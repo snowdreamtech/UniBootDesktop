@@ -2,20 +2,72 @@
 # Do not edit manually. See https://github.com/snowdreamtech/unirtm for details.
 
 [[tools."anchore/syft"]]
-version = "1.50.0"
+version = "1.51.0"
 backend = "github"
 
 [tools."anchore/syft"."platforms.linux-amd64"]
-checksum = "sha256:bf7b29ff57f06da30918266a0e1c2885a8f99784798d1bdb1628886aa015d788"
-url = "https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_linux_amd64.tar.gz"
+checksum = "sha256:2a2e837a2c8d59ec9af5472ee22d3b04ee463c4e44476ecf993fd1e5ab6ebc7f"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_linux_amd64.tar.gz"
+
+[tools."anchore/syft"."platforms.linux-amd64-musl"]
+checksum = "sha256:2a2e837a2c8d59ec9af5472ee22d3b04ee463c4e44476ecf993fd1e5ab6ebc7f"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_linux_amd64.tar.gz"
+
+[tools."anchore/syft"."platforms.linux-arm64"]
+checksum = "sha256:6c0466811541ea03add5213a60a1562f0851e4c0b0ecfdee1a694a9455285900"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_linux_arm64.tar.gz"
+
+[tools."anchore/syft"."platforms.linux-arm64-musl"]
+checksum = "sha256:6c0466811541ea03add5213a60a1562f0851e4c0b0ecfdee1a694a9455285900"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_linux_arm64.tar.gz"
+
+[tools."anchore/syft"."platforms.macos-amd64"]
+checksum = "sha256:cddf9a044145caf0a1a3194d00d1dd51a1666f4814f2919cdb4768a0c062ad95"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_darwin_amd64.tar.gz"
+
+[tools."anchore/syft"."platforms.macos-arm64"]
+checksum = "sha256:4f37f4c7fefce0a68e4cf71ba3f5f9829a99e65d89b29f7ee41b8c2c10ea8c59"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_darwin_arm64.tar.gz"
+
+[tools."anchore/syft"."platforms.windows-amd64"]
+checksum = "sha256:fc5ffaeffb993576ece9c791da5a688fb2c8969a1479bbfe58583672c64da336"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_windows_amd64.zip"
+
+[tools."anchore/syft"."platforms.windows-arm64"]
+checksum = "sha256:3fd075e644e67d1a9ae63fbc67991c510fc623030a67b93f5de9e2fd2da5d3c2"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_windows_arm64.zip"
 
 [[tools."aquasecurity/trivy"]]
-version = "0.70.0"
+version = "0.74.0"
 backend = "github"
 
 [tools."aquasecurity/trivy"."platforms.linux-amd64"]
-checksum = "sha256:8b4376d5d6befe5c24d503f10ff136d9e0c49f9127a4279fd110b727929a5aa9"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.70.0/trivy_0.70.0_Linux-64bit.tar.gz"
+checksum = "sha256:2ae6fe3ee734b7fdf11335663e18c75ea12dccc76062f09f164a3b0f8be4371a"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-64bit.tar.gz"
+
+[tools."aquasecurity/trivy"."platforms.linux-amd64-musl"]
+checksum = "sha256:2ae6fe3ee734b7fdf11335663e18c75ea12dccc76062f09f164a3b0f8be4371a"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-64bit.tar.gz"
+
+[tools."aquasecurity/trivy"."platforms.linux-arm64"]
+checksum = "sha256:b94ce1976bbf3c15b514b605ee88be7c6d94a29be2302847ff01cb794d47aad5"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-ARM64.tar.gz"
+
+[tools."aquasecurity/trivy"."platforms.linux-arm64-musl"]
+checksum = "sha256:b94ce1976bbf3c15b514b605ee88be7c6d94a29be2302847ff01cb794d47aad5"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-ARM64.tar.gz"
+
+[tools."aquasecurity/trivy"."platforms.macos-amd64"]
+checksum = "sha256:472816f6888dda689d075c30254d4210b4d1035acf365aa72332f584c2f60485"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_macOS-64bit.tar.gz"
+
+[tools."aquasecurity/trivy"."platforms.macos-arm64"]
+checksum = "sha256:1caada5e0e2091909357c7525d3aa76f4b660b13821bc143b190c7483e31cc11"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_macOS-ARM64.tar.gz"
+
+[tools."aquasecurity/trivy"."platforms.windows-amd64"]
+checksum = "sha256:94c40e0696e4b907a74b7b2e1438d5d72ebaca83115817407f568a002d520842"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_windows-64bit.zip"
 
 [[tools."astral-sh/ruff"]]
 version = "0.15.12"
@@ -47,80 +99,108 @@ backend = "github"
 url = "https://github.com/dotenv-linter/dotenv-linter/releases/download/v4.0.0/dotenv-linter-linux-x86_64.tar.gz"
 
 [[tools."editorconfig-checker/editorconfig-checker"]]
-version = "3.7.0"
+version = "3.11.1"
 backend = "github"
 
 [tools."editorconfig-checker/editorconfig-checker"."platforms.linux-amd64"]
-checksum = "sha256:4b0eeb52a1b337cdd6d23a38dd0b1d9d4fc8e66840939819af32ae8388770fb4"
-url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.7.0/editorconfig-checker-linux-amd64.tar.gz"
+checksum = "sha256:eea4e20653cd00167ea074671891ebaa851150d2ac1525a8c343ba16820e7109"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-linux-amd64.tar.gz"
+
+[tools."editorconfig-checker/editorconfig-checker"."platforms.linux-amd64-musl"]
+checksum = "sha256:eea4e20653cd00167ea074671891ebaa851150d2ac1525a8c343ba16820e7109"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-linux-amd64.tar.gz"
+
+[tools."editorconfig-checker/editorconfig-checker"."platforms.linux-arm64"]
+checksum = "sha256:26c34559bda51abb689a820f9804fdf619347a01dc532a8772682648aa7333c6"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-linux-arm64.tar.gz"
+
+[tools."editorconfig-checker/editorconfig-checker"."platforms.linux-arm64-musl"]
+checksum = "sha256:26c34559bda51abb689a820f9804fdf619347a01dc532a8772682648aa7333c6"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-linux-arm64.tar.gz"
+
+[tools."editorconfig-checker/editorconfig-checker"."platforms.macos-amd64"]
+checksum = "sha256:a9f68961e33d1a3b3f134c403557c8b2bbafb70b21b4c32b5d9245ffc2875f4f"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/ec-darwin-amd64.tar.gz"
+
+[tools."editorconfig-checker/editorconfig-checker"."platforms.macos-arm64"]
+checksum = "sha256:69205598fe8b26677d31194c5c9fdf7e8be321909ffb3c99efb5c9e4e648583e"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/ec-darwin-arm64.tar.gz"
+
+[tools."editorconfig-checker/editorconfig-checker"."platforms.windows-amd64"]
+checksum = "sha256:b0e4fd76e9b18a7f07a370ab1496c5d27b9434257f364deb2643871f0b32af2b"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-windows-amd64.tar.gz"
+
+[tools."editorconfig-checker/editorconfig-checker"."platforms.windows-arm64"]
+checksum = "sha256:511c00110975bf4a4bd0863051fd04bb73f5bbaeab41e9b7738d18c0cf38932c"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-windows-arm64.tar.gz"
 
 [[tools."github:anchore/syft"]]
-version = "1.50.0"
+version = "1.51.0"
 backend = "github"
 
 [tools."github:anchore/syft"."platforms.linux-amd64"]
-checksum = "sha256:bf7b29ff57f06da30918266a0e1c2885a8f99784798d1bdb1628886aa015d788"
-url = "https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_linux_amd64.tar.gz"
+checksum = "sha256:2a2e837a2c8d59ec9af5472ee22d3b04ee463c4e44476ecf993fd1e5ab6ebc7f"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_linux_amd64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.linux-amd64-musl"]
-checksum = "sha256:bf7b29ff57f06da30918266a0e1c2885a8f99784798d1bdb1628886aa015d788"
-url = "https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_linux_amd64.tar.gz"
+checksum = "sha256:2a2e837a2c8d59ec9af5472ee22d3b04ee463c4e44476ecf993fd1e5ab6ebc7f"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_linux_amd64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.linux-arm64"]
-checksum = "sha256:887c57cbcc2d0e8c5c110a4571a3fc7150058b24d74f993ee4663516e5c8ce86"
-url = "https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_linux_arm64.tar.gz"
+checksum = "sha256:6c0466811541ea03add5213a60a1562f0851e4c0b0ecfdee1a694a9455285900"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_linux_arm64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.linux-arm64-musl"]
-checksum = "sha256:887c57cbcc2d0e8c5c110a4571a3fc7150058b24d74f993ee4663516e5c8ce86"
-url = "https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_linux_arm64.tar.gz"
+checksum = "sha256:6c0466811541ea03add5213a60a1562f0851e4c0b0ecfdee1a694a9455285900"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_linux_arm64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.macos-amd64"]
-checksum = "sha256:d11a8c7bc27114853bd7c1e1b2f3be3ddda3a1de17aee585329f04c369341c75"
-url = "https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_darwin_amd64.tar.gz"
+checksum = "sha256:cddf9a044145caf0a1a3194d00d1dd51a1666f4814f2919cdb4768a0c062ad95"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_darwin_amd64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.macos-arm64"]
-checksum = "sha256:e32fdb9d47823fa633748a1efca2528fd77c37469ea93c9e40ab835da44e4cce"
-url = "https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_darwin_arm64.tar.gz"
+checksum = "sha256:4f37f4c7fefce0a68e4cf71ba3f5f9829a99e65d89b29f7ee41b8c2c10ea8c59"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_darwin_arm64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.windows-amd64"]
-checksum = "sha256:815ee6973ec5dff6a671d7f41b0e78835a8c45b91d5a39f4743ea1cee833d3be"
-url = "https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_windows_amd64.zip"
+checksum = "sha256:fc5ffaeffb993576ece9c791da5a688fb2c8969a1479bbfe58583672c64da336"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_windows_amd64.zip"
 
 [tools."github:anchore/syft"."platforms.windows-arm64"]
-checksum = "sha256:5eb435eb8750737d12e66f5a145975b4027adf20076b518079af38b2148d55a5"
-url = "https://github.com/anchore/syft/releases/download/v1.50.0/syft_1.50.0_windows_arm64.zip"
+checksum = "sha256:3fd075e644e67d1a9ae63fbc67991c510fc623030a67b93f5de9e2fd2da5d3c2"
+url = "https://github.com/anchore/syft/releases/download/v1.51.0/syft_1.51.0_windows_arm64.zip"
 
 [[tools."github:aquasecurity/trivy"]]
-version = "0.70.0"
+version = "0.74.0"
 backend = "github"
 
 [tools."github:aquasecurity/trivy"."platforms.linux-amd64"]
-checksum = "sha256:8b4376d5d6befe5c24d503f10ff136d9e0c49f9127a4279fd110b727929a5aa9"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.70.0/trivy_0.70.0_Linux-64bit.tar.gz"
+checksum = "sha256:2ae6fe3ee734b7fdf11335663e18c75ea12dccc76062f09f164a3b0f8be4371a"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-64bit.tar.gz"
 
 [tools."github:aquasecurity/trivy"."platforms.linux-amd64-musl"]
-checksum = "sha256:8b4376d5d6befe5c24d503f10ff136d9e0c49f9127a4279fd110b727929a5aa9"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.70.0/trivy_0.70.0_Linux-64bit.tar.gz"
+checksum = "sha256:2ae6fe3ee734b7fdf11335663e18c75ea12dccc76062f09f164a3b0f8be4371a"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-64bit.tar.gz"
 
 [tools."github:aquasecurity/trivy"."platforms.linux-arm64"]
-checksum = "sha256:2f6bb988b553a1bbac6bdd1ce890f5e412439564e17522b88a4541b4f364fc8d"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.70.0/trivy_0.70.0_Linux-ARM64.tar.gz"
+checksum = "sha256:b94ce1976bbf3c15b514b605ee88be7c6d94a29be2302847ff01cb794d47aad5"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-ARM64.tar.gz"
 
 [tools."github:aquasecurity/trivy"."platforms.linux-arm64-musl"]
-checksum = "sha256:2f6bb988b553a1bbac6bdd1ce890f5e412439564e17522b88a4541b4f364fc8d"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.70.0/trivy_0.70.0_Linux-ARM64.tar.gz"
+checksum = "sha256:b94ce1976bbf3c15b514b605ee88be7c6d94a29be2302847ff01cb794d47aad5"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-ARM64.tar.gz"
 
 [tools."github:aquasecurity/trivy"."platforms.macos-amd64"]
-checksum = "sha256:52d531452b19e7593da29366007d02a810e1e0080d02f9cf6a1afb46c35aaa93"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.70.0/trivy_0.70.0_macOS-64bit.tar.gz"
+checksum = "sha256:472816f6888dda689d075c30254d4210b4d1035acf365aa72332f584c2f60485"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_macOS-64bit.tar.gz"
 
 [tools."github:aquasecurity/trivy"."platforms.macos-arm64"]
-checksum = "sha256:68e543c51dcc96e1c344053a4fde9660cf602c25565d9f09dc17dd41e13b838a"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.70.0/trivy_0.70.0_macOS-ARM64.tar.gz"
+checksum = "sha256:1caada5e0e2091909357c7525d3aa76f4b660b13821bc143b190c7483e31cc11"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_macOS-ARM64.tar.gz"
 
 [tools."github:aquasecurity/trivy"."platforms.windows-amd64"]
-checksum = "sha256:eea5442eab86f9e26cd718d7618d43899e72a83767619e8bee47911bddbfb825"
-url = "https://github.com/aquasecurity/trivy/releases/download/v0.70.0/trivy_0.70.0_windows-64bit.zip"
+checksum = "sha256:94c40e0696e4b907a74b7b2e1438d5d72ebaca83115817407f568a002d520842"
+url = "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_windows-64bit.zip"
 
 [[tools."github:astral-sh/ruff"]]
 version = "0.15.12"
@@ -244,40 +324,40 @@ url = "https://github.com/dotenv-linter/dotenv-linter/releases/download/v4.0.0/d
 url = "https://github.com/dotenv-linter/dotenv-linter/releases/download/v4.0.0/dotenv-linter-win-aarch64.zip"
 
 [[tools."github:editorconfig-checker/editorconfig-checker"]]
-version = "3.7.0"
+version = "3.11.1"
 backend = "github"
 
 [tools."github:editorconfig-checker/editorconfig-checker"."platforms.linux-amd64"]
-checksum = "sha256:4b0eeb52a1b337cdd6d23a38dd0b1d9d4fc8e66840939819af32ae8388770fb4"
-url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.7.0/editorconfig-checker-linux-amd64.tar.gz"
+checksum = "sha256:eea4e20653cd00167ea074671891ebaa851150d2ac1525a8c343ba16820e7109"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-linux-amd64.tar.gz"
 
 [tools."github:editorconfig-checker/editorconfig-checker"."platforms.linux-amd64-musl"]
-checksum = "sha256:4b0eeb52a1b337cdd6d23a38dd0b1d9d4fc8e66840939819af32ae8388770fb4"
-url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.7.0/editorconfig-checker-linux-amd64.tar.gz"
+checksum = "sha256:eea4e20653cd00167ea074671891ebaa851150d2ac1525a8c343ba16820e7109"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-linux-amd64.tar.gz"
 
 [tools."github:editorconfig-checker/editorconfig-checker"."platforms.linux-arm64"]
-checksum = "sha256:8c29f86796192439beea1ccbe91df9d6fc4eaab23d50486b6a0d36dc40ad3660"
-url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.7.0/editorconfig-checker-linux-arm64.tar.gz"
+checksum = "sha256:26c34559bda51abb689a820f9804fdf619347a01dc532a8772682648aa7333c6"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-linux-arm64.tar.gz"
 
 [tools."github:editorconfig-checker/editorconfig-checker"."platforms.linux-arm64-musl"]
-checksum = "sha256:8c29f86796192439beea1ccbe91df9d6fc4eaab23d50486b6a0d36dc40ad3660"
-url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.7.0/editorconfig-checker-linux-arm64.tar.gz"
+checksum = "sha256:26c34559bda51abb689a820f9804fdf619347a01dc532a8772682648aa7333c6"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-linux-arm64.tar.gz"
 
 [tools."github:editorconfig-checker/editorconfig-checker"."platforms.macos-amd64"]
-checksum = "sha256:6cd2e4aa2a374d391e3baeaae43fc28906fd15b09490f5669eee206a63eef00a"
-url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.7.0/ec-darwin-amd64.tar.gz"
+checksum = "sha256:a9f68961e33d1a3b3f134c403557c8b2bbafb70b21b4c32b5d9245ffc2875f4f"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/ec-darwin-amd64.tar.gz"
 
 [tools."github:editorconfig-checker/editorconfig-checker"."platforms.macos-arm64"]
-checksum = "sha256:727e6ef506c6fbe7719cc29c69b495715b64514a00059f3f179077bfad0580e5"
-url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.7.0/ec-darwin-arm64.tar.gz"
+checksum = "sha256:69205598fe8b26677d31194c5c9fdf7e8be321909ffb3c99efb5c9e4e648583e"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/ec-darwin-arm64.tar.gz"
 
 [tools."github:editorconfig-checker/editorconfig-checker"."platforms.windows-amd64"]
-checksum = "sha256:497628bc3492645b018b16311f3f1164a058d1325ba57d03ad0863641c61994d"
-url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.7.0/editorconfig-checker-windows-amd64.tar.gz"
+checksum = "sha256:b0e4fd76e9b18a7f07a370ab1496c5d27b9434257f364deb2643871f0b32af2b"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-windows-amd64.tar.gz"
 
 [tools."github:editorconfig-checker/editorconfig-checker"."platforms.windows-arm64"]
-checksum = "sha256:b12dff5382bb871298ac88a2ad3b86cab159afd9f73dcf51020ef69f2ca675ec"
-url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.7.0/editorconfig-checker-windows-arm64.tar.gz"
+checksum = "sha256:511c00110975bf4a4bd0863051fd04bb73f5bbaeab41e9b7738d18c0cf38932c"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.11.1/editorconfig-checker-windows-arm64.tar.gz"
 
 [[tools."github:gitleaks/gitleaks"]]
 version = "8.30.1"
@@ -481,29 +561,29 @@ checksum = "sha256:cadcf7ea4efe3a68728893813643cebe1185e5b1d4be5b96245f65c9a4d5e
 url = "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_windows_arm64.zip"
 
 [[tools."github:zizmorcore/zizmor"]]
-version = "1.25.2"
+version = "1.29.0"
 backend = "github"
 
 [tools."github:zizmorcore/zizmor"."platforms.linux-amd64"]
-url = "https://github.com/zizmorcore/zizmor/releases/download/v1.25.2/zizmor-x86_64-unknown-linux-gnu.tar.gz"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-x86_64-unknown-linux-gnu.tar.gz"
 
 [tools."github:zizmorcore/zizmor"."platforms.linux-amd64-musl"]
-url = "https://github.com/zizmorcore/zizmor/releases/download/v1.25.2/zizmor-x86_64-unknown-linux-gnu.tar.gz"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-x86_64-unknown-linux-gnu.tar.gz"
 
 [tools."github:zizmorcore/zizmor"."platforms.linux-arm64"]
-url = "https://github.com/zizmorcore/zizmor/releases/download/v1.25.2/zizmor-aarch64-unknown-linux-gnu.tar.gz"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-aarch64-unknown-linux-gnu.tar.gz"
 
 [tools."github:zizmorcore/zizmor"."platforms.linux-arm64-musl"]
-url = "https://github.com/zizmorcore/zizmor/releases/download/v1.25.2/zizmor-aarch64-unknown-linux-gnu.tar.gz"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-aarch64-unknown-linux-gnu.tar.gz"
 
 [tools."github:zizmorcore/zizmor"."platforms.macos-amd64"]
-url = "https://github.com/zizmorcore/zizmor/releases/download/v1.25.2/zizmor-x86_64-apple-darwin.tar.gz"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-x86_64-apple-darwin.tar.gz"
 
 [tools."github:zizmorcore/zizmor"."platforms.macos-arm64"]
-url = "https://github.com/zizmorcore/zizmor/releases/download/v1.25.2/zizmor-aarch64-apple-darwin.tar.gz"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-aarch64-apple-darwin.tar.gz"
 
 [tools."github:zizmorcore/zizmor"."platforms.windows-amd64"]
-url = "https://github.com/zizmorcore/zizmor/releases/download/v1.25.2/zizmor-x86_64-pc-windows-msvc.zip"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-x86_64-pc-windows-msvc.zip"
 
 [[tools."gitleaks/gitleaks"]]
 version = "8.30.1"
@@ -725,7 +805,7 @@ url = "https://nodejs.org/dist/v26.3.0/node-v26.3.0-win-arm64.zip"
 gpg_key = "C4F0DFFF4E8C1A8236409D08E73BC641CC11F4C8"
 
 [[tools."npm:@commitlint/cli"]]
-version = "21.2.1"
+version = "21.2.2"
 backend = "npm"
 
 [tools."npm:@commitlint/cli"."platforms.linux-amd64"]
@@ -745,7 +825,7 @@ backend = "npm"
 [tools."npm:@commitlint/cli"."platforms.windows-arm64"]
 
 [[tools."npm:@commitlint/config-conventional"]]
-version = "21.2.0"
+version = "21.2.2"
 backend = "npm"
 
 [tools."npm:@commitlint/config-conventional"."platforms.linux-amd64"]
@@ -865,7 +945,7 @@ backend = "npm"
 [tools."npm:dockerfile-utils"."platforms.windows-arm64"]
 
 [[tools."npm:eslint"]]
-version = "10.8.1"
+version = "10.9.0"
 backend = "npm"
 
 [tools."npm:eslint"."platforms.linux-amd64"]
@@ -1005,7 +1085,7 @@ backend = "pipx"
 [tools."pipx:pip-audit"."platforms.windows-arm64"]
 
 [[tools."pipx:pre-commit"]]
-version = "4.6.1"
+version = "4.6.2"
 backend = "pipx"
 
 [tools."pipx:pre-commit"."platforms.linux-amd64"]
@@ -1044,6 +1124,26 @@ backend = "pipx"
 
 [tools."pipx:yamllint"."platforms.windows-arm64"]
 
+[[tools."pre-commit"]]
+version = "4.6.2"
+backend = "asdf"
+
+[tools."pre-commit"."platforms.linux-amd64"]
+
+[tools."pre-commit"."platforms.linux-amd64-musl"]
+
+[tools."pre-commit"."platforms.linux-arm64"]
+
+[tools."pre-commit"."platforms.linux-arm64-musl"]
+
+[tools."pre-commit"."platforms.macos-amd64"]
+
+[tools."pre-commit"."platforms.macos-arm64"]
+
+[tools."pre-commit"."platforms.windows-amd64"]
+
+[tools."pre-commit"."platforms.windows-arm64"]
+
 [[tools."python"]]
 version = "3.14.5"
 backend = "native"
@@ -1081,8 +1181,26 @@ checksum = "sha256:8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a
 url = "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz"
 
 [[tools."zizmorcore/zizmor"]]
-version = "1.25.2"
+version = "1.29.0"
 backend = "github"
 
 [tools."zizmorcore/zizmor"."platforms.linux-amd64"]
-url = "https://github.com/zizmorcore/zizmor/releases/download/v1.25.2/zizmor-x86_64-unknown-linux-gnu.tar.gz"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-x86_64-unknown-linux-gnu.tar.gz"
+
+[tools."zizmorcore/zizmor"."platforms.linux-amd64-musl"]
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-x86_64-unknown-linux-gnu.tar.gz"
+
+[tools."zizmorcore/zizmor"."platforms.linux-arm64"]
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-aarch64-unknown-linux-gnu.tar.gz"
+
+[tools."zizmorcore/zizmor"."platforms.linux-arm64-musl"]
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-aarch64-unknown-linux-gnu.tar.gz"
+
+[tools."zizmorcore/zizmor"."platforms.macos-amd64"]
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-x86_64-apple-darwin.tar.gz"
+
+[tools."zizmorcore/zizmor"."platforms.macos-arm64"]
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-aarch64-apple-darwin.tar.gz"
+
+[tools."zizmorcore/zizmor"."platforms.windows-amd64"]
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-x86_64-pc-windows-msvc.zip"
