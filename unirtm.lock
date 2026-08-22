@@ -698,7 +698,7 @@ backend = "go"
 [tools."go:golang.org/x/tools/cmd/goimports"."platforms.windows-arm64"]
 
 [[tools."go:golang.org/x/vuln/cmd/govulncheck"]]
-version = "v1.1.4"
+version = "v1.7.0"
 backend = "go"
 
 [tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.linux-amd64"]
