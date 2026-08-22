@@ -90,7 +90,7 @@ jobs:
         shell: sh
         run: |
           # 1. Check & update all tools in .unirtm.toml to latest versions (non-interactive)
-          unirtm update --all --yes
+          unirtm update --all --force --yes
           # 2. Format .unirtm.toml with canonical section and key ordering
           unirtm fmt
           # 3. Update lockfile for all platforms
