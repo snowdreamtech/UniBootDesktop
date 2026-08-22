@@ -6,6 +6,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.12](https://github.com/snowdreamtech/template/compare/v0.15.11...v0.15.12) (2026-08-22)
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** sync dependabot config and unirtm toolchain ([eabf483](https://github.com/snowdreamtech/template/commit/eabf483fd39cd3a00f73d7e380a8e82a8de3eb3d))
+* **deps:** sync dependabot config and unirtm toolchain ([70cd8d9](https://github.com/snowdreamtech/template/commit/70cd8d91e24ff5d79ee4508b8d87a71c43f87912))
+* **deps:** upgrade golang version to 1.27.0 in template ([8559102](https://github.com/snowdreamtech/template/commit/8559102441208d4d9d5150bea6705f565129a190))
+
 ## [0.15.11](https://github.com/snowdreamtech/template/compare/v0.15.10...v0.15.11) (2026-08-19)
 
 
