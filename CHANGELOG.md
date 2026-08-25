@@ -6,6 +6,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.13](https://github.com/snowdreamtech/template/compare/v0.15.12...v0.15.13) (2026-08-25)
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** sync dependabot config and unirtm toolchain ([4f74adf](https://github.com/snowdreamtech/template/commit/4f74adfffc0e78819a8a53ed22284f2c0897e8e2))
+* **deps:** update govulncheck tool version to v1.7.0 for Go 1.27 AST support ([54e84b9](https://github.com/snowdreamtech/template/commit/54e84b9edc847675b20fa7ef7262d41b95878661))
+* **deps:** update unirtm toolchain version to 0.28.0 ([b24cb8e](https://github.com/snowdreamtech/template/commit/b24cb8ef46c5fd2abce6b84a0cb8354b725f9ae7))
+
 ## [0.15.12](https://github.com/snowdreamtech/template/compare/v0.15.11...v0.15.12) (2026-08-22)
 
 
