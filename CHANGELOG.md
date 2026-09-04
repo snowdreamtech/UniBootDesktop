@@ -6,6 +6,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.14](https://github.com/snowdreamtech/template/compare/v0.15.13...v0.15.14) (2026-09-04)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** disable gpg signing in workflow commit steps ([43f266e](https://github.com/snowdreamtech/template/commit/43f266e0e3c9b65bfbb6da0c761caa8d4f047c20))
+* **deps:** set valid golangci-lint version to v1.64.8 ([625796e](https://github.com/snowdreamtech/template/commit/625796e5e0bb7313e0b4a44ead0a0f75145e4bad))
+* **unirtm:** add missing macos platform entries for editorconfig-checker@4.0.0 ([30c33f1](https://github.com/snowdreamtech/template/commit/30c33f1e527b062436491cc10c7dc24613da41be))
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** bump the all-dependencies group in /docs with 3 updates ([3e4b847](https://github.com/snowdreamtech/template/commit/3e4b8479f8be438ffe369c01e099b35844a1d7e0))
+* **deps:** sync dependabot config and unirtm toolchain ([c244660](https://github.com/snowdreamtech/template/commit/c244660fcb9c0d9a6ed9aaf2829d2964f68d987b))
+* **deps:** sync dependabot config and unirtm toolchain ([886b3fa](https://github.com/snowdreamtech/template/commit/886b3fa8c417add860d17fe12e0750964ce03886))
+* **deps:** update golangci-lint to v2.13.2 with /v2 module path and remove lockfile ([2199c57](https://github.com/snowdreamtech/template/commit/2199c574af594eed06aa6e121ebe6a186f943e0b))
+* **deps:** update unirtm tool dependencies to latest versions ([c1606f7](https://github.com/snowdreamtech/template/commit/c1606f7653eafcd4b4d4ce730d5f1f716f589398))
+
 ## [0.15.13](https://github.com/snowdreamtech/template/compare/v0.15.12...v0.15.13) (2026-08-25)
 
 
