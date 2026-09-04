@@ -210,6 +210,14 @@ url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/dow
 checksum = "sha256:a2470418cd2b6c7988a29b6e671fef94d449c69c1da1bd0f5ab4ff06047b2200"
 url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.0/editorconfig-checker-linux-arm64.tar.gz"
 
+[tools."github:editorconfig-checker/editorconfig-checker"."platforms.macos-amd64"]
+checksum = "sha256:01791dbe412a5097584ee99290743e98ec1b49590f379d0475913055f57a01b8"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.0/editorconfig-checker-darwin-all.tar.gz"
+
+[tools."github:editorconfig-checker/editorconfig-checker"."platforms.macos-arm64"]
+checksum = "sha256:01791dbe412a5097584ee99290743e98ec1b49590f379d0475913055f57a01b8"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.0/editorconfig-checker-darwin-all.tar.gz"
+
 [tools."github:editorconfig-checker/editorconfig-checker"."platforms.windows-amd64"]
 checksum = "sha256:6648dd19f2b2cd00311006cdb5812a132fe312784e7dfaa13354672af4efb77b"
 url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.0/editorconfig-checker-windows-amd64.tar.gz"
