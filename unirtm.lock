@@ -630,7 +630,7 @@ url = "https://golang.google.cn/dl/go1.27.1.windows-arm64.zip"
 gpg_key = "EB4C1BF148A2C440F831EE8752D905A67D74191C"
 
 [[tools."go:github.com/golangci/golangci-lint/cmd/golangci-lint"]]
-version = "v2.13.2"
+version = "v1.64.8"
 backend = "go"
 
 [tools."go:github.com/golangci/golangci-lint/cmd/golangci-lint"."platforms.linux-amd64"]
