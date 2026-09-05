@@ -6,6 +6,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.15](https://github.com/snowdreamtech/template/compare/v0.15.14...v0.15.15) (2026-09-05)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** ensure npm install includes devDependencies in pages workflow ([4795ca3](https://github.com/snowdreamtech/template/commit/4795ca36f2eed5b3b9f522da75e5f6fd926aea61))
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** sync dependabot config and unirtm toolchain ([bb56138](https://github.com/snowdreamtech/template/commit/bb56138d75144c8748f145064e922dd3e6d6dc74))
+* sync unirtm updates (v0.29.1, dependabot lock flags, lint bumps, dead code cleanup) ([6d0c3b7](https://github.com/snowdreamtech/template/commit/6d0c3b7f934327fa81c4e903ec7ab69b1c810bf2))
+
 ## [0.15.14](https://github.com/snowdreamtech/template/compare/v0.15.13...v0.15.14) (2026-09-04)
 
 
