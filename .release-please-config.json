@@ -5,7 +5,12 @@
       "release-type": "go",
       "include-component-in-tag": false,
       "changelog-path": "CHANGELOG.md",
-      "extra-files": [".github/workflows/docker.yml"]
+      "extra-files": [
+        "docker/rocky/Dockerfile",
+        "docker/debian/Dockerfile",
+        "docker/alpine/Dockerfile",
+        ".github/workflows/docker.yml"
+      ]
     }
   },
   "include-v-in-tag": true,
