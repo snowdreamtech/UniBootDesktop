@@ -226,6 +226,42 @@ url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/dow
 checksum = "sha256:a3a517146ff4bc6a3ca7452245c6e8dcd49c6fb9a6fc75198c72a101a1478d93"
 url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.0/editorconfig-checker-windows-arm64.tar.gz"
 
+[[tools."github:editorconfig-checker/editorconfig-checker"]]
+version = "4.0.1"
+backend = ""
+
+[tools."github:editorconfig-checker/editorconfig-checker"."platforms.linux-amd64"]
+checksum = "sha256:90139c6ed52373c0acfc9deb2a07aa812e5184753afd4bc8252bf44eb4909155"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.1/editorconfig-checker-linux-amd64.tar.gz"
+
+[tools."github:editorconfig-checker/editorconfig-checker"."platforms.linux-amd64-musl"]
+checksum = "sha256:90139c6ed52373c0acfc9deb2a07aa812e5184753afd4bc8252bf44eb4909155"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.1/editorconfig-checker-linux-amd64.tar.gz"
+
+[tools."github:editorconfig-checker/editorconfig-checker"."platforms.linux-arm64"]
+checksum = "sha256:f162c749ade763ed4954de678ebb786c99431b9a615a964c284605e68dbbd3f9"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.1/editorconfig-checker-linux-arm64.tar.gz"
+
+[tools."github:editorconfig-checker/editorconfig-checker"."platforms.linux-arm64-musl"]
+checksum = "sha256:f162c749ade763ed4954de678ebb786c99431b9a615a964c284605e68dbbd3f9"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.1/editorconfig-checker-linux-arm64.tar.gz"
+
+[tools."github:editorconfig-checker/editorconfig-checker"."platforms.macos-amd64"]
+checksum = "sha256:9ed547505176d7384e1fb861ecfdd13df8c15e37d4bbcc2bd40e52e81ab32176"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.1/editorconfig-checker-darwin-all.tar.gz"
+
+[tools."github:editorconfig-checker/editorconfig-checker"."platforms.macos-arm64"]
+checksum = "sha256:9ed547505176d7384e1fb861ecfdd13df8c15e37d4bbcc2bd40e52e81ab32176"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.1/editorconfig-checker-darwin-all.tar.gz"
+
+[tools."github:editorconfig-checker/editorconfig-checker"."platforms.windows-amd64"]
+checksum = "sha256:34892dfd3d4e2545044888063e26c78652238612734e384e91f62608681487e4"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.1/editorconfig-checker-windows-amd64.tar.gz"
+
+[tools."github:editorconfig-checker/editorconfig-checker"."platforms.windows-arm64"]
+checksum = "sha256:2c1f58ae9efe169d96aa52ee7021445e83ef3a95955df3ee1c668fcd011b48b8"
+url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v4.0.1/editorconfig-checker-windows-arm64.tar.gz"
+
 [[tools."github:gitleaks/gitleaks"]]
 version = "8.30.1"
 backend = "github"
@@ -576,6 +612,26 @@ backend = "go"
 
 [tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.windows-arm64"]
 
+[[tools."go:golang.org/x/vuln/cmd/govulncheck"]]
+version = "v1.8.0"
+backend = ""
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.linux-amd64"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.linux-amd64-musl"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.linux-arm64"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.linux-arm64-musl"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.macos-amd64"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.macos-arm64"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.windows-amd64"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.windows-arm64"]
+
 [[tools."go:mvdan.cc/sh/v3/cmd/shfmt"]]
 version = "v3.14.0"
 backend = "go"
@@ -875,6 +931,26 @@ backend = "npm"
 [[tools."pipx:clang-format"]]
 version = "23.1.0"
 backend = "pipx"
+
+[tools."pipx:clang-format"."platforms.linux-amd64"]
+
+[tools."pipx:clang-format"."platforms.linux-amd64-musl"]
+
+[tools."pipx:clang-format"."platforms.linux-arm64"]
+
+[tools."pipx:clang-format"."platforms.linux-arm64-musl"]
+
+[tools."pipx:clang-format"."platforms.macos-amd64"]
+
+[tools."pipx:clang-format"."platforms.macos-arm64"]
+
+[tools."pipx:clang-format"."platforms.windows-amd64"]
+
+[tools."pipx:clang-format"."platforms.windows-arm64"]
+
+[[tools."pipx:clang-format"]]
+version = "23.1.1"
+backend = ""
 
 [tools."pipx:clang-format"."platforms.linux-amd64"]
 
