@@ -326,7 +326,7 @@ composer.phar
 ### Ruby / Bundler ###
 /.bundle/
 /lib/bundler/man/
-/pkg/
+# Go pkg directory is source code in Standard Go layout
 /spec/reports/
 /tmp/
 Gemfile.lock

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "UniGoDesktop",
+  "outputfilename": "unigodesktop",
+  "frontend:install": "pnpm install",
+  "frontend:build": "pnpm run build",
+  "frontend:dev:watcher": "pnpm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "SnowdreamTech",
+    "email": "snowdreamtech@qq.com"
+  },
+  "info": {
+    "companyName": "SnowdreamTech",
+    "productName": "UniGoDesktop",
+    "productVersion": "0.1.0",
+    "copyright": "Copyright (c) 2026 SnowdreamTech. All rights reserved."
+  }
+}
