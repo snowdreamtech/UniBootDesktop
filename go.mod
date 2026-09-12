@@ -1,6 +1,6 @@
 module github.com/snowdreamtech/unigodesktop
 
-go 1.27.1
+go 1.26.0
 
 require (
 	github.com/ProtonMail/gopenpgp/v2 v2.10.0
