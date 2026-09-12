@@ -8,6 +8,9 @@ import (
 	"os"
 )
 
+// EnvManager provides environment variable operations.
+type EnvManager struct{}
+
 // Get returns the value of the environment variable with the given key,
 // searching with prefixes in order: UNIGODESKTOP_, UNIGODESKTOP_, MISE_, and then the raw key.
 // Note: PATH is retrieved directly to avoid pollution from UNIGODESKTOP_PATH/UNIGODESKTOP_PATH/MISE_PATH.

@@ -9,6 +9,9 @@ import (
 	"runtime"
 )
 
+// HelloPrinter provides greeting output functionality.
+type HelloPrinter struct{}
+
 // PrintHello prints a hello world message containing OS and Arch
 func PrintHello() {
 	slog.Debug("Executing PrintHello function (this is a debug log)")
