@@ -79,6 +79,11 @@ description = "Launch Wails GUI application in development mode"
 run = "unirtm exec -- wails dev"
 output = "interleaved"
 
+[tasks.build]
+description = "Build Wails GUI application binary"
+run = "unirtm exec -- wails build"
+output = "interleaved"
+
 [tasks.audit]
 description = "Run comprehensive security audit sequentially"
 run = '''
