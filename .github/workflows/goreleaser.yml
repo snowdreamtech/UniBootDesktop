@@ -246,7 +246,7 @@ jobs:
           echo "Warming up Go Proxy for ${TAG}..."
           # Wait up to 60 seconds for Go proxy to sync the new tag
           for i in $(seq 1 12); do
-            if curl -s -f "https://proxy.golang.org/github.com/snowdreamtech/unigo/@v/${TAG}.info" > /dev/null; then
+            if curl -s -f "https://proxy.golang.org/github.com/snowdreamtech/unigodesktop/@v/${TAG}.info" > /dev/null; then
               echo "✅ Go Proxy is ready!"
               exit 0
             fi
@@ -302,7 +302,7 @@ jobs:
         shell: sh
         run: |
           # npm/scripts/build.sh was already executed by GoReleaser after_hooks.
-          # Platform packages (npm/unigo-*/bin/) and package.json files are ready.
+          # Platform packages (npm/unigodesktop-*/bin/) and package.json files are ready.
           echo '=== Publishing platform sub-packages ==='
           for pkg in npm/*/; do
             [ -f "${pkg}package.json" ] || continue
@@ -407,8 +407,8 @@ jobs:
           GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
         run: |
           gh release download "$TAG" \
-            --repo snowdreamtech/UniGo \
-            --pattern 'unigo_Linux_x86_64.tar.gz' \
+            --repo snowdreamtech/UniGoDesktop \
+            --pattern 'unigodesktop_Linux_x86_64.tar.gz' \
             --pattern 'checksums.txt' \
             --pattern 'checksums.txt.sigstore.json'
 
@@ -418,7 +418,7 @@ jobs:
       - name: "🔒 Verify cosign signature"
         run: |
           cosign verify-blob \
-            --certificate-identity "https://github.com/snowdreamtech/UniGo/.github/workflows/goreleaser.yml@refs/tags/$TAG" \
+            --certificate-identity "https://github.com/snowdreamtech/UniGoDesktop/.github/workflows/goreleaser.yml@refs/tags/$TAG" \
             --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
             --bundle checksums.txt.sigstore.json \
             checksums.txt
@@ -427,6 +427,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
         run: |
-          gh attestation verify unigo_Linux_x86_64.tar.gz \
-            --repo snowdreamtech/UniGo \
-            --signer-repo snowdreamtech/UniGo
+          gh attestation verify unigodesktop_Linux_x86_64.tar.gz \
+            --repo snowdreamtech/UniGoDesktop \
+            --signer-repo snowdreamtech/UniGoDesktop

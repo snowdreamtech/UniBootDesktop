@@ -4,13 +4,13 @@ ARG TARGETOS
 ARG TARGETARCH
 
 # Set the workdir
-WORKDIR /root/go/src/github.com/snowdreamtech/unigo
+WORKDIR /root/go/src/github.com/snowdreamtech/unigodesktop
 
 ENV GO111MODULE=auto
 
 COPY . ./
 
-RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath -ldflags "-s -w" -v -o /root/go/bin/unigo
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath -ldflags "-s -w" -v -o /root/go/bin/unigodesktop
 
 # Base Image (Alpine Variant)
 # Extends snowdreamtech/alpine with additional tooling and configuration.
@@ -37,17 +37,17 @@ ARG BUILDTIME \
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="UniGo Image Based On Alpine" \
-    org.opencontainers.image.description="Docker Images for UniGo on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le, riscv64, s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/unigo" \
-    org.opencontainers.image.base.name="snowdreamtech/unigo:alpine" \
+    org.opencontainers.image.title="UniGoDesktop Image Based On Alpine" \
+    org.opencontainers.image.description="Docker Images for UniGoDesktop on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le, riscv64, s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/unigodesktop" \
+    org.opencontainers.image.base.name="snowdreamtech/unigodesktop:alpine" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/unigo" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/unigodesktop" \
     org.opencontainers.image.vendor="Snowdream Tech" \
     org.opencontainers.image.version="${VERSION}" \
     org.opencontainers.image.created="${BUILDTIME}" \
     org.opencontainers.image.revision="${REVISION}" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/unigo"
+    org.opencontainers.image.url="https://github.com/snowdreamtech/unigodesktop"
 
 # Runtime Environment Configuration
 ENV KEEPALIVE=${KEEPALIVE} \
@@ -61,9 +61,9 @@ ENV KEEPALIVE=${KEEPALIVE} \
     USER=${USER} \
     WORKDIR=${WORKDIR}
 
-COPY --from=builder /root/go/bin/unigo /usr/local/bin/
+COPY --from=builder /root/go/bin/unigodesktop /usr/local/bin/
 
-RUN chmod +x /usr/local/bin/unigo
+RUN chmod +x /usr/local/bin/unigodesktop
 
 # Container Orchestration Files
 COPY docker/alpine/entrypoint.d /usr/local/bin/entrypoint.d
