@@ -593,6 +593,15 @@ checksum = "sha256:13b69b87bb0e83f96bc68560a8cace7f0343b1e03469f1110ea18d17e3234
 url = "https://go.dev/dl/go1.27.1.windows-arm64.zip"
 gpg_key = "EB4C1BF148A2C440F831EE8752D905A67D74191C"
 
+[[tools."go"]]
+version = "1.26.0"
+backend = ""
+
+[tools."go"."platforms.macos-amd64"]
+checksum = "sha256:8f8f52c6649542cf027bbc9b9c68d1ec042f9f34808a40413f0b8b3f66f3caa4"
+url = "https://go.dev/dl/go1.27.1.darwin-amd64.tar.gz"
+gpg_key = "EB4C1BF148A2C440F831EE8752D905A67D74191C"
+
 [[tools."go:github.com/golangci/golangci-lint/v2/cmd/golangci-lint"]]
 version = "v2.13.2"
 backend = "go"
