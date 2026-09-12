@@ -23,6 +23,22 @@ type BaseRepository struct {
 	Ctx context.Context
 }
 
+// NewBaseRepository creates a new BaseRepository instance.
+func NewBaseRepository(ctx context.Context) *BaseRepository {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return &BaseRepository{Ctx: ctx}
+}
+
+// Context returns the context associated with the repository.
+func (b *BaseRepository) Context() context.Context {
+	if b == nil || b.Ctx == nil {
+		return context.Background()
+	}
+	return b.Ctx
+}
+
 // Installation represents an installed tool
 type Installation struct {
 	ID          int64     `db:"id"`
