@@ -1,6 +1,6 @@
 module github.com/snowdreamtech/unigodesktop
 
-go 1.24.1
+go 1.26.0
 
 require (
 	github.com/ProtonMail/gopenpgp/v2 v2.10.0
@@ -17,9 +17,9 @@ require (
 	github.com/ulikunitz/xz v0.5.16
 	github.com/wailsapp/wails/v2 v2.10.1
 	github.com/zeebo/blake3 v0.2.4
-	golang.org/x/crypto v0.56.0
-	golang.org/x/net v0.58.0
-	golang.org/x/term v0.45.0
+	golang.org/x/crypto v0.45.0
+	golang.org/x/net v0.47.0
+	golang.org/x/term v0.42.0
 	gopkg.in/yaml.v3 v3.0.1
 	modernc.org/sqlite v1.54.0
 )
