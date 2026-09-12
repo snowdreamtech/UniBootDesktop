@@ -6,7 +6,7 @@ package desktop
 import (
 	"context"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"log/slog"
 )
 
 // TrayManager handles the application system tray menu and notifications.
@@ -23,12 +23,12 @@ func NewTrayManager(app *App) *TrayManager {
 
 // Start launches system tray integration.
 func (t *TrayManager) Start(ctx context.Context) error {
-	logger.Info("System Tray Manager initialized")
+	slog.Info("System Tray Manager initialized")
 	return nil
 }
 
 // Stop cleanly terminates system tray resources.
 func (t *TrayManager) Stop() error {
-	logger.Info("System Tray Manager stopped")
+	slog.Info("System Tray Manager stopped")
 	return nil
 }
