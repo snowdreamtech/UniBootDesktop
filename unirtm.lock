@@ -228,7 +228,7 @@ url = "https://github.com/editorconfig-checker/editorconfig-checker/releases/dow
 
 [[tools."github:editorconfig-checker/editorconfig-checker"]]
 version = "4.0.1"
-backend = ""
+backend = "github"
 
 [tools."github:editorconfig-checker/editorconfig-checker"."platforms.linux-amd64"]
 checksum = "sha256:90139c6ed52373c0acfc9deb2a07aa812e5184753afd4bc8252bf44eb4909155"
