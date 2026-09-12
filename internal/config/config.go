@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/pelletier/go-toml/v2"
-	"github.com/snowdreamtech/unigo/internal/env"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
 	"gopkg.in/yaml.v3"
 )
 
@@ -19,13 +19,13 @@ type Config struct {
 }
 
 // Load reads the configuration from the global config directory.
-// It prioritizes TOML (unigo.toml) over YAML (unigo.yaml/unigo.yml).
+// It prioritizes TOML (unigodesktop.toml) over YAML (unigodesktop.yaml/unigodesktop.yml).
 func Load() (*Config, error) {
 	configDir := env.GetConfigDir()
 	cfg := &Config{}
 
 	// Check TOML
-	tomlPath := filepath.Join(configDir, "unigo.toml")
+	tomlPath := filepath.Join(configDir, "unigodesktop.toml")
 	if data, err := os.ReadFile(tomlPath); err == nil {
 		if err := toml.Unmarshal(data, cfg); err != nil {
 			return nil, fmt.Errorf("failed to parse TOML config: %w", err)
@@ -36,7 +36,7 @@ func Load() (*Config, error) {
 	}
 
 	// Check YAML
-	yamlPaths := []string{"unigo.yaml", "unigo.yml"}
+	yamlPaths := []string{"unigodesktop.yaml", "unigodesktop.yml", "unigodesktop.toml"}
 	for _, yp := range yamlPaths {
 		yamlPath := filepath.Join(configDir, yp)
 		if data, err := os.ReadFile(yamlPath); err == nil {
@@ -53,9 +53,9 @@ func Load() (*Config, error) {
 	return cfg, nil
 }
 
-// Save writes the current configuration to unigo.toml in the global config directory.
+// Save writes the current configuration to unigodesktop.toml in the global config directory.
 func (c *Config) Save() error {
-	configPath := env.GetGlobalConfigPath() // Defaults to unigo.toml
+	configPath := env.GetGlobalConfigPath() // Defaults to unigodesktop.toml
 
 	if err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil {
 		return fmt.Errorf("failed to create config directory: %w", err)
@@ -71,4 +71,11 @@ func (c *Config) Save() error {
 	}
 
 	return nil
+}
+
+// GetDefaultConfig returns a new default configuration instance.
+func GetDefaultConfig() *Config {
+	return &Config{
+		Debug: false,
+	}
 }

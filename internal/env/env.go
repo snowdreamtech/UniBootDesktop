@@ -9,21 +9,25 @@ import (
 )
 
 // Get returns the value of the environment variable with the given key,
-// searching with prefixes in order: UNIGO_, MISE_, and then the raw key.
-// Note: PATH is retrieved directly to avoid pollution from UNIGO_PATH/MISE_PATH.
+// searching with prefixes in order: UNIGODESKTOP_, UNIGODESKTOP_, MISE_, and then the raw key.
+// Note: PATH is retrieved directly to avoid pollution from UNIGODESKTOP_PATH/UNIGODESKTOP_PATH/MISE_PATH.
 func Get(key string) string {
 	if key == "PATH" {
 		return os.Getenv("PATH")
 	}
-	// 1. UNIGO_ prefix
-	if v := os.Getenv("UNIGO_" + key); v != "" {
+	// 1. UNIGODESKTOP_ prefix
+	if v := os.Getenv("UNIGODESKTOP_" + key); v != "" {
 		return v
 	}
-	// 2. MISE_ prefix
+	// 2. UNIGODESKTOP_ prefix
+	if v := os.Getenv("UNIGODESKTOP_" + key); v != "" {
+		return v
+	}
+	// 3. MISE_ prefix
 	if v := os.Getenv("MISE_" + key); v != "" {
 		return v
 	}
-	// 3. Raw key (Native)
+	// 4. Raw key (Native)
 	return os.Getenv(key)
 }
 
@@ -37,7 +41,7 @@ func GithubProxy() string {
 
 var (
 	//ProjectName Project Name
-	ProjectName string = "unigo"
+	ProjectName string = "unigodesktop"
 
 	//Author Author
 	Author string = "Snowdream Tech <snowdreamtech@qq.com>"
@@ -58,10 +62,10 @@ var (
 	COPYRIGHT string = "Copyright (c) 2023-present SnowdreamTech Inc."
 
 	//LICENSE LICENSE
-	LICENSE string = "MIT <https://github.com/snowdreamtech/unigo/blob/main/LICENSE>"
+	LICENSE string = "MIT <https://github.com/snowdreamtech/unigodesktop/blob/main/LICENSE>"
 
 	//Config Config File Path
-	Config string = "unigo.toml"
+	Config string = "unigodesktop.toml"
 
 	// Debug indicates whether the application should run in debug mode.
 	Debug bool

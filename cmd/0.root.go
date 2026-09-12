@@ -7,12 +7,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/snowdreamtech/unigo/internal/cli/output"
-	"github.com/snowdreamtech/unigo/internal/env"
-	"github.com/snowdreamtech/unigo/internal/errors"
-	"github.com/snowdreamtech/unigo/internal/hello"
-	"github.com/snowdreamtech/unigo/internal/logger"
-	"github.com/snowdreamtech/unigo/internal/updater"
+	"github.com/snowdreamtech/unigodesktop/internal/cli/output"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unigodesktop/internal/errors"
+	"github.com/snowdreamtech/unigodesktop/internal/hello"
+	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unigodesktop/internal/updater"
 	"github.com/spf13/cobra"
 )
 
@@ -24,6 +24,7 @@ var (
 	cdDir       string
 	yes         bool
 	showVersion bool
+	desktopMode bool
 )
 
 func getOutputFormat() output.OutputFormat {
@@ -34,9 +35,9 @@ func getOutputFormat() output.OutputFormat {
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "unigo",
-	Short: "UniGo is a Golang template hello world application",
-	Long:  `A fast and flexible Golang template referencing UniRTM and helloworld.`,
+	Use:   "unigodesktop",
+	Short: "UniGoDesktop is a Golang desktop application template",
+	Long:  `A fast, cross-platform Golang desktop application template with embedded web UI and CLI capabilities.`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// Change directory if --cd is provided
 		if cdDir != "" {

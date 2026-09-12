@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/snowdreamtech/unigo/internal/cli/output"
-	"github.com/snowdreamtech/unigo/internal/env"
+	"github.com/snowdreamtech/unigodesktop/internal/cli/output"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
 )
 
 // ShellConfigManager handles persistent configuration changes in shell RC files.
@@ -72,7 +72,7 @@ func (m *ShellConfigManager) Inject(shell ShellType, marker string, content stri
 	if strings.Contains(rawContentStr, searchPattern) {
 		// Already present, check if we need to update
 		if strings.Contains(rawContentStr, content) {
-			m.formatter.Info(fmt.Sprintf("UniGo %s logic already up to date in %s", marker, configFile), nil)
+			m.formatter.Info(fmt.Sprintf("UniGoDesktop %s logic already up to date in %s", marker, configFile), nil)
 			return nil
 		}
 

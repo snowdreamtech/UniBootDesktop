@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/snowdreamtech/unigo/internal/errors"
+	"github.com/snowdreamtech/unigodesktop/internal/errors"
 )
 
 // ExampleNewUserError demonstrates creating a user error.

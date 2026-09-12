@@ -17,12 +17,12 @@ import (
 
 	"github.com/mattn/go-isatty"
 	"github.com/pterm/pterm"
-	"github.com/snowdreamtech/unigo/internal/env"
-	"github.com/snowdreamtech/unigo/internal/version"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unigodesktop/internal/version"
 )
 
 const (
-	githubAPIURL = "https://api.github.com/repos/snowdreamtech/UniGo/releases/latest"
+	githubAPIURL = "https://api.github.com/repos/snowdreamtech/UniGoDesktop/releases/latest"
 	cacheFile    = "update-cache.json"
 	checkPeriod  = 24 * time.Hour
 	promptPeriod = 24 * time.Hour

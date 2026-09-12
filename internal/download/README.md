@@ -40,7 +40,7 @@ package main
 import (
     "context"
     "fmt"
-    "github.com/snowdreamtech/unigo/internal/download"
+    "github.com/snowdreamtech/unigodesktop/internal/download"
 )
 
 func main() {

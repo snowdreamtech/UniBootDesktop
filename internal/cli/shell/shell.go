@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/snowdreamtech/unigo/internal/env"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
 )
 
 // ShellType represents the type of shell being used.

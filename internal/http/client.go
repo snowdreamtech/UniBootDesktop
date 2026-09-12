@@ -10,7 +10,7 @@ import (
 
 	"golang.org/x/net/http/httpproxy"
 
-	"github.com/snowdreamtech/unigo/internal/env"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
 )
 
 // MockTransport can be set during tests to intercept all HTTP/HTTPS requests

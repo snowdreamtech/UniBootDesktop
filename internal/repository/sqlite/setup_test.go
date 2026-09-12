@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/snowdreamtech/unigo/internal/database"
+	"github.com/snowdreamtech/unigodesktop/internal/database"
 	"github.com/stretchr/testify/require"
 )
 
