@@ -16,6 +16,9 @@ var desktopCmd = &cobra.Command{
 	Short: "Launch the UniGoDesktop graphical application",
 	Long:  `Launch the UniGoDesktop interactive graphical application and system tray menu.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if WailsRunner != nil {
+			return WailsRunner()
+		}
 		cfg, err := config.Load()
 		if err != nil {
 			cfg = config.GetDefaultConfig()

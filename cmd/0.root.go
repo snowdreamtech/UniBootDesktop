@@ -34,6 +34,8 @@ func getOutputFormat() output.OutputFormat {
 	return output.FormatHuman
 }
 
+var WailsRunner func() error
+
 var rootCmd = &cobra.Command{
 	Use:   "unigodesktop",
 	Short: "UniGoDesktop is a Golang desktop application template",
@@ -59,12 +61,16 @@ var rootCmd = &cobra.Command{
 		updater.PromptIfAvailable(env.GitTag, cmd.Name())
 		return nil
 	},
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if showVersion {
 			runVersion(cmd, args)
-			return
+			return nil
+		}
+		if WailsRunner != nil {
+			return WailsRunner()
 		}
 		hello.PrintHello()
+		return nil
 	},
 }
 

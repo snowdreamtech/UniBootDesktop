@@ -197,6 +197,7 @@ nbproject/Package-*.bash
 build/
 nbbuild/
 dist/
+!frontend/dist/.gitkeep
 nbdist/
 nbactions.xml
 nb-configuration.xml

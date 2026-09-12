@@ -16,6 +16,9 @@ var guiCmd = &cobra.Command{
 	Short: "Launch the UniGoDesktop Wails graphical user interface",
 	Long:  `Launch the UniGoDesktop interactive Wails / Webview graphical desktop interface.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if WailsRunner != nil {
+			return WailsRunner()
+		}
 		cfg, err := config.Load()
 		if err != nil {
 			cfg = config.GetDefaultConfig()
