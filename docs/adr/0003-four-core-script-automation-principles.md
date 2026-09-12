@@ -97,10 +97,10 @@ support and richer libraries.
   creating a bootstrapping paradox. POSIX shell is universally available on all target platforms and
   has zero external dependencies.
 
-### Option C: .unigo.toml-only Automation
+### Option C: .unigodesktop.toml-only Automation
 
-Express all automation as .unigo.toml targets with no shell scripts.
+Express all automation as .unigodesktop.toml targets with no shell scripts.
 
 - **Reason rejected:** GNU Make has subtle cross-platform differences, particularly regarding
   Windows compatibility. Complex conditional logic (OS detection, retry loops) is unwieldy in
-  .unigo.toml syntax. A hybrid approach (`.unigo.toml` targets invoke `scripts/*.sh`) is used instead.
+  .unigodesktop.toml syntax. A hybrid approach (`.unigodesktop.toml` targets invoke `scripts/*.sh`) is used instead.

@@ -19,7 +19,7 @@ install_tool_safe BIN_NAME PROVIDER DISPLAY_NAME [VERSION_FLAG] [SKIP_FILE_CHECK
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
 | `BIN_NAME` | string | Yes | - | Binary name to verify (e.g., "shfmt", "ec-linux-amd64") |
-| `PROVIDER` | string | Yes | - | UniGo provider string (e.g., "github:mvdan/sh") |
+| `PROVIDER` | string | Yes | - | UniGoDesktop provider string (e.g., "github:mvdan/sh") |
 | `DISPLAY_NAME` | string | Yes | - | Human-readable name for logging |
 | `VERSION_FLAG` | string | No | "--version" | Flag to check version |
 | `SKIP_FILE_CHECK` | integer | No | 0 | Skip file detection (0=check, 1=skip) |
@@ -64,7 +64,7 @@ The function follows a six-step process:
 2. **Version Verification**: Verifies binary responds to version flag
 3. **Installation Decision**: Decides whether to install based on environment (CI vs local)
 4. **Cleanup**: Removes non-functional binaries if found
-5. **UniGo Installation**: Installs tool using unigo
+5. **UniGoDesktop Installation**: Installs tool using unigo
 6. **Post-Install Verification**: Verifies installation was successful
 
 **Performance:**
@@ -537,5 +537,5 @@ fi
 
 ## References
 
-- [UniGo Documentation](https://github.com/snowdreamtech/UniGo)
+- [UniGoDesktop Documentation](https://github.com/snowdreamtech/UniGoDesktop)
 - [POSIX Shell Scripting](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html)

@@ -77,7 +77,7 @@ RUN curl https://unigo.run | sh
 ENV PATH="/root/.local/bin:$PATH"
 
 # 复制配置并安装工具
-COPY .unigo.toml .
+COPY .unigodesktop.toml .
 RUN unigo install
 
 WORKDIR /app
@@ -108,7 +108,7 @@ RUN curl https://unigo.run | sh
 ENV PATH="/root/.local/bin:$PATH"
 
 # 复制配置并安装工具
-COPY .unigo.toml .
+COPY .unigodesktop.toml .
 RUN unigo install
 
 WORKDIR /app
@@ -168,7 +168,7 @@ file $(unigo which node)
 
 ### 使用国内镜像加速
 
-在 `.unigo.toml` 中配置：
+在 `.unigodesktop.toml` 中配置：
 
 ```toml
 [env]
@@ -204,7 +204,7 @@ RUN curl https://unigo.run | sh
 ENV PATH="/root/.local/bin:$PATH"
 
 # 安装工具
-COPY .unigo.toml .
+COPY .unigodesktop.toml .
 RUN unigo install
 
 # 构建应用
@@ -291,7 +291,7 @@ docker pull node:25.9.0-alpine3.22
 
 ## 参考资源
 
-- [unigo 官方文档](https://github.com/snowdreamtech/UniGo)
+- [unigo 官方文档](https://github.com/snowdreamtech/UniGoDesktop)
 - [Alpine Linux 包搜索](https://pkgs.alpinelinux.org/)
 - [Node.js Unofficial Builds](https://unofficial-builds.nodejs.org/)
 - [Docker Hub - Alpine](https://hub.docker.com/_/alpine)

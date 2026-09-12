@@ -1,4 +1,4 @@
-# Troubleshooting UniGo Provenance Verification Issues
+# Troubleshooting UniGoDesktop Provenance Verification Issues
 
 ## Problem
 
@@ -60,10 +60,10 @@ The fix is now automated in the CI/CD pipeline:
 
 - Ruff 0.15.9 provenance verification error
 - GitHub Attestations: <https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations>
-- UniGo cache documentation: <https://github.com/snowdreamtech/UniGocli/cache.html>
+- UniGoDesktop cache documentation: <https://github.com/snowdreamtech/UniGoDesktopcli/cache.html>
 
 ## References
 
 - [GitHub Artifact Attestations Documentation](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds)
 - [Ruff 0.15.9 Release](https://github.com/astral-sh/ruff/releases/tag/0.15.9)
-- [UniGo Cache Clear Discussion](https://github.com/jdx/unigo/discussions/7267)
+- [UniGoDesktop Cache Clear Discussion](https://github.com/jdx/unigo/discussions/7267)

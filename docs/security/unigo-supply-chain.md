@@ -40,7 +40,7 @@ hadolint                      aqua:hadolint/hadolint
 
 ### ✅ Already Implemented
 
-1. **Explicit Backend Specification**: All tools in `.unigo.toml` use explicit backends:
+1. **Explicit Backend Specification**: All tools in `.unigodesktop.toml` use explicit backends:
    - `github:owner/repo` for GitHub releases
    - `npm:package` for npm packages
    - `pipx:package` for Python packages
@@ -54,7 +54,7 @@ hadolint                      aqua:hadolint/hadolint
      ;;
    ```
 
-3. **Version Pinning**: All tools are pinned to specific versions in `.unigo.toml`
+3. **Version Pinning**: All tools are pinned to specific versions in `.unigodesktop.toml`
 
 ### 🔒 Additional Recommendations
 
@@ -129,7 +129,7 @@ Our CI workflows already implement:
 
 - ✅ Locked unigo versions (`UNIRTM_LOCKED=1`)
 - ✅ Explicit tool specs in lint-wrapper.sh
-- ✅ Version pinning in .unigo.toml
+- ✅ Version pinning in .unigodesktop.toml
 - ✅ unigo.lock committed to repository
 
 ## Related Security Measures
@@ -141,9 +141,9 @@ Our CI workflows already implement:
 
 ## References
 
-- [unigo Registry Documentation](https://github.com/snowdreamtech/UniGoregistry.html)
+- [unigo Registry Documentation](https://github.com/snowdreamtech/UniGoDesktopregistry.html)
 - [unigo Security Policy](https://github.com/jdx/unigo/blob/main/SECURITY.md)
-- [unigo Paranoid Mode](https://github.com/snowdreamtech/UniGoparanoid)
+- [unigo Paranoid Mode](https://github.com/snowdreamtech/UniGoDesktopparanoid)
 - [SLSA Framework](https://slsa.dev/)
 
 ## Action Items

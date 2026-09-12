@@ -13,7 +13,7 @@ Alpine Linux 使用 musl libc 而不是 glibc，这会影响某些预编译二�
 **原因**: Go 官方二进制是静态链接的，不依赖 libc
 
 ```toml
-# .unigo.toml - 无需修改
+# .unigodesktop.toml - 无需修改
 go = "1.27.0"
 ```
 
@@ -33,7 +33,7 @@ ldd $(which go)
 **原因**: python-build-standalone 项目提供 musl 预编译包
 
 ```toml
-# .unigo.toml - 无需修改
+# .unigodesktop.toml - 无需修改
 python = "3.14.3"
 ```
 
@@ -68,7 +68,7 @@ unigo settings set node.flavor=musl
 或在配置文件中设置：
 
 ```toml
-# .unigo.toml
+# .unigodesktop.toml
 [settings]
 node.mirror_url = "https://unofficial-builds.nodejs.org/download/release/"
 node.flavor = "musl"
@@ -124,7 +124,7 @@ RUN unigo settings set node.mirror_url=https://unofficial-builds.nodejs.org/down
     unigo settings set node.flavor=musl
 
 # 复制配置文件
-COPY .unigo.toml .
+COPY .unigodesktop.toml .
 
 # 安装所有工具
 RUN unigo install
@@ -154,13 +154,13 @@ RUN curl https://unigo.run | sh
 ENV PATH="/root/.local/bin:$PATH"
 
 # 复制配置文件（注释掉 node/python/go）
-COPY .unigo.toml .
+COPY .unigodesktop.toml .
 
 # 只安装开发工具（linters, formatters 等）
 RUN unigo install
 ```
 
-对应的 `.unigo.toml`:
+对应的 `.unigodesktop.toml`:
 
 ```toml
 # 生产环境配置 - 使用系统包
@@ -250,7 +250,7 @@ file $(unigo where node)/bin/node
 
 - [Node.js Unofficial Builds](https://unofficial-builds.nodejs.org/)
 - [python-build-standalone](https://github.com/indygreg/python-build-standalone)
-- [unigo Node.js 文档](https://github.com/snowdreamtech/UniGolang/node.html)
+- [unigo Node.js 文档](https://github.com/snowdreamtech/UniGoDesktoplang/node.html)
 - [Alpine Linux 包搜索](https://pkgs.alpinelinux.org/packages)
 - [musl libc 官网](https://musl.libc.org/)
 

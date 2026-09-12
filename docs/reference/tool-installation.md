@@ -68,7 +68,7 @@ Based on the environment (CI vs local development), decide whether to proceed wi
 
 If a non-functional binary is found, remove it before reinstalling.
 
-### Step 5: UniGo Installation
+### Step 5: UniGoDesktop Installation
 
 Use unigo to install the tool with the specified version.
 
@@ -126,18 +126,18 @@ Many tools provide platform-specific binaries with different names. The installa
 
 The system uses a layered resolution strategy:
 
-1. **UniGo Which** (Primary): `unigo which <tool>` - handles platform-specific binaries automatically
+1. **UniGoDesktop Which** (Primary): `unigo which <tool>` - handles platform-specific binaries automatically
 2. **Command -v** (Fallback 1): `command -v <tool>` - for tools in PATH
-3. **UniGo Where + Find** (Fallback 2): Search unigo installation directory with pattern matching
+3. **UniGoDesktop Where + Find** (Fallback 2): Search unigo installation directory with pattern matching
 
 **Example:**
 
 ```bash
 # For editorconfig-checker on Linux x86_64
-# UniGo automatically resolves to: ec-linux-amd64
+# UniGoDesktop automatically resolves to: ec-linux-amd64
 
 # For hadolint on Windows
-# UniGo automatically resolves to: hadolint.exe
+# UniGoDesktop automatically resolves to: hadolint.exe
 ```
 
 ### Performance Considerations
@@ -193,7 +193,7 @@ Each verification step is atomic and reports its status:
 
 **Possible causes:**
 
-- UniGo installation directory not in PATH
+- UniGoDesktop installation directory not in PATH
 - Platform-specific binary name not recognized
 - Installation failed silently
 
@@ -230,7 +230,7 @@ Each verification step is atomic and reports its status:
 **Possible causes:**
 
 - Tool doesn't provide binaries for your platform
-- UniGo provider doesn't support platform-specific names
+- UniGoDesktop provider doesn't support platform-specific names
 
 **Solution:**
 
@@ -399,5 +399,5 @@ For a complete list, see the implementation in `scripts/lib/langs/*.sh`.
 
 ## References
 
-- [UniGo Documentation](https://github.com/snowdreamtech/UniGo)
+- [UniGoDesktop Documentation](https://github.com/snowdreamtech/UniGoDesktop)
 - [Performance Testing Spec](../../.kiro/specs/performance-testing-and-docs/design.md)

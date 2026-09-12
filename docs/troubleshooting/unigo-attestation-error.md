@@ -1,4 +1,4 @@
-# UniGo Attestation Verification Error
+# UniGoDesktop Attestation Verification Error
 
 ## 问题描述
 
@@ -33,7 +33,7 @@ Verify the release is authentic before proceeding.
    - 这不是 Ruff 的问题，而是 Aqua 的设计缺陷
 
 4. **unigo 的默认行为**
-   - 当你在 `.unigo.toml` 中写 `github:astral-sh/ruff` 时
+   - 当你在 `.unigodesktop.toml` 中写 `github:astral-sh/ruff` 时
    - unigo 实际上使用 `aqua:astral-sh/ruff` 作为后端
    - metadata 查询来自 GitHub API
    - 但二进制下载来自 Aqua Registry（默认优先）
@@ -41,8 +41,8 @@ Verify the release is authentic before proceeding.
 
 ### 技术细节
 
-1. **UniGo 的后端机制**
-   - 当你在 `.unigo.toml` 中指定 `github:astral-sh/ruff` 时
+1. **UniGoDesktop 的后端机制**
+   - 当你在 `.unigodesktop.toml` 中指定 `github:astral-sh/ruff` 时
    - unigo 实际上使用 `aqua:astral-sh/ruff` 作为后端
    - 可以在 <https://unigo-versions.jdx.dev/tools/ruff> 查看
 
@@ -71,7 +71,7 @@ Verify the release is authentic before proceeding.
 
 #### 第一层：unigo 配置文件
 
-在 `.unigo.toml` 的 `[settings]` 部分添加：
+在 `.unigodesktop.toml` 的 `[settings]` 部分添加：
 
 ```toml
 [settings]
@@ -87,7 +87,7 @@ aqua.minisign = false
 
 #### 第二层：环境变量强制
 
-在 `.unigo.toml` 的 `[env]` 部分添加：
+在 `.unigodesktop.toml` 的 `[env]` 部分添加：
 
 ```toml
 [env]
@@ -167,7 +167,7 @@ unigo install github:astral-sh/ruff@0.15.10 --yes
 如果 attestation 验证持续失败，可以暂时使用 0.15.9：
 
 ```toml
-# .unigo.toml
+# .unigodesktop.toml
 [tools]
 "github:astral-sh/ruff" = "0.15.9"
 ```
@@ -177,7 +177,7 @@ unigo install github:astral-sh/ruff@0.15.10 --yes
 使用 pipx 或 cargo 安装 ruff，而不是通过 unigo：
 
 ```toml
-# .unigo.toml
+# .unigodesktop.toml
 [tools]
 # 使用 pipx 安装（Python 包）
 "pipx:ruff" = "0.15.10"
@@ -248,17 +248,17 @@ unigo lock
 
 ## 相关链接
 
-- [UniGo 配置最佳实践](../reference/unigo-configuration.md) - unigo 配置标准和安全要求
+- [UniGoDesktop 配置最佳实践](../reference/unigo-configuration.md) - unigo 配置标准和安全要求
 - [GitHub Artifact Attestations 文档](https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds)
 - [Aqua Registry](https://github.com/aquaproj/aqua-registry)
-- [UniGo 文档](https://github.com/snowdreamtech/UniGo)
+- [UniGoDesktop 文档](https://github.com/snowdreamtech/UniGoDesktop)
 - [Ruff Releases](https://github.com/astral-sh/ruff/releases)
 
 ## 报告问题
 
 如果你认为这是 unigo 的 bug，可以在以下位置报告：
 
-1. **UniGo 项目**: <https://github.com/jdx/unigo/issues>
+1. **UniGoDesktop 项目**: <https://github.com/jdx/unigo/issues>
 2. **Aqua Registry**: <https://github.com/aquaproj/aqua-registry/issues>
 
 报告时请包含：

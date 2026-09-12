@@ -28,10 +28,10 @@ $ unigo install node@25.9.0
 
 ### 方案 A: 条件环境变量（推荐）
 
-在 `.unigo.toml` 中使用条件配置，根据系统自动选择：
+在 `.unigodesktop.toml` 中使用条件配置，根据系统自动选择：
 
 ```toml
-# .unigo.toml
+# .unigodesktop.toml
 [tools]
 node = "25.9.0"
 python = "3.14.3"
@@ -69,7 +69,7 @@ ENV UNIRTM_NODE_MIRROR_URL="https://unofficial-builds.nodejs.org/download/releas
 ENV UNIRTM_NODE_FLAVOR="musl"
 
 # 复制配置并安装
-COPY .unigo.toml .
+COPY .unigodesktop.toml .
 RUN unigo install
 
 WORKDIR /app
@@ -80,7 +80,7 @@ CMD ["node", "index.js"]
 **优势**:
 
 - ✅ 配置清晰明确
-- ✅ 不影响 .unigo.toml
+- ✅ 不影响 .unigodesktop.toml
 - ✅ 适合单一平台部署
 
 ### 方案 C: 使用官方 Node.js Alpine 镜像（最简单）
@@ -94,7 +94,7 @@ RUN curl https://unigo.run | sh
 ENV PATH="/root/.local/bin:$PATH"
 
 # 复制配置（node 已预装，unigo 跳过）
-COPY .unigo.toml .
+COPY .unigodesktop.toml .
 RUN unigo install python go
 
 WORKDIR /app
@@ -162,13 +162,13 @@ file $(unigo which node)
 
 ```
 .
-├── .unigo.toml              # 跨平台配置
+├── .unigodesktop.toml              # 跨平台配置
 ├── Dockerfile.alpine       # Alpine 专用
 ├── Dockerfile.ubuntu       # Ubuntu 专用
 └── docker-compose.yml
 ```
 
-### .unigo.toml（方案 A）
+### .unigodesktop.toml（方案 A）
 
 ```toml
 [tools]
@@ -202,7 +202,7 @@ ENV UNIRTM_NODE_MIRROR_URL="https://unofficial-builds.nodejs.org/download/releas
 ENV UNIRTM_NODE_FLAVOR="musl"
 
 # 安装工具
-COPY .unigo.toml .
+COPY .unigodesktop.toml .
 RUN unigo install
 
 WORKDIR /app
@@ -225,7 +225,7 @@ RUN curl https://unigo.run | sh
 ENV PATH="/root/.local/bin:$PATH"
 
 # 安装工具（自动使用 glibc 预编译包）
-COPY .unigo.toml .
+COPY .unigodesktop.toml .
 RUN unigo install
 
 WORKDIR /app
@@ -306,7 +306,7 @@ unigo install node@25.9.0
 
 ## 参考资源
 
-- [unigo 官方文档](https://github.com/snowdreamtech/UniGo)
+- [unigo 官方文档](https://github.com/snowdreamtech/UniGoDesktop)
 - [Node.js 官方下载](https://nodejs.org/dist/)
 - [Node.js Unofficial Builds](https://unofficial-builds.nodejs.org/)
 - [Alpine Linux 包搜索](https://pkgs.alpinelinux.org/)

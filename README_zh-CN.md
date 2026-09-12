@@ -1,38 +1,39 @@
-# UniGo
+# UniGoDesktop
 
-[![CI 流水线](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/ci.yml?branch=main&label=CI%20Pipeline)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)
-[![CD 自动化发布](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/cd.yml?branch=main&label=CD%20Pipeline)](https://github.com/snowdreamtech/UniGo/actions/workflows/cd.yml)
-[![文档站点](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/pages.yml?branch=main&label=%E6%96%87%E6%A1%A3&logo=github)](https://github.com/snowdreamtech/UniGo/actions/workflows/pages.yml)
-[![CodeQL 审计](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/codeql.yml?branch=main&label=CodeQL&logo=github)](https://github.com/snowdreamtech/UniGo/actions/workflows/codeql.yml)
-[![跨平台验证](https://img.shields.io/badge/Verified-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)
-[![安全审计](https://img.shields.io/badge/Security-Zizmor%20%7C%20Trivy%20%7C%20Gitleaks-brightgreen)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)
-[![SBOM 背书](https://img.shields.io/badge/SBOM-Available-success)](https://github.com/snowdreamtech/UniGo/releases/latest)
+[![CI 流水线](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGoDesktop/ci.yml?branch=main&label=CI%20Pipeline)](https://github.com/snowdreamtech/UniGoDesktop/actions/workflows/ci.yml)
+[![CD 自动化发布](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGoDesktop/cd.yml?branch=main&label=CD%20Pipeline)](https://github.com/snowdreamtech/UniGoDesktop/actions/workflows/cd.yml)
+[![文档站点](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGoDesktop/pages.yml?branch=main&label=%E6%96%87%E6%A1%A3&logo=github)](https://github.com/snowdreamtech/UniGoDesktop/actions/workflows/pages.yml)
+[![CodeQL 审计](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGoDesktop/codeql.yml?branch=main&label=CodeQL&logo=github)](https://github.com/snowdreamtech/UniGoDesktop/actions/workflows/codeql.yml)
+[![跨平台验证](https://img.shields.io/badge/Verified-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/snowdreamtech/UniGoDesktop/actions/workflows/ci.yml)
+[![安全审计](https://img.shields.io/badge/Security-Zizmor%20%7C%20Trivy%20%7C%20Gitleaks-brightgreen)](https://github.com/snowdreamtech/UniGoDesktop/actions/workflows/ci.yml)
+[![SBOM 背书](https://img.shields.io/badge/SBOM-Available-success)](https://github.com/snowdreamtech/UniGoDesktop/releases/latest)
 [![许可证: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/license/MIT)
-[![最新发布](https://img.shields.io/github/v/release/snowdreamtech/UniGo?logo=github&sort=semver)](https://github.com/snowdreamtech/UniGo/releases/latest)
-[![Dependabot 已启用](https://img.shields.io/badge/Dependabot-Enabled-brightgreen?logo=dependabot)](https://github.com/snowdreamtech/UniGo/blob/main/.github/dependabot.yml)
+[![最新发布](https://img.shields.io/github/v/release/snowdreamtech/UniGoDesktop?logo=github&sort=semver)](https://github.com/snowdreamtech/UniGoDesktop/releases/latest)
+[![Dependabot 已启用](https://img.shields.io/badge/Dependabot-Enabled-brightgreen?logo=dependabot)](https://github.com/snowdreamtech/UniGoDesktop/blob/main/.github/dependabot.yml)
 [![pre-commit 已启用](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
-[![GitHub Stars](https://img.shields.io/github/stars/snowdreamtech/UniGo?style=social)](https://github.com/snowdreamtech/UniGo)
-[![GitHub Issues](https://img.shields.io/github/issues/snowdreamtech/UniGo)](https://github.com/snowdreamtech/UniGo/issues)
-[![代码规模](https://img.shields.io/github/languages/code-size/snowdreamtech/UniGo)](https://github.com/snowdreamtech/UniGo)
+[![GitHub Stars](https://img.shields.io/github/stars/snowdreamtech/UniGoDesktop?style=social)](https://github.com/snowdreamtech/UniGoDesktop)
+[![GitHub Issues](https://img.shields.io/github/issues/snowdreamtech/UniGoDesktop)](https://github.com/snowdreamtech/UniGoDesktop/issues)
+[![代码规模](https://img.shields.io/github/languages/code-size/snowdreamtech/UniGoDesktop)](https://github.com/snowdreamtech/UniGoDesktop)
 
 [English](README.md) | [简体中文](README_zh-CN.md)
 
-UniGo 是一个快速、灵活且企业级的 Golang CLI 模板，深受 UniRTM 和 helloworld 的启发。它为构建现代 Go 命令行应用程序提供了一个坚实的基础，内置了精美的终端输出、结构化日志、缓存管理机制以及全套的 CI/CD 流水线。
+UniGoDesktop 是一个快速、灵活且企业级的 Golang 桌面端应用模版项目 (Golang Desktop Template)，深受 UniRTM 和 helloworld 的启发。它为构建现代跨平台 Go 桌面应用提供了坚实的基础，内置嵌入式 Web 界面、系统托盘 (System Tray) 支持以及 CLI/Headless 命令行模式。
 
 ## 🌟 特性
 
-- **现代 CLI 架构**：基于 Go 1.24+ 和 Cobra 构建，提供结构化且易于扩展的命令行框架。
-- **精美输出**：使用 `pterm` 实现丰富、多彩且交互友好的终端输出效果。
-- **结构化日志**：内置对 Go 标准库 `slog` 的支持，提供高性能的结构化日志记录。
-- **丰富的内置工具**：自带 `doctor`、`self-update`、`cache`、`config` 和 `license` 等实用命令。
-- **三重保证质量**：通过 IDE 实时检查、Pre-commit 本地拦截和 GitHub Actions 远端全量审计，构建 100% 代码纯净度防线。
-- **跨平台就绪**：在 macOS、Linux 和 Windows 上均可无缝运行。
+- **Golang 桌面引擎**：结构化的桌面应用生命周期管理 (`internal/desktop`)，管理主窗口、系统托盘与本地后台服务。
+- **嵌入式 Web UI**：通过轻量级本地 Web Bridge 服务器提供嵌入式前端静态资源 (HTML/CSS/JS)。
+- **系统托盘集成**：原生系统托盘菜单（显示主窗口、应用状态、退出）。
+- **双模运行能力**：支持以交互式桌面 GUI 模式 (`unigodesktop desktop` 或默认) 或命令行 CLI 工具模式运行。
+- **现代 CLI 架构**：基于 Go 1.27+ 和 Cobra 构建，提供完整的结构化命令行功能。
+- **结构化日志与数据库缓存**：内置 Go `log/slog` 高性能结构化日志与 SQLite 本地持久化存储。
+- **跨平台就绪**：在 macOS、Linux 和 Windows 上均可无缝构建与运行。
 
 ## 🏗️ 架构与设计
 
 ### 概览
 
-UniGo 旨在解决每次启动新的 Go CLI 项目时遇到的模板化和重复配置问题。它提供了开箱即用的标准开发环境、架构模式和自动化流水线。
+UniGoDesktop 旨在解决每次启动新的 Go CLI 项目时遇到的模板化和重复配置问题。它提供了开箱即用的标准开发环境、架构模式和自动化流水线。
 
 ### 核心组件
 
@@ -54,7 +55,7 @@ UniGo 旨在解决每次启动新的 Go CLI 项目时遇到的模板化和重复
 **通过 NPM 安装**:
 
 ```sh-session
-npm install -g @snowdreamtech/unigo
+npm install -g @snowdreamtech/unigodesktop
 ```
 
 **通过 PyPI 安装**:
@@ -90,7 +91,7 @@ pip install snowdreamtech-unigo
 ### 故障排除
 
 - **问题**: `unirtm run verify` 报测试失败。
-  - **解决方案**: 确保代码通过所有 Go 单元测试。UniGo 会执行严格的代码覆盖率和竞态条件 (race) 检查。
+  - **解决方案**: 确保代码通过所有 Go 单元测试。UniGoDesktop 会执行严格的代码覆盖率和竞态条件 (race) 检查。
 - **问题**: Pre-commit 钩子报错。
   - **解决方案**: 许多钩子（如代码格式化）会自动修复问题。将修改后的文件重新 `git add` 并再次提交即可。
 
@@ -106,8 +107,8 @@ pip install snowdreamtech-unigo
 ### 本地开发设置
 
 ```bash
-git clone https://github.com/snowdreamtech/UniGo.git
-cd UniGo
+git clone https://github.com/snowdreamtech/UniGoDesktop.git
+cd UniGoDesktop
 unirtm run setup
 unirtm run install
 ```
@@ -135,4 +136,4 @@ unirtm run install
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/image?repos=snowdreamtech/UniGo&type=date&legend=top-left)](https://www.star-history.com/?repos=snowdreamtech%2FUniGo&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/image?repos=snowdreamtech/UniGoDesktop&type=date&legend=top-left)](https://www.star-history.com/?repos=snowdreamtech%2FUniGoDesktop&type=date&legend=top-left)
