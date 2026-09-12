@@ -68,7 +68,7 @@ func (a *App) Start(ctx context.Context) error {
 
 	errChan := make(chan error, 2)
 
-	// Start UI Runner
+	// Start UI Runner (Web Bridge Server)
 	go func() {
 		if err := a.runner.Start(ctx); err != nil {
 			errChan <- fmt.Errorf("UI runner error: %w", err)
