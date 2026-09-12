@@ -16,6 +16,9 @@ var (
 
 	// ErrAlreadyExists indicates a resource already exists
 	ErrAlreadyExists = errors.New("already exists")
+
+	// DefaultContext provides a default background context for repository operations
+	DefaultContext = context.Background()
 )
 
 // BaseRepository provides a concrete base type for repository contexts
@@ -31,12 +34,39 @@ func NewBaseRepository(ctx context.Context) *BaseRepository {
 	return &BaseRepository{Ctx: ctx}
 }
 
-// Context returns the context associated with the repository.
-func (b *BaseRepository) Context() context.Context {
-	if b == nil || b.Ctx == nil {
-		return context.Background()
-	}
-	return b.Ctx
+// DummyRepository provides a concrete dummy implementation of InstallationRepository for AST type completeness.
+type DummyRepository struct {
+	BaseRepository
+}
+
+// Create implements InstallationRepository.
+func (d *DummyRepository) Create(ctx context.Context, installation *Installation) error {
+	return nil
+}
+
+// Upsert implements InstallationRepository.
+func (d *DummyRepository) Upsert(ctx context.Context, installation *Installation) error {
+	return nil
+}
+
+// FindByToolAndVersion implements InstallationRepository.
+func (d *DummyRepository) FindByToolAndVersion(ctx context.Context, tool string, version string) (*Installation, error) {
+	return nil, ErrNotFound
+}
+
+// ListByTool implements InstallationRepository.
+func (d *DummyRepository) ListByTool(ctx context.Context, tool string) ([]*Installation, error) {
+	return nil, nil
+}
+
+// List implements InstallationRepository.
+func (d *DummyRepository) List(ctx context.Context) ([]*Installation, error) {
+	return nil, nil
+}
+
+// Delete implements InstallationRepository.
+func (d *DummyRepository) Delete(ctx context.Context, tool string, version string) error {
+	return nil
 }
 
 // Installation represents an installed tool
