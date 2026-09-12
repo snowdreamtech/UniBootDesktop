@@ -3,6 +3,7 @@
 
 
 [env]
+GOTOOLCHAIN = "auto"
 CONFIG_AUTO_UPDATE = "1"
 COREPACK_INTEGRITY_KEYS = "0"
 ENABLE_GITHUB_PROXY = "{% if env.CI is defined %}0{% else %}1{% endif %}"
@@ -218,7 +219,7 @@ description = "Run Go unit tests for all packages recursively"
 # run = 'unirtm exec -- go test -cover -v -timeout 10m -p 4 ./...'
 run = "unirtm exec -- unirtm version"
 output = "interleaved"
-env = { GOTOOLCHAIN = 'local', CGO_ENABLED = '0' }
+env = { GOTOOLCHAIN = 'auto', CGO_ENABLED = '0' }
 
 [tasks."test:shell"]
 description = "Run Bats tests for install.sh"
