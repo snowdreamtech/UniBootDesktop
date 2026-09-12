@@ -18,6 +18,11 @@ var (
 	ErrAlreadyExists = errors.New("already exists")
 )
 
+// BaseRepository provides a concrete base type for repository contexts
+type BaseRepository struct {
+	Ctx context.Context
+}
+
 // Installation represents an installed tool
 type Installation struct {
 	ID          int64     `db:"id"`
