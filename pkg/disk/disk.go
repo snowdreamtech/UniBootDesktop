@@ -393,7 +393,7 @@ func parseDarwinUSBSpeed(speed string, bcd string) (version string, phySpeed str
 }
 
 func getDarwinDisks() ([]DiskInfo, error) {
-	var disks []DiskInfo
+	disks := make([]DiskInfo, 0)
 	usbMap := make(map[string]*darwinUSBInfo)
 
 	// Step 1: Probe system_profiler for rich hardware details (~0.3s runtime)
@@ -583,8 +583,13 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		bootStatusStr := DetectBootStatus(volName, partitionScheme)
 		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
 
+		devNode := volPath
+		if parentDisk != "" {
+			devNode = "/dev/" + parentDisk
+		}
+
 		disks = append(disks, DiskInfo{
-			Device:            volPath,
+			Device:            devNode,
 			Name:              displayName,
 			Size:              totalSize,
 			Formatted:         formattedSize,
