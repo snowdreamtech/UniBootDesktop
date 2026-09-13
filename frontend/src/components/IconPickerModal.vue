@@ -164,9 +164,10 @@ function resetToAuto() {
 
 .icon-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.9rem;
   margin-bottom: 1.5rem;
+  align-items: stretch;
 }
 
 .icon-card {
@@ -180,6 +181,8 @@ function resetToAuto() {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  height: 100%;
 }
 
 .icon-card:hover {
@@ -194,8 +197,8 @@ function resetToAuto() {
 }
 
 .icon-preview {
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -203,6 +206,7 @@ function resetToAuto() {
   margin-bottom: 0.6rem;
   background: rgba(0, 229, 255, 0.1);
   color: var(--accent-cyan);
+  flex-shrink: 0;
 }
 
 .icon-preview.boot {
@@ -240,12 +244,21 @@ function resetToAuto() {
   font-weight: 700;
   margin-bottom: 0.25rem;
   color: var(--text-color);
+  min-height: 2.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.25;
 }
 
 .option-desc {
   font-size: 0.725rem;
   color: var(--text-muted);
-  line-height: 1.3;
+  line-height: 1.35;
+  min-height: 2.7em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-footer {
