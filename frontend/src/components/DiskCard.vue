@@ -154,6 +154,9 @@ interface DiskInfo {
   usbVersion?: string;
   usbSpeed?: string;
   vendor?: string;
+  vendorId?: string;
+  productId?: string;
+  controllerVendor?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }
