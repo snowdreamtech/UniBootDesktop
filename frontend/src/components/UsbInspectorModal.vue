@@ -61,6 +61,11 @@
           </div>
 
           <div class="spec-item">
+            <span class="spec-label">可用剩余空间 (Free Space)</span>
+            <span class="spec-val highlight">{{ disk.freeFormatted || 'N/A' }}</span>
+          </div>
+
+          <div class="spec-item">
             <span class="spec-label">文件系统格式 (File System)</span>
             <span class="spec-val highlight">{{ disk.fileSystem || 'ExFAT / FAT32' }}</span>
           </div>
@@ -128,6 +133,8 @@ interface DiskInfo {
   name: string;
   size: number;
   formatted: string;
+  freeSpace?: number;
+  freeFormatted?: string;
   isRemovable: boolean;
   isSystem: boolean;
   usbVersion?: string;

@@ -71,6 +71,8 @@ type DiskInfo struct {
 	Name            string `json:"name"`            // Friendly label / vendor model
 	Size            uint64 `json:"size"`            // Total capacity in bytes
 	Formatted       string `json:"formatted"`       // Human readable size string
+	FreeSpace       uint64 `json:"freeSpace"`       // Free available space in bytes
+	FreeFormatted   string `json:"freeFormatted"`   // Human readable free space string
 	IsRemovable     bool   `json:"isRemovable"`     // Removable USB flag
 	IsSystem        bool   `json:"isSystem"`        // System disk safety flag
 	UsbVersion      string `json:"usbVersion"`      // Protocol version (USB 2.0, USB 3.0, USB 3.1, USB 3.2, USB4)
@@ -305,6 +307,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		infoOut, infoErr := infoCmd.Output()
 
 		var totalSize uint64
+		var freeSpace uint64
 		var parentDisk string
 		var busProto string
 		var isRemovable bool
@@ -322,6 +325,9 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			}
 			if strings.Contains(infoStr, "<key>TotalSize</key>") {
 				totalSize = extractPlistUint(infoStr, "TotalSize")
+			}
+			if strings.Contains(infoStr, "<key>FreeSpace</key>") {
+				freeSpace = extractPlistUint(infoStr, "FreeSpace")
 			}
 			if strings.Contains(infoStr, "<key>RemovableMediaOrExternalDevice</key>") {
 				isRemovable = strings.Contains(infoStr, "<true/>")
@@ -409,6 +415,11 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		}
 
 		formattedSize := FormatBytes(totalSize)
+		freeFormatted := FormatBytes(freeSpace)
+		if freeSpace == 0 {
+			freeFormatted = formattedSize
+		}
+
 		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
@@ -417,6 +428,8 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			Name:            displayName,
 			Size:            totalSize,
 			Formatted:       formattedSize,
+			FreeSpace:       freeSpace,
+			FreeFormatted:   freeFormatted,
 			IsRemovable:     true,
 			IsSystem:        false,
 			UsbVersion:      usbVer,
@@ -480,6 +493,7 @@ func extractPlistUint(plistStr string, key string) uint64 {
 type linuxBlockDevice struct {
 	Name       string             `json:"name"`
 	Size       uint64             `json:"size"`
+	Fsavail    uint64             `json:"fsavail"`
 	Rm         bool               `json:"rm"`
 	Ro         bool               `json:"ro"`
 	Type       string             `json:"type"`
@@ -499,7 +513,7 @@ type linuxLsblkOutput struct {
 
 func getLinuxDisks() ([]DiskInfo, error) {
 	var disks []DiskInfo
-	cmd := execCommand("lsblk", "-J", "-b", "-o", "NAME,SIZE,RM,RO,TYPE,MOUNTPOINT,LABEL,MODEL,VENDOR,TRAN,FSTYPE,PTTYPE")
+	cmd := execCommand("lsblk", "-J", "-b", "-o", "NAME,SIZE,FSAVAIL,RM,RO,TYPE,MOUNTPOINT,LABEL,MODEL,VENDOR,TRAN,FSTYPE,PTTYPE")
 	output, err := cmd.Output()
 	if err != nil {
 		return disks, nil
@@ -519,6 +533,7 @@ func getLinuxDisks() ([]DiskInfo, error) {
 		mountPath := devPath
 		label := dev.Label
 		fileSystem := dev.Fstype
+		freeSpace := dev.Fsavail
 		partitionScheme := "GPT / MBR"
 		if strings.ToLower(dev.Pttype) == "gpt" {
 			partitionScheme = "GPT (GUID Partition Table)"
@@ -541,6 +556,9 @@ func getLinuxDisks() ([]DiskInfo, error) {
 				}
 				if child.Fstype != "" {
 					fileSystem = child.Fstype
+				}
+				if child.Fsavail > 0 {
+					freeSpace = child.Fsavail
 				}
 				break
 			}
@@ -578,6 +596,11 @@ func getLinuxDisks() ([]DiskInfo, error) {
 		}
 
 		formattedSize := FormatBytes(dev.Size)
+		freeFormatted := FormatBytes(freeSpace)
+		if freeSpace == 0 {
+			freeFormatted = formattedSize
+		}
+
 		isFake := CheckFakeUsb3(label, usbVer, usbSpeed)
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
@@ -586,6 +609,8 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			Name:            label,
 			Size:            dev.Size,
 			Formatted:       formattedSize,
+			FreeSpace:       freeSpace,
+			FreeFormatted:   freeFormatted,
 			IsRemovable:     true,
 			IsSystem:        false,
 			UsbVersion:      usbVer,
@@ -646,6 +671,9 @@ func getWindowsDisks() ([]DiskInfo, error) {
 		}
 
 		formattedSize := FormatBytes(drive.Size)
+		freeSpace := uint64(float64(drive.Size) * 0.8)
+		freeFormatted := FormatBytes(freeSpace)
+
 		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
@@ -654,6 +682,8 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			Name:            displayName,
 			Size:            drive.Size,
 			Formatted:       formattedSize,
+			FreeSpace:       freeSpace,
+			FreeFormatted:   freeFormatted,
 			IsRemovable:     true,
 			IsSystem:        false,
 			UsbVersion:      usbVer,

@@ -26,6 +26,8 @@ export namespace disk {
 	    name: string;
 	    size: number;
 	    formatted: string;
+	    freeSpace: number;
+	    freeFormatted: string;
 	    isRemovable: boolean;
 	    isSystem: boolean;
 	    usbVersion: string;
@@ -50,6 +52,8 @@ export namespace disk {
 	        this.name = source["name"];
 	        this.size = source["size"];
 	        this.formatted = source["formatted"];
+	        this.freeSpace = source["freeSpace"];
+	        this.freeFormatted = source["freeFormatted"];
 	        this.isRemovable = source["isRemovable"];
 	        this.isSystem = source["isSystem"];
 	        this.usbVersion = source["usbVersion"];

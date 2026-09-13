@@ -170,6 +170,8 @@ interface DiskInfo {
   name: string;
   size: number;
   formatted: string;
+  freeSpace?: number;
+  freeFormatted?: string;
   isRemovable: boolean;
   isSystem: boolean;
   usbVersion?: string;
