@@ -38,7 +38,11 @@
           </div>
         </div>
 
-        <!-- User-Friendly Basic Info Grid -->
+        <!-- Basic Device Info Header & Grid -->
+        <div class="section-divider">
+          <span>📊 设备基础信息 (Basic Device Info)</span>
+        </div>
+
         <div class="spec-grid">
           <div class="spec-item">
             <span class="spec-label">设备名称 (Device Name)</span>
@@ -63,6 +67,20 @@
           <div class="spec-item">
             <span class="spec-label">可用剩余空间 (Free Space)</span>
             <span class="spec-val highlight">{{ disk.freeFormatted || 'N/A' }}</span>
+          </div>
+
+          <div class="spec-item">
+            <span class="spec-label">USB 协议版本 (Protocol Version)</span>
+            <span class="spec-val badge-val" :class="disk.protocolCode || 'usb2'">
+              {{ disk.usbVersion || 'USB 2.0' }}
+            </span>
+          </div>
+
+          <div class="spec-item">
+            <span class="spec-label">物理 PHY 速率 (Negotiated Speed)</span>
+            <span class="spec-val speed-val" :class="{ 'slow-speed': disk.isFakeUsb3 }">
+              ⚡ {{ disk.usbSpeed || '480 Mb/s' }}
+            </span>
           </div>
 
           <div class="spec-item">
@@ -94,20 +112,6 @@
         </div>
 
         <div class="spec-grid advanced-grid">
-          <div class="spec-item">
-            <span class="spec-label">USB 协议版本 (Protocol Version)</span>
-            <span class="spec-val badge-val" :class="disk.protocolCode || 'usb2'">
-              {{ disk.usbVersion || 'USB 2.0' }}
-            </span>
-          </div>
-
-          <div class="spec-item">
-            <span class="spec-label">物理 PHY 速率 (Negotiated Speed)</span>
-            <span class="spec-val speed-val" :class="{ 'slow-speed': disk.isFakeUsb3 }">
-              ⚡ {{ disk.usbSpeed || '480 Mb/s' }}
-            </span>
-          </div>
-
           <div class="spec-item">
             <span class="spec-label">S.M.A.R.T. 健康状态 (SMART Status)</span>
             <span class="spec-val" :class="disk.smartStatus === 'Verified' ? 'pass-val' : 'highlight'">
