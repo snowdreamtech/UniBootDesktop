@@ -54,13 +54,12 @@ func DeployModeAWithVentoyPath(ctx context.Context, targetDisk string, fsType st
 		}
 	} else {
 		// Scenario B: Blank / Ordinary USB Drive -> Fresh initialization & formatting
-		// If valid Ventoy CLI path is provided, use official Ventoy CLI for formatting
-		if ventoyPath != "" && ValidateVentoyCli(ventoyPath).Valid {
-			mountPoint, err = FormatDiskWithVentoyCli(ctx, ventoyPath, targetDisk, fsType)
+		// Mode A on a blank disk STRICTLY requires a valid Ventoy directory!
+		val := ValidateVentoyCli(ventoyPath)
+		if !val.Valid {
+			return nil, fmt.Errorf("无法制作 Mode A (混合模式)：目标 U 盘为全新纯净盘，且未检测到有效的 Ventoy 目录。请先在【设置】中配置并检测 Ventoy 目录 (%s)", val.Message)
 		}
-		if mountPoint == "" || err != nil {
-			mountPoint, err = FormatDiskModeA(ctx, targetDisk, fsType)
-		}
+		mountPoint, err = FormatDiskWithVentoyCli(ctx, ventoyPath, targetDisk, fsType)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("preparing disk for Mode A failed: %w", err)
