@@ -16,13 +16,13 @@
           @click="selectIcon(option.id)"
         >
           <div class="icon-preview" :class="option.id">
-            <!-- USB Standard 3.0 -->
+            <!-- USB Standard 3.0 SuperSpeed -->
             <svg v-if="option.id === 'usb'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="2" width="6" height="5" rx="0.5"/>
               <circle cx="10.8" cy="4" r="0.6" fill="currentColor"/>
               <circle cx="13.2" cy="4" r="0.6" fill="currentColor"/>
               <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
-              <circle cx="12" cy="18" r="1.2"/>
+              <polygon points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10" fill="currentColor" stroke="none"/>
             </svg>
             <!-- Traditional USB 2.0 -->
             <svg v-else-if="option.id === 'usb2'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

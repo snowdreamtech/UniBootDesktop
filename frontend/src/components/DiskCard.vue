@@ -100,7 +100,7 @@
         <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
         <polygon points="13 9 10 13.5 12.5 13.5 11 18 15 12.5 12.5 12.5 13 9" fill="currentColor" stroke="none"/>
       </svg>
-      <!-- Standard USB Flash Drive Icon -->
+      <!-- USB 3.0 SuperSpeed Flash Drive Icon -->
       <svg v-else class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <!-- Metal USB-A Plug Head -->
         <rect x="9" y="2" width="6" height="5" rx="0.5"/>
@@ -108,8 +108,8 @@
         <circle cx="13.2" cy="4" r="0.6" fill="currentColor"/>
         <!-- USB Main Body -->
         <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
-        <!-- Bottom Lanyard Hole -->
-        <circle cx="12" cy="18" r="1.2"/>
+        <!-- SuperSpeed Lightning Emblem -->
+        <polygon points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10" fill="currentColor" stroke="none"/>
       </svg>
     </div>
 
