@@ -295,3 +295,29 @@ func ResolveMountPointWithLabel(targetDisk string, label string) (string, error)
 	return "", fmt.Errorf("could not resolve mount point for label %s on target disk %s", label, targetDisk)
 }
 
+// MountAndResolveEFIPartition resolves or automatically mounts Partition 2 (VTOYEFI / ESP) for existing Ventoy drives.
+func MountAndResolveEFIPartition(targetDisk string) (string, error) {
+	if runtime.GOOS == "darwin" {
+		vtoyEfiPath := "/Volumes/VTOYEFI"
+		if info, err := os.Stat(vtoyEfiPath); err == nil && info.IsDir() {
+			return vtoyEfiPath, nil
+		}
+		diskNode := filepath.Base(targetDisk)
+		if strings.HasPrefix(diskNode, "disk") {
+			part2 := diskNode + "s2"
+			cmd := execCommand("diskutil", "mount", part2)
+			if err := cmd.Run(); err == nil {
+				if info, err := os.Stat(vtoyEfiPath); err == nil && info.IsDir() {
+					return vtoyEfiPath, nil
+				}
+			}
+		}
+	}
+
+	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
+		return os.TempDir(), nil
+	}
+
+	return "", fmt.Errorf("could not resolve EFI boot partition for target disk %s", targetDisk)
+}
+

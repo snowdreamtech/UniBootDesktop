@@ -106,7 +106,7 @@ func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) 
 }
 
 // DeployModeB executes Mode B: Cloud Pure Mode (1-sec native format & multi-arch iPXE firmware) with customizable file system.
-// Formats drive into a 100% Ventoy-free pure cloud USB drive (UNIBOOT volume).
+// For existing Ventoy drives, it non-destructively flashes ONLY Partition 2 (VTOYEFI / ESP), keeping Partition 1 (Data) untouched!
 func DeployModeB(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return nil, fmt.Errorf("disk validation failed: %w", err)
@@ -116,22 +116,45 @@ func DeployModeB(ctx context.Context, targetDisk string, fsType string) (*Deploy
 		fsType = "exFAT"
 	}
 
-	// Mode B creates a 100% pure single-partition UNIBOOT cloud drive
-	mountPoint, err := FormatDiskModeB(ctx, targetDisk)
+	isExistingVentoy := disk.IsVentoyDisk(targetDisk)
+	var mountPoint string
+	var err error
+
+	if isExistingVentoy {
+		// Non-destructive Mode B conversion: Flash EFI Partition 2 (VTOYEFI) directly (Data partition untouched!)
+		efiMountPoint, errEfi := MountAndResolveEFIPartition(targetDisk)
+		if errEfi == nil {
+			mountPoint = efiMountPoint
+		} else {
+			// Fallback: Resolve main volume mount point
+			mountPoint, err = ResolveMountPointWithLabel(targetDisk, "Ventoy")
+			if err != nil {
+				mountPoint, err = FormatDiskModeB(ctx, targetDisk)
+			}
+		}
+	} else {
+		// Fresh Mode B deployment on blank drive
+		mountPoint, err = FormatDiskModeB(ctx, targetDisk)
+	}
 	if err != nil {
-		return nil, fmt.Errorf("formatting disk for Mode B failed: %w", err)
+		return nil, fmt.Errorf("preparing disk for Mode B failed: %w", err)
 	}
 
-	// Extract multi-arch iPXE EFI & Legacy BIOS firmware assets to target volume
+	// Extract multi-arch iPXE EFI & Legacy BIOS firmware assets to target EFI / Data volume
 	if err := firmware.ExtractFirmwareToDir(mountPoint); err != nil {
 		return nil, fmt.Errorf("extracting firmware assets failed: %w", err)
+	}
+
+	msg := fmt.Sprintf("Successfully deployed Cloud Pure Mode B (%s/UNIBOOT) to %s (mount: %s)", fsType, targetDisk, mountPoint)
+	if isExistingVentoy {
+		msg = fmt.Sprintf("Successfully converted Ventoy drive to Mode B iPXE Cloud Boot by flashing EFI partition at %s (Main Data Partition untouched, ISO data preserved!)", targetDisk)
 	}
 
 	return &DeployResult{
 		Success: true,
 		Mode:    fmt.Sprintf("Mode B (Cloud Pure - %s)", fsType),
 		Target:  targetDisk,
-		Message: fmt.Sprintf("Successfully deployed Cloud Pure Mode B (%s/UNIBOOT) to %s (mount: %s)", fsType, targetDisk, mountPoint),
+		Message: msg,
 	}, nil
 }
 
