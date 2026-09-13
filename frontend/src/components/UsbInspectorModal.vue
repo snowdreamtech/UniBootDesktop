@@ -55,11 +55,6 @@
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">引导状态 (Boot Status)</span>
-            <span class="spec-val highlight">{{ disk.bootStatus || '📁 数据存储盘 (未检出系统引导)' }}</span>
-          </div>
-
-          <div class="spec-item">
             <span class="spec-label">设备容量 (Storage Size)</span>
             <span class="spec-val">{{ disk.formatted }} ({{ disk.size.toLocaleString() }} Bytes)</span>
           </div>
@@ -94,6 +89,11 @@
           </div>
 
           <div class="spec-item">
+            <span class="spec-label">系统挂载路径 (Mount Path)</span>
+            <span class="spec-val code">{{ disk.device }}</span>
+          </div>
+
+          <div class="spec-item">
             <span class="spec-label">读写权限 (Disk Permission)</span>
             <span class="spec-val" :class="disk.writable !== false ? 'pass-val' : 'warn-val'">
               {{ disk.writable !== false ? '✅ 可读写 (Read-Write)' : '🔒 写保护/只读 (Read-Only)' }}
@@ -101,8 +101,8 @@
           </div>
 
           <div class="spec-item spec-full">
-            <span class="spec-label">系统挂载路径 (Mount Path)</span>
-            <span class="spec-val code">{{ disk.device }}</span>
+            <span class="spec-label">引导状态 (Boot Status)</span>
+            <span class="spec-val highlight">{{ disk.bootStatus || '📁 数据存储盘 (未检出系统引导)' }}</span>
           </div>
         </div>
 
