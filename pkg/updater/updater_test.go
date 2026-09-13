@@ -17,9 +17,9 @@ func TestBuildProxyURL(t *testing.T) {
 		{"", rawURL},
 		{"direct", rawURL},
 		{"DIRECT", rawURL},
-		{"https://ghproxy.net", "https://ghproxy.net/" + rawURL},
-		{"https://ghproxy.net/", "https://ghproxy.net/" + rawURL},
-		{"https://mirror.ghproxy.com/", "https://mirror.ghproxy.com/" + rawURL},
+		{"https://proxy.example.com", "https://proxy.example.com/" + rawURL},
+		{"https://proxy.example.com/", "https://proxy.example.com/" + rawURL},
+		{"https://my-custom-proxy.org/", "https://my-custom-proxy.org/" + rawURL},
 	}
 
 	for _, tt := range tests {

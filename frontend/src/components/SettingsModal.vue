@@ -48,7 +48,7 @@
         <!-- Section 2: UniBoot Firmware Matrix -->
         <div class="settings-section">
           <h4 class="section-title">
-            <span>📦 UniBoot 核心固件打包矩阵 (含 undionly.kpxe 预留)</span>
+            <span>📦 UniBoot 核心固件与 ISO 打包矩阵 (全量 13 项内置嵌入)</span>
           </h4>
 
           <div class="firmware-list">
@@ -58,8 +58,7 @@
                 <span class="fw-path">➔ {{ fw.targetPath }}</span>
               </div>
               <div class="fw-meta">
-                <span v-if="fw.isReserved" class="badge warning">预留 PXE 支持</span>
-                <span v-else class="badge success">已打包嵌入 (`embed.FS`)</span>
+                <span class="badge success">已打包嵌入 (`embed.FS`)</span>
                 <span class="fw-desc">{{ fw.description }}</span>
               </div>
             </div>
@@ -100,7 +99,6 @@ interface FirmwareMapping {
   releaseName: string;
   targetPath: string;
   description: string;
-  isReserved?: boolean;
 }
 
 const props = defineProps<{
@@ -133,11 +131,15 @@ const firmwareList = ref<FirmwareMapping[]>([
   { releaseName: 'ipxe-loongarch64.efi', targetPath: 'EFI/BOOT/BOOTLOONGARCH64.EFI', description: 'UEFI LoongArch64 龙芯 64位' },
   { releaseName: 'ipxe-riscv64.efi', targetPath: 'EFI/BOOT/BOOTRISCV64.EFI', description: 'UEFI RISC-V 64-bit' },
   { releaseName: 'ipxe-riscv32.efi', targetPath: 'EFI/BOOT/BOOTRISCV32.EFI', description: 'UEFI RISC-V 32-bit' },
-  { releaseName: 'ipxe.lkrn', targetPath: 'ipxe.lkrn', description: 'Legacy BIOS U盘 MBR 引导内核' },
+  { releaseName: 'ipxe.lkrn', targetPath: 'ipxe.lkrn', description: 'Legacy BIOS U盘 MBR 引导内核 (x86)' },
+  { releaseName: 'ipxe-riscv64.lkrn', targetPath: 'ipxe-riscv64.lkrn', description: 'Legacy MBR 引导内核 (RISC-V 64-bit)' },
+  { releaseName: 'ipxe-riscv32.lkrn', targetPath: 'ipxe-riscv32.lkrn', description: 'Legacy MBR 引导内核 (RISC-V 32-bit)' },
   { releaseName: 'undionly.kpxe', targetPath: 'undionly.kpxe', description: 'Legacy BIOS UNDI PXE 网络引导固件', isReserved: true },
   { releaseName: 'boot.ipxe', targetPath: 'boot.ipxe', description: 'iPXE 全局入口脚本' },
   { releaseName: 'uniboot.ipxe', targetPath: 'uniboot.ipxe', description: 'UniBoot 主交互菜单脚本' },
+  { releaseName: 'UniBoot.iso', targetPath: 'UniBoot.iso', description: 'UniBoot 全架构 UEFI/BIOS 混合引导 ISO 镜像', isReserved: true },
 ]);
+
 
 function initProxyState(proxyUrl?: string) {
   proxyInputUrl.value = proxyUrl || '';

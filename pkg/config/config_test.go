@@ -25,7 +25,7 @@ func TestConfigSaveAndLoad(t *testing.T) {
 	t.Setenv("UNIGO_DATA_DIR", tmpDir)
 
 	cfg := GetDefaultConfig()
-	cfg.GithubProxy = "https://mirror.ghproxy.com/"
+	cfg.GithubProxy = "https://proxy.example.com/"
 	cfg.FileSystem = "NTFS"
 
 	if err := cfg.Save(); err != nil {
@@ -37,8 +37,8 @@ func TestConfigSaveAndLoad(t *testing.T) {
 		t.Fatalf("Load config failed: %v", err)
 	}
 
-	if loaded.GithubProxy != "https://mirror.ghproxy.com/" {
-		t.Errorf("expected GithubProxy 'https://mirror.ghproxy.com/', got %s", loaded.GithubProxy)
+	if loaded.GithubProxy != "https://proxy.example.com/" {
+		t.Errorf("expected GithubProxy 'https://proxy.example.com/', got %s", loaded.GithubProxy)
 	}
 	if loaded.FileSystem != "NTFS" {
 		t.Errorf("expected FileSystem 'NTFS', got %s", loaded.FileSystem)
