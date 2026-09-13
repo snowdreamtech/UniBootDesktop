@@ -66,7 +66,7 @@ var StandardFirmwareMappings = []FirmwareMapping{
 	// Entry Scripts & ISO Images
 	{ReleaseName: "boot.ipxe", TargetPath: "boot.ipxe", Description: "iPXE Global Entry Script", IsReserved: false},
 	{ReleaseName: "uniboot.ipxe", TargetPath: "uniboot.ipxe", Description: "UniBoot Main Interactive Menu Script", IsReserved: false},
-	{ReleaseName: "UniBoot.iso", TargetPath: "UniBoot.iso", Description: "UniBoot Full UEFI/BIOS Hybrid Boot ISO Image", IsReserved: true},
+	{ReleaseName: "UniBoot.iso", TargetPath: "iso/UniBoot.iso", Description: "UniBoot Full UEFI/BIOS Hybrid Boot ISO Image", IsReserved: true},
 }
 
 // GetFirmwareMappings returns a copy of all standard firmware mappings.
