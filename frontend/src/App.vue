@@ -118,8 +118,8 @@
           集成 Ventoy 核心 + UniBoot 专属暗色主题 & iPXE 网络扩展，支持放置数 GB 大 ISO 镜像。
         </p>
 
-        <!-- Filesystem Selection for Mode A & Mode B (Hidden when Mode A is upgrading an existing Ventoy drive) -->
-        <div v-if="!isModeANonDestructive" class="fs-selector">
+        <!-- Filesystem Selection for Mode A & Mode B (Hidden when upgrading an existing Ventoy/UniBoot drive) -->
+        <div v-if="!isNonDestructive" class="fs-selector">
           <label class="fs-label">主数据区格式 (File System):</label>
           <select v-model="selectedFsType" class="fs-select">
             <option value="exFAT">exFAT (默认推荐 • 支持 >4GB 单文件大 ISO)</option>
@@ -129,24 +129,17 @@
           </select>
         </div>
 
-        <!-- Safe Mode Notice Banner when Mode A is upgrading an existing Ventoy drive -->
-        <div v-if="isModeANonDestructive" class="safe-mode-notice">
+        <!-- Safe Mode Notice Banner when upgrading an existing Ventoy/UniBoot drive -->
+        <div v-if="isNonDestructive" class="safe-mode-notice">
           <span class="safe-notice-icon">🛡️</span>
           <div class="safe-notice-content">
-            <div class="safe-notice-title">检测到现有的 Ventoy 启动盘 (免格式化增量写入)</div>
-            <div class="safe-notice-desc">
-              无需选择主数据区格式。模式 A 将<b>自动保留现有分区与 ISO 镜像</b>，全自动注入 UniBoot 暗色主题与 iPXE 云引导！
+            <div class="safe-notice-title">
+              {{ activeMode === 'cloud' ? '检测到现有 Ventoy/UniBoot 盘 (模式 B 仅刷新 ESP 引导区)' : '检测到现有的 Ventoy 启动盘 (免格式化无损增量写入)' }}
             </div>
-          </div>
-        </div>
-
-        <!-- Warning Tip Banner when Mode B is selected for an existing Ventoy drive -->
-        <div v-else-if="isModeBOnVentoy" class="warn-modeb-notice">
-          <span class="warn-notice-icon">💡</span>
-          <div class="warn-notice-content">
-            <div class="warn-notice-title"> Ventoy 转化为纯净云盘提示</div>
-            <div class="warn-notice-desc">
-              【模式 B】旨在打造 100% 脱离 Ventoy 的纯净云盘，部署将重构为单分区。<b>若需保留现有的 Ventoy 与 ISO 镜像，请切至【模式 A (全能双模盘)】！</b>
+            <div class="safe-notice-desc">
+              {{ activeMode === 'cloud'
+                  ? '模式 B 坚持标准 UNIBOOT 双分区架构。部署将自动无损刷新 ESP 引导区直达 iPXE 云菜单，绝不抹擦主数据区的现有数据与 ISO！'
+                  : '无需选择主数据区格式。模式 A 将自动保留现有主数据分区与 ISO 镜像，全自动注入 UniBoot 暗色主题与 iPXE 云引导！' }}
             </div>
           </div>
         </div>
@@ -170,11 +163,11 @@
 
           <button 
             class="btn-primary deploy-btn" 
-            :class="{ 'safe-btn': isModeANonDestructive }"
+            :class="{ 'safe-btn': isNonDestructive }"
             :disabled="isDeployDisabled || isDeploying"
             @click="openDeployConfirm"
           >
-            {{ isDeploying ? '正在极速烧录中...' : (isModeANonDestructive ? '🛡️ 开始无损增量写入 (不格式化)' : (selectionMode === 'batch' ? `开始批量烧录 (${selectedDevices.size} 块 U 盘)` : '开始 1 秒部署写入')) }}
+            {{ isDeploying ? '正在极速烧录中...' : (isNonDestructive ? '🛡️ 开始无损增量写入 (不格式化)' : (selectionMode === 'batch' ? `开始批量烧录 (${selectedDevices.size} 块 U 盘)` : '开始 1 秒部署写入')) }}
           </button>
         </div>
 
@@ -467,12 +460,18 @@ const isSelectedVentoyDisk = computed(() => {
   return false;
 });
 
-const isModeANonDestructive = computed(() => {
-  return activeMode.value === 'hybrid' && isSelectedVentoyDisk.value;
-});
-
-const isModeBOnVentoy = computed(() => {
-  return activeMode.value === 'cloud' && isSelectedVentoyDisk.value;
+const isNonDestructive = computed(() => {
+  if (selectionMode.value === 'single') {
+    return isSelectedVentoyDisk.value;
+  }
+  if (selectedDevices.value.size === 0) return false;
+  return Array.from(selectedDevices.value).some(dev => {
+    const d = availableDisks.value.find(disk => disk.device === dev);
+    if (!d) return false;
+    const name = (d.name || '').toUpperCase();
+    const status = (d.bootStatus || '').toUpperCase();
+    return name.includes('VENTOY') || status.includes('VENTOY') || status.includes('UNIBOOT');
+  });
 });
 
 const isQemuDisabled = computed(() => {
