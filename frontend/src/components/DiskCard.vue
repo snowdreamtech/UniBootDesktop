@@ -15,26 +15,29 @@
     
     <!-- Dynamic SVG Disk Icon -->
     <div class="disk-icon-wrapper" :class="diskType">
-      <!-- Boot USB Icon -->
+      <!-- Boot USB Icon with Lightning -->
       <svg v-if="diskType === 'boot'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-        <path d="M10 2v4h4V2"/>
-        <path d="M13 10l-3 4h4l-3 4"/>
+        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
+        <path d="M6 7h12a1.5 1.5 0 0 1 1.5 1.5v10a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-10A1.5 1.5 0 0 1 6 7z"/>
+        <polygon points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10" fill="currentColor" stroke="none"/>
       </svg>
-      <!-- SSD Icon -->
+      <!-- Portable SSD Icon -->
       <svg v-else-if="diskType === 'ssd'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2"/>
-        <path d="M6 8h4"/>
-        <path d="M14 8h4"/>
-        <circle cx="6" cy="16" r="1"/>
-        <circle cx="10" cy="16" r="1"/>
+        <rect x="3" y="5" width="18" height="14" rx="3"/>
+        <line x1="7" y1="9" x2="11" y2="9"/>
+        <line x1="7" y1="12" x2="17" y2="12"/>
+        <circle cx="17" cy="9" r="1" fill="currentColor"/>
       </svg>
       <!-- Standard USB Flash Drive Icon -->
       <svg v-else class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M10 2v5h4V2h-4z"/>
-        <path d="M7 7h10a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a1 1 0 0 1 1-1z"/>
-        <line x1="9" y1="12" x2="15" y2="12"/>
-        <line x1="9" y1="16" x2="13" y2="16"/>
+        <!-- Metal USB-A Plug Head -->
+        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
+        <circle cx="10.8" cy="4" r="0.6" fill="currentColor"/>
+        <circle cx="13.2" cy="4" r="0.6" fill="currentColor"/>
+        <!-- USB Main Body -->
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
+        <!-- Bottom Lanyard Hole -->
+        <circle cx="12" cy="18" r="1.2"/>
       </svg>
     </div>
 
