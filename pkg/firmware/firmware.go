@@ -52,6 +52,7 @@ var StandardFirmwareMappings = []FirmwareMapping{
 	// UEFI Architectures
 	{ReleaseName: "ipxe-x86_64.efi", TargetPath: "EFI/BOOT/BOOTX64.EFI", Description: "UEFI x86_64 (Intel/AMD 64-bit)", IsReserved: false},
 	{ReleaseName: "ipxe-arm64.efi", TargetPath: "EFI/BOOT/BOOTAA64.EFI", Description: "UEFI ARM64 (Apple Silicon Mac / ARM Server)", IsReserved: false},
+	{ReleaseName: "ipxe-arm.efi", TargetPath: "EFI/BOOT/BOOTARM.EFI", Description: "UEFI ARM32 (32-bit ARM)", IsReserved: false},
 	{ReleaseName: "ipxe-i386.efi", TargetPath: "EFI/BOOT/BOOTIA32.EFI", Description: "UEFI IA32 (32-bit x86 Tablets/Board)", IsReserved: false},
 	{ReleaseName: "ipxe-loongarch64.efi", TargetPath: "EFI/BOOT/BOOTLOONGARCH64.EFI", Description: "UEFI LoongArch64 (Loongson 64-bit)", IsReserved: false},
 	{ReleaseName: "ipxe-riscv64.efi", TargetPath: "EFI/BOOT/BOOTRISCV64.EFI", Description: "UEFI RISC-V 64-bit", IsReserved: false},
