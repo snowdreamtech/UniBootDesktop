@@ -4,6 +4,7 @@
 package firmware
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"testing"
@@ -146,4 +147,20 @@ func TestGetLocalUniBootVersion(t *testing.T) {
 		t.Errorf("expected non-empty version string")
 	}
 }
+
+func TestFetchLatestUniBootRelease(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping network test in short mode")
+	}
+	ctx := context.Background()
+	info, err := FetchLatestUniBootRelease(ctx, "")
+	if err != nil {
+		t.Logf("FetchLatestUniBootRelease network query warning (acceptable in offline env): %v", err)
+		return
+	}
+	if info.TagName == "" {
+		t.Errorf("expected non-empty TagName from GitHub API")
+	}
+}
+
 

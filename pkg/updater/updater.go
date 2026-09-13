@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -64,27 +65,75 @@ func BuildProxyURL(rawURL string, proxyPrefix string) string {
 
 // DownloadFileWithProxy downloads a remote URL to destPath using optional proxy prefix and retries.
 func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, proxyPrefix string) error {
-	finalURL := BuildProxyURL(rawURL, proxyPrefix)
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, finalURL, nil)
-	if err != nil {
-		return fmt.Errorf("failed to create download request: %w", err)
-	}
+	proxyPrefix = strings.TrimSpace(proxyPrefix)
 
 	client := &http.Client{
-		Timeout: 60 * time.Second,
+		Timeout: 120 * time.Second,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			if len(via) >= 10 {
+				return fmt.Errorf("stopped after 10 redirects")
+			}
+			// If proxyPrefix is configured, ensure redirect target URL also goes through proxy
+			if proxyPrefix != "" && !strings.EqualFold(proxyPrefix, "direct") {
+				targetURL := req.URL.String()
+				if !strings.HasPrefix(targetURL, proxyPrefix) {
+					newURL := BuildProxyURL(targetURL, proxyPrefix)
+					if parsedURL, err := url.Parse(newURL); err == nil {
+						req.URL = parsedURL
+					}
+				}
+			}
+			return nil
+		},
 	}
 
-	var resp *http.Response
-	var downloadErr error
+	finalURL := BuildProxyURL(rawURL, proxyPrefix)
+
+	var lastErr error
 	for i := 0; i < 3; i++ {
-		resp, downloadErr = client.Do(req)
-		if downloadErr == nil && resp.StatusCode == http.StatusOK {
-			break
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, finalURL, nil)
+		if err != nil {
+			return fmt.Errorf("failed to create download request: %w", err)
 		}
-		if resp != nil {
-			resp.Body.Close()
+		req.Header.Set("User-Agent", "UniBootDesktop/1.0")
+		req.Header.Set("Accept", "*/*")
+
+		resp, err := client.Do(req)
+		if err == nil && resp.StatusCode == http.StatusOK {
+			defer resp.Body.Close()
+
+			if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
+				return fmt.Errorf("failed to create target directory: %w", err)
+			}
+
+			tmpPath := destPath + ".tmp"
+			out, err := os.Create(tmpPath)
+			if err != nil {
+				return fmt.Errorf("failed to create temp destination file: %w", err)
+			}
+
+			_, copyErr := io.Copy(out, resp.Body)
+			out.Close()
+
+			if copyErr != nil {
+				os.Remove(tmpPath)
+				lastErr = fmt.Errorf("failed to save file contents: %w", copyErr)
+			} else {
+				if err := os.Rename(tmpPath, destPath); err != nil {
+					os.Remove(tmpPath)
+					return fmt.Errorf("failed to replace destination file: %w", err)
+				}
+				return nil
+			}
+		} else {
+			if resp != nil {
+				lastErr = fmt.Errorf("HTTP status %d", resp.StatusCode)
+				resp.Body.Close()
+			} else {
+				lastErr = err
+			}
 		}
+
 		select {
 		case <-ctx.Done():
 			return ctx.Err()
@@ -92,31 +141,6 @@ func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, 
 		}
 	}
 
-	if downloadErr != nil {
-		return fmt.Errorf("failed after retries: %w", downloadErr)
-	}
-	if resp == nil || resp.StatusCode != http.StatusOK {
-		status := 0
-		if resp != nil {
-			status = resp.StatusCode
-		}
-		return fmt.Errorf("unexpected status code: %d", status)
-	}
-	defer resp.Body.Close()
-
-	if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
-		return fmt.Errorf("failed to create target directory: %w", err)
-	}
-
-	out, err := os.Create(destPath)
-	if err != nil {
-		return fmt.Errorf("failed to create destination file: %w", err)
-	}
-	defer out.Close()
-
-	if _, err := io.Copy(out, resp.Body); err != nil {
-		return fmt.Errorf("failed to save file contents: %w", err)
-	}
-
-	return nil
+	return fmt.Errorf("download failed for %s after retries: %w", rawURL, lastErr)
 }
+

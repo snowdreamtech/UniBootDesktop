@@ -108,27 +108,43 @@ func GetLocalUniBootVersion() string {
 // FetchLatestUniBootRelease queries https://api.github.com/repos/snowdreamtech/UniBoot/releases/latest.
 func FetchLatestUniBootRelease(ctx context.Context, proxyPrefix string) (*UniBootReleaseInfo, error) {
 	apiURL := "https://api.github.com/repos/snowdreamtech/UniBoot/releases/latest"
+	finalURL := updater.BuildProxyURL(apiURL, proxyPrefix)
 
 	ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, apiURL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, finalURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create release request: %w", err)
 	}
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
-	req.Header.Set("User-Agent", "UniBootDesktop")
+	req.Header.Set("User-Agent", "UniBootDesktop/1.0")
 
 	client := &http.Client{Timeout: 15 * time.Second}
 	resp, err := client.Do(req)
+
+	// Fallback to direct URL if proxy request fails
+	if (err != nil || resp.StatusCode != http.StatusOK) && finalURL != apiURL {
+		if resp != nil {
+			resp.Body.Close()
+		}
+		fallbackReq, fallbackErr := http.NewRequestWithContext(ctx, http.MethodGet, apiURL, nil)
+		if fallbackErr == nil {
+			fallbackReq.Header.Set("Accept", "application/vnd.github.v3+json")
+			fallbackReq.Header.Set("User-Agent", "UniBootDesktop/1.0")
+			resp, err = client.Do(fallbackReq)
+		}
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to query UniBoot latest release: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("GitHub API returned status code: %d", resp.StatusCode)
+		return nil, fmt.Errorf("GitHub API returned status code %d for %s", resp.StatusCode, finalURL)
 	}
+
 
 	var ghRelease struct {
 		TagName     string `json:"tag_name"`
