@@ -24,6 +24,13 @@
         >
           🛠️ 模式 A (全能双模盘)
         </button>
+        <button 
+          class="settings-icon-btn" 
+          title="系统与 GitHub 代理加速设置"
+          @click="isSettingsOpen = true"
+        >
+          ⚙️
+        </button>
       </div>
     </header>
 
@@ -177,6 +184,14 @@
       @close="isDeployConfirmOpen = false"
       @confirm="startDeployment"
     />
+
+    <!-- Settings & GitHub Proxy Modal -->
+    <SettingsModal
+      :isOpen="isSettingsOpen"
+      :currentProxy="currentGithubProxy"
+      @close="isSettingsOpen = false"
+      @save="onSaveSettings"
+    />
   </div>
 </template>
 
@@ -187,6 +202,7 @@ import ProgressBar from './components/ProgressBar.vue';
 import IconPickerModal, { DiskIconType } from './components/IconPickerModal.vue';
 import UsbInspectorModal from './components/UsbInspectorModal.vue';
 import DeployConfirmModal from './components/DeployConfirmModal.vue';
+import SettingsModal from './components/SettingsModal.vue';
 
 interface DiskInfo {
   device: string;
@@ -256,10 +272,43 @@ const targetPickerDisk = ref<DiskInfo | null>(null);
 const isInspectorOpen = ref(false);
 const targetInspectorDisk = ref<DiskInfo | null>(null);
 const isDeployConfirmOpen = ref(false);
+const isSettingsOpen = ref(false);
+const currentGithubProxy = ref('https://ghproxy.net/');
 const pendingTargets = ref<string[]>([]);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
 const qemuStatus = ref({ installed: false, path: '', version: '' });
+
+async function loadConfig() {
+  if (window.go && window.go.main && window.go.main.App) {
+    try {
+      const cfg = await window.go.main.App.GetConfig();
+      if (cfg) {
+        if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
+        if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
+      }
+    } catch (e) {
+      console.error('Failed to load config:', e);
+    }
+  }
+}
+
+async function onSaveSettings(proxyUrl: string) {
+  currentGithubProxy.value = proxyUrl;
+  if (window.go && window.go.main && window.go.main.App) {
+    try {
+      await window.go.main.App.SaveConfig({
+        mode: activeMode.value,
+        autoCheckUpdate: true,
+        theme: 'dark',
+        githubProxy: proxyUrl,
+        fileSystem: selectedFsType.value,
+      });
+    } catch (e) {
+      console.error('Failed to save config:', e);
+    }
+  }
+}
 
 function openDeployConfirm() {
   let targets: string[] = [];
@@ -464,6 +513,7 @@ function launchQEMU() {
 let diskPollTimer: number | undefined;
 
 onMounted(() => {
+  loadConfig();
   refreshDisks();
   checkQemu();
 
@@ -746,5 +796,23 @@ h1 {
 .fs-select:focus {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 12px rgba(0, 229, 255, 0.25);
+}
+
+.settings-icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-icon-btn:hover {
+  background: rgba(0, 229, 255, 0.12);
+  transform: rotate(30deg);
 }
 </style>

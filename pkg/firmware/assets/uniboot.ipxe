@@ -1,0 +1,13 @@
+# UniBoot Interactive Menu Script
+#!ipxe
+:menu
+menu UniBoot Multi-Architecture Boot Menu
+item --key l local Boot Local OS
+item --key n netboot Netboot / iPXE Shell
+choose target && goto ${target}
+
+:local
+sanboot --no-describe --drive 0x80
+
+:netboot
+shell

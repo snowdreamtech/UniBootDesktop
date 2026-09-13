@@ -3,6 +3,16 @@
 
 package firmware
 
+import (
+	"embed"
+	"fmt"
+	"os"
+	"path/filepath"
+)
+
+//go:embed assets/*
+var embeddedAssets embed.FS
+
 // FirmwareMapping defines the mapping between a UniBoot release asset name and its UEFI/BIOS standard target path.
 type FirmwareMapping struct {
 	ReleaseName string `json:"releaseName"` // Original Release asset filename (e.g. ipxe-x86_64.efi, undionly.kpxe)
@@ -54,4 +64,30 @@ func TargetPathForReleaseAsset(name string) string {
 		return m.TargetPath
 	}
 	return ""
+}
+
+// ExtractFirmwareToDir extracts all embedded firmware files to the specified target directory.
+func ExtractFirmwareToDir(targetDir string) error {
+	if targetDir == "" {
+		return fmt.Errorf("target directory cannot be empty")
+	}
+
+	for _, mapping := range StandardFirmwareMappings {
+		srcPath := "assets/" + mapping.ReleaseName
+		data, err := embeddedAssets.ReadFile(srcPath)
+		if err != nil {
+			return fmt.Errorf("failed to read embedded firmware asset %s: %w", mapping.ReleaseName, err)
+		}
+
+		destPath := filepath.Join(targetDir, filepath.FromSlash(mapping.TargetPath))
+		if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
+			return fmt.Errorf("failed to create directory for %s: %w", destPath, err)
+		}
+
+		if err := os.WriteFile(destPath, data, 0644); err != nil {
+			return fmt.Errorf("failed to extract firmware asset to %s: %w", destPath, err)
+		}
+	}
+
+	return nil
 }

@@ -4,6 +4,8 @@
 package firmware
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -65,5 +67,36 @@ func TestTargetPathForReleaseAsset(t *testing.T) {
 		if got != tt.expected {
 			t.Errorf("TargetPathForReleaseAsset(%q) = %q; want %q", tt.releaseName, got, tt.expected)
 		}
+	}
+}
+
+func TestExtractFirmwareToDir(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	err := ExtractFirmwareToDir(tmpDir)
+	if err != nil {
+		t.Fatalf("ExtractFirmwareToDir failed: %v", err)
+	}
+
+	// Check that critical extracted files exist
+	expectedFiles := []string{
+		"EFI/BOOT/BOOTX64.EFI",
+		"EFI/BOOT/BOOTAA64.EFI",
+		"ipxe.lkrn",
+		"undionly.kpxe",
+		"boot.ipxe",
+		"uniboot.ipxe",
+	}
+
+	for _, f := range expectedFiles {
+		fullPath := filepath.Join(tmpDir, filepath.FromSlash(f))
+		if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+			t.Errorf("expected extracted file missing: %s", fullPath)
+		}
+	}
+
+	// Error test empty dir
+	if err := ExtractFirmwareToDir(""); err == nil {
+		t.Errorf("expected error when targetDir is empty")
 	}
 }

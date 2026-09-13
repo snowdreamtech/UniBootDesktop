@@ -1,0 +1,4 @@
+# UniBoot iPXE Entry Script
+#!ipxe
+dhcp
+chain uniboot.ipxe

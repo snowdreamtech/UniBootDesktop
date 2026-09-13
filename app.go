@@ -9,6 +9,7 @@ import (
 
 	"github.com/snowdreamtech/unigodesktop/pkg/config"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
+	"github.com/snowdreamtech/unigodesktop/pkg/firmware"
 	"github.com/snowdreamtech/unigodesktop/pkg/installer"
 	"github.com/snowdreamtech/unigodesktop/pkg/qemu"
 	"github.com/snowdreamtech/unigodesktop/pkg/updater"
@@ -68,4 +69,17 @@ func (a *App) CheckUpdate() *updater.UpdateStatus {
 // GetConfig loads the application settings.
 func (a *App) GetConfig() (*config.AppConfig, error) {
 	return config.Load()
+}
+
+// SaveConfig updates and saves application settings.
+func (a *App) SaveConfig(cfg *config.AppConfig) error {
+	if cfg == nil {
+		return config.GetDefaultConfig().Save()
+	}
+	return cfg.Save()
+}
+
+// GetFirmwareList returns the standard UniBoot firmware mapping matrix.
+func (a *App) GetFirmwareList() []firmware.FirmwareMapping {
+	return firmware.GetFirmwareMappings()
 }

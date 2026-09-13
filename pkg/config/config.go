@@ -14,9 +14,11 @@ import (
 
 // AppConfig represents application-wide configuration parameters.
 type AppConfig struct {
-	Mode         string `json:"mode" toml:"mode"`                 // Mode A (hybrid) or Mode B (cloud)
-	AutoCheckUpdate bool   `json:"autoCheckUpdate" toml:"autoCheckUpdate"` // Automatically check for updates
-	Theme        string `json:"theme" toml:"theme"`               // UI theme preference (dark/light)
+	Mode            string `json:"mode" toml:"mode"`                         // Mode A (hybrid) or Mode B (cloud)
+	AutoCheckUpdate bool   `json:"autoCheckUpdate" toml:"autoCheckUpdate"`   // Automatically check for updates
+	Theme           string `json:"theme" toml:"theme"`                       // UI theme preference (dark/light)
+	GithubProxy     string `json:"githubProxy" toml:"githubProxy"`           // GitHub proxy server URL (e.g. https://ghproxy.net/)
+	FileSystem      string `json:"fileSystem" toml:"fileSystem"`             // Default file system for Mode A (exFAT/NTFS/FAT32/ext4)
 }
 
 // GetDefaultConfig returns the default application configuration.
@@ -25,6 +27,8 @@ func GetDefaultConfig() *AppConfig {
 		Mode:            "cloud", // Mode B Cloud Pure Mode by default
 		AutoCheckUpdate: true,
 		Theme:           "dark",
+		GithubProxy:     "https://ghproxy.net/",
+		FileSystem:      "exFAT",
 	}
 }
 
