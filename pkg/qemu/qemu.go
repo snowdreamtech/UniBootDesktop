@@ -258,7 +258,7 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		"-machine", "q35",
 		"-m", "2048",
 		"-device", "virtio-vga,xres=1280,yres=800",
-		"-netdev", "user,id=net0,bootfile=https://boot.uniboot.org/boot.ipxe",
+		"-netdev", "user,id=net0",
 		"-device", "e1000,netdev=net0",
 	}
 
