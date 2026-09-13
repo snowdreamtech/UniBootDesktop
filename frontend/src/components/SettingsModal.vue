@@ -10,7 +10,12 @@
             <span class="sub-title">系统参数偏好、网络代理加速及 UniBoot 固件矩阵</span>
           </div>
         </div>
-        <button class="close-btn" @click="close">✕</button>
+        <div class="header-actions">
+          <span class="auto-save-tag" :class="{ saving: isAutoSaving }">
+            {{ saveStatusText }}
+          </span>
+          <button class="close-btn" @click="close">✕</button>
+        </div>
       </div>
 
       <!-- Tab Navigation Bar -->
@@ -45,7 +50,7 @@
           <div class="settings-section">
             <h4 class="section-title">
               <span>⚙️ 基础运行参数与偏好设置</span>
-              <span class="badge info">系统预置</span>
+              <span class="badge info">实时保存</span>
             </h4>
 
             <div class="grid-form">
@@ -93,7 +98,7 @@
             </div>
 
             <div class="placeholder-notice">
-              💡 基础通用参数配置完成。更改将在保存后生效，并在下一次启动或任务创建时自动应用。
+              ⚡ 提示：修改任何参数均会<strong>实时自动保存并生效</strong>，无需手动点击保存。
             </div>
           </div>
         </div>
@@ -251,12 +256,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Modal Footer -->
-      <div class="modal-footer">
-        <button class="btn-secondary" @click="close">取消</button>
-        <button class="btn-primary" @click="save">保存设置</button>
-      </div>
     </div>
   </div>
 </template>
@@ -307,6 +306,12 @@ const proxyPort = ref<number | ''>(1080);
 const proxyUser = ref('');
 const proxyPassword = ref('');
 
+// Auto save state
+let isInitializing = true;
+let saveTimer: any = null;
+const isAutoSaving = ref(false);
+const saveStatusText = ref('⚡ 实时保存已启用');
+
 // Tests state
 const isTestingNet = ref(false);
 const netTestResult = ref('');
@@ -344,7 +349,57 @@ function getFinalProxyUrl(): string {
   return proxyInputUrl.value.trim();
 }
 
+function triggerAutoSave() {
+  if (isInitializing) return;
+  if (saveTimer) clearTimeout(saveTimer);
+
+  saveTimer = setTimeout(() => {
+    const payload = {
+      githubProxy: getFinalProxyUrl(),
+      proxyProtocol: proxyProtocol.value,
+      proxyHost: proxyHost.value.trim(),
+      proxyPort: Number(proxyPort.value) || 0,
+      proxyUser: proxyUser.value.trim(),
+      proxyPassword: proxyPassword.value,
+      mode: defaultMode.value,
+      fileSystem: defaultFs.value,
+      autoCheckUpdate: autoCheckUpdate.value,
+      theme: appTheme.value,
+    };
+    emit('save', payload);
+    if (window.go && window.go.main && window.go.main.App) {
+      window.go.main.App.SaveConfig(payload as any).catch((e: any) => console.error(e));
+    }
+    isAutoSaving.value = true;
+    saveStatusText.value = '✅ 修改已实时生效';
+    setTimeout(() => {
+      isAutoSaving.value = false;
+      saveStatusText.value = '⚡ 实时保存已启用';
+    }, 1200);
+  }, 250);
+}
+
+watch(
+  [
+    defaultMode,
+    defaultFs,
+    autoCheckUpdate,
+    appTheme,
+    proxyInputUrl,
+    proxyProtocol,
+    proxyHost,
+    proxyPort,
+    proxyUser,
+    proxyPassword
+  ],
+  () => {
+    triggerAutoSave();
+  },
+  { deep: true }
+);
+
 async function loadFullConfig() {
+  isInitializing = true;
   if (window.go && window.go.main && window.go.main.App) {
     try {
       const cfg = await window.go.main.App.GetConfig();
@@ -364,6 +419,9 @@ async function loadFullConfig() {
       console.error('Failed to load full config:', e);
     }
   }
+  setTimeout(() => {
+    isInitializing = false;
+  }, 100);
 }
 
 watch(() => props.isOpen, (val) => {
@@ -493,22 +551,6 @@ function close() {
   emit('close');
 }
 
-function save() {
-  emit('save', {
-    githubProxy: getFinalProxyUrl(),
-    proxyProtocol: proxyProtocol.value,
-    proxyHost: proxyHost.value.trim(),
-    proxyPort: Number(proxyPort.value) || 0,
-    proxyUser: proxyUser.value.trim(),
-    proxyPassword: proxyPassword.value,
-    mode: defaultMode.value,
-    fileSystem: defaultFs.value,
-    autoCheckUpdate: autoCheckUpdate.value,
-    theme: appTheme.value,
-  });
-  close();
-}
-
 onMounted(() => {
   loadFullConfig();
   fetchFirmwareList();
@@ -572,6 +614,29 @@ onMounted(() => {
 .header-title .sub-title {
   font-size: 0.775rem;
   color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.auto-save-tag {
+  font-size: 0.75rem;
+  color: var(--accent-cyan);
+  background: rgba(0, 229, 255, 0.1);
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  transition: all 0.3s ease;
+}
+
+.auto-save-tag.saving {
+  color: var(--success);
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--success);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
 }
 
 .close-btn {
@@ -712,17 +777,6 @@ onMounted(() => {
 .field-hint {
   font-size: 0.725rem;
   color: rgba(255, 255, 255, 0.4);
-}
-
-.form-hint {
-  font-size: 0.775rem;
-  color: var(--text-muted);
-  line-height: 1.45;
-  margin-top: 0.4rem;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  border-left: 3px solid var(--accent-cyan);
 }
 
 .form-input, .form-select {
@@ -952,14 +1006,5 @@ onMounted(() => {
   height: 100%;
   background: linear-gradient(90deg, var(--accent-cyan), #9d4edd);
   transition: width 0.2s ease;
-}
-
-.modal-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  background: rgba(0, 0, 0, 0.2);
 }
 </style>
