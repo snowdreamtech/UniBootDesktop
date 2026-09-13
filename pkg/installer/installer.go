@@ -56,7 +56,7 @@ func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*Deploy
 	}
 
 	// 2. Extract multi-arch iPXE EFI & Legacy BIOS firmware assets to target volume
-	if err := firmware.ExtractFirmwareToDir(mountPoint); err != nil {
+	if err := firmware.ExtractFirmwareModeA(mountPoint); err != nil {
 		return nil, fmt.Errorf("extracting firmware assets failed: %w", err)
 	}
 
@@ -150,7 +150,7 @@ func DeployModeB(ctx context.Context, targetDisk string, fsType string) (*Deploy
 	}
 
 	// Extract multi-arch iPXE EFI & Legacy BIOS firmware assets to target EFI / Data volume
-	if err := firmware.ExtractFirmwareToDir(mountPoint); err != nil {
+	if err := firmware.ExtractFirmwareModeB(mountPoint); err != nil {
 		return nil, fmt.Errorf("extracting firmware assets failed: %w", err)
 	}
 

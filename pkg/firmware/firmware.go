@@ -309,3 +309,66 @@ func ExtractFirmwareToDir(targetDir string) error {
 	return nil
 }
 
+// ExtractFirmwareModeA extracts Mode A assets (ipxe/ & iso/) directly to the main data partition (Partition 1),
+// without redundantly polluting the data partition with EFI/BOOT/ files (handled by Ventoy Partition 2).
+func ExtractFirmwareModeA(dataMountDir string) error {
+	if dataMountDir == "" {
+		return fmt.Errorf("data mount directory cannot be empty")
+	}
+
+	for _, mapping := range StandardFirmwareMappings {
+		data, _, err := GetFirmwareData(mapping.ReleaseName)
+		if err != nil {
+			return fmt.Errorf("failed to load firmware asset %s: %w", mapping.ReleaseName, err)
+		}
+
+		// 1. Populate ipxe/ directory for Ventoy F6 custom menu integration
+		if strings.HasSuffix(mapping.ReleaseName, ".efi") ||
+			strings.HasSuffix(mapping.ReleaseName, ".lkrn") ||
+			strings.HasSuffix(mapping.ReleaseName, ".kpxe") ||
+			strings.HasSuffix(mapping.ReleaseName, ".ipxe") {
+			ipxePath := filepath.Join(dataMountDir, "ipxe", mapping.ReleaseName)
+			if err := os.MkdirAll(filepath.Dir(ipxePath), 0755); err != nil {
+				return fmt.Errorf("failed to create directory for %s: %w", ipxePath, err)
+			}
+			if err := os.WriteFile(ipxePath, data, 0644); err != nil {
+				return fmt.Errorf("failed to write %s: %w", ipxePath, err)
+			}
+		}
+
+		// 2. Populate iso/ directory for UniBoot ISO placement
+		if mapping.ReleaseName == "UniBoot.iso" {
+			isoPath := filepath.Join(dataMountDir, "iso", "UniBoot.iso")
+			if err := os.MkdirAll(filepath.Dir(isoPath), 0755); err == nil {
+				_ = os.WriteFile(isoPath, data, 0644)
+			}
+		}
+	}
+	return nil
+}
+
+// ExtractFirmwareModeB extracts Mode B assets (EFI/BOOT/ & root scripts) directly to the ESP partition (Partition 2),
+// providing pure 100% native iPXE cloud boot without ventoy or iso dependencies.
+func ExtractFirmwareModeB(efiMountDir string) error {
+	if efiMountDir == "" {
+		return fmt.Errorf("EFI mount directory cannot be empty")
+	}
+
+	for _, mapping := range StandardFirmwareMappings {
+		data, _, err := GetFirmwareData(mapping.ReleaseName)
+		if err != nil {
+			return fmt.Errorf("failed to load firmware asset %s: %w", mapping.ReleaseName, err)
+		}
+
+		// Mode B writes EFI/BOOT/ BOOTX64.EFI, BOOTAA64.EFI, boot.ipxe, uniboot.ipxe, ipxe.lkrn, undionly.kpxe to ESP partition
+		destPath := filepath.Join(efiMountDir, filepath.FromSlash(mapping.TargetPath))
+		if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
+			return fmt.Errorf("failed to create directory for %s: %w", destPath, err)
+		}
+		if err := os.WriteFile(destPath, data, 0644); err != nil {
+			return fmt.Errorf("failed to extract firmware asset to %s: %w", destPath, err)
+		}
+	}
+	return nil
+}
+
