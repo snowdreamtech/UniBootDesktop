@@ -37,35 +37,34 @@ func GetFSToolName(tool, backend string) string {
 	return name
 }
 
-// GetConfigDir returns the root configuration directory for UniGoDesktop.
-// It uses UNIGODESKTOP_CONFIG_DIR or UNIGODESKTOP_CONFIG_DIR if set, otherwise falls back to XDG config directory.
+// GetConfigDir returns the root configuration directory for UniBootDesktop.
+// It uses UNIBOOTDESKTOP_CONFIG_DIR / UNIGODESKTOP_CONFIG_DIR if set, otherwise falls back to XDG config directory.
 func GetConfigDir() string {
 	if configDir := Get("CONFIG_DIR"); configDir != "" {
 		return configDir
 	}
 
 	if configHome := Get("XDG_CONFIG_HOME"); configHome != "" {
-		return filepath.Join(configHome, "unigodesktop")
+		return filepath.Join(configHome, "unibootdesktop")
 	}
 
 	homeDir, err := OsUserHomeDir()
 	if err != nil {
-		return "./unigodesktop_config"
+		return "./unibootdesktop_config"
 	}
 
 	if RuntimeGOOS == "windows" {
 		if appData, err := OsUserConfigDir(); err == nil {
-			return filepath.Join(appData, "unigodesktop")
+			return filepath.Join(appData, "unibootdesktop")
 		}
 	}
 
 	// For macOS and Linux, we unify on the standard XDG ~/.config
-	// This provides a consistent experience for developers across Unix-like systems.
-	return filepath.Join(homeDir, ".config", "unigodesktop")
+	return filepath.Join(homeDir, ".config", "unibootdesktop")
 }
 
-// GetDataDir returns the root data directory for UniGoDesktop.
-// It uses UNIGODESKTOP_DATA_DIR / UNIGODESKTOP_DATA_DIR if set, otherwise falls back to appropriate OS directories.
+// GetDataDir returns the root data directory for UniBootDesktop.
+// It uses UNIBOOTDESKTOP_DATA_DIR / UNIGODESKTOP_DATA_DIR if set, otherwise falls back to appropriate OS directories.
 func GetDataDir() string {
 	if dataDir := Get("DATA_DIR"); dataDir != "" {
 		return dataDir
@@ -73,33 +72,32 @@ func GetDataDir() string {
 
 	// Follow XDG Base Directory Specification for data home if XDG_DATA_HOME is set
 	if dataHome := Get("XDG_DATA_HOME"); dataHome != "" {
-		return filepath.Join(dataHome, "unigodesktop")
+		return filepath.Join(dataHome, "unibootdesktop")
 	}
 
 	homeDir, err := OsUserHomeDir()
 	if err != nil {
-		return "./unigodesktop_data" // Fallback if home directory cannot be determined
+		return "./unibootdesktop_data" // Fallback if home directory cannot be determined
 	}
 
 	if RuntimeGOOS == "windows" {
 		// Windows stores data in Local AppData
 		if localAppData := Get("LOCALAPPDATA"); localAppData != "" {
-			return filepath.Join(localAppData, "unigodesktop")
+			return filepath.Join(localAppData, "unibootdesktop")
 		}
-		return filepath.Join(homeDir, "AppData", "Local", "unigodesktop")
+		return filepath.Join(homeDir, "AppData", "Local", "unibootdesktop")
 	}
 
 	// For macOS and Linux, we unify on the standard XDG ~/.local/share
-	// This ensures dotfiles and scripts work consistently across both platforms.
-	return filepath.Join(homeDir, ".local", "share", "unigodesktop")
+	return filepath.Join(homeDir, ".local", "share", "unibootdesktop")
 }
 
-// GetDatabasePath returns the path to the UniGoDesktop SQLite database.
+// GetDatabasePath returns the path to the UniBootDesktop SQLite database.
 func GetDatabasePath() string {
-	return filepath.Join(GetDataDir(), "unigodesktop.db")
+	return filepath.Join(GetDataDir(), "unibootdesktop.db")
 }
 
-// GetShimsDir returns the directory where UniGoDesktop shims are stored.
+// GetShimsDir returns the directory where UniBootDesktop shims are stored.
 func GetShimsDir() string {
 	return filepath.Join(GetDataDir(), "shims")
 }
@@ -127,17 +125,17 @@ func GetCacheDir() string {
 	}
 
 	if cacheHome := Get("XDG_CACHE_HOME"); cacheHome != "" {
-		return filepath.Join(cacheHome, "unigodesktop")
+		return filepath.Join(cacheHome, "unibootdesktop")
 	}
 
 	homeDir, err := OsUserHomeDir()
 	if err != nil {
-		return "./unigodesktop_cache"
+		return "./unibootdesktop_cache"
 	}
 
 	if RuntimeGOOS == "darwin" {
 		// macOS standard cache directory
-		return filepath.Join(homeDir, "Library", "Caches", "unigodesktop")
+		return filepath.Join(homeDir, "Library", "Caches", "unibootdesktop")
 	}
 
 	if RuntimeGOOS == "windows" {
@@ -146,26 +144,22 @@ func GetCacheDir() string {
 	}
 
 	// Default for Linux and others (XDG standard)
-	return filepath.Join(homeDir, ".cache", "unigodesktop")
+	return filepath.Join(homeDir, ".cache", "unibootdesktop")
 }
 
-// GetLockFilePath returns the path of the unigodesktop.lock file.
-// It respects the UNIGODESKTOP_LOCK_FILE / UNIGODESKTOP_LOCK_FILE environment variable for custom locations
-// (useful in CI or monorepo setups), falling back to "unigodesktop.lock" in the
-// current working directory — mirroring how mise.lock sits next to mise.toml.
+// GetLockFilePath returns the path of the unibootdesktop.lock file.
 func GetLockFilePath() string {
 	if custom := Get("LOCK_FILE"); custom != "" {
 		return custom
 	}
 	wd, err := OsGetwd()
 	if err != nil {
-		return "unigodesktop.lock"
+		return "unibootdesktop.lock"
 	}
-	return filepath.Join(wd, "unigodesktop.lock")
+	return filepath.Join(wd, "unibootdesktop.lock")
 }
 
-// GetGlobalConfigPath returns the path to the global unigodesktop.toml configuration file.
-// This is the file edited by `unigodesktop set --global` / `unigodesktop unset --global`.
+// GetGlobalConfigPath returns the path to the global unibootdesktop.toml configuration file.
 func GetGlobalConfigPath() string {
-	return filepath.Join(GetConfigDir(), "unigodesktop.toml")
+	return filepath.Join(GetConfigDir(), "unibootdesktop.toml")
 }

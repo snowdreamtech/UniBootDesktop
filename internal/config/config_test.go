@@ -17,11 +17,11 @@ func TestLoadTOML(t *testing.T) {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
-	defer os.Unsetenv("UNIGODESKTOP_CONFIG_DIR")
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	defer os.Unsetenv("UNIBOOTDESKTOP_CONFIG_DIR")
 
 	tomlContent := []byte(`debug = true`)
-	err = os.WriteFile(filepath.Join(tmpDir, "unigodesktop.toml"), tomlContent, 0644)
+	err = os.WriteFile(filepath.Join(tmpDir, "unibootdesktop.toml"), tomlContent, 0644)
 	if err != nil {
 		t.Fatalf("Failed to write toml: %v", err)
 	}
@@ -42,11 +42,11 @@ func TestLoadYAML(t *testing.T) {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
-	defer os.Unsetenv("UNIGODESKTOP_CONFIG_DIR")
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	defer os.Unsetenv("UNIBOOTDESKTOP_CONFIG_DIR")
 
 	yamlContent := []byte(`debug: true`)
-	err = os.WriteFile(filepath.Join(tmpDir, "unigodesktop.yaml"), yamlContent, 0644)
+	err = os.WriteFile(filepath.Join(tmpDir, "unibootdesktop.yaml"), yamlContent, 0644)
 	if err != nil {
 		t.Fatalf("Failed to write yaml: %v", err)
 	}
@@ -67,8 +67,8 @@ func TestSave(t *testing.T) {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
-	defer os.Unsetenv("UNIGODESKTOP_CONFIG_DIR")
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	defer os.Unsetenv("UNIBOOTDESKTOP_CONFIG_DIR")
 
 	cfg := &Config{Debug: true}
 	err = cfg.Save()
@@ -77,7 +77,7 @@ func TestSave(t *testing.T) {
 	}
 
 	// Verify it wrote TOML
-	content, err := os.ReadFile(filepath.Join(tmpDir, "unigodesktop.toml"))
+	content, err := os.ReadFile(filepath.Join(tmpDir, "unibootdesktop.toml"))
 	if err != nil {
 		t.Fatalf("Failed to read saved file: %v", err)
 	}
@@ -90,10 +90,10 @@ func TestSave(t *testing.T) {
 func TestLoadInvalidTOML(t *testing.T) {
 	tmpDir, _ := os.MkdirTemp("", "unigo_config_test")
 	defer os.RemoveAll(tmpDir)
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
-	defer os.Unsetenv("UNIGODESKTOP_CONFIG_DIR")
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	defer os.Unsetenv("UNIBOOTDESKTOP_CONFIG_DIR")
 
-	os.WriteFile(filepath.Join(tmpDir, "unigodesktop.toml"), []byte(`[invalid`), 0644)
+	os.WriteFile(filepath.Join(tmpDir, "unibootdesktop.toml"), []byte(`[invalid`), 0644)
 
 	_, err := Load()
 	if err == nil {
@@ -104,10 +104,10 @@ func TestLoadInvalidTOML(t *testing.T) {
 func TestLoadInvalidYAML(t *testing.T) {
 	tmpDir, _ := os.MkdirTemp("", "unigo_config_test")
 	defer os.RemoveAll(tmpDir)
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
-	defer os.Unsetenv("UNIGODESKTOP_CONFIG_DIR")
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	defer os.Unsetenv("UNIBOOTDESKTOP_CONFIG_DIR")
 
-	os.WriteFile(filepath.Join(tmpDir, "unigodesktop.yaml"), []byte(`invalid: yaml: :`), 0644)
+	os.WriteFile(filepath.Join(tmpDir, "unibootdesktop.yaml"), []byte(`invalid: yaml: :`), 0644)
 
 	_, err := Load()
 	if err == nil {
@@ -122,10 +122,10 @@ func TestLoadUnreadableConfig(t *testing.T) {
 
 	tmpDir, _ := os.MkdirTemp("", "unigo_config_test")
 	defer os.RemoveAll(tmpDir)
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
-	defer os.Unsetenv("UNIGODESKTOP_CONFIG_DIR")
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	defer os.Unsetenv("UNIBOOTDESKTOP_CONFIG_DIR")
 
-	file := filepath.Join(tmpDir, "unigodesktop.toml")
+	file := filepath.Join(tmpDir, "unibootdesktop.toml")
 	os.WriteFile(file, []byte(`debug = true`), 0200) // write-only
 
 	_, err := Load()
@@ -142,8 +142,8 @@ func TestSaveMkdirError(t *testing.T) {
 	badDir := filepath.Join(tmpDir, "bad_dir")
 	os.WriteFile(badDir, []byte("file"), 0644)
 
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", badDir)
-	defer os.Unsetenv("UNIGODESKTOP_CONFIG_DIR")
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", badDir)
+	defer os.Unsetenv("UNIBOOTDESKTOP_CONFIG_DIR")
 
 	cfg := &Config{Debug: true}
 	err := cfg.Save()
@@ -155,11 +155,11 @@ func TestSaveMkdirError(t *testing.T) {
 func TestSaveWriteError(t *testing.T) {
 	tmpDir, _ := os.MkdirTemp("", "unigo_config_test")
 	defer os.RemoveAll(tmpDir)
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
-	defer os.Unsetenv("UNIGODESKTOP_CONFIG_DIR")
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	defer os.Unsetenv("UNIBOOTDESKTOP_CONFIG_DIR")
 
 	// Pre-create the config file as read-only
-	configPath := filepath.Join(tmpDir, "unigodesktop.toml")
+	configPath := filepath.Join(tmpDir, "unibootdesktop.toml")
 	os.WriteFile(configPath, []byte(""), 0400)
 
 	cfg := &Config{Debug: true}
@@ -172,8 +172,8 @@ func TestSaveWriteError(t *testing.T) {
 func TestLoadDefault(t *testing.T) {
 	tmpDir, _ := os.MkdirTemp("", "unigo_config_test")
 	defer os.RemoveAll(tmpDir)
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
-	defer os.Unsetenv("UNIGODESKTOP_CONFIG_DIR")
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	defer os.Unsetenv("UNIBOOTDESKTOP_CONFIG_DIR")
 
 	cfg, err := Load()
 	if err != nil {

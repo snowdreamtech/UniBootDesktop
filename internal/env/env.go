@@ -12,17 +12,17 @@ import (
 type EnvManager struct{}
 
 // Get returns the value of the environment variable with the given key,
-// searching with prefixes in order: UNIGODESKTOP_, UNIGODESKTOP_, MISE_, and then the raw key.
-// Note: PATH is retrieved directly to avoid pollution from UNIGODESKTOP_PATH/UNIGODESKTOP_PATH/MISE_PATH.
+// searching with prefixes in order: UNIBOOTDESKTOP_, UNIGODESKTOP_, MISE_, and then the raw key.
+// Note: PATH is retrieved directly to avoid pollution from UNIBOOTDESKTOP_PATH/UNIGODESKTOP_PATH/MISE_PATH.
 func Get(key string) string {
 	if key == "PATH" {
 		return os.Getenv("PATH")
 	}
-	// 1. UNIGODESKTOP_ prefix
-	if v := os.Getenv("UNIGODESKTOP_" + key); v != "" {
+	// 1. UNIBOOTDESKTOP_ prefix (Primary)
+	if v := os.Getenv("UNIBOOTDESKTOP_" + key); v != "" {
 		return v
 	}
-	// 2. UNIGODESKTOP_ prefix
+	// 2. UNIGODESKTOP_ prefix (Legacy fallback)
 	if v := os.Getenv("UNIGODESKTOP_" + key); v != "" {
 		return v
 	}
@@ -41,7 +41,7 @@ func GithubProxy() string {
 
 var (
 	//ProjectName Project Name
-	ProjectName string = "unigodesktop"
+	ProjectName string = "unibootdesktop"
 
 	//Author Author
 	Author string = "Snowdream Tech <snowdreamtech@qq.com>"
@@ -65,7 +65,7 @@ var (
 	LICENSE string = "MIT <https://github.com/snowdreamtech/unigodesktop/blob/main/LICENSE>"
 
 	//Config Config File Path
-	Config string = "unigodesktop.toml"
+	Config string = "unibootdesktop.toml"
 
 	// Debug indicates whether the application should run in debug mode.
 	Debug bool
