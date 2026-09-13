@@ -112,6 +112,13 @@
             <span class="spec-label">芯片硬件 ID (USB VID / PID)</span>
             <span class="spec-val code">VID: {{ disk.vendorId || 'N/A' }} | PID: {{ disk.productId || 'N/A' }}</span>
           </div>
+
+          <div class="spec-item" v-if="disk.busPower || disk.busPowerUsed">
+            <span class="spec-label">接口总线供电 (USB Bus Power)</span>
+            <span class="spec-val highlight">
+              {{ disk.busPowerUsed || disk.busPower || '500 mA' }} (供电上限: {{ disk.busPower || '500 mA' }})
+            </span>
+          </div>
         </div>
 
         <!-- Protocol Compatibility Matrix -->
@@ -154,6 +161,8 @@ interface DiskInfo {
   vendorId?: string;
   productId?: string;
   smartStatus?: string;
+  busPower?: string;
+  busPowerUsed?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }

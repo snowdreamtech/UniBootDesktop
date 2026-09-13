@@ -40,6 +40,8 @@ export namespace disk {
 	    vendorId: string;
 	    productId: string;
 	    smartStatus: string;
+	    busPower: string;
+	    busPowerUsed: string;
 	    isFakeUsb3: boolean;
 	    protocolCode: string;
 	
@@ -67,6 +69,8 @@ export namespace disk {
 	        this.vendorId = source["vendorId"];
 	        this.productId = source["productId"];
 	        this.smartStatus = source["smartStatus"];
+	        this.busPower = source["busPower"];
+	        this.busPowerUsed = source["busPowerUsed"];
 	        this.isFakeUsb3 = source["isFakeUsb3"];
 	        this.protocolCode = source["protocolCode"];
 	    }

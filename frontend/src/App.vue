@@ -184,6 +184,8 @@ interface DiskInfo {
   vendorId?: string;
   productId?: string;
   smartStatus?: string;
+  busPower?: string;
+  busPowerUsed?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }
