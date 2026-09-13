@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/snowdreamtech/unigodesktop/internal/env"
 )
 
 //go:embed assets/*
@@ -66,17 +68,38 @@ func TargetPathForReleaseAsset(name string) string {
 	return ""
 }
 
-// ExtractFirmwareToDir extracts all embedded firmware files to the specified target directory.
+// GetFirmwareData retrieves binary data for a firmware asset based on priority:
+// Priority 1: User downloaded / cached firmware in GetDataDir()/firmware/<releaseName>
+// Priority 2: Built-in embedded binary (embed.FS)
+func GetFirmwareData(releaseName string) ([]byte, string, error) {
+	// Check user data directory for manually downloaded / updated firmware
+	localPath := filepath.Join(env.GetDataDir(), "firmware", releaseName)
+	if info, err := os.Stat(localPath); err == nil && info.Size() > 0 {
+		data, err := os.ReadFile(localPath)
+		if err == nil {
+			return data, fmt.Sprintf("Local Cache (%s)", localPath), nil
+		}
+	}
+
+	// Fallback: Read from built-in embedded binary
+	embeddedPath := "assets/" + releaseName
+	data, err := embeddedAssets.ReadFile(embeddedPath)
+	if err != nil {
+		return nil, "", fmt.Errorf("firmware asset %s not found: %w", releaseName, err)
+	}
+	return data, "Embedded Binary (embed.FS)", nil
+}
+
+// ExtractFirmwareToDir extracts firmware files to the specified target directory using priority selection.
 func ExtractFirmwareToDir(targetDir string) error {
 	if targetDir == "" {
 		return fmt.Errorf("target directory cannot be empty")
 	}
 
 	for _, mapping := range StandardFirmwareMappings {
-		srcPath := "assets/" + mapping.ReleaseName
-		data, err := embeddedAssets.ReadFile(srcPath)
+		data, _, err := GetFirmwareData(mapping.ReleaseName)
 		if err != nil {
-			return fmt.Errorf("failed to read embedded firmware asset %s: %w", mapping.ReleaseName, err)
+			return fmt.Errorf("failed to load firmware asset %s: %w", mapping.ReleaseName, err)
 		}
 
 		destPath := filepath.Join(targetDir, filepath.FromSlash(mapping.TargetPath))

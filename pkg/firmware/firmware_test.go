@@ -100,3 +100,42 @@ func TestExtractFirmwareToDir(t *testing.T) {
 		t.Errorf("expected error when targetDir is empty")
 	}
 }
+
+func TestGetFirmwareData_Priority(t *testing.T) {
+	// Test embedded fallback default
+	data, src, err := GetFirmwareData("boot.ipxe")
+	if err != nil {
+		t.Fatalf("GetFirmwareData failed for boot.ipxe: %v", err)
+	}
+	if len(data) == 0 {
+		t.Errorf("expected non-empty firmware data")
+	}
+	if src == "" {
+		t.Errorf("expected non-empty source label")
+	}
+
+	// Test local downloaded file override
+	tmpDataDir := t.TempDir()
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", tmpDataDir)
+
+	localFwDir := filepath.Join(tmpDataDir, "firmware")
+	if err := os.MkdirAll(localFwDir, 0755); err != nil {
+		t.Fatalf("failed to create local firmware dir: %v", err)
+	}
+
+	overrideContent := []byte("# Custom downloaded boot.ipxe override")
+	if err := os.WriteFile(filepath.Join(localFwDir, "boot.ipxe"), overrideContent, 0644); err != nil {
+		t.Fatalf("failed to write override file: %v", err)
+	}
+
+	overriddenData, overrideSrc, err := GetFirmwareData("boot.ipxe")
+	if err != nil {
+		t.Fatalf("GetFirmwareData with override failed: %v", err)
+	}
+	if string(overriddenData) != string(overrideContent) {
+		t.Errorf("expected overridden content %q, got %q", string(overrideContent), string(overriddenData))
+	}
+	if overrideSrc == "" {
+		t.Errorf("expected non-empty override source string")
+	}
+}
