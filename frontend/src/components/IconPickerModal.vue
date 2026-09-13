@@ -60,6 +60,24 @@
               <rect x="5" y="7" width="14" height="14" rx="2"/>
               <rect x="8" y="11" width="8" height="6" rx="1" stroke-dasharray="2 2"/>
             </svg>
+            <!-- Mobile HDD -->
+            <svg v-else-if="option.id === 'hdd'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="16" height="16" rx="2"/>
+              <circle cx="12" cy="11" r="4"/>
+              <circle cx="12" cy="11" r="1.5"/>
+              <line x1="6" y1="17" x2="8" y2="17"/>
+            </svg>
+            <!-- Security Key -->
+            <svg v-else-if="option.id === 'key'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="7.5" cy="12.5" r="3.5"/>
+              <path d="M11 12.5h9.5M16 12.5v2.5M18.5 12.5v2"/>
+            </svg>
+            <!-- CD-ROM ISO -->
+            <svg v-else-if="option.id === 'cdrom'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <circle cx="12" cy="12" r="3"/>
+              <circle cx="12" cy="12" r="1"/>
+            </svg>
           </div>
           <div class="option-title">{{ option.label }}</div>
           <div class="option-desc">{{ option.desc }}</div>
@@ -74,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-export type DiskIconType = 'usb' | 'boot' | 'ssd' | 'typec' | 'secure' | 'reader';
+export type DiskIconType = 'usb' | 'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom';
 
 defineProps<{
   isOpen: boolean;
@@ -91,6 +109,9 @@ const iconOptions: Array<{ id: DiskIconType; label: string; desc: string }> = [
   { id: 'typec', label: 'Type-C 双头 U 盘', desc: '适配手机与 Mac 的 Type-C 盘' },
   { id: 'secure', label: '加密安全 U 盘', desc: '带物理密码锁的加密硬件' },
   { id: 'reader', label: 'SD / TF 卡读卡器', desc: '插入式多功能内存读卡器' },
+  { id: 'hdd', label: '移动机械硬盘 (HDD)', desc: '2.5 寸高容量机械移动盘' },
+  { id: 'key', label: 'U2F / 安全钥匙盘', desc: '物理密钥 FIDO2 安全盘' },
+  { id: 'cdrom', label: 'CD-ROM 虚拟光驱盘', desc: 'ISO 虚拟光盘模拟设备' },
 ];
 
 function close() {
@@ -232,6 +253,21 @@ function resetToAuto() {
 .icon-preview.reader {
   background: rgba(99, 102, 241, 0.15);
   color: #6366f1;
+}
+
+.icon-preview.hdd {
+  background: rgba(14, 165, 233, 0.15);
+  color: #38bdf8;
+}
+
+.icon-preview.key {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+}
+
+.icon-preview.cdrom {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
 }
 
 .disk-svg {

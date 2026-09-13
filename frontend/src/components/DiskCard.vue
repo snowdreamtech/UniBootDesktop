@@ -56,6 +56,24 @@
         <rect x="5" y="7" width="14" height="14" rx="2"/>
         <rect x="8" y="11" width="8" height="6" rx="1" stroke-dasharray="2 2"/>
       </svg>
+      <!-- Mobile HDD Icon -->
+      <svg v-else-if="diskType === 'hdd'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="4" width="16" height="16" rx="2"/>
+        <circle cx="12" cy="11" r="4"/>
+        <circle cx="12" cy="11" r="1.5"/>
+        <line x1="6" y1="17" x2="8" y2="17"/>
+      </svg>
+      <!-- Security Key Icon -->
+      <svg v-else-if="diskType === 'key'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="7.5" cy="12.5" r="3.5"/>
+        <path d="M11 12.5h9.5M16 12.5v2.5M18.5 12.5v2"/>
+      </svg>
+      <!-- CD-ROM ISO Icon -->
+      <svg v-else-if="diskType === 'cdrom'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <circle cx="12" cy="12" r="3"/>
+        <circle cx="12" cy="12" r="1"/>
+      </svg>
       <!-- Standard USB Flash Drive Icon -->
       <svg v-else class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <!-- Metal USB-A Plug Head -->
@@ -125,8 +143,8 @@ const props = withDefaults(defineProps<{
 
 defineEmits(['select', 'toggle', 'pick-icon', 'inspect']);
 
-const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'usb'>(() => {
-  if (props.customIcon && ['boot', 'ssd', 'typec', 'secure', 'reader', 'usb'].includes(props.customIcon)) {
+const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom' | 'usb'>(() => {
+  if (props.customIcon && ['boot', 'ssd', 'typec', 'secure', 'reader', 'hdd', 'key', 'cdrom', 'usb'].includes(props.customIcon)) {
     return props.customIcon as any;
   }
 
@@ -136,6 +154,15 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'usb'
   }
   if (nameUpper.includes('SECURE') || nameUpper.includes('VAULT') || nameUpper.includes('LOCK')) {
     return 'secure';
+  }
+  if (nameUpper.includes('FIDO') || nameUpper.includes('KEY') || nameUpper.includes('YUBI')) {
+    return 'key';
+  }
+  if (nameUpper.includes('CDROM') || nameUpper.includes('ISO') || nameUpper.includes('VIRTUAL')) {
+    return 'cdrom';
+  }
+  if (nameUpper.includes('HDD') || nameUpper.includes('DISK DRIVE')) {
+    return 'hdd';
   }
   if (nameUpper.includes('CARD') || nameUpper.includes('READER') || nameUpper.includes('SD')) {
     return 'reader';
@@ -155,6 +182,9 @@ const diskTagLabel = computed(() => {
   if (diskType.value === 'typec') return 'Type-C 盘';
   if (diskType.value === 'secure') return '加密 U盘';
   if (diskType.value === 'reader') return '读卡器';
+  if (diskType.value === 'hdd') return '移动硬盘';
+  if (diskType.value === 'key') return '安全钥匙';
+  if (diskType.value === 'cdrom') return '虚拟光驱';
   return 'USB 3.0';
 });
 </script>
@@ -208,6 +238,21 @@ const diskTagLabel = computed(() => {
 .disk-icon-wrapper.reader {
   background: rgba(99, 102, 241, 0.15);
   color: #6366f1;
+}
+
+.disk-icon-wrapper.hdd {
+  background: rgba(14, 165, 233, 0.15);
+  color: #38bdf8;
+}
+
+.disk-icon-wrapper.key {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+}
+
+.disk-icon-wrapper.cdrom {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
 }
 
 .disk-svg {
@@ -334,6 +379,21 @@ const diskTagLabel = computed(() => {
 .disk-badge.reader {
   background: rgba(99, 102, 241, 0.15);
   color: #818cf8;
+}
+
+.disk-badge.hdd {
+  background: rgba(14, 165, 233, 0.15);
+  color: #38bdf8;
+}
+
+.disk-badge.key {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+}
+
+.disk-badge.cdrom {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
 }
 
 .disk-checkbox-container {
