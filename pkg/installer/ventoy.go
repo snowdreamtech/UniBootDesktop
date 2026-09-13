@@ -22,10 +22,17 @@ type VentoyThemeConfig struct {
 	Display string `json:"display,omitempty"`
 }
 
+// VentoyAliasConfig defines image_alias items in ventoy.json matching Ventoy plugin spec.
+type VentoyAliasConfig struct {
+	Image string `json:"image"`
+	Alias string `json:"alias"`
+}
+
 // VentoyGlobalConfig represents the root JSON schema for ventoy/ventoy.json matching UniBoot spec.
 type VentoyGlobalConfig struct {
-	Theme   *VentoyThemeConfig       `json:"theme,omitempty"`
-	Control []map[string]interface{} `json:"control,omitempty"`
+	Theme      *VentoyThemeConfig       `json:"theme,omitempty"`
+	ImageAlias []VentoyAliasConfig      `json:"image_alias,omitempty"`
+	Control    []map[string]interface{} `json:"control,omitempty"`
 }
 
 // WriteVentoyConfig generates the ventoy/ventoy.json, ventoy/ventoy_grub.cfg, and extracts theme assets
@@ -42,6 +49,12 @@ func WriteVentoyConfig(mountDir string) error {
 			File:    "/ventoy/themes/uniboot/theme.txt",
 			Gfxmode: "1280x800",
 			Display: "full",
+		},
+		ImageAlias: []VentoyAliasConfig{
+			{
+				Image: "/iso/UniBoot.iso",
+				Alias: "⚡ UniBoot 统一网络与本地安装系统",
+			},
 		},
 		Control: []map[string]interface{}{
 			{"VTOY_DEFAULT_IMAGE": "/iso/UniBoot.iso"},
