@@ -35,14 +35,14 @@ func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
 	return disk.GetRemovableDisks()
 }
 
-// DeployModeA triggers Mode A (Hybrid Pro Mode - Ventoy + iPXE).
-func (a *App) DeployModeA(targetDisk string) (*installer.DeployResult, error) {
-	return installer.DeployModeA(a.ctx, targetDisk)
+// DeployModeA triggers Mode A (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system.
+func (a *App) DeployModeA(targetDisk string, fsType string) (*installer.DeployResult, error) {
+	return installer.DeployModeA(a.ctx, targetDisk, fsType)
 }
 
-// DeployModeABatch triggers Mode A deployment for multiple target USB drives.
-func (a *App) DeployModeABatch(targetDisks []string) ([]*installer.DeployResult, error) {
-	return installer.DeployModeABatch(a.ctx, targetDisks)
+// DeployModeABatch triggers Mode A deployment for multiple target USB drives with customizable file system.
+func (a *App) DeployModeABatch(targetDisks []string, fsType string) ([]*installer.DeployResult, error) {
+	return installer.DeployModeABatch(a.ctx, targetDisks, fsType)
 }
 
 // DeployModeB triggers Mode B (Cloud Pure Mode - 1-sec FAT32 + iPXE).

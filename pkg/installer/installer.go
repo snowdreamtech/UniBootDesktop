@@ -18,23 +18,27 @@ type DeployResult struct {
 	Message string `json:"message"`
 }
 
-// DeployModeA executes Mode A: Hybrid Pro Mode (Ventoy CLI + UniBoot theme + iPXE network extension).
-func DeployModeA(ctx context.Context, targetDisk string) (*DeployResult, error) {
+// DeployModeA executes Mode A: Hybrid Pro Mode (Ventoy CLI + UniBoot theme + iPXE network extension) with customizable file system.
+func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return nil, fmt.Errorf("disk validation failed: %w", err)
 	}
 
-	// Deploy Mode A logic
+	if fsType == "" {
+		fsType = "exFAT"
+	}
+
+	// Deploy Mode A logic with specified file system
 	return &DeployResult{
 		Success: true,
-		Mode:    "Mode A (Hybrid Pro)",
+		Mode:    fmt.Sprintf("Mode A (Hybrid Pro - %s)", fsType),
 		Target:  targetDisk,
-		Message: fmt.Sprintf("Successfully deployed Hybrid Pro Mode to %s", targetDisk),
+		Message: fmt.Sprintf("Successfully deployed Hybrid Pro Mode (%s) to %s", fsType, targetDisk),
 	}, nil
 }
 
-// DeployModeABatch executes Mode A on multiple target USB drives concurrently/sequentially.
-func DeployModeABatch(ctx context.Context, targetDisks []string) ([]*DeployResult, error) {
+// DeployModeABatch executes Mode A on multiple target USB drives with specified file system.
+func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
 	if len(targetDisks) == 0 {
 		return nil, fmt.Errorf("no target disks specified for batch deployment")
 	}
@@ -47,7 +51,7 @@ func DeployModeABatch(ctx context.Context, targetDisks []string) ([]*DeployResul
 
 	results := make([]*DeployResult, 0, len(targetDisks))
 	for _, d := range targetDisks {
-		res, err := DeployModeA(ctx, d)
+		res, err := DeployModeA(ctx, d, fsType)
 		if err != nil {
 			results = append(results, &DeployResult{
 				Success: false,

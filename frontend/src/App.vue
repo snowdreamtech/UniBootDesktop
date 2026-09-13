@@ -97,6 +97,17 @@
           集成 Ventoy 核心 + UniBoot 专属暗色主题 & iPXE 网络扩展，支持放置数 GB 大 ISO 镜像。
         </p>
 
+        <!-- Filesystem Selection for Mode A -->
+        <div class="fs-selector" v-if="activeMode === 'hybrid'">
+          <label class="fs-label">主数据区格式 (File System):</label>
+          <select v-model="selectedFsType" class="fs-select">
+            <option value="exFAT">exFAT (默认推荐 • 支持 >4GB 单文件大 ISO)</option>
+            <option value="NTFS">NTFS (Windows 极速原生格式)</option>
+            <option value="FAT32">FAT32 (老旧机器全兼容 • 4GB单文件限制)</option>
+            <option value="ext4">ext4 (Linux 专属文件系统)</option>
+          </select>
+        </div>
+
         <div class="deploy-box">
           <div class="selected-target">
             <span>目标设备:</span>
@@ -196,6 +207,7 @@ interface DiskInfo {
 
 const activeMode = ref<'cloud' | 'hybrid'>('cloud');
 const selectionMode = ref<'single' | 'batch'>('single');
+const selectedFsType = ref<'exFAT' | 'NTFS' | 'FAT32' | 'ext4'>('exFAT');
 const diskList = ref<DiskInfo[]>([]);
 const CUSTOM_ICONS_KEY = 'unigo_custom_icons_v1';
 
@@ -392,13 +404,13 @@ async function startDeployment() {
         if (activeMode.value === 'cloud') {
           await window.go.main.App.DeployModeB(targets[0]);
         } else {
-          await window.go.main.App.DeployModeA(targets[0]);
+          await window.go.main.App.DeployModeA(targets[0], selectedFsType.value);
         }
       } else {
         if (activeMode.value === 'cloud') {
           await window.go.main.App.DeployModeBBatch(targets);
         } else {
-          await window.go.main.App.DeployModeABatch(targets);
+          await window.go.main.App.DeployModeABatch(targets, selectedFsType.value);
         }
       }
     }
@@ -677,5 +689,35 @@ h1 {
   font-size: 0.8rem;
   color: var(--text-muted);
   margin-bottom: 1rem;
+}
+
+.fs-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.fs-label {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.fs-select {
+  background: rgba(8, 14, 26, 0.8);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  border-radius: 8px;
+  color: #fff;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.825rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fs-select:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.25);
 }
 </style>

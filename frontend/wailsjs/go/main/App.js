@@ -10,12 +10,12 @@ export function CheckUpdate() {
   return window['go']['main']['App']['CheckUpdate']();
 }
 
-export function DeployModeA(arg1) {
-  return window['go']['main']['App']['DeployModeA'](arg1);
+export function DeployModeA(arg1, arg2) {
+  return window['go']['main']['App']['DeployModeA'](arg1, arg2);
 }
 
-export function DeployModeABatch(arg1) {
-  return window['go']['main']['App']['DeployModeABatch'](arg1);
+export function DeployModeABatch(arg1, arg2) {
+  return window['go']['main']['App']['DeployModeABatch'](arg1, arg2);
 }
 
 export function DeployModeB(arg1) {

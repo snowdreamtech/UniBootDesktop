@@ -10,9 +10,9 @@ export function CheckQEMU():Promise<qemu.QEMUStatus>;
 
 export function CheckUpdate():Promise<updater.UpdateStatus>;
 
-export function DeployModeA(arg1:string):Promise<installer.DeployResult>;
+export function DeployModeA(arg1:string,arg2:string):Promise<installer.DeployResult>;
 
-export function DeployModeABatch(arg1:Array<string>):Promise<Array<installer.DeployResult>>;
+export function DeployModeABatch(arg1:Array<string>,arg2:string):Promise<Array<installer.DeployResult>>;
 
 export function DeployModeB(arg1:string):Promise<installer.DeployResult>;
 
