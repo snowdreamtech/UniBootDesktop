@@ -139,11 +139,149 @@ func formatDiskLinux(ctx context.Context, targetDisk string) (string, error) {
 	return mountPoint, nil
 }
 
+// FormatDiskModeA formats the target physical disk for Mode A (Hybrid Pro Mode - Ventoy + UniBoot)
+// with the specified file system (exFAT, NTFS, FAT32, ext4) and volume label "VENTOY".
+// Returns the resolved volume mount point (e.g. /Volumes/VENTOY, E:\, /mnt/VENTOY).
+func FormatDiskModeA(ctx context.Context, targetDisk string, fsType string) (string, error) {
+	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
+		return "", fmt.Errorf("disk validation failed: %w", err)
+	}
+
+	if fsType == "" {
+		fsType = "exFAT"
+	}
+
+	// Dry-run mode for tests or safe simulation
+	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
+		tempMount, err := os.MkdirTemp("", "uniboot-dryrun-modea-*")
+		if err != nil {
+			return "", fmt.Errorf("failed to create dry-run mount point for Mode A: %w", err)
+		}
+		return tempMount, nil
+	}
+
+	switch runtime.GOOS {
+	case "darwin":
+		return formatDiskModeAMacOS(ctx, targetDisk, fsType)
+	case "windows":
+		return formatDiskModeAWindows(ctx, targetDisk, fsType)
+	case "linux":
+		return formatDiskModeALinux(ctx, targetDisk, fsType)
+	default:
+		return "", fmt.Errorf("unsupported operating system: %s", runtime.GOOS)
+	}
+}
+
+func formatDiskModeAMacOS(ctx context.Context, targetDisk string, fsType string) (string, error) {
+	diskNode := filepath.Base(targetDisk)
+	fsFormat := strings.ToUpper(fsType)
+	if fsFormat == "EXFAT" {
+		fsFormat = "ExFAT"
+	} else if fsFormat == "FAT32" {
+		fsFormat = "FAT32"
+	}
+
+	cmd := execCommand("diskutil", "eraseDisk", fsFormat, "VENTOY", "MBRFormat", diskNode)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", fmt.Errorf("diskutil eraseDisk for Mode A failed (%v): %s", err, string(output))
+	}
+
+	mountPoint := "/Volumes/VENTOY"
+	if info, err := os.Stat(mountPoint); err == nil && info.IsDir() {
+		return mountPoint, nil
+	}
+
+	return ResolveMountPointWithLabel(targetDisk, "VENTOY")
+}
+
+func formatDiskModeAWindows(ctx context.Context, targetDisk string, fsType string) (string, error) {
+	diskIndex := targetDisk
+	diskIndex = strings.TrimPrefix(diskIndex, `\\.\PhysicalDrive`)
+	diskIndex = strings.TrimPrefix(diskIndex, `disk`)
+	diskIndex = strings.TrimPrefix(diskIndex, `Disk`)
+
+	fsFormat := strings.ToLower(fsType)
+	if fsFormat == "" {
+		fsFormat = "exfat"
+	}
+
+	scriptContent := fmt.Sprintf("select disk %s\nclean\ncreate partition primary\nactive\nformat fs=%s label=\"VENTOY\" quick\nassign\n", diskIndex, fsFormat)
+	tmpFile, err := os.CreateTemp("", "diskpart-modea-*.txt")
+	if err != nil {
+		return "", fmt.Errorf("failed to create diskpart script: %w", err)
+	}
+	defer os.Remove(tmpFile.Name())
+
+	if _, err := tmpFile.WriteString(scriptContent); err != nil {
+		tmpFile.Close()
+		return "", fmt.Errorf("failed to write diskpart script: %w", err)
+	}
+	tmpFile.Close()
+
+	cmd := execCommand("diskpart", "/s", tmpFile.Name())
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", fmt.Errorf("diskpart for Mode A failed (%v): %s", err, string(output))
+	}
+
+	return ResolveMountPointWithLabel(targetDisk, "VENTOY")
+}
+
+func formatDiskModeALinux(ctx context.Context, targetDisk string, fsType string) (string, error) {
+	cmd := execCommand("parted", "-s", targetDisk, "mklabel", "msdos")
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return "", fmt.Errorf("parted mklabel failed (%v): %s", err, string(output))
+	}
+
+	cmd = execCommand("parted", "-s", targetDisk, "mkpart", "primary", "1MiB", "100%")
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return "", fmt.Errorf("parted mkpart failed (%v): %s", err, string(output))
+	}
+
+	partition := targetDisk + "1"
+	if strings.Contains(targetDisk, "nvme") || strings.Contains(targetDisk, "mmcblk") {
+		partition = targetDisk + "p1"
+	}
+
+	mkfsCmd := "mkfs.exfat"
+	switch strings.ToLower(fsType) {
+	case "fat32":
+		mkfsCmd = "mkfs.vfat"
+	case "ntfs":
+		mkfsCmd = "mkfs.ntfs"
+	case "ext4":
+		mkfsCmd = "mkfs.ext4"
+	}
+
+	cmd = execCommand(mkfsCmd, "-n", "VENTOY", partition)
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return "", fmt.Errorf("%s failed (%v): %s", mkfsCmd, err, string(output))
+	}
+
+	mountPoint := "/mnt/VENTOY"
+	if err := os.MkdirAll(mountPoint, 0755); err != nil {
+		return "", fmt.Errorf("failed to create mount dir %s: %w", mountPoint, err)
+	}
+
+	cmd = execCommand("mount", partition, mountPoint)
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return "", fmt.Errorf("mount partition failed (%v): %s", err, string(output))
+	}
+
+	return mountPoint, nil
+}
+
 // ResolveMountPoint resolves the active mount point for volume label "UNIBOOT" on the system.
 func ResolveMountPoint(targetDisk string) (string, error) {
+	return ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
+}
+
+// ResolveMountPointWithLabel resolves the active mount point for a specified volume label on the system.
+func ResolveMountPointWithLabel(targetDisk string, label string) (string, error) {
 	// macOS standard mount location
 	if runtime.GOOS == "darwin" {
-		macPath := "/Volumes/UNIBOOT"
+		macPath := filepath.Join("/Volumes", label)
 		if info, err := os.Stat(macPath); err == nil && info.IsDir() {
 			return macPath, nil
 		}
@@ -154,5 +292,6 @@ func ResolveMountPoint(targetDisk string) (string, error) {
 		return os.TempDir(), nil
 	}
 
-	return "", fmt.Errorf("could not resolve mount point for target disk %s", targetDisk)
+	return "", fmt.Errorf("could not resolve mount point for label %s on target disk %s", label, targetDisk)
 }
+

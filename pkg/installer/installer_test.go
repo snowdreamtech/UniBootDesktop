@@ -13,13 +13,16 @@ import (
 )
 
 func TestDeployModeA(t *testing.T) {
+	os.Setenv("UNIBOOT_DRY_RUN", "true")
+	defer os.Unsetenv("UNIBOOT_DRY_RUN")
+
 	ctx := context.Background()
 
-	res, err := DeployModeA(ctx, "/Volumes/MyUSB", "exFAT")
+	res, err := DeployModeA(ctx, "dummy_usb_disk", "exFAT")
 	require.NoError(t, err)
 	assert.True(t, res.Success)
-	assert.Equal(t, "/Volumes/MyUSB", res.Target)
-	assert.Contains(t, res.Message, "Successfully deployed")
+	assert.Equal(t, "dummy_usb_disk", res.Target)
+	assert.Contains(t, res.Message, "Successfully deployed Hybrid Pro Mode A")
 
 	_, err = DeployModeA(ctx, "/", "exFAT")
 	assert.Error(t, err)
@@ -42,6 +45,9 @@ func TestDeployModeB(t *testing.T) {
 }
 
 func TestDeployModeABatch(t *testing.T) {
+	os.Setenv("UNIBOOT_DRY_RUN", "true")
+	defer os.Unsetenv("UNIBOOT_DRY_RUN")
+
 	ctx := context.Background()
 
 	// Empty list
@@ -49,14 +55,14 @@ func TestDeployModeABatch(t *testing.T) {
 	assert.Error(t, err)
 
 	// Valid targets
-	results, err := DeployModeABatch(ctx, []string{"/Volumes/USB1", "/Volumes/USB2"}, "exFAT")
+	results, err := DeployModeABatch(ctx, []string{"dummy_usb_1", "dummy_usb_2"}, "exFAT")
 	require.NoError(t, err)
 	assert.Len(t, results, 2)
 	assert.True(t, results[0].Success)
 	assert.True(t, results[1].Success)
 
 	// System drive included -> validation error
-	_, err = DeployModeABatch(ctx, []string{"/Volumes/USB1", "/"}, "exFAT")
+	_, err = DeployModeABatch(ctx, []string{"dummy_usb_1", "/"}, "exFAT")
 	assert.Error(t, err)
 }
 

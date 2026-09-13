@@ -29,14 +29,30 @@ func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*Deploy
 		fsType = "exFAT"
 	}
 
-	// Deploy Mode A logic with specified file system
+	// 1. Format disk for Mode A (Ventoy dual-engine partition layout)
+	mountPoint, err := FormatDiskModeA(ctx, targetDisk, fsType)
+	if err != nil {
+		return nil, fmt.Errorf("formatting disk for Mode A failed: %w", err)
+	}
+
+	// 2. Extract multi-arch iPXE EFI & Legacy BIOS firmware assets to target volume
+	if err := firmware.ExtractFirmwareToDir(mountPoint); err != nil {
+		return nil, fmt.Errorf("extracting firmware assets failed: %w", err)
+	}
+
+	// 3. Write Ventoy configuration (ventoy.json & ventoy_grub.cfg for UniBoot iPXE integration)
+	if err := WriteVentoyConfig(mountPoint); err != nil {
+		return nil, fmt.Errorf("writing Ventoy configuration failed: %w", err)
+	}
+
 	return &DeployResult{
 		Success: true,
 		Mode:    fmt.Sprintf("Mode A (Hybrid Pro - %s)", fsType),
 		Target:  targetDisk,
-		Message: fmt.Sprintf("Successfully deployed Hybrid Pro Mode (%s) to %s", fsType, targetDisk),
+		Message: fmt.Sprintf("Successfully deployed Hybrid Pro Mode A (%s/VENTOY) to %s (mount: %s)", fsType, targetDisk, mountPoint),
 	}, nil
 }
+
 
 // DeployModeABatch executes Mode A on multiple target USB drives with specified file system.
 func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {

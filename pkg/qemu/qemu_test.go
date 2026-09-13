@@ -5,7 +5,6 @@ package qemu
 
 import (
 	"context"
-	"os"
 	"testing"
 )
 

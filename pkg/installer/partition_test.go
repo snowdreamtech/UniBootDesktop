@@ -72,3 +72,51 @@ func TestFormatDiskModeB_ExtractionIntegration(t *testing.T) {
 		t.Fatalf("Failed to write to dry-run mount point %s: %v", mountPoint, err)
 	}
 }
+
+func TestFormatDiskModeA_SafetyValidation(t *testing.T) {
+	ctx := context.Background()
+
+	systemDrives := []string{"/", "/dev/sda", "C:", "/dev/nvme0n1"}
+	for _, drive := range systemDrives {
+		_, err := FormatDiskModeA(ctx, drive, "exFAT")
+		if err == nil {
+			t.Errorf("Expected safety validation error for system drive %s in Mode A, got nil", drive)
+		}
+	}
+}
+
+func TestFormatDiskModeA_DryRun(t *testing.T) {
+	ctx := context.Background()
+	os.Setenv("UNIBOOT_DRY_RUN", "true")
+	defer os.Unsetenv("UNIBOOT_DRY_RUN")
+
+	mountPoint, err := FormatDiskModeA(ctx, "dummy_usb_disk", "exFAT")
+	if err != nil {
+		t.Fatalf("FormatDiskModeA dry-run failed: %v", err)
+	}
+
+	if mountPoint == "" {
+		t.Fatalf("Expected non-empty mount point in dry-run mode for Mode A")
+	}
+
+	info, err := os.Stat(mountPoint)
+	if err != nil || !info.IsDir() {
+		t.Fatalf("Expected mount point %s to be a valid directory", mountPoint)
+	}
+
+	// Verify WriteVentoyConfig in dry-run directory
+	if err := WriteVentoyConfig(mountPoint); err != nil {
+		t.Fatalf("WriteVentoyConfig failed: %v", err)
+	}
+
+	jsonPath := filepath.Join(mountPoint, "ventoy", "ventoy.json")
+	if _, err := os.Stat(jsonPath); err != nil {
+		t.Errorf("Expected ventoy.json to exist at %s", jsonPath)
+	}
+
+	grubPath := filepath.Join(mountPoint, "ventoy", "ventoy_grub.cfg")
+	if _, err := os.Stat(grubPath); err != nil {
+		t.Errorf("Expected ventoy_grub.cfg to exist at %s", grubPath)
+	}
+}
+
