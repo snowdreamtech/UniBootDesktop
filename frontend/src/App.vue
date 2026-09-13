@@ -573,19 +573,28 @@ async function startDeployment() {
 
 
 async function launchQEMU() {
-  if (!selectedDisk.value) {
-    alert('请先插入或选择要测试的目标 U 盘！');
+  console.log('[UniBoot] launchQEMU triggered, selectedDisk:', selectedDisk.value);
+
+  if (!selectedDisk.value || !selectedDisk.value.device) {
+    alert('请先插入或在磁盘列表中选择要测试的目标 U 盘！');
     return;
   }
 
+  const targetDevice = selectedDisk.value.device;
+
   try {
     if (window.go && window.go.main && window.go.main.App) {
-      await window.go.main.App.LaunchQEMU(selectedDisk.value.device);
-      alert(`🚀 已成功启动 QEMU 模拟器校验磁盘：${selectedDisk.value.device}`);
+      if (typeof window.go.main.App.LaunchQEMU === 'function') {
+        await window.go.main.App.LaunchQEMU(targetDevice);
+        alert(`🚀 已成功启动 QEMU 模拟器校验磁盘：${targetDevice}`);
+      } else {
+        alert(`⚠️ 后端 API 加载中：Wails App.LaunchQEMU 尚未完成绑定，请重新启动 UniBoot 应用。`);
+      }
     } else {
-      alert(`[演示模式] 正在启动 QEMU 模拟器校验磁盘：${selectedDisk.value.device}`);
+      alert(`[演示模式] 正在启动 QEMU 模拟器校验磁盘：${targetDevice}`);
     }
   } catch (e: any) {
+    console.error('[UniBoot] LaunchQEMU error:', e);
     alert(`❌ 启动 QEMU 模拟器失败：\n\n${e?.message || String(e)}`);
   }
 }

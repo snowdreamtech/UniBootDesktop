@@ -97,13 +97,23 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 
 	status := Detect()
 	if !status.Installed {
-		return fmt.Errorf("未检测到 QEMU 模拟器！请先安装 QEMU（例如通过 brew install qemu 或官方安装包）。")
+		return fmt.Errorf("未检测到 QEMU 模拟器！请先安装 QEMU（例如通过 brew install qemu 或 MacPorts 命令行包）。")
+	}
+
+	// Normalize macOS disk path: convert /dev/diskN -> /dev/rdiskN for raw unbuffered I/O
+	targetPath := diskPath
+	if runtime.GOOS == "darwin" {
+		if strings.HasPrefix(targetPath, "/dev/disk") {
+			targetPath = strings.Replace(targetPath, "/dev/disk", "/dev/rdisk", 1)
+		} else if !strings.HasPrefix(targetPath, "/dev/") && strings.HasPrefix(targetPath, "disk") {
+			targetPath = "/dev/r" + targetPath
+		}
 	}
 
 	// Build safe read-only preview command using snapshot mode
 	args := []string{
 		"-m", "1024",
-		"-drive", fmt.Sprintf("file=%s,format=raw,snapshot=on", diskPath),
+		"-drive", fmt.Sprintf("file=%s,format=raw,snapshot=on", targetPath),
 	}
 
 	cmd := exec.Command(status.Path, args...)
