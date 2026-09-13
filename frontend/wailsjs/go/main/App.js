@@ -38,6 +38,14 @@ export function GetFirmwareList() {
   return window['go']['main']['App']['GetFirmwareList']();
 }
 
+export function GetUniBootReleaseInfo() {
+  return window['go']['main']['App']['GetUniBootReleaseInfo']();
+}
+
 export function SaveConfig(arg1) {
   return window['go']['main']['App']['SaveConfig'](arg1);
+}
+
+export function SyncUniBootFirmware() {
+  return window['go']['main']['App']['SyncUniBootFirmware']();
 }

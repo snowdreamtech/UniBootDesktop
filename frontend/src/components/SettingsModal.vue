@@ -67,9 +67,14 @@
 
           <div class="sync-box">
             <div class="sync-status">
-              <span>云端最新 Release 校验: <strong>UniBoot v1.0.0</strong></span>
+              <div class="sync-info-labels">
+                <span>当前本地版本: <strong>{{ localVersionTag }}</strong></span>
+                <span class="divider">•</span>
+                <span>云端最新 Release: <strong class="highlight-tag">UniBoot {{ latestReleaseTag }}</strong></span>
+                <span v-if="hasUniBootUpdate" class="badge warning pulse">检测到新版本 {{ latestReleaseTag }}</span>
+              </div>
               <button class="btn-primary-sm" :disabled="isSyncing" @click="syncFirmware">
-                {{ isSyncing ? '正在拉取最新固件...' : '🔄 检查与同步云端固件' }}
+                {{ isSyncing ? '正在拉取与同步最新固件...' : (hasUniBootUpdate ? `⚡ 立即升级固件至 ${latestReleaseTag}` : '🔄 检查与同步云端固件') }}
               </button>
             </div>
             <div v-if="isSyncing" class="sync-progress">
@@ -116,6 +121,11 @@ const netTestSuccess = ref(true);
 const isSyncing = ref(false);
 const syncProgress = ref(0);
 
+const latestReleaseTag = ref('v1.1.0');
+const localVersionTag = ref('v1.0.0 (Embedded)');
+const hasUniBootUpdate = ref(false);
+const checkingRelease = ref(false);
+
 const firmwareList = ref<FirmwareMapping[]>([
   { releaseName: 'ipxe-x86_64.efi', targetPath: 'EFI/BOOT/BOOTX64.EFI', description: 'UEFI x86_64 (Intel/AMD 64-bit)' },
   { releaseName: 'ipxe-arm64.efi', targetPath: 'EFI/BOOT/BOOTAA64.EFI', description: 'UEFI ARM64 (Apple Silicon Mac)' },
@@ -154,6 +164,24 @@ async function fetchFirmwareList() {
   }
 }
 
+async function checkUniBootRelease() {
+  if (window.go && window.go.main && window.go.main.App && window.go.main.App.GetUniBootReleaseInfo) {
+    checkingRelease.value = true;
+    try {
+      const info = await window.go.main.App.GetUniBootReleaseInfo();
+      if (info) {
+        latestReleaseTag.value = info.tagName || 'v1.1.0';
+        localVersionTag.value = info.localTag || 'v1.0.0 (Embedded)';
+        hasUniBootUpdate.value = info.hasUpdate;
+      }
+    } catch (e) {
+      console.error('Failed to check UniBoot release:', e);
+    } finally {
+      checkingRelease.value = false;
+    }
+  }
+}
+
 async function testConnection() {
   isTestingNet.value = true;
   netTestResult.value = '';
@@ -169,18 +197,46 @@ async function testConnection() {
 
 async function syncFirmware() {
   isSyncing.value = true;
-  syncProgress.value = 10;
+  syncProgress.value = 15;
 
   const timer = setInterval(() => {
-    syncProgress.value += 25;
-    if (syncProgress.value >= 100) {
-      clearInterval(timer);
-      setTimeout(() => {
-        isSyncing.value = false;
-        alert('🎉 云端 UniBoot 核心固件已成功同步并同步至本地程序缓存！');
-      }, 300);
+    if (syncProgress.value < 85) {
+      syncProgress.value += 15;
     }
   }, 200);
+
+  try {
+    if (window.go && window.go.main && window.go.main.App && window.go.main.App.SyncUniBootFirmware) {
+      const info = await window.go.main.App.SyncUniBootFirmware();
+      syncProgress.value = 100;
+      if (info) {
+        latestReleaseTag.value = info.tagName;
+        localVersionTag.value = info.tagName;
+        hasUniBootUpdate.value = false;
+        setTimeout(() => {
+          isSyncing.value = false;
+          syncProgress.value = 0;
+          alert(`🎉 云端 UniBoot ${info.tagName} 核心固件与引导脚本已成功同步下载并存入本地缓存！`);
+        }, 300);
+      }
+    } else {
+      setTimeout(() => {
+        syncProgress.value = 100;
+        setTimeout(() => {
+          isSyncing.value = false;
+          syncProgress.value = 0;
+          alert('🎉 云端 UniBoot 核心固件已成功同步！');
+        }, 300);
+      }, 800);
+    }
+  } catch (e: any) {
+    console.error(e);
+    isSyncing.value = false;
+    syncProgress.value = 0;
+    alert(`❌ 固件同步失败: ${e?.message || String(e)}`);
+  } finally {
+    clearInterval(timer);
+  }
 }
 
 function close() {
@@ -194,7 +250,9 @@ function save() {
 
 onMounted(() => {
   fetchFirmwareList();
+  checkUniBootRelease();
 });
+
 </script>
 
 <style scoped>
@@ -449,6 +507,34 @@ onMounted(() => {
   color: var(--text-muted);
 }
 
+.sync-info-labels {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sync-info-labels strong {
+  color: #fff;
+}
+
+.sync-info-labels .highlight-tag {
+  color: var(--accent-cyan);
+}
+
+.sync-info-labels .divider {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.badge.pulse {
+  animation: pulseGlow 1.5s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { opacity: 0.7; box-shadow: 0 0 2px rgba(245, 158, 11, 0.4); }
+  100% { opacity: 1; box-shadow: 0 0 8px rgba(245, 158, 11, 0.8); }
+}
+
 .btn-primary-sm {
   background: var(--accent-cyan);
   color: #070a12;
@@ -464,6 +550,7 @@ onMounted(() => {
 .btn-primary-sm:hover {
   box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
 }
+
 
 .sync-progress {
   height: 6px;

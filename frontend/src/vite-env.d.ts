@@ -15,6 +15,8 @@ declare global {
           GetConfig(): Promise<any>;
           SaveConfig(cfg: any): Promise<any>;
           GetFirmwareList(): Promise<any[]>;
+          GetUniBootReleaseInfo(): Promise<any>;
+          SyncUniBootFirmware(): Promise<any>;
         };
       };
     };
@@ -22,3 +24,4 @@ declare global {
 }
 
 export {};
+

@@ -4,12 +4,17 @@
 package firmware
 
 import (
+	"context"
 	"embed"
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unigodesktop/pkg/updater"
 )
 
 //go:embed assets/*
@@ -21,6 +26,24 @@ type FirmwareMapping struct {
 	TargetPath  string `json:"targetPath"`  // Standard target path in UNIBOOTEFI / U-disk (e.g. EFI/BOOT/BOOTX64.EFI, undionly.kpxe)
 	Description string `json:"description"` // Architecture / target description
 	IsReserved  bool   `json:"isReserved"`  // Whether this is a reserved / optional firmware module (e.g. undionly.kpxe)
+}
+
+// UniBootReleaseAsset represents a file asset attached to a UniBoot GitHub release.
+type UniBootReleaseAsset struct {
+	Name               string `json:"name"`
+	BrowserDownloadURL string `json:"browser_download_url"`
+	Size               int64  `json:"size"`
+}
+
+// UniBootReleaseInfo represents release metadata fetched from GitHub API for UniBoot repository.
+type UniBootReleaseInfo struct {
+	TagName     string                `json:"tagName"`
+	Name        string                `json:"name"`
+	PublishedAt string                `json:"publishedAt"`
+	Body        string                `json:"body"`
+	Assets      []UniBootReleaseAsset `json:"assets"`
+	LocalTag    string                `json:"localTag"`
+	HasUpdate   bool                  `json:"hasUpdate"`
 }
 
 // StandardFirmwareMappings defines the full matrix of UniBoot firmware files to be deployed.
@@ -66,6 +89,126 @@ func TargetPathForReleaseAsset(name string) string {
 		return m.TargetPath
 	}
 	return ""
+}
+
+// GetLocalUniBootVersion returns current local/cached UniBoot version tag.
+func GetLocalUniBootVersion() string {
+	versionFile := filepath.Join(env.GetDataDir(), "firmware", "version.json")
+	if data, err := os.ReadFile(versionFile); err == nil {
+		var ver struct {
+			TagName string `json:"tagName"`
+		}
+		if err := json.Unmarshal(data, &ver); err == nil && ver.TagName != "" {
+			return ver.TagName
+		}
+	}
+	return "v1.0.0 (Embedded)"
+}
+
+// FetchLatestUniBootRelease queries https://api.github.com/repos/snowdreamtech/UniBoot/releases/latest.
+func FetchLatestUniBootRelease(ctx context.Context, proxyPrefix string) (*UniBootReleaseInfo, error) {
+	apiURL := "https://api.github.com/repos/snowdreamtech/UniBoot/releases/latest"
+
+	ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, apiURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create release request: %w", err)
+	}
+	req.Header.Set("Accept", "application/vnd.github.v3+json")
+	req.Header.Set("User-Agent", "UniBootDesktop")
+
+	client := &http.Client{Timeout: 15 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query UniBoot latest release: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("GitHub API returned status code: %d", resp.StatusCode)
+	}
+
+	var ghRelease struct {
+		TagName     string `json:"tag_name"`
+		Name        string `json:"name"`
+		PublishedAt string `json:"published_at"`
+		Body        string `json:"body"`
+		Assets      []struct {
+			Name               string `json:"name"`
+			BrowserDownloadURL string `json:"browser_download_url"`
+			Size               int64  `json:"size"`
+		} `json:"assets"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&ghRelease); err != nil {
+		return nil, fmt.Errorf("failed to decode GitHub release response: %w", err)
+	}
+
+	localTag := GetLocalUniBootVersion()
+	hasUpdate := localTag != ghRelease.TagName
+
+	releaseInfo := &UniBootReleaseInfo{
+		TagName:     ghRelease.TagName,
+		Name:        ghRelease.Name,
+		PublishedAt: ghRelease.PublishedAt,
+		Body:        ghRelease.Body,
+		LocalTag:    localTag,
+		HasUpdate:   hasUpdate,
+	}
+
+	for _, a := range ghRelease.Assets {
+		releaseInfo.Assets = append(releaseInfo.Assets, UniBootReleaseAsset{
+			Name:               a.Name,
+			BrowserDownloadURL: a.BrowserDownloadURL,
+			Size:               a.Size,
+		})
+	}
+
+	return releaseInfo, nil
+}
+
+// SyncUniBootFirmware downloads release assets from latest UniBoot release into GetDataDir()/firmware/<releaseName>.
+func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootReleaseInfo, error) {
+	rel, err := FetchLatestUniBootRelease(ctx, proxyPrefix)
+	if err != nil {
+		return nil, err
+	}
+
+	firmwareDir := filepath.Join(env.GetDataDir(), "firmware")
+	if err := os.MkdirAll(firmwareDir, 0755); err != nil {
+		return nil, fmt.Errorf("failed to create firmware cache dir: %w", err)
+	}
+
+	expectedAssets := make(map[string]bool)
+	for _, m := range StandardFirmwareMappings {
+		expectedAssets[m.ReleaseName] = true
+	}
+
+	downloadedCount := 0
+	for _, asset := range rel.Assets {
+		if expectedAssets[asset.Name] {
+			destPath := filepath.Join(firmwareDir, asset.Name)
+			if err := updater.DownloadFileWithProxy(ctx, asset.BrowserDownloadURL, destPath, proxyPrefix); err != nil {
+				return nil, fmt.Errorf("failed to download firmware asset %s: %w", asset.Name, err)
+			}
+			downloadedCount++
+		}
+	}
+
+	versionFile := filepath.Join(firmwareDir, "version.json")
+	versionData, _ := json.MarshalIndent(map[string]interface{}{
+		"tagName":   rel.TagName,
+		"updatedAt": time.Now().Format(time.RFC3339),
+		"count":     downloadedCount,
+	}, "", "  ")
+	_ = os.WriteFile(versionFile, versionData, 0644)
+
+	rel.LocalTag = rel.TagName
+	rel.HasUpdate = false
+
+	return rel, nil
 }
 
 // GetFirmwareData retrieves binary data for a firmware asset based on priority:
@@ -114,3 +257,4 @@ func ExtractFirmwareToDir(targetDir string) error {
 
 	return nil
 }
+

@@ -25,4 +25,8 @@ export function GetDiskList():Promise<Array<disk.DiskInfo>>;
 
 export function GetFirmwareList():Promise<Array<firmware.FirmwareMapping>>;
 
+export function GetUniBootReleaseInfo():Promise<firmware.UniBootReleaseInfo>;
+
 export function SaveConfig(arg1:config.AppConfig):Promise<void>;
+
+export function SyncUniBootFirmware():Promise<firmware.UniBootReleaseInfo>;

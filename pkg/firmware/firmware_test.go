@@ -139,3 +139,11 @@ func TestGetFirmwareData_Priority(t *testing.T) {
 		t.Errorf("expected non-empty override source string")
 	}
 }
+
+func TestGetLocalUniBootVersion(t *testing.T) {
+	ver := GetLocalUniBootVersion()
+	if ver == "" {
+		t.Errorf("expected non-empty version string")
+	}
+}
+

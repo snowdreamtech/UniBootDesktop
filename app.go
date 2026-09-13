@@ -83,3 +83,24 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 func (a *App) GetFirmwareList() []firmware.FirmwareMapping {
 	return firmware.GetFirmwareMappings()
 }
+
+// GetUniBootReleaseInfo queries the latest UniBoot GitHub release metadata.
+func (a *App) GetUniBootReleaseInfo() (*firmware.UniBootReleaseInfo, error) {
+	cfg, _ := config.Load()
+	proxy := ""
+	if cfg != nil {
+		proxy = cfg.GithubProxy
+	}
+	return firmware.FetchLatestUniBootRelease(a.ctx, proxy)
+}
+
+// SyncUniBootFirmware downloads the latest UniBoot release firmware assets to local cache.
+func (a *App) SyncUniBootFirmware() (*firmware.UniBootReleaseInfo, error) {
+	cfg, _ := config.Load()
+	proxy := ""
+	if cfg != nil {
+		proxy = cfg.GithubProxy
+	}
+	return firmware.SyncUniBootFirmware(a.ctx, proxy)
+}
+
