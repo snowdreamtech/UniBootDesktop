@@ -104,8 +104,8 @@
           集成 Ventoy 核心 + UniBoot 专属暗色主题 & iPXE 网络扩展，支持放置数 GB 大 ISO 镜像。
         </p>
 
-        <!-- Filesystem Selection for Mode A -->
-        <div class="fs-selector" v-if="activeMode === 'hybrid'">
+        <!-- Filesystem Selection for Mode A & Mode B -->
+        <div class="fs-selector">
           <label class="fs-label">主数据区格式 (File System):</label>
           <select v-model="selectedFsType" class="fs-select">
             <option value="exFAT">exFAT (默认推荐 • 支持 >4GB 单文件大 ISO)</option>
@@ -144,7 +144,7 @@
         <!-- QEMU Preview -->
         <div class="qemu-box">
           <div class="qemu-header">
-            <h3>QEMU 启动预览 (可选辅助)</h3>
+            <h3>QEMU 启动预览 (可选)</h3>
             <span class="badge" :class="qemuStatus.installed ? 'success' : 'muted'">
               {{ qemuStatus.installed ? '已检测到 QEMU' : '未检测到 QEMU' }}
             </span>
@@ -518,7 +518,7 @@ async function startDeployment() {
       if (targets.length === 1) {
         let res: any;
         if (activeMode.value === 'cloud') {
-          res = await window.go.main.App.DeployModeB(targets[0]);
+          res = await window.go.main.App.DeployModeB(targets[0], selectedFsType.value);
         } else {
           res = await window.go.main.App.DeployModeA(targets[0], selectedFsType.value);
         }
@@ -529,7 +529,7 @@ async function startDeployment() {
       } else {
         let resList: any[];
         if (activeMode.value === 'cloud') {
-          resList = await window.go.main.App.DeployModeBBatch(targets);
+          resList = await window.go.main.App.DeployModeBBatch(targets, selectedFsType.value);
         } else {
           resList = await window.go.main.App.DeployModeABatch(targets, selectedFsType.value);
         }
@@ -600,9 +600,10 @@ onUnmounted(() => {
 
 <style scoped>
 .app-container {
-  max-width: 1100px;
+  max-width: 1280px;
+  width: 95%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2.2rem;
 }
 
 .app-header {
@@ -661,8 +662,8 @@ h1 {
 
 .content-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 2rem;
 }
 
 .section-card h2 {
@@ -741,10 +742,10 @@ h1 {
 }
 
 .disk-list {
-  min-height: 180px;
-  max-height: 380px;
+  min-height: 220px;
+  max-height: 440px;
   overflow-y: auto;
-  padding-right: 0.25rem;
+  padding-right: 0.4rem;
 }
 
 .disk-list::-webkit-scrollbar {
