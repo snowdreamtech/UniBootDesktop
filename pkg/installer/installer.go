@@ -65,7 +65,10 @@ func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*Deploy
 		return nil, fmt.Errorf("writing Ventoy configuration failed: %w", err)
 	}
 
-	msg := fmt.Sprintf("Successfully deployed Hybrid Pro Mode A (%s/VENTOY) to %s (mount: %s)", fsType, targetDisk, mountPoint)
+	// 4. Non-destructively update volume label of data partition to UNIBOOT
+	mountPoint = UpdateVolumeLabel(targetDisk, mountPoint, "UNIBOOT")
+
+	msg := fmt.Sprintf("Successfully deployed Hybrid Pro Mode A (%s/UNIBOOT) to %s (mount: %s)", fsType, targetDisk, mountPoint)
 	if isExistingVentoy {
 		msg = fmt.Sprintf("Successfully upgraded existing Ventoy drive to UniBoot Hybrid Pro Mode A at %s (ISO data preserved)", targetDisk)
 	}

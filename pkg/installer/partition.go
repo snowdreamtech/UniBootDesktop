@@ -321,3 +321,50 @@ func MountAndResolveEFIPartition(targetDisk string) (string, error) {
 	return "", fmt.Errorf("could not resolve EFI boot partition for target disk %s", targetDisk)
 }
 
+// UpdateVolumeLabel non-destructively renames the data partition volume label to newLabel.
+// Returns the updated active mount point path if changed.
+func UpdateVolumeLabel(targetDisk string, mountPoint string, newLabel string) string {
+	if newLabel == "" || mountPoint == "" {
+		return mountPoint
+	}
+	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
+		return mountPoint
+	}
+
+	if runtime.GOOS == "darwin" {
+		cmd := execCommand("diskutil", "rename", mountPoint, newLabel)
+		if err := cmd.Run(); err == nil {
+			newMount := filepath.Join("/Volumes", newLabel)
+			if info, statErr := os.Stat(newMount); statErr == nil && info.IsDir() {
+				return newMount
+			}
+		}
+		return mountPoint
+	}
+
+	if runtime.GOOS == "windows" {
+		driveLetter := strings.TrimSuffix(mountPoint, "\\")
+		driveLetter = strings.TrimSuffix(driveLetter, "/")
+		if len(driveLetter) >= 2 && driveLetter[1] == ':' {
+			cmd := execCommand("cmd", "/c", "label", driveLetter, newLabel)
+			_ = cmd.Run()
+		}
+		return mountPoint
+	}
+
+	if runtime.GOOS == "linux" {
+		part1 := targetDisk + "1"
+		if strings.Contains(targetDisk, "nvme") || strings.Contains(targetDisk, "mmcblk") {
+			part1 = targetDisk + "p1"
+		}
+		cmd := execCommand("fatlabel", part1, newLabel)
+		if err := cmd.Run(); err != nil {
+			cmd2 := execCommand("exfatlabel", part1, newLabel)
+			_ = cmd2.Run()
+		}
+		return mountPoint
+	}
+
+	return mountPoint
+}
+
