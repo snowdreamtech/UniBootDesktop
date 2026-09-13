@@ -18,12 +18,12 @@ export function DeployModeABatch(arg1, arg2) {
   return window['go']['main']['App']['DeployModeABatch'](arg1, arg2);
 }
 
-export function DeployModeB(arg1) {
-  return window['go']['main']['App']['DeployModeB'](arg1);
+export function DeployModeB(arg1, arg2) {
+  return window['go']['main']['App']['DeployModeB'](arg1, arg2);
 }
 
-export function DeployModeBBatch(arg1) {
-  return window['go']['main']['App']['DeployModeBBatch'](arg1);
+export function DeployModeBBatch(arg1, arg2) {
+  return window['go']['main']['App']['DeployModeBBatch'](arg1, arg2);
 }
 
 export function GetConfig() {

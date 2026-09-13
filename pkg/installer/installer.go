@@ -67,13 +67,17 @@ func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) 
 	return results, nil
 }
 
-// DeployModeB executes Mode B: Cloud Pure Mode (1-sec native FAT32 format & multi-arch iPXE firmware).
-func DeployModeB(ctx context.Context, targetDisk string) (*DeployResult, error) {
+// DeployModeB executes Mode B: Cloud Pure Mode (1-sec native format & multi-arch iPXE firmware) with customizable file system.
+func DeployModeB(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return nil, fmt.Errorf("disk validation failed: %w", err)
 	}
 
-	// 1. Format disk to FAT32 MBR with volume label UNIBOOT
+	if fsType == "" {
+		fsType = "exFAT"
+	}
+
+	// 1. Format disk to MBR with volume label UNIBOOT and target file system
 	mountPoint, err := FormatDiskModeB(ctx, targetDisk)
 	if err != nil {
 		return nil, fmt.Errorf("formatting disk for Mode B failed: %w", err)
@@ -86,14 +90,14 @@ func DeployModeB(ctx context.Context, targetDisk string) (*DeployResult, error) 
 
 	return &DeployResult{
 		Success: true,
-		Mode:    "Mode B (Cloud Pure)",
+		Mode:    fmt.Sprintf("Mode B (Cloud Pure - %s)", fsType),
 		Target:  targetDisk,
-		Message: fmt.Sprintf("Successfully deployed Cloud Pure Mode B (FAT32/UNIBOOT) to %s (mount: %s)", targetDisk, mountPoint),
+		Message: fmt.Sprintf("Successfully deployed Cloud Pure Mode B (%s/UNIBOOT) to %s (mount: %s)", fsType, targetDisk, mountPoint),
 	}, nil
 }
 
-// DeployModeBBatch executes Mode B on multiple target USB drives concurrently/sequentially.
-func DeployModeBBatch(ctx context.Context, targetDisks []string) ([]*DeployResult, error) {
+// DeployModeBBatch executes Mode B on multiple target USB drives concurrently/sequentially with customizable file system.
+func DeployModeBBatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
 	if len(targetDisks) == 0 {
 		return nil, fmt.Errorf("no target disks specified for batch deployment")
 	}
@@ -106,11 +110,11 @@ func DeployModeBBatch(ctx context.Context, targetDisks []string) ([]*DeployResul
 
 	results := make([]*DeployResult, 0, len(targetDisks))
 	for _, d := range targetDisks {
-		res, err := DeployModeB(ctx, d)
+		res, err := DeployModeB(ctx, d, fsType)
 		if err != nil {
 			results = append(results, &DeployResult{
 				Success: false,
-				Mode:    "Mode B (Cloud Pure)",
+				Mode:    fmt.Sprintf("Mode B (Cloud Pure - %s)", fsType),
 				Target:  d,
 				Message: err.Error(),
 			})

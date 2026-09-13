@@ -46,14 +46,14 @@ func (a *App) DeployModeABatch(targetDisks []string, fsType string) ([]*installe
 	return installer.DeployModeABatch(a.ctx, targetDisks, fsType)
 }
 
-// DeployModeB triggers Mode B (Cloud Pure Mode - 1-sec FAT32 + iPXE).
-func (a *App) DeployModeB(targetDisk string) (*installer.DeployResult, error) {
-	return installer.DeployModeB(a.ctx, targetDisk)
+// DeployModeB triggers Mode B (Cloud Pure Mode) with customizable file system.
+func (a *App) DeployModeB(targetDisk string, fsType string) (*installer.DeployResult, error) {
+	return installer.DeployModeB(a.ctx, targetDisk, fsType)
 }
 
-// DeployModeBBatch triggers Mode B deployment for multiple target USB drives.
-func (a *App) DeployModeBBatch(targetDisks []string) ([]*installer.DeployResult, error) {
-	return installer.DeployModeBBatch(a.ctx, targetDisks)
+// DeployModeBBatch triggers Mode B deployment for multiple target USB drives with customizable file system.
+func (a *App) DeployModeBBatch(targetDisks []string, fsType string) ([]*installer.DeployResult, error) {
+	return installer.DeployModeBBatch(a.ctx, targetDisks, fsType)
 }
 
 // CheckQEMU returns QEMU detection metadata.
