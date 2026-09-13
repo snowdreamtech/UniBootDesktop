@@ -128,7 +128,7 @@
           <button 
             class="btn-primary deploy-btn" 
             :disabled="isDeployDisabled || isDeploying"
-            @click="startDeployment"
+            @click="openDeployConfirm"
           >
             {{ isDeploying ? '正在极速烧录中...' : (selectionMode === 'batch' ? `开始批量烧录 (${selectedDevices.size} 块 U 盘)` : '开始 1 秒部署写入') }}
           </button>
@@ -166,6 +166,17 @@
       :disk="targetInspectorDisk"
       @close="isInspectorOpen = false"
     />
+
+    <!-- High-Risk Format Confirmation Modal -->
+    <DeployConfirmModal
+      :isOpen="isDeployConfirmOpen"
+      :mode="activeMode"
+      :fsType="selectedFsType"
+      :targetDisk="selectedDisk"
+      :targetDisks="pendingTargets"
+      @close="isDeployConfirmOpen = false"
+      @confirm="startDeployment"
+    />
   </div>
 </template>
 
@@ -175,6 +186,7 @@ import DiskCard from './components/DiskCard.vue';
 import ProgressBar from './components/ProgressBar.vue';
 import IconPickerModal, { DiskIconType } from './components/IconPickerModal.vue';
 import UsbInspectorModal from './components/UsbInspectorModal.vue';
+import DeployConfirmModal from './components/DeployConfirmModal.vue';
 
 interface DiskInfo {
   device: string;
@@ -243,9 +255,24 @@ const isPickerOpen = ref(false);
 const targetPickerDisk = ref<DiskInfo | null>(null);
 const isInspectorOpen = ref(false);
 const targetInspectorDisk = ref<DiskInfo | null>(null);
+const isDeployConfirmOpen = ref(false);
+const pendingTargets = ref<string[]>([]);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
 const qemuStatus = ref({ installed: false, path: '', version: '' });
+
+function openDeployConfirm() {
+  let targets: string[] = [];
+  if (selectionMode.value === 'single') {
+    if (!selectedDisk.value) return;
+    targets = [selectedDisk.value.device];
+  } else {
+    targets = Array.from(selectedDevices.value);
+    if (targets.length === 0) return;
+  }
+  pendingTargets.value = targets;
+  isDeployConfirmOpen.value = true;
+}
 
 function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   const fp = getDiskFingerprint(disk);
