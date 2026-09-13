@@ -296,14 +296,6 @@ func ExtractFirmwareToDir(targetDir string) error {
 				_ = os.WriteFile(ipxePath, data, 0644)
 			}
 		}
-
-		// 3. Extra UniBoot ISO placement: populate iso/UniBoot.iso if asset is present
-		if mapping.ReleaseName == "UniBoot.iso" {
-			isoPath := filepath.Join(targetDir, "iso", "UniBoot.iso")
-			if err := os.MkdirAll(filepath.Dir(isoPath), 0755); err == nil {
-				_ = os.WriteFile(isoPath, data, 0644)
-			}
-		}
 	}
 
 	return nil
