@@ -22,6 +22,8 @@ func TestDefaultConfig(t *testing.T) {
 
 func TestConfigSaveAndLoad(t *testing.T) {
 	tmpDir := t.TempDir()
+	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
 	t.Setenv("UNIGO_DATA_DIR", tmpDir)
 
 	cfg := GetDefaultConfig()
@@ -30,8 +32,8 @@ func TestConfigSaveAndLoad(t *testing.T) {
 	cfg.ProxyProtocol = "socks5"
 	cfg.ProxyHost = "127.0.0.1"
 	cfg.ProxyPort = 1080
-	cfg.ProxyUser = "testuser"
-	cfg.ProxyPassword = "testpassword"
+	cfg.ProxyUser = "dummy_user"
+	cfg.ProxyPassword = "dummy_password"
 
 	if err := cfg.Save(); err != nil {
 		t.Fatalf("Save config failed: %v", err)
@@ -48,7 +50,7 @@ func TestConfigSaveAndLoad(t *testing.T) {
 	if loaded.FileSystem != "NTFS" {
 		t.Errorf("expected FileSystem 'NTFS', got %s", loaded.FileSystem)
 	}
-	if loaded.ProxyProtocol != "socks5" || loaded.ProxyHost != "127.0.0.1" || loaded.ProxyPort != 1080 || loaded.ProxyUser != "testuser" || loaded.ProxyPassword != "testpassword" {
+	if loaded.ProxyProtocol != "socks5" || loaded.ProxyHost != "127.0.0.1" || loaded.ProxyPort != 1080 || loaded.ProxyUser != "dummy_user" || loaded.ProxyPassword != "dummy_password" {
 		t.Errorf("proxy config mismatch: %+v", loaded)
 	}
 }
