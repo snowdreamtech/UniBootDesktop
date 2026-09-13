@@ -4,6 +4,8 @@ export namespace config {
 	    mode: string;
 	    autoCheckUpdate: boolean;
 	    theme: string;
+	    githubProxy: string;
+	    fileSystem: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new AppConfig(source);
@@ -14,6 +16,8 @@ export namespace config {
 	        this.mode = source["mode"];
 	        this.autoCheckUpdate = source["autoCheckUpdate"];
 	        this.theme = source["theme"];
+	        this.githubProxy = source["githubProxy"];
+	        this.fileSystem = source["fileSystem"];
 	    }
 	}
 
@@ -81,6 +85,29 @@ export namespace disk {
 	        this.controllerVendor = source["controllerVendor"];
 	        this.isFakeUsb3 = source["isFakeUsb3"];
 	        this.protocolCode = source["protocolCode"];
+	    }
+	}
+
+}
+
+export namespace firmware {
+	
+	export class FirmwareMapping {
+	    releaseName: string;
+	    targetPath: string;
+	    description: string;
+	    isReserved: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new FirmwareMapping(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.releaseName = source["releaseName"];
+	        this.targetPath = source["targetPath"];
+	        this.description = source["description"];
+	        this.isReserved = source["isReserved"];
 	    }
 	}
 

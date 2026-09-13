@@ -30,14 +30,14 @@ export function GetConfig() {
   return window['go']['main']['App']['GetConfig']();
 }
 
-export function SaveConfig(arg1) {
-  return window['go']['main']['App']['SaveConfig'](arg1);
+export function GetDiskList() {
+  return window['go']['main']['App']['GetDiskList']();
 }
 
 export function GetFirmwareList() {
   return window['go']['main']['App']['GetFirmwareList']();
 }
 
-export function GetDiskList() {
-  return window['go']['main']['App']['GetDiskList']();
+export function SaveConfig(arg1) {
+  return window['go']['main']['App']['SaveConfig'](arg1);
 }

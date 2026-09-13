@@ -5,6 +5,7 @@ import {updater} from '../models';
 import {installer} from '../models';
 import {config} from '../models';
 import {disk} from '../models';
+import {firmware} from '../models';
 
 export function CheckQEMU():Promise<qemu.QEMUStatus>;
 
@@ -20,8 +21,8 @@ export function DeployModeBBatch(arg1:Array<string>):Promise<Array<installer.Dep
 
 export function GetConfig():Promise<config.AppConfig>;
 
-export function SaveConfig(arg1:config.AppConfig):Promise<void>;
+export function GetDiskList():Promise<Array<disk.DiskInfo>>;
 
 export function GetFirmwareList():Promise<Array<firmware.FirmwareMapping>>;
 
-export function GetDiskList():Promise<Array<disk.DiskInfo>>;
+export function SaveConfig(arg1:config.AppConfig):Promise<void>;
