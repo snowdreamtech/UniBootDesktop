@@ -1,5 +1,19 @@
 <template>
   <div class="app-container">
+    <!-- Global App Toast Notification -->
+    <transition name="toast-fade">
+      <div v-if="toastMessage" class="global-toast" :class="toastType">
+        <span class="toast-icon">
+          <template v-if="toastType === 'warning'">⚠️</template>
+          <template v-else-if="toastType === 'error'">❌</template>
+          <template v-else-if="toastType === 'success'">🎉</template>
+          <template v-else>ℹ️</template>
+        </span>
+        <span class="toast-text">{{ toastMessage }}</span>
+        <button class="toast-close" @click="toastMessage = ''">✕</button>
+      </div>
+    </transition>
+
     <!-- Header -->
     <header class="app-header">
       <div class="brand">
@@ -287,6 +301,19 @@ const isDeploying = ref(false);
 const deployProgress = ref(0);
 const qemuStatus = ref({ installed: false, path: '', version: '' });
 const isLaunchingQemu = ref(false);
+
+const toastMessage = ref('');
+const toastType = ref<'info' | 'warning' | 'error' | 'success'>('info');
+let toastTimer: number | undefined;
+
+function showToast(msg: string, type: 'info' | 'warning' | 'error' | 'success' = 'info') {
+  toastMessage.value = msg;
+  toastType.value = type;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => {
+    toastMessage.value = '';
+  }, 4000);
+}
 
 function applyTheme(themeName?: string) {
   const theme = themeName === 'light' ? 'light' : 'dark';
@@ -616,7 +643,7 @@ async function launchQEMU() {
 
   // 1. Check if disk list is empty
   if (!diskList.value || diskList.value.length === 0) {
-    alert('⚠️ 当前未检测到任何可用的 U 盘设备！\n\n请插入 U 盘后再点击启动 QEMU 模拟器。');
+    showToast('⚠️ 当前未检测到任何可用的 U 盘设备！请插入 U 盘后再试。', 'warning');
     return;
   }
 
@@ -625,13 +652,13 @@ async function launchQEMU() {
   const diskLabel = activeQemuTargetName.value;
 
   if (!targetDevice) {
-    alert('⚠️ 提示：你尚未选择要测试的目标 U 盘！\n\n请在上方磁盘列表中点击选中要校验的 U 盘后再试。');
+    showToast('⚠️ 请先在上方磁盘列表中点击选择要测试的目标 U 盘！', 'warning');
     return;
   }
 
   // 3. Check if QEMU is installed
   if (!qemuStatus.value.installed) {
-    alert(`❌ 未在当前系统中检测到 QEMU 模拟器！\n\n安装提示：\n• MacPorts 用户: sudo port install qemu\n• Homebrew 用户: brew install qemu\n• Windows 用户: 请安装 QEMU.exe`);
+    showToast('❌ 未检测到 QEMU 模拟器！请先安装 QEMU (brew install qemu 或 port install qemu)', 'error');
     return;
   }
 
@@ -641,17 +668,17 @@ async function launchQEMU() {
     if (window.go && window.go.main && window.go.main.App) {
       if (typeof window.go.main.App.LaunchQEMU === 'function') {
         await window.go.main.App.LaunchQEMU(targetDevice);
-        alert(`🚀 已成功启动 QEMU 模拟器校验：\n${diskLabel} (${targetDevice})\n\n请在当前桌面上查看拉起的 QEMU 虚拟机窗口。`);
+        showToast(`🚀 已成功启动 QEMU 模拟器校验磁盘：${diskLabel} (${targetDevice})`, 'success');
       } else {
-        alert(`⚠️ 后端 API 尚未就绪：Wails 绑定接口加载中，请重新启动 UniBoot 桌面应用。`);
+        showToast('⚠️ 后端 API 尚未就绪：Wails 绑定接口加载中，请重新启动 UniBoot 应用。', 'warning');
       }
     } else {
       await new Promise(r => setTimeout(r, 600));
-      alert(`[演示模式] 正在启动 QEMU 模拟器校验：\n${diskLabel} (${targetDevice})`);
+      showToast(`[演示模式] 正在启动 QEMU 模拟器校验：${diskLabel} (${targetDevice})`, 'info');
     }
   } catch (e: any) {
     console.error('[UniBoot] LaunchQEMU error:', e);
-    alert(`❌ 启动 QEMU 模拟器失败：\n\n${e?.message || String(e)}`);
+    showToast(`❌ 启动 QEMU 模拟器失败：${e?.message || String(e)}`, 'error');
   } finally {
     isLaunchingQemu.value = false;
   }
@@ -962,5 +989,85 @@ h1 {
 .settings-icon-btn:hover {
   background: rgba(0, 229, 255, 0.12);
   transform: rotate(30deg);
+}
+
+.target-highlight {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.target-warn {
+  color: #facc15;
+  font-weight: 600;
+}
+
+/* Global App Toast Notification Styles */
+.global-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.global-toast.warning {
+  background: rgba(234, 179, 8, 0.95);
+  border-color: #facc15;
+  color: #1e1b4b;
+}
+
+.global-toast.error {
+  background: rgba(239, 68, 68, 0.95);
+  border-color: #f87171;
+  color: #ffffff;
+}
+
+.global-toast.success {
+  background: rgba(34, 197, 94, 0.95);
+  border-color: #4ade80;
+  color: #064e3b;
+}
+
+.global-toast.info {
+  background: rgba(59, 130, 246, 0.95);
+  border-color: #60a5fa;
+  color: #ffffff;
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  color: currentColor;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0.8;
+  margin-left: 8px;
+}
+
+.toast-close:hover {
+  opacity: 1;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 </style>
