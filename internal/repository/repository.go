@@ -16,9 +16,6 @@ var (
 
 	// ErrAlreadyExists indicates a resource already exists
 	ErrAlreadyExists = errors.New("already exists")
-
-	// DefaultContext provides a default background context for repository operations
-	DefaultContext = context.Background()
 )
 
 // BaseRepository provides a concrete base type for repository contexts
