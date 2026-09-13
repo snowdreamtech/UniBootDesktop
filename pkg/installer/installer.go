@@ -19,7 +19,8 @@ type DeployResult struct {
 	Message string `json:"message"`
 }
 
-// DeployModeA executes Mode A: Hybrid Pro Mode (Ventoy CLI + UniBoot theme + iPXE network extension) with customizable file system.
+// DeployModeA executes Mode A: Hybrid Pro Mode (Ventoy + UniBoot theme + iPXE network extension) with customizable file system.
+// Performs non-destructive in-place upgrade on existing Ventoy drives, or fresh partition initialization on blank drives.
 func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return nil, fmt.Errorf("disk validation failed: %w", err)
@@ -29,10 +30,26 @@ func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*Deploy
 		fsType = "exFAT"
 	}
 
-	// 1. Format disk for Mode A (Ventoy dual-engine partition layout)
-	mountPoint, err := FormatDiskModeA(ctx, targetDisk, fsType)
+	// 1. Differential Treatment: Check if target drive is ALREADY an active Ventoy drive
+	isExistingVentoy := disk.IsVentoyDisk(targetDisk)
+	var mountPoint string
+	var err error
+
+	if isExistingVentoy {
+		// Scenario A: Existing Ventoy Drive -> Non-destructive in-place upgrade (Preserves user ISO files!)
+		mountPoint, err = ResolveMountPointWithLabel(targetDisk, "Ventoy")
+		if err != nil {
+			mountPoint, err = ResolveMountPointWithLabel(targetDisk, "VENTOY")
+		}
+		if err != nil {
+			mountPoint, err = FormatDiskModeA(ctx, targetDisk, fsType)
+		}
+	} else {
+		// Scenario B: Blank / Ordinary USB Drive -> Fresh initialization & formatting
+		mountPoint, err = FormatDiskModeA(ctx, targetDisk, fsType)
+	}
 	if err != nil {
-		return nil, fmt.Errorf("formatting disk for Mode A failed: %w", err)
+		return nil, fmt.Errorf("preparing disk for Mode A failed: %w", err)
 	}
 
 	// 2. Extract multi-arch iPXE EFI & Legacy BIOS firmware assets to target volume
@@ -40,16 +57,21 @@ func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*Deploy
 		return nil, fmt.Errorf("extracting firmware assets failed: %w", err)
 	}
 
-	// 3. Write Ventoy configuration (ventoy.json & ventoy_grub.cfg for UniBoot iPXE integration)
+	// 3. Write Ventoy configuration (ventoy.json, ventoy_grub.cfg, themes/uniboot)
 	if err := WriteVentoyConfig(mountPoint); err != nil {
 		return nil, fmt.Errorf("writing Ventoy configuration failed: %w", err)
+	}
+
+	msg := fmt.Sprintf("Successfully deployed Hybrid Pro Mode A (%s/VENTOY) to %s (mount: %s)", fsType, targetDisk, mountPoint)
+	if isExistingVentoy {
+		msg = fmt.Sprintf("Successfully upgraded existing Ventoy drive to UniBoot Hybrid Pro Mode A at %s (ISO data preserved)", targetDisk)
 	}
 
 	return &DeployResult{
 		Success: true,
 		Mode:    fmt.Sprintf("Mode A (Hybrid Pro - %s)", fsType),
 		Target:  targetDisk,
-		Message: fmt.Sprintf("Successfully deployed Hybrid Pro Mode A (%s/VENTOY) to %s (mount: %s)", fsType, targetDisk, mountPoint),
+		Message: msg,
 	}, nil
 }
 

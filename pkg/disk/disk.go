@@ -190,6 +190,30 @@ func DetectBootStatus(volName string, partitionScheme string) string {
 	return "📁 数据存储盘 (未检出系统引导)"
 }
 
+// IsVentoyDisk determines if a given disk device path or mount path is already a Ventoy drive.
+func IsVentoyDisk(targetDisk string) bool {
+	upper := strings.ToUpper(targetDisk)
+	if strings.Contains(upper, "VENTOY") || strings.Contains(upper, "VTOYEFI") {
+		return true
+	}
+	// Check if target directory contains ventoy folder
+	if info, err := os.Stat(filepath.Join(targetDisk, "ventoy")); err == nil && info.IsDir() {
+		return true
+	}
+	// Check if macOS system mount contains Ventoy
+	if runtime.GOOS == "darwin" {
+		for _, mount := range []string{"/Volumes/Ventoy", "/Volumes/VENTOY", "/Volumes/VTOYEFI"} {
+			if info, err := os.Stat(mount); err == nil && info.IsDir() {
+				if strings.Contains(targetDisk, "Ventoy") || strings.Contains(targetDisk, "VENTOY") {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+
 // FormatBytes formats byte counts into human-readable strings using 1024 base (e.g. 29.80 GB).
 func FormatBytes(bytes uint64) string {
 	const (
