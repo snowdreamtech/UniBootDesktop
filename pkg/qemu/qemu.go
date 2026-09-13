@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -119,6 +120,11 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 	cmd := exec.Command(status.Path, args...)
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
+
+	// Detach QEMU process group from parent Wails app so the window stays alive independently
+	if runtime.GOOS != "windows" {
+		cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true}
+	}
 
 	if err := cmd.Start(); err != nil {
 		return fmt.Errorf("启动 QEMU 进程失败: %w", err)

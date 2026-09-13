@@ -150,8 +150,8 @@
             </span>
           </div>
           <p class="qemu-desc">烧录完成后，可在当前桌面直接启动 QEMU 虚拟机校验 U 盘引导环境。</p>
-          <button class="btn-secondary" @click="launchQEMU">
-            ▶ 启动 QEMU 模拟器测试
+          <button class="btn-secondary" :disabled="isLaunchingQemu" @click="launchQEMU">
+            {{ isLaunchingQemu ? '⏳ 正在启动 QEMU 模拟器...' : '▶ 启动 QEMU 模拟器测试' }}
           </button>
         </div>
       </section>
@@ -278,6 +278,7 @@ const pendingTargets = ref<string[]>([]);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
 const qemuStatus = ref({ installed: false, path: '', version: '' });
+const isLaunchingQemu = ref(false);
 
 function applyTheme(themeName?: string) {
   const theme = themeName === 'light' ? 'light' : 'dark';
@@ -581,21 +582,25 @@ async function launchQEMU() {
   }
 
   const targetDevice = selectedDisk.value.device;
+  isLaunchingQemu.value = true;
 
   try {
     if (window.go && window.go.main && window.go.main.App) {
       if (typeof window.go.main.App.LaunchQEMU === 'function') {
         await window.go.main.App.LaunchQEMU(targetDevice);
-        alert(`🚀 已成功启动 QEMU 模拟器校验磁盘：${targetDevice}`);
+        alert(`🚀 已成功启动 QEMU 模拟器校验磁盘：${targetDevice}\n\n请在当前桌面上查看拉起的 QEMU 虚拟机窗口。`);
       } else {
         alert(`⚠️ 后端 API 加载中：Wails App.LaunchQEMU 尚未完成绑定，请重新启动 UniBoot 应用。`);
       }
     } else {
+      await new Promise(r => setTimeout(r, 600));
       alert(`[演示模式] 正在启动 QEMU 模拟器校验磁盘：${targetDevice}`);
     }
   } catch (e: any) {
     console.error('[UniBoot] LaunchQEMU error:', e);
     alert(`❌ 启动 QEMU 模拟器失败：\n\n${e?.message || String(e)}`);
+  } finally {
+    isLaunchingQemu.value = false;
   }
 }
 
