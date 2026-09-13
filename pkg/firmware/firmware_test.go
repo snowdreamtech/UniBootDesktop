@@ -163,4 +163,22 @@ func TestFetchLatestUniBootRelease(t *testing.T) {
 	}
 }
 
+func TestSyncUniBootFirmware(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping network test in short mode")
+	}
+	tmpDataDir := t.TempDir()
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", tmpDataDir)
+
+	ctx := context.Background()
+	info, err := SyncUniBootFirmware(ctx, "")
+	if err != nil {
+		t.Fatalf("SyncUniBootFirmware failed: %v", err)
+	}
+	if info.TagName == "" {
+		t.Errorf("expected TagName to be set")
+	}
+}
+
+
 

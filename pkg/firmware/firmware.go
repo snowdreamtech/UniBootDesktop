@@ -203,14 +203,23 @@ func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootRelea
 	}
 
 	downloadedCount := 0
+	var firstErr error
+
 	for _, asset := range rel.Assets {
 		if expectedAssets[asset.Name] {
 			destPath := filepath.Join(firmwareDir, asset.Name)
 			if err := updater.DownloadFileWithProxy(ctx, asset.BrowserDownloadURL, destPath, proxyPrefix); err != nil {
-				return nil, fmt.Errorf("failed to download firmware asset %s: %w", asset.Name, err)
+				if firstErr == nil {
+					firstErr = err
+				}
+				continue
 			}
 			downloadedCount++
 		}
+	}
+
+	if downloadedCount == 0 && firstErr != nil {
+		return nil, fmt.Errorf("固件升级失败: %w", firstErr)
 	}
 
 	versionFile := filepath.Join(firmwareDir, "version.json")
@@ -226,6 +235,7 @@ func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootRelea
 
 	return rel, nil
 }
+
 
 // GetFirmwareData retrieves binary data for a firmware asset based on priority:
 // Priority 1: User downloaded / cached firmware in GetDataDir()/firmware/<releaseName>

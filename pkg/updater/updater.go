@@ -67,8 +67,9 @@ func BuildProxyURL(rawURL string, proxyPrefix string) string {
 func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, proxyPrefix string) error {
 	proxyPrefix = strings.TrimSpace(proxyPrefix)
 
+	// Per-attempt timeout of 15s to prevent hanging endlessly on blocked networks
 	client := &http.Client{
-		Timeout: 120 * time.Second,
+		Timeout: 15 * time.Second,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			if len(via) >= 10 {
 				return fmt.Errorf("stopped after 10 redirects")
@@ -90,9 +91,11 @@ func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, 
 	finalURL := BuildProxyURL(rawURL, proxyPrefix)
 
 	var lastErr error
-	for i := 0; i < 3; i++ {
-		req, err := http.NewRequestWithContext(ctx, http.MethodGet, finalURL, nil)
+	for i := 0; i < 2; i++ {
+		reqCtx, cancel := context.WithTimeout(ctx, 15*time.Second)
+		req, err := http.NewRequestWithContext(reqCtx, http.MethodGet, finalURL, nil)
 		if err != nil {
+			cancel()
 			return fmt.Errorf("failed to create download request: %w", err)
 		}
 		req.Header.Set("User-Agent", "UniBootDesktop/1.0")
@@ -100,20 +103,24 @@ func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, 
 
 		resp, err := client.Do(req)
 		if err == nil && resp.StatusCode == http.StatusOK {
-			defer resp.Body.Close()
-
 			if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
+				resp.Body.Close()
+				cancel()
 				return fmt.Errorf("failed to create target directory: %w", err)
 			}
 
 			tmpPath := destPath + ".tmp"
 			out, err := os.Create(tmpPath)
 			if err != nil {
+				resp.Body.Close()
+				cancel()
 				return fmt.Errorf("failed to create temp destination file: %w", err)
 			}
 
 			_, copyErr := io.Copy(out, resp.Body)
+			resp.Body.Close()
 			out.Close()
+			cancel()
 
 			if copyErr != nil {
 				os.Remove(tmpPath)
@@ -132,15 +139,21 @@ func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, 
 			} else {
 				lastErr = err
 			}
+			cancel()
 		}
 
 		select {
 		case <-ctx.Done():
 			return ctx.Err()
-		case <-time.After(time.Duration(i+1) * time.Second):
+		case <-time.After(500 * time.Millisecond):
 		}
 	}
 
-	return fmt.Errorf("download failed for %s after retries: %w", rawURL, lastErr)
+	if proxyPrefix == "" || strings.EqualFold(proxyPrefix, "direct") {
+		return fmt.Errorf("直连 GitHub 极速连接失败 (%v)。由于 GitHub 在内地网络可能受限，请在【系统与代理设置】中填写自定义 GitHub 代理前缀后再试", lastErr)
+	}
+
+	return fmt.Errorf("下载失败 (%s): %w", rawURL, lastErr)
 }
+
 
