@@ -26,11 +26,15 @@ func TestIsIgnoredVolume(t *testing.T) {
 		{"VTOYEFI upper", "VTOYEFI", true},
 		{"vtoyefi lower", "vtoyefi", true},
 		{"VTOYEFI with prefix", "VTOYEFI_BOOT", true},
+		{"UNIBOOTEFI upper", "UNIBOOTEFI", true},
+		{"unibootefi lower", "unibootefi", true},
+		{"UNIBOOTEFI with prefix", "UNIBOOTEFI_BOOT", true},
 		{"EFI_BOOT partition", "EFI_BOOT", true},
 		{"System Reserved", "System Reserved", true},
 		{"WinRE partition", "WinRE", true},
 		{"OEM partition", "OEM", true},
 		{"Normal Ventoy volume", "Ventoy", false},
+		{"Normal UniBoot volume", "UniBoot", false},
 		{"Normal USB volume", "MyUSBKey", false},
 	}
 

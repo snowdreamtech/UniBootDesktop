@@ -29,6 +29,7 @@ var (
 		"EFI",
 		"ESP",
 		"VTOYEFI",
+		"UNIBOOTEFI",
 		"SYSTEM RESERVED",
 		"系统保留",
 		"WINRE",
@@ -39,6 +40,7 @@ var (
 	// ignoredVolumePrefixes defines volume name prefixes to ignore (case-insensitive)
 	ignoredVolumePrefixes = []string{
 		"VTOYEFI",
+		"UNIBOOTEFI",
 		"EFI_",
 		"EFI-",
 		"BOOT_",
