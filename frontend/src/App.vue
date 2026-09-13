@@ -176,6 +176,8 @@ interface DiskInfo {
   usbSpeed?: string;
   vendor?: string;
   fileSystem?: string;
+  partitionScheme?: string;
+  writable?: boolean;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }

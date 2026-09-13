@@ -67,18 +67,20 @@ func IsIgnoredVolume(name string) bool {
 
 // DiskInfo represents metadata about an available disk/USB drive.
 type DiskInfo struct {
-	Device       string `json:"device"`       // Device path (e.g., /dev/disk2, E:)
-	Name         string `json:"name"`         // Friendly label / vendor model
-	Size         uint64 `json:"size"`         // Total capacity in bytes
-	Formatted    string `json:"formatted"`    // Human readable size string
-	IsRemovable  bool   `json:"isRemovable"`  // Removable USB flag
-	IsSystem     bool   `json:"isSystem"`     // System disk safety flag
-	UsbVersion   string `json:"usbVersion"`   // Protocol version (USB 2.0, USB 3.0, USB 3.1, USB 3.2, USB4)
-	UsbSpeed     string `json:"usbSpeed"`     // Physical bus speed (480 Mb/s, 5 Gb/s, 10 Gb/s, 20 Gb/s)
-	Vendor       string `json:"vendor"`       // Device manufacturer / vendor
-	FileSystem   string `json:"fileSystem"`   // File system format (e.g., ExFAT, FAT32, NTFS, APFS, ext4)
-	IsFakeUsb3   bool   `json:"isFakeUsb3"`   // Warning flag for fake USB 3.0 (USB 2.0 PHY disguised as 3.0)
-	ProtocolCode string `json:"protocolCode"` // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
+	Device          string `json:"device"`          // Device path (e.g., /dev/disk2, E:)
+	Name            string `json:"name"`            // Friendly label / vendor model
+	Size            uint64 `json:"size"`            // Total capacity in bytes
+	Formatted       string `json:"formatted"`       // Human readable size string
+	IsRemovable     bool   `json:"isRemovable"`     // Removable USB flag
+	IsSystem        bool   `json:"isSystem"`        // System disk safety flag
+	UsbVersion      string `json:"usbVersion"`      // Protocol version (USB 2.0, USB 3.0, USB 3.1, USB 3.2, USB4)
+	UsbSpeed        string `json:"usbSpeed"`        // Physical bus speed (480 Mb/s, 5 Gb/s, 10 Gb/s, 20 Gb/s)
+	Vendor          string `json:"vendor"`          // Device manufacturer / vendor
+	FileSystem      string `json:"fileSystem"`      // File system format (e.g., ExFAT, FAT32, NTFS, APFS, ext4)
+	PartitionScheme string `json:"partitionScheme"` // Partition scheme (e.g., GPT, MBR)
+	Writable        bool   `json:"writable"`        // Read-Write status (true = Read-Write, false = Read-Only)
+	IsFakeUsb3      bool   `json:"isFakeUsb3"`      // Warning flag for fake USB 3.0 (USB 2.0 PHY disguised as 3.0)
+	ProtocolCode    string `json:"protocolCode"`    // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
 }
 
 // CheckFakeUsb3 determines if a USB drive is a fake USB 3.0 device (claims USB 3.0+ in name/marketing but uses USB 2.0 PHY speed).
@@ -295,6 +297,8 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		var busProto string
 		var isRemovable bool
 		var fileSystem string
+		var partitionScheme string
+		var writable bool = true
 
 		if infoErr == nil {
 			infoStr := string(infoOut)
@@ -309,6 +313,9 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			}
 			if strings.Contains(infoStr, "<key>RemovableMediaOrExternalDevice</key>") {
 				isRemovable = strings.Contains(infoStr, "<true/>")
+			}
+			if strings.Contains(infoStr, "<key>Writable</key>") {
+				writable = strings.Contains(infoStr, "<key>Writable</key>\n\t<true/>") || strings.Contains(infoStr, "<key>Writable</key><true/>") || !strings.Contains(infoStr, "<key>Writable</key>\n\t<false/>")
 			}
 			if strings.Contains(infoStr, "<key>FilesystemUserVisibleName</key>") {
 				fileSystem = extractPlistValue(infoStr, "FilesystemUserVisibleName")
@@ -330,7 +337,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			continue
 		}
 
-		// Probe whole disk info for total raw byte size if volume size was read
+		// Probe whole disk info for total raw byte size and partition map type
 		if parentDisk != "" {
 			parentCmd := execCommand("diskutil", "info", "-plist", parentDisk)
 			parentOut, parentErr := parentCmd.Output()
@@ -340,7 +347,19 @@ func getDarwinDisks() ([]DiskInfo, error) {
 				if pSize > 0 {
 					totalSize = pSize
 				}
+				content := extractPlistValue(parentStr, "Content")
+				if strings.Contains(content, "GUID") || strings.Contains(content, "GPT") {
+					partitionScheme = "GPT (GUID Partition Table)"
+				} else if strings.Contains(content, "FDisk") || strings.Contains(content, "MBR") {
+					partitionScheme = "MBR (Master Boot Record)"
+				} else if content != "" {
+					partitionScheme = content
+				}
 			}
+		}
+
+		if partitionScheme == "" {
+			partitionScheme = "GPT / MBR"
 		}
 
 		usbVer := "USB 2.0"
@@ -376,18 +395,20 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
 		disks = append(disks, DiskInfo{
-			Device:       volPath,
-			Name:         displayName,
-			Size:         totalSize,
-			Formatted:    formattedSize,
-			IsRemovable:  true,
-			IsSystem:     false,
-			UsbVersion:   usbVer,
-			UsbSpeed:     usbSpeed,
-			Vendor:       vendor,
-			FileSystem:   fileSystem,
-			IsFakeUsb3:   isFake,
-			ProtocolCode: protoCode,
+			Device:          volPath,
+			Name:            displayName,
+			Size:            totalSize,
+			Formatted:       formattedSize,
+			IsRemovable:     true,
+			IsSystem:        false,
+			UsbVersion:      usbVer,
+			UsbSpeed:        usbSpeed,
+			Vendor:          vendor,
+			FileSystem:      fileSystem,
+			PartitionScheme: partitionScheme,
+			Writable:        writable,
+			IsFakeUsb3:      isFake,
+			ProtocolCode:    protoCode,
 		})
 	}
 
@@ -439,6 +460,7 @@ type linuxBlockDevice struct {
 	Name       string             `json:"name"`
 	Size       uint64             `json:"size"`
 	Rm         bool               `json:"rm"`
+	Ro         bool               `json:"ro"`
 	Type       string             `json:"type"`
 	MountPoint string             `json:"mountpoint"`
 	Label      string             `json:"label"`
@@ -446,6 +468,7 @@ type linuxBlockDevice struct {
 	Vendor     string             `json:"vendor"`
 	Tran       string             `json:"tran"`
 	Fstype     string             `json:"fstype"`
+	Pttype     string             `json:"pttype"`
 	Children   []linuxBlockDevice `json:"children"`
 }
 
@@ -455,7 +478,7 @@ type linuxLsblkOutput struct {
 
 func getLinuxDisks() ([]DiskInfo, error) {
 	var disks []DiskInfo
-	cmd := execCommand("lsblk", "-J", "-b", "-o", "NAME,SIZE,RM,TYPE,MOUNTPOINT,LABEL,MODEL,VENDOR,TRAN,FSTYPE")
+	cmd := execCommand("lsblk", "-J", "-b", "-o", "NAME,SIZE,RM,RO,TYPE,MOUNTPOINT,LABEL,MODEL,VENDOR,TRAN,FSTYPE,PTTYPE")
 	output, err := cmd.Output()
 	if err != nil {
 		return disks, nil
@@ -475,6 +498,12 @@ func getLinuxDisks() ([]DiskInfo, error) {
 		mountPath := devPath
 		label := dev.Label
 		fileSystem := dev.Fstype
+		partitionScheme := "GPT / MBR"
+		if strings.ToLower(dev.Pttype) == "gpt" {
+			partitionScheme = "GPT (GUID Partition Table)"
+		} else if strings.ToLower(dev.Pttype) == "dos" || strings.ToLower(dev.Pttype) == "mbr" {
+			partitionScheme = "MBR (Master Boot Record)"
+		}
 
 		if label == "" {
 			label = strings.TrimSpace(dev.Vendor + " " + dev.Model)
@@ -532,18 +561,20 @@ func getLinuxDisks() ([]DiskInfo, error) {
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
 		disks = append(disks, DiskInfo{
-			Device:       mountPath,
-			Name:         label,
-			Size:         dev.Size,
-			Formatted:    formattedSize,
-			IsRemovable:  true,
-			IsSystem:     false,
-			UsbVersion:   usbVer,
-			UsbSpeed:     usbSpeed,
-			Vendor:       vendor,
-			FileSystem:   fileSystem,
-			IsFakeUsb3:   isFake,
-			ProtocolCode: protoCode,
+			Device:          mountPath,
+			Name:            label,
+			Size:            dev.Size,
+			Formatted:       formattedSize,
+			IsRemovable:     true,
+			IsSystem:        false,
+			UsbVersion:      usbVer,
+			UsbSpeed:        usbSpeed,
+			Vendor:          vendor,
+			FileSystem:      fileSystem,
+			PartitionScheme: partitionScheme,
+			Writable:        !dev.Ro,
+			IsFakeUsb3:      isFake,
+			ProtocolCode:    protoCode,
 		})
 	}
 
@@ -598,18 +629,20 @@ func getWindowsDisks() ([]DiskInfo, error) {
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
 		disks = append(disks, DiskInfo{
-			Device:       driveLetter,
-			Name:         displayName,
-			Size:         drive.Size,
-			Formatted:    formattedSize,
-			IsRemovable:  true,
-			IsSystem:     false,
-			UsbVersion:   usbVer,
-			UsbSpeed:     usbSpeed,
-			Vendor:       "Generic",
-			FileSystem:   "FAT32 / NTFS",
-			IsFakeUsb3:   isFake,
-			ProtocolCode: protoCode,
+			Device:          driveLetter,
+			Name:            displayName,
+			Size:            drive.Size,
+			Formatted:       formattedSize,
+			IsRemovable:     true,
+			IsSystem:        false,
+			UsbVersion:      usbVer,
+			UsbSpeed:        usbSpeed,
+			Vendor:          "Generic",
+			FileSystem:      "FAT32 / NTFS",
+			PartitionScheme: "GPT / MBR",
+			Writable:        true,
+			IsFakeUsb3:      isFake,
+			ProtocolCode:    protoCode,
 		})
 	}
 

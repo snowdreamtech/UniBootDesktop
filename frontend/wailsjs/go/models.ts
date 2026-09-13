@@ -32,6 +32,8 @@ export namespace disk {
 	    usbSpeed: string;
 	    vendor: string;
 	    fileSystem: string;
+	    partitionScheme: string;
+	    writable: boolean;
 	    isFakeUsb3: boolean;
 	    protocolCode: string;
 	
@@ -51,6 +53,8 @@ export namespace disk {
 	        this.usbSpeed = source["usbSpeed"];
 	        this.vendor = source["vendor"];
 	        this.fileSystem = source["fileSystem"];
+	        this.partitionScheme = source["partitionScheme"];
+	        this.writable = source["writable"];
 	        this.isFakeUsb3 = source["isFakeUsb3"];
 	        this.protocolCode = source["protocolCode"];
 	    }

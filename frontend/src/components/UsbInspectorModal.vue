@@ -66,6 +66,18 @@
           </div>
 
           <div class="spec-item">
+            <span class="spec-label">分区表架构 (Partition Scheme)</span>
+            <span class="spec-val highlight">{{ disk.partitionScheme || 'GPT / MBR' }}</span>
+          </div>
+
+          <div class="spec-item">
+            <span class="spec-label">读写状态 (Disk Permission)</span>
+            <span class="spec-val" :class="disk.writable !== false ? 'pass-val' : 'warn-val'">
+              {{ disk.writable !== false ? '✅ 可读写 (Read-Write)' : '🔒 写保护/只读 (Read-Only)' }}
+            </span>
+          </div>
+
+          <div class="spec-item">
             <span class="spec-label">USB 协议版本 (Protocol Version)</span>
             <span class="spec-val badge-val" :class="disk.protocolCode || 'usb2'">
               {{ disk.usbVersion || 'USB 2.0' }}
@@ -112,6 +124,8 @@ interface DiskInfo {
   usbSpeed?: string;
   vendor?: string;
   fileSystem?: string;
+  partitionScheme?: string;
+  writable?: boolean;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }
@@ -295,6 +309,15 @@ function closeModal() {
 
 .spec-val.highlight {
   color: #fff;
+  font-weight: 700;
+}
+
+.spec-val.pass-val {
+  color: #34d399;
+}
+
+.spec-val.warn-val {
+  color: #ef4444;
   font-weight: 700;
 }
 
