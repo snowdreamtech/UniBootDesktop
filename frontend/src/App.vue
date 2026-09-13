@@ -159,7 +159,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import DiskCard from './components/DiskCard.vue';
 import ProgressBar from './components/ProgressBar.vue';
 import IconPickerModal, { DiskIconType } from './components/IconPickerModal.vue';
@@ -175,6 +175,7 @@ interface DiskInfo {
   usbVersion?: string;
   usbSpeed?: string;
   vendor?: string;
+  fileSystem?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }
@@ -259,12 +260,11 @@ function onDiskToggle(disk: DiskInfo) {
 async function refreshDisks() {
   if (window.go && window.go.main && window.go.main.App) {
     try {
-      diskList.value = await window.go.main.App.GetDiskList();
-      if (diskList.value.length > 0 && !selectedDisk.value) {
-        selectedDisk.value = diskList.value[0];
-      }
+      const fetched = await window.go.main.App.GetDiskList();
+      diskList.value = fetched || [];
     } catch (e) {
       console.error(e);
+      diskList.value = [];
     }
   } else {
     // Fallback mock for browser preview demonstrating genuine vs fake USB 3.0
@@ -370,9 +370,24 @@ function launchQEMU() {
   alert(`正在启动 QEMU 模拟器校验: ${selectedDisk.value?.device}`);
 }
 
+let diskPollTimer: number | undefined;
+
 onMounted(() => {
   refreshDisks();
   checkQemu();
+
+  // Auto-poll USB drives every 2.5s when idle for instant hotplug detection
+  diskPollTimer = window.setInterval(() => {
+    if (!isDeploying.value) {
+      refreshDisks();
+    }
+  }, 2500);
+});
+
+onUnmounted(() => {
+  if (diskPollTimer) {
+    clearInterval(diskPollTimer);
+  }
 });
 </script>
 

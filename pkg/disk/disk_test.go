@@ -79,3 +79,18 @@ func TestMapProtocolCode(t *testing.T) {
 	assert.Equal(t, "usb3_0", MapProtocolCode("USB 3.0", "5 Gb/s"))
 	assert.Equal(t, "usb2", MapProtocolCode("USB 2.0", "480 Mb/s"))
 }
+
+func TestFormatBytes(t *testing.T) {
+	assert.Equal(t, "500 B", FormatBytes(500))
+	assert.Equal(t, "1.02 KB", FormatBytes(1024))
+	assert.Equal(t, "8.05 GB", FormatBytes(8053063680))
+	assert.Equal(t, "248.15 GB", FormatBytes(248145510400))
+	assert.Equal(t, "1.65 TB", FormatBytes(1649267441664))
+}
+
+func TestGetRemovableDisks(t *testing.T) {
+	disks, err := GetRemovableDisks()
+	assert.NoError(t, err)
+	assert.NotNil(t, disks)
+}
+

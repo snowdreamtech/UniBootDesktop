@@ -31,6 +31,7 @@ export namespace disk {
 	    usbVersion: string;
 	    usbSpeed: string;
 	    vendor: string;
+	    fileSystem: string;
 	    isFakeUsb3: boolean;
 	    protocolCode: string;
 	
@@ -49,6 +50,7 @@ export namespace disk {
 	        this.usbVersion = source["usbVersion"];
 	        this.usbSpeed = source["usbSpeed"];
 	        this.vendor = source["vendor"];
+	        this.fileSystem = source["fileSystem"];
 	        this.isFakeUsb3 = source["isFakeUsb3"];
 	        this.protocolCode = source["protocolCode"];
 	    }

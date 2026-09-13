@@ -61,6 +61,11 @@
           </div>
 
           <div class="spec-item">
+            <span class="spec-label">文件系统格式 (File System)</span>
+            <span class="spec-val highlight">{{ disk.fileSystem || 'ExFAT / FAT32' }}</span>
+          </div>
+
+          <div class="spec-item">
             <span class="spec-label">USB 协议版本 (Protocol Version)</span>
             <span class="spec-val badge-val" :class="disk.protocolCode || 'usb2'">
               {{ disk.usbVersion || 'USB 2.0' }}
@@ -89,7 +94,7 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn-primary" @click="closeModal">确定 / 关闭</button>
+        <button class="btn-primary" @click="closeModal">确定</button>
       </div>
     </div>
   </div>
@@ -106,6 +111,7 @@ interface DiskInfo {
   usbVersion?: string;
   usbSpeed?: string;
   vendor?: string;
+  fileSystem?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }

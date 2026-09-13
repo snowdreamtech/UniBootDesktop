@@ -4,8 +4,10 @@
 package disk
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -74,6 +76,7 @@ type DiskInfo struct {
 	UsbVersion   string `json:"usbVersion"`   // Protocol version (USB 2.0, USB 3.0, USB 3.1, USB 3.2, USB4)
 	UsbSpeed     string `json:"usbSpeed"`     // Physical bus speed (480 Mb/s, 5 Gb/s, 10 Gb/s, 20 Gb/s)
 	Vendor       string `json:"vendor"`       // Device manufacturer / vendor
+	FileSystem   string `json:"fileSystem"`   // File system format (e.g., ExFAT, FAT32, NTFS, APFS, ext4)
 	IsFakeUsb3   bool   `json:"isFakeUsb3"`   // Warning flag for fake USB 3.0 (USB 2.0 PHY disguised as 3.0)
 	ProtocolCode string `json:"protocolCode"` // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
 }
@@ -123,84 +126,501 @@ func MapProtocolCode(version string, speed string) string {
 	return "usb2"
 }
 
+// FormatBytes formats byte counts into human-readable strings (e.g. 248.15 GB, 8.05 GB).
+func FormatBytes(bytes uint64) string {
+	const (
+		KB = 1000
+		MB = 1000 * KB
+		GB = 1000 * MB
+		TB = 1000 * GB
+	)
+	switch {
+	case bytes >= TB:
+		return fmt.Sprintf("%.2f TB", float64(bytes)/float64(TB))
+	case bytes >= GB:
+		return fmt.Sprintf("%.2f GB", float64(bytes)/float64(GB))
+	case bytes >= MB:
+		return fmt.Sprintf("%.2f MB", float64(bytes)/float64(MB))
+	case bytes >= KB:
+		return fmt.Sprintf("%.2f KB", float64(bytes)/float64(KB))
+	default:
+		return fmt.Sprintf("%d B", bytes)
+	}
+}
+
 // GetRemovableDisks lists removable USB drives safely while protecting system drives.
 func GetRemovableDisks() ([]DiskInfo, error) {
-	var disks []DiskInfo
-
 	switch runtime.GOOS {
 	case "darwin":
-		// On macOS, scan /Volumes for external volumes
-		entries, err := os.ReadDir("/Volumes")
-		if err == nil {
-			for _, entry := range entries {
-				if IsIgnoredVolume(entry.Name()) {
-					continue
+		return getDarwinDisks()
+	case "windows":
+		return getWindowsDisks()
+	default:
+		return getLinuxDisks()
+	}
+}
+
+// macOS implementation structures for system_profiler SPUSBDataType -json
+type darwinUSBMedia struct {
+	BsdName     string `json:"bsd_name"`
+	SizeInBytes uint64 `json:"size_in_bytes"`
+	Size        string `json:"size"`
+	Volumes     []struct {
+		MountPoint string `json:"mount_point"`
+		Name       string `json:"_name"`
+		BsdName    string `json:"bsd_name"`
+	} `json:"volumes"`
+}
+
+type darwinUSBItem struct {
+	Name         string           `json:"_name"`
+	Manufacturer string           `json:"manufacturer"`
+	DeviceSpeed  string           `json:"device_speed"`
+	BcdDevice    string           `json:"bcd_device"`
+	Media        []darwinUSBMedia `json:"Media"`
+	Items        []darwinUSBItem  `json:"_items"`
+}
+
+type darwinUSBProfiler struct {
+	SPUSBDataType []struct {
+		Items []darwinUSBItem `json:"_items"`
+	} `json:"SPUSBDataType"`
+}
+
+type darwinUSBInfo struct {
+	BsdName      string
+	Vendor       string
+	Model        string
+	UsbVersion   string
+	UsbSpeed     string
+	TotalSize    uint64
+	MountPoint   string
+	VolumeName   string
+}
+
+func walkDarwinUSBTree(items []darwinUSBItem, result map[string]*darwinUSBInfo) {
+	for _, item := range items {
+		for _, media := range item.Media {
+			if media.BsdName != "" {
+				ver, speed := parseDarwinUSBSpeed(item.DeviceSpeed, item.BcdDevice)
+				vendor := strings.TrimSpace(item.Manufacturer)
+				if vendor == "" || vendor == "USB" {
+					vendor = "Generic"
 				}
-				volPath := filepath.Join("/Volumes", entry.Name())
-				name := entry.Name()
 
-				// Probing USB hardware details with intelligent fallback
-				usbVer := "USB 3.0"
-				usbSpeed := "5 Gb/s"
-				vendor := "Generic"
-
-				if strings.Contains(strings.ToUpper(name), "2.0") || strings.Contains(strings.ToUpper(name), "FAKE") {
-					usbVer = "USB 2.0"
-					usbSpeed = "480 Mb/s"
+				info := &darwinUSBInfo{
+					BsdName:    media.BsdName,
+					Vendor:     vendor,
+					Model:      item.Name,
+					UsbVersion: ver,
+					UsbSpeed:   speed,
+					TotalSize:  media.SizeInBytes,
 				}
 
-				isFake := CheckFakeUsb3(name, usbVer, usbSpeed)
-				protoCode := MapProtocolCode(usbVer, usbSpeed)
-
-				disks = append(disks, DiskInfo{
-					Device:       volPath,
-					Name:         name,
-					Size:         32 * 1024 * 1024 * 1024, // 32GB fallback format size
-					Formatted:    "32 GB",
-					IsRemovable:  true,
-					IsSystem:     false,
-					UsbVersion:   usbVer,
-					UsbSpeed:     usbSpeed,
-					Vendor:       vendor,
-					IsFakeUsb3:   isFake,
-					ProtocolCode: protoCode,
-				})
+				for _, vol := range media.Volumes {
+					if vol.MountPoint != "" {
+						info.MountPoint = vol.MountPoint
+						info.VolumeName = vol.Name
+					}
+				}
+				result[media.BsdName] = info
 			}
 		}
-	case "windows":
-		// Mock Windows drive letters for portable testing
+		if len(item.Items) > 0 {
+			walkDarwinUSBTree(item.Items, result)
+		}
+	}
+}
+
+func parseDarwinUSBSpeed(speed string, bcd string) (version string, phySpeed string) {
+	lowerSpeed := strings.ToLower(speed)
+	switch {
+	case strings.Contains(lowerSpeed, "super_speed_plus_20") || strings.Contains(lowerSpeed, "20gb"):
+		return "USB 3.2", "20 Gb/s"
+	case strings.Contains(lowerSpeed, "super_speed_plus") || strings.Contains(lowerSpeed, "10gb"):
+		return "USB 3.1", "10 Gb/s"
+	case strings.Contains(lowerSpeed, "super_speed") || strings.Contains(lowerSpeed, "5gb"):
+		return "USB 3.0", "5 Gb/s"
+	case strings.Contains(lowerSpeed, "high_speed") || strings.Contains(lowerSpeed, "480mb"):
+		return "USB 2.0", "480 Mb/s"
+	}
+
+	if bcd != "" {
+		if strings.HasPrefix(bcd, "3.") {
+			return "USB 3.0", "5 Gb/s"
+		}
+		if strings.HasPrefix(bcd, "2.") {
+			return "USB 2.0", "480 Mb/s"
+		}
+	}
+	return "USB 2.0", "480 Mb/s"
+}
+
+func getDarwinDisks() ([]DiskInfo, error) {
+	var disks []DiskInfo
+	usbMap := make(map[string]*darwinUSBInfo)
+
+	// Step 1: Probe system_profiler for rich hardware details (~0.3s runtime)
+	cmd := execCommand("system_profiler", "SPUSBDataType", "-json")
+	output, err := cmd.Output()
+	if err == nil {
+		var profiler darwinUSBProfiler
+		if jsonErr := jsonUnmarshal(output, &profiler); jsonErr == nil {
+			for _, bus := range profiler.SPUSBDataType {
+				walkDarwinUSBTree(bus.Items, usbMap)
+			}
+		}
+	}
+
+	// Step 2: Scan /Volumes for mounted removable drives
+	entries, err := os.ReadDir("/Volumes")
+	if err != nil {
+		return disks, nil
+	}
+
+	for _, entry := range entries {
+		if IsIgnoredVolume(entry.Name()) {
+			continue
+		}
+
+		volPath := filepath.Join("/Volumes", entry.Name())
+		volName := entry.Name()
+
+		// Probe diskutil info for exact volume & whole disk node details
+		infoCmd := execCommand("diskutil", "info", "-plist", volPath)
+		infoOut, infoErr := infoCmd.Output()
+
+		var totalSize uint64
+		var parentDisk string
+		var busProto string
+		var isRemovable bool
+		var fileSystem string
+
+		if infoErr == nil {
+			infoStr := string(infoOut)
+			if strings.Contains(infoStr, "<key>BusProtocol</key>") {
+				busProto = extractPlistValue(infoStr, "BusProtocol")
+			}
+			if strings.Contains(infoStr, "<key>ParentWholeDisk</key>") {
+				parentDisk = extractPlistValue(infoStr, "ParentWholeDisk")
+			}
+			if strings.Contains(infoStr, "<key>TotalSize</key>") {
+				totalSize = extractPlistUint(infoStr, "TotalSize")
+			}
+			if strings.Contains(infoStr, "<key>RemovableMediaOrExternalDevice</key>") {
+				isRemovable = strings.Contains(infoStr, "<true/>")
+			}
+			if strings.Contains(infoStr, "<key>FilesystemUserVisibleName</key>") {
+				fileSystem = extractPlistValue(infoStr, "FilesystemUserVisibleName")
+			}
+			if fileSystem == "" && strings.Contains(infoStr, "<key>FilesystemName</key>") {
+				fileSystem = extractPlistValue(infoStr, "FilesystemName")
+			}
+			if fileSystem == "" && strings.Contains(infoStr, "<key>FilesystemType</key>") {
+				fileSystem = extractPlistValue(infoStr, "FilesystemType")
+			}
+		}
+
+		if fileSystem == "" {
+			fileSystem = "ExFAT"
+		}
+
+		// Skip non-USB / internal disks if bus protocol is available
+		if busProto != "" && busProto != "USB" && !isRemovable {
+			continue
+		}
+
+		// Probe whole disk info for total raw byte size if volume size was read
+		if parentDisk != "" {
+			parentCmd := execCommand("diskutil", "info", "-plist", parentDisk)
+			parentOut, parentErr := parentCmd.Output()
+			if parentErr == nil {
+				parentStr := string(parentOut)
+				pSize := extractPlistUint(parentStr, "TotalSize")
+				if pSize > 0 {
+					totalSize = pSize
+				}
+			}
+		}
+
+		usbVer := "USB 2.0"
+		usbSpeed := "480 Mb/s"
+		vendor := "Generic"
+		displayName := volName
+
+		// Match with system_profiler hardware metadata
+		if parentInfo, ok := usbMap[parentDisk]; ok {
+			if parentInfo.TotalSize > 0 {
+				totalSize = parentInfo.TotalSize
+			}
+			if parentInfo.Vendor != "" {
+				vendor = parentInfo.Vendor
+			}
+			if parentInfo.UsbVersion != "" {
+				usbVer = parentInfo.UsbVersion
+			}
+			if parentInfo.UsbSpeed != "" {
+				usbSpeed = parentInfo.UsbSpeed
+			}
+			if parentInfo.Model != "" && parentInfo.Model != "USB Flash Drive" && parentInfo.Model != "Disk 2.0" {
+				displayName = fmt.Sprintf("%s (%s)", parentInfo.Model, volName)
+			}
+		}
+
+		if totalSize == 0 {
+			totalSize = 32 * 1024 * 1024 * 1024 // Fallback if size unknown
+		}
+
+		formattedSize := FormatBytes(totalSize)
+		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
+		protoCode := MapProtocolCode(usbVer, usbSpeed)
+
 		disks = append(disks, DiskInfo{
-			Device:       "E:",
-			Name:         "USB 3.0 Flash Drive (Fake)",
-			Size:         64 * 1024 * 1024 * 1024,
-			Formatted:    "64 GB",
+			Device:       volPath,
+			Name:         displayName,
+			Size:         totalSize,
+			Formatted:    formattedSize,
 			IsRemovable:  true,
 			IsSystem:     false,
-			UsbVersion:   "USB 2.0",
-			UsbSpeed:     "480 Mb/s",
-			Vendor:       "Unknown",
-			IsFakeUsb3:   true,
-			ProtocolCode: "usb2",
-		})
-	default:
-		// Linux removable media scan under /media or /run/media
-		disks = append(disks, DiskInfo{
-			Device:       "/dev/sdb",
-			Name:         "Generic USB 3.0 Storage",
-			Size:         16 * 1024 * 1024 * 1024,
-			Formatted:    "16 GB",
-			IsRemovable:  true,
-			IsSystem:     false,
-			UsbVersion:   "USB 3.0",
-			UsbSpeed:     "5 Gb/s",
-			Vendor:       "SanDisk",
-			IsFakeUsb3:   false,
-			ProtocolCode: "usb3_0",
+			UsbVersion:   usbVer,
+			UsbSpeed:     usbSpeed,
+			Vendor:       vendor,
+			FileSystem:   fileSystem,
+			IsFakeUsb3:   isFake,
+			ProtocolCode: protoCode,
 		})
 	}
 
 	return disks, nil
 }
+
+// Helpers for simple XML plist string parsing without heavy external dependencies
+func extractPlistValue(plistStr string, key string) string {
+	keyTag := "<key>" + key + "</key>"
+	idx := strings.Index(plistStr, keyTag)
+	if idx == -1 {
+		return ""
+	}
+	sub := plistStr[idx+len(keyTag):]
+	startStr := strings.Index(sub, "<string>")
+	if startStr == -1 {
+		return ""
+	}
+	endStr := strings.Index(sub, "</string>")
+	if endStr == -1 || endStr <= startStr+8 {
+		return ""
+	}
+	return sub[startStr+8 : endStr]
+}
+
+func extractPlistUint(plistStr string, key string) uint64 {
+	keyTag := "<key>" + key + "</key>"
+	idx := strings.Index(plistStr, keyTag)
+	if idx == -1 {
+		return 0
+	}
+	sub := plistStr[idx+len(keyTag):]
+	startInt := strings.Index(sub, "<integer>")
+	if startInt == -1 {
+		return 0
+	}
+	endInt := strings.Index(sub, "</integer>")
+	if endInt == -1 || endInt <= startInt+9 {
+		return 0
+	}
+	valStr := sub[startInt+9 : endInt]
+	var val uint64
+	fmt.Sscanf(valStr, "%d", &val)
+	return val
+}
+
+// Linux disk probing via lsblk -J
+type linuxBlockDevice struct {
+	Name       string             `json:"name"`
+	Size       uint64             `json:"size"`
+	Rm         bool               `json:"rm"`
+	Type       string             `json:"type"`
+	MountPoint string             `json:"mountpoint"`
+	Label      string             `json:"label"`
+	Model      string             `json:"model"`
+	Vendor     string             `json:"vendor"`
+	Tran       string             `json:"tran"`
+	Fstype     string             `json:"fstype"`
+	Children   []linuxBlockDevice `json:"children"`
+}
+
+type linuxLsblkOutput struct {
+	BlockDevices []linuxBlockDevice `json:"blockdevices"`
+}
+
+func getLinuxDisks() ([]DiskInfo, error) {
+	var disks []DiskInfo
+	cmd := execCommand("lsblk", "-J", "-b", "-o", "NAME,SIZE,RM,TYPE,MOUNTPOINT,LABEL,MODEL,VENDOR,TRAN,FSTYPE")
+	output, err := cmd.Output()
+	if err != nil {
+		return disks, nil
+	}
+
+	var lsblk linuxLsblkOutput
+	if err := jsonUnmarshal(output, &lsblk); err != nil {
+		return disks, nil
+	}
+
+	for _, dev := range lsblk.BlockDevices {
+		if dev.Tran != "usb" && !dev.Rm {
+			continue
+		}
+
+		devPath := "/dev/" + dev.Name
+		mountPath := devPath
+		label := dev.Label
+		fileSystem := dev.Fstype
+
+		if label == "" {
+			label = strings.TrimSpace(dev.Vendor + " " + dev.Model)
+		}
+		if label == "" {
+			label = dev.Name
+		}
+
+		for _, child := range dev.Children {
+			if child.MountPoint != "" && !IsIgnoredVolume(child.Label) {
+				mountPath = child.MountPoint
+				if child.Label != "" {
+					label = child.Label
+				}
+				if child.Fstype != "" {
+					fileSystem = child.Fstype
+				}
+				break
+			}
+		}
+
+		if IsIgnoredVolume(label) {
+			continue
+		}
+
+		if fileSystem == "" {
+			fileSystem = "vfat / exfat"
+		}
+
+		usbVer := "USB 3.0"
+		usbSpeed := "5 Gb/s"
+		vendor := strings.TrimSpace(dev.Vendor)
+		if vendor == "" {
+			vendor = "Generic"
+		}
+
+		// Check sysfs for physical USB speed if available
+		sysSpeed, sysErr := os.ReadFile(fmt.Sprintf("/sys/block/%s/device/speed", dev.Name))
+		if sysErr == nil {
+			sp := strings.TrimSpace(string(sysSpeed))
+			if sp == "480" {
+				usbVer = "USB 2.0"
+				usbSpeed = "480 Mb/s"
+			} else if sp == "5000" {
+				usbVer = "USB 3.0"
+				usbSpeed = "5 Gb/s"
+			} else if sp == "10000" {
+				usbVer = "USB 3.1"
+				usbSpeed = "10 Gb/s"
+			}
+		}
+
+		formattedSize := FormatBytes(dev.Size)
+		isFake := CheckFakeUsb3(label, usbVer, usbSpeed)
+		protoCode := MapProtocolCode(usbVer, usbSpeed)
+
+		disks = append(disks, DiskInfo{
+			Device:       mountPath,
+			Name:         label,
+			Size:         dev.Size,
+			Formatted:    formattedSize,
+			IsRemovable:  true,
+			IsSystem:     false,
+			UsbVersion:   usbVer,
+			UsbSpeed:     usbSpeed,
+			Vendor:       vendor,
+			FileSystem:   fileSystem,
+			IsFakeUsb3:   isFake,
+			ProtocolCode: protoCode,
+		})
+	}
+
+	return disks, nil
+}
+
+// Windows disk probing via PowerShell Win32_DiskDrive
+type winDiskDrive struct {
+	DeviceID      string `json:"DeviceID"`
+	Model         string `json:"Model"`
+	Size          uint64 `json:"Size"`
+	InterfaceType string `json:"InterfaceType"`
+	Caption       string `json:"Caption"`
+}
+
+func getWindowsDisks() ([]DiskInfo, error) {
+	var disks []DiskInfo
+	cmd := execCommand("powershell", "-NoProfile", "-Command",
+		"Get-CimInstance Win32_DiskDrive | Where-Object { $_.InterfaceType -eq 'USB' -or $_.MediaType -like '*Removable*' } | Select-Object DeviceID, Model, Size, InterfaceType, Caption | ConvertTo-Json")
+	output, err := cmd.Output()
+	if err != nil || len(output) == 0 {
+		return disks, nil
+	}
+
+	var winDrives []winDiskDrive
+	if jsonErr := jsonUnmarshal(output, &winDrives); jsonErr != nil {
+		var singleDrive winDiskDrive
+		if jsonErrSingle := jsonUnmarshal(output, &singleDrive); jsonErrSingle == nil {
+			winDrives = append(winDrives, singleDrive)
+		}
+	}
+
+	for i, drive := range winDrives {
+		driveLetter := fmt.Sprintf("%c:", 'E'+i)
+		displayName := drive.Model
+		if displayName == "" {
+			displayName = drive.Caption
+		}
+		if displayName == "" {
+			displayName = "USB Storage Device"
+		}
+
+		usbVer := "USB 3.0"
+		usbSpeed := "5 Gb/s"
+		if strings.Contains(strings.ToUpper(displayName), "2.0") {
+			usbVer = "USB 2.0"
+			usbSpeed = "480 Mb/s"
+		}
+
+		formattedSize := FormatBytes(drive.Size)
+		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
+		protoCode := MapProtocolCode(usbVer, usbSpeed)
+
+		disks = append(disks, DiskInfo{
+			Device:       driveLetter,
+			Name:         displayName,
+			Size:         drive.Size,
+			Formatted:    formattedSize,
+			IsRemovable:  true,
+			IsSystem:     false,
+			UsbVersion:   usbVer,
+			UsbSpeed:     usbSpeed,
+			Vendor:       "Generic",
+			FileSystem:   "FAT32 / NTFS",
+			IsFakeUsb3:   isFake,
+			ProtocolCode: protoCode,
+		})
+	}
+
+	return disks, nil
+}
+
+// Variables for command execution and JSON parsing to allow mocking in tests
+var (
+	execCommand   = exec.Command
+	jsonUnmarshal = json.Unmarshal
+)
 
 // ValidateTargetDisk ensures the target disk is not a system disk before operation.
 func ValidateTargetDisk(targetDevice string) error {
@@ -212,3 +632,4 @@ func ValidateTargetDisk(targetDevice string) error {
 	}
 	return nil
 }
+
