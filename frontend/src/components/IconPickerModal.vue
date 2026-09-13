@@ -31,6 +31,25 @@
               <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
               <circle cx="12" cy="18" r="1.2"/>
             </svg>
+            <!-- USB 3.1 Gen 2 (10G) -->
+            <svg v-else-if="option.id === 'usb3_1'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="2" width="6" height="5" rx="0.5"/>
+              <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
+              <circle cx="12" cy="13" r="3" stroke-dasharray="4 2"/>
+              <path d="M12 11v4M10.5 13h3"/>
+            </svg>
+            <!-- USB 3.2 Gen 2x2 (20G) -->
+            <svg v-else-if="option.id === 'usb3_2'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="2" width="8" height="4" rx="2"/>
+              <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
+              <path d="M10 11l2 2 2-2M10 15l2-2 2 2"/>
+            </svg>
+            <!-- USB4 / Thunderbolt (40G) -->
+            <svg v-else-if="option.id === 'usb4'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="2" width="8" height="4" rx="2"/>
+              <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
+              <polygon points="13 9 10 13.5 12.5 13.5 11 18 15 12.5 12.5 12.5 13 9" fill="currentColor" stroke="none"/>
+            </svg>
             <!-- Boot USB -->
             <svg v-else-if="option.id === 'boot'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="2" width="6" height="5" rx="0.5"/>
@@ -99,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-export type DiskIconType = 'usb' | 'usb2' | 'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom';
+export type DiskIconType = 'usb' | 'usb2' | 'usb3_1' | 'usb3_2' | 'usb4' | 'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom';
 
 defineProps<{
   isOpen: boolean;
@@ -110,8 +129,11 @@ defineProps<{
 const emit = defineEmits(['close', 'select-icon', 'reset-icon']);
 
 const iconOptions: Array<{ id: DiskIconType; label: string; desc: string }> = [
-  { id: 'usb', label: '高速 USB 3.0 闪存盘', desc: '经典 Type-A 接口 USB 3.0 盘' },
-  { id: 'usb2', label: '传统 USB 2.0 闪存盘', desc: '经典黑色 480 Mbps 基础盘' },
+  { id: 'usb', label: 'USB 3.0 (5 Gbps)', desc: '经典 SuperSpeed 5 Gbps 盘' },
+  { id: 'usb2', label: 'USB 2.0 (480 Mbps)', desc: '经典 High-Speed 基础盘' },
+  { id: 'usb3_1', label: 'USB 3.1 (10 Gbps)', desc: 'SuperSpeed+ 10 Gbps 高速盘' },
+  { id: 'usb3_2', label: 'USB 3.2 (20 Gbps)', desc: 'Gen 2x2 20 Gbps 极速双通道' },
+  { id: 'usb4', label: 'USB4 / 雷电4 (40 Gbps)', desc: '旗舰 40 Gbps 协议盘' },
   { id: 'boot', label: 'BOOT 引导系统盘', desc: '带有闪电标志的引导盘' },
   { id: 'ssd', label: '移动固态硬盘 (PSSD)', desc: '高速拉丝铝盒固态盘' },
   { id: 'typec', label: 'Type-C 双头 U 盘', desc: '适配手机与 Mac 的 Type-C 盘' },
@@ -119,7 +141,6 @@ const iconOptions: Array<{ id: DiskIconType; label: string; desc: string }> = [
   { id: 'reader', label: 'SD / TF 卡读卡器', desc: '插入式多功能内存读卡器' },
   { id: 'hdd', label: '移动机械硬盘 (HDD)', desc: '2.5 寸高容量机械移动盘' },
   { id: 'key', label: 'U2F / 安全钥匙盘', desc: '物理密钥 FIDO2 安全盘' },
-  { id: 'cdrom', label: 'CD-ROM 虚拟光驱盘', desc: 'ISO 虚拟光盘模拟设备' },
 ];
 
 function close() {
@@ -241,6 +262,21 @@ function resetToAuto() {
 .icon-preview.usb2 {
   background: rgba(148, 163, 184, 0.15);
   color: #94a3b8;
+}
+
+.icon-preview.usb3_1 {
+  background: rgba(157, 78, 221, 0.15);
+  color: #c084fc;
+}
+
+.icon-preview.usb3_2 {
+  background: rgba(168, 85, 247, 0.2);
+  color: #d8b4fe;
+}
+
+.icon-preview.usb4 {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
 }
 
 .icon-preview.boot {

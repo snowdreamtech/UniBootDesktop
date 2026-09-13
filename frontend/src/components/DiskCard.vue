@@ -81,6 +81,25 @@
         <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
         <circle cx="12" cy="18" r="1.2"/>
       </svg>
+      <!-- USB 3.1 Gen 2 (10G Speed Ring) Icon -->
+      <svg v-else-if="diskType === 'usb3_1'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
+        <circle cx="12" cy="13" r="3" stroke-dasharray="4 2"/>
+        <path d="M12 11v4M10.5 13h3"/>
+      </svg>
+      <!-- USB 3.2 Gen 2x2 (20G Dual Channel) Icon -->
+      <svg v-else-if="diskType === 'usb3_2'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="8" y="2" width="8" height="4" rx="2"/>
+        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
+        <path d="M10 11l2 2 2-2M10 15l2-2 2 2"/>
+      </svg>
+      <!-- USB4 / Thunderbolt 4 (40G Flagship) Icon -->
+      <svg v-else-if="diskType === 'usb4'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="8" y="2" width="8" height="4" rx="2"/>
+        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
+        <polygon points="13 9 10 13.5 12.5 13.5 11 18 15 12.5 12.5 12.5 13 9" fill="currentColor" stroke="none"/>
+      </svg>
       <!-- Standard USB Flash Drive Icon -->
       <svg v-else class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <!-- Metal USB-A Plug Head -->
@@ -150,8 +169,8 @@ const props = withDefaults(defineProps<{
 
 defineEmits(['select', 'toggle', 'pick-icon', 'inspect']);
 
-const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom' | 'usb2' | 'usb'>(() => {
-  if (props.customIcon && ['boot', 'ssd', 'typec', 'secure', 'reader', 'hdd', 'key', 'cdrom', 'usb2', 'usb'].includes(props.customIcon)) {
+const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom' | 'usb2' | 'usb3_1' | 'usb3_2' | 'usb4' | 'usb'>(() => {
+  if (props.customIcon && ['boot', 'ssd', 'typec', 'secure', 'reader', 'hdd', 'key', 'cdrom', 'usb2', 'usb3_1', 'usb3_2', 'usb4', 'usb'].includes(props.customIcon)) {
     return props.customIcon as any;
   }
 
@@ -180,6 +199,15 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
   if (props.disk.size >= 128 * 1024 * 1024 * 1024 || nameUpper.includes('SSD') || nameUpper.includes('NVME')) {
     return 'ssd';
   }
+  if (props.disk.protocolCode === 'usb4' || props.disk.usbVersion === 'USB4') {
+    return 'usb4';
+  }
+  if (props.disk.protocolCode === 'usb3_2' || props.disk.usbVersion === 'USB 3.2') {
+    return 'usb3_2';
+  }
+  if (props.disk.protocolCode === 'usb3_1' || props.disk.usbVersion === 'USB 3.1') {
+    return 'usb3_1';
+  }
   if (props.disk.protocolCode === 'usb2' || props.disk.usbVersion === 'USB 2.0') {
     return 'usb2';
   }
@@ -196,9 +224,9 @@ const diskTagLabel = computed(() => {
   if (diskType.value === 'key') return '安全钥匙';
   if (diskType.value === 'cdrom') return '虚拟光驱';
   if (diskType.value === 'usb2') return 'USB 2.0';
-  if (props.disk.protocolCode === 'usb3_1') return 'USB 3.1';
-  if (props.disk.protocolCode === 'usb3_2') return 'USB 3.2';
-  if (props.disk.protocolCode === 'usb4') return 'USB4';
+  if (diskType.value === 'usb3_1') return 'USB 3.1';
+  if (diskType.value === 'usb3_2') return 'USB 3.2';
+  if (diskType.value === 'usb4') return 'USB4';
   return 'USB 3.0';
 });
 </script>
@@ -272,6 +300,21 @@ const diskTagLabel = computed(() => {
 .disk-icon-wrapper.usb2 {
   background: rgba(148, 163, 184, 0.15);
   color: #94a3b8;
+}
+
+.disk-icon-wrapper.usb3_1 {
+  background: rgba(157, 78, 221, 0.15);
+  color: #c084fc;
+}
+
+.disk-icon-wrapper.usb3_2 {
+  background: rgba(168, 85, 247, 0.2);
+  color: #d8b4fe;
+}
+
+.disk-icon-wrapper.usb4 {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
 }
 
 .disk-svg {
@@ -418,6 +461,21 @@ const diskTagLabel = computed(() => {
 .disk-badge.usb2 {
   background: rgba(148, 163, 184, 0.15);
   color: #cbd5e1;
+}
+
+.disk-badge.usb3_1 {
+  background: rgba(157, 78, 221, 0.15);
+  color: #c084fc;
+}
+
+.disk-badge.usb3_2 {
+  background: rgba(168, 85, 247, 0.2);
+  color: #d8b4fe;
+}
+
+.disk-badge.usb4 {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
 }
 
 .disk-checkbox-container {
