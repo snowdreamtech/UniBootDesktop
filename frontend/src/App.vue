@@ -172,7 +172,12 @@
               ⚠️ 未选择 U 盘（请在上方列表中点击选择要测试的 U 盘）
             </span>
           </p>
-          <button class="btn-secondary" :disabled="isLaunchingQemu" @click="launchQEMU">
+          <button 
+            class="btn-secondary" 
+            :disabled="isQemuDisabled" 
+            :title="qemuDisabledReason"
+            @click="launchQEMU"
+          >
             {{ isLaunchingQemu ? '⏳ 正在启动 QEMU 模拟器...' : '▶ 启动 QEMU 模拟器测试' }}
           </button>
         </div>
@@ -427,6 +432,31 @@ const isDeployDisabled = computed(() => {
     return !selectedDisk.value;
   }
   return selectedDevices.value.size === 0;
+});
+
+const isQemuDisabled = computed(() => {
+  return (
+    isLaunchingQemu.value ||
+    isDeploying.value ||
+    !qemuStatus.value.installed ||
+    !activeQemuTargetDevice.value
+  );
+});
+
+const qemuDisabledReason = computed(() => {
+  if (isLaunchingQemu.value) {
+    return 'QEMU 模拟器正在拉起启动中...';
+  }
+  if (isDeploying.value) {
+    return '烧录部署中，请等待部署完成后再测试';
+  }
+  if (!qemuStatus.value.installed) {
+    return '未检测到 QEMU 模拟器，请先安装 QEMU (brew/port install qemu)';
+  }
+  if (!activeQemuTargetDevice.value) {
+    return '请先在上方列表点击选择要测试的目标 U 盘';
+  }
+  return '点击在当前桌面拉起 QEMU 虚拟机校验 U 盘引导';
 });
 
 const activeQemuTargetDevice = computed(() => {
