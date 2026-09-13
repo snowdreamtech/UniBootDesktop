@@ -4,6 +4,14 @@
     :class="{ selected: isSelected }"
     @click="$emit('select', disk)"
   >
+    <div class="disk-checkbox-container" v-if="isBatchMode">
+      <input 
+        type="checkbox" 
+        class="disk-checkbox" 
+        :checked="isSelected"
+        @click.stop="$emit('toggle', disk)" 
+      />
+    </div>
     <div class="disk-icon">💾</div>
     <div class="disk-details">
       <div class="disk-name">{{ disk.name || disk.device }}</div>
@@ -23,12 +31,15 @@ interface DiskInfo {
   isSystem: boolean;
 }
 
-defineProps<{
+withDefaults(defineProps<{
   disk: DiskInfo;
   isSelected: boolean;
-}>();
+  isBatchMode?: boolean;
+}>(), {
+  isBatchMode: false
+});
 
-defineEmits(['select']);
+defineEmits(['select', 'toggle']);
 </script>
 
 <style scoped>
@@ -71,5 +82,18 @@ defineEmits(['select']);
   border-radius: 6px;
   font-size: 0.75rem;
   font-weight: 700;
+}
+
+.disk-checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-right: 0.25rem;
+}
+
+.disk-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-cyan);
+  cursor: pointer;
 }
 </style>
