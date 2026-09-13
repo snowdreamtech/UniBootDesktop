@@ -106,9 +106,9 @@
           </div>
         </div>
 
-        <!-- Advanced Hardware Specs Header & Grid -->
+        <!-- Hardware Details Header & Grid -->
         <div class="section-divider">
-          <span>🛠️ 底层硬件与极客数据 (Advanced Hardware Specs)</span>
+          <span>🛠️ 设备硬件详情 (Hardware Details)</span>
         </div>
 
         <div class="spec-grid advanced-grid">
@@ -132,22 +132,22 @@
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">扇区物理大小 (Sector Block Size)</span>
+            <span class="spec-label">物理扇区大小 (Physical Block Size)</span>
             <span class="spec-val highlight">{{ disk.sectorSize || '512 Bytes (512n/512e)' }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">推断主控芯片 (Controller Chip)</span>
+            <span class="spec-label">主控芯片厂商 (Controller Vendor)</span>
             <span class="spec-val highlight">{{ disk.controllerVendor || '通用 Standard Controller' }}</span>
           </div>
 
           <div class="spec-item" v-if="disk.vendorId || disk.productId">
-            <span class="spec-label">芯片硬件 ID (USB VID / PID)</span>
+            <span class="spec-label">硬件设备标识 (USB VID / PID)</span>
             <span class="spec-val code">VID: {{ disk.vendorId || 'N/A' }} | PID: {{ disk.productId || 'N/A' }}</span>
           </div>
 
           <div class="spec-item spec-full" v-if="disk.serialNumber">
-            <span class="spec-label">硬件序列号 (Serial Number)</span>
+            <span class="spec-label">设备物理序列号 (Serial Number)</span>
             <span class="spec-val code">{{ disk.serialNumber }}</span>
           </div>
         </div>
