@@ -123,43 +123,39 @@ func DeployModeB(ctx context.Context, targetDisk string, fsType string) (*Deploy
 	}
 
 	isExistingVentoy := disk.IsVentoyDisk(targetDisk)
-	var mountPoint string
+	var efiMountPoint string
 	var err error
 
 	if isExistingVentoy {
 		// Non-destructive Mode B conversion: Flash EFI Partition 2 (VTOYEFI) directly (Data partition untouched!)
-		efiMountPoint, errEfi := MountAndResolveEFIPartition(targetDisk)
-		if errEfi == nil {
-			mountPoint = efiMountPoint
-		} else {
-			// Fallback: Resolve main volume mount point
-			mountPoint, err = ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
-			if err != nil {
-				mountPoint, err = ResolveMountPointWithLabel(targetDisk, "Ventoy")
-			}
-			if err != nil {
-				mountPoint, err = ResolveMountPointWithLabel(targetDisk, "VENTOY")
-			}
-			if err != nil {
-				mountPoint, err = FormatDiskModeB(ctx, targetDisk)
-			}
+		efiMountPoint, err = MountAndResolveEFIPartition(targetDisk)
+		if err != nil {
+			return nil, fmt.Errorf("failed to mount/resolve EFI partition (Partition 2): %w", err)
 		}
 	} else {
-		// Fresh Mode B deployment on blank drive
-		mountPoint, err = FormatDiskModeB(ctx, targetDisk)
+		// Fresh Mode B deployment on blank drive -> Create UNIBOOT dual partitions and resolve ESP Partition 2
+		_, errFormat := FormatDiskModeB(ctx, targetDisk)
+		if errFormat != nil {
+			return nil, fmt.Errorf("formatting dual partitions for Mode B failed: %w", errFormat)
+		}
+		efiMountPoint, err = MountAndResolveEFIPartition(targetDisk)
+		if err != nil {
+			// Fallback: Resolve main volume mount point if EFI partition resolving fails
+			efiMountPoint, err = ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
+		}
 	}
 	if err != nil {
-		return nil, fmt.Errorf("preparing disk for Mode B failed: %w", err)
+		return nil, fmt.Errorf("preparing EFI partition for Mode B failed: %w", err)
 	}
 
-	// Extract multi-arch iPXE EFI & Legacy BIOS firmware assets to target EFI / Data volume
-	if err := firmware.ExtractFirmwareModeB(mountPoint); err != nil {
-		return nil, fmt.Errorf("extracting firmware assets failed: %w", err)
+	// Extract multi-arch iPXE EFI & Legacy BIOS firmware assets DIRECTLY into EFI partition (Partition 2)
+	if err := firmware.ExtractFirmwareModeB(efiMountPoint); err != nil {
+		return nil, fmt.Errorf("extracting firmware assets to EFI partition failed: %w", err)
 	}
 
-	msg := fmt.Sprintf("Successfully deployed Cloud Pure Mode B (%s/UNIBOOT) to %s (mount: %s)", fsType, targetDisk, mountPoint)
+	msg := fmt.Sprintf("Successfully deployed Cloud Pure Mode B to ESP EFI Partition (%s)", efiMountPoint)
 	if isExistingVentoy {
-		msg = fmt.Sprintf("Successfully converted Ventoy drive to Mode B iPXE Cloud Boot by flashing EFI partition at %s (Main Data Partition untouched, ISO data preserved!)", targetDisk)
+		msg = fmt.Sprintf("Successfully converted Ventoy drive to Mode B iPXE Cloud Boot by flashing EFI partition at %s (Main Data Partition untouched, ISO data preserved!)", efiMountPoint)
 	}
 
 	return &DeployResult{

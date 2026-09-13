@@ -49,16 +49,20 @@ func FormatDiskModeB(ctx context.Context, targetDisk string) (string, error) {
 	}
 }
 
-// formatDiskMacOS formats disk on macOS using diskutil
+// formatDiskMacOS formats disk on macOS using diskutil with UNIBOOT dual-partition layout (Data Partition + ESP)
 func formatDiskMacOS(ctx context.Context, targetDisk string) (string, error) {
 	// Normalize disk device path (e.g., /dev/disk2 -> disk2)
 	diskNode := filepath.Base(targetDisk)
 
-	// Command: diskutil eraseDisk FAT32 UNIBOOT MBRFormat diskN
-	cmd := execCommand("diskutil", "eraseDisk", "FAT32", "UNIBOOT", "MBRFormat", diskNode)
+	// Dual-Partition Command: Partition 1 ExFAT UNIBOOT (rest of disk), Partition 2 FAT32 VTOYEFI (64MB ESP)
+	cmd := execCommand("diskutil", "partitionDisk", diskNode, "MBRFormat", "ExFAT", "UNIBOOT", "0b", "FAT32", "VTOYEFI", "64M")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return "", fmt.Errorf("diskutil eraseDisk failed (%v): %s", err, string(output))
+		// Fallback to eraseDisk if partitionDisk fails on specific hardware
+		cmdFallback := execCommand("diskutil", "eraseDisk", "ExFAT", "UNIBOOT", "MBRFormat", diskNode)
+		if fbOut, fbErr := cmdFallback.CombinedOutput(); fbErr != nil {
+			return "", fmt.Errorf("diskutil partitionDisk failed (%v): %s (fallback failed: %s)", err, string(output), string(fbOut))
+		}
 	}
 
 	mountPoint := "/Volumes/UNIBOOT"
@@ -181,18 +185,22 @@ func formatDiskModeAMacOS(ctx context.Context, targetDisk string, fsType string)
 		fsFormat = "FAT32"
 	}
 
-	cmd := execCommand("diskutil", "eraseDisk", fsFormat, "VENTOY", "MBRFormat", diskNode)
+	// Dual Partition: Partition 1 Data (fsFormat UNIBOOT), Partition 2 ESP (FAT32 VTOYEFI 64M)
+	cmd := execCommand("diskutil", "partitionDisk", diskNode, "MBRFormat", fsFormat, "UNIBOOT", "0b", "FAT32", "VTOYEFI", "64M")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return "", fmt.Errorf("diskutil eraseDisk for Mode A failed (%v): %s", err, string(output))
+		cmdFallback := execCommand("diskutil", "eraseDisk", fsFormat, "UNIBOOT", "MBRFormat", diskNode)
+		if fbOut, fbErr := cmdFallback.CombinedOutput(); fbErr != nil {
+			return "", fmt.Errorf("diskutil partitionDisk for Mode A failed (%v): %s (fallback failed: %s)", err, string(output), string(fbOut))
+		}
 	}
 
-	mountPoint := "/Volumes/VENTOY"
+	mountPoint := "/Volumes/UNIBOOT"
 	if info, err := os.Stat(mountPoint); err == nil && info.IsDir() {
 		return mountPoint, nil
 	}
 
-	return ResolveMountPointWithLabel(targetDisk, "VENTOY")
+	return ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
 }
 
 func formatDiskModeAWindows(ctx context.Context, targetDisk string, fsType string) (string, error) {
