@@ -169,7 +169,7 @@
               {{ activeQemuTargetName }} ({{ activeQemuTargetDevice }})
             </strong>
             <span v-else class="target-warn">
-              ⚠️ 未选择 U 盘（请在上方列表中点击选择要测试的 U 盘）
+              ⚠️ 未选择 U 盘（请在左侧列表中点击选择要测试的 U 盘）
             </span>
           </p>
           <button 
@@ -454,7 +454,7 @@ const qemuDisabledReason = computed(() => {
     return '未检测到 QEMU 模拟器，请先安装 QEMU (brew/port install qemu)';
   }
   if (!activeQemuTargetDevice.value) {
-    return '请先在上方列表点击选择要测试的目标 U 盘';
+    return '请先在左侧列表点击选择要测试的目标 U 盘';
   }
   return '点击在当前桌面拉起 QEMU 虚拟机校验 U 盘引导';
 });
@@ -682,7 +682,7 @@ async function launchQEMU() {
   const diskLabel = activeQemuTargetName.value;
 
   if (!targetDevice) {
-    showToast('⚠️ 请先在上方磁盘列表中点击选择要测试的目标 U 盘！', 'warning');
+    showToast('⚠️ 请先在左侧磁盘列表中点击选择要测试的目标 U 盘！', 'warning');
     return;
   }
 
