@@ -56,13 +56,16 @@ var StandardFirmwareMappings = []FirmwareMapping{
 	{ReleaseName: "ipxe-riscv64.efi", TargetPath: "EFI/BOOT/BOOTRISCV64.EFI", Description: "UEFI RISC-V 64-bit", IsReserved: false},
 	{ReleaseName: "ipxe-riscv32.efi", TargetPath: "EFI/BOOT/BOOTRISCV32.EFI", Description: "UEFI RISC-V 32-bit", IsReserved: false},
 
-	// Legacy BIOS Boot Images
-	{ReleaseName: "ipxe.lkrn", TargetPath: "ipxe.lkrn", Description: "Legacy BIOS U-disk MBR Kernel Boot Image", IsReserved: false},
+	// Legacy BIOS / MBR Boot Images
+	{ReleaseName: "ipxe.lkrn", TargetPath: "ipxe.lkrn", Description: "Legacy BIOS U-disk MBR Kernel Boot Image (x86)", IsReserved: false},
+	{ReleaseName: "ipxe-riscv64.lkrn", TargetPath: "ipxe-riscv64.lkrn", Description: "Legacy MBR Kernel Boot Image (RISC-V 64-bit)", IsReserved: false},
+	{ReleaseName: "ipxe-riscv32.lkrn", TargetPath: "ipxe-riscv32.lkrn", Description: "Legacy MBR Kernel Boot Image (RISC-V 32-bit)", IsReserved: false},
 	{ReleaseName: "undionly.kpxe", TargetPath: "undionly.kpxe", Description: "Legacy BIOS UNDI PXE Network Boot Firmware", IsReserved: true},
 
-	// Entry Scripts
+	// Entry Scripts & ISO Images
 	{ReleaseName: "boot.ipxe", TargetPath: "boot.ipxe", Description: "iPXE Global Entry Script", IsReserved: false},
 	{ReleaseName: "uniboot.ipxe", TargetPath: "uniboot.ipxe", Description: "UniBoot Main Interactive Menu Script", IsReserved: false},
+	{ReleaseName: "UniBoot.iso", TargetPath: "UniBoot.iso", Description: "UniBoot Full UEFI/BIOS Hybrid Boot ISO Image", IsReserved: true},
 }
 
 // GetFirmwareMappings returns a copy of all standard firmware mappings.
