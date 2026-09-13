@@ -1,5 +1,5 @@
 /* Glassmorphism Theme CSS — UniGoDesktop Design System */
-:root {
+:root, [data-theme="dark"] {
   --bg-color: #070a12;
   --card-bg: rgba(18, 26, 43, 0.65);
   --card-border: rgba(0, 229, 255, 0.15);
@@ -11,6 +11,20 @@
   --accent-purple: #9d4edd;
   --success: #10b981;
   --warning: #f59e0b;
+}
+
+[data-theme="light"] {
+  --bg-color: #f1f5f9;
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(2, 132, 199, 0.25);
+  --card-border-active: rgba(2, 132, 199, 0.6);
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --accent-cyan: #0284c7;
+  --accent-cyan-glow: rgba(2, 132, 199, 0.25);
+  --accent-purple: #7c3aed;
+  --success: #059669;
+  --warning: #d97706;
 }
 
 * {

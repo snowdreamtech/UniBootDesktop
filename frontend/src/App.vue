@@ -279,6 +279,11 @@ const isDeploying = ref(false);
 const deployProgress = ref(0);
 const qemuStatus = ref({ installed: false, path: '', version: '' });
 
+function applyTheme(themeName?: string) {
+  const theme = themeName === 'light' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+}
+
 async function loadConfig() {
   if (window.go && window.go.main && window.go.main.App) {
     try {
@@ -286,6 +291,7 @@ async function loadConfig() {
       if (cfg) {
         if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
         if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
+        applyTheme(cfg.theme);
       }
     } catch (e) {
       console.error('Failed to load config:', e);
@@ -303,6 +309,7 @@ async function onSaveSettings(payload: any) {
     currentGithubProxy.value = proxyUrl;
     if (payload.fileSystem) selectedFsType.value = payload.fileSystem as any;
     if (payload.mode) activeMode.value = payload.mode as any;
+    if (payload.theme) applyTheme(payload.theme);
   }
 
   if (window.go && window.go.main && window.go.main.App) {
