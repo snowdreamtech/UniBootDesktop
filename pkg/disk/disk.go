@@ -8,16 +8,23 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
+
+// IsIgnoredVolume returns true if the volume name should be ignored (e.g., system disks, VTOYEFI partitions).
+func IsIgnoredVolume(name string) bool {
+	upper := strings.ToUpper(strings.TrimSpace(name))
+	return upper == "MACINTOSH HD" || upper == "SYSTEM" || upper == "VTOYEFI" || strings.HasPrefix(upper, "VTOYEFI")
+}
 
 // DiskInfo represents metadata about an available disk/USB drive.
 type DiskInfo struct {
-	Device     string `json:"device"`     // Device path (e.g., /dev/disk2, E:)
-	Name       string `json:"name"`       // Friendly label / vendor model
-	Size       uint64 `json:"size"`       // Total capacity in bytes
-	Formatted  string `json:"formatted"`  // Human readable size string
-	IsRemovable bool   `json:"isRemovable"`// Removable USB flag
-	IsSystem    bool   `json:"isSystem"`   // System disk safety flag
+	Device      string `json:"device"`      // Device path (e.g., /dev/disk2, E:)
+	Name        string `json:"name"`        // Friendly label / vendor model
+	Size        uint64 `json:"size"`        // Total capacity in bytes
+	Formatted   string `json:"formatted"`   // Human readable size string
+	IsRemovable bool   `json:"isRemovable"` // Removable USB flag
+	IsSystem    bool   `json:"isSystem"`    // System disk safety flag
 }
 
 // GetRemovableDisks lists removable USB drives safely while protecting system drives.
@@ -30,7 +37,7 @@ func GetRemovableDisks() ([]DiskInfo, error) {
 		entries, err := os.ReadDir("/Volumes")
 		if err == nil {
 			for _, entry := range entries {
-				if entry.Name() == "Macintosh HD" || entry.Name() == "System" {
+				if IsIgnoredVolume(entry.Name()) {
 					continue
 				}
 				volPath := filepath.Join("/Volumes", entry.Name())
