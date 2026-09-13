@@ -429,6 +429,27 @@ h1 {
 
 .disk-list {
   min-height: 180px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.disk-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.disk-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.disk-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.3);
+  border-radius: 4px;
+}
+
+.disk-list::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-cyan);
 }
 
 .empty-state {
