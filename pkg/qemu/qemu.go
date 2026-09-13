@@ -31,6 +31,7 @@ func Detect() *QEMUStatus {
 	}
 
 	commonPaths := []string{
+		"/opt/local/bin", // MacPorts (macOS)
 		"/opt/homebrew/bin",
 		"/usr/local/bin",
 		"/usr/bin",
