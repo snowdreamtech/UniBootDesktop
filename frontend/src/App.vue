@@ -71,7 +71,7 @@
             :disk="disk"
             :isBatchMode="selectionMode === 'batch'"
             :isSelected="selectionMode === 'single' ? selectedDisk?.device === disk.device : selectedDevices.has(disk.device)"
-            :customIcon="customIcons[disk.device]"
+            :customIcon="getCustomIcon(disk)"
             @select="onDiskSelect(disk)"
             @toggle="onDiskToggle(disk)"
             @pick-icon="openIconPicker(disk)"
@@ -197,9 +197,36 @@ interface DiskInfo {
 const activeMode = ref<'cloud' | 'hybrid'>('cloud');
 const selectionMode = ref<'single' | 'batch'>('single');
 const diskList = ref<DiskInfo[]>([]);
+const CUSTOM_ICONS_KEY = 'unigo_custom_icons_v1';
+
+function loadCustomIcons(): Record<string, DiskIconType> {
+  try {
+    const raw = localStorage.getItem(CUSTOM_ICONS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {
+    console.error('Failed to load custom icons from localStorage:', e);
+  }
+  return {};
+}
+
+function saveCustomIcons(icons: Record<string, DiskIconType>) {
+  try {
+    localStorage.setItem(CUSTOM_ICONS_KEY, JSON.stringify(icons));
+  } catch (e) {
+    console.error('Failed to save custom icons to localStorage:', e);
+  }
+}
+
+function getDiskFingerprint(disk: DiskInfo): string {
+  if (disk.serialNumber && disk.serialNumber.trim() !== '') {
+    return `sn:${disk.serialNumber.trim()}`;
+  }
+  return `dev:${disk.name}_${disk.size}`;
+}
+
 const selectedDisk = ref<DiskInfo | null>(null);
 const selectedDevices = ref<Set<string>>(new Set());
-const customIcons = ref<Record<string, DiskIconType>>({});
+const customIcons = ref<Record<string, DiskIconType>>(loadCustomIcons());
 const isPickerOpen = ref(false);
 const targetPickerDisk = ref<DiskInfo | null>(null);
 const isInspectorOpen = ref(false);
@@ -207,6 +234,11 @@ const targetInspectorDisk = ref<DiskInfo | null>(null);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
 const qemuStatus = ref({ installed: false, path: '', version: '' });
+
+function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
+  const fp = getDiskFingerprint(disk);
+  return customIcons.value[fp] || customIcons.value[disk.device];
+}
 
 function openInspector(disk: DiskInfo) {
   targetInspectorDisk.value = disk;
@@ -220,13 +252,19 @@ function openIconPicker(disk: DiskInfo) {
 
 function onIconSelected(type: DiskIconType) {
   if (targetPickerDisk.value) {
+    const fp = getDiskFingerprint(targetPickerDisk.value);
+    customIcons.value[fp] = type;
     customIcons.value[targetPickerDisk.value.device] = type;
+    saveCustomIcons(customIcons.value);
   }
 }
 
 function onIconReset() {
   if (targetPickerDisk.value) {
+    const fp = getDiskFingerprint(targetPickerDisk.value);
+    delete customIcons.value[fp];
     delete customIcons.value[targetPickerDisk.value.device];
+    saveCustomIcons(customIcons.value);
   }
 }
 
