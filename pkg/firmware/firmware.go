@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/env"
@@ -263,6 +264,7 @@ func GetFirmwareData(releaseName string) ([]byte, string, error) {
 }
 
 // ExtractFirmwareToDir extracts firmware files to the specified target directory using priority selection.
+// It populates standard UEFI/BIOS paths (EFI/BOOT/...) as well as UniBoot structure (ipxe/, iso/).
 func ExtractFirmwareToDir(targetDir string) error {
 	if targetDir == "" {
 		return fmt.Errorf("target directory cannot be empty")
@@ -274,6 +276,7 @@ func ExtractFirmwareToDir(targetDir string) error {
 			return fmt.Errorf("failed to load firmware asset %s: %w", mapping.ReleaseName, err)
 		}
 
+		// 1. Primary target path (e.g. EFI/BOOT/BOOTX64.EFI or root)
 		destPath := filepath.Join(targetDir, filepath.FromSlash(mapping.TargetPath))
 		if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
 			return fmt.Errorf("failed to create directory for %s: %w", destPath, err)
@@ -281,6 +284,25 @@ func ExtractFirmwareToDir(targetDir string) error {
 
 		if err := os.WriteFile(destPath, data, 0644); err != nil {
 			return fmt.Errorf("failed to extract firmware asset to %s: %w", destPath, err)
+		}
+
+		// 2. Extra UniBoot structure sync: populate ipxe/ for Ventoy menu integration
+		if strings.HasSuffix(mapping.ReleaseName, ".efi") ||
+			strings.HasSuffix(mapping.ReleaseName, ".lkrn") ||
+			strings.HasSuffix(mapping.ReleaseName, ".kpxe") ||
+			strings.HasSuffix(mapping.ReleaseName, ".ipxe") {
+			ipxePath := filepath.Join(targetDir, "ipxe", mapping.ReleaseName)
+			if err := os.MkdirAll(filepath.Dir(ipxePath), 0755); err == nil {
+				_ = os.WriteFile(ipxePath, data, 0644)
+			}
+		}
+
+		// 3. Extra UniBoot ISO placement: populate iso/UniBoot.iso if asset is present
+		if mapping.ReleaseName == "UniBoot.iso" {
+			isoPath := filepath.Join(targetDir, "iso", "UniBoot.iso")
+			if err := os.MkdirAll(filepath.Dir(isoPath), 0755); err == nil {
+				_ = os.WriteFile(isoPath, data, 0644)
+			}
 		}
 	}
 

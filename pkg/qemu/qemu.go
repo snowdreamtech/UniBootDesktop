@@ -147,11 +147,15 @@ func ResolveRawDiskDevice(diskPath string) string {
 		// Case 2: Standard block disk node (e.g. /dev/disk2 or /dev/disk2s1)
 		if strings.HasPrefix(diskPath, "/dev/disk") {
 			rawNode := strings.Replace(diskPath, "/dev/disk", "/dev/rdisk", 1)
-			if idx := strings.Index(filepath.Base(rawNode), "s"); idx != -1 {
-				base := filepath.Base(rawNode)[:idx]
-				rawNode = filepath.Join(filepath.Dir(rawNode), base)
+			base := filepath.Base(rawNode)
+			if strings.HasPrefix(base, "rdisk") {
+				diskNumPart := base[len("rdisk"):]
+				if idx := strings.Index(diskNumPart, "s"); idx != -1 {
+					diskNumPart = diskNumPart[:idx]
+				}
+				base = "rdisk" + diskNumPart
 			}
-			return rawNode
+			return filepath.Join(filepath.Dir(rawNode), base)
 		}
 
 		// Case 3: Volume mount path (e.g. /Volumes/Ventoy, /Volumes/UNIBOOT)

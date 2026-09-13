@@ -10,49 +10,42 @@ import (
 	"path/filepath"
 )
 
-// VentoyThemeConfig defines the theme configuration block in ventoy.json.
+// VentoyThemeConfig defines the theme configuration block in ventoy.json matching UniBoot spec.
 type VentoyThemeConfig struct {
-	File        string `json:"file"`
-	Gfxmode     string `json:"gfxmode,omitempty"`
-	Display     string `json:"display,omitempty"`
-	Serial      string `json:"serial,omitempty"`
-	Font        string `json:"font,omitempty"`
-	MenuColor   string `json:"menu_color,omitempty"`
-	SelectColor string `json:"select_color,omitempty"`
+	File    string `json:"file"`
+	Gfxmode string `json:"gfxmode,omitempty"`
+	Display string `json:"display,omitempty"`
 }
 
-// VentoyControlConfig defines global control options in ventoy.json.
-type VentoyControlConfig struct {
-	VtoyDefaultSearchRoot string `json:"VTOY_DEFAULT_SEARCH_ROOT,omitempty"`
-	VtoyMenuTimeout       int    `json:"VTOY_MENU_TIMEOUT,omitempty"`
-	VtoyDefaultOption     int    `json:"VTOY_DEFAULT_OPTION,omitempty"`
-	VtoySecondaryBootMenu int    `json:"VTOY_SECONDARY_BOOT_MENU,omitempty"`
-	VtoyHotKey            int    `json:"VTOY_HOTKEY,omitempty"`
-}
-
-// VentoyGlobalConfig represents the root JSON schema for ventoy/ventoy.json.
+// VentoyGlobalConfig represents the root JSON schema for ventoy/ventoy.json matching UniBoot spec.
 type VentoyGlobalConfig struct {
-	Theme   *VentoyThemeConfig   `json:"theme,omitempty"`
-	Control *VentoyControlConfig `json:"control,omitempty"`
+	Theme   *VentoyThemeConfig       `json:"theme,omitempty"`
+	Control []map[string]interface{} `json:"control,omitempty"`
 }
 
 // WriteVentoyConfig generates the ventoy/ventoy.json and ventoy/ventoy_grub.cfg files
-// in the specified target volume mount directory.
+// in the specified target volume mount directory, referencing UniBoot specifications.
 func WriteVentoyConfig(mountDir string) error {
 	ventoyDir := filepath.Join(mountDir, "ventoy")
 	if err := os.MkdirAll(ventoyDir, 0755); err != nil {
 		return fmt.Errorf("failed to create ventoy directory: %w", err)
 	}
 
-	// 1. Build ventoy.json
+	// 1. Build ventoy.json matching official UniBoot specification
 	cfg := VentoyGlobalConfig{
 		Theme: &VentoyThemeConfig{
-			File:      "/ventoy/theme/theme.txt",
-			Gfxmode:   "1920x1080",
-			MenuColor: "light-gray/black",
+			File:    "/ventoy/themes/uniboot/theme.txt",
+			Gfxmode: "1280x800",
+			Display: "full",
 		},
-		Control: &VentoyControlConfig{
-			VtoyMenuTimeout: 10,
+		Control: []map[string]interface{}{
+			{"VTOY_DEFAULT_IMAGE": "/iso/UniBoot.iso"},
+			{"VTOY_MENU_LANGUAGE": "zh_CN"},
+			{"VTOY_FILE_FLT_EFI": "1"},
+			{"VTOY_FILT_DOT_UNDERSCORE_FILE": "1"},
+			{"VTOY_SORT_CASE_SENSITIVE": "0"},
+			{"VTOY_WIN11_BYPASS_CHECK": "1"},
+			{"VTOY_WIN11_BYPASS_NRO": "1"},
 		},
 	}
 
@@ -66,26 +59,68 @@ func WriteVentoyConfig(mountDir string) error {
 		return fmt.Errorf("failed to write ventoy.json: %w", err)
 	}
 
-	// 2. Build ventoy_grub.cfg for UniBoot iPXE Cloud Network Boot custom entry
-	grubCfgContent := `
-# UniBoot Custom Ventoy Menu Extensions
-# Integrated Mode A: Offline Ventoy + Cloud iPXE Network Boot
+	// 2. Build ventoy_grub.cfg matching official UniBoot specification (with i18n & multi-arch iPXE support)
+	grubCfgContent := `# UniBoot Ventoy Custom GRUB Menu Configuration
+# Press F6 in Ventoy main menu to access custom menu entries
 
-menuentry "⚡ UniBoot Cloud iPXE Network Boot (云端网络引导)" --class ipxe --class net {
-    echo 'Loading UniBoot iPXE Cloud Network Engine...'
-    if [ "$grub_platform" = "efi" ]; then
-        if [ "$grub_cpu" = "x86_64" ]; then
-            chainloader /EFI/BOOT/BOOTX64.EFI
-        elif [ "$grub_cpu" = "arm64" ]; then
-            chainloader /EFI/BOOT/BOOTAA64.EFI
-        elif [ "$grub_cpu" = "i386" ]; then
-            chainloader /EFI/BOOT/BOOTIA32.EFI
-        else
-            chainloader /EFI/BOOT/BOOTX64.EFI
+# --- i18n Localization Engine ---
+if [ -z "${lang}" ]; then
+    set lang=zh_CN
+fi
+
+if [ "${lang}" = "zh_CN" -o "${lang}" = "zh_TW" -o "${lang}" = "zh_HK" ]; then
+    set lbl_ipxe_uefi="⚡ UniBoot Network Installation (统一网络安装 - UEFI)"
+    set lbl_ipxe_bios="⚡ UniBoot Network Installation (统一网络安装 - BIOS/非EFI)"
+    set lbl_return="<-- 返回 Ventoy 主菜单"
+else
+    set lbl_ipxe_uefi="⚡ UniBoot Network Installation (UEFI Mode)"
+    set lbl_ipxe_bios="⚡ UniBoot Network Installation (Legacy/Non-EFI Mode)"
+    set lbl_return="<-- Return to Main Menu"
+fi
+
+if [ "$grub_platform" = "efi" ]; then
+    menuentry "$lbl_ipxe_uefi" --class netboot {
+        set ipxe_file="/ipxe/ipxe-${grub_cpu}.efi"
+        search --no-floppy --set=root --file $ipxe_file
+        if [ $? -ne 0 ]; then
+            set ipxe_file="/EFI/BOOT/BOOTX64.EFI"
+            if [ "$grub_cpu" = "arm64" ]; then
+                set ipxe_file="/EFI/BOOT/BOOTAA64.EFI"
+            elif [ "$grub_cpu" = "i386" ]; then
+                set ipxe_file="/EFI/BOOT/BOOTIA32.EFI"
+            fi
+            search --no-floppy --set=root --file $ipxe_file
         fi
-    else
-        linux16 /ipxe.lkrn
-    fi
+        chainloader $ipxe_file
+    }
+else
+    menuentry "$lbl_ipxe_bios" --class netboot {
+        set lkrn_file="/ipxe/ipxe.lkrn"
+        if [ "$grub_cpu" = "riscv64" ]; then
+            set lkrn_file="/ipxe/ipxe-riscv64.lkrn"
+        elif [ "$grub_cpu" = "riscv32" ]; then
+            set lkrn_file="/ipxe/ipxe-riscv32.lkrn"
+        fi
+        
+        search --no-floppy --set=root --file $lkrn_file
+        if [ $? -ne 0 ]; then
+            set lkrn_file="/ipxe.lkrn"
+            search --no-floppy --set=root --file $lkrn_file
+        fi
+        
+        # x86 legacy bios uses linux16, others use linux
+        if [ "$grub_cpu" = "i386" -o "$grub_cpu" = "x86_64" -o -z "$grub_cpu" ]; then
+            linux16 $lkrn_file
+            initrd /ipxe/uniboot.ipxe
+        else
+            linux $lkrn_file
+            initrd /ipxe/uniboot.ipxe
+        fi
+    }
+fi
+
+menuentry "$lbl_return" --class=vtoyret VTOY_RET {
+    true
 }
 `
 
