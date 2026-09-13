@@ -115,9 +115,6 @@
                 class="form-input" 
                 placeholder="默认为空（直接连接 GitHub 官方）。例如填入: https://your-proxy.com/"
               />
-              <p class="form-hint">
-                💡 提示：本软件遵循合规原则，<strong>不内置、不提供、亦不推荐</strong>任何第三方代理服务器域名。如您所在网络访问 GitHub 受限，请在此自行手动输入有权使用的反向代理前缀。
-              </p>
             </div>
 
             <div class="network-test-row">
@@ -134,7 +131,7 @@
           <div class="settings-section margin-top">
             <h4 class="section-title">
               <span>🔌 系统网络代理设置 (HTTP / HTTPS / SOCKS4 / SOCKS5)</span>
-              <span class="badge info">支持 Auth</span>
+              <span class="badge info">主机与端口</span>
             </h4>
 
             <div class="grid-form">
@@ -179,26 +176,6 @@
                     placeholder="例如: 1080 / 7890"
                     min="1"
                     max="65535"
-                  />
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label">认证用户名 (User - 可选):</label>
-                  <input 
-                    v-model="proxyUser" 
-                    type="text" 
-                    class="form-input" 
-                    placeholder="可选，若无需认证请留空"
-                  />
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label">认证密码 (Password - 可选):</label>
-                  <input 
-                    v-model="proxyPassword" 
-                    type="password" 
-                    class="form-input" 
-                    placeholder="可选，若无需认证请留空"
                   />
                 </div>
               </template>
@@ -444,8 +421,7 @@ async function testNetworkProxy() {
   setTimeout(() => {
     isTestingProxy.value = false;
     proxyTestSuccess.value = true;
-    const authText = proxyUser.value ? ` (已配置身份验证: ${proxyUser.value})` : '';
-    proxyTestResult.value = `✅ ${proxyProtocol.value.toUpperCase()} 代理连通正常 (${proxyHost.value}:${proxyPort.value || 1080}${authText})`;
+    proxyTestResult.value = `✅ ${proxyProtocol.value.toUpperCase()} 代理连通正常 (${proxyHost.value}:${proxyPort.value || 1080})`;
   }, 450);
 }
 
