@@ -19,6 +19,11 @@ type AppConfig struct {
 	Theme           string `json:"theme" toml:"theme"`                       // UI theme preference (dark/light)
 	GithubProxy     string `json:"githubProxy" toml:"githubProxy"`           // GitHub proxy server URL (e.g. https://proxy.example.com/)
 	FileSystem      string `json:"fileSystem" toml:"fileSystem"`             // Default file system for Mode A (exFAT/NTFS/FAT32/ext4)
+	ProxyProtocol   string `json:"proxyProtocol" toml:"proxyProtocol"`       // Network proxy protocol: direct, http, https, socks4, socks5
+	ProxyHost       string `json:"proxyHost" toml:"proxyHost"`               // Network proxy server host
+	ProxyPort       int    `json:"proxyPort" toml:"proxyPort"`               // Network proxy server port
+	ProxyUser       string `json:"proxyUser" toml:"proxyUser"`               // Network proxy authentication username
+	ProxyPassword   string `json:"proxyPassword" toml:"proxyPassword"`       // Network proxy authentication password
 }
 
 // GetDefaultConfig returns the default application configuration.
@@ -29,6 +34,11 @@ func GetDefaultConfig() *AppConfig {
 		Theme:           "dark",
 		GithubProxy:     "", // Default to empty (Direct connection, no hardcoded proxy preset)
 		FileSystem:      "exFAT",
+		ProxyProtocol:   "direct",
+		ProxyHost:       "",
+		ProxyPort:       0,
+		ProxyUser:       "",
+		ProxyPassword:   "",
 	}
 }
 

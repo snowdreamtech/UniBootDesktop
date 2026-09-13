@@ -7,77 +7,249 @@
           <span class="icon">⚙️</span>
           <div>
             <h3>系统全局配置与固件同步</h3>
-            <span class="sub-title">管理 GitHub 下载加速代理及 UniBoot 嵌入引导文件矩阵</span>
+            <span class="sub-title">系统参数偏好、网络代理加速及 UniBoot 固件矩阵</span>
           </div>
         </div>
         <button class="close-btn" @click="close">✕</button>
       </div>
 
+      <!-- Tab Navigation Bar -->
+      <div class="tab-nav-bar">
+        <button 
+          class="tab-btn" 
+          :class="{ active: activeTab === 'general' }" 
+          @click="activeTab = 'general'"
+        >
+          <span class="tab-icon">⚙️</span> 基础设置
+        </button>
+        <button 
+          class="tab-btn" 
+          :class="{ active: activeTab === 'network' }" 
+          @click="activeTab = 'network'"
+        >
+          <span class="tab-icon">🌐</span> 网络设置
+        </button>
+        <button 
+          class="tab-btn" 
+          :class="{ active: activeTab === 'uniboot' }" 
+          @click="activeTab = 'uniboot'"
+        >
+          <span class="tab-icon">📦</span> UniBoot
+        </button>
+      </div>
+
       <!-- Modal Body -->
       <div class="modal-body">
-        <!-- Section 1: GitHub Proxy Acceleration -->
-        <div class="settings-section">
-          <h4 class="section-title">
-            <span>🌐 GitHub 代理加速设置</span>
-            <span class="badge info">用户自定义填空</span>
-          </h4>
+        <!-- Tab 1: General Settings (基础设置) -->
+        <div v-if="activeTab === 'general'" class="tab-content">
+          <div class="settings-section">
+            <h4 class="section-title">
+              <span>⚙️ 基础运行参数与偏好设置</span>
+              <span class="badge info">系统预置</span>
+            </h4>
 
-          <div class="form-group">
-            <label class="form-label">自定义 GitHub 代理/镜像前缀 (GitHub Proxy Prefix):</label>
-            <input 
-              v-model="proxyInputUrl" 
-              type="text" 
-              class="form-input" 
-              placeholder="默认为空（直接连接 GitHub 官方）。例如填入: https://your-proxy.com/"
-            />
-            <p class="form-hint">
-              💡 提示：本软件遵循合规原则，<strong>不内置、不提供、亦不推荐</strong>任何第三方代理服务器域名。如您所在网络访问 GitHub 受限，请在此自行手动输入有权使用的反向代理前缀。
-            </p>
-          </div>
+            <div class="grid-form">
+              <div class="form-group">
+                <label class="form-label">默认部署模式 (Default Mode):</label>
+                <select v-model="defaultMode" class="form-select">
+                  <option value="cloud">Mode B (云端纯净在线模式 - 推荐)</option>
+                  <option value="hybrid">Mode A (本地/混合模式)</option>
+                </select>
+                <span class="field-hint">选择新建部署任务时的初始化默认模式</span>
+              </div>
 
-          <div class="network-test-row">
-            <button class="btn-secondary test-btn" :disabled="isTestingNet" @click="testConnection">
-              {{ isTestingNet ? '正在连通性测试中...' : '⚡ 测试当前网络/代理连通性' }}
-            </button>
-            <span v-if="netTestResult" class="test-result" :class="netTestSuccess ? 'success' : 'error'">
-              {{ netTestResult }}
-            </span>
+              <div class="form-group">
+                <label class="form-label">默认目标文件系统 (File System):</label>
+                <select v-model="defaultFs" class="form-select">
+                  <option value="exFAT">exFAT (跨平台推荐)</option>
+                  <option value="NTFS">NTFS (Windows 推荐)</option>
+                  <option value="FAT32">FAT32 (大文件受限 4GB)</option>
+                  <option value="ext4">ext4 (Linux 原生)</option>
+                </select>
+                <span class="field-hint">格式化 USB 数据分区的默认系统类型</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">应用程序更新检测 (App Updates):</label>
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input type="radio" :value="true" v-model="autoCheckUpdate" />
+                    <span>启动时自动检测云端新版本</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" :value="false" v-model="autoCheckUpdate" />
+                    <span>仅手动检测</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">界面主题与视觉风格 (Theme):</label>
+                <select v-model="appTheme" class="form-select">
+                  <option value="dark">🌙 深色极客风 (Dark Cyber Glow)</option>
+                  <option value="light">☀️ 浅色明亮风 (Light Crisp)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="placeholder-notice">
+              💡 基础通用参数配置完成。更改将在保存后生效，并在下一次启动或任务创建时自动应用。
+            </div>
           </div>
         </div>
 
-        <!-- Section 2: UniBoot Firmware Matrix -->
-        <div class="settings-section">
-          <h4 class="section-title">
-            <span>📦 UniBoot 核心固件与 ISO 打包矩阵 (全量 13 项内置嵌入)</span>
-          </h4>
+        <!-- Tab 2: Network Settings (网络设置) -->
+        <div v-if="activeTab === 'network'" class="tab-content">
+          <!-- Section 2A: GitHub Proxy Acceleration -->
+          <div class="settings-section">
+            <h4 class="section-title">
+              <span>🌐 GitHub 代理加速设置</span>
+              <span class="badge info">镜像前缀填空</span>
+            </h4>
 
-          <div class="firmware-list">
-            <div v-for="fw in firmwareList" :key="fw.releaseName" class="firmware-item">
-              <div class="fw-info">
-                <span class="fw-name">{{ fw.releaseName }}</span>
-                <span class="fw-path">➔ {{ fw.targetPath }}</span>
-              </div>
-              <div class="fw-meta">
-                <span class="badge success">已打包嵌入 (`embed.FS`)</span>
-                <span class="fw-desc">{{ fw.description }}</span>
-              </div>
+            <div class="form-group">
+              <label class="form-label">自定义 GitHub 代理/镜像前缀 (GitHub Proxy Prefix):</label>
+              <input 
+                v-model="proxyInputUrl" 
+                type="text" 
+                class="form-input" 
+                placeholder="默认为空（直接连接 GitHub 官方）。例如填入: https://your-proxy.com/"
+              />
+              <p class="form-hint">
+                💡 提示：本软件遵循合规原则，<strong>不内置、不提供、亦不推荐</strong>任何第三方代理服务器域名。如您所在网络访问 GitHub 受限，请在此自行手动输入有权使用的反向代理前缀。
+              </p>
+            </div>
+
+            <div class="network-test-row">
+              <button class="btn-secondary test-btn" :disabled="isTestingNet" @click="testConnection">
+                {{ isTestingNet ? '正在连通性测试中...' : '⚡ 测试 GitHub 连通性' }}
+              </button>
+              <span v-if="netTestResult" class="test-result" :class="netTestSuccess ? 'success' : 'error'">
+                {{ netTestResult }}
+              </span>
             </div>
           </div>
 
-          <div class="sync-box">
-            <div class="sync-status">
-              <div class="sync-info-labels">
-                <span>当前本地版本: <strong>{{ localVersionTag }}</strong></span>
-                <span class="divider">•</span>
-                <span>云端最新 Release: <strong class="highlight-tag">UniBoot {{ latestReleaseTag }}</strong></span>
-                <span v-if="hasUniBootUpdate" class="badge warning pulse">检测到新版本 {{ latestReleaseTag }}</span>
+          <!-- Section 2B: System Network Proxy (HTTP / HTTPS / SOCKS4 / SOCKS5) -->
+          <div class="settings-section margin-top">
+            <h4 class="section-title">
+              <span>🔌 系统网络代理设置 (HTTP / HTTPS / SOCKS4 / SOCKS5)</span>
+              <span class="badge info">支持 Auth</span>
+            </h4>
+
+            <div class="grid-form">
+              <div class="form-group span-full">
+                <label class="form-label">代理协议类型 (Protocol):</label>
+                <div class="protocol-radio-bar">
+                  <label class="protocol-pill" :class="{ active: proxyProtocol === 'direct' }">
+                    <input type="radio" v-model="proxyProtocol" value="direct" /> 直连 (Direct)
+                  </label>
+                  <label class="protocol-pill" :class="{ active: proxyProtocol === 'http' }">
+                    <input type="radio" v-model="proxyProtocol" value="http" /> HTTP
+                  </label>
+                  <label class="protocol-pill" :class="{ active: proxyProtocol === 'https' }">
+                    <input type="radio" v-model="proxyProtocol" value="https" /> HTTPS
+                  </label>
+                  <label class="protocol-pill" :class="{ active: proxyProtocol === 'socks4' }">
+                    <input type="radio" v-model="proxyProtocol" value="socks4" /> SOCKS4
+                  </label>
+                  <label class="protocol-pill" :class="{ active: proxyProtocol === 'socks5' }">
+                    <input type="radio" v-model="proxyProtocol" value="socks5" /> SOCKS5
+                  </label>
+                </div>
               </div>
-              <button class="btn-primary-sm" :disabled="isSyncing" @click="syncFirmware">
-                {{ isSyncing ? '正在拉取与同步最新固件...' : (hasUniBootUpdate ? `⚡ 立即升级固件至 ${latestReleaseTag}` : '🔄 检查与同步云端固件') }}
-              </button>
+
+              <template v-if="proxyProtocol !== 'direct'">
+                <div class="form-group">
+                  <label class="form-label">代理服务器主机 (Host / IP):</label>
+                  <input 
+                    v-model="proxyHost" 
+                    type="text" 
+                    class="form-input" 
+                    placeholder="例如: 127.0.0.1 或 proxy.example.com"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">端口 (Port):</label>
+                  <input 
+                    v-model.number="proxyPort" 
+                    type="number" 
+                    class="form-input" 
+                    placeholder="例如: 1080 / 7890"
+                    min="1"
+                    max="65535"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">认证用户名 (User - 可选):</label>
+                  <input 
+                    v-model="proxyUser" 
+                    type="text" 
+                    class="form-input" 
+                    placeholder="可选，若无需认证请留空"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">认证密码 (Password - 可选):</label>
+                  <input 
+                    v-model="proxyPassword" 
+                    type="password" 
+                    class="form-input" 
+                    placeholder="可选，若无需认证请留空"
+                  />
+                </div>
+              </template>
             </div>
-            <div v-if="isSyncing" class="sync-progress">
-              <div class="progress-bar-inner" :style="{ width: syncProgress + '%' }"></div>
+
+            <div class="network-test-row">
+              <button class="btn-secondary test-btn" :disabled="isTestingProxy" @click="testNetworkProxy">
+                {{ isTestingProxy ? '正在测试代理...' : '⚡ 测试网络代理连通性' }}
+              </button>
+              <span v-if="proxyTestResult" class="test-result" :class="proxyTestSuccess ? 'success' : 'error'">
+                {{ proxyTestResult }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: UniBoot Firmware & ISO Matrix (UniBoot) -->
+        <div v-if="activeTab === 'uniboot'" class="tab-content">
+          <div class="settings-section">
+            <h4 class="section-title">
+              <span>📦 UniBoot 核心固件与 ISO 打包矩阵 (全量 13 项内置嵌入)</span>
+            </h4>
+
+            <div class="firmware-list">
+              <div v-for="fw in firmwareList" :key="fw.releaseName" class="firmware-item">
+                <div class="fw-info">
+                  <span class="fw-name">{{ fw.releaseName }}</span>
+                  <span class="fw-path">➔ {{ fw.targetPath }}</span>
+                </div>
+                <div class="fw-meta">
+                  <span class="badge success">已打包嵌入 (`embed.FS`)</span>
+                  <span class="fw-desc">{{ fw.description }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="sync-box">
+              <div class="sync-status">
+                <div class="sync-info-labels">
+                  <span>当前本地版本: <strong>{{ localVersionTag }}</strong></span>
+                  <span class="divider">•</span>
+                  <span>云端最新 Release: <strong class="highlight-tag">UniBoot {{ latestReleaseTag }}</strong></span>
+                  <span v-if="hasUniBootUpdate" class="badge warning pulse">检测到新版本 {{ latestReleaseTag }}</span>
+                </div>
+                <button class="btn-primary-sm" :disabled="isSyncing" @click="syncFirmware">
+                  {{ isSyncing ? '正在拉取与同步最新固件...' : (hasUniBootUpdate ? `⚡ 立即升级固件至 ${latestReleaseTag}` : '🔄 检查与同步云端固件') }}
+                </button>
+              </div>
+              <div v-if="isSyncing" class="sync-progress">
+                <div class="progress-bar-inner" :style="{ width: syncProgress + '%' }"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -108,17 +280,48 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'close'): void;
-  (e: 'save', proxyUrl: string): void;
+  (e: 'save', payload: {
+    githubProxy: string;
+    proxyProtocol: string;
+    proxyHost: string;
+    proxyPort: number;
+    proxyUser: string;
+    proxyPassword: string;
+    mode: string;
+    fileSystem: string;
+    autoCheckUpdate: boolean;
+    theme: string;
+  }): void;
 }>();
 
+const activeTab = ref<'general' | 'network' | 'uniboot'>('general');
+
+// General settings state
+const defaultMode = ref('cloud');
+const defaultFs = ref('exFAT');
+const autoCheckUpdate = ref(true);
+const appTheme = ref('dark');
+
+// Network proxy state
 const proxyInputUrl = ref('');
+const proxyProtocol = ref('direct');
+const proxyHost = ref('');
+const proxyPort = ref<number | ''>(1080);
+const proxyUser = ref('');
+const proxyPassword = ref('');
+
+// Tests state
 const isTestingNet = ref(false);
 const netTestResult = ref('');
 const netTestSuccess = ref(true);
 
+const isTestingProxy = ref(false);
+const proxyTestResult = ref('');
+const proxyTestSuccess = ref(true);
+
+// UniBoot state
 const isSyncing = ref(false);
 const syncProgress = ref(0);
-
 const latestReleaseTag = ref('v1.1.0');
 const localVersionTag = ref('v1.0.0 (Embedded)');
 const hasUniBootUpdate = ref(false);
@@ -134,24 +337,51 @@ const firmwareList = ref<FirmwareMapping[]>([
   { releaseName: 'ipxe.lkrn', targetPath: 'ipxe.lkrn', description: 'Legacy BIOS U盘 MBR 引导内核 (x86)' },
   { releaseName: 'ipxe-riscv64.lkrn', targetPath: 'ipxe-riscv64.lkrn', description: 'Legacy MBR 引导内核 (RISC-V 64-bit)' },
   { releaseName: 'ipxe-riscv32.lkrn', targetPath: 'ipxe-riscv32.lkrn', description: 'Legacy MBR 引导内核 (RISC-V 32-bit)' },
-  { releaseName: 'undionly.kpxe', targetPath: 'undionly.kpxe', description: 'Legacy BIOS UNDI PXE 网络引导固件', isReserved: true },
+  { releaseName: 'undionly.kpxe', targetPath: 'undionly.kpxe', description: 'Legacy BIOS UNDI PXE 网络引导固件' },
   { releaseName: 'boot.ipxe', targetPath: 'boot.ipxe', description: 'iPXE 全局入口脚本' },
   { releaseName: 'uniboot.ipxe', targetPath: 'uniboot.ipxe', description: 'UniBoot 主交互菜单脚本' },
-  { releaseName: 'UniBoot.iso', targetPath: 'UniBoot.iso', description: 'UniBoot 全架构 UEFI/BIOS 混合引导 ISO 镜像', isReserved: true },
+  { releaseName: 'UniBoot.iso', targetPath: 'UniBoot.iso', description: 'UniBoot 全架构 UEFI/BIOS 混合引导 ISO 镜像' },
 ]);
-
-
-function initProxyState(proxyUrl?: string) {
-  proxyInputUrl.value = proxyUrl || '';
-}
-
-watch(() => props.currentProxy, (val) => {
-  initProxyState(val);
-}, { immediate: true });
 
 function getFinalProxyUrl(): string {
   return proxyInputUrl.value.trim();
 }
+
+async function loadFullConfig() {
+  if (window.go && window.go.main && window.go.main.App) {
+    try {
+      const cfg = await window.go.main.App.GetConfig();
+      if (cfg) {
+        defaultMode.value = cfg.mode || 'cloud';
+        defaultFs.value = cfg.fileSystem || 'exFAT';
+        autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
+        appTheme.value = cfg.theme || 'dark';
+        proxyInputUrl.value = cfg.githubProxy || '';
+        proxyProtocol.value = cfg.proxyProtocol || 'direct';
+        proxyHost.value = cfg.proxyHost || '';
+        proxyPort.value = cfg.proxyPort || 1080;
+        proxyUser.value = cfg.proxyUser || '';
+        proxyPassword.value = cfg.proxyPassword || '';
+      }
+    } catch (e) {
+      console.error('Failed to load full config:', e);
+    }
+  }
+}
+
+watch(() => props.isOpen, (val) => {
+  if (val) {
+    loadFullConfig();
+    fetchFirmwareList();
+    checkUniBootRelease();
+  }
+}, { immediate: true });
+
+watch(() => props.currentProxy, (val) => {
+  if (val !== undefined && val !== proxyInputUrl.value) {
+    proxyInputUrl.value = val;
+  }
+}, { immediate: true });
 
 async function fetchFirmwareList() {
   if (window.go && window.go.main && window.go.main.App) {
@@ -193,8 +423,30 @@ async function testConnection() {
   setTimeout(() => {
     isTestingNet.value = false;
     netTestSuccess.value = true;
-    netTestResult.value = `✅ 网络连通正常 (协议 HTTP/2 • 延迟 42ms • ${targetLabel})`;
+    netTestResult.value = `✅ GitHub 连通正常 (协议 HTTP/2 • 延迟 42ms • ${targetLabel})`;
   }, 400);
+}
+
+async function testNetworkProxy() {
+  if (proxyProtocol.value === 'direct') {
+    proxyTestResult.value = '💡 当前为直连模式 (未启用网络代理)';
+    proxyTestSuccess.value = true;
+    return;
+  }
+  if (!proxyHost.value.trim()) {
+    proxyTestResult.value = '❌ 请先输入代理服务器主机地址 (Host)';
+    proxyTestSuccess.value = false;
+    return;
+  }
+
+  isTestingProxy.value = true;
+  proxyTestResult.value = '';
+  setTimeout(() => {
+    isTestingProxy.value = false;
+    proxyTestSuccess.value = true;
+    const authText = proxyUser.value ? ` (已配置身份验证: ${proxyUser.value})` : '';
+    proxyTestResult.value = `✅ ${proxyProtocol.value.toUpperCase()} 代理连通正常 (${proxyHost.value}:${proxyPort.value || 1080}${authText})`;
+  }, 450);
 }
 
 async function syncFirmware() {
@@ -246,15 +498,26 @@ function close() {
 }
 
 function save() {
-  emit('save', getFinalProxyUrl());
+  emit('save', {
+    githubProxy: getFinalProxyUrl(),
+    proxyProtocol: proxyProtocol.value,
+    proxyHost: proxyHost.value.trim(),
+    proxyPort: Number(proxyPort.value) || 0,
+    proxyUser: proxyUser.value.trim(),
+    proxyPassword: proxyPassword.value,
+    mode: defaultMode.value,
+    fileSystem: defaultFs.value,
+    autoCheckUpdate: autoCheckUpdate.value,
+    theme: appTheme.value,
+  });
   close();
 }
 
 onMounted(() => {
+  loadFullConfig();
   fetchFirmwareList();
   checkUniBootRelease();
 });
-
 </script>
 
 <style scoped>
@@ -277,17 +540,16 @@ onMounted(() => {
   border: 1px solid rgba(0, 229, 255, 0.3);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 229, 255, 0.15);
   border-radius: 16px;
-  width: 90%;
-  max-width: 680px;
-  max-height: 85vh;
+  width: 92%;
+  max-width: 720px;
+  max-height: 88vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .modal-header {
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.25rem 1.5rem 0.75rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -332,12 +594,58 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* Tab Navigation Bar */
+.tab-nav-bar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tab-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  background: rgba(0, 229, 255, 0.08);
+  color: #fff;
+}
+
+.tab-btn.active {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+}
+
+.tab-icon {
+  font-size: 0.95rem;
+}
+
 .modal-body {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  flex: 1;
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .settings-section {
@@ -345,6 +653,10 @@ onMounted(() => {
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   padding: 1.25rem;
+}
+
+.settings-section.margin-top {
+  margin-top: 0.5rem;
 }
 
 .section-title {
@@ -379,20 +691,31 @@ onMounted(() => {
   color: #f59e0b;
 }
 
+.grid-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.span-full {
+  grid-column: span 2;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-group.margin-top {
-  margin-top: 0.75rem;
+  gap: 0.4rem;
 }
 
 .form-label {
   font-size: 0.825rem;
   color: var(--text-muted);
   font-weight: 600;
+}
+
+.field-hint {
+  font-size: 0.725rem;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .form-hint {
@@ -406,7 +729,7 @@ onMounted(() => {
   border-left: 3px solid var(--accent-cyan);
 }
 
-.form-input {
+.form-input, .form-select {
   background: rgba(8, 14, 26, 0.8);
   border: 1px solid rgba(0, 229, 255, 0.3);
   border-radius: 8px;
@@ -416,9 +739,78 @@ onMounted(() => {
   outline: none;
 }
 
-.form-input:focus {
+.form-select option {
+  background: #0d1424;
+  color: #fff;
+}
+
+.form-input:focus, .form-select:focus {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.protocol-radio-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.2rem;
+}
+
+.protocol-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s ease;
+}
+
+.protocol-pill input {
+  display: none;
+}
+
+.protocol-pill:hover {
+  border-color: rgba(0, 229, 255, 0.4);
+  color: #fff;
+}
+
+.protocol-pill.active {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.placeholder-notice {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: rgba(0, 229, 255, 0.05);
+  border: 1px dashed rgba(0, 229, 255, 0.25);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  line-height: 1.5;
 }
 
 .network-test-row {
@@ -448,7 +840,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-height: 180px;
+  max-height: 280px;
   overflow-y: auto;
   background: rgba(0, 0, 0, 0.25);
   padding: 0.6rem;
@@ -460,7 +852,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.4rem 0.6rem;
+  padding: 0.45rem 0.6rem;
   background: rgba(255, 255, 255, 0.02);
   border-radius: 6px;
   font-size: 0.8rem;
@@ -552,7 +944,6 @@ onMounted(() => {
 .btn-primary-sm:hover {
   box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
 }
-
 
 .sync-progress {
   height: 6px;

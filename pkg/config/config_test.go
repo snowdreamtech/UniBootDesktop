@@ -27,6 +27,11 @@ func TestConfigSaveAndLoad(t *testing.T) {
 	cfg := GetDefaultConfig()
 	cfg.GithubProxy = "https://proxy.example.com/"
 	cfg.FileSystem = "NTFS"
+	cfg.ProxyProtocol = "socks5"
+	cfg.ProxyHost = "127.0.0.1"
+	cfg.ProxyPort = 1080
+	cfg.ProxyUser = "testuser"
+	cfg.ProxyPassword = "testpassword"
 
 	if err := cfg.Save(); err != nil {
 		t.Fatalf("Save config failed: %v", err)
@@ -42,5 +47,8 @@ func TestConfigSaveAndLoad(t *testing.T) {
 	}
 	if loaded.FileSystem != "NTFS" {
 		t.Errorf("expected FileSystem 'NTFS', got %s", loaded.FileSystem)
+	}
+	if loaded.ProxyProtocol != "socks5" || loaded.ProxyHost != "127.0.0.1" || loaded.ProxyPort != 1080 || loaded.ProxyUser != "testuser" || loaded.ProxyPassword != "testpassword" {
+		t.Errorf("proxy config mismatch: %+v", loaded)
 	}
 }

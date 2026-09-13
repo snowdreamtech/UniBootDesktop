@@ -6,6 +6,11 @@ export namespace config {
 	    theme: string;
 	    githubProxy: string;
 	    fileSystem: string;
+	    proxyProtocol: string;
+	    proxyHost: string;
+	    proxyPort: number;
+	    proxyUser: string;
+	    proxyPassword: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new AppConfig(source);
@@ -18,6 +23,11 @@ export namespace config {
 	        this.theme = source["theme"];
 	        this.githubProxy = source["githubProxy"];
 	        this.fileSystem = source["fileSystem"];
+	        this.proxyProtocol = source["proxyProtocol"];
+	        this.proxyHost = source["proxyHost"];
+	        this.proxyPort = source["proxyPort"];
+	        this.proxyUser = source["proxyUser"];
+	        this.proxyPassword = source["proxyPassword"];
 	    }
 	}
 

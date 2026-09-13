@@ -293,17 +293,40 @@ async function loadConfig() {
   }
 }
 
-async function onSaveSettings(proxyUrl: string) {
-  currentGithubProxy.value = proxyUrl;
+async function onSaveSettings(payload: any) {
+  let proxyUrl = '';
+  if (typeof payload === 'string') {
+    proxyUrl = payload;
+    currentGithubProxy.value = payload;
+  } else if (payload && typeof payload === 'object') {
+    proxyUrl = payload.githubProxy || '';
+    currentGithubProxy.value = proxyUrl;
+    if (payload.fileSystem) selectedFsType.value = payload.fileSystem as any;
+    if (payload.mode) activeMode.value = payload.mode as any;
+  }
+
   if (window.go && window.go.main && window.go.main.App) {
     try {
-      await window.go.main.App.SaveConfig({
+      const configObj = typeof payload === 'object' && payload !== null ? {
+        mode: payload.mode || activeMode.value,
+        autoCheckUpdate: payload.autoCheckUpdate !== false,
+        theme: payload.theme || 'dark',
+        githubProxy: proxyUrl,
+        fileSystem: payload.fileSystem || selectedFsType.value,
+        proxyProtocol: payload.proxyProtocol || 'direct',
+        proxyHost: payload.proxyHost || '',
+        proxyPort: Number(payload.proxyPort) || 0,
+        proxyUser: payload.proxyUser || '',
+        proxyPassword: payload.proxyPassword || '',
+      } : {
         mode: activeMode.value,
         autoCheckUpdate: true,
         theme: 'dark',
         githubProxy: proxyUrl,
         fileSystem: selectedFsType.value,
-      });
+      };
+
+      await window.go.main.App.SaveConfig(configObj as any);
     } catch (e) {
       console.error('Failed to save config:', e);
     }
