@@ -22,6 +22,11 @@ type DeployResult struct {
 // DeployModeA executes Mode A: Hybrid Pro Mode (Ventoy + UniBoot theme + iPXE network extension) with customizable file system.
 // Performs non-destructive in-place upgrade on existing Ventoy drives, or fresh partition initialization on blank drives.
 func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
+	return DeployModeAWithVentoyPath(ctx, targetDisk, fsType, "")
+}
+
+// DeployModeAWithVentoyPath executes Mode A with an optional user-configured Ventoy CLI executable path.
+func DeployModeAWithVentoyPath(ctx context.Context, targetDisk string, fsType string, ventoyPath string) (*DeployResult, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return nil, fmt.Errorf("disk validation failed: %w", err)
 	}
@@ -49,7 +54,13 @@ func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*Deploy
 		}
 	} else {
 		// Scenario B: Blank / Ordinary USB Drive -> Fresh initialization & formatting
-		mountPoint, err = FormatDiskModeA(ctx, targetDisk, fsType)
+		// If valid Ventoy CLI path is provided, use official Ventoy CLI for formatting
+		if ventoyPath != "" && ValidateVentoyCli(ventoyPath).Valid {
+			mountPoint, err = FormatDiskWithVentoyCli(ctx, ventoyPath, targetDisk, fsType)
+		}
+		if mountPoint == "" || err != nil {
+			mountPoint, err = FormatDiskModeA(ctx, targetDisk, fsType)
+		}
 	}
 	if err != nil {
 		return nil, fmt.Errorf("preparing disk for Mode A failed: %w", err)

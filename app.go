@@ -38,7 +38,17 @@ func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
 
 // DeployModeA triggers Mode A (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system.
 func (a *App) DeployModeA(targetDisk string, fsType string) (*installer.DeployResult, error) {
-	return installer.DeployModeA(a.ctx, targetDisk, fsType)
+	cfg, _ := config.Load()
+	ventoyPath := ""
+	if cfg != nil {
+		ventoyPath = cfg.VentoyPath
+	}
+	return installer.DeployModeAWithVentoyPath(a.ctx, targetDisk, fsType, ventoyPath)
+}
+
+// ValidateVentoyCli verifies the user-specified Ventoy CLI path.
+func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidationResult {
+	return installer.ValidateVentoyCli(ventoyPath)
 }
 
 // DeployModeABatch triggers Mode A deployment for multiple target USB drives with customizable file system.

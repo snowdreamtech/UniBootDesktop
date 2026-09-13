@@ -11,6 +11,7 @@ export namespace config {
 	    proxyPort: number;
 	    proxyUser: string;
 	    proxyPassword: string;
+	    ventoyPath: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new AppConfig(source);
@@ -28,6 +29,7 @@ export namespace config {
 	        this.proxyPort = source["proxyPort"];
 	        this.proxyUser = source["proxyUser"];
 	        this.proxyPassword = source["proxyPassword"];
+	        this.ventoyPath = source["ventoyPath"];
 	    }
 	}
 
@@ -199,6 +201,24 @@ export namespace installer {
 	        this.mode = source["mode"];
 	        this.target = source["target"];
 	        this.message = source["message"];
+	    }
+	}
+	export class VentoyCliValidationResult {
+	    valid: boolean;
+	    version: string;
+	    message: string;
+	    executablePath: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new VentoyCliValidationResult(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.valid = source["valid"];
+	        this.version = source["version"];
+	        this.message = source["message"];
+	        this.executablePath = source["executablePath"];
 	    }
 	}
 

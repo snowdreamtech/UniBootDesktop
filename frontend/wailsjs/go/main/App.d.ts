@@ -32,3 +32,5 @@ export function LaunchQEMU(arg1:string):Promise<void>;
 export function SaveConfig(arg1:config.AppConfig):Promise<void>;
 
 export function SyncUniBootFirmware():Promise<firmware.UniBootReleaseInfo>;
+
+export function ValidateVentoyCli(arg1:string):Promise<installer.VentoyCliValidationResult>;

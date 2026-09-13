@@ -53,3 +53,7 @@ export function SaveConfig(arg1) {
 export function SyncUniBootFirmware() {
   return window['go']['main']['App']['SyncUniBootFirmware']();
 }
+
+export function ValidateVentoyCli(arg1) {
+  return window['go']['main']['App']['ValidateVentoyCli'](arg1);
+}

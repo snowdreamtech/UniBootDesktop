@@ -41,6 +41,13 @@
         >
           <span class="tab-icon">📦</span> UniBoot
         </button>
+        <button 
+          class="tab-btn" 
+          :class="{ active: activeTab === 'ventoy' }" 
+          @click="activeTab = 'ventoy'"
+        >
+          <span class="tab-icon">🚀</span> Ventoy
+        </button>
       </div>
 
       <!-- Modal Body -->
@@ -251,6 +258,49 @@
             </div>
           </div>
         </div>
+
+        <!-- Tab 4: Ventoy Official Directory Settings (Ventoy 官方工具包) -->
+        <div v-if="activeTab === 'ventoy'" class="tab-content">
+          <div class="settings-section">
+            <h4 class="section-title">
+              <span>🚀 Ventoy 官方工具包目录 (Ventoy Official)</span>
+              <span class="badge info">纯净盘初始化专用</span>
+            </h4>
+
+            <div class="form-group span-full">
+              <label class="form-label">Ventoy 目录路径 (Ventoy Folder / Directory):</label>
+              <div class="input-with-btn">
+                <input 
+                  v-model="ventoyPath" 
+                  type="text" 
+                  class="form-input" 
+                  placeholder="例如选择目录: /opt/ventoy 或 C:\ventoy-1.0.99\"
+                />
+                <button class="btn-secondary test-btn" :disabled="isValidatingVentoy" @click="checkVentoyCli">
+                  {{ isValidatingVentoy ? '正在检测...' : '⚡ 检测 Ventoy 目录' }}
+                </button>
+              </div>
+              <span class="field-hint">只需指定 Ventoy 官方向解压目录，系统将自动识别当前操作系统对应的命令。对于全新的纯净 U 盘，系统将自动调用 Ventoy 命令完成格式化与双分区制作；对于已制作好的 Ventoy 盘则自动跳过。</span>
+            </div>
+
+            <!-- Live Validation Result Card -->
+            <div v-if="ventoyValidation" class="ventoy-status-card" :class="ventoyValidation.valid ? 'success-card' : 'error-card'">
+              <div class="status-header">
+                <span class="status-icon">{{ ventoyValidation.valid ? '✅' : '❌' }}</span>
+                <span class="status-title">{{ ventoyValidation.valid ? 'Ventoy 目录检测成功' : 'Ventoy 目录检测未通过' }}</span>
+                <span v-if="ventoyValidation.valid && ventoyValidation.version" class="version-badge-green">
+                  {{ ventoyValidation.version }}
+                </span>
+              </div>
+              <div class="status-message">
+                {{ ventoyValidation.message }}
+              </div>
+              <div v-if="ventoyValidation.executablePath" class="exec-path">
+                自动匹配可执行命令: <code>{{ ventoyValidation.executablePath }}</code>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -283,10 +333,11 @@ const emit = defineEmits<{
     fileSystem: string;
     autoCheckUpdate: boolean;
     theme: string;
+    ventoyPath: string;
   }): void;
 }>();
 
-const activeTab = ref<'general' | 'network' | 'uniboot'>('general');
+const activeTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
 
 // General settings state
 const defaultMode = ref('cloud');
@@ -301,6 +352,11 @@ const proxyHost = ref('');
 const proxyPort = ref<number | ''>(1080);
 const proxyUser = ref('');
 const proxyPassword = ref('');
+
+// Ventoy CLI state
+const ventoyPath = ref('');
+const isValidatingVentoy = ref(false);
+const ventoyValidation = ref<{ valid: boolean; version: string; message: string; executablePath: string } | null>(null);
 
 // Auto save state
 let isInitializing = true;
@@ -361,6 +417,7 @@ function triggerAutoSave() {
       fileSystem: defaultFs.value,
       autoCheckUpdate: autoCheckUpdate.value,
       theme: appTheme.value,
+      ventoyPath: ventoyPath.value.trim(),
     };
     emit('save', payload);
     if (window.go && window.go.main && window.go.main.App) {
@@ -386,13 +443,42 @@ watch(
     proxyHost,
     proxyPort,
     proxyUser,
-    proxyPassword
+    proxyPassword,
+    ventoyPath,
   ],
   () => {
     triggerAutoSave();
   },
   { deep: true }
 );
+
+async function checkVentoyCli() {
+  if (!ventoyPath.value.trim()) {
+    ventoyValidation.value = {
+      valid: false,
+      version: '',
+      message: '未配置 Ventoy CLI 路径',
+      executablePath: ''
+    };
+    return;
+  }
+  isValidatingVentoy.value = true;
+  try {
+    if (window.go && window.go.main && window.go.main.App && window.go.main.App.ValidateVentoyCli) {
+      const res = await window.go.main.App.ValidateVentoyCli(ventoyPath.value.trim());
+      ventoyValidation.value = res;
+    }
+  } catch (e: any) {
+    ventoyValidation.value = {
+      valid: false,
+      version: '',
+      message: `❌ 校验发生异常: ${e?.message || String(e)}`,
+      executablePath: ''
+    };
+  } finally {
+    isValidatingVentoy.value = false;
+  }
+}
 
 async function loadFullConfig() {
   isInitializing = true;
@@ -410,6 +496,10 @@ async function loadFullConfig() {
         proxyPort.value = cfg.proxyPort || 1080;
         proxyUser.value = cfg.proxyUser || '';
         proxyPassword.value = cfg.proxyPassword || '';
+        ventoyPath.value = cfg.ventoyPath || '';
+        if (ventoyPath.value) {
+          checkVentoyCli();
+        }
       }
     } catch (e) {
       console.error('Failed to load full config:', e);
@@ -998,7 +1088,78 @@ onMounted(() => {
 
 .progress-bar-inner {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-cyan), #9d4edd);
+  background: var(--accent-cyan);
   transition: width 0.2s ease;
+}
+
+.input-with-btn {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.input-with-btn .form-input {
+  flex: 1;
+}
+
+.ventoy-status-card {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.ventoy-status-card.success-card {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.ventoy-status-card.error-card {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.status-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.version-badge-green {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid #10b981;
+  padding: 0.15rem 0.55rem;
+  border-radius: 20px;
+  font-size: 0.775rem;
+  font-weight: 800;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.status-message {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+}
+
+.exec-path {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+}
+
+.exec-path code {
+  color: var(--accent-cyan);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
 }
 </style>

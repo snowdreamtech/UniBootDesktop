@@ -24,6 +24,7 @@ type AppConfig struct {
 	ProxyPort       int    `json:"proxyPort" toml:"proxyPort"`               // Network proxy server port
 	ProxyUser       string `json:"proxyUser" toml:"proxyUser"`               // Network proxy authentication username
 	ProxyPassword   string `json:"proxyPassword" toml:"proxyPassword"`       // Network proxy authentication password
+	VentoyPath      string `json:"ventoyPath" toml:"ventoyPath"`             // Path to official Ventoy CLI directory / executable
 }
 
 // GetDefaultConfig returns the default application configuration.
@@ -39,6 +40,7 @@ func GetDefaultConfig() *AppConfig {
 		ProxyPort:       0,
 		ProxyUser:       "",
 		ProxyPassword:   "",
+		VentoyPath:      "",
 	}
 }
 
