@@ -85,6 +85,25 @@ func Detect() *QEMUStatus {
 	}
 }
 
+// DetectOVMF searches common system paths for edk2 / OVMF UEFI firmware image.
+func DetectOVMF() string {
+	searchPaths := []string{
+		"/opt/local/share/qemu/edk2-x86_64-code.fd",
+		"/opt/homebrew/share/qemu/edk2-x86_64-code.fd",
+		"/usr/share/OVMF/OVMF_CODE.fd",
+		"/usr/share/ovmf/OVMF.fd",
+		"/usr/share/qemu/ovmf-x86_64-code.bin",
+		"/usr/share/edk2/ovmf/OVMF_CODE.fd",
+		"/usr/share/edk2-ovmf/x64/OVMF_CODE.fd",
+	}
+	for _, p := range searchPaths {
+		if info, err := os.Stat(p); err == nil && !info.IsDir() {
+			return p
+		}
+	}
+	return ""
+}
+
 // extractPlistString parses a string value for a given key from a plist string.
 func extractPlistString(plistStr string, key string) string {
 	keyPattern := fmt.Sprintf("<key>%s</key>", key)
@@ -190,16 +209,32 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 			diskNode = "disk" + diskNode
 		}
 
-		// 1. Unmount target disk volumes to release macOS disk arbitration lock
-		unmountCmd := exec.Command("diskutil", "unmountDisk", diskNode)
+		// 1. Force unmount target disk volumes to release macOS disk arbitration lock (same as test-uefi.sh)
+		unmountCmd := exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode))
 		_ = unmountCmd.Run()
+		time.Sleep(500 * time.Millisecond)
 	}
 
-	// Build safe read-only preview command using snapshot mode
+	ovmfFw := DetectOVMF()
+
+	// Build optimized parameters matching test-uefi.sh
 	args := []string{
-		"-m", "1024",
-		"-drive", fmt.Sprintf("file=%s,format=raw,snapshot=on", targetPath),
+		"-machine", "q35",
+		"-m", "2048",
+		"-device", "virtio-vga,xres=1280,yres=800",
+		"-netdev", "user,id=net0",
+		"-device", "e1000,netdev=net0",
 	}
+
+	if runtime.GOOS == "darwin" {
+		args = append(args, "-display", "cocoa,zoom-to-fit=on")
+	}
+
+	if ovmfFw != "" {
+		args = append(args, "-drive", fmt.Sprintf("if=pflash,format=raw,readonly=on,file=%s", ovmfFw))
+	}
+
+	args = append(args, "-drive", fmt.Sprintf("file=%s,format=raw", targetPath))
 
 	cmd := exec.Command(status.Path, args...)
 	var stderr bytes.Buffer
@@ -214,7 +249,7 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		return fmt.Errorf("启动 QEMU 进程失败: %w", err)
 	}
 
-	// Wait briefly (300ms) to catch immediate startup failures (e.g. permission denied)
+	// Wait briefly (400ms) to catch immediate startup failures (e.g. permission denied)
 	done := make(chan error, 1)
 	go func() {
 		done <- cmd.Wait()
@@ -225,9 +260,14 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		if err != nil {
 			errOutput := strings.TrimSpace(stderr.String())
 			if errOutput != "" {
-				// If permission is denied on macOS, try executing via osascript administrator privileges
+				// If permission is denied on macOS, fallback to executing via osascript with administrator privileges
 				if runtime.GOOS == "darwin" && strings.Contains(errOutput, "Permission denied") {
-					script := fmt.Sprintf(`do shell script "'%s' -m 1024 -drive 'file=%s,format=raw,snapshot=on' >/dev/null 2>&1 &" with administrator privileges`, status.Path, targetPath)
+					var scriptArgs []string
+					scriptArgs = append(scriptArgs, fmt.Sprintf("'%s'", status.Path))
+					for _, a := range args {
+						scriptArgs = append(scriptArgs, fmt.Sprintf("'%s'", a))
+					}
+					script := fmt.Sprintf(`do shell script "%s >/dev/null 2>&1 &" with administrator privileges`, strings.Join(scriptArgs, " "))
 					adminCmd := exec.Command("osascript", "-e", script)
 					if adminErr := adminCmd.Run(); adminErr == nil {
 						return nil
@@ -238,7 +278,7 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 			return fmt.Errorf("QEMU 启动异常退出: %w", err)
 		}
 		return nil
-	case <-time.After(300 * time.Millisecond):
+	case <-time.After(400 * time.Millisecond):
 		return nil
 	}
 }
