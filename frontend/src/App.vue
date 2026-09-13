@@ -465,8 +465,8 @@ const isNonDestructive = computed(() => {
     return isSelectedVentoyDisk.value;
   }
   if (selectedDevices.value.size === 0) return false;
-  return Array.from(selectedDevices.value).some(dev => {
-    const d = availableDisks.value.find(disk => disk.device === dev);
+  return Array.from(selectedDevices.value).some((dev: string) => {
+    const d = diskList.value.find((disk: DiskInfo) => disk.device === dev);
     if (!d) return false;
     const name = (d.name || '').toUpperCase();
     const status = (d.bootStatus || '').toUpperCase();
