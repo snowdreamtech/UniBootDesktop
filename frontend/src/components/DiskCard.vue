@@ -175,8 +175,20 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
   }
 
   const nameUpper = (props.disk.name || '').toUpperCase();
+  const vendorUpper = (props.disk.vendor || '').toUpperCase();
+  const controllerUpper = (props.disk.controllerVendor || '').toUpperCase();
+  const vidUpper = (props.disk.vendorId || '').toUpperCase();
+
+  const isReader = nameUpper.includes('CARD') || nameUpper.includes('READER') || nameUpper.includes('SD') || nameUpper.includes('MICROSD') || nameUpper.includes('TF') ||
+                   vendorUpper.includes('CARD') || vendorUpper.includes('READER') || vendorUpper.includes('SD') ||
+                   controllerUpper.includes('读卡器') || controllerUpper.includes('CHIPSBANK') || controllerUpper.includes('CHIPSBRAND') ||
+                   vidUpper.includes('0X1E3D') || vidUpper.includes('0X0BDA') || vidUpper.includes('0X05E3');
+
   if (nameUpper.includes('VENTOY') || nameUpper.includes('UNIBOOT') || nameUpper.includes('BOOT')) {
     return 'boot';
+  }
+  if (isReader) {
+    return 'reader';
   }
   if (nameUpper.includes('SECURE') || nameUpper.includes('VAULT') || nameUpper.includes('LOCK')) {
     return 'secure';
@@ -189,9 +201,6 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
   }
   if (nameUpper.includes('HDD') || nameUpper.includes('DISK DRIVE')) {
     return 'hdd';
-  }
-  if (nameUpper.includes('CARD') || nameUpper.includes('READER') || nameUpper.includes('SD')) {
-    return 'reader';
   }
   if (nameUpper.includes('TYPE-C') || nameUpper.includes('TYPEC') || nameUpper.includes('DUAL')) {
     return 'typec';

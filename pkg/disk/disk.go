@@ -160,8 +160,12 @@ func InferControllerVendor(vendorID string, productID string, vendor string) str
 		return "JMicron (智微科技桥接主控)"
 	case strings.Contains(vid, "0x174c"):
 		return "ASMedia (祥硕科技主控)"
+	case strings.Contains(vid, "0x1e3d"):
+		return "Chipsbank (芯邦读卡器主控)"
 	case strings.Contains(vid, "0x0bda"):
-		return "Realtek (瑞昱半导体主控)"
+		return "Realtek (瑞昱读卡器主控)"
+	case strings.Contains(vid, "0x05e3"):
+		return "Genesys Logic (创惟读卡器主控)"
 	}
 	if vendor != "" && vendor != "Generic" {
 		return vendor + " (通用主控)"
