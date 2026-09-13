@@ -4,11 +4,15 @@
 package qemu
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"runtime"
 	"strings"
+	"time"
 )
 
 // QEMUStatus contains detection metadata for QEMU installation.
@@ -18,35 +22,71 @@ type QEMUStatus struct {
 	Version   string `json:"version"`
 }
 
-// Detect checks if QEMU executable is available on the system PATH.
+// Detect checks if QEMU executable is available on PATH or common installation directories.
 func Detect() *QEMUStatus {
-	path, err := exec.LookPath("qemu-system-x86_64")
-	if err != nil {
-		// Support dry-run or mock mode when UNIBOOT_DRY_RUN is set
-		if os.Getenv("UNIBOOT_DRY_RUN") != "" {
+	candidates := []string{
+		"qemu-system-x86_64",
+		"qemu-system-aarch64",
+		"qemu-system-i386",
+	}
+
+	commonPaths := []string{
+		"/opt/homebrew/bin",
+		"/usr/local/bin",
+		"/usr/bin",
+		`C:\Program Files\qemu`,
+		`C:\Program Files (x86)\qemu`,
+	}
+
+	// 1. Try finding candidates via system PATH
+	for _, name := range candidates {
+		if path, err := exec.LookPath(name); err == nil {
 			return &QEMUStatus{
 				Installed: true,
-				Path:      "/usr/local/bin/qemu-system-x86_64 (Dry-Run)",
-				Version:   "QEMU system x86_64 (Mock)",
+				Path:      path,
+				Version:   fmt.Sprintf("QEMU (%s)", name),
 			}
 		}
-		return &QEMUStatus{
-			Installed: false,
-			Path:      "",
-			Version:   "Not Installed",
+	}
+
+	// 2. Search common installation directories directly
+	for _, dir := range commonPaths {
+		for _, name := range candidates {
+			exeName := name
+			if runtime.GOOS == "windows" {
+				exeName += ".exe"
+			}
+			fullPath := filepath.Join(dir, exeName)
+			if info, err := os.Stat(fullPath); err == nil && !info.IsDir() {
+				return &QEMUStatus{
+					Installed: true,
+					Path:      fullPath,
+					Version:   fmt.Sprintf("QEMU (%s)", name),
+				}
+			}
 		}
 	}
+
+	// Support dry-run or mock mode when UNIBOOT_DRY_RUN is set
+	if os.Getenv("UNIBOOT_DRY_RUN") != "" {
+		return &QEMUStatus{
+			Installed: true,
+			Path:      "/usr/local/bin/qemu-system-x86_64 (Dry-Run)",
+			Version:   "QEMU system x86_64 (Mock)",
+		}
+	}
+
 	return &QEMUStatus{
-		Installed: true,
-		Path:      path,
-		Version:   "QEMU system x86_64",
+		Installed: false,
+		Path:      "",
+		Version:   "Not Installed",
 	}
 }
 
-// LaunchTest executes a non-blocking QEMU preview test instance on the target USB drive.
+// LaunchTest executes a non-blocking QEMU preview test instance on the target USB drive safely.
 func LaunchTest(ctx context.Context, diskPath string) error {
 	if diskPath == "" {
-		return fmt.Errorf("target disk device path cannot be empty")
+		return fmt.Errorf("请先选择要测试的目标 U 盘！")
 	}
 
 	// Dry-run mode for tests or simulation
@@ -56,9 +96,42 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 
 	status := Detect()
 	if !status.Installed {
-		return fmt.Errorf("QEMU (qemu-system-x86_64) is not installed on this system")
+		return fmt.Errorf("未检测到 QEMU 模拟器！请先安装 QEMU（例如通过 brew install qemu 或官方安装包）。")
 	}
 
-	cmd := exec.CommandContext(ctx, status.Path, "-m", "1024", "-hda", diskPath)
-	return cmd.Start()
+	// Build safe read-only preview command using snapshot mode
+	args := []string{
+		"-m", "1024",
+		"-drive", fmt.Sprintf("file=%s,format=raw,snapshot=on", diskPath),
+	}
+
+	cmd := exec.Command(status.Path, args...)
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+
+	if err := cmd.Start(); err != nil {
+		return fmt.Errorf("启动 QEMU 进程失败: %w", err)
+	}
+
+	// Wait briefly (300ms) to catch immediate startup failures (e.g. permission denied)
+	done := make(chan error, 1)
+	go func() {
+		done <- cmd.Wait()
+	}()
+
+	select {
+	case err := <-done:
+		if err != nil {
+			errOutput := strings.TrimSpace(stderr.String())
+			if errOutput != "" {
+				return fmt.Errorf("QEMU 启动异常退出 (%v): %s", err, errOutput)
+			}
+			return fmt.Errorf("QEMU 启动异常退出: %w", err)
+		}
+		// Process exited early cleanly
+		return nil
+	case <-time.After(300 * time.Millisecond):
+		// QEMU process started successfully and continues running in background
+		return nil
+	}
 }
