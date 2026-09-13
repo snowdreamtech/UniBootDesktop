@@ -184,13 +184,13 @@ func DetectBootStatus(volName string, partitionScheme string) string {
 	return "📁 数据存储盘 (未检出系统引导)"
 }
 
-// FormatBytes formats byte counts into human-readable strings (e.g. 248.15 GB, 8.05 GB).
+// FormatBytes formats byte counts into human-readable strings using 1024 base (e.g. 29.80 GB).
 func FormatBytes(bytes uint64) string {
 	const (
-		KB = 1000
-		MB = 1000 * KB
-		GB = 1000 * MB
-		TB = 1000 * GB
+		KB = 1024
+		MB = 1024 * KB
+		GB = 1024 * MB
+		TB = 1024 * GB
 	)
 	switch {
 	case bytes >= TB:
@@ -204,6 +204,27 @@ func FormatBytes(bytes uint64) string {
 	default:
 		return fmt.Sprintf("%d B", bytes)
 	}
+}
+
+// FormatBytesDual formats byte counts with 1024-base system capacity and 1000-base hardware nominal capacity.
+// Example: "29.80 GB (标称 32 GB)"
+func FormatBytesDual(bytes uint64) string {
+	if bytes == 0 {
+		return "0 B"
+	}
+	sysFormatted := FormatBytes(bytes)
+	const (
+		GB1000 = 1000 * 1000 * 1000
+		TB1000 = 1000 * GB1000
+	)
+	if bytes >= TB1000 {
+		nomVal := float64(bytes) / float64(TB1000)
+		return fmt.Sprintf("%s (标称 %.0f TB)", sysFormatted, nomVal)
+	} else if bytes >= GB1000 {
+		nomVal := float64(bytes) / float64(GB1000)
+		return fmt.Sprintf("%s (标称 %.0f GB)", sysFormatted, nomVal)
+	}
+	return sysFormatted
 }
 
 // GetRemovableDisks lists removable USB drives safely while protecting system drives.
@@ -521,7 +542,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			totalSize = 32 * 1024 * 1024 * 1024 // Fallback if size unknown
 		}
 
-		formattedSize := FormatBytes(totalSize)
+		formattedSize := FormatBytesDual(totalSize)
 		freeFormatted := FormatBytes(freeSpace)
 		if freeSpace == 0 {
 			freeFormatted = formattedSize
@@ -711,7 +732,7 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			}
 		}
 
-		formattedSize := FormatBytes(dev.Size)
+		formattedSize := FormatBytesDual(dev.Size)
 		freeFormatted := FormatBytes(freeSpace)
 		if freeSpace == 0 {
 			freeFormatted = formattedSize
@@ -793,7 +814,7 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			usbSpeed = "480 Mb/s"
 		}
 
-		formattedSize := FormatBytes(drive.Size)
+		formattedSize := FormatBytesDual(drive.Size)
 		freeSpace := uint64(float64(drive.Size) * 0.8)
 		freeFormatted := FormatBytes(freeSpace)
 

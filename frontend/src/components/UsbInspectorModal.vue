@@ -56,7 +56,7 @@
 
           <div class="spec-item">
             <span class="spec-label">设备容量 (Storage Size)</span>
-            <span class="spec-val">{{ disk.formatted }} ({{ disk.size.toLocaleString() }} Bytes)</span>
+            <span class="spec-val">{{ disk.formatted }}</span>
           </div>
 
           <div class="spec-item">

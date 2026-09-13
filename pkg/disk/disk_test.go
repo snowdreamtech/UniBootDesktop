@@ -82,10 +82,14 @@ func TestMapProtocolCode(t *testing.T) {
 
 func TestFormatBytes(t *testing.T) {
 	assert.Equal(t, "500 B", FormatBytes(500))
-	assert.Equal(t, "1.02 KB", FormatBytes(1024))
-	assert.Equal(t, "8.05 GB", FormatBytes(8053063680))
-	assert.Equal(t, "248.15 GB", FormatBytes(248145510400))
-	assert.Equal(t, "1.65 TB", FormatBytes(1649267441664))
+	assert.Equal(t, "1.00 KB", FormatBytes(1024))
+	assert.Equal(t, "7.50 GB", FormatBytes(8053063680))
+	assert.Equal(t, "231.10 GB", FormatBytes(248145510400))
+	assert.Equal(t, "1.50 TB", FormatBytes(1649267441664))
+}
+
+func TestFormatBytesDual(t *testing.T) {
+	assert.Equal(t, "29.80 GB (标称 32 GB)", FormatBytesDual(32000000000))
 }
 
 func TestGetRemovableDisks(t *testing.T) {
