@@ -788,11 +788,6 @@ onMounted(() => {
   outline: none;
 }
 
-.form-select option {
-  background: var(--modal-bg);
-  color: var(--text-main);
-}
-
 .form-input:focus, .form-select:focus {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 10px var(--accent-cyan-glow);

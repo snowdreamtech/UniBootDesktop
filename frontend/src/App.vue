@@ -859,11 +859,6 @@ h1 {
   transition: all 0.2s ease;
 }
 
-.fs-select option {
-  background: var(--modal-bg);
-  color: var(--text-main);
-}
-
 .fs-select:focus {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 12px rgba(0, 229, 255, 0.25);

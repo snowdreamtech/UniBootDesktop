@@ -35,20 +35,29 @@
   --warning: #d97706;
 }
 
-select, option {
-  background-color: var(--input-bg);
-  color: var(--text-main);
-  border-color: var(--card-border);
+/* Global Select & Option Dropdown Light/Dark Theme Adaptations */
+select, option, optgroup {
+  background-color: var(--input-bg) !important;
+  color: var(--text-main) !important;
+  border-color: var(--card-border) !important;
 }
 
+:root[data-theme="light"] select,
+:root[data-theme="light"] option,
+[data-theme="light"] select,
+[data-theme="light"] option,
 [data-theme="light"] select option {
-  background-color: #ffffff;
-  color: #0f172a;
+  background-color: #ffffff !important;
+  color: #0f172a !important;
 }
 
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] option,
+[data-theme="dark"] select,
+[data-theme="dark"] option,
 [data-theme="dark"] select option {
-  background-color: #0d1424;
-  color: #f8fafc;
+  background-color: #0d1424 !important;
+  color: #f8fafc !important;
 }
 
 * {
