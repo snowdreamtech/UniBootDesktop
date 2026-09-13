@@ -6,8 +6,8 @@
         <div class="header-title">
           <span class="icon">⚙️</span>
           <div>
-            <h3>系统全局配置与固件同步</h3>
-            <span class="sub-title">系统参数偏好、网络代理加速及 UniBoot 固件矩阵</span>
+            <h3>设置</h3>
+            <span class="sub-title">首选项与偏好</span>
           </div>
         </div>
         <div class="header-actions">

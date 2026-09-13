@@ -848,15 +848,20 @@ h1 {
 }
 
 .fs-select {
-  background: rgba(8, 14, 26, 0.8);
-  border: 1px solid rgba(0, 229, 255, 0.25);
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
   border-radius: 8px;
-  color: #fff;
+  color: var(--text-main);
   padding: 0.55rem 0.75rem;
   font-size: 0.825rem;
   outline: none;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.fs-select option {
+  background: var(--modal-bg);
+  color: var(--text-main);
 }
 
 .fs-select:focus {

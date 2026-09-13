@@ -33,6 +33,22 @@
   --warning: #d97706;
 }
 
+select, option {
+  background-color: var(--input-bg);
+  color: var(--text-main);
+  border-color: var(--card-border);
+}
+
+[data-theme="light"] select option {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+[data-theme="dark"] select option {
+  background-color: #0d1424;
+  color: #f8fafc;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
