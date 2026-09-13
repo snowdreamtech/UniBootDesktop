@@ -39,6 +39,7 @@ export namespace disk {
 	    serialNumber: string;
 	    vendorId: string;
 	    productId: string;
+	    smartStatus: string;
 	    isFakeUsb3: boolean;
 	    protocolCode: string;
 	
@@ -65,6 +66,7 @@ export namespace disk {
 	        this.serialNumber = source["serialNumber"];
 	        this.vendorId = source["vendorId"];
 	        this.productId = source["productId"];
+	        this.smartStatus = source["smartStatus"];
 	        this.isFakeUsb3 = source["isFakeUsb3"];
 	        this.protocolCode = source["protocolCode"];
 	    }

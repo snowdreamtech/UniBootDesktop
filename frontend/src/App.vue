@@ -183,6 +183,7 @@ interface DiskInfo {
   serialNumber?: string;
   vendorId?: string;
   productId?: string;
+  smartStatus?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }

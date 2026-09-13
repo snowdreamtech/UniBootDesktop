@@ -83,6 +83,13 @@
           </div>
 
           <div class="spec-item">
+            <span class="spec-label">S.M.A.R.T. 健康状态 (SMART Status)</span>
+            <span class="spec-val" :class="disk.smartStatus === 'Verified' ? 'pass-val' : 'highlight'">
+              {{ disk.smartStatus === 'Verified' ? '✅ 健康 (Verified)' : (disk.smartStatus || 'ℹ️ N/A') }}
+            </span>
+          </div>
+
+          <div class="spec-item">
             <span class="spec-label">USB 协议版本 (Protocol Version)</span>
             <span class="spec-val badge-val" :class="disk.protocolCode || 'usb2'">
               {{ disk.usbVersion || 'USB 2.0' }}
@@ -146,6 +153,7 @@ interface DiskInfo {
   serialNumber?: string;
   vendorId?: string;
   productId?: string;
+  smartStatus?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }

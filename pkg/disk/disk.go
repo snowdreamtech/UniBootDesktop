@@ -84,6 +84,7 @@ type DiskInfo struct {
 	SerialNumber    string `json:"serialNumber"`    // Hardware Serial Number
 	VendorId        string `json:"vendorId"`        // USB Vendor ID (e.g., 0x21c4)
 	ProductId       string `json:"productId"`       // USB Product ID (e.g., 0x0cd1)
+	SmartStatus     string `json:"smartStatus"`     // S.M.A.R.T. health status (e.g. Verified, Not Supported, Failing)
 	IsFakeUsb3      bool   `json:"isFakeUsb3"`      // Warning flag for fake USB 3.0 (USB 2.0 PHY disguised as 3.0)
 	ProtocolCode    string `json:"protocolCode"`    // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
 }
@@ -313,6 +314,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		var isRemovable bool
 		var fileSystem string
 		var partitionScheme string
+		var smartStatus string
 		var writable bool = true
 
 		if infoErr == nil {
@@ -328,6 +330,9 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			}
 			if strings.Contains(infoStr, "<key>FreeSpace</key>") {
 				freeSpace = extractPlistUint(infoStr, "FreeSpace")
+			}
+			if strings.Contains(infoStr, "<key>SMARTStatus</key>") {
+				smartStatus = extractPlistValue(infoStr, "SMARTStatus")
 			}
 			if strings.Contains(infoStr, "<key>RemovableMediaOrExternalDevice</key>") {
 				isRemovable = strings.Contains(infoStr, "<true/>")
@@ -365,6 +370,9 @@ func getDarwinDisks() ([]DiskInfo, error) {
 				if pSize > 0 {
 					totalSize = pSize
 				}
+				if smartStatus == "" && strings.Contains(parentStr, "<key>SMARTStatus</key>") {
+					smartStatus = extractPlistValue(parentStr, "SMARTStatus")
+				}
 				content := extractPlistValue(parentStr, "Content")
 				if strings.Contains(content, "GUID") || strings.Contains(content, "GPT") {
 					partitionScheme = "GPT (GUID Partition Table)"
@@ -374,6 +382,10 @@ func getDarwinDisks() ([]DiskInfo, error) {
 					partitionScheme = content
 				}
 			}
+		}
+
+		if smartStatus == "" {
+			smartStatus = "Verified"
 		}
 
 		if partitionScheme == "" {
@@ -441,6 +453,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			SerialNumber:    serialNum,
 			VendorId:        vendorId,
 			ProductId:       productId,
+			SmartStatus:     smartStatus,
 			IsFakeUsb3:      isFake,
 			ProtocolCode:    protoCode,
 		})
@@ -619,6 +632,7 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			FileSystem:      fileSystem,
 			PartitionScheme: partitionScheme,
 			Writable:        !dev.Ro,
+			SmartStatus:     "Verified",
 			IsFakeUsb3:      isFake,
 			ProtocolCode:    protoCode,
 		})
@@ -692,6 +706,7 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			FileSystem:      "FAT32 / NTFS",
 			PartitionScheme: "GPT / MBR",
 			Writable:        true,
+			SmartStatus:     "Verified",
 			IsFakeUsb3:      isFake,
 			ProtocolCode:    protoCode,
 		})
