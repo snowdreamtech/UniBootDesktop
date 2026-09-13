@@ -5,7 +5,7 @@
         <div class="header-title">
           <span class="warning-icon">{{ isAllVentoy ? '🛡️' : (isMixed ? '⚡' : '⚠️') }}</span>
           <h3>
-            {{ isAllVentoy ? '智能部署确认：无需格式化 (请勿惊慌)' : (isMixed ? '⚡ 混合智能部署确认：增量与全新混合' : '高危操作确认：即将抹除 U 盘数据') }}
+            {{ isAllVentoy ? '无损更新确认：无需格式化磁盘' : (isMixed ? '⚡ 智能混合制作确认' : '格式化确认：即将初始化目标磁盘') }}
           </h3>
         </div>
         <button class="close-btn" @click="close">✕</button>
@@ -14,17 +14,17 @@
       <div class="modal-body">
         <!-- Safe Info Banner for ALL Ventoy Disks -->
         <div v-if="isAllVentoy" class="safe-banner">
-          <div class="banner-title">💡 请放心：本操作绝对不会格式化您的 U 盘！</div>
+          <div class="banner-title">💡 无损增量更新提示：无需格式化</div>
           <div class="banner-desc">
-            检测到目标 U 盘已部署 Ventoy 引导结构。系统将<strong>自动采用增量注入技术</strong>，跳过擦盘与格式化，直接写入 UniBoot 引导固件与主题。<strong>您 U 盘中的所有文件、ISO 镜像均 100% 原样保留</strong>，请安心部署！
+            检测到目标 U 盘已存在 Ventoy / UniBoot 引导结构。系统将<strong>自动采用增量注入技术</strong>，跳过擦盘与格式化，直接更新引导固件与主题。<strong>您 U 盘中的所有文件、ISO 镜像均 100% 原样保留</strong>！
           </div>
         </div>
 
         <!-- Mixed Mode Info Banner for Mixed Selections -->
         <div v-else-if="isMixed" class="mixed-banner">
-          <div class="banner-title">🛡️ 混合智能模式：Ventoy 盘免格式化，普通盘格式化</div>
+          <div class="banner-title">🛡️ 智能混合模式：Ventoy 盘无损更新，空白盘初始化</div>
           <div class="banner-desc">
-            已选中 <strong>{{ ventoyDisks.length }}</strong> 块 Ventoy 盘（<b>自动免格式化/保留数据</b>）与 <strong>{{ blankDisks.length }}</strong> 块普通 U 盘（<b>格式化写入</b>）。系统将对不同 U 盘进行精准分类处理！
+            已选中 <strong>{{ ventoyDisks.length }}</strong> 块引导盘（<b>自动免格式化/保留数据</b>）与 <strong>{{ blankDisks.length }}</strong> 块普通 U 盘（<b>初始化格式化</b>）。系统将进行差异化精准处理！
           </div>
         </div>
 
@@ -32,13 +32,13 @@
         <div v-else class="danger-banner">
           <div class="banner-title">💥 警告：格式化过程不可逆！</div>
           <div class="banner-desc">
-            部署写入将对目标设备进行<strong>底层重新分区与格式化</strong>，改写主引导记录 (MBR/GPT)。<strong>所选 U 盘上的全部现有数据、文档与资料将被彻底永久清空</strong>。
+            写入将对目标设备进行<strong>底层重新分区与格式化</strong>，改写主引导记录 (MBR/GPT)。<strong>所选 U 盘上的全部现有数据与资料将被清空</strong>。
           </div>
         </div>
 
         <!-- Target Devices Summary Box -->
         <div class="target-summary-box">
-          <div class="summary-label">本次将部署写入的目标设备：</div>
+          <div class="summary-label">即将写入引导的目标磁盘：</div>
           
           <!-- Single Disk Summary -->
           <div v-if="targetDisks.length === 1 && targetDisk" class="target-disk-item">
@@ -58,13 +58,13 @@
           <!-- Batch Disks Mixed Summary -->
           <div v-else-if="isMixed" class="batch-summary">
             <div class="mixed-group" v-if="ventoyDisks.length > 0">
-              <div class="group-title safe-title">🛡️ 免格式化增量写入盘（保留所有 ISO 镜像）：</div>
+              <div class="group-title safe-title">🛡️ 无损增量更新盘（保留所有 ISO 镜像）：</div>
               <div class="batch-tags">
                 <span v-for="dev in ventoyDisks" :key="dev" class="batch-dev-tag safe-dev-tag">🛡️ {{ dev }}</span>
               </div>
             </div>
             <div class="mixed-group" v-if="blankDisks.length > 0">
-              <div class="group-title danger-title">⚠️ 全新重新格式化烧录盘：</div>
+              <div class="group-title danger-title">⚠️ 重新格式化写入盘：</div>
               <div class="batch-tags">
                 <span v-for="dev in blankDisks" :key="dev" class="batch-dev-tag danger-dev-tag">💾 {{ dev }}</span>
               </div>
@@ -73,7 +73,7 @@
 
           <!-- Batch Disks Pure Summary -->
           <div v-else class="batch-summary">
-            <div class="batch-count">已选中 <strong>{{ targetDisks.length }}</strong> 块 U 盘独立并行写入：</div>
+            <div class="batch-count">已选中 <strong>{{ targetDisks.length }}</strong> 块 U 盘并行写入：</div>
             <div class="batch-tags">
               <span v-for="dev in targetDisks" :key="dev" class="batch-dev-tag">💾 {{ dev }}</span>
             </div>
@@ -84,7 +84,7 @@
       <div class="modal-footer">
         <button class="btn-cancel" @click="close">取消</button>
         <button :class="isAllVentoy || isMixed ? 'btn-safe-confirm' : 'btn-danger-confirm'" @click="confirm">
-          {{ isAllVentoy ? '🛡️ 放心写入 (不格式化 U 盘)' : (isMixed ? '🚀 开始混合烧录 (Ventoy盘不格式化)' : '⚠️ 确认数据已备份，开始格式化写入') }}
+          {{ isAllVentoy ? '🛡️ 确认无损更新 (保留数据)' : (isMixed ? '🚀 开始混合制作' : '⚠️ 确认备份并开始写入') }}
         </button>
       </div>
     </div>

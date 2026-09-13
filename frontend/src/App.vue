@@ -110,9 +110,9 @@
 
       <!-- Right: Deployment & Testing Panel -->
       <section class="glass-card section-card">
-        <h2>部署与预览操作</h2>
+        <h2>启动盘制作与模拟测试</h2>
         <p class="section-desc" v-if="activeMode === 'cloud'">
-          <strong>100% 脱离 Ventoy</strong> • 原生格式化 FAT32 并写入 64MB 多架构 iPXE 固件，1 秒完成！
+          <strong>纯净 iPXE 云引导</strong> • 极速初始化双分区并写入多架构 iPXE 网络引导固件。
         </p>
         <p class="section-desc" v-else>
           集成 Ventoy 核心 + UniBoot 专属暗色主题 & iPXE 网络扩展，支持放置数 GB 大 ISO 镜像。
@@ -134,7 +134,7 @@
           <span class="safe-notice-icon">🛡️</span>
           <div class="safe-notice-content">
             <div class="safe-notice-title">
-              {{ activeMode === 'cloud' ? '检测到现有 Ventoy/UniBoot 盘 (模式 B 仅刷新 ESP 引导区)' : '检测到现有的 Ventoy 启动盘 (免格式化无损增量写入)' }}
+              {{ activeMode === 'cloud' ? '检测到现有 Ventoy/UniBoot 盘 (模式 B 仅刷新 ESP 引导区)' : '检测到现有的 Ventoy 启动盘 (免格式化无损更新)' }}
             </div>
             <div class="safe-notice-desc">
               {{ activeMode === 'cloud'
@@ -167,14 +167,14 @@
             :disabled="isDeployDisabled || isDeploying"
             @click="openDeployConfirm"
           >
-            {{ isDeploying ? '正在极速烧录中...' : (isNonDestructive ? '🛡️ 开始无损增量写入 (不格式化)' : (selectionMode === 'batch' ? `开始批量烧录 (${selectedDevices.size} 块 U 盘)` : '开始 1 秒部署写入')) }}
+            {{ isDeploying ? '正在写入引导固件...' : (isNonDestructive ? '🛡️ 开始无损更新 (保留数据)' : (selectionMode === 'batch' ? `开始批量制作 (${selectedDevices.size} 块 U 盘)` : '开始制作启动盘')) }}
           </button>
         </div>
 
         <!-- QEMU Preview -->
         <div class="qemu-box">
           <div class="qemu-header">
-            <h3>QEMU 启动预览 (可选)</h3>
+            <h3>QEMU 引导模拟测试</h3>
             <span class="badge" :class="qemuStatus.installed ? 'success' : 'muted'">
               {{ qemuStatus.installed ? '已检测到 QEMU' : '未检测到 QEMU' }}
             </span>
@@ -194,7 +194,7 @@
             :title="qemuDisabledReason"
             @click="launchQEMU"
           >
-            {{ isLaunchingQemu ? '⏳ 正在启动 QEMU 模拟器...' : '▶ 启动 QEMU 模拟器测试' }}
+            {{ isLaunchingQemu ? '⏳ 正在拉起 QEMU 虚拟机...' : '▶ 运行 QEMU 启动测试' }}
           </button>
         </div>
       </section>
