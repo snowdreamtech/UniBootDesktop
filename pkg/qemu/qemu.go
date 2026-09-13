@@ -85,16 +85,21 @@ func Detect() *QEMUStatus {
 	}
 }
 
-// DetectOVMF searches common system paths for edk2 / OVMF UEFI firmware image.
+// DetectOVMF searches common system paths for edk2 / OVMF UEFI firmware image across macOS, Linux & Windows.
 func DetectOVMF() string {
 	searchPaths := []string{
+		// macOS
 		"/opt/local/share/qemu/edk2-x86_64-code.fd",
 		"/opt/homebrew/share/qemu/edk2-x86_64-code.fd",
+		// Linux
 		"/usr/share/OVMF/OVMF_CODE.fd",
 		"/usr/share/ovmf/OVMF.fd",
 		"/usr/share/qemu/ovmf-x86_64-code.bin",
 		"/usr/share/edk2/ovmf/OVMF_CODE.fd",
 		"/usr/share/edk2-ovmf/x64/OVMF_CODE.fd",
+		// Windows
+		`C:\Program Files\qemu\share\edk2-x86_64-code.fd`,
+		`C:\Program Files (x86)\qemu\share\edk2-x86_64-code.fd`,
 	}
 	for _, p := range searchPaths {
 		if info, err := os.Stat(p); err == nil && !info.IsDir() {
@@ -124,8 +129,8 @@ func extractPlistString(plistStr string, key string) string {
 	return strings.TrimSpace(rest[:endStr])
 }
 
-// ResolveRawDiskDevice resolves volume mount paths (e.g. /Volumes/Ventoy), partition paths (e.g. /dev/disk2s1),
-// or device names (e.g. disk2) to raw unbuffered block device paths suitable for QEMU (e.g. /dev/rdisk2).
+// ResolveRawDiskDevice resolves volume mount paths (e.g. /Volumes/Ventoy, E:\, /mnt/UNIBOOT)
+// or partition paths (e.g. /dev/disk2s1, /dev/sdb1) to raw block device paths suitable for QEMU across macOS, Linux, and Windows.
 func ResolveRawDiskDevice(diskPath string) string {
 	diskPath = strings.TrimSpace(diskPath)
 	if diskPath == "" {
@@ -174,12 +179,37 @@ func ResolveRawDiskDevice(diskPath string) string {
 			}
 			return "/dev/r" + node
 		}
+
+	case "linux":
+		// Case 1: Whole disk device like /dev/sdb or /dev/nvme0n1
+		if strings.HasPrefix(diskPath, "/dev/") {
+			base := diskPath
+			if strings.Contains(base, "nvme") || strings.Contains(base, "mmcblk") {
+				if idx := strings.LastIndex(base, "p"); idx != -1 && idx > len("/dev/nvme") {
+					base = base[:idx]
+				}
+			} else {
+				base = strings.TrimRight(base, "0123456789")
+			}
+			return base
+		}
+
+	case "windows":
+		// Format Windows drive letter (e.g. "E:", "E:\") -> "\\.\E:" or PhysicalDrive
+		cleanDrive := strings.TrimRight(diskPath, `\`)
+		if len(cleanDrive) == 2 && cleanDrive[1] == ':' {
+			return fmt.Sprintf(`\\.\%s`, cleanDrive)
+		}
+		if strings.HasPrefix(diskPath, `disk`) || strings.HasPrefix(diskPath, `Disk`) {
+			diskIdx := strings.TrimPrefix(strings.TrimPrefix(diskPath, "disk"), "Disk")
+			return fmt.Sprintf(`\\.\PhysicalDrive%s`, diskIdx)
+		}
 	}
 
 	return diskPath
 }
 
-// LaunchTest executes a non-blocking QEMU preview test instance on the target USB drive safely.
+// LaunchTest executes a non-blocking QEMU preview test instance on the target USB drive safely across macOS, Windows and Linux.
 func LaunchTest(ctx context.Context, diskPath string) error {
 	if diskPath == "" {
 		return fmt.Errorf("请先选择要测试的目标 U 盘！")
@@ -195,29 +225,31 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		return fmt.Errorf("未检测到 QEMU 模拟器！请先安装 QEMU（例如通过 brew install qemu 或 MacPorts 命令行包）。")
 	}
 
-	// Resolve volume/mount path (e.g. /Volumes/Ventoy) to underlying raw block device (/dev/rdisk2)
+	// Resolve volume/mount path to underlying raw block device across all OSes
 	targetPath := ResolveRawDiskDevice(diskPath)
 	if targetPath == "" {
 		targetPath = diskPath
 	}
 
 	if runtime.GOOS == "darwin" {
-		// Extract whole disk identifier like disk2
 		diskNode := strings.TrimPrefix(targetPath, "/dev/rdisk")
 		diskNode = strings.TrimPrefix(diskNode, "/dev/disk")
 		if !strings.HasPrefix(diskNode, "disk") {
 			diskNode = "disk" + diskNode
 		}
-
-		// 1. Force unmount target disk volumes to release macOS disk arbitration lock (same as test-uefi.sh)
+		// 1. Force unmount target disk volumes to release macOS disk arbitration lock
 		unmountCmd := exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode))
 		_ = unmountCmd.Run()
 		time.Sleep(500 * time.Millisecond)
+	} else if runtime.GOOS == "linux" {
+		// Try udisksctl unmount for Linux volume partitions
+		unmountCmd := exec.Command("udisksctl", "unmount", "-b", diskPath)
+		_ = unmountCmd.Run()
 	}
 
 	ovmfFw := DetectOVMF()
 
-	// Build optimized parameters matching test-uefi.sh
+	// Build optimized hardware acceleration parameters
 	args := []string{
 		"-machine", "q35",
 		"-m", "2048",
@@ -226,8 +258,13 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		"-device", "e1000,netdev=net0",
 	}
 
+	// Host OS specific display and KVM acceleration
 	if runtime.GOOS == "darwin" {
 		args = append(args, "-display", "cocoa,zoom-to-fit=on")
+	} else if runtime.GOOS == "linux" {
+		if _, err := os.Stat("/dev/kvm"); err == nil {
+			args = append(args, "-enable-kvm")
+		}
 	}
 
 	if ovmfFw != "" {
