@@ -218,6 +218,18 @@ type darwinUSBInfo struct {
 	BusPowerUsed string
 }
 
+// FormatMilliAmperes ensures electric current values have a human-readable 'mA' unit.
+func FormatMilliAmperes(val string) string {
+	val = strings.TrimSpace(val)
+	if val == "" {
+		return ""
+	}
+	if !strings.Contains(strings.ToLower(val), "ma") && !strings.Contains(strings.ToLower(val), "a") {
+		return val + " mA"
+	}
+	return val
+}
+
 func walkDarwinUSBTree(items []darwinUSBItem, result map[string]*darwinUSBInfo) {
 	for _, item := range items {
 		for _, media := range item.Media {
@@ -238,8 +250,8 @@ func walkDarwinUSBTree(items []darwinUSBItem, result map[string]*darwinUSBInfo) 
 					SerialNumber: strings.TrimSpace(item.SerialNum),
 					VendorId:     strings.TrimSpace(item.VendorID),
 					ProductId:    strings.TrimSpace(item.ProductID),
-					BusPower:     strings.TrimSpace(item.BusPower),
-					BusPowerUsed: strings.TrimSpace(item.BusPowerUsed),
+					BusPower:     FormatMilliAmperes(item.BusPower),
+					BusPowerUsed: FormatMilliAmperes(item.BusPowerUsed),
 				}
 
 				for _, vol := range media.Volumes {

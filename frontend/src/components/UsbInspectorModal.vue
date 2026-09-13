@@ -116,7 +116,7 @@
           <div class="spec-item" v-if="disk.busPower || disk.busPowerUsed">
             <span class="spec-label">接口总线供电 (USB Bus Power)</span>
             <span class="spec-val highlight">
-              {{ disk.busPowerUsed || disk.busPower || '500 mA' }} (供电上限: {{ disk.busPower || '500 mA' }})
+              {{ formatPower(disk.busPowerUsed || disk.busPower) }} (端口上限: {{ formatPower(disk.busPower) }})
             </span>
           </div>
         </div>
@@ -173,6 +173,15 @@ defineProps<{
 }>();
 
 const emit = defineEmits(['close']);
+
+function formatPower(val?: string): string {
+  if (!val) return '500 mA';
+  const str = val.trim();
+  if (!str.toLowerCase().includes('ma') && !str.toLowerCase().includes('a')) {
+    return `${str} mA`;
+  }
+  return str;
+}
 
 function closeModal() {
   emit('close');
