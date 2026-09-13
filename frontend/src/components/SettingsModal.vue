@@ -131,7 +131,7 @@
           <div class="settings-section margin-top">
             <h4 class="section-title">
               <span>🔌 系统网络代理设置 (HTTP / HTTPS / SOCKS4 / SOCKS5)</span>
-              <span class="badge info">主机与端口</span>
+              <span class="badge info">支持 Auth (可选)</span>
             </h4>
 
             <div class="grid-form">
@@ -176,6 +176,26 @@
                     placeholder="例如: 1080 / 7890"
                     min="1"
                     max="65535"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">认证用户名 (User - 可选):</label>
+                  <input 
+                    v-model="proxyUser" 
+                    type="text" 
+                    class="form-input" 
+                    placeholder="默认为空（若无需认证留空即可）"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">认证密码 (Password - 可选):</label>
+                  <input 
+                    v-model="proxyPassword" 
+                    type="password" 
+                    class="form-input" 
+                    placeholder="默认为空（若无需认证留空即可）"
                   />
                 </div>
               </template>
