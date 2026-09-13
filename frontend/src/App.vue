@@ -118,8 +118,8 @@
           集成 Ventoy 核心 + UniBoot 专属暗色主题 & iPXE 网络扩展，支持放置数 GB 大 ISO 镜像。
         </p>
 
-        <!-- Filesystem Selection for Mode A & Mode B -->
-        <div class="fs-selector">
+        <!-- Filesystem Selection for Mode A & Mode B (Hidden when target is already a Ventoy drive) -->
+        <div v-if="!isSelectedVentoyDisk" class="fs-selector">
           <label class="fs-label">主数据区格式 (File System):</label>
           <select v-model="selectedFsType" class="fs-select">
             <option value="exFAT">exFAT (默认推荐 • 支持 >4GB 单文件大 ISO)</option>
@@ -127,6 +127,17 @@
             <option value="FAT32">FAT32 (老旧机器全兼容 • 4GB单文件限制)</option>
             <option value="ext4">ext4 (Linux 专属文件系统)</option>
           </select>
+        </div>
+
+        <!-- Safe Mode Notice Banner when target is a Ventoy drive (No format required) -->
+        <div v-else class="safe-mode-notice">
+          <span class="safe-notice-icon">🛡️</span>
+          <div class="safe-notice-content">
+            <div class="safe-notice-title">检测到现有的 Ventoy 启动盘 (免格式化增量写入)</div>
+            <div class="safe-notice-desc">
+              无需选择主数据区格式。系统将<b>自动保留现有分区结构，跳过格式化</b>。您 U 盘中现有的所有 ISO 镜像与资料将<b> 100% 完好保留</b>，请放心写入！
+            </div>
+          </div>
         </div>
 
         <div class="deploy-box">
@@ -142,16 +153,17 @@
 
           <ProgressBar 
             v-if="isDeploying" 
-            label="正在批量写入引导与固件包..." 
+            label="正在写入引导与固件包..." 
             :progress="deployProgress" 
           />
 
           <button 
             class="btn-primary deploy-btn" 
+            :class="{ 'safe-btn': isSelectedVentoyDisk }"
             :disabled="isDeployDisabled || isDeploying"
             @click="openDeployConfirm"
           >
-            {{ isDeploying ? '正在极速烧录中...' : (selectionMode === 'batch' ? `开始批量烧录 (${selectedDevices.size} 块 U 盘)` : '开始 1 秒部署写入') }}
+            {{ isDeploying ? '正在极速烧录中...' : (isSelectedVentoyDisk ? '🛡️ 开始无损增量写入 (不格式化)' : (selectionMode === 'batch' ? `开始批量烧录 (${selectedDevices.size} 块 U 盘)` : '开始 1 秒部署写入')) }}
           </button>
         </div>
 
@@ -432,6 +444,15 @@ const isDeployDisabled = computed(() => {
     return !selectedDisk.value;
   }
   return selectedDevices.value.size === 0;
+});
+
+const isSelectedVentoyDisk = computed(() => {
+  if (selectionMode.value === 'single' && selectedDisk.value) {
+    const name = (selectedDisk.value.name || '').toUpperCase();
+    const status = (selectedDisk.value.bootStatus || '').toUpperCase();
+    return name.includes('VENTOY') || status.includes('VENTOY') || status.includes('UNIBOOT');
+  }
+  return false;
 });
 
 const isQemuDisabled = computed(() => {
@@ -916,6 +937,48 @@ h1 {
   margin-top: 1rem;
 }
 
+.fs-selector {
+  margin-bottom: 1.25rem;
+}
+
+.safe-mode-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1.25rem;
+}
+
+.safe-notice-icon {
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+
+.safe-notice-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.safe-notice-title {
+  color: var(--accent-cyan);
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.safe-notice-desc {
+  color: #a5f3fc;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.safe-notice-desc b {
+  color: #fff;
+}
+
 .deploy-box {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
@@ -933,6 +996,18 @@ h1 {
 .deploy-btn {
   width: 100%;
   font-size: 1rem;
+}
+
+.deploy-btn.safe-btn {
+  background: linear-gradient(135deg, #00e5ff 0%, #0284c7 100%);
+  color: #070a12;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0, 229, 255, 0.35);
+}
+
+.deploy-btn.safe-btn:hover {
+  background: linear-gradient(135deg, #38bdf8 0%, #00e5ff 100%);
+  box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5);
 }
 
 .qemu-box {

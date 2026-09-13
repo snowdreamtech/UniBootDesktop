@@ -3,8 +3,8 @@
     <div class="glass-modal confirm-card" :class="{ 'safe-card': isVentoyDisk }" @click.stop>
       <div class="modal-header" :class="isVentoyDisk ? 'safe-header' : 'danger-header'">
         <div class="header-title">
-          <span class="warning-icon">{{ isVentoyDisk ? '⚡' : '⚠️' }}</span>
-          <h3>{{ isVentoyDisk ? '智能部署确认：无损增量注入' : '高危操作确认：即将抹除 U 盘数据' }}</h3>
+          <span class="warning-icon">{{ isVentoyDisk ? '🛡️' : '⚠️' }}</span>
+          <h3>{{ isVentoyDisk ? '智能部署确认：无需格式化 (请勿惊慌)' : '高危操作确认：即将抹除 U 盘数据' }}</h3>
         </div>
         <button class="close-btn" @click="close">✕</button>
       </div>
@@ -12,9 +12,9 @@
       <div class="modal-body">
         <!-- Safe Info Banner for Existing Ventoy Disks -->
         <div v-if="isVentoyDisk" class="safe-banner">
-          <div class="banner-title">💡 免格式化增量注入模式（数据 100% 安全）</div>
+          <div class="banner-title">💡 请放心：本操作绝对不会格式化您的 U 盘！</div>
           <div class="banner-desc">
-            检测到目标 U 盘已部署 Ventoy 引导结构。系统将<strong>自动跳过格式化与抹盘阶段</strong>，直接无损写入 UniBoot 引导固件与菜单。<strong>您 U 盘中现有的全部 ISO 镜像与资料将完好保留</strong>！
+            检测到目标 U 盘已部署 Ventoy 引导结构。系统将<strong>自动采用增量注入技术</strong>，跳过擦盘与格式化，直接写入 UniBoot 引导固件与主题。<strong>您 U 盘中的所有文件、ISO 镜像均 100% 原样保留</strong>，请安心部署！
           </div>
         </div>
 
