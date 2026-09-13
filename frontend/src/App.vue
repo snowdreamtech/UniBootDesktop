@@ -433,9 +433,18 @@ async function refreshDisks() {
     try {
       const fetched = await window.go.main.App.GetDiskList();
       diskList.value = fetched || [];
+      if (selectedDisk.value) {
+        const stillExists = diskList.value.find(d => d.device === selectedDisk.value?.device);
+        if (!stillExists) {
+          selectedDisk.value = diskList.value.length > 0 ? diskList.value[0] : null;
+        }
+      } else if (diskList.value.length > 0) {
+        selectedDisk.value = diskList.value[0];
+      }
     } catch (e) {
       console.error(e);
       diskList.value = [];
+      selectedDisk.value = null;
     }
   } else {
     // Fallback mock for browser preview demonstrating genuine vs fake USB 3.0
@@ -574,27 +583,41 @@ async function startDeployment() {
 
 
 async function launchQEMU() {
-  console.log('[UniBoot] launchQEMU triggered, selectedDisk:', selectedDisk.value);
+  console.log('[UniBoot] launchQEMU clicked, diskList:', diskList.value, 'selectedDisk:', selectedDisk.value);
 
+  // 1. Check if disk list is empty
+  if (!diskList.value || diskList.value.length === 0) {
+    alert('⚠️ 当前未检测到任何可用的 U 盘设备！\n\n请插入 U 盘后再点击启动 QEMU 模拟器。');
+    return;
+  }
+
+  // 2. Check if a disk is selected
   if (!selectedDisk.value || !selectedDisk.value.device) {
-    alert('请先插入或在磁盘列表中选择要测试的目标 U 盘！');
+    alert('⚠️ 请先选择要测试的目标 U 盘！\n\n请在上方磁盘列表中点击选中要校验的 U 盘。');
+    return;
+  }
+
+  // 3. Check if QEMU is installed
+  if (!qemuStatus.value.installed) {
+    alert(`❌ 未在当前系统中检测到 QEMU 模拟器！\n\n安装提示：\n• MacPorts 用户: sudo port install qemu\n• Homebrew 用户: brew install qemu\n• Windows 用户: 请安装 QEMU.exe`);
     return;
   }
 
   const targetDevice = selectedDisk.value.device;
+  const diskLabel = selectedDisk.value.name || selectedDisk.value.device;
   isLaunchingQemu.value = true;
 
   try {
     if (window.go && window.go.main && window.go.main.App) {
       if (typeof window.go.main.App.LaunchQEMU === 'function') {
         await window.go.main.App.LaunchQEMU(targetDevice);
-        alert(`🚀 已成功启动 QEMU 模拟器校验磁盘：${targetDevice}\n\n请在当前桌面上查看拉起的 QEMU 虚拟机窗口。`);
+        alert(`🚀 已成功启动 QEMU 模拟器校验：\n${diskLabel} (${targetDevice})\n\n请在当前桌面上查看拉起的 QEMU 虚拟机窗口。`);
       } else {
-        alert(`⚠️ 后端 API 加载中：Wails App.LaunchQEMU 尚未完成绑定，请重新启动 UniBoot 应用。`);
+        alert(`⚠️ 后端 API 尚未就绪：Wails 绑定接口加载中，请重新启动 UniBoot 桌面应用。`);
       }
     } else {
       await new Promise(r => setTimeout(r, 600));
-      alert(`[演示模式] 正在启动 QEMU 模拟器校验磁盘：${targetDevice}`);
+      alert(`[演示模式] 正在启动 QEMU 模拟器校验：\n${diskLabel} (${targetDevice})`);
     }
   } catch (e: any) {
     console.error('[UniBoot] LaunchQEMU error:', e);
