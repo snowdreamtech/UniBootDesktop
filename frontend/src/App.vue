@@ -396,9 +396,6 @@ const isDeployDisabled = computed(() => {
 
 function setSelectionMode(mode: 'single' | 'batch') {
   selectionMode.value = mode;
-  if (mode === 'single' && diskList.value.length > 0 && !selectedDisk.value) {
-    selectedDisk.value = diskList.value[0];
-  }
 }
 
 function selectAllDisks() {
@@ -411,7 +408,11 @@ function deselectAllDisks() {
 
 function onDiskSelect(disk: DiskInfo) {
   if (selectionMode.value === 'single') {
-    selectedDisk.value = disk;
+    if (selectedDisk.value && selectedDisk.value.device === disk.device) {
+      selectedDisk.value = null;
+    } else {
+      selectedDisk.value = disk;
+    }
   } else {
     onDiskToggle(disk);
   }
@@ -436,10 +437,8 @@ async function refreshDisks() {
       if (selectedDisk.value) {
         const stillExists = diskList.value.find(d => d.device === selectedDisk.value?.device);
         if (!stillExists) {
-          selectedDisk.value = diskList.value.length > 0 ? diskList.value[0] : null;
+          selectedDisk.value = null;
         }
-      } else if (diskList.value.length > 0) {
-        selectedDisk.value = diskList.value[0];
       }
     } catch (e) {
       console.error(e);
