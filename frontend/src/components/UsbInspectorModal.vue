@@ -209,7 +209,10 @@ function closeModal() {
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 229, 255, 0.1);
   border-radius: 16px;
   width: 90%;
-  max-width: 620px;
+  max-width: 650px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -262,6 +265,26 @@ function closeModal() {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.3);
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-cyan);
 }
 
 .audit-banner {
