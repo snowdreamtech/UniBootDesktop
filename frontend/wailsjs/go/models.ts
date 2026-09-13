@@ -42,6 +42,8 @@ export namespace disk {
 	    smartStatus: string;
 	    busPower: string;
 	    busPowerUsed: string;
+	    sectorSize: string;
+	    transportProtocol: string;
 	    isFakeUsb3: boolean;
 	    protocolCode: string;
 	
@@ -71,6 +73,8 @@ export namespace disk {
 	        this.smartStatus = source["smartStatus"];
 	        this.busPower = source["busPower"];
 	        this.busPowerUsed = source["busPowerUsed"];
+	        this.sectorSize = source["sectorSize"];
+	        this.transportProtocol = source["transportProtocol"];
 	        this.isFakeUsb3 = source["isFakeUsb3"];
 	        this.protocolCode = source["protocolCode"];
 	    }

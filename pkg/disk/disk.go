@@ -87,6 +87,8 @@ type DiskInfo struct {
 	SmartStatus     string `json:"smartStatus"`     // S.M.A.R.T. health status (e.g. Verified, Not Supported, Failing)
 	BusPower        string `json:"busPower"`        // Bus power available (e.g. 500 mA, 900 mA)
 	BusPowerUsed    string `json:"busPowerUsed"`    // Bus power required/used (e.g. 500 mA, 224 mA)
+	SectorSize      string `json:"sectorSize"`      // Sector block size (e.g. 512 Bytes, 4096 Bytes / 4Kn)
+	TransportProtocol string `json:"transportProtocol"` // USB Transport Protocol (e.g. UASP, BOT)
 	IsFakeUsb3      bool   `json:"isFakeUsb3"`      // Warning flag for fake USB 3.0 (USB 2.0 PHY disguised as 3.0)
 	ProtocolCode    string `json:"protocolCode"`    // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
 }
@@ -335,6 +337,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		var fileSystem string
 		var partitionScheme string
 		var smartStatus string
+		var sectorBytes uint64
 		var writable bool = true
 
 		if infoErr == nil {
@@ -353,6 +356,9 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			}
 			if strings.Contains(infoStr, "<key>SMARTStatus</key>") {
 				smartStatus = extractPlistValue(infoStr, "SMARTStatus")
+			}
+			if strings.Contains(infoStr, "<key>DeviceBlockSize</key>") {
+				sectorBytes = extractPlistUint(infoStr, "DeviceBlockSize")
 			}
 			if strings.Contains(infoStr, "<key>RemovableMediaOrExternalDevice</key>") {
 				isRemovable = strings.Contains(infoStr, "<true/>")
@@ -393,6 +399,9 @@ func getDarwinDisks() ([]DiskInfo, error) {
 				if smartStatus == "" && strings.Contains(parentStr, "<key>SMARTStatus</key>") {
 					smartStatus = extractPlistValue(parentStr, "SMARTStatus")
 				}
+				if sectorBytes == 0 && strings.Contains(parentStr, "<key>DeviceBlockSize</key>") {
+					sectorBytes = extractPlistUint(parentStr, "DeviceBlockSize")
+				}
 				content := extractPlistValue(parentStr, "Content")
 				if strings.Contains(content, "GUID") || strings.Contains(content, "GPT") {
 					partitionScheme = "GPT (GUID Partition Table)"
@@ -410,6 +419,18 @@ func getDarwinDisks() ([]DiskInfo, error) {
 
 		if partitionScheme == "" {
 			partitionScheme = "GPT / MBR"
+		}
+
+		sectorSizeStr := "512 Bytes (512n/512e)"
+		if sectorBytes == 4096 {
+			sectorSizeStr = "4096 Bytes (4Kn 原生大扇区)"
+		} else if sectorBytes > 0 {
+			sectorSizeStr = fmt.Sprintf("%d Bytes", sectorBytes)
+		}
+
+		transportProtoStr := "BOT (Bulk-Only Transport)"
+		if strings.Contains(strings.ToUpper(busProto), "UASP") || strings.Contains(strings.ToUpper(busProto), "SCSI") {
+			transportProtoStr = "UASP (USB Attached SCSI 高速队列)"
 		}
 
 		usbVer := "USB 2.0"
@@ -464,28 +485,30 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
 		disks = append(disks, DiskInfo{
-			Device:          volPath,
-			Name:            displayName,
-			Size:            totalSize,
-			Formatted:       formattedSize,
-			FreeSpace:       freeSpace,
-			FreeFormatted:   freeFormatted,
-			IsRemovable:     true,
-			IsSystem:        false,
-			UsbVersion:      usbVer,
-			UsbSpeed:        usbSpeed,
-			Vendor:          vendor,
-			FileSystem:      fileSystem,
-			PartitionScheme: partitionScheme,
-			Writable:        writable,
-			SerialNumber:    serialNum,
-			VendorId:        vendorId,
-			ProductId:       productId,
-			SmartStatus:     smartStatus,
-			BusPower:        busPower,
-			BusPowerUsed:    busPowerUsed,
-			IsFakeUsb3:      isFake,
-			ProtocolCode:    protoCode,
+			Device:            volPath,
+			Name:              displayName,
+			Size:              totalSize,
+			Formatted:         formattedSize,
+			FreeSpace:         freeSpace,
+			FreeFormatted:     freeFormatted,
+			IsRemovable:       true,
+			IsSystem:          false,
+			UsbVersion:        usbVer,
+			UsbSpeed:          usbSpeed,
+			Vendor:            vendor,
+			FileSystem:        fileSystem,
+			PartitionScheme:   partitionScheme,
+			Writable:          writable,
+			SerialNumber:      serialNum,
+			VendorId:          vendorId,
+			ProductId:         productId,
+			SmartStatus:       smartStatus,
+			BusPower:          busPower,
+			BusPowerUsed:      busPowerUsed,
+			SectorSize:        sectorSizeStr,
+			TransportProtocol: transportProtoStr,
+			IsFakeUsb3:        isFake,
+			ProtocolCode:      protoCode,
 		})
 	}
 
@@ -661,11 +684,13 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			Vendor:          vendor,
 			FileSystem:      fileSystem,
 			PartitionScheme: partitionScheme,
-			Writable:        !dev.Ro,
-			SmartStatus:     "Verified",
-			BusPower:        "500 mA",
-			BusPowerUsed:    "500 mA",
-			IsFakeUsb3:      isFake,
+			Writable:          !dev.Ro,
+			SmartStatus:       "Verified",
+			BusPower:          "500 mA",
+			BusPowerUsed:      "500 mA",
+			SectorSize:        "512 Bytes (512n/512e)",
+			TransportProtocol: "BOT (Bulk-Only Transport)",
+			IsFakeUsb3:        isFake,
 			ProtocolCode:    protoCode,
 		})
 	}
@@ -737,11 +762,13 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			Vendor:          "Generic",
 			FileSystem:      "FAT32 / NTFS",
 			PartitionScheme: "GPT / MBR",
-			Writable:        true,
-			SmartStatus:     "Verified",
-			BusPower:        "500 mA",
-			BusPowerUsed:    "500 mA",
-			IsFakeUsb3:      isFake,
+			Writable:          true,
+			SmartStatus:       "Verified",
+			BusPower:          "500 mA",
+			BusPowerUsed:      "500 mA",
+			SectorSize:        "512 Bytes (512n/512e)",
+			TransportProtocol: "BOT (Bulk-Only Transport)",
+			IsFakeUsb3:        isFake,
 			ProtocolCode:    protoCode,
 		})
 	}

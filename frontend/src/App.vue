@@ -186,6 +186,8 @@ interface DiskInfo {
   smartStatus?: string;
   busPower?: string;
   busPowerUsed?: string;
+  sectorSize?: string;
+  transportProtocol?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }

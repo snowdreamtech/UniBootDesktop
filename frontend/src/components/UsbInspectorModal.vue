@@ -119,6 +119,16 @@
               {{ formatPower(disk.busPowerUsed || disk.busPower) }} (端口上限: {{ formatPower(disk.busPower) }})
             </span>
           </div>
+
+          <div class="spec-item">
+            <span class="spec-label">扇区物理大小 (Sector Block Size)</span>
+            <span class="spec-val highlight">{{ disk.sectorSize || '512 Bytes (512n/512e)' }}</span>
+          </div>
+
+          <div class="spec-item">
+            <span class="spec-label">底层传输协议 (Transport Protocol)</span>
+            <span class="spec-val highlight">{{ disk.transportProtocol || 'BOT (Bulk-Only Transport)' }}</span>
+          </div>
         </div>
 
         <!-- Protocol Compatibility Matrix -->
@@ -163,6 +173,8 @@ interface DiskInfo {
   smartStatus?: string;
   busPower?: string;
   busPowerUsed?: string;
+  sectorSize?: string;
+  transportProtocol?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }
