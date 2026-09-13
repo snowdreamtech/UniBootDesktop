@@ -96,10 +96,6 @@
                 </select>
               </div>
             </div>
-
-            <div class="placeholder-notice">
-              ⚡ 提示：修改任何参数均会<strong>实时自动保存并生效</strong>，无需手动点击保存。
-            </div>
           </div>
         </div>
 
@@ -574,9 +570,9 @@ onMounted(() => {
 }
 
 .glass-modal {
-  background: rgba(13, 20, 36, 0.95);
-  border: 1px solid rgba(0, 229, 255, 0.3);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 229, 255, 0.15);
+  background: var(--modal-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 24px var(--accent-cyan-glow);
   border-radius: 16px;
   width: 92%;
   max-width: 720px;
@@ -584,6 +580,8 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  color: var(--text-main);
+  transition: all 0.3s ease;
 }
 
 .modal-header {
@@ -591,7 +589,8 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--section-bg);
+  border-bottom: 1px solid var(--card-border);
 }
 
 .header-title {
@@ -607,7 +606,7 @@ onMounted(() => {
 .header-title h3 {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-main);
   margin: 0;
 }
 
@@ -628,7 +627,7 @@ onMounted(() => {
   background: rgba(0, 229, 255, 0.1);
   padding: 0.25rem 0.6rem;
   border-radius: 20px;
-  border: 1px solid rgba(0, 229, 255, 0.25);
+  border: 1px solid var(--card-border);
   transition: all 0.3s ease;
 }
 
@@ -651,7 +650,7 @@ onMounted(() => {
 }
 
 .close-btn:hover {
-  color: #fff;
+  color: var(--text-main);
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -660,13 +659,13 @@ onMounted(() => {
   display: flex;
   gap: 0.5rem;
   padding: 0.5rem 1.5rem;
-  background: rgba(0, 0, 0, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--section-bg);
+  border-bottom: 1px solid var(--card-border);
 }
 
 .tab-btn {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
   color: var(--text-muted);
   padding: 0.5rem 1rem;
   border-radius: 8px;
@@ -681,14 +680,14 @@ onMounted(() => {
 
 .tab-btn:hover {
   background: rgba(0, 229, 255, 0.08);
-  color: #fff;
+  color: var(--text-main);
 }
 
 .tab-btn.active {
   background: rgba(0, 229, 255, 0.15);
   border-color: var(--accent-cyan);
   color: var(--accent-cyan);
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+  box-shadow: 0 0 12px var(--accent-cyan-glow);
 }
 
 .tab-icon {
@@ -710,8 +709,8 @@ onMounted(() => {
 }
 
 .settings-section {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--section-bg);
+  border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 1.25rem;
 }
@@ -776,27 +775,27 @@ onMounted(() => {
 
 .field-hint {
   font-size: 0.725rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
 }
 
 .form-input, .form-select {
-  background: rgba(8, 14, 26, 0.8);
-  border: 1px solid rgba(0, 229, 255, 0.3);
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
   border-radius: 8px;
-  color: #fff;
+  color: var(--text-main);
   padding: 0.55rem 0.75rem;
   font-size: 0.85rem;
   outline: none;
 }
 
 .form-select option {
-  background: #0d1424;
-  color: #fff;
+  background: var(--modal-bg);
+  color: var(--text-main);
 }
 
 .form-input:focus, .form-select:focus {
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+  box-shadow: 0 0 10px var(--accent-cyan-glow);
 }
 
 .radio-group {
@@ -811,7 +810,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.8rem;
-  color: #ddd;
+  color: var(--text-main);
   cursor: pointer;
 }
 
@@ -823,8 +822,8 @@ onMounted(() => {
 }
 
 .protocol-pill {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
   padding: 0.35rem 0.75rem;
   border-radius: 6px;
   font-size: 0.8rem;
@@ -841,8 +840,8 @@ onMounted(() => {
 }
 
 .protocol-pill:hover {
-  border-color: rgba(0, 229, 255, 0.4);
-  color: #fff;
+  border-color: var(--accent-cyan);
+  color: var(--text-main);
 }
 
 .protocol-pill.active {
@@ -857,7 +856,7 @@ onMounted(() => {
   font-size: 0.8rem;
   color: var(--text-muted);
   background: rgba(0, 229, 255, 0.05);
-  border: 1px dashed rgba(0, 229, 255, 0.25);
+  border: 1px dashed var(--card-border);
   padding: 0.75rem 1rem;
   border-radius: 8px;
   line-height: 1.5;
@@ -892,10 +891,10 @@ onMounted(() => {
   gap: 0.5rem;
   max-height: 280px;
   overflow-y: auto;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--section-bg);
   padding: 0.6rem;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
 }
 
 .firmware-item {
@@ -903,7 +902,7 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 0.45rem 0.6rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--input-bg);
   border-radius: 6px;
   font-size: 0.8rem;
 }
@@ -917,7 +916,7 @@ onMounted(() => {
 .fw-name {
   font-family: monospace;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-main);
 }
 
 .fw-path {
@@ -959,7 +958,7 @@ onMounted(() => {
 }
 
 .sync-info-labels strong {
-  color: #fff;
+  color: var(--text-main);
 }
 
 .sync-info-labels .highlight-tag {
@@ -967,7 +966,7 @@ onMounted(() => {
 }
 
 .sync-info-labels .divider {
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--text-muted);
 }
 
 .badge.pulse {
@@ -992,7 +991,7 @@ onMounted(() => {
 }
 
 .btn-primary-sm:hover {
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 12px var(--accent-cyan-glow);
 }
 
 .sync-progress {

@@ -1,7 +1,10 @@
 /* Glassmorphism Theme CSS — UniGoDesktop Design System */
 :root, [data-theme="dark"] {
   --bg-color: #070a12;
-  --card-bg: rgba(18, 26, 43, 0.65);
+  --card-bg: rgba(18, 26, 43, 0.92);
+  --modal-bg: rgba(13, 20, 36, 0.95);
+  --input-bg: rgba(8, 14, 26, 0.8);
+  --section-bg: rgba(0, 0, 0, 0.25);
   --card-border: rgba(0, 229, 255, 0.15);
   --card-border-active: rgba(0, 229, 255, 0.6);
   --text-main: #f8fafc;
@@ -14,12 +17,15 @@
 }
 
 [data-theme="light"] {
-  --bg-color: #f1f5f9;
-  --card-bg: rgba(255, 255, 255, 0.85);
+  --bg-color: #f8fafc;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --modal-bg: #ffffff;
+  --input-bg: #f1f5f9;
+  --section-bg: #f8fafc;
   --card-border: rgba(2, 132, 199, 0.25);
   --card-border-active: rgba(2, 132, 199, 0.6);
   --text-main: #0f172a;
-  --text-muted: #475569;
+  --text-muted: #64748b;
   --accent-cyan: #0284c7;
   --accent-cyan-glow: rgba(2, 132, 199, 0.25);
   --accent-purple: #7c3aed;
