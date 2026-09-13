@@ -16,10 +16,20 @@ func TestIsIgnoredVolume(t *testing.T) {
 		expected bool
 	}{
 		{"Macintosh HD system disk", "Macintosh HD", true},
+		{"Macintosh HD Data volume", "Macintosh HD - Data", true},
 		{"System volume", "System", true},
+		{"Recovery volume", "Recovery", true},
+		{"Preboot volume", "Preboot", true},
+		{"VM swap volume", "VM", true},
+		{"EFI partition", "EFI", true},
+		{"ESP partition", "ESP", true},
 		{"VTOYEFI upper", "VTOYEFI", true},
 		{"vtoyefi lower", "vtoyefi", true},
 		{"VTOYEFI with prefix", "VTOYEFI_BOOT", true},
+		{"EFI_BOOT partition", "EFI_BOOT", true},
+		{"System Reserved", "System Reserved", true},
+		{"WinRE partition", "WinRE", true},
+		{"OEM partition", "OEM", true},
 		{"Normal Ventoy volume", "Ventoy", false},
 		{"Normal USB volume", "MyUSBKey", false},
 	}

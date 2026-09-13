@@ -14,20 +14,37 @@ import (
 var (
 	// ignoredVolumeExact defines exact volume names to ignore (case-insensitive)
 	ignoredVolumeExact = []string{
+		// macOS System & Internal Volumes
 		"MACINTOSH HD",
+		"MACINTOSH HD - DATA",
 		"SYSTEM",
-		"VTOYEFI",
 		"RECOVERY",
 		"PREBOOT",
+		"VM",
+		"UPDATE",
+
+		// EFI & Boot Partition Names
+		"EFI",
+		"ESP",
+		"VTOYEFI",
+		"SYSTEM RESERVED",
+		"系统保留",
+		"WINRE",
+		"WINRETOOLS",
+		"OEM",
 	}
 
 	// ignoredVolumePrefixes defines volume name prefixes to ignore (case-insensitive)
 	ignoredVolumePrefixes = []string{
 		"VTOYEFI",
+		"EFI_",
+		"EFI-",
+		"BOOT_",
+		"BOOT-",
 	}
 )
 
-// IsIgnoredVolume returns true if the volume name should be ignored (e.g., system disks, VTOYEFI partitions).
+// IsIgnoredVolume returns true if the volume name should be ignored (e.g., system disks, EFI/boot partitions).
 func IsIgnoredVolume(name string) bool {
 	upper := strings.ToUpper(strings.TrimSpace(name))
 	if upper == "" {
