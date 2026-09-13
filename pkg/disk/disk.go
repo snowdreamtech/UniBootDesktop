@@ -11,10 +11,39 @@ import (
 	"strings"
 )
 
+var (
+	// ignoredVolumeExact defines exact volume names to ignore (case-insensitive)
+	ignoredVolumeExact = []string{
+		"MACINTOSH HD",
+		"SYSTEM",
+		"VTOYEFI",
+		"RECOVERY",
+		"PREBOOT",
+	}
+
+	// ignoredVolumePrefixes defines volume name prefixes to ignore (case-insensitive)
+	ignoredVolumePrefixes = []string{
+		"VTOYEFI",
+	}
+)
+
 // IsIgnoredVolume returns true if the volume name should be ignored (e.g., system disks, VTOYEFI partitions).
 func IsIgnoredVolume(name string) bool {
 	upper := strings.ToUpper(strings.TrimSpace(name))
-	return upper == "MACINTOSH HD" || upper == "SYSTEM" || upper == "VTOYEFI" || strings.HasPrefix(upper, "VTOYEFI")
+	if upper == "" {
+		return true
+	}
+	for _, exact := range ignoredVolumeExact {
+		if upper == exact {
+			return true
+		}
+	}
+	for _, prefix := range ignoredVolumePrefixes {
+		if strings.HasPrefix(upper, prefix) {
+			return true
+		}
+	}
+	return false
 }
 
 // DiskInfo represents metadata about an available disk/USB drive.
