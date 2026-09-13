@@ -472,39 +472,75 @@ async function startDeployment() {
   }
 
   isDeploying.value = true;
-  deployProgress.value = 10;
+  deployProgress.value = 15;
+
+  const progressTimer = setInterval(() => {
+    if (deployProgress.value < 85) {
+      deployProgress.value += 15;
+    }
+  }, 150);
+
+  let success = true;
+  let resultMsg = '';
 
   try {
     if (window.go && window.go.main && window.go.main.App) {
       if (targets.length === 1) {
+        let res: any;
         if (activeMode.value === 'cloud') {
-          await window.go.main.App.DeployModeB(targets[0]);
+          res = await window.go.main.App.DeployModeB(targets[0]);
         } else {
-          await window.go.main.App.DeployModeA(targets[0], selectedFsType.value);
+          res = await window.go.main.App.DeployModeA(targets[0], selectedFsType.value);
+        }
+        if (res) {
+          success = res.success;
+          resultMsg = res.message || '';
         }
       } else {
+        let resList: any[];
         if (activeMode.value === 'cloud') {
-          await window.go.main.App.DeployModeBBatch(targets);
+          resList = await window.go.main.App.DeployModeBBatch(targets);
         } else {
-          await window.go.main.App.DeployModeABatch(targets, selectedFsType.value);
+          resList = await window.go.main.App.DeployModeABatch(targets, selectedFsType.value);
+        }
+        if (resList && resList.length > 0) {
+          const failed = resList.filter(r => !r.success);
+          if (failed.length > 0) {
+            success = false;
+            resultMsg = failed.map(f => `${f.target}: ${f.message}`).join('\n');
+          } else {
+            resultMsg = `成功完成 ${resList.length} 块 U 盘的极速云安装盘部署！`;
+          }
         }
       }
+    } else {
+      // Mock execution for browser demo
+      await new Promise(r => setTimeout(r, 800));
+      resultMsg = `成功部署模式 ${activeMode.value === 'cloud' ? 'B (极速云安装盘)' : 'A (混合双模)'} 到 ${targets.join(', ')}`;
     }
   } catch (e: any) {
     console.error(e);
+    success = false;
+    resultMsg = e?.message || String(e);
+  } finally {
+    clearInterval(progressTimer);
   }
 
-  const timer = setInterval(() => {
-    deployProgress.value += 30;
-    if (deployProgress.value >= 100) {
-      clearInterval(timer);
-      setTimeout(() => {
-        isDeploying.value = false;
-        alert(`🎉 部署成功！${targets.length} 块 U 盘极速云安装盘已就绪！`);
-      }, 300);
-    }
-  }, 200);
+  if (success) {
+    deployProgress.value = 100;
+    setTimeout(async () => {
+      isDeploying.value = false;
+      deployProgress.value = 0;
+      await refreshDisks();
+      alert(`🎉 部署成功！\n\n${resultMsg}`);
+    }, 200);
+  } else {
+    isDeploying.value = false;
+    deployProgress.value = 0;
+    alert(`❌ 部署失败：\n\n${resultMsg}`);
+  }
 }
+
 
 function launchQEMU() {
   alert(`正在启动 QEMU 模拟器校验: ${selectedDisk.value?.device}`);
