@@ -34,12 +34,9 @@ func Get(key string) string {
 	return os.Getenv(key)
 }
 
-// GithubProxy returns the configured GitHub proxy URL or a stable public default.
+// GithubProxy returns the configured GitHub proxy URL or empty string by default.
 func GithubProxy() string {
-	if proxy := Get("GITHUB_PROXY"); proxy != "" {
-		return proxy
-	}
-	return "https://gh-proxy.sn0wdr1am.com/"
+	return Get("GITHUB_PROXY")
 }
 
 var (
