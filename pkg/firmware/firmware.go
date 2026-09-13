@@ -63,9 +63,10 @@ var StandardFirmwareMappings = []FirmwareMapping{
 	{ReleaseName: "ipxe-riscv32.lkrn", TargetPath: "ipxe-riscv32.lkrn", Description: "Legacy MBR Kernel Boot Image (RISC-V 32-bit)", IsReserved: false},
 	{ReleaseName: "undionly.kpxe", TargetPath: "undionly.kpxe", Description: "Legacy BIOS UNDI PXE Network Boot Firmware", IsReserved: true},
 
-	// Entry Scripts & ISO Images
+	// Entry Scripts & Theme Background Assets
 	{ReleaseName: "boot.ipxe", TargetPath: "boot.ipxe", Description: "iPXE Global Entry Script", IsReserved: false},
 	{ReleaseName: "uniboot.ipxe", TargetPath: "uniboot.ipxe", Description: "UniBoot Main Interactive Menu Script", IsReserved: false},
+	{ReleaseName: "background.png", TargetPath: "background.png", Description: "UniBoot 1:1 Ventoy Theme Background Image (PNG)", IsReserved: false},
 	{ReleaseName: "UniBoot.iso", TargetPath: "iso/UniBoot.iso", Description: "UniBoot Full UEFI/BIOS Hybrid Boot ISO Image", IsReserved: true},
 }
 
@@ -148,7 +149,6 @@ func FetchLatestUniBootRelease(ctx context.Context, proxyPrefix string) (*UniBoo
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("GitHub API returned status code %d for %s", resp.StatusCode, finalURL)
 	}
-
 
 	var ghRelease struct {
 		TagName     string `json:"tag_name"`
@@ -240,7 +240,6 @@ func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootRelea
 	return rel, nil
 }
 
-
 // GetFirmwareData retrieves binary data for a firmware asset based on priority:
 // Priority 1: User downloaded / cached firmware in GetDataDir()/firmware/<releaseName>
 // Priority 2: Built-in embedded binary (embed.FS)
@@ -290,6 +289,7 @@ func ExtractFirmwareToDir(targetDir string) error {
 		if strings.HasSuffix(mapping.ReleaseName, ".efi") ||
 			strings.HasSuffix(mapping.ReleaseName, ".lkrn") ||
 			strings.HasSuffix(mapping.ReleaseName, ".kpxe") ||
+			strings.HasSuffix(mapping.ReleaseName, ".png") ||
 			strings.HasSuffix(mapping.ReleaseName, ".ipxe") {
 			ipxePath := filepath.Join(targetDir, "ipxe", mapping.ReleaseName)
 			if err := os.MkdirAll(filepath.Dir(ipxePath), 0755); err == nil {
@@ -318,6 +318,7 @@ func ExtractFirmwareModeA(dataMountDir string) error {
 		if strings.HasSuffix(mapping.ReleaseName, ".efi") ||
 			strings.HasSuffix(mapping.ReleaseName, ".lkrn") ||
 			strings.HasSuffix(mapping.ReleaseName, ".kpxe") ||
+			strings.HasSuffix(mapping.ReleaseName, ".png") ||
 			strings.HasSuffix(mapping.ReleaseName, ".ipxe") {
 			ipxePath := filepath.Join(dataMountDir, "ipxe", mapping.ReleaseName)
 			if err := os.MkdirAll(filepath.Dir(ipxePath), 0755); err != nil {
@@ -339,8 +340,8 @@ func ExtractFirmwareModeA(dataMountDir string) error {
 	return nil
 }
 
-// ExtractFirmwareModeB extracts Mode B assets (EFI/BOOT/ & root scripts) directly to the ESP partition (Partition 2),
-// providing pure 100% native iPXE cloud boot without ventoy or iso dependencies.
+// ExtractFirmwareModeB extracts Mode B assets (EFI/BOOT/ & root scripts & background image) directly to ESP partition (Partition 2),
+// providing 100% native iPXE cloud boot matching 1:1 Ventoy theme design.
 func ExtractFirmwareModeB(efiMountDir string) error {
 	if efiMountDir == "" {
 		return fmt.Errorf("EFI mount directory cannot be empty")
@@ -352,13 +353,19 @@ func ExtractFirmwareModeB(efiMountDir string) error {
 			return fmt.Errorf("failed to load firmware asset %s: %w", mapping.ReleaseName, err)
 		}
 
-		// Mode B writes EFI/BOOT/ BOOTX64.EFI, BOOTAA64.EFI, boot.ipxe, uniboot.ipxe, ipxe.lkrn, undionly.kpxe to ESP partition
+		// Mode B writes EFI/BOOT/ BOOTX64.EFI, BOOTAA64.EFI, boot.ipxe, uniboot.ipxe, background.png to ESP partition
 		destPath := filepath.Join(efiMountDir, filepath.FromSlash(mapping.TargetPath))
 		if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
 			return fmt.Errorf("failed to create directory for %s: %w", destPath, err)
 		}
 		if err := os.WriteFile(destPath, data, 0644); err != nil {
 			return fmt.Errorf("failed to extract firmware asset to %s: %w", destPath, err)
+		}
+
+		if mapping.ReleaseName == "background.png" {
+			extraPath := filepath.Join(efiMountDir, "ipxe", "background.png")
+			_ = os.MkdirAll(filepath.Dir(extraPath), 0755)
+			_ = os.WriteFile(extraPath, data, 0644)
 		}
 	}
 	return nil
