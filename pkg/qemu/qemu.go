@@ -85,6 +85,81 @@ func Detect() *QEMUStatus {
 	}
 }
 
+// extractPlistString parses a string value for a given key from a plist string.
+func extractPlistString(plistStr string, key string) string {
+	keyPattern := fmt.Sprintf("<key>%s</key>", key)
+	idx := strings.Index(plistStr, keyPattern)
+	if idx == -1 {
+		return ""
+	}
+	rest := plistStr[idx+len(keyPattern):]
+	startStr := strings.Index(rest, "<string>")
+	if startStr == -1 {
+		return ""
+	}
+	rest = rest[startStr+len("<string>"):]
+	endStr := strings.Index(rest, "</string>")
+	if endStr == -1 {
+		return ""
+	}
+	return strings.TrimSpace(rest[:endStr])
+}
+
+// ResolveRawDiskDevice resolves volume mount paths (e.g. /Volumes/Ventoy), partition paths (e.g. /dev/disk2s1),
+// or device names (e.g. disk2) to raw unbuffered block device paths suitable for QEMU (e.g. /dev/rdisk2).
+func ResolveRawDiskDevice(diskPath string) string {
+	diskPath = strings.TrimSpace(diskPath)
+	if diskPath == "" {
+		return ""
+	}
+
+	switch runtime.GOOS {
+	case "darwin":
+		// Case 1: Already a raw disk node (e.g. /dev/rdisk2)
+		if strings.HasPrefix(diskPath, "/dev/rdisk") {
+			return diskPath
+		}
+
+		// Case 2: Standard block disk node (e.g. /dev/disk2 or /dev/disk2s1)
+		if strings.HasPrefix(diskPath, "/dev/disk") {
+			rawNode := strings.Replace(diskPath, "/dev/disk", "/dev/rdisk", 1)
+			if idx := strings.Index(filepath.Base(rawNode), "s"); idx != -1 {
+				base := filepath.Base(rawNode)[:idx]
+				rawNode = filepath.Join(filepath.Dir(rawNode), base)
+			}
+			return rawNode
+		}
+
+		// Case 3: Volume mount path (e.g. /Volumes/Ventoy, /Volumes/UNIBOOT)
+		cmd := exec.Command("diskutil", "info", "-plist", diskPath)
+		output, err := cmd.Output()
+		if err == nil {
+			plistStr := string(output)
+			if parentDisk := extractPlistString(plistStr, "ParentWholeDisk"); parentDisk != "" {
+				return "/dev/r" + parentDisk
+			}
+			if devNode := extractPlistString(plistStr, "DeviceNode"); devNode != "" {
+				rawNode := strings.Replace(devNode, "/dev/disk", "/dev/rdisk", 1)
+				if idx := strings.Index(filepath.Base(rawNode), "s"); idx != -1 {
+					base := filepath.Base(rawNode)[:idx]
+					rawNode = filepath.Join(filepath.Dir(rawNode), base)
+				}
+				return rawNode
+			}
+		}
+
+		if strings.HasPrefix(diskPath, "disk") {
+			node := diskPath
+			if idx := strings.Index(node, "s"); idx != -1 {
+				node = node[:idx]
+			}
+			return "/dev/r" + node
+		}
+	}
+
+	return diskPath
+}
+
 // LaunchTest executes a non-blocking QEMU preview test instance on the target USB drive safely.
 func LaunchTest(ctx context.Context, diskPath string) error {
 	if diskPath == "" {
@@ -101,14 +176,10 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		return fmt.Errorf("未检测到 QEMU 模拟器！请先安装 QEMU（例如通过 brew install qemu 或 MacPorts 命令行包）。")
 	}
 
-	// Normalize macOS disk path: convert /dev/diskN -> /dev/rdiskN for raw unbuffered I/O
-	targetPath := diskPath
-	if runtime.GOOS == "darwin" {
-		if strings.HasPrefix(targetPath, "/dev/disk") {
-			targetPath = strings.Replace(targetPath, "/dev/disk", "/dev/rdisk", 1)
-		} else if !strings.HasPrefix(targetPath, "/dev/") && strings.HasPrefix(targetPath, "disk") {
-			targetPath = "/dev/r" + targetPath
-		}
+	// Resolve volume/mount path (e.g. /Volumes/Ventoy) to underlying raw block device (/dev/rdisk2)
+	targetPath := ResolveRawDiskDevice(diskPath)
+	if targetPath == "" {
+		targetPath = diskPath
 	}
 
 	// Build safe read-only preview command using snapshot mode

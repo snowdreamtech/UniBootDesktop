@@ -38,3 +38,10 @@ func TestLaunchTest_DryRun(t *testing.T) {
 		t.Errorf("expected nil error under dry-run, got: %v", err)
 	}
 }
+
+func TestResolveRawDiskDevice(t *testing.T) {
+	node := ResolveRawDiskDevice("/dev/disk2s1")
+	if node != "/dev/rdisk2" {
+		t.Errorf("expected /dev/rdisk2 for /dev/disk2s1, got %s", node)
+	}
+}
