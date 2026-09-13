@@ -662,8 +662,8 @@ h1 {
 
 .content-grid {
   display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  gap: 2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
 }
 
 .section-card h2 {

@@ -337,12 +337,14 @@ const diskTagLabel = computed(() => {
 
 .disk-details {
   flex: 1;
+  min-width: 0;
 }
 
 .disk-name-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .disk-name {
@@ -373,6 +375,7 @@ const diskTagLabel = computed(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .speed-tag {
@@ -380,6 +383,7 @@ const diskTagLabel = computed(() => {
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.05);
+  white-space: nowrap;
 }
 
 .speed-tag.usb2 {
@@ -402,6 +406,7 @@ const diskTagLabel = computed(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .btn-inspect {
