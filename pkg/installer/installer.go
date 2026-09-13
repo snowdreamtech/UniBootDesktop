@@ -37,7 +37,10 @@ func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*Deploy
 
 	if isExistingVentoy {
 		// Scenario A: Existing Ventoy Drive -> Non-destructive in-place upgrade (Preserves user ISO files!)
-		mountPoint, err = ResolveMountPointWithLabel(targetDisk, "Ventoy")
+		mountPoint, err = ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
+		if err != nil {
+			mountPoint, err = ResolveMountPointWithLabel(targetDisk, "Ventoy")
+		}
 		if err != nil {
 			mountPoint, err = ResolveMountPointWithLabel(targetDisk, "VENTOY")
 		}
@@ -127,7 +130,13 @@ func DeployModeB(ctx context.Context, targetDisk string, fsType string) (*Deploy
 			mountPoint = efiMountPoint
 		} else {
 			// Fallback: Resolve main volume mount point
-			mountPoint, err = ResolveMountPointWithLabel(targetDisk, "Ventoy")
+			mountPoint, err = ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
+			if err != nil {
+				mountPoint, err = ResolveMountPointWithLabel(targetDisk, "Ventoy")
+			}
+			if err != nil {
+				mountPoint, err = ResolveMountPointWithLabel(targetDisk, "VENTOY")
+			}
 			if err != nil {
 				mountPoint, err = FormatDiskModeB(ctx, targetDisk)
 			}
