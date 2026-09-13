@@ -1,17 +1,25 @@
 <template>
   <div v-if="isOpen" class="modal-overlay" @click="close">
-    <div class="glass-modal confirm-card" @click.stop>
-      <div class="modal-header danger-header">
+    <div class="glass-modal confirm-card" :class="{ 'safe-card': isVentoyDisk }" @click.stop>
+      <div class="modal-header" :class="isVentoyDisk ? 'safe-header' : 'danger-header'">
         <div class="header-title">
-          <span class="warning-icon">⚠️</span>
-          <h3>高危操作确认：即将抹除 U 盘数据</h3>
+          <span class="warning-icon">{{ isVentoyDisk ? '⚡' : '⚠️' }}</span>
+          <h3>{{ isVentoyDisk ? '智能部署确认：无损增量注入' : '高危操作确认：即将抹除 U 盘数据' }}</h3>
         </div>
         <button class="close-btn" @click="close">✕</button>
       </div>
 
       <div class="modal-body">
-        <!-- Danger Warning Alert Banner -->
-        <div class="danger-banner">
+        <!-- Safe Info Banner for Existing Ventoy Disks -->
+        <div v-if="isVentoyDisk" class="safe-banner">
+          <div class="banner-title">💡 免格式化增量注入模式（数据 100% 安全）</div>
+          <div class="banner-desc">
+            检测到目标 U 盘已部署 Ventoy 引导结构。系统将<strong>自动跳过格式化与抹盘阶段</strong>，直接无损写入 UniBoot 引导固件与菜单。<strong>您 U 盘中现有的全部 ISO 镜像与资料将完好保留</strong>！
+          </div>
+        </div>
+
+        <!-- Danger Warning Alert Banner for Blank Disks -->
+        <div v-else class="danger-banner">
           <div class="banner-title">💥 警告：格式化过程不可逆！</div>
           <div class="banner-desc">
             部署写入将对目标设备进行<strong>底层重新分区与格式化</strong>，改写主引导记录 (MBR/GPT)。<strong>所选 U 盘上的全部现有数据、文档与资料将被彻底永久清空</strong>。
@@ -33,6 +41,7 @@
               <span class="pill-tag">{{ targetDisk.fileSystem || 'FAT32' }}</span>
               <span class="pill-tag accent" v-if="mode === 'hybrid'">{{ fsType }} 格式</span>
               <span class="pill-tag highlight">{{ mode === 'cloud' ? '模式 B (1秒云端)' : '模式 A (混合双模)' }}</span>
+              <span class="pill-tag safe-tag" v-if="isVentoyDisk">🛡️ 智能免格式化</span>
             </div>
           </div>
 
@@ -48,8 +57,8 @@
 
       <div class="modal-footer">
         <button class="btn-cancel" @click="close">取消</button>
-        <button class="btn-danger-confirm" @click="confirm">
-          ⚠️ 确认数据已备份，开始格式化写入
+        <button :class="isVentoyDisk ? 'btn-safe-confirm' : 'btn-danger-confirm'" @click="confirm">
+          {{ isVentoyDisk ? '🚀 开始无损注入 UniBoot 引导固件' : '⚠️ 确认数据已备份，开始格式化写入' }}
         </button>
       </div>
     </div>
@@ -57,15 +66,18 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface DiskInfo {
   device: string;
   name: string;
   size: number;
   formatted: string;
   fileSystem?: string;
+  bootStatus?: string;
 }
 
-defineProps<{
+const props = defineProps<{
   isOpen: boolean;
   mode: 'cloud' | 'hybrid';
   fsType?: string;
@@ -74,6 +86,15 @@ defineProps<{
 }>();
 
 const emit = defineEmits(['close', 'confirm']);
+
+const isVentoyDisk = computed(() => {
+  if (props.targetDisk) {
+    const name = (props.targetDisk.name || '').toUpperCase();
+    const status = (props.targetDisk.bootStatus || '').toUpperCase();
+    return name.includes('VENTOY') || status.includes('VENTOY') || status.includes('UNIBOOT');
+  }
+  return false;
+});
 
 function close() {
   emit('close');
@@ -121,8 +142,17 @@ function confirm() {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.danger-header {
-  background: rgba(239, 68, 68, 0.08);
+.glass-modal.safe-card {
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 229, 255, 0.2);
+}
+
+.modal-header.safe-header {
+  background: rgba(0, 229, 255, 0.08);
+}
+
+.modal-header.safe-header h3 {
+  color: var(--accent-cyan);
 }
 
 .header-title {
@@ -161,6 +191,26 @@ function confirm() {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+
+.safe-banner {
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.safe-banner .banner-title {
+  color: var(--accent-cyan);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+.safe-banner .banner-desc {
+  color: #a5f3fc;
+  font-size: 0.825rem;
+  line-height: 1.5;
 }
 
 .danger-banner {
@@ -298,6 +348,32 @@ function confirm() {
 
 .btn-cancel:hover {
   background: rgba(255, 255, 255, 0.12);
+}
+
+.pill-tag.safe-tag {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #4ade80;
+  font-weight: 600;
+}
+
+.btn-safe-confirm {
+  background: linear-gradient(135deg, #00e5ff 0%, #0284c7 100%);
+  border: none;
+  color: #070a12;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 229, 255, 0.35);
+  transition: all 0.2s;
+}
+
+.btn-safe-confirm:hover {
+  background: linear-gradient(135deg, #38bdf8 0%, #00e5ff 100%);
+  box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5);
+  transform: translateY(-1px);
 }
 
 .btn-danger-confirm {
