@@ -74,6 +74,13 @@
         <circle cx="12" cy="12" r="3"/>
         <circle cx="12" cy="12" r="1"/>
       </svg>
+      <!-- Traditional USB 2.0 Icon -->
+      <svg v-else-if="diskType === 'usb2'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
+        <rect x="10.5" y="3.5" width="3" height="2" fill="currentColor" opacity="0.4"/>
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
+        <circle cx="12" cy="18" r="1.2"/>
+      </svg>
       <!-- Standard USB Flash Drive Icon -->
       <svg v-else class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <!-- Metal USB-A Plug Head -->
@@ -143,8 +150,8 @@ const props = withDefaults(defineProps<{
 
 defineEmits(['select', 'toggle', 'pick-icon', 'inspect']);
 
-const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom' | 'usb'>(() => {
-  if (props.customIcon && ['boot', 'ssd', 'typec', 'secure', 'reader', 'hdd', 'key', 'cdrom', 'usb'].includes(props.customIcon)) {
+const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom' | 'usb2' | 'usb'>(() => {
+  if (props.customIcon && ['boot', 'ssd', 'typec', 'secure', 'reader', 'hdd', 'key', 'cdrom', 'usb2', 'usb'].includes(props.customIcon)) {
     return props.customIcon as any;
   }
 
@@ -173,6 +180,9 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
   if (props.disk.size >= 128 * 1024 * 1024 * 1024 || nameUpper.includes('SSD') || nameUpper.includes('NVME')) {
     return 'ssd';
   }
+  if (props.disk.protocolCode === 'usb2' || props.disk.usbVersion === 'USB 2.0') {
+    return 'usb2';
+  }
   return 'usb';
 });
 
@@ -185,6 +195,10 @@ const diskTagLabel = computed(() => {
   if (diskType.value === 'hdd') return '移动硬盘';
   if (diskType.value === 'key') return '安全钥匙';
   if (diskType.value === 'cdrom') return '虚拟光驱';
+  if (diskType.value === 'usb2') return 'USB 2.0';
+  if (props.disk.protocolCode === 'usb3_1') return 'USB 3.1';
+  if (props.disk.protocolCode === 'usb3_2') return 'USB 3.2';
+  if (props.disk.protocolCode === 'usb4') return 'USB4';
   return 'USB 3.0';
 });
 </script>
@@ -253,6 +267,11 @@ const diskTagLabel = computed(() => {
 .disk-icon-wrapper.cdrom {
   background: rgba(234, 179, 8, 0.15);
   color: #facc15;
+}
+
+.disk-icon-wrapper.usb2 {
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
 }
 
 .disk-svg {
@@ -394,6 +413,11 @@ const diskTagLabel = computed(() => {
 .disk-badge.cdrom {
   background: rgba(234, 179, 8, 0.15);
   color: #facc15;
+}
+
+.disk-badge.usb2 {
+  background: rgba(148, 163, 184, 0.15);
+  color: #cbd5e1;
 }
 
 .disk-checkbox-container {

@@ -16,11 +16,18 @@
           @click="selectIcon(option.id)"
         >
           <div class="icon-preview" :class="option.id">
-            <!-- USB Standard -->
+            <!-- USB Standard 3.0 -->
             <svg v-if="option.id === 'usb'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="2" width="6" height="5" rx="0.5"/>
               <circle cx="10.8" cy="4" r="0.6" fill="currentColor"/>
               <circle cx="13.2" cy="4" r="0.6" fill="currentColor"/>
+              <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
+              <circle cx="12" cy="18" r="1.2"/>
+            </svg>
+            <!-- Traditional USB 2.0 -->
+            <svg v-else-if="option.id === 'usb2'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="2" width="6" height="5" rx="0.5"/>
+              <rect x="10.5" y="3.5" width="3" height="2" fill="currentColor" opacity="0.4"/>
               <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
               <circle cx="12" cy="18" r="1.2"/>
             </svg>
@@ -92,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-export type DiskIconType = 'usb' | 'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom';
+export type DiskIconType = 'usb' | 'usb2' | 'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom';
 
 defineProps<{
   isOpen: boolean;
@@ -103,7 +110,8 @@ defineProps<{
 const emit = defineEmits(['close', 'select-icon', 'reset-icon']);
 
 const iconOptions: Array<{ id: DiskIconType; label: string; desc: string }> = [
-  { id: 'usb', label: '标准 USB 3.0 闪存盘', desc: '经典 Type-A 插头金属机身' },
+  { id: 'usb', label: '高速 USB 3.0 闪存盘', desc: '经典 Type-A 接口 USB 3.0 盘' },
+  { id: 'usb2', label: '传统 USB 2.0 闪存盘', desc: '经典黑色 480 Mbps 基础盘' },
   { id: 'boot', label: 'BOOT 引导系统盘', desc: '带有闪电标志的引导盘' },
   { id: 'ssd', label: '移动固态硬盘 (PSSD)', desc: '高速拉丝铝盒固态盘' },
   { id: 'typec', label: 'Type-C 双头 U 盘', desc: '适配手机与 Mac 的 Type-C 盘' },
@@ -228,6 +236,11 @@ function resetToAuto() {
   background: rgba(0, 229, 255, 0.1);
   color: var(--accent-cyan);
   flex-shrink: 0;
+}
+
+.icon-preview.usb2 {
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
 }
 
 .icon-preview.boot {
