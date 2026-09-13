@@ -362,12 +362,6 @@ func ExtractFirmwareModeB(efiMountDir string) error {
 		if err := os.WriteFile(destPath, data, 0644); err != nil {
 			return fmt.Errorf("failed to extract firmware asset to %s: %w", destPath, err)
 		}
-
-		if mapping.ReleaseName == "background.png" {
-			extraPath := filepath.Join(efiMountDir, "ipxe", "background.png")
-			_ = os.MkdirAll(filepath.Dir(extraPath), 0755)
-			_ = os.WriteFile(extraPath, data, 0644)
-		}
 	}
 	return nil
 }
