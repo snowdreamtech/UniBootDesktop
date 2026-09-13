@@ -219,6 +219,7 @@ lerna-debug.log*
 .node_repl_history
 *.tgz
 *.log
+*.timestamp-*.mjs
 
 ### Python ###
 __pycache__/

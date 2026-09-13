@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
+	"github.com/snowdreamtech/unigodesktop/pkg/firmware"
 )
 
 // DeployResult contains the output metadata of a USB deployment run.
@@ -66,18 +67,28 @@ func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) 
 	return results, nil
 }
 
-// DeployModeB executes Mode B: Cloud Pure Mode (1-sec native FAT32 format & 64MB multi-arch iPXE firmware).
+// DeployModeB executes Mode B: Cloud Pure Mode (1-sec native FAT32 format & multi-arch iPXE firmware).
 func DeployModeB(ctx context.Context, targetDisk string) (*DeployResult, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return nil, fmt.Errorf("disk validation failed: %w", err)
 	}
 
-	// Deploy Mode B 1-second Cloud Pure deployment logic
+	// 1. Format disk to FAT32 MBR with volume label UNIBOOT
+	mountPoint, err := FormatDiskModeB(ctx, targetDisk)
+	if err != nil {
+		return nil, fmt.Errorf("formatting disk for Mode B failed: %w", err)
+	}
+
+	// 2. Extract multi-arch iPXE EFI & Legacy BIOS firmware assets to target volume
+	if err := firmware.ExtractFirmwareToDir(mountPoint); err != nil {
+		return nil, fmt.Errorf("extracting firmware assets failed: %w", err)
+	}
+
 	return &DeployResult{
 		Success: true,
 		Mode:    "Mode B (Cloud Pure)",
 		Target:  targetDisk,
-		Message: fmt.Sprintf("Successfully deployed 1-sec Cloud Pure iPXE to %s", targetDisk),
+		Message: fmt.Sprintf("Successfully deployed Cloud Pure Mode B (FAT32/UNIBOOT) to %s (mount: %s)", targetDisk, mountPoint),
 	}, nil
 }
 
@@ -109,3 +120,4 @@ func DeployModeBBatch(ctx context.Context, targetDisks []string) ([]*DeployResul
 	}
 	return results, nil
 }
+
