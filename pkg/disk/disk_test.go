@@ -48,3 +48,34 @@ func TestValidateTargetDisk(t *testing.T) {
 	assert.Error(t, ValidateTargetDisk("C:"))
 	assert.NoError(t, ValidateTargetDisk("/Volumes/MyUSBKey"))
 }
+
+func TestCheckFakeUsb3(t *testing.T) {
+	tests := []struct {
+		name       string
+		diskName   string
+		usbVersion string
+		usbSpeed   string
+		expected   bool
+	}{
+		{"Fake USB 3.0 with 480 Mbps PHY", "SanDisk Ultra USB 3.0", "USB 2.0", "480 Mb/s", true},
+		{"Genuine USB 3.0 with 5 Gbps PHY", "Kingston DataTraveler 3.0", "USB 3.0", "5 Gb/s", false},
+		{"Fake SuperSpeed drive", "SuperSpeed USB3 Drive", "2.00", "Up to 480 Mb/s", true},
+		{"Genuine USB 3.1 Gen 2", "Samsung SSD 3.1", "USB 3.1", "10 Gb/s", false},
+		{"Normal USB 2.0 drive", "Old Flash Drive", "USB 2.0", "480 Mb/s", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := CheckFakeUsb3(tt.diskName, tt.usbVersion, tt.usbSpeed)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func TestMapProtocolCode(t *testing.T) {
+	assert.Equal(t, "usb4", MapProtocolCode("USB4", "40 Gb/s"))
+	assert.Equal(t, "usb3_2", MapProtocolCode("USB 3.2", "10 Gb/s"))
+	assert.Equal(t, "usb3_1", MapProtocolCode("USB 3.1", "10 Gb/s"))
+	assert.Equal(t, "usb3_0", MapProtocolCode("USB 3.0", "5 Gb/s"))
+	assert.Equal(t, "usb2", MapProtocolCode("USB 2.0", "480 Mb/s"))
+}

@@ -70,12 +70,29 @@
     </div>
 
     <div class="disk-details">
-      <div class="disk-name">{{ disk.name || disk.device }}</div>
-      <div class="disk-meta">{{ disk.device }} • {{ disk.formatted }}</div>
+      <div class="disk-name-row">
+        <span class="disk-name">{{ disk.name || disk.device }}</span>
+        <span v-if="disk.isFakeUsb3" class="fake-badge" title="警告：宣传 USB 3.0 但硬件物理层仅为 USB 2.0 480 Mbps 速率">
+          ⚠️ 假 USB 3.0
+        </span>
+      </div>
+      <div class="disk-meta">
+        {{ disk.device }} • {{ disk.formatted }}
+        <span class="speed-tag" :class="disk.protocolCode || 'usb2'">
+          {{ disk.usbVersion || 'USB 2.0' }} • {{ disk.usbSpeed || '480 Mb/s' }}
+        </span>
+      </div>
     </div>
 
     <div class="disk-tags">
       <span class="disk-badge" :class="diskType">{{ diskTagLabel }}</span>
+      <button 
+        class="btn-inspect" 
+        title="查看 USB 硬件数据鉴定" 
+        @click.stop="$emit('inspect', disk)"
+      >
+        🔍 鉴定
+      </button>
     </div>
   </div>
 </template>
@@ -90,6 +107,11 @@ interface DiskInfo {
   formatted: string;
   isRemovable: boolean;
   isSystem: boolean;
+  usbVersion?: string;
+  usbSpeed?: string;
+  vendor?: string;
+  isFakeUsb3?: boolean;
+  protocolCode?: string;
 }
 
 const props = withDefaults(defineProps<{
@@ -101,7 +123,7 @@ const props = withDefaults(defineProps<{
   isBatchMode: false
 });
 
-defineEmits(['select', 'toggle', 'pick-icon']);
+defineEmits(['select', 'toggle', 'pick-icon', 'inspect']);
 
 const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'usb'>(() => {
   if (props.customIcon && ['boot', 'ssd', 'typec', 'secure', 'reader', 'usb'].includes(props.customIcon)) {
@@ -197,15 +219,86 @@ const diskTagLabel = computed(() => {
   flex: 1;
 }
 
+.disk-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .disk-name {
   font-weight: 600;
   font-size: 1rem;
 }
 
+.fake-badge {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.725rem;
+  font-weight: 700;
+  animation: pulse-warn 2s infinite ease-in-out;
+}
+
+@keyframes pulse-warn {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
 .disk-meta {
   font-size: 0.825rem;
   color: var(--text-muted);
-  margin-top: 0.2rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.speed-tag {
+  font-size: 0.725rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.speed-tag.usb2 {
+  color: #cbd5e1;
+}
+
+.speed-tag.usb3_0 {
+  color: var(--accent-cyan);
+}
+
+.speed-tag.usb3_1, .speed-tag.usb3_2 {
+  color: #c084fc;
+}
+
+.speed-tag.usb4 {
+  color: #fbbf24;
+}
+
+.disk-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-inspect {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-inspect:hover {
+  background: rgba(0, 229, 255, 0.15);
+  color: var(--accent-cyan);
+  border-color: rgba(0, 229, 255, 0.3);
 }
 
 .disk-badge {

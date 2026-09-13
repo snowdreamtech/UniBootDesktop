@@ -28,6 +28,11 @@ export namespace disk {
 	    formatted: string;
 	    isRemovable: boolean;
 	    isSystem: boolean;
+	    usbVersion: string;
+	    usbSpeed: string;
+	    vendor: string;
+	    isFakeUsb3: boolean;
+	    protocolCode: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new DiskInfo(source);
@@ -41,6 +46,11 @@ export namespace disk {
 	        this.formatted = source["formatted"];
 	        this.isRemovable = source["isRemovable"];
 	        this.isSystem = source["isSystem"];
+	        this.usbVersion = source["usbVersion"];
+	        this.usbSpeed = source["usbSpeed"];
+	        this.vendor = source["vendor"];
+	        this.isFakeUsb3 = source["isFakeUsb3"];
+	        this.protocolCode = source["protocolCode"];
 	    }
 	}
 

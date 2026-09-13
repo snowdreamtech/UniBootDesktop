@@ -75,6 +75,7 @@
             @select="onDiskSelect(disk)"
             @toggle="onDiskToggle(disk)"
             @pick-icon="openIconPicker(disk)"
+            @inspect="openInspector(disk)"
           />
           <div v-if="diskList.length === 0" class="empty-state">
             正在查找移动 U 盘... 请插入 U 盘或点击刷新
@@ -147,6 +148,13 @@
       @select-icon="onIconSelected"
       @reset-icon="onIconReset"
     />
+
+    <!-- USB Hardware Inspector Modal -->
+    <UsbInspectorModal
+      :isOpen="isInspectorOpen"
+      :disk="targetInspectorDisk"
+      @close="isInspectorOpen = false"
+    />
   </div>
 </template>
 
@@ -155,6 +163,7 @@ import { ref, computed, onMounted } from 'vue';
 import DiskCard from './components/DiskCard.vue';
 import ProgressBar from './components/ProgressBar.vue';
 import IconPickerModal, { DiskIconType } from './components/IconPickerModal.vue';
+import UsbInspectorModal from './components/UsbInspectorModal.vue';
 
 interface DiskInfo {
   device: string;
@@ -163,6 +172,11 @@ interface DiskInfo {
   formatted: string;
   isRemovable: boolean;
   isSystem: boolean;
+  usbVersion?: string;
+  usbSpeed?: string;
+  vendor?: string;
+  isFakeUsb3?: boolean;
+  protocolCode?: string;
 }
 
 const activeMode = ref<'cloud' | 'hybrid'>('cloud');
@@ -173,9 +187,16 @@ const selectedDevices = ref<Set<string>>(new Set());
 const customIcons = ref<Record<string, DiskIconType>>({});
 const isPickerOpen = ref(false);
 const targetPickerDisk = ref<DiskInfo | null>(null);
+const isInspectorOpen = ref(false);
+const targetInspectorDisk = ref<DiskInfo | null>(null);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
 const qemuStatus = ref({ installed: false, path: '', version: '' });
+
+function openInspector(disk: DiskInfo) {
+  targetInspectorDisk.value = disk;
+  isInspectorOpen.value = true;
+}
 
 function openIconPicker(disk: DiskInfo) {
   targetPickerDisk.value = disk;
@@ -246,10 +267,47 @@ async function refreshDisks() {
       console.error(e);
     }
   } else {
-    // Fallback mock for browser preview
+    // Fallback mock for browser preview demonstrating genuine vs fake USB 3.0
     diskList.value = [
-      { device: '/dev/disk2', name: 'SanDisk Ultra USB 3.0', size: 32000000000, formatted: '32 GB', isRemovable: true, isSystem: false },
-      { device: '/dev/disk3', name: 'Kingston DataTraveler', size: 64000000000, formatted: '64 GB', isRemovable: true, isSystem: false }
+      {
+        device: '/dev/disk2',
+        name: 'SanDisk Ultra USB 3.0 Flash Drive',
+        size: 32000000000,
+        formatted: '32 GB',
+        isRemovable: true,
+        isSystem: false,
+        usbVersion: 'USB 2.0',
+        usbSpeed: '480 Mb/s',
+        vendor: 'SanDisk (Suspected Fake)',
+        isFakeUsb3: true,
+        protocolCode: 'usb2'
+      },
+      {
+        device: '/dev/disk3',
+        name: 'Kingston DataTraveler 3.0',
+        size: 64000000000,
+        formatted: '64 GB',
+        isRemovable: true,
+        isSystem: false,
+        usbVersion: 'USB 3.0',
+        usbSpeed: '5 Gb/s',
+        vendor: 'Kingston Technology',
+        isFakeUsb3: false,
+        protocolCode: 'usb3_0'
+      },
+      {
+        device: '/dev/disk4',
+        name: 'Samsung Type-C Duo 3.1',
+        size: 128000000000,
+        formatted: '128 GB',
+        isRemovable: true,
+        isSystem: false,
+        usbVersion: 'USB 3.1 Gen 2',
+        usbSpeed: '10 Gb/s',
+        vendor: 'Samsung Electronics',
+        isFakeUsb3: false,
+        protocolCode: 'usb3_1'
+      }
     ];
     if (!selectedDisk.value) selectedDisk.value = diskList.value[0];
   }
