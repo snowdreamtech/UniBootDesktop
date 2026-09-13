@@ -3,10 +3,10 @@
     <div class="modal-card glass-modal">
       <div class="modal-header">
         <div class="header-title">
-          <span class="modal-icon">🔍</span>
+          <span class="modal-icon">ℹ️</span>
           <div>
-            <h3>USB 硬件数据鉴定面板</h3>
-            <p class="subtitle">精准检测物理 PHY 协商协议、底层传输速率与防假冒审计</p>
+            <h3>USB 设备硬件详情</h3>
+            <p class="subtitle">物理 PHY 协议识别、底层传输速率与硬件数据</p>
           </div>
         </div>
         <button class="close-btn" @click="closeModal">✕</button>

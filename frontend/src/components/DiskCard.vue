@@ -88,10 +88,10 @@
       <span class="disk-badge" :class="diskType">{{ diskTagLabel }}</span>
       <button 
         class="btn-inspect" 
-        title="查看 USB 硬件数据鉴定" 
+        title="查看 USB 设备硬件详情" 
         @click.stop="$emit('inspect', disk)"
       >
-        🔍 鉴定
+        ℹ️ 详情
       </button>
     </div>
   </div>
