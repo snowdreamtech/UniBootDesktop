@@ -33,6 +33,35 @@ func DeployModeA(ctx context.Context, targetDisk string) (*DeployResult, error) 
 	}, nil
 }
 
+// DeployModeABatch executes Mode A on multiple target USB drives concurrently/sequentially.
+func DeployModeABatch(ctx context.Context, targetDisks []string) ([]*DeployResult, error) {
+	if len(targetDisks) == 0 {
+		return nil, fmt.Errorf("no target disks specified for batch deployment")
+	}
+
+	for _, d := range targetDisks {
+		if err := disk.ValidateTargetDisk(d); err != nil {
+			return nil, fmt.Errorf("disk validation failed for %s: %w", d, err)
+		}
+	}
+
+	results := make([]*DeployResult, 0, len(targetDisks))
+	for _, d := range targetDisks {
+		res, err := DeployModeA(ctx, d)
+		if err != nil {
+			results = append(results, &DeployResult{
+				Success: false,
+				Mode:    "Mode A (Hybrid Pro)",
+				Target:  d,
+				Message: err.Error(),
+			})
+			continue
+		}
+		results = append(results, res)
+	}
+	return results, nil
+}
+
 // DeployModeB executes Mode B: Cloud Pure Mode (1-sec native FAT32 format & 64MB multi-arch iPXE firmware).
 func DeployModeB(ctx context.Context, targetDisk string) (*DeployResult, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
@@ -46,4 +75,33 @@ func DeployModeB(ctx context.Context, targetDisk string) (*DeployResult, error) 
 		Target:  targetDisk,
 		Message: fmt.Sprintf("Successfully deployed 1-sec Cloud Pure iPXE to %s", targetDisk),
 	}, nil
+}
+
+// DeployModeBBatch executes Mode B on multiple target USB drives concurrently/sequentially.
+func DeployModeBBatch(ctx context.Context, targetDisks []string) ([]*DeployResult, error) {
+	if len(targetDisks) == 0 {
+		return nil, fmt.Errorf("no target disks specified for batch deployment")
+	}
+
+	for _, d := range targetDisks {
+		if err := disk.ValidateTargetDisk(d); err != nil {
+			return nil, fmt.Errorf("disk validation failed for %s: %w", d, err)
+		}
+	}
+
+	results := make([]*DeployResult, 0, len(targetDisks))
+	for _, d := range targetDisks {
+		res, err := DeployModeB(ctx, d)
+		if err != nil {
+			results = append(results, &DeployResult{
+				Success: false,
+				Mode:    "Mode B (Cloud Pure)",
+				Target:  d,
+				Message: err.Error(),
+			})
+			continue
+		}
+		results = append(results, res)
+	}
+	return results, nil
 }

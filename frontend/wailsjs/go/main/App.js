@@ -14,8 +14,16 @@ export function DeployModeA(arg1) {
   return window['go']['main']['App']['DeployModeA'](arg1);
 }
 
+export function DeployModeABatch(arg1) {
+  return window['go']['main']['App']['DeployModeABatch'](arg1);
+}
+
 export function DeployModeB(arg1) {
   return window['go']['main']['App']['DeployModeB'](arg1);
+}
+
+export function DeployModeBBatch(arg1) {
+  return window['go']['main']['App']['DeployModeBBatch'](arg1);
 }
 
 export function GetConfig() {

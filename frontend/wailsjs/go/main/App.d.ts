@@ -12,7 +12,11 @@ export function CheckUpdate():Promise<updater.UpdateStatus>;
 
 export function DeployModeA(arg1:string):Promise<installer.DeployResult>;
 
+export function DeployModeABatch(arg1:Array<string>):Promise<Array<installer.DeployResult>>;
+
 export function DeployModeB(arg1:string):Promise<installer.DeployResult>;
+
+export function DeployModeBBatch(arg1:Array<string>):Promise<Array<installer.DeployResult>>;
 
 export function GetConfig():Promise<config.AppConfig>;
 
