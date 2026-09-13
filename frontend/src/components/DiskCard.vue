@@ -14,7 +14,12 @@
     </div>
     
     <!-- Dynamic SVG Disk Icon -->
-    <div class="disk-icon-wrapper" :class="diskType">
+    <div 
+      class="disk-icon-wrapper" 
+      :class="diskType" 
+      title="点击自定义图标"
+      @click.stop="$emit('pick-icon', disk)"
+    >
       <!-- Boot USB Icon with Lightning -->
       <svg v-if="diskType === 'boot'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="9" y="2" width="6" height="5" rx="0.5"/>
@@ -27,6 +32,29 @@
         <line x1="7" y1="9" x2="11" y2="9"/>
         <line x1="7" y1="12" x2="17" y2="12"/>
         <circle cx="17" cy="9" r="1" fill="currentColor"/>
+      </svg>
+      <!-- Type-C Dual Icon -->
+      <svg v-else-if="diskType === 'typec'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="8" y="2" width="8" height="4" rx="2"/>
+        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
+        <rect x="9" y="20" width="6" height="3" rx="0.5"/>
+      </svg>
+      <!-- Secure USB Icon -->
+      <svg v-else-if="diskType === 'secure'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
+        <circle cx="10" cy="11" r="0.8" fill="currentColor"/>
+        <circle cx="12" cy="11" r="0.8" fill="currentColor"/>
+        <circle cx="14" cy="11" r="0.8" fill="currentColor"/>
+        <circle cx="10" cy="14" r="0.8" fill="currentColor"/>
+        <circle cx="12" cy="14" r="0.8" fill="currentColor"/>
+        <circle cx="14" cy="14" r="0.8" fill="currentColor"/>
+      </svg>
+      <!-- Card Reader Icon -->
+      <svg v-else-if="diskType === 'reader'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
+        <rect x="5" y="7" width="14" height="14" rx="2"/>
+        <rect x="8" y="11" width="8" height="6" rx="1" stroke-dasharray="2 2"/>
       </svg>
       <!-- Standard USB Flash Drive Icon -->
       <svg v-else class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -68,16 +96,30 @@ const props = withDefaults(defineProps<{
   disk: DiskInfo;
   isSelected: boolean;
   isBatchMode?: boolean;
+  customIcon?: string;
 }>(), {
   isBatchMode: false
 });
 
-defineEmits(['select', 'toggle']);
+defineEmits(['select', 'toggle', 'pick-icon']);
 
-const diskType = computed<'boot' | 'ssd' | 'usb'>(() => {
+const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'usb'>(() => {
+  if (props.customIcon && ['boot', 'ssd', 'typec', 'secure', 'reader', 'usb'].includes(props.customIcon)) {
+    return props.customIcon as any;
+  }
+
   const nameUpper = (props.disk.name || '').toUpperCase();
   if (nameUpper.includes('VENTOY') || nameUpper.includes('UNIBOOT') || nameUpper.includes('BOOT')) {
     return 'boot';
+  }
+  if (nameUpper.includes('SECURE') || nameUpper.includes('VAULT') || nameUpper.includes('LOCK')) {
+    return 'secure';
+  }
+  if (nameUpper.includes('CARD') || nameUpper.includes('READER') || nameUpper.includes('SD')) {
+    return 'reader';
+  }
+  if (nameUpper.includes('TYPE-C') || nameUpper.includes('TYPEC') || nameUpper.includes('DUAL')) {
+    return 'typec';
   }
   if (props.disk.size >= 128 * 1024 * 1024 * 1024 || nameUpper.includes('SSD') || nameUpper.includes('NVME')) {
     return 'ssd';
@@ -88,6 +130,9 @@ const diskType = computed<'boot' | 'ssd' | 'usb'>(() => {
 const diskTagLabel = computed(() => {
   if (diskType.value === 'boot') return 'BOOT U盘';
   if (diskType.value === 'ssd') return '移动固态';
+  if (diskType.value === 'typec') return 'Type-C 盘';
+  if (diskType.value === 'secure') return '加密 U盘';
+  if (diskType.value === 'reader') return '读卡器';
   return 'USB 3.0';
 });
 </script>
@@ -128,6 +173,21 @@ const diskTagLabel = computed(() => {
   color: #9d4edd;
 }
 
+.disk-icon-wrapper.typec {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.disk-icon-wrapper.secure {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.disk-icon-wrapper.reader {
+  background: rgba(99, 102, 241, 0.15);
+  color: #6366f1;
+}
+
 .disk-svg {
   width: 22px;
   height: 22px;
@@ -166,6 +226,21 @@ const diskTagLabel = computed(() => {
 .disk-badge.ssd {
   background: rgba(157, 78, 221, 0.15);
   color: #c084fc;
+}
+
+.disk-badge.typec {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.disk-badge.secure {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.disk-badge.reader {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
 }
 
 .disk-checkbox-container {

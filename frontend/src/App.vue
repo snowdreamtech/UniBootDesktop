@@ -71,8 +71,10 @@
             :disk="disk"
             :isBatchMode="selectionMode === 'batch'"
             :isSelected="selectionMode === 'single' ? selectedDisk?.device === disk.device : selectedDevices.has(disk.device)"
+            :customIcon="customIcons[disk.device]"
             @select="onDiskSelect(disk)"
             @toggle="onDiskToggle(disk)"
+            @pick-icon="openIconPicker(disk)"
           />
           <div v-if="diskList.length === 0" class="empty-state">
             正在查找移动 U 盘... 请插入 U 盘或点击刷新
@@ -135,6 +137,16 @@
         </div>
       </section>
     </main>
+
+    <!-- Icon Picker Modal -->
+    <IconPickerModal
+      :isOpen="isPickerOpen"
+      :diskName="targetPickerDisk?.name || targetPickerDisk?.device || ''"
+      :currentIcon="targetPickerDisk ? customIcons[targetPickerDisk.device] : undefined"
+      @close="isPickerOpen = false"
+      @select-icon="onIconSelected"
+      @reset-icon="onIconReset"
+    />
   </div>
 </template>
 
@@ -142,6 +154,7 @@
 import { ref, computed, onMounted } from 'vue';
 import DiskCard from './components/DiskCard.vue';
 import ProgressBar from './components/ProgressBar.vue';
+import IconPickerModal, { DiskIconType } from './components/IconPickerModal.vue';
 
 interface DiskInfo {
   device: string;
@@ -157,9 +170,29 @@ const selectionMode = ref<'single' | 'batch'>('single');
 const diskList = ref<DiskInfo[]>([]);
 const selectedDisk = ref<DiskInfo | null>(null);
 const selectedDevices = ref<Set<string>>(new Set());
+const customIcons = ref<Record<string, DiskIconType>>({});
+const isPickerOpen = ref(false);
+const targetPickerDisk = ref<DiskInfo | null>(null);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
 const qemuStatus = ref({ installed: false, path: '', version: '' });
+
+function openIconPicker(disk: DiskInfo) {
+  targetPickerDisk.value = disk;
+  isPickerOpen.value = true;
+}
+
+function onIconSelected(type: DiskIconType) {
+  if (targetPickerDisk.value) {
+    customIcons.value[targetPickerDisk.value.device] = type;
+  }
+}
+
+function onIconReset() {
+  if (targetPickerDisk.value) {
+    delete customIcons.value[targetPickerDisk.value.device];
+  }
+}
 
 const isDeployDisabled = computed(() => {
   if (selectionMode.value === 'single') {
