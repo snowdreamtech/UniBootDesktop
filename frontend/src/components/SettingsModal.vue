@@ -457,7 +457,7 @@ async function checkVentoyCli() {
     ventoyValidation.value = {
       valid: false,
       version: '',
-      message: '未配置 Ventoy CLI 路径',
+      message: '未配置 Ventoy 目录',
       executablePath: ''
     };
     return;

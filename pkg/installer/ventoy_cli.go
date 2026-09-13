@@ -32,7 +32,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:   false,
 			Version: "",
-			Message: "未配置 Ventoy CLI 路径",
+			Message: "未配置 Ventoy 目录",
 		}
 	}
 
@@ -41,7 +41,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:   false,
 			Version: "",
-			Message: fmt.Sprintf("❌ 路径不存在: %s", cleanPath),
+			Message: fmt.Sprintf("❌ 目录不存在: %s", cleanPath),
 		}
 	}
 
@@ -52,7 +52,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 			return &VentoyCliValidationResult{
 				Valid:   false,
 				Version: "",
-				Message: fmt.Sprintf("❌ 目录内未找到适用于 %s 的 Ventoy 可执行程序", runtime.GOOS),
+				Message: fmt.Sprintf("❌ 目录内未找到适用于 %s 的 Ventoy 程序", runtime.GOOS),
 			}
 		}
 	} else {
@@ -70,7 +70,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		}
 	}
 
-	// Attempt calling Ventoy CLI version check command
+	// Attempt calling Ventoy version check command
 	cmd := exec.Command(execPath, "-v")
 	outputBytes, err := cmd.CombinedOutput()
 	outputStr := string(outputBytes)
@@ -83,7 +83,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 			return &VentoyCliValidationResult{
 				Valid:          false,
 				Version:        "",
-				Message:        fmt.Sprintf("❌ 无法成功调用 Ventoy CLI 命令: %v (%s)", err, strings.TrimSpace(outputStr)),
+				Message:        fmt.Sprintf("❌ 无法成功调用 Ventoy 命令: %v (%s)", err, strings.TrimSpace(outputStr)),
 				ExecutablePath: execPath,
 			}
 		}
