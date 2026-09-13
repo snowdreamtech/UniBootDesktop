@@ -182,6 +182,19 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		targetPath = diskPath
 	}
 
+	if runtime.GOOS == "darwin" {
+		// Extract whole disk identifier like disk2
+		diskNode := strings.TrimPrefix(targetPath, "/dev/rdisk")
+		diskNode = strings.TrimPrefix(diskNode, "/dev/disk")
+		if !strings.HasPrefix(diskNode, "disk") {
+			diskNode = "disk" + diskNode
+		}
+
+		// 1. Unmount target disk volumes to release macOS disk arbitration lock
+		unmountCmd := exec.Command("diskutil", "unmountDisk", diskNode)
+		_ = unmountCmd.Run()
+	}
+
 	// Build safe read-only preview command using snapshot mode
 	args := []string{
 		"-m", "1024",
@@ -212,14 +225,20 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		if err != nil {
 			errOutput := strings.TrimSpace(stderr.String())
 			if errOutput != "" {
-				return fmt.Errorf("QEMU 启动异常退出 (%v): %s", err, errOutput)
+				// If permission is denied on macOS, try executing via osascript administrator privileges
+				if runtime.GOOS == "darwin" && strings.Contains(errOutput, "Permission denied") {
+					script := fmt.Sprintf(`do shell script "'%s' -m 1024 -drive 'file=%s,format=raw,snapshot=on' >/dev/null 2>&1 &" with administrator privileges`, status.Path, targetPath)
+					adminCmd := exec.Command("osascript", "-e", script)
+					if adminErr := adminCmd.Run(); adminErr == nil {
+						return nil
+					}
+				}
+				return fmt.Errorf("QEMU 启动提示: %s", errOutput)
 			}
 			return fmt.Errorf("QEMU 启动异常退出: %w", err)
 		}
-		// Process exited early cleanly
 		return nil
 	case <-time.After(300 * time.Millisecond):
-		// QEMU process started successfully and continues running in background
 		return nil
 	}
 }
