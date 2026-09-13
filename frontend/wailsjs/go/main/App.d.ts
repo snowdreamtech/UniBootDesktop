@@ -20,4 +20,8 @@ export function DeployModeBBatch(arg1:Array<string>):Promise<Array<installer.Dep
 
 export function GetConfig():Promise<config.AppConfig>;
 
+export function SaveConfig(arg1:config.AppConfig):Promise<void>;
+
+export function GetFirmwareList():Promise<Array<firmware.FirmwareMapping>>;
+
 export function GetDiskList():Promise<Array<disk.DiskInfo>>;

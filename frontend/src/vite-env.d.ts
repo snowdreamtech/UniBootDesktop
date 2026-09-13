@@ -13,6 +13,8 @@ declare global {
           CheckQEMU(): Promise<any>;
           CheckUpdate(): Promise<any>;
           GetConfig(): Promise<any>;
+          SaveConfig(cfg: any): Promise<any>;
+          GetFirmwareList(): Promise<any[]>;
         };
       };
     };
