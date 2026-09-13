@@ -38,7 +38,7 @@
           </div>
         </div>
 
-        <!-- Spec Data Table Grid -->
+        <!-- User-Friendly Basic Info Grid -->
         <div class="spec-grid">
           <div class="spec-item">
             <span class="spec-label">设备名称 (Device Name)</span>
@@ -51,8 +51,8 @@
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">系统挂载路径 (Mount Path)</span>
-            <span class="spec-val code">{{ disk.device }}</span>
+            <span class="spec-label">引导状态 (Boot Status)</span>
+            <span class="spec-val highlight">{{ disk.bootStatus || '📁 数据存储盘 (未检出系统引导)' }}</span>
           </div>
 
           <div class="spec-item">
@@ -76,19 +76,24 @@
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">读写状态 (Disk Permission)</span>
+            <span class="spec-label">读写权限 (Disk Permission)</span>
             <span class="spec-val" :class="disk.writable !== false ? 'pass-val' : 'warn-val'">
               {{ disk.writable !== false ? '✅ 可读写 (Read-Write)' : '🔒 写保护/只读 (Read-Only)' }}
             </span>
           </div>
 
-          <div class="spec-item">
-            <span class="spec-label">S.M.A.R.T. 健康状态 (SMART Status)</span>
-            <span class="spec-val" :class="disk.smartStatus === 'Verified' ? 'pass-val' : 'highlight'">
-              {{ disk.smartStatus === 'Verified' ? '✅ 健康 (Verified)' : (disk.smartStatus || 'ℹ️ N/A') }}
-            </span>
+          <div class="spec-item spec-full">
+            <span class="spec-label">系统挂载路径 (Mount Path)</span>
+            <span class="spec-val code">{{ disk.device }}</span>
           </div>
+        </div>
 
+        <!-- Advanced Hardware Specs Header & Grid -->
+        <div class="section-divider">
+          <span>🛠️ 底层硬件与极客数据 (Advanced Hardware Specs)</span>
+        </div>
+
+        <div class="spec-grid advanced-grid">
           <div class="spec-item">
             <span class="spec-label">USB 协议版本 (Protocol Version)</span>
             <span class="spec-val badge-val" :class="disk.protocolCode || 'usb2'">
@@ -103,14 +108,11 @@
             </span>
           </div>
 
-          <div class="spec-item" v-if="disk.serialNumber">
-            <span class="spec-label">硬件序列号 (Serial Number)</span>
-            <span class="spec-val code">{{ disk.serialNumber }}</span>
-          </div>
-
-          <div class="spec-item" v-if="disk.vendorId || disk.productId">
-            <span class="spec-label">芯片硬件 ID (USB VID / PID)</span>
-            <span class="spec-val code">VID: {{ disk.vendorId || 'N/A' }} | PID: {{ disk.productId || 'N/A' }}</span>
+          <div class="spec-item">
+            <span class="spec-label">S.M.A.R.T. 健康状态 (SMART Status)</span>
+            <span class="spec-val" :class="disk.smartStatus === 'Verified' ? 'pass-val' : 'highlight'">
+              {{ disk.smartStatus === 'Verified' ? '✅ 健康 (Verified)' : (disk.smartStatus || 'ℹ️ N/A') }}
+            </span>
           </div>
 
           <div class="spec-item" v-if="disk.busPower || disk.busPowerUsed">
@@ -131,13 +133,18 @@
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">引导扇区状态 (Boot Status)</span>
-            <span class="spec-val highlight">{{ disk.bootStatus || '📁 数据存储盘 (未检出系统引导)' }}</span>
-          </div>
-
-          <div class="spec-item">
             <span class="spec-label">推断主控芯片 (Controller Chip)</span>
             <span class="spec-val highlight">{{ disk.controllerVendor || '通用 Standard Controller' }}</span>
+          </div>
+
+          <div class="spec-item" v-if="disk.vendorId || disk.productId">
+            <span class="spec-label">芯片硬件 ID (USB VID / PID)</span>
+            <span class="spec-val code">VID: {{ disk.vendorId || 'N/A' }} | PID: {{ disk.productId || 'N/A' }}</span>
+          </div>
+
+          <div class="spec-item spec-full" v-if="disk.serialNumber">
+            <span class="spec-label">硬件序列号 (Serial Number)</span>
+            <span class="spec-val code">{{ disk.serialNumber }}</span>
           </div>
         </div>
 
@@ -383,10 +390,24 @@ function closeModal() {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.section-divider {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.2rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  border-bottom: 1px dashed rgba(0, 229, 255, 0.2);
+}
+
 .spec-item {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+}
+
+.spec-item.spec-full {
+  grid-column: 1 / -1;
 }
 
 .spec-label {
