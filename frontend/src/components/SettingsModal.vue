@@ -432,6 +432,8 @@ function triggerAutoSave() {
   }, 250);
 }
 
+let ventoyDebounceTimer: any = null;
+
 watch(
   [
     defaultMode,
@@ -451,6 +453,18 @@ watch(
   },
   { deep: true }
 );
+
+watch(ventoyPath, (newVal) => {
+  if (isInitializing) return;
+  if (ventoyDebounceTimer) clearTimeout(ventoyDebounceTimer);
+  ventoyDebounceTimer = setTimeout(() => {
+    if (newVal.trim()) {
+      checkVentoyCli();
+    } else {
+      ventoyValidation.value = null;
+    }
+  }, 400);
+});
 
 async function checkVentoyCli() {
   if (!ventoyPath.value.trim()) {

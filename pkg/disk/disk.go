@@ -190,7 +190,7 @@ func DetectBootStatus(volName string, partitionScheme string) string {
 	return "📁 数据存储盘 (未检出系统引导)"
 }
 
-// IsVentoyDisk determines if a given disk device path or mount path is already a Ventoy drive.
+// IsVentoyDisk determines if a given disk device path or mount path is already a Ventoy/UniBoot drive.
 func IsVentoyDisk(targetDisk string) bool {
 	upper := strings.ToUpper(targetDisk)
 	if strings.Contains(upper, "VENTOY") || strings.Contains(upper, "VTOYEFI") {
@@ -200,11 +200,38 @@ func IsVentoyDisk(targetDisk string) bool {
 	if info, err := os.Stat(filepath.Join(targetDisk, "ventoy")); err == nil && info.IsDir() {
 		return true
 	}
-	// Check if macOS system mount contains Ventoy
+
 	if runtime.GOOS == "darwin" {
-		for _, mount := range []string{"/Volumes/Ventoy", "/Volumes/VENTOY", "/Volumes/VTOYEFI"} {
+		diskNode := filepath.Base(targetDisk)
+		if strings.HasPrefix(diskNode, "disk") {
+			p1 := diskNode
+			p2 := diskNode
+			if !strings.Contains(diskNode, "s") {
+				p1 = diskNode + "s1"
+				p2 = diskNode + "s2"
+			}
+			for _, p := range []string{p1, p2} {
+				out, err := exec.Command("diskutil", "info", "-plist", p).Output()
+				if err == nil {
+					strOut := string(out)
+					volName := extractPlistValue(strOut, "VolumeName")
+					volNameUpper := strings.ToUpper(volName)
+					if strings.Contains(volNameUpper, "VENTOY") || strings.Contains(volNameUpper, "VTOYEFI") || strings.Contains(volNameUpper, "UNIBOOT") {
+						return true
+					}
+					mountPoint := extractPlistValue(strOut, "MountPoint")
+					if mountPoint != "" {
+						if info, statErr := os.Stat(filepath.Join(mountPoint, "ventoy")); statErr == nil && info.IsDir() {
+							return true
+						}
+					}
+				}
+			}
+		}
+
+		for _, mount := range []string{"/Volumes/Ventoy", "/Volumes/VENTOY", "/Volumes/VTOYEFI", "/Volumes/UNIBOOT"} {
 			if info, err := os.Stat(mount); err == nil && info.IsDir() {
-				if strings.Contains(targetDisk, "Ventoy") || strings.Contains(targetDisk, "VENTOY") {
+				if infoV, errV := os.Stat(filepath.Join(mount, "ventoy")); errV == nil && infoV.IsDir() {
 					return true
 				}
 			}

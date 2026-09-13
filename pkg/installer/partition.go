@@ -332,23 +332,39 @@ func formatDiskModeALinux(ctx context.Context, targetDisk string, fsType string)
 }
 
 // ResolveMountPoint resolves the active mount point for volume label "UNIBOOT" on the system.
+// ResolveMountPoint resolves the active mount point for volume label "UNIBOOT" on the system.
 func ResolveMountPoint(targetDisk string) (string, error) {
 	return ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
 }
 
 // ResolveMountPointWithLabel resolves the active mount point for a specified volume label on the system.
 func ResolveMountPointWithLabel(targetDisk string, label string) (string, error) {
-	// macOS standard mount location
+	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
+		return os.TempDir(), nil
+	}
+
+	// macOS target isolation
 	if runtime.GOOS == "darwin" {
+		diskNode := filepath.Base(targetDisk)
+		if !strings.Contains(diskNode, "s") {
+			diskNode = diskNode + "s1"
+		}
+
+		infoCmd := execCommand("diskutil", "info", "-plist", diskNode)
+		infoOut, infoErr := infoCmd.Output()
+		if infoErr == nil {
+			mount := extractPlistStringValue(string(infoOut), "MountPoint")
+			if mount != "" {
+				if info, err := os.Stat(mount); err == nil && info.IsDir() {
+					return mount, nil
+				}
+			}
+		}
+
 		macPath := filepath.Join("/Volumes", label)
 		if info, err := os.Stat(macPath); err == nil && info.IsDir() {
 			return macPath, nil
 		}
-	}
-
-	// Fallback to checking existing system mounts or dry-run temp directory
-	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
-		return os.TempDir(), nil
 	}
 
 	return "", fmt.Errorf("could not resolve mount point for label %s on target disk %s", label, targetDisk)
@@ -356,28 +372,70 @@ func ResolveMountPointWithLabel(targetDisk string, label string) (string, error)
 
 // MountAndResolveEFIPartition resolves or automatically mounts Partition 2 (VTOYEFI / ESP) for existing Ventoy drives.
 func MountAndResolveEFIPartition(targetDisk string) (string, error) {
-	if runtime.GOOS == "darwin" {
-		vtoyEfiPath := "/Volumes/VTOYEFI"
-		if info, err := os.Stat(vtoyEfiPath); err == nil && info.IsDir() {
-			return vtoyEfiPath, nil
-		}
-		diskNode := filepath.Base(targetDisk)
-		if strings.HasPrefix(diskNode, "disk") {
-			part2 := diskNode + "s2"
-			cmd := execCommand("diskutil", "mount", part2)
-			if err := cmd.Run(); err == nil {
-				if info, err := os.Stat(vtoyEfiPath); err == nil && info.IsDir() {
-					return vtoyEfiPath, nil
-				}
-			}
-		}
-	}
-
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
 		return os.TempDir(), nil
 	}
 
+	if runtime.GOOS == "darwin" {
+		diskNode := filepath.Base(targetDisk)
+		part2 := diskNode
+		if !strings.Contains(part2, "s") {
+			part2 = diskNode + "s2"
+		}
+
+		// 1. Check if part2 is already mounted
+		infoCmd := execCommand("diskutil", "info", "-plist", part2)
+		infoOut, infoErr := infoCmd.Output()
+		if infoErr == nil {
+			mount := extractPlistStringValue(string(infoOut), "MountPoint")
+			if mount != "" {
+				if info, err := os.Stat(mount); err == nil && info.IsDir() {
+					return mount, nil
+				}
+			}
+		}
+
+		// 2. Force mount part2
+		cmd := execCommand("diskutil", "mount", part2)
+		_ = cmd.Run()
+
+		// 3. Re-check mount point after diskutil mount
+		infoCmd2 := execCommand("diskutil", "info", "-plist", part2)
+		infoOut2, infoErr2 := infoCmd2.Output()
+		if infoErr2 == nil {
+			mount := extractPlistStringValue(string(infoOut2), "MountPoint")
+			if mount != "" {
+				if info, err := os.Stat(mount); err == nil && info.IsDir() {
+					return mount, nil
+				}
+			}
+		}
+
+		vtoyEfiPath := "/Volumes/VTOYEFI"
+		if info, err := os.Stat(vtoyEfiPath); err == nil && info.IsDir() {
+			return vtoyEfiPath, nil
+		}
+	}
+
 	return "", fmt.Errorf("could not resolve EFI boot partition for target disk %s", targetDisk)
+}
+
+func extractPlistStringValue(plistStr string, key string) string {
+	keyTag := "<key>" + key + "</key>"
+	idx := strings.Index(plistStr, keyTag)
+	if idx == -1 {
+		return ""
+	}
+	sub := plistStr[idx+len(keyTag):]
+	startStr := strings.Index(sub, "<string>")
+	if startStr == -1 {
+		return ""
+	}
+	endStr := strings.Index(sub, "</string>")
+	if endStr == -1 || endStr <= startStr+8 {
+		return ""
+	}
+	return sub[startStr+8 : endStr]
 }
 
 // UpdateVolumeLabel non-destructively renames the data partition volume label to newLabel.
