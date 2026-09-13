@@ -87,9 +87,11 @@ type DiskInfo struct {
 	SmartStatus     string `json:"smartStatus"`     // S.M.A.R.T. health status (e.g. Verified, Not Supported, Failing)
 	BusPower        string `json:"busPower"`        // Bus power available (e.g. 500 mA, 900 mA)
 	BusPowerUsed    string `json:"busPowerUsed"`    // Bus power required/used (e.g. 500 mA, 224 mA)
-	SectorSize      string `json:"sectorSize"`      // Sector block size (e.g. 512 Bytes, 4096 Bytes / 4Kn)
+	SectorSize        string `json:"sectorSize"`        // Sector block size (e.g. 512 Bytes, 4096 Bytes / 4Kn)
 	TransportProtocol string `json:"transportProtocol"` // USB Transport Protocol (e.g. UASP, BOT)
-	IsFakeUsb3      bool   `json:"isFakeUsb3"`      // Warning flag for fake USB 3.0 (USB 2.0 PHY disguised as 3.0)
+	BootStatus        string `json:"bootStatus"`        // Boot sector status (e.g. UniBoot/Ventoy Ready, MBR Bootable, Standard Data)
+	ControllerVendor  string `json:"controllerVendor"`  // Inferred USB Controller Vendor (e.g. Phison, SMI, Alcor)
+	IsFakeUsb3        bool   `json:"isFakeUsb3"`        // Warning flag for fake USB 3.0 (USB 2.0 PHY disguised as 3.0)
 	ProtocolCode    string `json:"protocolCode"`    // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
 }
 
@@ -136,6 +138,50 @@ func MapProtocolCode(version string, speed string) string {
 		return "usb3_0"
 	}
 	return "usb2"
+}
+
+// InferControllerVendor infers the likely USB master controller brand based on VID/PID and vendor strings.
+func InferControllerVendor(vendorID string, productID string, vendor string) string {
+	vid := strings.ToLower(strings.TrimSpace(vendorID))
+	switch {
+	case strings.Contains(vid, "0x0951") || strings.Contains(vid, "0x13fe"):
+		return "Phison (群联电子主控)"
+	case strings.Contains(vid, "0x090c"):
+		return "SMI (慧荣科技主控)"
+	case strings.Contains(vid, "0x058f"):
+		return "Alcor (安国微电子主控)"
+	case strings.Contains(vid, "0x1f75"):
+		return "Innostor (银灿科技主控)"
+	case strings.Contains(vid, "0x0781"):
+		return "SanDisk (闪迪自研主控)"
+	case strings.Contains(vid, "0x1b1c"):
+		return "Corsair / ASMedia (美商海盗船主控)"
+	case strings.Contains(vid, "0x152d"):
+		return "JMicron (智微科技桥接主控)"
+	case strings.Contains(vid, "0x174c"):
+		return "ASMedia (祥硕科技主控)"
+	case strings.Contains(vid, "0x0bda"):
+		return "Realtek (瑞昱半导体主控)"
+	}
+	if vendor != "" && vendor != "Generic" {
+		return vendor + " (通用主控)"
+	}
+	return "通用 Standard Controller"
+}
+
+// DetectBootStatus evaluates if the target drive contains bootloader structures.
+func DetectBootStatus(volName string, partitionScheme string) string {
+	upperVol := strings.ToUpper(volName)
+	if strings.Contains(upperVol, "VENTOY") || strings.Contains(upperVol, "UNIBOOT") || strings.Contains(upperVol, "VTOYEFI") {
+		return "🚀 UniBoot / Ventoy 极速引导盘已部署"
+	}
+	if strings.Contains(strings.ToUpper(partitionScheme), "GPT") {
+		return "💿 GPT / EFI 标准系统引导盘"
+	}
+	if strings.Contains(strings.ToUpper(partitionScheme), "MBR") {
+		return "💾 MBR 主引导记录刻录完成"
+	}
+	return "📁 数据存储盘 (未检出系统引导)"
 }
 
 // FormatBytes formats byte counts into human-readable strings (e.g. 248.15 GB, 8.05 GB).
@@ -483,6 +529,8 @@ func getDarwinDisks() ([]DiskInfo, error) {
 
 		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
+		bootStatusStr := DetectBootStatus(volName, partitionScheme)
+		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
 
 		disks = append(disks, DiskInfo{
 			Device:            volPath,
@@ -507,6 +555,8 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      busPowerUsed,
 			SectorSize:        sectorSizeStr,
 			TransportProtocol: transportProtoStr,
+			BootStatus:        bootStatusStr,
+			ControllerVendor:  controllerVendorStr,
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
 		})
@@ -690,6 +740,8 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      "500 mA",
 			SectorSize:        "512 Bytes (512n/512e)",
 			TransportProtocol: "BOT (Bulk-Only Transport)",
+			BootStatus:        DetectBootStatus(label, partitionScheme),
+			ControllerVendor:  InferControllerVendor("", "", vendor),
 			IsFakeUsb3:        isFake,
 			ProtocolCode:    protoCode,
 		})
@@ -768,6 +820,8 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      "500 mA",
 			SectorSize:        "512 Bytes (512n/512e)",
 			TransportProtocol: "BOT (Bulk-Only Transport)",
+			BootStatus:        DetectBootStatus(displayName, "GPT / MBR"),
+			ControllerVendor:  InferControllerVendor("", "", "Generic"),
 			IsFakeUsb3:        isFake,
 			ProtocolCode:    protoCode,
 		})

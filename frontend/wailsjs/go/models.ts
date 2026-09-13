@@ -44,6 +44,8 @@ export namespace disk {
 	    busPowerUsed: string;
 	    sectorSize: string;
 	    transportProtocol: string;
+	    bootStatus: string;
+	    controllerVendor: string;
 	    isFakeUsb3: boolean;
 	    protocolCode: string;
 	
@@ -75,6 +77,8 @@ export namespace disk {
 	        this.busPowerUsed = source["busPowerUsed"];
 	        this.sectorSize = source["sectorSize"];
 	        this.transportProtocol = source["transportProtocol"];
+	        this.bootStatus = source["bootStatus"];
+	        this.controllerVendor = source["controllerVendor"];
 	        this.isFakeUsb3 = source["isFakeUsb3"];
 	        this.protocolCode = source["protocolCode"];
 	    }

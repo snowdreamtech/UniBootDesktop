@@ -188,6 +188,8 @@ interface DiskInfo {
   busPowerUsed?: string;
   sectorSize?: string;
   transportProtocol?: string;
+  bootStatus?: string;
+  controllerVendor?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }

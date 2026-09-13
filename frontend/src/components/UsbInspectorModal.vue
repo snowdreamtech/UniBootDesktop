@@ -129,6 +129,16 @@
             <span class="spec-label">底层传输协议 (Transport Protocol)</span>
             <span class="spec-val highlight">{{ disk.transportProtocol || 'BOT (Bulk-Only Transport)' }}</span>
           </div>
+
+          <div class="spec-item">
+            <span class="spec-label">引导扇区状态 (Boot Status)</span>
+            <span class="spec-val highlight">{{ disk.bootStatus || '📁 数据存储盘 (未检出系统引导)' }}</span>
+          </div>
+
+          <div class="spec-item">
+            <span class="spec-label">推断主控芯片 (Controller Chip)</span>
+            <span class="spec-val highlight">{{ disk.controllerVendor || '通用 Standard Controller' }}</span>
+          </div>
         </div>
 
         <!-- Protocol Compatibility Matrix -->
@@ -175,6 +185,8 @@ interface DiskInfo {
   busPowerUsed?: string;
   sectorSize?: string;
   transportProtocol?: string;
+  bootStatus?: string;
+  controllerVendor?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }
