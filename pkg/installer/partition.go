@@ -55,15 +55,15 @@ func formatDiskMacOS(ctx context.Context, targetDisk string) (string, error) {
 	diskNode := filepath.Base(targetDisk)
 
 	// Dual-Partition Command: Partition 1 ExFAT UNIBOOT (rest of disk), Partition 2 FAT32 VTOYEFI (64MB ESP)
-	cmd := execCommand("diskutil", "partitionDisk", diskNode, "MBRFormat", "ExFAT", "UNIBOOT", "0b", "FAT32", "VTOYEFI", "64M")
+	cmd := execCommand("diskutil", "partitionDisk", diskNode, "2", "MBRFormat", "ExFAT", "UNIBOOT", "R", "FAT32", "VTOYEFI", "64M")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		// Fallback to eraseDisk if partitionDisk fails on specific hardware
-		cmdFallback := execCommand("diskutil", "eraseDisk", "ExFAT", "UNIBOOT", "MBRFormat", diskNode)
-		if fbOut, fbErr := cmdFallback.CombinedOutput(); fbErr != nil {
-			return "", fmt.Errorf("diskutil partitionDisk failed (%v): %s (fallback failed: %s)", err, string(output), string(fbOut))
-		}
+		return "", fmt.Errorf("diskutil partitionDisk failed (%v): %s", err, string(output))
 	}
+
+	// Mount Partition 2 (VTOYEFI) explicitly on macOS so dual partitions are visible in Finder/system
+	part2Node := diskNode + "s2"
+	_ = execCommand("diskutil", "mount", part2Node).Run()
 
 	mountPoint := "/Volumes/UNIBOOT"
 	if info, err := os.Stat(mountPoint); err == nil && info.IsDir() {
@@ -81,7 +81,13 @@ func formatDiskWindows(ctx context.Context, targetDisk string) (string, error) {
 	diskIndex = strings.TrimPrefix(diskIndex, `disk`)
 	diskIndex = strings.TrimPrefix(diskIndex, `Disk`)
 
-	scriptContent := fmt.Sprintf("select disk %s\nclean\ncreate partition primary\nactive\nformat fs=fat32 label=\"UNIBOOT\" quick\nassign\n", diskIndex)
+	// Windows dual-partition setup using diskpart:
+	// Partition 1: Primary FAT32 UNIBOOT (data)
+	// Partition 2: Primary FAT32 VTOYEFI (64MB ESP partition at end of disk)
+	scriptContent := fmt.Sprintf(
+		"select disk %s\nclean\nconvert mbr\ncreate partition primary\nshrink desired=64\nactive\nformat fs=fat32 label=\"UNIBOOT\" quick\nassign\ncreate partition primary\nformat fs=fat32 label=\"VTOYEFI\" quick\nset id=ef\n",
+		diskIndex,
+	)
 	tmpFile, err := os.CreateTemp("", "diskpart-*.txt")
 	if err != nil {
 		return "", fmt.Errorf("failed to create diskpart script: %w", err)
@@ -111,41 +117,61 @@ func formatDiskLinux(ctx context.Context, targetDisk string) (string, error) {
 		return "", fmt.Errorf("parted mklabel failed (%v): %s", err, string(output))
 	}
 
-	// 2. Create Primary FAT32 partition
-	cmd = execCommand("parted", "-s", targetDisk, "mkpart", "primary", "fat32", "1MiB", "100%")
+	// 2. Create Partition 1 (Primary Data) leaving 64MiB at the end
+	cmd = execCommand("parted", "-s", targetDisk, "mkpart", "primary", "fat32", "1MiB", "-65MiB")
 	if output, err := cmd.CombinedOutput(); err != nil {
-		return "", fmt.Errorf("parted mkpart failed (%v): %s", err, string(output))
+		return "", fmt.Errorf("parted mkpart P1 failed (%v): %s", err, string(output))
+	}
+	_ = execCommand("parted", "-s", targetDisk, "set", "1", "boot", "on").Run()
+
+	// 3. Create Partition 2 (64MiB ESP Partition)
+	cmd = execCommand("parted", "-s", targetDisk, "mkpart", "primary", "fat32", "-64MiB", "100%")
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return "", fmt.Errorf("parted mkpart P2 failed (%v): %s", err, string(output))
 	}
 
 	// Partition naming convention (/dev/sdb -> /dev/sdb1, /dev/nvme0n1 -> /dev/nvme0n1p1)
-	partition := targetDisk + "1"
+	part1 := targetDisk + "1"
+	part2 := targetDisk + "2"
 	if strings.Contains(targetDisk, "nvme") || strings.Contains(targetDisk, "mmcblk") {
-		partition = targetDisk + "p1"
+		part1 = targetDisk + "p1"
+		part2 = targetDisk + "p2"
 	}
 
-	// 3. Format as FAT32 with label UNIBOOT
-	cmd = execCommand("mkfs.vfat", "-F", "32", "-n", "UNIBOOT", partition)
+	// 4. Format Partition 1 as FAT32 with label UNIBOOT
+	cmd = execCommand("mkfs.vfat", "-F", "32", "-n", "UNIBOOT", part1)
 	if output, err := cmd.CombinedOutput(); err != nil {
-		return "", fmt.Errorf("mkfs.vfat failed (%v): %s", err, string(output))
+		return "", fmt.Errorf("mkfs.vfat P1 failed (%v): %s", err, string(output))
 	}
 
-	// 4. Create mount directory and mount
+	// 5. Format Partition 2 as FAT32 with label VTOYEFI
+	cmd = execCommand("mkfs.vfat", "-F", "32", "-n", "VTOYEFI", part2)
+	if _, err := cmd.CombinedOutput(); err != nil {
+		_ = execCommand("mkfs.vfat", "-F", "16", "-n", "VTOYEFI", part2).Run()
+	}
+
+	// 6. Create mount directory and mount Partition 1
 	mountPoint := "/mnt/UNIBOOT"
 	if err := os.MkdirAll(mountPoint, 0755); err != nil {
 		return "", fmt.Errorf("failed to create mount dir %s: %w", mountPoint, err)
 	}
 
-	cmd = execCommand("mount", partition, mountPoint)
+	cmd = execCommand("mount", part1, mountPoint)
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return "", fmt.Errorf("mount partition failed (%v): %s", err, string(output))
 	}
+
+	// 7. Create mount directory and mount Partition 2 (VTOYEFI)
+	efiMountPoint := "/mnt/VTOYEFI"
+	_ = os.MkdirAll(efiMountPoint, 0755)
+	_ = execCommand("mount", part2, efiMountPoint).Run()
 
 	return mountPoint, nil
 }
 
 // FormatDiskModeA formats the target physical disk for Mode A (Hybrid Pro Mode - Ventoy + UniBoot)
-// with the specified file system (exFAT, NTFS, FAT32, ext4) and volume label "VENTOY".
-// Returns the resolved volume mount point (e.g. /Volumes/VENTOY, E:\, /mnt/VENTOY).
+// with the specified file system (exFAT, NTFS, FAT32, ext4) and volume label "UNIBOOT".
+// Returns the resolved volume mount point (e.g. /Volumes/UNIBOOT, E:\, /mnt/UNIBOOT).
 func FormatDiskModeA(ctx context.Context, targetDisk string, fsType string) (string, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return "", fmt.Errorf("disk validation failed: %w", err)
@@ -186,14 +212,15 @@ func formatDiskModeAMacOS(ctx context.Context, targetDisk string, fsType string)
 	}
 
 	// Dual Partition: Partition 1 Data (fsFormat UNIBOOT), Partition 2 ESP (FAT32 VTOYEFI 64M)
-	cmd := execCommand("diskutil", "partitionDisk", diskNode, "MBRFormat", fsFormat, "UNIBOOT", "0b", "FAT32", "VTOYEFI", "64M")
+	cmd := execCommand("diskutil", "partitionDisk", diskNode, "2", "MBRFormat", fsFormat, "UNIBOOT", "R", "FAT32", "VTOYEFI", "64M")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		cmdFallback := execCommand("diskutil", "eraseDisk", fsFormat, "UNIBOOT", "MBRFormat", diskNode)
-		if fbOut, fbErr := cmdFallback.CombinedOutput(); fbErr != nil {
-			return "", fmt.Errorf("diskutil partitionDisk for Mode A failed (%v): %s (fallback failed: %s)", err, string(output), string(fbOut))
-		}
+		return "", fmt.Errorf("diskutil partitionDisk for Mode A failed (%v): %s", err, string(output))
 	}
+
+	// Mount Partition 2 (VTOYEFI) explicitly on macOS so dual partitions are visible in Finder/system
+	part2Node := diskNode + "s2"
+	_ = execCommand("diskutil", "mount", part2Node).Run()
 
 	mountPoint := "/Volumes/UNIBOOT"
 	if info, err := os.Stat(mountPoint); err == nil && info.IsDir() {
@@ -214,7 +241,14 @@ func formatDiskModeAWindows(ctx context.Context, targetDisk string, fsType strin
 		fsFormat = "exfat"
 	}
 
-	scriptContent := fmt.Sprintf("select disk %s\nclean\ncreate partition primary\nactive\nformat fs=%s label=\"VENTOY\" quick\nassign\n", diskIndex, fsFormat)
+	// Windows dual-partition setup using diskpart:
+	// Partition 1: Primary data partition (UNIBOOT)
+	// Partition 2: Primary FAT32 VTOYEFI (64MB ESP partition at end of disk)
+	scriptContent := fmt.Sprintf(
+		"select disk %s\nclean\nconvert mbr\ncreate partition primary\nshrink desired=64\nactive\nformat fs=%s label=\"UNIBOOT\" quick\nassign\ncreate partition primary\nformat fs=fat32 label=\"VTOYEFI\" quick\nset id=ef\n",
+		diskIndex,
+		fsFormat,
+	)
 	tmpFile, err := os.CreateTemp("", "diskpart-modea-*.txt")
 	if err != nil {
 		return "", fmt.Errorf("failed to create diskpart script: %w", err)
@@ -233,7 +267,7 @@ func formatDiskModeAWindows(ctx context.Context, targetDisk string, fsType strin
 		return "", fmt.Errorf("diskpart for Mode A failed (%v): %s", err, string(output))
 	}
 
-	return ResolveMountPointWithLabel(targetDisk, "VENTOY")
+	return ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
 }
 
 func formatDiskModeALinux(ctx context.Context, targetDisk string, fsType string) (string, error) {
@@ -242,14 +276,22 @@ func formatDiskModeALinux(ctx context.Context, targetDisk string, fsType string)
 		return "", fmt.Errorf("parted mklabel failed (%v): %s", err, string(output))
 	}
 
-	cmd = execCommand("parted", "-s", targetDisk, "mkpart", "primary", "1MiB", "100%")
+	cmd = execCommand("parted", "-s", targetDisk, "mkpart", "primary", "1MiB", "-65MiB")
 	if output, err := cmd.CombinedOutput(); err != nil {
-		return "", fmt.Errorf("parted mkpart failed (%v): %s", err, string(output))
+		return "", fmt.Errorf("parted mkpart P1 failed (%v): %s", err, string(output))
+	}
+	_ = execCommand("parted", "-s", targetDisk, "set", "1", "boot", "on").Run()
+
+	cmd = execCommand("parted", "-s", targetDisk, "mkpart", "primary", "fat32", "-64MiB", "100%")
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return "", fmt.Errorf("parted mkpart P2 failed (%v): %s", err, string(output))
 	}
 
-	partition := targetDisk + "1"
+	part1 := targetDisk + "1"
+	part2 := targetDisk + "2"
 	if strings.Contains(targetDisk, "nvme") || strings.Contains(targetDisk, "mmcblk") {
-		partition = targetDisk + "p1"
+		part1 = targetDisk + "p1"
+		part2 = targetDisk + "p2"
 	}
 
 	mkfsCmd := "mkfs.exfat"
@@ -262,20 +304,29 @@ func formatDiskModeALinux(ctx context.Context, targetDisk string, fsType string)
 		mkfsCmd = "mkfs.ext4"
 	}
 
-	cmd = execCommand(mkfsCmd, "-n", "VENTOY", partition)
+	cmd = execCommand(mkfsCmd, "-n", "UNIBOOT", part1)
 	if output, err := cmd.CombinedOutput(); err != nil {
-		return "", fmt.Errorf("%s failed (%v): %s", mkfsCmd, err, string(output))
+		return "", fmt.Errorf("%s P1 failed (%v): %s", mkfsCmd, err, string(output))
 	}
 
-	mountPoint := "/mnt/VENTOY"
+	cmd = execCommand("mkfs.vfat", "-F", "32", "-n", "VTOYEFI", part2)
+	if _, err := cmd.CombinedOutput(); err != nil {
+		_ = execCommand("mkfs.vfat", "-F", "16", "-n", "VTOYEFI", part2).Run()
+	}
+
+	mountPoint := "/mnt/UNIBOOT"
 	if err := os.MkdirAll(mountPoint, 0755); err != nil {
 		return "", fmt.Errorf("failed to create mount dir %s: %w", mountPoint, err)
 	}
 
-	cmd = execCommand("mount", partition, mountPoint)
+	cmd = execCommand("mount", part1, mountPoint)
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return "", fmt.Errorf("mount partition failed (%v): %s", err, string(output))
 	}
+
+	efiMountPoint := "/mnt/VTOYEFI"
+	_ = os.MkdirAll(efiMountPoint, 0755)
+	_ = execCommand("mount", part2, efiMountPoint).Run()
 
 	return mountPoint, nil
 }
