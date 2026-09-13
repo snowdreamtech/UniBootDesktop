@@ -138,8 +138,8 @@
             </div>
             <div class="safe-notice-desc">
               {{ activeMode === 'cloud'
-                  ? '模式 B 坚持标准 UNIBOOT 双分区架构。部署将自动无损刷新 ESP 引导区直达 iPXE 云菜单，绝不抹擦主数据区的现有数据与 ISO！'
-                  : '无需选择主数据区格式。模式 A 将自动保留现有主数据分区与 ISO 镜像，全自动注入 UniBoot 暗色主题与 iPXE 云引导！' }}
+                  ? '模式 B 坚持标准 UNIBOOT 双分区架构。部署将自动无损刷新 ESP 引导区直达 iPXE 云菜单，绝不抹擦或挪动主数据区原有文件与 ISO！'
+                  : '无需选择主数据区格式。模式 A 自动保留所有现有文件与 ISO 镜像（绝不挪动原文件位置），全自动无损注入 UniBoot 暗色主题与 iPXE 云引导！' }}
             </div>
           </div>
         </div>
