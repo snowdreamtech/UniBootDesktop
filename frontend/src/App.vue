@@ -149,7 +149,15 @@
               {{ qemuStatus.installed ? '已检测到 QEMU' : '未检测到 QEMU' }}
             </span>
           </div>
-          <p class="qemu-desc">烧录完成后，可在当前桌面直接启动 QEMU 虚拟机校验 U 盘引导环境。</p>
+          <p class="qemu-desc">
+            校验目标: 
+            <strong v-if="activeQemuTargetDevice" class="target-highlight">
+              {{ activeQemuTargetName }} ({{ activeQemuTargetDevice }})
+            </strong>
+            <span v-else class="target-warn">
+              ⚠️ 未选择 U 盘（请在上方列表中点击选择要测试的 U 盘）
+            </span>
+          </p>
           <button class="btn-secondary" :disabled="isLaunchingQemu" @click="launchQEMU">
             {{ isLaunchingQemu ? '⏳ 正在启动 QEMU 模拟器...' : '▶ 启动 QEMU 模拟器测试' }}
           </button>
@@ -394,6 +402,28 @@ const isDeployDisabled = computed(() => {
   return selectedDevices.value.size === 0;
 });
 
+const activeQemuTargetDevice = computed(() => {
+  if (selectionMode.value === 'single') {
+    return selectedDisk.value?.device || '';
+  }
+  if (selectedDevices.value.size > 0) {
+    return Array.from(selectedDevices.value)[0];
+  }
+  return '';
+});
+
+const activeQemuTargetName = computed(() => {
+  if (selectionMode.value === 'single') {
+    return selectedDisk.value?.name || selectedDisk.value?.device || '';
+  }
+  if (selectedDevices.value.size > 0) {
+    const firstDev = Array.from(selectedDevices.value)[0];
+    const found = diskList.value.find(d => d.device === firstDev);
+    return found?.name || firstDev;
+  }
+  return '';
+});
+
 function setSelectionMode(mode: 'single' | 'batch') {
   selectionMode.value = mode;
 }
@@ -582,7 +612,7 @@ async function startDeployment() {
 
 
 async function launchQEMU() {
-  console.log('[UniBoot] launchQEMU clicked, diskList:', diskList.value, 'selectedDisk:', selectedDisk.value);
+  console.log('[UniBoot] launchQEMU clicked, diskList:', diskList.value, 'selectedDisk:', selectedDisk.value, 'selectedDevices:', selectedDevices.value);
 
   // 1. Check if disk list is empty
   if (!diskList.value || diskList.value.length === 0) {
@@ -590,9 +620,12 @@ async function launchQEMU() {
     return;
   }
 
-  // 2. Check if a disk is selected
-  if (!selectedDisk.value || !selectedDisk.value.device) {
-    alert('⚠️ 请先选择要测试的目标 U 盘！\n\n请在上方磁盘列表中点击选中要校验的 U 盘。');
+  // 2. Check if a disk is selected (supports both single & batch selection modes)
+  const targetDevice = activeQemuTargetDevice.value;
+  const diskLabel = activeQemuTargetName.value;
+
+  if (!targetDevice) {
+    alert('⚠️ 提示：你尚未选择要测试的目标 U 盘！\n\n请在上方磁盘列表中点击选中要校验的 U 盘后再试。');
     return;
   }
 
@@ -602,8 +635,6 @@ async function launchQEMU() {
     return;
   }
 
-  const targetDevice = selectedDisk.value.device;
-  const diskLabel = selectedDisk.value.name || selectedDisk.value.device;
   isLaunchingQemu.value = true;
 
   try {
