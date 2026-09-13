@@ -149,9 +149,9 @@
               {{ qemuStatus.installed ? '已检测到 QEMU' : '未检测到 QEMU' }}
             </span>
           </div>
-          <p class="qemu-desc">烧录完成后，可在当前桌面直接拉起 QEMU 虚拟机校验 U 盘引导环境。</p>
+          <p class="qemu-desc">烧录完成后，可在当前桌面直接启动 QEMU 虚拟机校验 U 盘引导环境。</p>
           <button class="btn-secondary" :disabled="!selectedDisk" @click="launchQEMU">
-            ▶ 拉起 QEMU 模拟器测试
+            ▶ 启动 QEMU 模拟器测试
           </button>
         </div>
       </section>
@@ -581,9 +581,9 @@ async function launchQEMU() {
   try {
     if (window.go && window.go.main && window.go.main.App) {
       await window.go.main.App.LaunchQEMU(selectedDisk.value.device);
-      alert(`🚀 已成功拉起 QEMU 模拟器校验：${selectedDisk.value.device}`);
+      alert(`🚀 已成功启动 QEMU 模拟器校验：${selectedDisk.value.device}`);
     } else {
-      alert(`[演示模式] 正在拉起 QEMU 模拟器校验：${selectedDisk.value.device}`);
+      alert(`[演示模式] 正在启动 QEMU 模拟器校验：${selectedDisk.value.device}`);
     }
   } catch (e: any) {
     alert(`❌ 启动 QEMU 模拟器失败：\n\n${e?.message || String(e)}`);
