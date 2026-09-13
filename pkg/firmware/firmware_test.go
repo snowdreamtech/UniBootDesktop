@@ -1,0 +1,69 @@
+// Copyright (c) 2026 SnowdreamTech. All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+package firmware
+
+import (
+	"testing"
+)
+
+func TestStandardFirmwareMappings(t *testing.T) {
+	mappings := GetFirmwareMappings()
+	if len(mappings) == 0 {
+		t.Fatalf("expected non-empty firmware mappings")
+	}
+
+	// Verify undionly.kpxe presence and reserved status
+	foundUndionly := false
+	for _, m := range mappings {
+		if m.ReleaseName == "undionly.kpxe" {
+			foundUndionly = true
+			if m.TargetPath != "undionly.kpxe" {
+				t.Errorf("expected TargetPath 'undionly.kpxe', got '%s'", m.TargetPath)
+			}
+			if !m.IsReserved {
+				t.Errorf("expected IsReserved to be true for undionly.kpxe")
+			}
+		}
+	}
+
+	if !foundUndionly {
+		t.Errorf("undionly.kpxe mapping missing from StandardFirmwareMappings")
+	}
+}
+
+func TestGetMappingByReleaseName(t *testing.T) {
+	mapping, ok := GetMappingByReleaseName("undionly.kpxe")
+	if !ok {
+		t.Fatalf("expected undionly.kpxe mapping to be found")
+	}
+	if mapping.TargetPath != "undionly.kpxe" {
+		t.Errorf("expected target path undionly.kpxe, got %s", mapping.TargetPath)
+	}
+
+	_, okNonExistent := GetMappingByReleaseName("non-existent-firmware.bin")
+	if okNonExistent {
+		t.Errorf("expected non-existent firmware mapping to return false")
+	}
+}
+
+func TestTargetPathForReleaseAsset(t *testing.T) {
+	tests := []struct {
+		releaseName string
+		expected    string
+	}{
+		{"ipxe-x86_64.efi", "EFI/BOOT/BOOTX64.EFI"},
+		{"ipxe-arm64.efi", "EFI/BOOT/BOOTAA64.EFI"},
+		{"ipxe.lkrn", "ipxe.lkrn"},
+		{"undionly.kpxe", "undionly.kpxe"},
+		{"uniboot.ipxe", "uniboot.ipxe"},
+		{"unknown.efi", ""},
+	}
+
+	for _, tt := range tests {
+		got := TargetPathForReleaseAsset(tt.releaseName)
+		if got != tt.expected {
+			t.Errorf("TargetPathForReleaseAsset(%q) = %q; want %q", tt.releaseName, got, tt.expected)
+		}
+	}
+}
