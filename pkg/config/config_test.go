@@ -12,8 +12,8 @@ func TestDefaultConfig(t *testing.T) {
 	if cfg.Mode != "cloud" {
 		t.Errorf("expected default Mode 'cloud', got %s", cfg.Mode)
 	}
-	if cfg.GithubProxy != "https://ghproxy.net/" {
-		t.Errorf("expected default GithubProxy 'https://ghproxy.net/', got %s", cfg.GithubProxy)
+	if cfg.GithubProxy != "" {
+		t.Errorf("expected default GithubProxy '', got %s", cfg.GithubProxy)
 	}
 	if cfg.FileSystem != "exFAT" {
 		t.Errorf("expected default FileSystem 'exFAT', got %s", cfg.FileSystem)

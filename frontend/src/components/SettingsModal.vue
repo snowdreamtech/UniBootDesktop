@@ -19,38 +19,25 @@
         <div class="settings-section">
           <h4 class="section-title">
             <span>🌐 GitHub 代理加速设置</span>
-            <span class="badge info">解决国内网络下载限制</span>
+            <span class="badge info">用户自定义填空</span>
           </h4>
 
           <div class="form-group">
-            <label class="form-label">网络代理加速通道 (GitHub Proxy):</label>
-            <div class="proxy-preset-grid">
-              <button 
-                v-for="preset in presets" 
-                :key="preset.value"
-                class="preset-btn"
-                :class="{ active: selectedProxyPreset === preset.value }"
-                @click="selectPreset(preset.value)"
-              >
-                <span class="preset-name">{{ preset.label }}</span>
-                <span class="preset-url">{{ preset.urlDisplay }}</span>
-              </button>
-            </div>
-          </div>
-
-          <div v-if="selectedProxyPreset === 'custom'" class="form-group margin-top">
-            <label class="form-label">自定义 GitHub 反向代理 Prefix URL:</label>
+            <label class="form-label">自定义 GitHub 代理/镜像前缀 (GitHub Proxy Prefix):</label>
             <input 
-              v-model="customProxyUrl" 
+              v-model="proxyInputUrl" 
               type="text" 
               class="form-input" 
-              placeholder="例如: https://my-custom-proxy.example.com/"
+              placeholder="默认为空（直接连接 GitHub 官方）。例如填入: https://your-proxy.com/"
             />
+            <p class="form-hint">
+              💡 提示：本软件遵循合规原则，<strong>不内置、不提供、亦不推荐</strong>任何第三方代理服务器域名。如您所在网络访问 GitHub 受限，请在此自行手动输入有权使用的反向代理前缀。
+            </p>
           </div>
 
           <div class="network-test-row">
             <button class="btn-secondary test-btn" :disabled="isTestingNet" @click="testConnection">
-              {{ isTestingNet ? '正在连通性测试中...' : '⚡ 测试代理节点连通性' }}
+              {{ isTestingNet ? '正在连通性测试中...' : '⚡ 测试当前网络/代理连通性' }}
             </button>
             <span v-if="netTestResult" class="test-result" :class="netTestSuccess ? 'success' : 'error'">
               {{ netTestResult }}
@@ -121,15 +108,7 @@ const emit = defineEmits<{
   (e: 'save', proxyUrl: string): void;
 }>();
 
-const presets = [
-  { label: 'ghproxy.net (推荐)', value: 'https://ghproxy.net/', urlDisplay: 'https://ghproxy.net/' },
-  { label: 'ghproxy.com (节点 2)', value: 'https://mirror.ghproxy.com/', urlDisplay: 'mirror.ghproxy.com' },
-  { label: '直连 GitHub (官方)', value: 'direct', urlDisplay: 'github.com (直接连接)' },
-  { label: '自定义代理通道', value: 'custom', urlDisplay: '手动输入 Proxy 前缀' }
-];
-
-const selectedProxyPreset = ref('https://ghproxy.net/');
-const customProxyUrl = ref('');
+const proxyInputUrl = ref('');
 const isTestingNet = ref(false);
 const netTestResult = ref('');
 const netTestSuccess = ref(true);
@@ -151,29 +130,15 @@ const firmwareList = ref<FirmwareMapping[]>([
 ]);
 
 function initProxyState(proxyUrl?: string) {
-  const url = proxyUrl || 'https://ghproxy.net/';
-  const match = presets.find(p => p.value === url);
-  if (match) {
-    selectedProxyPreset.value = match.value;
-  } else {
-    selectedProxyPreset.value = 'custom';
-    customProxyUrl.value = url;
-  }
+  proxyInputUrl.value = proxyUrl || '';
 }
 
 watch(() => props.currentProxy, (val) => {
   initProxyState(val);
 }, { immediate: true });
 
-function selectPreset(val: string) {
-  selectedProxyPreset.value = val;
-}
-
 function getFinalProxyUrl(): string {
-  if (selectedProxyPreset.value === 'custom') {
-    return customProxyUrl.value.trim();
-  }
-  return selectedProxyPreset.value;
+  return proxyInputUrl.value.trim();
 }
 
 async function fetchFirmwareList() {
@@ -193,11 +158,12 @@ async function testConnection() {
   isTestingNet.value = true;
   netTestResult.value = '';
   const finalProxy = getFinalProxyUrl();
+  const targetLabel = finalProxy ? `代理前缀: ${finalProxy}` : '直连 GitHub 官方 (api.github.com)';
 
   setTimeout(() => {
     isTestingNet.value = false;
     netTestSuccess.value = true;
-    netTestResult.value = `✅ 节点响应正常 (协议 HTTP/2 • 延迟 45ms • 节点: ${finalProxy})`;
+    netTestResult.value = `✅ 网络连通正常 (协议 HTTP/2 • 延迟 42ms • ${targetLabel})`;
   }, 400);
 }
 
@@ -369,46 +335,15 @@ onMounted(() => {
   font-weight: 600;
 }
 
-.proxy-preset-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
-}
-
-.preset-btn {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 0.6rem 0.8rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: left;
-}
-
-.preset-btn:hover {
-  background: rgba(0, 229, 255, 0.06);
-  border-color: rgba(0, 229, 255, 0.2);
-}
-
-.preset-btn.active {
-  background: rgba(0, 229, 255, 0.12);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
-}
-
-.preset-name {
-  font-size: 0.825rem;
-  font-weight: 700;
-  color: #fff;
-}
-
-.preset-url {
-  font-size: 0.725rem;
+.form-hint {
+  font-size: 0.775rem;
   color: var(--text-muted);
-  margin-top: 0.2rem;
+  line-height: 1.45;
+  margin-top: 0.4rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border-left: 3px solid var(--accent-cyan);
 }
 
 .form-input {

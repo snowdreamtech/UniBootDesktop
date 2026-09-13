@@ -27,7 +27,7 @@ func GetDefaultConfig() *AppConfig {
 		Mode:            "cloud", // Mode B Cloud Pure Mode by default
 		AutoCheckUpdate: true,
 		Theme:           "dark",
-		GithubProxy:     "https://ghproxy.net/",
+		GithubProxy:     "", // Default to empty (Direct connection, no hardcoded proxy preset)
 		FileSystem:      "exFAT",
 	}
 }
