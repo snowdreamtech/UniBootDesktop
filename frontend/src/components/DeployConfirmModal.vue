@@ -1,24 +1,34 @@
 <template>
   <div v-if="isOpen" class="modal-overlay" @click="close">
-    <div class="glass-modal confirm-card" :class="{ 'safe-card': isVentoyDisk }" @click.stop>
-      <div class="modal-header" :class="isVentoyDisk ? 'safe-header' : 'danger-header'">
+    <div class="glass-modal confirm-card" :class="{ 'safe-card': isAllVentoy, 'mixed-card': isMixed }" @click.stop>
+      <div class="modal-header" :class="isAllVentoy ? 'safe-header' : (isMixed ? 'mixed-header' : 'danger-header')">
         <div class="header-title">
-          <span class="warning-icon">{{ isVentoyDisk ? '🛡️' : '⚠️' }}</span>
-          <h3>{{ isVentoyDisk ? '智能部署确认：无需格式化 (请勿惊慌)' : '高危操作确认：即将抹除 U 盘数据' }}</h3>
+          <span class="warning-icon">{{ isAllVentoy ? '🛡️' : (isMixed ? '⚡' : '⚠️') }}</span>
+          <h3>
+            {{ isAllVentoy ? '智能部署确认：无需格式化 (请勿惊慌)' : (isMixed ? '⚡ 混合智能部署确认：增量与全新混合' : '高危操作确认：即将抹除 U 盘数据') }}
+          </h3>
         </div>
         <button class="close-btn" @click="close">✕</button>
       </div>
 
       <div class="modal-body">
-        <!-- Safe Info Banner for Existing Ventoy Disks -->
-        <div v-if="isVentoyDisk" class="safe-banner">
+        <!-- Safe Info Banner for ALL Ventoy Disks -->
+        <div v-if="isAllVentoy" class="safe-banner">
           <div class="banner-title">💡 请放心：本操作绝对不会格式化您的 U 盘！</div>
           <div class="banner-desc">
             检测到目标 U 盘已部署 Ventoy 引导结构。系统将<strong>自动采用增量注入技术</strong>，跳过擦盘与格式化，直接写入 UniBoot 引导固件与主题。<strong>您 U 盘中的所有文件、ISO 镜像均 100% 原样保留</strong>，请安心部署！
           </div>
         </div>
 
-        <!-- Danger Warning Alert Banner for Blank Disks -->
+        <!-- Mixed Mode Info Banner for Mixed Selections -->
+        <div v-else-if="isMixed" class="mixed-banner">
+          <div class="banner-title">🛡️ 混合智能模式：Ventoy 盘免格式化，普通盘格式化</div>
+          <div class="banner-desc">
+            已选中 <strong>{{ ventoyDisks.length }}</strong> 块 Ventoy 盘（<b>自动免格式化/保留数据</b>）与 <strong>{{ blankDisks.length }}</strong> 块普通 U 盘（<b>格式化写入</b>）。系统将对不同 U 盘进行精准分类处理！
+          </div>
+        </div>
+
+        <!-- Danger Warning Alert Banner for Pure Blank Disks -->
         <div v-else class="danger-banner">
           <div class="banner-title">💥 警告：格式化过程不可逆！</div>
           <div class="banner-desc">
@@ -41,11 +51,27 @@
               <span class="pill-tag">{{ targetDisk.fileSystem || 'FAT32' }}</span>
               <span class="pill-tag accent" v-if="mode === 'hybrid'">{{ fsType }} 格式</span>
               <span class="pill-tag highlight">{{ mode === 'cloud' ? '模式 B (1秒云端)' : '模式 A (混合双模)' }}</span>
-              <span class="pill-tag safe-tag" v-if="isVentoyDisk">🛡️ 智能免格式化</span>
+              <span class="pill-tag safe-tag" v-if="isAllVentoy">🛡️ 智能免格式化</span>
             </div>
           </div>
 
-          <!-- Batch Disks Summary -->
+          <!-- Batch Disks Mixed Summary -->
+          <div v-else-if="isMixed" class="batch-summary">
+            <div class="mixed-group" v-if="ventoyDisks.length > 0">
+              <div class="group-title safe-title">🛡️ 免格式化增量写入盘（保留所有 ISO 镜像）：</div>
+              <div class="batch-tags">
+                <span v-for="dev in ventoyDisks" :key="dev" class="batch-dev-tag safe-dev-tag">🛡️ {{ dev }}</span>
+              </div>
+            </div>
+            <div class="mixed-group" v-if="blankDisks.length > 0">
+              <div class="group-title danger-title">⚠️ 全新重新格式化烧录盘：</div>
+              <div class="batch-tags">
+                <span v-for="dev in blankDisks" :key="dev" class="batch-dev-tag danger-dev-tag">💾 {{ dev }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Batch Disks Pure Summary -->
           <div v-else class="batch-summary">
             <div class="batch-count">已选中 <strong>{{ targetDisks.length }}</strong> 块 U 盘独立并行写入：</div>
             <div class="batch-tags">
@@ -57,8 +83,8 @@
 
       <div class="modal-footer">
         <button class="btn-cancel" @click="close">取消</button>
-        <button :class="isVentoyDisk ? 'btn-safe-confirm' : 'btn-danger-confirm'" @click="confirm">
-          {{ isVentoyDisk ? '🚀 开始无损注入 UniBoot 引导固件' : '⚠️ 确认数据已备份，开始格式化写入' }}
+        <button :class="isAllVentoy || isMixed ? 'btn-safe-confirm' : 'btn-danger-confirm'" @click="confirm">
+          {{ isAllVentoy ? '🛡️ 放心写入 (不格式化 U 盘)' : (isMixed ? '🚀 开始混合烧录 (Ventoy盘不格式化)' : '⚠️ 确认数据已备份，开始格式化写入') }}
         </button>
       </div>
     </div>
@@ -83,17 +109,44 @@ const props = defineProps<{
   fsType?: string;
   targetDisk: DiskInfo | null;
   targetDisks: string[];
+  allDisks?: DiskInfo[];
 }>();
 
 const emit = defineEmits(['close', 'confirm']);
 
-const isVentoyDisk = computed(() => {
-  if (props.targetDisk) {
-    const name = (props.targetDisk.name || '').toUpperCase();
-    const status = (props.targetDisk.bootStatus || '').toUpperCase();
-    return name.includes('VENTOY') || status.includes('VENTOY') || status.includes('UNIBOOT');
+const ventoyDisks = computed(() => {
+  if (!props.allDisks || props.allDisks.length === 0) {
+    if (props.targetDisk) {
+      const name = (props.targetDisk.name || '').toUpperCase();
+      const status = (props.targetDisk.bootStatus || '').toUpperCase();
+      if (name.includes('VENTOY') || status.includes('VENTOY') || status.includes('UNIBOOT')) {
+        return [props.targetDisk.device];
+      }
+    }
+    return [];
   }
-  return false;
+  return props.targetDisks.filter(dev => {
+    const found = props.allDisks?.find(d => d.device === dev);
+    if (found) {
+      const name = (found.name || '').toUpperCase();
+      const status = (found.bootStatus || '').toUpperCase();
+      return name.includes('VENTOY') || status.includes('VENTOY') || status.includes('UNIBOOT');
+    }
+    return dev.toUpperCase().includes('VENTOY');
+  });
+});
+
+const blankDisks = computed(() => {
+  return props.targetDisks.filter(dev => !ventoyDisks.value.includes(dev));
+});
+
+const isAllVentoy = computed(() => {
+  if (props.targetDisks.length === 0) return false;
+  return ventoyDisks.value.length === props.targetDisks.length;
+});
+
+const isMixed = computed(() => {
+  return ventoyDisks.value.length > 0 && blankDisks.value.length > 0;
 });
 
 function close() {
@@ -147,12 +200,25 @@ function confirm() {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 229, 255, 0.2);
 }
 
+.glass-modal.mixed-card {
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(168, 85, 247, 0.2);
+}
+
 .modal-header.safe-header {
   background: rgba(0, 229, 255, 0.08);
 }
 
 .modal-header.safe-header h3 {
   color: var(--accent-cyan);
+}
+
+.modal-header.mixed-header {
+  background: rgba(168, 85, 247, 0.08);
+}
+
+.modal-header.mixed-header h3 {
+  color: #d8b4fe;
 }
 
 .header-title {
@@ -211,6 +277,58 @@ function confirm() {
   color: #a5f3fc;
   font-size: 0.825rem;
   line-height: 1.5;
+}
+
+.mixed-banner {
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.mixed-banner .banner-title {
+  color: #d8b4fe;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+.mixed-banner .banner-desc {
+  color: #e9d5ff;
+  font-size: 0.825rem;
+  line-height: 1.5;
+}
+
+.mixed-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.group-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.group-title.safe-title {
+  color: #4ade80;
+}
+
+.group-title.danger-title {
+  color: #f87171;
+}
+
+.batch-dev-tag.safe-dev-tag {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #4ade80;
+}
+
+.batch-dev-tag.danger-dev-tag {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
 }
 
 .danger-banner {

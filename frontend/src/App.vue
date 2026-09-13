@@ -220,6 +220,7 @@
       :fsType="selectedFsType"
       :targetDisk="selectedDisk"
       :targetDisks="pendingTargets"
+      :allDisks="diskList"
       @close="isDeployConfirmOpen = false"
       @confirm="startDeployment"
     />
