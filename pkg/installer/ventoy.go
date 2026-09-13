@@ -4,11 +4,16 @@
 package installer
 
 import (
+	"embed"
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 )
+
+//go:embed themes/*
+var embeddedThemes embed.FS
 
 // VentoyThemeConfig defines the theme configuration block in ventoy.json matching UniBoot spec.
 type VentoyThemeConfig struct {
@@ -23,7 +28,7 @@ type VentoyGlobalConfig struct {
 	Control []map[string]interface{} `json:"control,omitempty"`
 }
 
-// WriteVentoyConfig generates the ventoy/ventoy.json and ventoy/ventoy_grub.cfg files
+// WriteVentoyConfig generates the ventoy/ventoy.json, ventoy/ventoy_grub.cfg, and extracts theme assets
 // in the specified target volume mount directory, referencing UniBoot specifications.
 func WriteVentoyConfig(mountDir string) error {
 	ventoyDir := filepath.Join(mountDir, "ventoy")
@@ -57,6 +62,32 @@ func WriteVentoyConfig(mountDir string) error {
 	jsonPath := filepath.Join(ventoyDir, "ventoy.json")
 	if err := os.WriteFile(jsonPath, data, 0644); err != nil {
 		return fmt.Errorf("failed to write ventoy.json: %w", err)
+	}
+
+	// 2. Extract embedded UniBoot theme files to ventoy/themes/uniboot/
+	themeTargetDir := filepath.Join(ventoyDir, "themes", "uniboot")
+	if err := os.MkdirAll(themeTargetDir, 0755); err != nil {
+		return fmt.Errorf("failed to create theme directory: %w", err)
+	}
+
+	err = fs.WalkDir(embeddedThemes, "themes/uniboot", func(path string, d fs.DirEntry, walkErr error) error {
+		if walkErr != nil || d.IsDir() {
+			return walkErr
+		}
+		relPath, err := filepath.Rel("themes/uniboot", path)
+		if err != nil {
+			return err
+		}
+		fileData, err := embeddedThemes.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		dest := filepath.Join(themeTargetDir, relPath)
+		_ = os.MkdirAll(filepath.Dir(dest), 0755)
+		return os.WriteFile(dest, fileData, 0644)
+	})
+	if err != nil {
+		return fmt.Errorf("failed to extract embedded theme files: %w", err)
 	}
 
 	// 2. Build ventoy_grub.cfg matching official UniBoot specification (with i18n & multi-arch iPXE support)

@@ -118,5 +118,15 @@ func TestFormatDiskModeA_DryRun(t *testing.T) {
 	if _, err := os.Stat(grubPath); err != nil {
 		t.Errorf("Expected ventoy_grub.cfg to exist at %s", grubPath)
 	}
+
+	themeTxtPath := filepath.Join(mountPoint, "ventoy", "themes", "uniboot", "theme.txt")
+	if _, err := os.Stat(themeTxtPath); err != nil {
+		t.Errorf("Expected theme.txt to exist at %s", themeTxtPath)
+	}
+
+	bgPath := filepath.Join(mountPoint, "ventoy", "themes", "uniboot", "background.png")
+	if _, err := os.Stat(bgPath); err != nil {
+		t.Errorf("Expected background.png to exist at %s", bgPath)
+	}
 }
 
