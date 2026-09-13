@@ -563,9 +563,13 @@ async function refreshDisks() {
       diskList.value = fetched || [];
       if (selectedDisk.value) {
         const stillExists = diskList.value.find(d => d.device === selectedDisk.value?.device);
-        if (!stillExists) {
-          selectedDisk.value = null;
+        if (stillExists) {
+          selectedDisk.value = stillExists;
+        } else {
+          selectedDisk.value = diskList.value.length > 0 ? diskList.value[0] : null;
         }
+      } else if (diskList.value.length > 0) {
+        selectedDisk.value = diskList.value[0];
       }
     } catch (e) {
       console.error(e);
