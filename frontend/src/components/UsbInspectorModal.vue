@@ -90,6 +90,16 @@
               ⚡ {{ disk.usbSpeed || '480 Mb/s' }}
             </span>
           </div>
+
+          <div class="spec-item" v-if="disk.serialNumber">
+            <span class="spec-label">硬件序列号 (Serial Number)</span>
+            <span class="spec-val code">{{ disk.serialNumber }}</span>
+          </div>
+
+          <div class="spec-item" v-if="disk.vendorId || disk.productId">
+            <span class="spec-label">芯片硬件 ID (USB VID / PID)</span>
+            <span class="spec-val code">VID: {{ disk.vendorId || 'N/A' }} | PID: {{ disk.productId || 'N/A' }}</span>
+          </div>
         </div>
 
         <!-- Protocol Compatibility Matrix -->
@@ -126,6 +136,9 @@ interface DiskInfo {
   fileSystem?: string;
   partitionScheme?: string;
   writable?: boolean;
+  serialNumber?: string;
+  vendorId?: string;
+  productId?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }

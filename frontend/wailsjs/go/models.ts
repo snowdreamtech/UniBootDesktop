@@ -34,6 +34,9 @@ export namespace disk {
 	    fileSystem: string;
 	    partitionScheme: string;
 	    writable: boolean;
+	    serialNumber: string;
+	    vendorId: string;
+	    productId: string;
 	    isFakeUsb3: boolean;
 	    protocolCode: string;
 	
@@ -55,6 +58,9 @@ export namespace disk {
 	        this.fileSystem = source["fileSystem"];
 	        this.partitionScheme = source["partitionScheme"];
 	        this.writable = source["writable"];
+	        this.serialNumber = source["serialNumber"];
+	        this.vendorId = source["vendorId"];
+	        this.productId = source["productId"];
 	        this.isFakeUsb3 = source["isFakeUsb3"];
 	        this.protocolCode = source["protocolCode"];
 	    }

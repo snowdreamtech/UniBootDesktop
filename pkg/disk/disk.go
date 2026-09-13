@@ -79,6 +79,9 @@ type DiskInfo struct {
 	FileSystem      string `json:"fileSystem"`      // File system format (e.g., ExFAT, FAT32, NTFS, APFS, ext4)
 	PartitionScheme string `json:"partitionScheme"` // Partition scheme (e.g., GPT, MBR)
 	Writable        bool   `json:"writable"`        // Read-Write status (true = Read-Write, false = Read-Only)
+	SerialNumber    string `json:"serialNumber"`    // Hardware Serial Number
+	VendorId        string `json:"vendorId"`        // USB Vendor ID (e.g., 0x21c4)
+	ProductId       string `json:"productId"`       // USB Product ID (e.g., 0x0cd1)
 	IsFakeUsb3      bool   `json:"isFakeUsb3"`      // Warning flag for fake USB 3.0 (USB 2.0 PHY disguised as 3.0)
 	ProtocolCode    string `json:"protocolCode"`    // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
 }
@@ -179,6 +182,9 @@ type darwinUSBItem struct {
 	Manufacturer string           `json:"manufacturer"`
 	DeviceSpeed  string           `json:"device_speed"`
 	BcdDevice    string           `json:"bcd_device"`
+	SerialNum    string           `json:"serial_num"`
+	VendorID     string           `json:"vendor_id"`
+	ProductID    string           `json:"product_id"`
 	Media        []darwinUSBMedia `json:"Media"`
 	Items        []darwinUSBItem  `json:"_items"`
 }
@@ -198,6 +204,9 @@ type darwinUSBInfo struct {
 	TotalSize    uint64
 	MountPoint   string
 	VolumeName   string
+	SerialNumber string
+	VendorId     string
+	ProductId    string
 }
 
 func walkDarwinUSBTree(items []darwinUSBItem, result map[string]*darwinUSBInfo) {
@@ -211,12 +220,15 @@ func walkDarwinUSBTree(items []darwinUSBItem, result map[string]*darwinUSBInfo) 
 				}
 
 				info := &darwinUSBInfo{
-					BsdName:    media.BsdName,
-					Vendor:     vendor,
-					Model:      item.Name,
-					UsbVersion: ver,
-					UsbSpeed:   speed,
-					TotalSize:  media.SizeInBytes,
+					BsdName:      media.BsdName,
+					Vendor:       vendor,
+					Model:        item.Name,
+					UsbVersion:   ver,
+					UsbSpeed:     speed,
+					TotalSize:    media.SizeInBytes,
+					SerialNumber: strings.TrimSpace(item.SerialNum),
+					VendorId:     strings.TrimSpace(item.VendorID),
+					ProductId:    strings.TrimSpace(item.ProductID),
 				}
 
 				for _, vol := range media.Volumes {
@@ -366,6 +378,9 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		usbSpeed := "480 Mb/s"
 		vendor := "Generic"
 		displayName := volName
+		serialNum := ""
+		vendorId := ""
+		productId := ""
 
 		// Match with system_profiler hardware metadata
 		if parentInfo, ok := usbMap[parentDisk]; ok {
@@ -384,6 +399,9 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			if parentInfo.Model != "" && parentInfo.Model != "USB Flash Drive" && parentInfo.Model != "Disk 2.0" {
 				displayName = fmt.Sprintf("%s (%s)", parentInfo.Model, volName)
 			}
+			serialNum = parentInfo.SerialNumber
+			vendorId = parentInfo.VendorId
+			productId = parentInfo.ProductId
 		}
 
 		if totalSize == 0 {
@@ -407,6 +425,9 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			FileSystem:      fileSystem,
 			PartitionScheme: partitionScheme,
 			Writable:        writable,
+			SerialNumber:    serialNum,
+			VendorId:        vendorId,
+			ProductId:       productId,
 			IsFakeUsb3:      isFake,
 			ProtocolCode:    protoCode,
 		})

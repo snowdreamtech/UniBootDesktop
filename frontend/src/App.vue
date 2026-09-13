@@ -178,6 +178,9 @@ interface DiskInfo {
   fileSystem?: string;
   partitionScheme?: string;
   writable?: boolean;
+  serialNumber?: string;
+  vendorId?: string;
+  productId?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
 }
