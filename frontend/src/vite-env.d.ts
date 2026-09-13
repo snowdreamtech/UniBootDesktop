@@ -11,6 +11,7 @@ declare global {
           DeployModeB(targetDisk: string, fsType?: string): Promise<any>;
           DeployModeBBatch(targetDisks: string[], fsType?: string): Promise<any[]>;
           CheckQEMU(): Promise<any>;
+          LaunchQEMU(targetDisk: string): Promise<void>;
           CheckUpdate(): Promise<any>;
           GetConfig(): Promise<any>;
           SaveConfig(cfg: any): Promise<any>;

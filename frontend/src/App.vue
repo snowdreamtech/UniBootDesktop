@@ -572,8 +572,22 @@ async function startDeployment() {
 }
 
 
-function launchQEMU() {
-  alert(`正在启动 QEMU 模拟器校验: ${selectedDisk.value?.device}`);
+async function launchQEMU() {
+  if (!selectedDisk.value) {
+    alert('请先选择要测试的目标 U 盘！');
+    return;
+  }
+
+  try {
+    if (window.go && window.go.main && window.go.main.App) {
+      await window.go.main.App.LaunchQEMU(selectedDisk.value.device);
+      alert(`🚀 已成功拉起 QEMU 模拟器校验：${selectedDisk.value.device}`);
+    } else {
+      alert(`[演示模式] 正在拉起 QEMU 模拟器校验：${selectedDisk.value.device}`);
+    }
+  } catch (e: any) {
+    alert(`❌ 启动 QEMU 模拟器失败：\n\n${e?.message || String(e)}`);
+  }
 }
 
 let diskPollTimer: number | undefined;

@@ -42,6 +42,10 @@ export function GetUniBootReleaseInfo() {
   return window['go']['main']['App']['GetUniBootReleaseInfo']();
 }
 
+export function LaunchQEMU(arg1) {
+  return window['go']['main']['App']['LaunchQEMU'](arg1);
+}
+
 export function SaveConfig(arg1) {
   return window['go']['main']['App']['SaveConfig'](arg1);
 }

@@ -27,6 +27,8 @@ export function GetFirmwareList():Promise<Array<firmware.FirmwareMapping>>;
 
 export function GetUniBootReleaseInfo():Promise<firmware.UniBootReleaseInfo>;
 
+export function LaunchQEMU(arg1:string):Promise<void>;
+
 export function SaveConfig(arg1:config.AppConfig):Promise<void>;
 
 export function SyncUniBootFirmware():Promise<firmware.UniBootReleaseInfo>;

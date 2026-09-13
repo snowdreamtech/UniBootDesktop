@@ -61,6 +61,11 @@ func (a *App) CheckQEMU() *qemu.QEMUStatus {
 	return qemu.Detect()
 }
 
+// LaunchQEMU triggers a QEMU virtual machine test instance for the target USB drive.
+func (a *App) LaunchQEMU(targetDisk string) error {
+	return qemu.LaunchTest(a.ctx, targetDisk)
+}
+
 // CheckUpdate returns GitHub release update metadata.
 func (a *App) CheckUpdate() *updater.UpdateStatus {
 	return updater.CheckUpdate(a.ctx)
