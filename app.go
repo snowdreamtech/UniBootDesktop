@@ -41,14 +41,14 @@ func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
 // SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
 func (a *App) SelectIsoFiles() ([]string, error) {
 	return wailsRuntime.OpenMultipleFilesDialog(a.ctx, wailsRuntime.OpenDialogOptions{
-		Title: "选择系统镜像文件 (支持单选与多选 ISO/IMG/WIM/VHD/EFI...)",
+		Title: "Select System Image Files (*.iso, *.wim, *.img, *.vhd, etc.)",
 		Filters: []wailsRuntime.FileFilter{
 			{
-				DisplayName: "Ventoy 镜像源 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+				DisplayName: "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 				Pattern:     "*.iso;*.wim;*.img;*.vhd;*.vhdx;*.vti;*.efi;*.bin;*.xz;*.gz;*.raw",
 			},
 			{
-				DisplayName: "所有文件 (*.*)",
+				DisplayName: "All Files (*.*)",
 				Pattern:     "*.*",
 			},
 		},

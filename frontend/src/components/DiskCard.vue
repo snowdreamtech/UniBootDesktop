@@ -185,7 +185,7 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
 
   const isReader = nameUpper.includes('CARD') || nameUpper.includes('READER') || nameUpper.includes('SD') || nameUpper.includes('MICROSD') || nameUpper.includes('TF') ||
                    vendorUpper.includes('CARD') || vendorUpper.includes('READER') || vendorUpper.includes('SD') ||
-                   controllerUpper.includes('读卡器') || controllerUpper.includes('CHIPSBANK') || controllerUpper.includes('CHIPSBRAND') ||
+                   controllerUpper.includes('CARD') || controllerUpper.includes('READER') || controllerUpper.includes('读卡器') || controllerUpper.includes('CHIPSBANK') || controllerUpper.includes('CHIPSBRAND') ||
                    vidUpper.includes('0X1E3D') || vidUpper.includes('0X0BDA') || vidUpper.includes('0X05E3');
 
   if (nameUpper.includes('VENTOY') || nameUpper.includes('UNIBOOT') || nameUpper.includes('BOOT')) {

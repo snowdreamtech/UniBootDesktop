@@ -67,7 +67,7 @@ func DeployModeAWithIsoAndVentoyPath(ctx context.Context, targetDisk string, fsT
 		// Mode A on a blank disk STRICTLY requires a valid Ventoy directory!
 		val := ValidateVentoyCli(ventoyPath)
 		if !val.Valid {
-			return nil, fmt.Errorf("无法制作 Mode A (混合模式)：目标 U 盘为全新纯净盘，且未检测到有效的 Ventoy 目录。请先在【设置】中配置并检测 Ventoy 目录 (%s)", val.Message)
+			return nil, fmt.Errorf("cannot create Mode A (Hybrid Mode): target USB drive is clean and no valid Ventoy directory detected. Please configure Ventoy directory in Settings first (%s)", val.Message)
 		}
 		mountPoint, err = FormatDiskWithVentoyCli(ctx, ventoyPath, targetDisk, fsType)
 	}

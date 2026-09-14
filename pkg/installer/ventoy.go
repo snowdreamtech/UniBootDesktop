@@ -88,7 +88,7 @@ func WriteVentoyConfigWithAppConfig(mountDir string, appCfg *config.AppConfig) e
 		ImageAlias: []VentoyAliasConfig{
 			{
 				Image: "/iso/UniBoot.iso",
-				Alias: "⚡ UniBoot 统一网络与本地安装系统",
+				Alias: "⚡ UniBoot Network & Local Installation System",
 			},
 		},
 		Control: controls,
@@ -140,9 +140,9 @@ if [ -z "${lang}" ]; then
 fi
 
 if [ "${lang}" = "zh_CN" -o "${lang}" = "zh_TW" -o "${lang}" = "zh_HK" ]; then
-    set lbl_ipxe_uefi="⚡ UniBoot Network Installation (统一网络安装 - UEFI)"
-    set lbl_ipxe_bios="⚡ UniBoot Network Installation (统一网络安装 - BIOS/非EFI)"
-    set lbl_return="<-- 返回 Ventoy 主菜单"
+    set lbl_ipxe_uefi="⚡ UniBoot Network Installation (UEFI Mode)"
+    set lbl_ipxe_bios="⚡ UniBoot Network Installation (Legacy/Non-EFI Mode)"
+    set lbl_return="<-- Return to Ventoy Main Menu"
 else
     set lbl_ipxe_uefi="⚡ UniBoot Network Installation (UEFI Mode)"
     set lbl_ipxe_bios="⚡ UniBoot Network Installation (Legacy/Non-EFI Mode)"

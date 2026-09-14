@@ -224,7 +224,7 @@ func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootRelea
 	}
 
 	if downloadedCount == 0 && firstErr != nil {
-		return nil, fmt.Errorf("固件升级失败: %w", firstErr)
+		return nil, fmt.Errorf("firmware upgrade failed: %w", firstErr)
 	}
 
 	versionFile := filepath.Join(firmwareDir, "version.json")

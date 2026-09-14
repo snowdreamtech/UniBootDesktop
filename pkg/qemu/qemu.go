@@ -216,7 +216,7 @@ func ResolveRawDiskDevice(diskPath string) string {
 // LaunchTest executes a non-blocking QEMU preview test instance on the target USB drive safely across macOS, Windows and Linux.
 func LaunchTest(ctx context.Context, diskPath string) error {
 	if diskPath == "" {
-		return fmt.Errorf("请先选择要测试的目标 U 盘！")
+		return fmt.Errorf("please select target USB drive first")
 	}
 
 	// Dry-run mode for tests or simulation
@@ -226,7 +226,7 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 
 	status := Detect()
 	if !status.Installed {
-		return fmt.Errorf("未检测到 QEMU 模拟器！请先安装 QEMU（例如通过 brew install qemu 或 MacPorts 命令行包）。")
+		return fmt.Errorf("QEMU simulator not detected! Please install QEMU first (e.g. via brew install qemu).")
 	}
 
 	// Resolve volume/mount path to underlying raw block device across all OSes
@@ -287,7 +287,7 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 	}
 
 	if err := cmd.Start(); err != nil {
-		return fmt.Errorf("启动 QEMU 进程失败: %w", err)
+		return fmt.Errorf("failed to start QEMU process: %w", err)
 	}
 
 	// Wait briefly (400ms) to catch immediate startup failures (e.g. permission denied)
@@ -314,9 +314,9 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 						return nil
 					}
 				}
-				return fmt.Errorf("QEMU 启动提示: %s", errOutput)
+				return fmt.Errorf("QEMU launch message: %s", errOutput)
 			}
-			return fmt.Errorf("QEMU 启动异常退出: %w", err)
+			return fmt.Errorf("QEMU exited unexpectedly: %w", err)
 		}
 		return nil
 	case <-time.After(400 * time.Millisecond):

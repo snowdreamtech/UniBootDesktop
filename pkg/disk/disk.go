@@ -31,7 +31,7 @@ var (
 		"VTOYEFI",
 		"UNIBOOTEFI",
 		"SYSTEM RESERVED",
-		"系统保留",
+		"SYSTEM_RESERVED",
 		"WINRE",
 		"WINRETOOLS",
 		"OEM",
@@ -596,14 +596,14 @@ func getDarwinDisks() ([]DiskInfo, error) {
 
 		sectorSizeStr := "512 Bytes (512n/512e)"
 		if sectorBytes == 4096 {
-			sectorSizeStr = "4096 Bytes (4Kn 原生大扇区)"
+			sectorSizeStr = "4096 Bytes (4Kn Native)"
 		} else if sectorBytes > 0 {
 			sectorSizeStr = fmt.Sprintf("%d Bytes", sectorBytes)
 		}
 
 		transportProtoStr := "BOT (Bulk-Only Transport)"
 		if strings.Contains(strings.ToUpper(busProto), "UASP") || strings.Contains(strings.ToUpper(busProto), "SCSI") {
-			transportProtoStr = "UASP (USB Attached SCSI 高速队列)"
+			transportProtoStr = "UASP (USB Attached SCSI)"
 		}
 
 		usbVer := "USB 2.0"

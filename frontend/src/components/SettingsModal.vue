@@ -66,11 +66,11 @@
                 <CustomSelect
                   v-model="appLanguage"
                   :options="[
-                    { value: 'auto', label: '🌐 自动识别 (Auto)' },
-                    { value: 'zh-CN', label: '🇨🇳 简体中文' },
+                    { value: 'auto', label: '🌐 ' + t('common.autoDetect') },
+                    { value: 'zh-CN', label: '🇨🇳 ' + t('lang.zhCN') },
                     { value: 'en-US', label: '🇺🇸 English' },
-                    { value: 'zh-TW', label: '🇭🇰 繁體中文' },
-                    { value: 'ja-JP', label: '🇯🇵 日本語' },
+                    { value: 'zh-TW', label: '🇭🇰 ' + t('lang.zhTW') },
+                    { value: 'ja-JP', label: '🇯🇵 ' + t('lang.jaJP') },
                     { value: 'ko-KR', label: '🇰🇷 한국어' },
                     { value: 'de-DE', label: '🇩🇪 Deutsch' },
                     { value: 'fr-FR', label: '🇫🇷 Français' },
@@ -222,22 +222,22 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">认证用户名 (User - 可选):</label>
+                  <label class="form-label">{{ t('settings.proxyAuthUserLabel') }}</label>
                   <input 
                     v-model="proxyUser" 
                     type="text" 
                     class="form-input" 
-                    placeholder="默认为空（若无需认证留空即可）"
+                    :placeholder="t('settings.proxyAuthUserPlaceholder')"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">认证密码 (Password - 可选):</label>
+                  <label class="form-label">{{ t('settings.proxyAuthPassLabel') }}</label>
                   <input 
                     v-model="proxyPassword" 
                     type="password" 
                     class="form-input" 
-                    placeholder="默认为空（若无需认证留空即可）"
+                    :placeholder="t('settings.proxyAuthUserPlaceholder')"
                   />
                 </div>
               </template>
@@ -245,7 +245,7 @@
 
             <div class="network-test-row">
               <button class="btn-secondary test-btn" :disabled="isTestingProxy" @click="testNetworkProxy">
-                {{ isTestingProxy ? '正在测试代理...' : '⚡ 测试网络代理连通性' }}
+                {{ isTestingProxy ? t('settings.testingProxy') : t('settings.testProxyConn') }}
               </button>
               <span v-if="proxyTestResult" class="test-result" :class="proxyTestSuccess ? 'success' : 'error'">
                 {{ proxyTestResult }}
@@ -258,7 +258,7 @@
         <div v-if="activeTab === 'uniboot'" class="tab-content">
           <div class="settings-section">
             <h4 class="section-title">
-              <span>📦 UniBoot 核心固件与 ISO 打包矩阵 (全量 13 项内置嵌入)</span>
+              <span>{{ t('settings.firmwareMatrixTitle') }}</span>
             </h4>
 
             <div class="firmware-list">
@@ -268,8 +268,8 @@
                   <span class="fw-path">➔ {{ fw.targetPath }}</span>
                 </div>
                 <div class="fw-meta">
-                  <span class="badge success">已打包嵌入 (`embed.FS`)</span>
-                  <span class="fw-desc">{{ fw.description }}</span>
+                  <span class="badge success">{{ t('settings.embeddedBadge') }}</span>
+                  <span class="fw-desc">{{ fw.descKey ? t(fw.descKey) : fw.description }}</span>
                 </div>
               </div>
             </div>
@@ -277,13 +277,13 @@
             <div class="sync-box">
               <div class="sync-status">
                 <div class="sync-info-labels">
-                  <span>当前本地版本: <strong>{{ localVersionTag }}</strong></span>
+                  <span>{{ t('settings.localVersion') }} <strong>{{ localVersionTag }}</strong></span>
                   <span class="divider">•</span>
-                  <span>云端最新 Release: <strong class="highlight-tag">UniBoot {{ latestReleaseTag }}</strong></span>
-                  <span v-if="hasUniBootUpdate" class="badge warning pulse">检测到新版本 {{ latestReleaseTag }}</span>
+                  <span>{{ t('settings.cloudRelease') }} <strong class="highlight-tag">UniBoot {{ latestReleaseTag }}</strong></span>
+                  <span v-if="hasUniBootUpdate" class="badge warning pulse">{{ t('settings.newVersionDetected', { version: latestReleaseTag }) }}</span>
                 </div>
                 <button class="btn-primary-sm" :disabled="isSyncing" @click="syncFirmware">
-                  {{ isSyncing ? '正在拉取与同步最新固件...' : (hasUniBootUpdate ? `⚡ 立即升级固件至 ${latestReleaseTag}` : '🔄 检查与同步云端固件') }}
+                  {{ isSyncing ? t('settings.pullingFirmware') : (hasUniBootUpdate ? t('settings.upgradeFirmwareNow', { version: latestReleaseTag }) : t('settings.checkSyncFirmware')) }}
                 </button>
               </div>
               <div v-if="isSyncing" class="sync-progress">
@@ -401,7 +401,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import CustomSelect from './CustomSelect.vue';
 import { setLanguage, t } from '../i18n';
 
@@ -409,6 +409,7 @@ interface FirmwareMapping {
   releaseName: string;
   targetPath: string;
   description: string;
+  descKey?: string;
 }
 
 const props = defineProps<{
@@ -482,7 +483,7 @@ const ventoyValidation = ref<{ valid: boolean; version: string; message: string;
 let isInitializing = true;
 let saveTimer: any = null;
 const isAutoSaving = ref(false);
-const saveStatusText = ref('⚡ 实时保存已启用');
+const saveStatusText = computed(() => isAutoSaving.value ? t('settings.saveStatusApplied') : t('settings.saveStatusEnabled'));
 
 // Tests state
 const isTestingNet = ref(false);
@@ -505,16 +506,16 @@ const firmwareList = ref<FirmwareMapping[]>([
   { releaseName: 'ipxe-x86_64.efi', targetPath: 'EFI/BOOT/BOOTX64.EFI', description: 'UEFI x86_64 (Intel/AMD 64-bit)' },
   { releaseName: 'ipxe-arm64.efi', targetPath: 'EFI/BOOT/BOOTAA64.EFI', description: 'UEFI ARM64 (Apple Silicon Mac)' },
   { releaseName: 'ipxe-i386.efi', targetPath: 'EFI/BOOT/BOOTIA32.EFI', description: 'UEFI IA32 (32-bit x86 Tablets)' },
-  { releaseName: 'ipxe-loongarch64.efi', targetPath: 'EFI/BOOT/BOOTLOONGARCH64.EFI', description: 'UEFI LoongArch64 龙芯 64位' },
+  { releaseName: 'ipxe-loongarch64.efi', targetPath: 'EFI/BOOT/BOOTLOONGARCH64.EFI', description: 'UEFI LoongArch64 (Loongson 64-bit)', descKey: 'settings.firmwareDesc.ipxeLoongarch64' },
   { releaseName: 'ipxe-riscv64.efi', targetPath: 'EFI/BOOT/BOOTRISCV64.EFI', description: 'UEFI RISC-V 64-bit' },
   { releaseName: 'ipxe-riscv32.efi', targetPath: 'EFI/BOOT/BOOTRISCV32.EFI', description: 'UEFI RISC-V 32-bit' },
-  { releaseName: 'ipxe.lkrn', targetPath: 'ipxe.lkrn', description: 'Legacy BIOS U盘 MBR 引导内核 (x86)' },
-  { releaseName: 'ipxe-riscv64.lkrn', targetPath: 'ipxe-riscv64.lkrn', description: 'Legacy MBR 引导内核 (RISC-V 64-bit)' },
-  { releaseName: 'ipxe-riscv32.lkrn', targetPath: 'ipxe-riscv32.lkrn', description: 'Legacy MBR 引导内核 (RISC-V 32-bit)' },
-  { releaseName: 'undionly.kpxe', targetPath: 'undionly.kpxe', description: 'Legacy BIOS UNDI PXE 网络引导固件' },
-  { releaseName: 'boot.ipxe', targetPath: 'boot.ipxe', description: 'iPXE 全局入口脚本' },
-  { releaseName: 'uniboot.ipxe', targetPath: 'uniboot.ipxe', description: 'UniBoot 主交互菜单脚本' },
-  { releaseName: 'UniBoot.iso', targetPath: 'UniBoot.iso', description: 'UniBoot 全架构 UEFI/BIOS 混合引导 ISO 镜像' },
+  { releaseName: 'ipxe.lkrn', targetPath: 'ipxe.lkrn', description: 'Legacy BIOS USB MBR Boot Kernel (x86)', descKey: 'settings.firmwareDesc.ipxeLkrn' },
+  { releaseName: 'ipxe-riscv64.lkrn', targetPath: 'ipxe-riscv64.lkrn', description: 'Legacy MBR Boot Kernel (RISC-V 64-bit)', descKey: 'settings.firmwareDesc.ipxeRiscv64Lkrn' },
+  { releaseName: 'ipxe-riscv32.lkrn', targetPath: 'ipxe-riscv32.lkrn', description: 'Legacy MBR Boot Kernel (RISC-V 32-bit)', descKey: 'settings.firmwareDesc.ipxeRiscv32Lkrn' },
+  { releaseName: 'undionly.kpxe', targetPath: 'undionly.kpxe', description: 'Legacy BIOS UNDI PXE Network Boot Firmware', descKey: 'settings.firmwareDesc.undionlyKpxe' },
+  { releaseName: 'boot.ipxe', targetPath: 'boot.ipxe', description: 'iPXE Global Entry Script', descKey: 'settings.firmwareDesc.bootIpxe' },
+  { releaseName: 'uniboot.ipxe', targetPath: 'uniboot.ipxe', description: 'UniBoot Main Interactive Menu Script', descKey: 'settings.firmwareDesc.unibootIpxe' },
+  { releaseName: 'UniBoot.iso', targetPath: 'UniBoot.iso', description: 'UniBoot All-Arch UEFI/BIOS Hybrid Boot ISO Image', descKey: 'settings.firmwareDesc.unibootIso' },
 ]);
 
 function getFinalProxyUrl(): string {
@@ -550,10 +551,8 @@ function triggerAutoSave() {
       window.go.main.App.SaveConfig(payload as any).catch((e: any) => console.error(e));
     }
     isAutoSaving.value = true;
-    saveStatusText.value = '✅ 修改已实时生效';
     setTimeout(() => {
       isAutoSaving.value = false;
-      saveStatusText.value = '⚡ 实时保存已启用';
     }, 1200);
   }, 250);
 }
@@ -614,7 +613,7 @@ async function checkVentoyCli() {
     ventoyValidation.value = {
       valid: false,
       version: '',
-      message: `❌ 校验发生异常: ${e?.message || String(e)}`,
+      message: t('settings.verifyException', { error: e?.message || String(e) }),
       executablePath: ''
     };
   } finally {
@@ -706,23 +705,23 @@ async function testConnection() {
   isTestingNet.value = true;
   netTestResult.value = '';
   const finalProxy = getFinalProxyUrl();
-  const targetLabel = finalProxy ? `代理前缀: ${finalProxy}` : '直连 GitHub 官方 (api.github.com)';
+  const targetLabel = finalProxy ? t('settings.proxyPrefix', { proxy: finalProxy }) : t('settings.directGitHub');
 
   setTimeout(() => {
     isTestingNet.value = false;
     netTestSuccess.value = true;
-    netTestResult.value = `✅ GitHub 连通正常 (协议 HTTP/2 • 延迟 42ms • ${targetLabel})`;
+    netTestResult.value = t('settings.netTestSuccess', { target: targetLabel });
   }, 400);
 }
 
 async function testNetworkProxy() {
   if (proxyProtocol.value === 'direct') {
-    proxyTestResult.value = '💡 当前为直连模式 (未启用网络代理)';
+    proxyTestResult.value = t('settings.directModeNotice');
     proxyTestSuccess.value = true;
     return;
   }
   if (!proxyHost.value.trim()) {
-    proxyTestResult.value = '❌ 请先输入代理服务器主机地址 (Host)';
+    proxyTestResult.value = t('settings.proxyHostRequired');
     proxyTestSuccess.value = false;
     return;
   }
@@ -732,7 +731,7 @@ async function testNetworkProxy() {
   setTimeout(() => {
     isTestingProxy.value = false;
     proxyTestSuccess.value = true;
-    proxyTestResult.value = `✅ ${proxyProtocol.value.toUpperCase()} 代理连通正常 (${proxyHost.value}:${proxyPort.value || 1080})`;
+    proxyTestResult.value = t('settings.proxyTestSuccess', { protocol: proxyProtocol.value.toUpperCase(), host: proxyHost.value, port: proxyPort.value || 1080 });
   }, 450);
 }
 
@@ -757,7 +756,7 @@ async function syncFirmware() {
         setTimeout(() => {
           isSyncing.value = false;
           syncProgress.value = 0;
-          alert(`🎉 云端 UniBoot ${info.tagName} 核心固件与引导脚本已成功同步下载并存入本地缓存！`);
+          alert(t('settings.syncSuccessAlert', { tag: info.tagName }));
         }, 300);
       }
     } else {
@@ -766,7 +765,7 @@ async function syncFirmware() {
         setTimeout(() => {
           isSyncing.value = false;
           syncProgress.value = 0;
-          alert('🎉 云端 UniBoot 核心固件已成功同步！');
+          alert(t('settings.syncSuccessShortAlert'));
         }, 300);
       }, 800);
     }
@@ -774,7 +773,7 @@ async function syncFirmware() {
     console.error(e);
     isSyncing.value = false;
     syncProgress.value = 0;
-    alert(`❌ 固件同步失败: ${e?.message || String(e)}`);
+    alert(t('settings.syncFailedAlert', { error: e?.message || String(e) }));
   } finally {
     clearInterval(timer);
   }

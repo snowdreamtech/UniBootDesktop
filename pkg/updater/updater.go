@@ -150,10 +150,10 @@ func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, 
 	}
 
 	if proxyPrefix == "" || strings.EqualFold(proxyPrefix, "direct") {
-		return fmt.Errorf("直连 GitHub 极速连接失败 (%v)。由于 GitHub 在内地网络可能受限，请在【系统与代理设置】中填写自定义 GitHub 代理前缀后再试", lastErr)
+		return fmt.Errorf("direct GitHub connection failed (%v). Please configure GitHub proxy prefix in Settings and try again", lastErr)
 	}
 
-	return fmt.Errorf("下载失败 (%s): %w", rawURL, lastErr)
+	return fmt.Errorf("download failed (%s): %w", rawURL, lastErr)
 }
 
 

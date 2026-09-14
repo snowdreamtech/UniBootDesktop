@@ -347,12 +347,12 @@ import { t, currentLang, setLanguage } from './i18n';
 const isLangMenuOpen = ref(false);
 const langDropdownRef = ref<HTMLElement | null>(null);
 
-const langOptions = [
-  { value: 'auto', label: '自动识别 (Auto)', flag: '🌐' },
-  { value: 'zh-CN', label: '简体中文', flag: '🇨🇳' },
+const langOptions = computed(() => [
+  { value: 'auto', label: t('common.autoDetect'), flag: '🌐' },
+  { value: 'zh-CN', label: t('lang.zhCN'), flag: '🇨🇳' },
   { value: 'en-US', label: 'English', flag: '🇺🇸' },
-  { value: 'zh-TW', label: '繁體中文', flag: '🇭🇰' },
-  { value: 'ja-JP', label: '日本語', flag: '🇯🇵' },
+  { value: 'zh-TW', label: t('lang.zhTW'), flag: '🇭🇰' },
+  { value: 'ja-JP', label: t('lang.jaJP'), flag: '🇯🇵' },
   { value: 'ko-KR', label: '한국어', flag: '🇰🇷' },
   { value: 'de-DE', label: 'Deutsch', flag: '🇩🇪' },
   { value: 'fr-FR', label: 'Français', flag: '🇫🇷' },
@@ -364,14 +364,14 @@ const langOptions = [
   { value: 'pl-PL', label: 'Polski', flag: '🇵🇱' },
   { value: 'vi-VN', label: 'Tiếng Việt', flag: '🇻🇳' },
   { value: 'ar-SA', label: 'العربية', flag: '🇸🇦' }
-];
+]);
 
 const currentLangLabel = computed(() => {
   if (currentLang.value === 'auto') {
-    return '语言 / Lang (Auto)';
+    return t('common.langAuto');
   }
-  const opt = langOptions.find(o => o.value === currentLang.value);
-  return opt ? opt.label : '语言 / Lang';
+  const opt = langOptions.value.find(o => o.value === currentLang.value);
+  return opt ? opt.label : t('common.lang');
 });
 
 function toggleLangMenu() {
@@ -785,10 +785,11 @@ const isSelectedVentoyDisk = computed(() => {
     }
     const name = (selectedDisk.value.name || '').toUpperCase();
     const status = (selectedDisk.value.bootStatus || '').toUpperCase();
-    if (selectedDisk.value.isModeB || status.includes('模式 B') || status.includes('CLOUD PURE') || status.includes('极速云引导盘')) {
+    const rawStatus = selectedDisk.value.bootStatus || '';
+    if (selectedDisk.value.isModeB || status.includes('MODE B') || status.includes('CLOUD PURE') || rawStatus.includes('模式 B') || rawStatus.includes('极速云引导盘')) {
       return false; // Mode B drive is NOT a Ventoy MBR drive, must be formatted via Ventoy CLI to convert to Mode A!
     }
-    return status.includes('模式 A') || name.includes('VENTOY') || status.includes('VENTOY');
+    return status.includes('MODE A') || name.includes('VENTOY') || status.includes('VENTOY') || rawStatus.includes('模式 A');
   }
   return false;
 });
@@ -805,10 +806,11 @@ const isNonDestructive = computed(() => {
     if (d.isRealVentoy) return true;
     const name = (d.name || '').toUpperCase();
     const status = (d.bootStatus || '').toUpperCase();
-    if (d.isModeB || status.includes('模式 B') || status.includes('CLOUD PURE') || status.includes('极速云引导盘')) {
+    const rawStatus = d.bootStatus || '';
+    if (d.isModeB || status.includes('MODE B') || status.includes('CLOUD PURE') || rawStatus.includes('模式 B') || rawStatus.includes('极速云引导盘')) {
       return false;
     }
-    return status.includes('模式 A') || name.includes('VENTOY') || status.includes('VENTOY');
+    return status.includes('MODE A') || name.includes('VENTOY') || status.includes('VENTOY') || rawStatus.includes('模式 A');
   });
 });
 
@@ -1096,17 +1098,17 @@ async function launchQEMU() {
     if (window.go && window.go.main && window.go.main.App) {
       if (typeof window.go.main.App.LaunchQEMU === 'function') {
         await window.go.main.App.LaunchQEMU(targetDevice);
-        showToast(`🚀 已成功启动 QEMU 模拟器校验磁盘：${diskLabel} (${targetDevice})`, 'success');
+        showToast(t('qemu.startSuccess', { disk: diskLabel, device: targetDevice }), 'success');
       } else {
-        showToast('⚠️ 后端 API 尚未就绪：Wails 绑定接口加载中，请重新启动 UniBoot 应用。', 'warning');
+        showToast(t('qemu.backendNotReady'), 'warning');
       }
     } else {
       await new Promise(r => setTimeout(r, 600));
-      showToast(`[演示模式] 正在启动 QEMU 模拟器校验：${diskLabel} (${targetDevice})`, 'info');
+      showToast(t('qemu.demoModeStart', { disk: diskLabel, device: targetDevice }), 'info');
     }
   } catch (e: any) {
     console.error('[UniBoot] LaunchQEMU error:', e);
-    showToast(`❌ 启动 QEMU 模拟器失败：${e?.message || String(e)}`, 'error');
+    showToast(t('qemu.startFailed', { error: e?.message || String(e) }), 'error');
   } finally {
     isLaunchingQemu.value = false;
   }
@@ -1124,7 +1126,7 @@ onMounted(() => {
   if (window.runtime && window.runtime.EventsOn) {
     window.runtime.EventsOn("iso-copy-progress", (data: any) => {
       if (data) {
-        isoCopyStatus.value = `正在写入镜像 (${data.fileIndex}/${data.totalFiles}): ${data.currentFile} (${data.progress.toFixed(1)}%)`;
+        isoCopyStatus.value = t('disk.writingImageProgress', { fileIndex: data.fileIndex, totalFiles: data.totalFiles, currentFile: data.currentFile, progress: data.progress.toFixed(1) });
         deployProgress.value = Math.min(99, Math.max(50, Math.floor(50 + data.progress / 2)));
       }
     });
