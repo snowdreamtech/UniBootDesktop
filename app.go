@@ -7,6 +7,8 @@ import (
 	"context"
 	"log/slog"
 
+	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
+
 	"github.com/snowdreamtech/unigodesktop/pkg/config"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 	"github.com/snowdreamtech/unigodesktop/pkg/firmware"
@@ -36,14 +38,34 @@ func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
 	return disk.GetRemovableDisks()
 }
 
-// DeployModeA triggers Mode A (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system.
-func (a *App) DeployModeA(targetDisk string, fsType string) (*installer.DeployResult, error) {
+// SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
+func (a *App) SelectIsoFiles() ([]string, error) {
+	return wailsRuntime.OpenMultipleFilesDialog(a.ctx, wailsRuntime.OpenDialogOptions{
+		Title: "选择系统镜像文件 (支持单选与多选 ISO/IMG/WIM/VHD/EFI...)",
+		Filters: []wailsRuntime.FileFilter{
+			{
+				DisplayName: "Ventoy 镜像源 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+				Pattern:     "*.iso;*.wim;*.img;*.vhd;*.vhdx;*.vti;*.efi;*.bin;*.xz;*.gz;*.raw",
+			},
+			{
+				DisplayName: "所有文件 (*.*)",
+				Pattern:     "*.*",
+			},
+		},
+	})
+}
+
+// DeployModeA triggers Mode A (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system and optional ISO files.
+func (a *App) DeployModeA(targetDisk string, fsType string, isoPaths []string) (*installer.DeployResult, error) {
 	cfg, _ := config.Load()
 	ventoyPath := ""
 	if cfg != nil {
 		ventoyPath = cfg.VentoyPath
 	}
-	return installer.DeployModeAWithVentoyPath(a.ctx, targetDisk, fsType, ventoyPath)
+	progressCb := func(p installer.IsoCopyProgress) {
+		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
+	}
+	return installer.DeployModeAWithIsoAndVentoyPath(a.ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb)
 }
 
 // ValidateVentoyCli verifies the user-specified Ventoy CLI path.
@@ -51,9 +73,12 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 	return installer.ValidateVentoyCli(ventoyPath)
 }
 
-// DeployModeABatch triggers Mode A deployment for multiple target USB drives with customizable file system.
-func (a *App) DeployModeABatch(targetDisks []string, fsType string) ([]*installer.DeployResult, error) {
-	return installer.DeployModeABatch(a.ctx, targetDisks, fsType)
+// DeployModeABatch triggers Mode A deployment for multiple target USB drives with customizable file system and optional ISO files.
+func (a *App) DeployModeABatch(targetDisks []string, fsType string, isoPaths []string) ([]*installer.DeployResult, error) {
+	progressCb := func(p installer.IsoCopyProgress) {
+		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
+	}
+	return installer.DeployModeABatchWithIso(a.ctx, targetDisks, fsType, isoPaths, progressCb)
 }
 
 // DeployModeB triggers Mode B (Cloud Pure Mode) with customizable file system.

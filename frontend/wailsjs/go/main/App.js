@@ -10,12 +10,12 @@ export function CheckUpdate() {
   return window['go']['main']['App']['CheckUpdate']();
 }
 
-export function DeployModeA(arg1, arg2) {
-  return window['go']['main']['App']['DeployModeA'](arg1, arg2);
+export function DeployModeA(arg1, arg2, arg3) {
+  return window['go']['main']['App']['DeployModeA'](arg1, arg2, arg3);
 }
 
-export function DeployModeABatch(arg1, arg2) {
-  return window['go']['main']['App']['DeployModeABatch'](arg1, arg2);
+export function DeployModeABatch(arg1, arg2, arg3) {
+  return window['go']['main']['App']['DeployModeABatch'](arg1, arg2, arg3);
 }
 
 export function DeployModeB(arg1, arg2) {
@@ -48,6 +48,10 @@ export function LaunchQEMU(arg1) {
 
 export function SaveConfig(arg1) {
   return window['go']['main']['App']['SaveConfig'](arg1);
+}
+
+export function SelectIsoFiles() {
+  return window['go']['main']['App']['SelectIsoFiles']();
 }
 
 export function SyncUniBootFirmware() {

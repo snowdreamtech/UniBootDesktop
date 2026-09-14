@@ -11,9 +11,9 @@ export function CheckQEMU():Promise<qemu.QEMUStatus>;
 
 export function CheckUpdate():Promise<updater.UpdateStatus>;
 
-export function DeployModeA(arg1:string,arg2:string):Promise<installer.DeployResult>;
+export function DeployModeA(arg1:string,arg2:string,arg3:Array<string>):Promise<installer.DeployResult>;
 
-export function DeployModeABatch(arg1:Array<string>,arg2:string):Promise<Array<installer.DeployResult>>;
+export function DeployModeABatch(arg1:Array<string>,arg2:string,arg3:Array<string>):Promise<Array<installer.DeployResult>>;
 
 export function DeployModeB(arg1:string,arg2:string):Promise<installer.DeployResult>;
 
@@ -30,6 +30,8 @@ export function GetUniBootReleaseInfo():Promise<firmware.UniBootReleaseInfo>;
 export function LaunchQEMU(arg1:string):Promise<void>;
 
 export function SaveConfig(arg1:config.AppConfig):Promise<void>;
+
+export function SelectIsoFiles():Promise<Array<string>>;
 
 export function SyncUniBootFirmware():Promise<firmware.UniBootReleaseInfo>;
 

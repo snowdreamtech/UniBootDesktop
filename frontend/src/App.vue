@@ -144,6 +144,43 @@
           </div>
         </div>
 
+        <!-- Local ISO/IMG Image Source Selection Card (Mode A) -->
+        <div v-if="activeMode === 'hybrid'" class="iso-card">
+          <div class="iso-card-header">
+            <div class="iso-title-group">
+              <h3>💿 本地系统镜像源 (ISO / IMG / WIM / VHD)</h3>
+              <span class="iso-subtitle">支持单选与多选系统镜像。一键制作完成将自动写入 `/UNIBOOT/iso/` 目录供 Ventoy / UniBoot 直接挂载。</span>
+            </div>
+            <button class="btn-secondary add-iso-btn" @click="handleSelectIsoFiles">
+              ➕ 添加镜像文件
+            </button>
+          </div>
+
+          <div class="iso-list-container">
+            <div v-if="selectedIsoFiles.length === 0" class="iso-empty-state" @click="handleSelectIsoFiles">
+              <span class="empty-icon">📥</span>
+              <div class="empty-text">点击添加镜像文件 (支持单选与批量多选)</div>
+              <div class="empty-subtext">支持 .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw 等 Ventoy 全格式</div>
+            </div>
+
+            <div v-else class="iso-file-list">
+              <div v-for="(file, index) in selectedIsoFiles" :key="index" class="iso-file-item">
+                <span class="iso-file-icon">{{ getFileIcon(file.name) }}</span>
+                <div class="iso-file-info">
+                  <div class="iso-file-name" :title="file.path">{{ file.name }}</div>
+                  <div class="iso-file-path">{{ file.path }}</div>
+                </div>
+                <button class="iso-remove-btn" title="移除此文件" @click="removeIsoFile(index)">✕</button>
+              </div>
+            </div>
+
+            <div v-if="selectedIsoFiles.length > 0" class="iso-footer">
+              <span class="iso-count-summary">已选 <strong>{{ selectedIsoFiles.length }}</strong> 个系统镜像源文件</span>
+              <button class="btn-text-danger" @click="clearIsoFiles">清空列表</button>
+            </div>
+          </div>
+        </div>
+
         <div class="deploy-box">
           <div class="selected-target">
             <span>目标设备:</span>
@@ -323,6 +360,78 @@ const isDeploying = ref(false);
 const deployProgress = ref(0);
 const qemuStatus = ref({ installed: false, path: '', version: '' });
 const isLaunchingQemu = ref(false);
+
+interface IsoFileItem {
+  name: string;
+  path: string;
+}
+
+const selectedIsoFiles = ref<IsoFileItem[]>([]);
+const isoCopyStatus = ref<string>('');
+
+async function handleSelectIsoFiles() {
+  if (window.go && window.go.main && window.go.main.App && window.go.main.App.SelectIsoFiles) {
+    try {
+      const paths: string[] = await window.go.main.App.SelectIsoFiles();
+      if (paths && paths.length > 0) {
+        let added = 0;
+        for (const p of paths) {
+          if (!selectedIsoFiles.value.some(f => f.path === p)) {
+            const name = p.split(/[/\\]/).pop() || p;
+            selectedIsoFiles.value.push({ name, path: p });
+            added++;
+          }
+        }
+        if (added > 0) {
+          showToast(`已成功添加 ${added} 个镜像源文件`, 'success');
+        }
+      }
+    } catch (err: any) {
+      console.error('SelectIsoFiles error:', err);
+    }
+  } else {
+    // Mock for browser demo
+    const mockFiles = [
+      { name: 'ubuntu-24.04-desktop-amd64.iso', path: '/Users/demo/Downloads/ubuntu-24.04-desktop-amd64.iso' },
+      { name: 'Windows11_23H2_Chinese_Simplified_x64.iso', path: '/Users/demo/Downloads/Windows11_23H2_Chinese_Simplified_x64.iso' }
+    ];
+    for (const m of mockFiles) {
+      if (!selectedIsoFiles.value.some(f => f.path === m.path)) {
+        selectedIsoFiles.value.push(m);
+      }
+    }
+    showToast('已添加 2 个示例镜像源文件 (浏览器演示)', 'info');
+  }
+}
+
+function removeIsoFile(index: number) {
+  selectedIsoFiles.value.splice(index, 1);
+}
+
+function clearIsoFiles() {
+  selectedIsoFiles.value = [];
+}
+
+function getFileIcon(filename: string) {
+  const ext = filename.split('.').pop()?.toLowerCase();
+  switch (ext) {
+    case 'iso':
+      return '💿';
+    case 'wim':
+    case 'img':
+    case 'raw':
+      return '📦';
+    case 'vhd':
+    case 'vhdx':
+    case 'vti':
+      return '💾';
+    case 'efi':
+    case 'bin':
+      return '⚡';
+    default:
+      return '📄';
+  }
+}
 
 const toastMessage = ref('');
 const toastType = ref<'info' | 'warning' | 'error' | 'success'>('info');
@@ -655,12 +764,13 @@ async function startDeployment() {
 
   try {
     if (window.go && window.go.main && window.go.main.App) {
+      const isoPaths = selectedIsoFiles.value.map(f => f.path);
       if (targets.length === 1) {
         let res: any;
         if (activeMode.value === 'cloud') {
           res = await window.go.main.App.DeployModeB(targets[0], selectedFsType.value);
         } else {
-          res = await window.go.main.App.DeployModeA(targets[0], selectedFsType.value);
+          res = await window.go.main.App.DeployModeA(targets[0], selectedFsType.value, isoPaths);
         }
         if (res) {
           success = res.success;
@@ -671,7 +781,7 @@ async function startDeployment() {
         if (activeMode.value === 'cloud') {
           resList = await window.go.main.App.DeployModeBBatch(targets, selectedFsType.value);
         } else {
-          resList = await window.go.main.App.DeployModeABatch(targets, selectedFsType.value);
+          resList = await window.go.main.App.DeployModeABatch(targets, selectedFsType.value, isoPaths);
         }
         if (resList && resList.length > 0) {
           const failed = resList.filter(r => !r.success);
@@ -764,6 +874,15 @@ onMounted(() => {
   loadConfig();
   refreshDisks();
   checkQemu();
+
+  if (window.runtime && window.runtime.EventsOn) {
+    window.runtime.EventsOn("iso-copy-progress", (data: any) => {
+      if (data) {
+        isoCopyStatus.value = `正在写入镜像 (${data.fileIndex}/${data.totalFiles}): ${data.currentFile} (${data.progress.toFixed(1)}%)`;
+        deployProgress.value = Math.min(99, Math.max(50, Math.floor(50 + data.progress / 2)));
+      }
+    });
+  }
 
   // Auto-poll USB drives every 2.5s when idle for instant hotplug detection
   diskPollTimer = window.setInterval(() => {
@@ -1235,5 +1354,181 @@ h1 {
     opacity: 1;
     transform: translate(-50%, 0);
   }
+}
+
+/* ISO Source Card Styles */
+.iso-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(0, 229, 255, 0.5);
+  border-radius: 14px;
+  padding: 1.2rem;
+  margin-top: 1.2rem;
+  margin-bottom: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.iso-card:hover {
+  border-style: solid;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.12);
+}
+
+.iso-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.9rem;
+}
+
+.iso-title-group h3 {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.2rem;
+}
+
+.iso-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+.add-iso-btn {
+  font-size: 0.82rem;
+  padding: 0.4rem 0.85rem;
+  white-space: nowrap;
+}
+
+.iso-list-container {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  padding: 0.8rem;
+}
+
+.iso-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.6rem 1rem;
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.iso-empty-state:hover {
+  background: rgba(0, 229, 255, 0.05);
+  border-color: var(--accent-cyan);
+}
+
+.empty-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.empty-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.empty-subtext {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.iso-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.iso-file-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  transition: background 0.2s ease;
+}
+
+.iso-file-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.iso-file-icon {
+  font-size: 1.3rem;
+}
+
+.iso-file-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.iso-file-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f8fafc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.iso-file-path {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.iso-remove-btn {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+.iso-remove-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.iso-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.8rem;
+}
+
+.iso-count-summary {
+  color: var(--text-muted);
+}
+
+.iso-count-summary strong {
+  color: var(--accent-cyan);
+}
+
+.btn-text-danger {
+  background: transparent;
+  border: none;
+  color: #f87171;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.btn-text-danger:hover {
+  text-decoration: underline;
 }
 </style>

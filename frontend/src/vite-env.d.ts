@@ -2,12 +2,19 @@
 
 declare global {
   interface Window {
+    runtime?: {
+      EventsOn(eventName: string, callback: (data: any) => void): void;
+      EventsOff(eventName: string, ...additionalEvents: string[]): void;
+      EventsOnce(eventName: string, callback: (data: any) => void): void;
+      EventsEmit(eventName: string, ...optionalData: any[]): void;
+    };
     go?: {
       main?: {
         App?: {
           GetDiskList(): Promise<any[]>;
-          DeployModeA(targetDisk: string, fsType?: string): Promise<any>;
-          DeployModeABatch(targetDisks: string[], fsType?: string): Promise<any[]>;
+          SelectIsoFiles(): Promise<string[]>;
+          DeployModeA(targetDisk: string, fsType?: string, isoPaths?: string[]): Promise<any>;
+          DeployModeABatch(targetDisks: string[], fsType?: string, isoPaths?: string[]): Promise<any[]>;
           DeployModeB(targetDisk: string, fsType?: string): Promise<any>;
           DeployModeBBatch(targetDisks: string[], fsType?: string): Promise<any[]>;
           CheckQEMU(): Promise<any>;

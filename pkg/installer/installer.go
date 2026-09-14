@@ -22,11 +22,16 @@ type DeployResult struct {
 // DeployModeA executes Mode A: Hybrid Pro Mode (Ventoy + UniBoot theme + iPXE network extension) with customizable file system.
 // Performs non-destructive in-place upgrade on existing Ventoy drives, or fresh partition initialization on blank drives.
 func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
-	return DeployModeAWithVentoyPath(ctx, targetDisk, fsType, "")
+	return DeployModeAWithIsoAndVentoyPath(ctx, targetDisk, fsType, "", nil, nil)
 }
 
 // DeployModeAWithVentoyPath executes Mode A with an optional user-configured Ventoy CLI executable path.
 func DeployModeAWithVentoyPath(ctx context.Context, targetDisk string, fsType string, ventoyPath string) (*DeployResult, error) {
+	return DeployModeAWithIsoAndVentoyPath(ctx, targetDisk, fsType, ventoyPath, nil, nil)
+}
+
+// DeployModeAWithIsoAndVentoyPath executes Mode A with customizable Ventoy CLI path, ISO file paths, and progress callback.
+func DeployModeAWithIsoAndVentoyPath(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) (*DeployResult, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return nil, fmt.Errorf("disk validation failed: %w", err)
 	}
@@ -75,12 +80,22 @@ func DeployModeAWithVentoyPath(ctx context.Context, targetDisk string, fsType st
 		return nil, fmt.Errorf("writing Ventoy configuration failed: %w", err)
 	}
 
-	// 4. Non-destructively update volume label of data partition to UNIBOOT
+	// 4. Copy selected local ISO/IMG system images to target drive (/iso/ directory)
+	if len(isoPaths) > 0 {
+		if err := CopyIsoFilesToDisk(mountPoint, isoPaths, progressCb); err != nil {
+			return nil, fmt.Errorf("copying selected ISO/IMG files failed: %w", err)
+		}
+	}
+
+	// 5. Non-destructively update volume label of data partition to UNIBOOT
 	mountPoint = UpdateVolumeLabel(targetDisk, mountPoint, "UNIBOOT")
 
 	msg := fmt.Sprintf("Successfully deployed Hybrid Pro Mode A (%s/UNIBOOT) to %s (mount: %s)", fsType, targetDisk, mountPoint)
 	if isExistingVentoy {
 		msg = fmt.Sprintf("Successfully upgraded existing Ventoy drive to UniBoot Hybrid Pro Mode A at %s (ISO data preserved)", targetDisk)
+	}
+	if len(isoPaths) > 0 {
+		msg += fmt.Sprintf(" (%d ISO/IMG file(s) copied)", len(isoPaths))
 	}
 
 	return &DeployResult{
@@ -94,6 +109,11 @@ func DeployModeAWithVentoyPath(ctx context.Context, targetDisk string, fsType st
 
 // DeployModeABatch executes Mode A on multiple target USB drives with specified file system.
 func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
+	return DeployModeABatchWithIso(ctx, targetDisks, fsType, nil, nil)
+}
+
+// DeployModeABatchWithIso executes Mode A on multiple target USB drives with optional ISO files and progress reporting.
+func DeployModeABatchWithIso(ctx context.Context, targetDisks []string, fsType string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
 	if len(targetDisks) == 0 {
 		return nil, fmt.Errorf("no target disks specified for batch deployment")
 	}
@@ -106,7 +126,7 @@ func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) 
 
 	results := make([]*DeployResult, 0, len(targetDisks))
 	for _, d := range targetDisks {
-		res, err := DeployModeA(ctx, d, fsType)
+		res, err := DeployModeAWithIsoAndVentoyPath(ctx, d, fsType, "", isoPaths, progressCb)
 		if err != nil {
 			results = append(results, &DeployResult{
 				Success: false,
