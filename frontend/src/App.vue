@@ -1221,7 +1221,7 @@ h1 {
   align-items: center;
   gap: 0.4rem;
   background: rgba(255, 255, 255, 0.08);
-  color: var(--text-color, #e0e6ed);
+  color: var(--text-main, #e0e6ed);
   border: 1px solid var(--card-border, rgba(255, 255, 255, 0.12));
   padding: 0.45rem 0.8rem;
   border-radius: 8px;
@@ -1280,9 +1280,9 @@ h1 {
   background: transparent;
   border: none;
   border-radius: 8px;
-  color: var(--text-color, #e0e6ed);
+  color: var(--text-main, #e0e6ed);
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   text-align: left;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -2069,5 +2069,41 @@ h1 {
 
 [data-theme="light"] .target-warn {
   color: #d97706;
+}
+
+[data-theme="light"] .lang-pill-btn {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .lang-pill-btn:hover {
+  background: #f0f9ff;
+  color: #0284c7;
+  border-color: #38bdf8;
+}
+
+[data-theme="light"] .lang-dropdown-menu {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.15);
+}
+
+[data-theme="light"] .lang-option {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+[data-theme="light"] .lang-option:hover {
+  background: #f0f9ff;
+  color: #0284c7;
+}
+
+[data-theme="light"] .lang-option.active {
+  background: #e0f2fe;
+  color: #0284c7;
+  font-weight: 700;
 }
 </style>

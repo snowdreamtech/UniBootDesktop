@@ -169,23 +169,32 @@ onUnmounted(() => {
 }
 
 /* Light Theme Enhancements */
+[data-theme="light"] .select-trigger {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  font-weight: 600;
+}
+
 [data-theme="light"] .select-dropdown-menu {
   background: #ffffff;
   border-color: #cbd5e1;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
 }
 
 [data-theme="light"] .dropdown-item {
   color: #0f172a;
+  font-weight: 600;
 }
 
 [data-theme="light"] .dropdown-item:hover {
-  background: #e0f2fe;
+  background: #f0f9ff;
   color: #0284c7;
 }
 
 [data-theme="light"] .dropdown-item.selected {
   background: #e0f2fe;
   color: #0284c7;
+  font-weight: 700;
 }
 </style>

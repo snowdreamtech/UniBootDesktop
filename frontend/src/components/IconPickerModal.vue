@@ -360,7 +360,7 @@ function resetToAuto() {
   font-size: 0.825rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
-  color: var(--text-color);
+  color: var(--text-main);
   min-height: 2.4em;
   display: flex;
   align-items: center;

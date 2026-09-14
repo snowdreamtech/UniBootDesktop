@@ -401,7 +401,7 @@ function confirm() {
   padding: 0.2rem 0.6rem;
   border-radius: 6px;
   font-size: 0.75rem;
-  color: var(--text-color);
+  color: var(--text-main);
 }
 
 .pill-tag.accent {
@@ -457,7 +457,7 @@ function confirm() {
 .btn-cancel {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--card-border);
-  color: var(--text-color);
+  color: var(--text-main);
   padding: 0.6rem 1.25rem;
   border-radius: 8px;
   font-size: 0.875rem;
