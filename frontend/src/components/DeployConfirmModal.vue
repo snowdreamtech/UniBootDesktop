@@ -49,7 +49,7 @@
             <div class="disk-meta-pills">
               <span class="pill-tag">{{ targetDisk.formatted }}</span>
               <span class="pill-tag">{{ targetDisk.fileSystem || 'FAT32' }}</span>
-              <span class="pill-tag accent" v-if="mode === 'hybrid'">{{ t('confirm.fs_format', { fs: fsType }) }}</span>
+              <span class="pill-tag accent" v-if="mode === 'hybrid'">{{ t('confirm.fs_format', { fs: fsType || '' }) }}</span>
               <span class="pill-tag highlight">{{ mode === 'cloud' ? t('mode.cloud') : t('mode.hybrid') }}</span>
               <span class="pill-tag safe-tag" v-if="isAllVentoy">{{ t('confirm.smart_safe_tag') }}</span>
             </div>
