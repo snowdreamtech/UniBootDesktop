@@ -73,19 +73,18 @@ func WriteVentoyConfigWithAppConfig(mountDir string, appCfg *config.AppConfig) e
 		)
 	}
 
-	timeoutVal := appCfg.VentoyMenuTimeout
-	if timeoutVal <= 0 {
-		timeoutVal = 10
+	themeCfg := &VentoyThemeConfig{
+		File:    "/ventoy/themes/uniboot/theme.txt",
+		Gfxmode: "1280x800",
+		Display: "full",
+	}
+	if appCfg.VentoyMenuTimeout > 0 {
+		themeCfg.Timeout = appCfg.VentoyMenuTimeout
 	}
 
 	// 1. Build ventoy.json matching official UniBoot specification & user config
 	cfg := VentoyGlobalConfig{
-		Theme: &VentoyThemeConfig{
-			File:    "/ventoy/themes/uniboot/theme.txt",
-			Gfxmode: "1280x800",
-			Display: "full",
-			Timeout: timeoutVal,
-		},
+		Theme: themeCfg,
 		ImageAlias: []VentoyAliasConfig{
 			{
 				Image: "/iso/UniBoot.iso",

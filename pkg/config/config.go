@@ -46,11 +46,11 @@ func GetDefaultConfig() *AppConfig {
 		ProxyUser:            "",
 		ProxyPassword:        "",
 		VentoyPath:           "",
-		VentoySecureBoot:     true,
-		VentoyPartitionStyle: "MBR",
-		VentoyReserveSpace:   0,
-		VentoyWin11Bypass:    true,
-		VentoyMenuTimeout:    10,
+		VentoySecureBoot:     true,  // Official Ventoy default: Enabled (Checked)
+		VentoyPartitionStyle: "MBR",   // Official Ventoy default: MBR
+		VentoyReserveSpace:   0,       // Official Ventoy default: 0 MB
+		VentoyWin11Bypass:    false,   // Official Ventoy default: Disabled (False)
+		VentoyMenuTimeout:    0,       // Official Ventoy default: 0 (No timeout / wait indefinitely)
 	}
 }
 

@@ -582,8 +582,8 @@ async function onSaveSettings(payload: any) {
         ventoySecureBoot: payload.ventoySecureBoot !== false,
         ventoyPartitionStyle: payload.ventoyPartitionStyle || 'MBR',
         ventoyReserveSpace: Number(payload.ventoyReserveSpace) || 0,
-        ventoyWin11Bypass: payload.ventoyWin11Bypass !== false,
-        ventoyMenuTimeout: Number(payload.ventoyMenuTimeout) || 10,
+        ventoyWin11Bypass: payload.ventoyWin11Bypass === true,
+        ventoyMenuTimeout: Number(payload.ventoyMenuTimeout) || 0,
       } : {
         mode: activeMode.value,
         autoCheckUpdate: true,

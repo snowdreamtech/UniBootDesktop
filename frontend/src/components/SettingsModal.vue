@@ -385,13 +385,13 @@
                   <input
                     v-model.number="ventoyMenuTimeout"
                     type="number"
-                    min="1"
+                    min="0"
                     max="60"
                     class="form-input"
-                    placeholder="默认 10 秒"
+                    placeholder="默认 0 秒 (不自动倒计时，无缝停留在菜单)"
                     @input="triggerAutoSave"
                   />
-                  <span class="field-hint">Ventoy 开机主菜单无按键操作时的默认超时自动启动时间</span>
+                  <span class="field-hint">官方默认 0 秒（等待按键挑选）。可设置为 >0 秒在超时后自动加载镜像</span>
                 </div>
               </div>
             </div>
@@ -472,8 +472,8 @@ const ventoyPath = ref('');
 const ventoySecureBoot = ref(true);
 const ventoyPartitionStyle = ref('MBR');
 const ventoyReserveSpace = ref(0);
-const ventoyWin11Bypass = ref(true);
-const ventoyMenuTimeout = ref(10);
+const ventoyWin11Bypass = ref(false);
+const ventoyMenuTimeout = ref(0);
 const isValidatingVentoy = ref(false);
 const ventoyValidation = ref<{ valid: boolean; version: string; message: string; executablePath: string } | null>(null);
 
@@ -540,8 +540,8 @@ function triggerAutoSave() {
       ventoySecureBoot: ventoySecureBoot.value,
       ventoyPartitionStyle: ventoyPartitionStyle.value,
       ventoyReserveSpace: Number(ventoyReserveSpace.value) || 0,
-      ventoyWin11Bypass: ventoyWin11Bypass.value,
-      ventoyMenuTimeout: Number(ventoyMenuTimeout.value) || 10,
+      ventoyWin11Bypass: ventoyWin11Bypass.value === true,
+      ventoyMenuTimeout: Number(ventoyMenuTimeout.value) || 0,
     };
     emit('save', payload);
     if (window.go && window.go.main && window.go.main.App) {
@@ -632,10 +632,10 @@ async function loadFullConfig() {
         proxyPassword.value = cfg.proxyPassword || '';
         ventoyPath.value = cfg.ventoyPath || '';
         ventoySecureBoot.value = cfg.ventoySecureBoot !== false;
-        ventoyPartitionStyle.value = cfg.ventoyPartitionStyle || 'GPT';
+        ventoyPartitionStyle.value = cfg.ventoyPartitionStyle || 'MBR';
         ventoyReserveSpace.value = cfg.ventoyReserveSpace || 0;
-        ventoyWin11Bypass.value = cfg.ventoyWin11Bypass !== false;
-        ventoyMenuTimeout.value = cfg.ventoyMenuTimeout || 10;
+        ventoyWin11Bypass.value = cfg.ventoyWin11Bypass === true;
+        ventoyMenuTimeout.value = cfg.ventoyMenuTimeout || 0;
         checkVentoyCli();
       }
     } catch (e) {
