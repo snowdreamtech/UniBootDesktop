@@ -203,7 +203,7 @@ function resetToAuto() {
 .modal-header h3 {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-main);
 }
 
 .close-btn {
@@ -384,5 +384,22 @@ function resetToAuto() {
   border-top: 1px solid var(--card-border);
   padding-top: 1rem;
   flex-shrink: 0;
+}
+
+/* Light Theme Enhancements */
+[data-theme="light"] .icon-card {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="light"] .icon-card:hover {
+  background: #f0f9ff;
+  border-color: #38bdf8;
+}
+
+[data-theme="light"] .icon-card.active {
+  background: #e0f2fe;
+  border-color: #0284c7;
 }
 </style>
