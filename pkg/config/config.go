@@ -24,6 +24,7 @@ type AppConfig struct {
 	ProxyPort       int    `json:"proxyPort" toml:"proxyPort"`               // Network proxy server port
 	ProxyUser       string `json:"proxyUser" toml:"proxyUser"`               // Network proxy authentication username
 	ProxyPassword   string `json:"proxyPassword" toml:"proxyPassword"`       // Network proxy authentication password
+	Language        string `json:"language" toml:"language"`                 // UI Language (auto/zh-CN/en-US/zh-TW)
 	VentoyPath           string `json:"ventoyPath" toml:"ventoyPath"`                     // Path to official Ventoy CLI directory / executable
 	VentoySecureBoot     bool   `json:"ventoySecureBoot" toml:"ventoySecureBoot"`         // Enable Ventoy Secure Boot support (-s)
 	VentoyPartitionStyle string `json:"ventoyPartitionStyle" toml:"ventoyPartitionStyle"` // Ventoy partition style: GPT or MBR
@@ -38,6 +39,7 @@ func GetDefaultConfig() *AppConfig {
 		Mode:                 "cloud", // Mode B Cloud Pure Mode by default
 		AutoCheckUpdate:      true,
 		Theme:                "dark",
+		Language:             "auto",  // Auto detect OS system language by default
 		GithubProxy:          "", // Default to empty (Direct connection, no hardcoded proxy preset)
 		FileSystem:           "exFAT",
 		ProxyProtocol:        "direct",

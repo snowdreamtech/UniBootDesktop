@@ -104,6 +104,21 @@
               </div>
 
               <div class="form-group">
+                <label class="form-label">界面语言 (Language):</label>
+                <CustomSelect
+                  v-model="appLanguage"
+                  :options="[
+                    { value: 'auto', label: '🌐 自动识别 (Auto - 匹配操作系统)' },
+                    { value: 'zh-CN', label: '🇨🇳 简体中文 (Simplified Chinese)' },
+                    { value: 'en-US', label: '🇺🇸 English (英文)' },
+                    { value: 'zh-TW', label: '🇭🇰 繁體中文 (Traditional Chinese)' }
+                  ]"
+                  @change="onLanguageChange"
+                />
+                <span class="field-hint">切换应用程序界面显示的语言文字</span>
+              </div>
+
+              <div class="form-group">
                 <label class="form-label">界面主题与视觉风格 (Theme):</label>
                 <CustomSelect
                   v-model="appTheme"
@@ -405,6 +420,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import CustomSelect from './CustomSelect.vue';
+import { setLanguage } from '../i18n';
 
 interface FirmwareMapping {
   releaseName: string;
@@ -431,6 +447,7 @@ const emit = defineEmits<{
     fileSystem: string;
     autoCheckUpdate: boolean;
     theme: string;
+    language: string;
     ventoyPath: string;
     ventoySecureBoot: boolean;
     ventoyPartitionStyle: string;
@@ -458,6 +475,7 @@ const defaultMode = ref('cloud');
 const defaultFs = ref('exFAT');
 const autoCheckUpdate = ref(true);
 const appTheme = ref('dark');
+const appLanguage = ref('auto');
 
 // Network proxy state
 const proxyInputUrl = ref('');
@@ -536,6 +554,7 @@ function triggerAutoSave() {
       fileSystem: defaultFs.value,
       autoCheckUpdate: autoCheckUpdate.value,
       theme: appTheme.value,
+      language: appLanguage.value,
       ventoyPath: ventoyPath.value.trim(),
       ventoySecureBoot: ventoySecureBoot.value,
       ventoyPartitionStyle: ventoyPartitionStyle.value,
@@ -556,6 +575,11 @@ function triggerAutoSave() {
   }, 250);
 }
 
+function onLanguageChange(val: string) {
+  setLanguage(val);
+  triggerAutoSave();
+}
+
 let ventoyDebounceTimer: any = null;
 
 watch(
@@ -564,6 +588,7 @@ watch(
     defaultFs,
     autoCheckUpdate,
     appTheme,
+    appLanguage,
     proxyInputUrl,
     proxyProtocol,
     proxyHost,
@@ -624,6 +649,8 @@ async function loadFullConfig() {
         defaultFs.value = cfg.fileSystem || 'exFAT';
         autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
         appTheme.value = cfg.theme || 'dark';
+        appLanguage.value = cfg.language || 'auto';
+        setLanguage(appLanguage.value);
         proxyInputUrl.value = cfg.githubProxy || '';
         proxyProtocol.value = cfg.proxyProtocol || 'direct';
         proxyHost.value = cfg.proxyHost || '';

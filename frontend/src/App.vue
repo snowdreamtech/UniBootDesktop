@@ -40,6 +40,13 @@
         </button>
         <button 
           class="settings-icon-btn" 
+          title="切换界面语言 (Language)"
+          @click="openSettings('general')"
+        >
+          🌐
+        </button>
+        <button 
+          class="settings-icon-btn" 
           title="系统与 GitHub 代理加速设置"
           @click="openSettings('general')"
         >
@@ -314,6 +321,7 @@ import DeployConfirmModal from './components/DeployConfirmModal.vue';
 import SettingsModal from './components/SettingsModal.vue';
 import VentoyAlertModal from './components/VentoyAlertModal.vue';
 import CustomSelect from './components/CustomSelect.vue';
+import { setLanguage } from './i18n';
 
 interface DiskInfo {
   device: string;
@@ -544,6 +552,7 @@ async function loadConfig() {
       if (cfg) {
         if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
         if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
+        if (cfg.language) setLanguage(cfg.language);
         applyTheme(cfg.theme);
       }
     } catch (e) {
@@ -571,6 +580,7 @@ async function onSaveSettings(payload: any) {
         mode: payload.mode || activeMode.value,
         autoCheckUpdate: payload.autoCheckUpdate !== false,
         theme: payload.theme || 'dark',
+        language: payload.language || 'auto',
         githubProxy: proxyUrl,
         fileSystem: payload.fileSystem || selectedFsType.value,
         proxyProtocol: payload.proxyProtocol || 'direct',
