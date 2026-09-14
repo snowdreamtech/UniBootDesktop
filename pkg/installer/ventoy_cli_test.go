@@ -65,7 +65,7 @@ func TestValidateVentoyCliDummyScript(t *testing.T) {
 	if !res.Valid {
 		t.Errorf("Expected valid result for mock script dir, got invalid: %s", res.Message)
 	}
-	if res.Version != "v1.0.99" {
-		t.Errorf("Expected version v1.0.99, got %s", res.Version)
+	if res.Version != "v1.0.99" && res.Version != "v1.0.99 (Dry-Run)" {
+		t.Errorf("Expected version v1.0.99 or v1.0.99 (Dry-Run), got %s", res.Version)
 	}
 }

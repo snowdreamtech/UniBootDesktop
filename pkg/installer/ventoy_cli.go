@@ -36,12 +36,22 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		}
 	}
 
+	// OS Compatibility check: macOS does not have official native Ventoy CLI binaries
+	if runtime.GOOS == "darwin" && os.Getenv("UNIBOOT_DRY_RUN") == "" {
+		return &VentoyCliValidationResult{
+			Valid:          false,
+			Version:        "",
+			Message:        "❌ macOS 平台提示：官方 Ventoy 暂不支持在 macOS 上直接运行格式化程序。制作【模式 A】全新盘需依赖 Ventoy CLI；建议在 macOS 上直接选择原生支持的【模式 B (1秒极速云引导盘)】！如需使用模式 A，请先在 Win/Linux 上完成 Ventoy 盘初始化后插入 macOS 无损升级。",
+			ExecutablePath: ventoyPath,
+		}
+	}
+
 	cleanPath := strings.TrimSpace(ventoyPath)
 	if cleanPath == "" {
 		return &VentoyCliValidationResult{
 			Valid:   false,
 			Version: "",
-			Message: "未配置 Ventoy 目录",
+			Message: fmt.Sprintf("❌ 未配置 Ventoy 目录：制作【模式 A】全新盘需调用 Ventoy CLI。请在【设置】中配置适用于 %s 的 Ventoy 目录。", runtime.GOOS),
 		}
 	}
 
@@ -50,7 +60,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:   false,
 			Version: "",
-			Message: fmt.Sprintf("❌ 目录不存在: %s", cleanPath),
+			Message: fmt.Sprintf("❌ Ventoy 配置路径不存在: %s", cleanPath),
 		}
 	}
 
@@ -61,24 +71,14 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 			return &VentoyCliValidationResult{
 				Valid:   false,
 				Version: "",
-				Message: fmt.Sprintf("❌ 目录内未找到适用于 %s 的 Ventoy 程序", runtime.GOOS),
+				Message: fmt.Sprintf("❌ 目录内未找到适用于 %s 系统的 Ventoy CLI 程序 (%s)", runtime.GOOS, cleanPath),
 			}
 		}
 	} else {
 		execPath = cleanPath
 	}
 
-	// OS Compatibility check: detect macOS or non-Windows binaries
 	lowerExec := strings.ToLower(execPath)
-	if runtime.GOOS == "darwin" && os.Getenv("UNIBOOT_DRY_RUN") == "" {
-		return &VentoyCliValidationResult{
-			Valid:          false,
-			Version:        "",
-			Message:        "❌ macOS 平台说明：官方 Ventoy 暂不提供 macOS 原生格式化程序。如需在全新盘制作【模式 A】，请先在 Windows/Linux 上完成 Ventoy 初始化；或在当前 macOS 上直接使用原生支持的【模式 B (1秒极速云引导盘)】！",
-			ExecutablePath: execPath,
-		}
-	}
-
 	if runtime.GOOS != "windows" && strings.HasSuffix(lowerExec, ".exe") {
 		return &VentoyCliValidationResult{
 			Valid:          false,

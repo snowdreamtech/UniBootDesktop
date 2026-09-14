@@ -27,14 +27,14 @@
         <button 
           class="tab-btn" 
           :class="{ active: activeMode === 'cloud' }"
-          @click="activeMode = 'cloud'"
+          @click="selectMode('cloud')"
         >
           ⚡ 模式 B (1秒极速云安装盘)
         </button>
         <button 
           class="tab-btn" 
           :class="{ active: activeMode === 'hybrid' }"
-          @click="activeMode = 'hybrid'"
+          @click="selectMode('hybrid')"
         >
           🛠️ 模式 A (全能双模盘)
         </button>
@@ -127,6 +127,18 @@
             <option value="FAT32">FAT32 (老旧机器全兼容 • 4GB单文件限制)</option>
             <option value="ext4">ext4 (Linux 专属文件系统)</option>
           </select>
+        </div>
+
+        <!-- Ventoy CLI Pre-flight Requirement Notice Banner (Mode A) -->
+        <div v-if="activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid" class="ventoy-warning-card">
+          <span class="warning-card-icon">⚠️</span>
+          <div class="warning-card-body">
+            <div class="warning-card-title">全新模式 A (Ventoy 双模盘) 前置限制与说明</div>
+            <div class="warning-card-message">{{ ventoyStatus.message || '全新制作模式 A 需依赖 Ventoy CLI 可执行文件。' }}</div>
+          </div>
+          <button class="btn-secondary btn-sm" @click="isSettingsOpen = true">
+            ⚙️ 配置 / 校验
+          </button>
         </div>
 
         <!-- Safe Mode Notice Banner when upgrading an existing Ventoy/UniBoot drive -->
@@ -360,6 +372,30 @@ const isDeploying = ref(false);
 const deployProgress = ref(0);
 const qemuStatus = ref({ installed: false, path: '', version: '' });
 const isLaunchingQemu = ref(false);
+const ventoyStatus = ref({ valid: true, version: '', message: '', executablePath: '' });
+
+async function checkVentoyStatus() {
+  if (window.go && window.go.main && window.go.main.App && window.go.main.App.ValidateVentoyCli) {
+    try {
+      const res = await window.go.main.App.ValidateVentoyCli('');
+      if (res) {
+        ventoyStatus.value = res;
+      }
+    } catch (e) {
+      console.error('Failed to validate Ventoy status:', e);
+    }
+  }
+}
+
+async function selectMode(mode: 'cloud' | 'hybrid') {
+  activeMode.value = mode;
+  if (mode === 'hybrid') {
+    await checkVentoyStatus();
+    if (!isNonDestructive.value && !ventoyStatus.value.valid) {
+      showToast(ventoyStatus.value.message || '⚠️ 模式 A 全新制作依赖 Ventoy CLI 环境', 'warning');
+    }
+  }
+}
 
 interface IsoFileItem {
   name: string;
@@ -507,7 +543,7 @@ async function onSaveSettings(payload: any) {
   }
 }
 
-function openDeployConfirm() {
+async function openDeployConfirm() {
   let targets: string[] = [];
   if (selectionMode.value === 'single') {
     if (!selectedDisk.value) return;
@@ -516,6 +552,15 @@ function openDeployConfirm() {
     targets = Array.from(selectedDevices.value);
     if (targets.length === 0) return;
   }
+
+  if (activeMode.value === 'hybrid' && !isNonDestructive.value) {
+    await checkVentoyStatus();
+    if (!ventoyStatus.value.valid) {
+      showToast(ventoyStatus.value.message || '无法制作 Mode A：未检测到有效的 Ventoy CLI 程序', 'error');
+      return;
+    }
+  }
+
   pendingTargets.value = targets;
   isDeployConfirmOpen.value = true;
 }
@@ -880,6 +925,7 @@ onMounted(() => {
   loadConfig();
   refreshDisks();
   checkQemu();
+  checkVentoyStatus();
 
   if (window.runtime && window.runtime.EventsOn) {
     window.runtime.EventsOn("iso-copy-progress", (data: any) => {
@@ -1536,5 +1582,38 @@ h1 {
 
 .btn-text-danger:hover {
   text-decoration: underline;
+}
+
+.ventoy-warning-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.warning-card-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.warning-card-body {
+  flex: 1;
+}
+
+.warning-card-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #f87171;
+  margin-bottom: 4px;
+}
+
+.warning-card-message {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
 }
 </style>

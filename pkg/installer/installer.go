@@ -119,6 +119,11 @@ func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) 
 
 // DeployModeABatchWithIso executes Mode A on multiple target USB drives with optional ISO files and progress reporting.
 func DeployModeABatchWithIso(ctx context.Context, targetDisks []string, fsType string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
+	return DeployModeABatchWithVentoyAndIso(ctx, targetDisks, fsType, "", isoPaths, progressCb)
+}
+
+// DeployModeABatchWithVentoyAndIso executes Mode A on multiple target USB drives with customizable Ventoy CLI path, ISO files, and progress reporting.
+func DeployModeABatchWithVentoyAndIso(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
 	if len(targetDisks) == 0 {
 		return nil, fmt.Errorf("no target disks specified for batch deployment")
 	}
@@ -131,7 +136,7 @@ func DeployModeABatchWithIso(ctx context.Context, targetDisks []string, fsType s
 
 	results := make([]*DeployResult, 0, len(targetDisks))
 	for _, d := range targetDisks {
-		res, err := DeployModeAWithIsoAndVentoyPath(ctx, d, fsType, "", isoPaths, progressCb)
+		res, err := DeployModeAWithIsoAndVentoyPath(ctx, d, fsType, ventoyPath, isoPaths, progressCb)
 		if err != nil {
 			results = append(results, &DeployResult{
 				Success: false,

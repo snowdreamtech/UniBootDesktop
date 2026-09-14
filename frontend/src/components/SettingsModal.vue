@@ -467,15 +467,6 @@ watch(ventoyPath, (newVal) => {
 });
 
 async function checkVentoyCli() {
-  if (!ventoyPath.value.trim()) {
-    ventoyValidation.value = {
-      valid: false,
-      version: '',
-      message: '未配置 Ventoy 目录',
-      executablePath: ''
-    };
-    return;
-  }
   isValidatingVentoy.value = true;
   try {
     if (window.go && window.go.main && window.go.main.App && window.go.main.App.ValidateVentoyCli) {
@@ -511,9 +502,7 @@ async function loadFullConfig() {
         proxyUser.value = cfg.proxyUser || '';
         proxyPassword.value = cfg.proxyPassword || '';
         ventoyPath.value = cfg.ventoyPath || '';
-        if (ventoyPath.value) {
-          checkVentoyCli();
-        }
+        checkVentoyCli();
       }
     } catch (e) {
       console.error('Failed to load full config:', e);
