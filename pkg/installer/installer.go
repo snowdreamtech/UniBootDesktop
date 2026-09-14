@@ -6,6 +6,11 @@ package installer
 import (
 	"context"
 	"fmt"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"runtime"
+	"strings"
 
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 	"github.com/snowdreamtech/unigodesktop/pkg/firmware"
@@ -141,6 +146,29 @@ func DeployModeABatchWithIso(ctx context.Context, targetDisks []string, fsType s
 	return results, nil
 }
 
+// CleanMbrBootstrapCode zero-fills bytes 0..445 of Sector 0 on targetDisk,
+// preserving bytes 446-511 (Partition Table & MBR Signature) 100% intact.
+// This neutralizes stale Ventoy MBR hooks when converting Mode A to Mode B, preventing Legacy BIOS boot crashes.
+func CleanMbrBootstrapCode(targetDisk string) error {
+	diskNode := filepath.Base(targetDisk)
+	if idx := strings.Index(diskNode, "s"); idx > 0 {
+		diskNode = diskNode[:idx]
+	}
+
+	var rawDev string
+	if runtime.GOOS == "darwin" {
+		rawDev = "/dev/r" + diskNode
+		if _, err := os.Stat(rawDev); err != nil {
+			rawDev = "/dev/" + diskNode
+		}
+	} else {
+		rawDev = "/dev/" + diskNode
+	}
+
+	cmd := exec.Command("dd", "if=/dev/zero", "of="+rawDev, "bs=446", "count=1", "conv=notrunc")
+	return cmd.Run()
+}
+
 // DeployModeB executes Mode B: Cloud Pure Mode (1-sec native format & multi-arch iPXE firmware) with customizable file system.
 // For existing Ventoy drives, it non-destructively flashes ONLY Partition 2 (VTOYEFI / ESP), keeping Partition 1 (Data) untouched!
 func DeployModeB(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
@@ -158,6 +186,9 @@ func DeployModeB(ctx context.Context, targetDisk string, fsType string) (*Deploy
 
 	if isExistingVentoy {
 		// Non-destructive Mode B conversion: Flash EFI Partition 2 (VTOYEFI) directly (Data partition untouched!)
+		// Safely neutralize stale Sector 0 Ventoy MBR code to prevent Legacy BIOS boot crashes!
+		_ = CleanMbrBootstrapCode(targetDisk)
+
 		efiMountPoint, err = MountAndResolveEFIPartition(targetDisk)
 		if err != nil {
 			return nil, fmt.Errorf("failed to mount/resolve EFI partition (Partition 2): %w", err)

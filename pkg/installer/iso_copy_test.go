@@ -77,3 +77,18 @@ func TestCopyIsoFilesToDisk(t *testing.T) {
 		t.Errorf("expected progress callback to be triggered")
 	}
 }
+
+func TestCleanMbrBootstrapCode(t *testing.T) {
+	tmpDir := t.TempDir()
+	dummyFile := filepath.Join(tmpDir, "dummy_disk_node")
+
+	sectorData := make([]byte, 512)
+	for i := range sectorData {
+		sectorData[i] = 0xFF
+	}
+	if err := os.WriteFile(dummyFile, sectorData, 0644); err != nil {
+		t.Fatalf("failed to write dummy sector file: %v", err)
+	}
+
+	_ = CleanMbrBootstrapCode(dummyFile)
+}
