@@ -72,6 +72,7 @@ func TestTargetPathForReleaseAsset(t *testing.T) {
 }
 
 func TestExtractFirmwareToDir(t *testing.T) {
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", t.TempDir())
 	tmpDir := t.TempDir()
 
 	err := ExtractFirmwareToDir(tmpDir)
@@ -103,6 +104,7 @@ func TestExtractFirmwareToDir(t *testing.T) {
 }
 
 func TestExtractFirmwareModeA(t *testing.T) {
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", t.TempDir())
 	tmpDir := t.TempDir()
 	if err := ExtractFirmwareModeA(tmpDir); err != nil {
 		t.Fatalf("ExtractFirmwareModeA failed: %v", err)
@@ -124,6 +126,7 @@ func TestExtractFirmwareModeA(t *testing.T) {
 }
 
 func TestExtractFirmwareModeB(t *testing.T) {
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", t.TempDir())
 	tmpDir := t.TempDir()
 	if err := ExtractFirmwareModeB(tmpDir); err != nil {
 		t.Fatalf("ExtractFirmwareModeB failed: %v", err)

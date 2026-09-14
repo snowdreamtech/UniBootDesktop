@@ -325,6 +325,8 @@ interface DiskInfo {
   controllerVendor?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
+  isRealVentoy?: boolean;
+  isModeB?: boolean;
 }
 
 const activeMode = ref<'cloud' | 'hybrid'>('cloud');
@@ -656,6 +658,9 @@ const deployDisabledReason = computed(() => {
   if (selectionMode.value === 'single' && !selectedDisk.value) return '请先选择要制作的目标 U 盘';
   if (selectionMode.value === 'batch' && selectedDevices.value.size === 0) return '请先勾选要批量制作的目标 U 盘';
   if (activeMode.value === 'hybrid' && !isNonDestructive.value && !ventoyStatus.value.valid) {
+    if (isMacOs.value) {
+      return '❌ macOS 平台暂不支持全新格式化制作 Mode A 盘 (请使用模式 B)';
+    }
     return ventoyStatus.value.message || '全新制作模式 A 需依赖 Ventoy CLI 环境';
   }
   return '';
