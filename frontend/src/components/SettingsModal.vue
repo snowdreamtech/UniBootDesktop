@@ -318,6 +318,7 @@ interface FirmwareMapping {
 const props = defineProps<{
   isOpen: boolean;
   currentProxy?: string;
+  initialTab?: 'general' | 'network' | 'uniboot' | 'ventoy';
 }>();
 
 const emit = defineEmits<{
@@ -338,6 +339,17 @@ const emit = defineEmits<{
 }>();
 
 const activeTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
+
+watch(() => props.isOpen, (newVal) => {
+  if (newVal) {
+    if (props.initialTab) {
+      activeTab.value = props.initialTab;
+    }
+    loadFullConfig();
+    fetchFirmwareList();
+    checkUniBootRelease();
+  }
+}, { immediate: true });
 
 // General settings state
 const defaultMode = ref('cloud');

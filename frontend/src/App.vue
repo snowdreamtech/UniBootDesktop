@@ -41,7 +41,7 @@
         <button 
           class="settings-icon-btn" 
           title="系统与 GitHub 代理加速设置"
-          @click="isSettingsOpen = true"
+          @click="openSettings('general')"
         >
           ⚙️
         </button>
@@ -136,7 +136,7 @@
             <div class="warning-card-title">全新模式 A (Ventoy 双模盘) 前置限制与说明</div>
             <div class="warning-card-message">{{ ventoyStatus.message || '全新制作模式 A 需依赖 Ventoy CLI 可执行文件。' }}</div>
           </div>
-          <button class="btn-secondary btn-sm" @click="isSettingsOpen = true">
+          <button class="btn-secondary btn-sm" @click="openSettings('ventoy')">
             ⚙️ 配置 / 校验
           </button>
         </div>
@@ -282,6 +282,7 @@
     <!-- Settings & GitHub Proxy Modal -->
     <SettingsModal
       :isOpen="isSettingsOpen"
+      :initialTab="settingsInitialTab"
       :currentProxy="currentGithubProxy"
       @close="isSettingsOpen = false"
       @save="onSaveSettings"
@@ -369,6 +370,13 @@ const isInspectorOpen = ref(false);
 const targetInspectorDisk = ref<DiskInfo | null>(null);
 const isDeployConfirmOpen = ref(false);
 const isSettingsOpen = ref(false);
+const settingsInitialTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
+
+function openSettings(tab: 'general' | 'network' | 'uniboot' | 'ventoy' = 'general') {
+  settingsInitialTab.value = tab;
+  isSettingsOpen.value = true;
+}
+
 const currentGithubProxy = ref('');
 const pendingTargets = ref<string[]>([]);
 const isDeploying = ref(false);
