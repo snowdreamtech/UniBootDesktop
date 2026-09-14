@@ -257,7 +257,7 @@ export const huHu: TranslationDict = {
   "fs.ext4": "ext4 (Linux Native)",
   "disk.title": "Válassza ki a Cél USB-meghajtót",
   "header.subtitle": "Indítólemez létrehozása és QEMU teszt",
-  "settings.tab_firmware": "UniBoot belső vezérlőprogram kezelés",
+  "settings.tabFirmware": "UniBoot belső vezérlőprogram kezelés",
   "settings.tab_qemu": "QEMU szimulációs környezet",
   "settings.tab_about": "A UniBoot Desktopról"
 };

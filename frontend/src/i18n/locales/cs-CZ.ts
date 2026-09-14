@@ -257,7 +257,7 @@ export const csCz: TranslationDict = {
   "fs.ext4": "ext4 (Linux Native)",
   "disk.title": "Vyberte Cílový USB Disk",
   "header.subtitle": "Vytvoření bootovacího disku a test QEMU",
-  "settings.tab_firmware": "Správa firmwaru UniBoot",
+  "settings.tabFirmware": "Správa firmwaru UniBoot",
   "settings.tab_qemu": "Simulační prostředí QEMU",
   "settings.tab_about": "O aplikaci UniBoot Desktop"
 };

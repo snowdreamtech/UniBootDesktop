@@ -257,7 +257,7 @@ export const svSe: TranslationDict = {
   "fs.ext4": "ext4 (Linux Native)",
   "disk.title": "Välj Mål-USB-enhet",
   "header.subtitle": "Skapa startbar enhet och QEMU-test",
-  "settings.tab_firmware": "UniBoot-firmwarehantering",
+  "settings.tabFirmware": "UniBoot-firmwarehantering",
   "settings.tab_qemu": "QEMU-simuleringsmiljö",
   "settings.tab_about": "Om UniBoot Desktop"
 };

@@ -257,7 +257,7 @@ export const nbNo: TranslationDict = {
   "fs.ext4": "ext4 (Linux Native)",
   "disk.title": "Velg Mål-USB-stasjon",
   "header.subtitle": "Opprettelse av oppstartbar stasjon og QEMU-test",
-  "settings.tab_firmware": "UniBoot-fastvarebehandling",
+  "settings.tabFirmware": "UniBoot-fastvarebehandling",
   "settings.tab_qemu": "QEMU-simuleringsmiljø",
   "settings.tab_about": "Om UniBoot Desktop"
 };

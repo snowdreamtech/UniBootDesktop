@@ -257,7 +257,7 @@ export const daDk: TranslationDict = {
   "fs.ext4": "ext4 (Linux Native)",
   "disk.title": "Vælg Mål-USB-drev",
   "header.subtitle": "Oprettelse af bootbart drev og QEMU-test",
-  "settings.tab_firmware": "UniBoot-firmwarestyring",
+  "settings.tabFirmware": "UniBoot-firmwarestyring",
   "settings.tab_qemu": "QEMU-simuleringsmiljø",
   "settings.tab_about": "Om UniBoot Desktop"
 };
