@@ -63,21 +63,29 @@
             <div class="grid-form">
               <div class="form-group">
                 <label class="form-label">默认部署模式 (Default Mode):</label>
-                <select v-model="defaultMode" class="form-select">
-                  <option value="cloud">Mode B (云端纯净在线模式 - 推荐)</option>
-                  <option value="hybrid">Mode A (本地/混合模式)</option>
-                </select>
+                <CustomSelect
+                  v-model="defaultMode"
+                  :options="[
+                    { value: 'cloud', label: 'Mode B (云端纯净在线模式 - 推荐)' },
+                    { value: 'hybrid', label: 'Mode A (本地/混合模式)' }
+                  ]"
+                  @change="saveChanges"
+                />
                 <span class="field-hint">选择新建部署任务时的初始化默认模式</span>
               </div>
 
               <div class="form-group">
                 <label class="form-label">默认目标文件系统 (File System):</label>
-                <select v-model="defaultFs" class="form-select">
-                  <option value="exFAT">exFAT (跨平台推荐)</option>
-                  <option value="NTFS">NTFS (Windows 推荐)</option>
-                  <option value="FAT32">FAT32 (大文件受限 4GB)</option>
-                  <option value="ext4">ext4 (Linux 原生)</option>
-                </select>
+                <CustomSelect
+                  v-model="defaultFs"
+                  :options="[
+                    { value: 'exFAT', label: 'exFAT (跨平台推荐)' },
+                    { value: 'NTFS', label: 'NTFS (Windows 推荐)' },
+                    { value: 'FAT32', label: 'FAT32 (大文件受限 4GB)' },
+                    { value: 'ext4', label: 'ext4 (Linux 原生)' }
+                  ]"
+                  @change="saveChanges"
+                />
                 <span class="field-hint">格式化 USB 数据分区的默认系统类型</span>
               </div>
 
@@ -85,11 +93,11 @@
                 <label class="form-label">应用程序更新检测 (App Updates):</label>
                 <div class="radio-group">
                   <label class="radio-label">
-                    <input type="radio" :value="true" v-model="autoCheckUpdate" />
+                    <input type="radio" :value="true" v-model="autoCheckUpdate" @change="saveChanges" />
                     <span>启动时自动检测云端新版本</span>
                   </label>
                   <label class="radio-label">
-                    <input type="radio" :value="false" v-model="autoCheckUpdate" />
+                    <input type="radio" :value="false" v-model="autoCheckUpdate" @change="saveChanges" />
                     <span>仅手动检测</span>
                   </label>
                 </div>
@@ -97,10 +105,14 @@
 
               <div class="form-group">
                 <label class="form-label">界面主题与视觉风格 (Theme):</label>
-                <select v-model="appTheme" class="form-select">
-                  <option value="dark">🌙 深色极客风 (Dark Cyber Glow)</option>
-                  <option value="light">☀️ 浅色明亮风 (Light Crisp)</option>
-                </select>
+                <CustomSelect
+                  v-model="appTheme"
+                  :options="[
+                    { value: 'dark', label: '🌙 深色极客风 (Dark Cyber Glow)' },
+                    { value: 'light', label: '☀️ 浅色明亮风 (Light Crisp)' }
+                  ]"
+                  @change="saveChanges"
+                />
               </div>
             </div>
           </div>
@@ -308,6 +320,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
+import CustomSelect from './CustomSelect.vue';
 
 interface FirmwareMapping {
   releaseName: string;

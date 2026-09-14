@@ -121,12 +121,15 @@
         <!-- Filesystem Selection for Mode A & Mode B (Hidden when upgrading an existing Ventoy/UniBoot drive) -->
         <div v-if="!isNonDestructive" class="fs-selector">
           <label class="fs-label">主数据区格式 (File System):</label>
-          <select v-model="selectedFsType" class="fs-select">
-            <option value="exFAT">exFAT (默认推荐 • 支持 >4GB 单文件大 ISO)</option>
-            <option value="NTFS">NTFS (Windows 极速原生格式)</option>
-            <option value="FAT32">FAT32 (老旧机器全兼容 • 4GB单文件限制)</option>
-            <option value="ext4">ext4 (Linux 专属文件系统)</option>
-          </select>
+          <CustomSelect
+            v-model="selectedFsType"
+            :options="[
+              { value: 'exFAT', label: 'exFAT (默认推荐 • 支持 >4GB 单文件大 ISO)' },
+              { value: 'NTFS', label: 'NTFS (Windows 极速原生格式)' },
+              { value: 'FAT32', label: 'FAT32 (老旧机器全兼容 • 4GB单文件限制)' },
+              { value: 'ext4', label: 'ext4 (Linux 专属文件系统)' }
+            ]"
+          />
         </div>
 
         <!-- Ventoy CLI Pre-flight Requirement Notice Banner (Mode A) -->
@@ -310,6 +313,7 @@ import UsbInspectorModal from './components/UsbInspectorModal.vue';
 import DeployConfirmModal from './components/DeployConfirmModal.vue';
 import SettingsModal from './components/SettingsModal.vue';
 import VentoyAlertModal from './components/VentoyAlertModal.vue';
+import CustomSelect from './components/CustomSelect.vue';
 
 interface DiskInfo {
   device: string;
