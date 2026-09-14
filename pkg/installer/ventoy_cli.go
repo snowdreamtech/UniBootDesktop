@@ -184,14 +184,48 @@ func FormatDiskWithVentoyCli(ctx context.Context, ventoyPath string, targetDisk 
 		return "", fmt.Errorf("target disk validation failed: %w", err)
 	}
 
-	// Command flags: -i (install), -g (GPT partition scheme for UEFI) or default MBR
-	cmd := exec.CommandContext(ctx, val.ExecutablePath, "-i", "-g", targetDisk)
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		// Fallback command without -g
-		cmdFallback := exec.CommandContext(ctx, val.ExecutablePath, "-i", targetDisk)
-		if fbOut, fbErr := cmdFallback.CombinedOutput(); fbErr != nil {
-			return "", fmt.Errorf("Ventoy CLI execution failed (%v): %s (fallback failed: %s)", err, string(output), string(fbOut))
+	ventoyDir := filepath.Dir(val.ExecutablePath)
+
+	switch runtime.GOOS {
+	case "windows":
+		diskArg := targetDisk
+		if !strings.HasPrefix(strings.ToLower(diskArg), "/vtoy:") && !strings.HasPrefix(strings.ToLower(diskArg), "physicaldrive") {
+			diskArg = "/VTOY:" + targetDisk
+		}
+		cmd := exec.CommandContext(ctx, val.ExecutablePath, "/I", "/GPT", diskArg)
+		cmd.Dir = ventoyDir
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			// Fallback try standard flags: -i -g targetDisk
+			cmdFallback := exec.CommandContext(ctx, val.ExecutablePath, "-i", "-g", targetDisk)
+			cmdFallback.Dir = ventoyDir
+			if fbOut, fbErr := cmdFallback.CombinedOutput(); fbErr != nil {
+				return "", fmt.Errorf("Ventoy CLI execution failed (%v): %s (fallback failed: %s)", err, string(output), string(fbOut))
+			}
+		}
+
+	case "linux":
+		cmd := exec.CommandContext(ctx, val.ExecutablePath, "-i", "-g", "-L", "UNIBOOT", targetDisk)
+		cmd.Dir = ventoyDir
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			cmdFallback := exec.CommandContext(ctx, val.ExecutablePath, "-i", "-g", targetDisk)
+			cmdFallback.Dir = ventoyDir
+			if fbOut, fbErr := cmdFallback.CombinedOutput(); fbErr != nil {
+				cmdFallback2 := exec.CommandContext(ctx, val.ExecutablePath, "-i", targetDisk)
+				cmdFallback2.Dir = ventoyDir
+				if fbOut2, fbErr2 := cmdFallback2.CombinedOutput(); fbErr2 != nil {
+					return "", fmt.Errorf("Ventoy CLI execution failed (%v): %s (fallback failed: %s)", err, string(output), string(fbOut2))
+				}
+			}
+		}
+
+	default:
+		cmd := exec.CommandContext(ctx, val.ExecutablePath, "-i", "-g", targetDisk)
+		cmd.Dir = ventoyDir
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			return "", fmt.Errorf("Ventoy CLI execution failed (%v): %s", err, string(output))
 		}
 	}
 
