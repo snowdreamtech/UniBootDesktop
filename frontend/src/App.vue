@@ -213,9 +213,9 @@
           <button 
             class="btn-primary deploy-btn" 
             :class="{ 'safe-btn': isNonDestructive, 'danger-disabled': activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid }"
-            :disabled="isDeployDisabled || isDeploying"
+            :disabled="isDeploying"
             :title="deployDisabledReason"
-            @click="openDeployConfirm"
+            @click="handleDeployBtnClick"
           >
             {{ isDeploying ? '正在写入引导固件...' : (isNonDestructive ? '🛡️ 开始无损更新 (保留数据)' : (selectionMode === 'batch' ? `开始批量制作 (${selectedDevices.size} 块 U 盘)` : '开始制作启动盘')) }}
           </button>
@@ -287,6 +287,17 @@
       @close="isSettingsOpen = false"
       @save="onSaveSettings"
     />
+
+    <!-- Ventoy Missing Alert Modal -->
+    <VentoyAlertModal
+      :isOpen="isVentoyAlertOpen"
+      :title="ventoyAlertTitle"
+      :message="ventoyAlertMessage"
+      :actionType="ventoyAlertAction"
+      @close="isVentoyAlertOpen = false"
+      @action="handleVentoyAlertAction"
+      @switch-b="handleVentoyAlertSwitchB"
+    />
   </div>
 </template>
 
@@ -298,6 +309,7 @@ import IconPickerModal, { DiskIconType } from './components/IconPickerModal.vue'
 import UsbInspectorModal from './components/UsbInspectorModal.vue';
 import DeployConfirmModal from './components/DeployConfirmModal.vue';
 import SettingsModal from './components/SettingsModal.vue';
+import VentoyAlertModal from './components/VentoyAlertModal.vue';
 
 interface DiskInfo {
   device: string;
@@ -371,6 +383,29 @@ const targetInspectorDisk = ref<DiskInfo | null>(null);
 const isDeployConfirmOpen = ref(false);
 const isSettingsOpen = ref(false);
 const settingsInitialTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
+
+const isVentoyAlertOpen = ref(false);
+const ventoyAlertTitle = ref('');
+const ventoyAlertMessage = ref('');
+const ventoyAlertAction = ref<'open_settings' | 'switch_b'>('open_settings');
+
+function openVentoyAlert(title: string, message: string, action: 'open_settings' | 'switch_b') {
+  ventoyAlertTitle.value = title;
+  ventoyAlertMessage.value = message;
+  ventoyAlertAction.value = action;
+  isVentoyAlertOpen.value = true;
+}
+
+function handleVentoyAlertAction() {
+  isVentoyAlertOpen.value = false;
+  openSettings('ventoy');
+}
+
+function handleVentoyAlertSwitchB() {
+  isVentoyAlertOpen.value = false;
+  activeMode.value = 'cloud';
+  showToast('已切换至原生支持的【模式 B (1秒极速云引导盘)】！', 'success');
+}
 
 function openSettings(tab: 'general' | 'network' | 'uniboot' | 'ventoy' = 'general') {
   settingsInitialTab.value = tab;
@@ -554,22 +589,49 @@ async function onSaveSettings(payload: any) {
   }
 }
 
-async function openDeployConfirm() {
-  let targets: string[] = [];
-  if (selectionMode.value === 'single') {
-    if (!selectedDisk.value) return;
-    targets = [selectedDisk.value.device];
-  } else {
-    targets = Array.from(selectedDevices.value);
-    if (targets.length === 0) return;
+async function handleDeployBtnClick() {
+  if (isDeploying.value) return;
+
+  if (selectionMode.value === 'single' && !selectedDisk.value) {
+    showToast('⚠️ 请先在左侧磁盘列表中选择目标 U 盘', 'warning');
+    return;
+  }
+  if (selectionMode.value === 'batch' && selectedDevices.value.size === 0) {
+    showToast('⚠️ 请先勾选要批量制作的目标 U 盘', 'warning');
+    return;
   }
 
   if (activeMode.value === 'hybrid' && !isNonDestructive.value) {
     await checkVentoyStatus();
     if (!ventoyStatus.value.valid) {
-      showToast(ventoyStatus.value.message || '无法制作 Mode A：未检测到有效的 Ventoy CLI 程序', 'error');
+      if (isMacOs.value) {
+        openVentoyAlert(
+          'macOS 暂不支持 Ventoy CLI 全新格式化',
+          '官方 Ventoy 暂不支持在 macOS 上直接运行格式化程序。制作【模式 A】全新盘需依赖 Ventoy CLI；建议直接选择原生支持的【模式 B (1秒极速云引导盘)】！如需使用模式 A，请先在 Win/Linux 上完成 Ventoy 盘初始化后插入 macOS 无损升级。',
+          'switch_b'
+        );
+      } else {
+        openVentoyAlert(
+          '未检测到 Ventoy CLI 执行文件',
+          ventoyStatus.value.message || '全新制作【模式 A (Ventoy 双模盘)】需依赖本地 Ventoy CLI 程序 (Ventoy2Disk)。请先前往设置配置 Ventoy 可执行文件路径，或直接一键切换至不需要 Ventoy CLI 的【模式 B (1秒极速云引导)】！',
+          'open_settings'
+        );
+      }
       return;
     }
+  }
+
+  await openDeployConfirm();
+}
+
+async function openDeployConfirm() {
+  let targets: string[] = [];
+  if (selectionMode.value === 'single') {
+    if (!selectedDisk.value) return;
+    targets = [selectedDisk.device];
+  } else {
+    targets = Array.from(selectedDevices.value);
+    if (targets.length === 0) return;
   }
 
   pendingTargets.value = targets;
