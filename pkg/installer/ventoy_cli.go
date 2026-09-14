@@ -13,6 +13,7 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/snowdreamtech/unigodesktop/pkg/config"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 )
 
@@ -171,6 +172,18 @@ func extractVentoyVersion(text string) string {
 
 // FormatDiskWithVentoyCli uses the verified official Ventoy CLI binary to format and partition a blank USB drive.
 func FormatDiskWithVentoyCli(ctx context.Context, ventoyPath string, targetDisk string, fsType string) (string, error) {
+	return FormatDiskWithVentoyCliWithConfig(ctx, ventoyPath, targetDisk, fsType, nil)
+}
+
+// FormatDiskWithVentoyCliWithConfig executes Ventoy CLI formatting with user parameters from AppConfig.
+func FormatDiskWithVentoyCliWithConfig(ctx context.Context, ventoyPath string, targetDisk string, fsType string, cfg *config.AppConfig) (string, error) {
+	if cfg == nil {
+		cfg, _ = config.Load()
+		if cfg == nil {
+			cfg = config.GetDefaultConfig()
+		}
+	}
+
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
 		return FormatDiskModeA(ctx, targetDisk, fsType)
 	}
@@ -186,18 +199,40 @@ func FormatDiskWithVentoyCli(ctx context.Context, ventoyPath string, targetDisk 
 
 	ventoyDir := filepath.Dir(val.ExecutablePath)
 
+	partFlag := "-g"
+	winPartFlag := "/GPT"
+	if strings.EqualFold(cfg.VentoyPartitionStyle, "MBR") {
+		partFlag = "-m"
+		winPartFlag = "/MBR"
+	}
+
+	baseArgs := []string{"-i", partFlag}
+	winBaseArgs := []string{"/I", winPartFlag}
+
+	if cfg.VentoySecureBoot {
+		baseArgs = append(baseArgs, "-s")
+		winBaseArgs = append(winBaseArgs, "/s")
+	}
+
+	if cfg.VentoyReserveSpace > 0 {
+		baseArgs = append(baseArgs, "-r", fmt.Sprintf("%d", cfg.VentoyReserveSpace))
+		winBaseArgs = append(winBaseArgs, fmt.Sprintf("/r:%d", cfg.VentoyReserveSpace))
+	}
+
 	switch runtime.GOOS {
 	case "windows":
 		diskArg := targetDisk
 		if !strings.HasPrefix(strings.ToLower(diskArg), "/vtoy:") && !strings.HasPrefix(strings.ToLower(diskArg), "physicaldrive") {
 			diskArg = "/VTOY:" + targetDisk
 		}
-		cmd := exec.CommandContext(ctx, val.ExecutablePath, "/I", "/GPT", diskArg)
+		winCmdArgs := append(winBaseArgs, diskArg)
+		cmd := exec.CommandContext(ctx, val.ExecutablePath, winCmdArgs...)
 		cmd.Dir = ventoyDir
 		output, err := cmd.CombinedOutput()
 		if err != nil {
-			// Fallback try standard flags: -i -g targetDisk
-			cmdFallback := exec.CommandContext(ctx, val.ExecutablePath, "-i", "-g", targetDisk)
+			// Fallback try standard flags
+			fallbackArgs := append(baseArgs, targetDisk)
+			cmdFallback := exec.CommandContext(ctx, val.ExecutablePath, fallbackArgs...)
 			cmdFallback.Dir = ventoyDir
 			if fbOut, fbErr := cmdFallback.CombinedOutput(); fbErr != nil {
 				return "", fmt.Errorf("Ventoy CLI execution failed (%v): %s (fallback failed: %s)", err, string(output), string(fbOut))
@@ -205,11 +240,13 @@ func FormatDiskWithVentoyCli(ctx context.Context, ventoyPath string, targetDisk 
 		}
 
 	case "linux":
-		cmd := exec.CommandContext(ctx, val.ExecutablePath, "-i", "-g", "-L", "UNIBOOT", targetDisk)
+		linuxArgs := append(baseArgs, "-L", "UNIBOOT", targetDisk)
+		cmd := exec.CommandContext(ctx, val.ExecutablePath, linuxArgs...)
 		cmd.Dir = ventoyDir
 		output, err := cmd.CombinedOutput()
 		if err != nil {
-			cmdFallback := exec.CommandContext(ctx, val.ExecutablePath, "-i", "-g", targetDisk)
+			fallbackArgs := append(baseArgs, targetDisk)
+			cmdFallback := exec.CommandContext(ctx, val.ExecutablePath, fallbackArgs...)
 			cmdFallback.Dir = ventoyDir
 			if _, fbErr := cmdFallback.CombinedOutput(); fbErr != nil {
 				cmdFallback2 := exec.CommandContext(ctx, val.ExecutablePath, "-i", targetDisk)
@@ -221,7 +258,8 @@ func FormatDiskWithVentoyCli(ctx context.Context, ventoyPath string, targetDisk 
 		}
 
 	default:
-		cmd := exec.CommandContext(ctx, val.ExecutablePath, "-i", "-g", targetDisk)
+		defaultArgs := append(baseArgs, targetDisk)
+		cmd := exec.CommandContext(ctx, val.ExecutablePath, defaultArgs...)
 		cmd.Dir = ventoyDir
 		output, err := cmd.CombinedOutput()
 		if err != nil {

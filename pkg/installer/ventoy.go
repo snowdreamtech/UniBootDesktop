@@ -10,6 +10,8 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+
+	"github.com/snowdreamtech/unigodesktop/pkg/config"
 )
 
 //go:embed themes/*
@@ -20,6 +22,7 @@ type VentoyThemeConfig struct {
 	File    string `json:"file"`
 	Gfxmode string `json:"gfxmode,omitempty"`
 	Display string `json:"display,omitempty"`
+	Timeout int    `json:"timeout,omitempty"`
 }
 
 // VentoyAliasConfig defines image_alias items in ventoy.json matching Ventoy plugin spec.
@@ -36,19 +39,52 @@ type VentoyGlobalConfig struct {
 }
 
 // WriteVentoyConfig generates the ventoy/ventoy.json, ventoy/ventoy_grub.cfg, and extracts theme assets
-// in the specified target volume mount directory, referencing UniBoot specifications.
+// in the specified target volume mount directory, referencing UniBoot specifications and AppConfig.
 func WriteVentoyConfig(mountDir string) error {
+	return WriteVentoyConfigWithAppConfig(mountDir, nil)
+}
+
+// WriteVentoyConfigWithAppConfig generates ventoy.json with custom options from AppConfig.
+func WriteVentoyConfigWithAppConfig(mountDir string, appCfg *config.AppConfig) error {
+	if appCfg == nil {
+		appCfg, _ = config.Load()
+		if appCfg == nil {
+			appCfg = config.GetDefaultConfig()
+		}
+	}
+
 	ventoyDir := filepath.Join(mountDir, "ventoy")
 	if err := os.MkdirAll(ventoyDir, 0755); err != nil {
 		return fmt.Errorf("failed to create ventoy directory: %w", err)
 	}
 
-	// 1. Build ventoy.json matching official UniBoot specification
+	controls := []map[string]interface{}{
+		{"VTOY_DEFAULT_IMAGE": "/iso/UniBoot.iso"},
+		{"VTOY_MENU_LANGUAGE": "zh_CN"},
+		{"VTOY_FILE_FLT_EFI": "1"},
+		{"VTOY_FILT_DOT_UNDERSCORE_FILE": "1"},
+		{"VTOY_SORT_CASE_SENSITIVE": "0"},
+	}
+
+	if appCfg.VentoyWin11Bypass {
+		controls = append(controls,
+			map[string]interface{}{"VTOY_WIN11_BYPASS_CHECK": "1"},
+			map[string]interface{}{"VTOY_WIN11_BYPASS_NRO": "1"},
+		)
+	}
+
+	timeoutVal := appCfg.VentoyMenuTimeout
+	if timeoutVal <= 0 {
+		timeoutVal = 10
+	}
+
+	// 1. Build ventoy.json matching official UniBoot specification & user config
 	cfg := VentoyGlobalConfig{
 		Theme: &VentoyThemeConfig{
 			File:    "/ventoy/themes/uniboot/theme.txt",
 			Gfxmode: "1280x800",
 			Display: "full",
+			Timeout: timeoutVal,
 		},
 		ImageAlias: []VentoyAliasConfig{
 			{
@@ -56,15 +92,7 @@ func WriteVentoyConfig(mountDir string) error {
 				Alias: "⚡ UniBoot 统一网络与本地安装系统",
 			},
 		},
-		Control: []map[string]interface{}{
-			{"VTOY_DEFAULT_IMAGE": "/iso/UniBoot.iso"},
-			{"VTOY_MENU_LANGUAGE": "zh_CN"},
-			{"VTOY_FILE_FLT_EFI": "1"},
-			{"VTOY_FILT_DOT_UNDERSCORE_FILE": "1"},
-			{"VTOY_SORT_CASE_SENSITIVE": "0"},
-			{"VTOY_WIN11_BYPASS_CHECK": "1"},
-			{"VTOY_WIN11_BYPASS_NRO": "1"},
-		},
+		Control: controls,
 	}
 
 	data, err := json.MarshalIndent(cfg, "", "    ")

@@ -578,6 +578,12 @@ async function onSaveSettings(payload: any) {
         proxyPort: Number(payload.proxyPort) || 0,
         proxyUser: payload.proxyUser || '',
         proxyPassword: payload.proxyPassword || '',
+        ventoyPath: payload.ventoyPath || '',
+        ventoySecureBoot: payload.ventoySecureBoot !== false,
+        ventoyPartitionStyle: payload.ventoyPartitionStyle || 'GPT',
+        ventoyReserveSpace: Number(payload.ventoyReserveSpace) || 0,
+        ventoyWin11Bypass: payload.ventoyWin11Bypass !== false,
+        ventoyMenuTimeout: Number(payload.ventoyMenuTimeout) || 10,
       } : {
         mode: activeMode.value,
         autoCheckUpdate: true,

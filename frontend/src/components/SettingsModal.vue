@@ -311,6 +311,90 @@
                 自动匹配可执行命令: <code>{{ ventoyValidation.executablePath }}</code>
               </div>
             </div>
+
+            <!-- Ventoy Formats & CLI Flags Group -->
+            <div class="settings-sub-card">
+              <h5 class="sub-card-title">🛡️ 格式化与命令行初始化参数 (CLI Formatting Flags)</h5>
+              
+              <div class="grid-form">
+                <div class="form-group">
+                  <label class="form-label">安全启动签名支持 (Secure Boot -s):</label>
+                  <div class="radio-group horizontal">
+                    <label class="radio-label">
+                      <input type="radio" :value="true" v-model="ventoySecureBoot" @change="triggerAutoSave" />
+                      <span>开启 (-s 注入证书)</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" :value="false" v-model="ventoySecureBoot" @change="triggerAutoSave" />
+                      <span>关闭</span>
+                    </label>
+                  </div>
+                  <span class="field-hint">允许 U 盘在已开启 Secure Boot 的品牌机/Surface 上顺利引导</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">分区表架构 (Partition Style):</label>
+                  <CustomSelect
+                    v-model="ventoyPartitionStyle"
+                    :options="[
+                      { value: 'GPT', label: 'GPT (现代电脑推荐 • UEFI)' },
+                      { value: 'MBR', label: 'MBR (老旧机器兼容 • Legacy/BIOS)' }
+                    ]"
+                    @change="triggerAutoSave"
+                  />
+                  <span class="field-hint">选 GPT 适配 UEFI 启动，选 MBR 兼顾老款 BIOS 主板</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">末尾预留未分配空间 (MB):</label>
+                  <input
+                    v-model.number="ventoyReserveSpace"
+                    type="number"
+                    min="0"
+                    class="form-input"
+                    placeholder="默认 0 (不预留)"
+                    @input="triggerAutoSave"
+                  />
+                  <span class="field-hint">在 U 盘末端保留未分配区，可用于后续自行创建 Swap / 加密分区</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ventoy Engine & Plugins Group -->
+            <div class="settings-sub-card">
+              <h5 class="sub-card-title">⚡ Ventoy 引擎与插件配置 (ventoy.json)</h5>
+              
+              <div class="grid-form">
+                <div class="form-group">
+                  <label class="form-label">Windows 11 硬件限制绕过补丁:</label>
+                  <div class="radio-group horizontal">
+                    <label class="radio-label">
+                      <input type="radio" :value="true" v-model="ventoyWin11Bypass" @change="triggerAutoSave" />
+                      <span>自动注入 TPM 2.0 / CPU / RAM 绕过补丁</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" :value="false" v-model="ventoyWin11Bypass" @change="triggerAutoSave" />
+                      <span>禁用补丁</span>
+                    </label>
+                  </div>
+                  <span class="field-hint">老电脑可无障碍安装官方 Windows 11 镜像</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">菜单默认启动倒计时 (秒):</label>
+                  <input
+                    v-model.number="ventoyMenuTimeout"
+                    type="number"
+                    min="1"
+                    max="60"
+                    class="form-input"
+                    placeholder="默认 10 秒"
+                    @input="triggerAutoSave"
+                  />
+                  <span class="field-hint">Ventoy 开机主菜单无按键操作时的默认超时自动启动时间</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -348,6 +432,11 @@ const emit = defineEmits<{
     autoCheckUpdate: boolean;
     theme: string;
     ventoyPath: string;
+    ventoySecureBoot: boolean;
+    ventoyPartitionStyle: string;
+    ventoyReserveSpace: number;
+    ventoyWin11Bypass: boolean;
+    ventoyMenuTimeout: number;
   }): void;
 }>();
 
@@ -378,8 +467,13 @@ const proxyPort = ref<number | ''>(1080);
 const proxyUser = ref('');
 const proxyPassword = ref('');
 
-// Ventoy CLI state
+// Ventoy CLI & Options state
 const ventoyPath = ref('');
+const ventoySecureBoot = ref(true);
+const ventoyPartitionStyle = ref('GPT');
+const ventoyReserveSpace = ref(0);
+const ventoyWin11Bypass = ref(true);
+const ventoyMenuTimeout = ref(10);
 const isValidatingVentoy = ref(false);
 const ventoyValidation = ref<{ valid: boolean; version: string; message: string; executablePath: string } | null>(null);
 
@@ -443,6 +537,11 @@ function triggerAutoSave() {
       autoCheckUpdate: autoCheckUpdate.value,
       theme: appTheme.value,
       ventoyPath: ventoyPath.value.trim(),
+      ventoySecureBoot: ventoySecureBoot.value,
+      ventoyPartitionStyle: ventoyPartitionStyle.value,
+      ventoyReserveSpace: Number(ventoyReserveSpace.value) || 0,
+      ventoyWin11Bypass: ventoyWin11Bypass.value,
+      ventoyMenuTimeout: Number(ventoyMenuTimeout.value) || 10,
     };
     emit('save', payload);
     if (window.go && window.go.main && window.go.main.App) {
@@ -472,6 +571,11 @@ watch(
     proxyUser,
     proxyPassword,
     ventoyPath,
+    ventoySecureBoot,
+    ventoyPartitionStyle,
+    ventoyReserveSpace,
+    ventoyWin11Bypass,
+    ventoyMenuTimeout,
   ],
   () => {
     triggerAutoSave();
@@ -527,6 +631,11 @@ async function loadFullConfig() {
         proxyUser.value = cfg.proxyUser || '';
         proxyPassword.value = cfg.proxyPassword || '';
         ventoyPath.value = cfg.ventoyPath || '';
+        ventoySecureBoot.value = cfg.ventoySecureBoot !== false;
+        ventoyPartitionStyle.value = cfg.ventoyPartitionStyle || 'GPT';
+        ventoyReserveSpace.value = cfg.ventoyReserveSpace || 0;
+        ventoyWin11Bypass.value = cfg.ventoyWin11Bypass !== false;
+        ventoyMenuTimeout.value = cfg.ventoyMenuTimeout || 10;
         checkVentoyCli();
       }
     } catch (e) {
@@ -1201,5 +1310,31 @@ onMounted(() => {
   background: rgba(0, 0, 0, 0.2);
   padding: 0.1rem 0.4rem;
   border-radius: 4px;
+}
+
+.settings-sub-card {
+  background: rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.1rem;
+  margin-top: 1.25rem;
+}
+
+[data-theme="light"] .settings-sub-card {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.sub-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.85rem;
+}
+
+.radio-group.horizontal {
+  flex-direction: row;
+  gap: 1.25rem;
+  margin-top: 0.35rem;
 }
 </style>

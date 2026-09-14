@@ -24,23 +24,33 @@ type AppConfig struct {
 	ProxyPort       int    `json:"proxyPort" toml:"proxyPort"`               // Network proxy server port
 	ProxyUser       string `json:"proxyUser" toml:"proxyUser"`               // Network proxy authentication username
 	ProxyPassword   string `json:"proxyPassword" toml:"proxyPassword"`       // Network proxy authentication password
-	VentoyPath      string `json:"ventoyPath" toml:"ventoyPath"`             // Path to official Ventoy CLI directory / executable
+	VentoyPath           string `json:"ventoyPath" toml:"ventoyPath"`                     // Path to official Ventoy CLI directory / executable
+	VentoySecureBoot     bool   `json:"ventoySecureBoot" toml:"ventoySecureBoot"`         // Enable Ventoy Secure Boot support (-s)
+	VentoyPartitionStyle string `json:"ventoyPartitionStyle" toml:"ventoyPartitionStyle"` // Ventoy partition style: GPT or MBR
+	VentoyReserveSpace   int    `json:"ventoyReserveSpace" toml:"ventoyReserveSpace"`     // Reserved space at end of disk (MB)
+	VentoyWin11Bypass    bool   `json:"ventoyWin11Bypass" toml:"ventoyWin11Bypass"`       // Auto inject Win11 TPM/CPU bypass patch
+	VentoyMenuTimeout    int    `json:"ventoyMenuTimeout" toml:"ventoyMenuTimeout"`       // Auto boot timeout (seconds)
 }
 
 // GetDefaultConfig returns the default application configuration.
 func GetDefaultConfig() *AppConfig {
 	return &AppConfig{
-		Mode:            "cloud", // Mode B Cloud Pure Mode by default
-		AutoCheckUpdate: true,
-		Theme:           "dark",
-		GithubProxy:     "", // Default to empty (Direct connection, no hardcoded proxy preset)
-		FileSystem:      "exFAT",
-		ProxyProtocol:   "direct",
-		ProxyHost:       "",
-		ProxyPort:       0,
-		ProxyUser:       "",
-		ProxyPassword:   "",
-		VentoyPath:      "",
+		Mode:                 "cloud", // Mode B Cloud Pure Mode by default
+		AutoCheckUpdate:      true,
+		Theme:                "dark",
+		GithubProxy:          "", // Default to empty (Direct connection, no hardcoded proxy preset)
+		FileSystem:           "exFAT",
+		ProxyProtocol:        "direct",
+		ProxyHost:            "",
+		ProxyPort:            0,
+		ProxyUser:            "",
+		ProxyPassword:        "",
+		VentoyPath:           "",
+		VentoySecureBoot:     true,
+		VentoyPartitionStyle: "GPT",
+		VentoyReserveSpace:   0,
+		VentoyWin11Bypass:    true,
+		VentoyMenuTimeout:    10,
 	}
 }
 
