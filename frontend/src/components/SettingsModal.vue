@@ -69,7 +69,7 @@
                     { value: 'cloud', label: 'Mode B (云端纯净在线模式 - 推荐)' },
                     { value: 'hybrid', label: 'Mode A (本地/混合模式)' }
                   ]"
-                  @change="saveChanges"
+                  @change="triggerAutoSave"
                 />
                 <span class="field-hint">选择新建部署任务时的初始化默认模式</span>
               </div>
@@ -84,7 +84,7 @@
                     { value: 'FAT32', label: 'FAT32 (大文件受限 4GB)' },
                     { value: 'ext4', label: 'ext4 (Linux 原生)' }
                   ]"
-                  @change="saveChanges"
+                  @change="triggerAutoSave"
                 />
                 <span class="field-hint">格式化 USB 数据分区的默认系统类型</span>
               </div>
@@ -93,11 +93,11 @@
                 <label class="form-label">应用程序更新检测 (App Updates):</label>
                 <div class="radio-group">
                   <label class="radio-label">
-                    <input type="radio" :value="true" v-model="autoCheckUpdate" @change="saveChanges" />
+                    <input type="radio" :value="true" v-model="autoCheckUpdate" @change="triggerAutoSave" />
                     <span>启动时自动检测云端新版本</span>
                   </label>
                   <label class="radio-label">
-                    <input type="radio" :value="false" v-model="autoCheckUpdate" @change="saveChanges" />
+                    <input type="radio" :value="false" v-model="autoCheckUpdate" @change="triggerAutoSave" />
                     <span>仅手动检测</span>
                   </label>
                 </div>
@@ -111,7 +111,7 @@
                     { value: 'dark', label: '🌙 深色极客风 (Dark Cyber Glow)' },
                     { value: 'light', label: '☀️ 浅色明亮风 (Light Crisp)' }
                   ]"
-                  @change="saveChanges"
+                  @change="triggerAutoSave"
                 />
               </div>
             </div>
