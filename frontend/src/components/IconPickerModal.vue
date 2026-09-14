@@ -5,7 +5,7 @@
         <h3>🎨 {{ t('icon_picker.title') }}</h3>
         <button class="close-btn" @click="close">✕</button>
       </div>
-      <p class="modal-desc">为目标设备 <strong>{{ diskName }}</strong> 挑选满意的形象外观：</p>
+      <p class="modal-desc">{{ t('icon_picker.subtitle', { name: diskName }) }}</p>
 
       <div class="modal-scroll-body">
         <div class="icon-grid">
@@ -119,7 +119,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+import { computed } from 'vue';
 import { t } from '../i18n';
 export type DiskIconType = 'usb' | 'usb2' | 'usb3_1' | 'usb3_2' | 'usb4' | 'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom';
 
@@ -131,20 +131,20 @@ defineProps<{
 
 const emit = defineEmits(['close', 'select-icon', 'reset-icon']);
 
-const iconOptions: Array<{ id: DiskIconType; label: string; desc: string }> = [
-  { id: 'usb', label: 'USB 3.0 (5 Gbps)', desc: '经典 SuperSpeed 5 Gbps 盘' },
-  { id: 'usb2', label: 'USB 2.0 (480 Mbps)', desc: '经典 High-Speed 基础盘' },
-  { id: 'usb3_1', label: 'USB 3.1 (10 Gbps)', desc: 'SuperSpeed+ 10 Gbps 高速盘' },
-  { id: 'usb3_2', label: 'USB 3.2 (20 Gbps)', desc: 'Gen 2x2 20 Gbps 极速双通道' },
-  { id: 'usb4', label: 'USB4 / 雷电4 (40 Gbps)', desc: '旗舰 40 Gbps 协议盘' },
-  { id: 'boot', label: 'BOOT 引导系统盘', desc: '带有闪电标志的引导盘' },
-  { id: 'ssd', label: '移动固态硬盘 (PSSD)', desc: '高速拉丝铝盒固态盘' },
-  { id: 'typec', label: 'Type-C 双头 U 盘', desc: '适配手机与 Mac 的 Type-C 盘' },
-  { id: 'secure', label: '加密安全 U 盘', desc: '带物理密码锁的加密硬件' },
-  { id: 'reader', label: 'SD / TF 卡读卡器', desc: '插入式多功能内存读卡器' },
-  { id: 'hdd', label: '移动机械硬盘 (HDD)', desc: '2.5 寸高容量机械移动盘' },
-  { id: 'key', label: 'U2F / 安全钥匙盘', desc: '物理密钥 FIDO2 安全盘' },
-];
+const iconOptions = computed<Array<{ id: DiskIconType; label: string; desc: string }>>(() => [
+  { id: 'usb', label: 'USB 3.0 (5 Gbps)', desc: t('icon_picker.usb_desc') },
+  { id: 'usb2', label: 'USB 2.0 (480 Mbps)', desc: t('icon_picker.usb2_desc') },
+  { id: 'usb3_1', label: 'USB 3.1 (10 Gbps)', desc: t('icon_picker.usb3_1_desc') },
+  { id: 'usb3_2', label: 'USB 3.2 (20 Gbps)', desc: t('icon_picker.usb3_2_desc') },
+  { id: 'usb4', label: 'USB4 / Thunderbolt 4 (40 Gbps)', desc: t('icon_picker.usb4_desc') },
+  { id: 'boot', label: 'BOOT Drive', desc: t('icon_picker.boot_desc') },
+  { id: 'ssd', label: 'PSSD', desc: t('icon_picker.ssd_desc') },
+  { id: 'typec', label: 'Type-C Drive', desc: t('icon_picker.typec_desc') },
+  { id: 'secure', label: 'Secure Encrypted USB', desc: t('icon_picker.secure_desc') },
+  { id: 'reader', label: 'Card Reader (SD / MicroSD)', desc: t('icon_picker.reader_desc') },
+  { id: 'hdd', label: 'Mechanical HDD', desc: t('icon_picker.hdd_desc') },
+  { id: 'key', label: 'FIDO2 Security Key', desc: t('icon_picker.key_desc') },
+]);
 
 function close() {
   emit('close');

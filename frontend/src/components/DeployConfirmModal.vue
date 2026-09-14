@@ -5,7 +5,7 @@
         <div class="header-title">
           <span class="warning-icon">{{ isAllVentoy ? '🛡️' : (isMixed ? '⚡' : '⚠️') }}</span>
           <h3>
-            {{ isAllVentoy ? '无损更新确认：无需格式化磁盘' : (isMixed ? '⚡ 智能混合制作确认' : '格式化确认：即将初始化目标磁盘') }}
+            {{ isAllVentoy ? t('confirm.title_safe') : (isMixed ? t('confirm.title_mixed') : t('confirm.title_danger')) }}
           </h3>
         </div>
         <button class="close-btn" @click="close">✕</button>
@@ -14,31 +14,31 @@
       <div class="modal-body">
         <!-- Safe Info Banner for ALL Ventoy Disks -->
         <div v-if="isAllVentoy" class="safe-banner">
-          <div class="banner-title">💡 无损增量更新提示：无需格式化</div>
+          <div class="banner-title">{{ t('confirm.safe_banner_title') }}</div>
           <div class="banner-desc">
-            检测到目标 U 盘已存在 Ventoy / UniBoot 引导结构。系统将<strong>自动采用增量注入技术</strong>，跳过擦盘与格式化，直接更新引导固件与主题。<strong>您 U 盘中的所有文件、ISO 镜像均 100% 原样保留</strong>！
+            {{ t('confirm.safe_banner_desc') }}
           </div>
         </div>
 
         <!-- Mixed Mode Info Banner for Mixed Selections -->
         <div v-else-if="isMixed" class="mixed-banner">
-          <div class="banner-title">🛡️ 智能混合模式：Ventoy 盘无损更新，空白盘初始化</div>
+          <div class="banner-title">{{ t('confirm.mixed_banner_title') }}</div>
           <div class="banner-desc">
-            已选中 <strong>{{ ventoyDisks.length }}</strong> 块引导盘（<b>自动免格式化/保留数据</b>）与 <strong>{{ blankDisks.length }}</strong> 块普通 U 盘（<b>初始化格式化</b>）。系统将进行差异化精准处理！
+            {{ t('confirm.mixed_banner_desc', { ventoyCount: ventoyDisks.length, blankCount: blankDisks.length }) }}
           </div>
         </div>
 
         <!-- Danger Warning Alert Banner for Pure Blank Disks -->
         <div v-else class="danger-banner">
-          <div class="banner-title">💥 警告：格式化过程不可逆！</div>
+          <div class="banner-title">{{ t('confirm.danger_banner_title') }}</div>
           <div class="banner-desc">
-            写入将对目标设备进行<strong>底层重新分区与格式化</strong>，改写主引导记录 (MBR/GPT)。<strong>所选 U 盘上的全部现有数据与资料将被清空</strong>。
+            {{ t('confirm.danger_banner_desc') }}
           </div>
         </div>
 
         <!-- Target Devices Summary Box -->
         <div class="target-summary-box">
-          <div class="summary-label">即将写入引导的目标磁盘：</div>
+          <div class="summary-label">{{ t('confirm.summary_title') }}</div>
           
           <!-- Single Disk Summary -->
           <div v-if="targetDisks.length === 1 && targetDisk" class="target-disk-item">
@@ -49,22 +49,22 @@
             <div class="disk-meta-pills">
               <span class="pill-tag">{{ targetDisk.formatted }}</span>
               <span class="pill-tag">{{ targetDisk.fileSystem || 'FAT32' }}</span>
-              <span class="pill-tag accent" v-if="mode === 'hybrid'">{{ fsType }} 格式</span>
-              <span class="pill-tag highlight">{{ mode === 'cloud' ? '模式 B (1秒云端)' : '模式 A (混合双模)' }}</span>
-              <span class="pill-tag safe-tag" v-if="isAllVentoy">🛡️ 智能免格式化</span>
+              <span class="pill-tag accent" v-if="mode === 'hybrid'">{{ t('confirm.fs_format', { fs: fsType }) }}</span>
+              <span class="pill-tag highlight">{{ mode === 'cloud' ? t('mode.cloud') : t('mode.hybrid') }}</span>
+              <span class="pill-tag safe-tag" v-if="isAllVentoy">{{ t('confirm.smart_safe_tag') }}</span>
             </div>
           </div>
 
           <!-- Batch Disks Mixed Summary -->
           <div v-else-if="isMixed" class="batch-summary">
             <div class="mixed-group" v-if="ventoyDisks.length > 0">
-              <div class="group-title safe-title">🛡️ 无损增量更新盘（保留所有 ISO 镜像）：</div>
+              <div class="group-title safe-title">{{ t('confirm.ventoy_group_title') }}</div>
               <div class="batch-tags">
                 <span v-for="dev in ventoyDisks" :key="dev" class="batch-dev-tag safe-dev-tag">🛡️ {{ dev }}</span>
               </div>
             </div>
             <div class="mixed-group" v-if="blankDisks.length > 0">
-              <div class="group-title danger-title">⚠️ 重新格式化写入盘：</div>
+              <div class="group-title danger-title">{{ t('confirm.blank_group_title') }}</div>
               <div class="batch-tags">
                 <span v-for="dev in blankDisks" :key="dev" class="batch-dev-tag danger-dev-tag">💾 {{ dev }}</span>
               </div>
@@ -73,7 +73,7 @@
 
           <!-- Batch Disks Pure Summary -->
           <div v-else class="batch-summary">
-            <div class="batch-count">已选中 <strong>{{ targetDisks.length }}</strong> 块 U 盘并行写入：</div>
+            <div class="batch-count">{{ t('confirm.batch_summary_title', { count: targetDisks.length }) }}</div>
             <div class="batch-tags">
               <span v-for="dev in targetDisks" :key="dev" class="batch-dev-tag">💾 {{ dev }}</span>
             </div>

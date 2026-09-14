@@ -4,14 +4,14 @@
       <div class="modal-header danger-header">
         <div class="header-title">
           <span class="warning-icon">⚠️</span>
-          <h3>{{ title || '无法制作模式 A 启动盘' }}</h3>
+          <h3>{{ title || t('ventoy_alert.default_title') }}</h3>
         </div>
         <button class="close-btn" @click="close">✕</button>
       </div>
 
       <div class="modal-body">
         <div class="alert-banner">
-          <div class="banner-title">💡 前置条件缺失与引导提示</div>
+          <div class="banner-title">{{ t('ventoy_alert.banner_title') }}</div>
           <div class="banner-desc">{{ message }}</div>
         </div>
 

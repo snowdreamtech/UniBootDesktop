@@ -17,127 +17,127 @@
         <div v-if="disk.isFakeUsb3" class="audit-banner fake-alert">
           <div class="banner-icon">⚠️</div>
           <div class="banner-text">
-            <h4>伪造 USB 3.0 预警！(Fake USB 3.0 Alert)</h4>
-            <p>设备宣传名称带有 USB 3.0 / 3.1 标识，但操作系统物理层实际协商速率仅为 <strong>{{ disk.usbSpeed || '480 Mb/s' }}</strong> (USB 2.0 High-Speed PHY)。此 U 盘疑似被刷固件或使用虚假蓝色接口。</p>
+            <h4>{{ t('inspector.fake_title') }}</h4>
+            <p>{{ t('inspector.fake_desc', { speed: disk.usbSpeed || '480 Mb/s' }) }}</p>
           </div>
         </div>
 
         <div v-else-if="disk.protocolCode === 'usb3_0' || disk.protocolCode === 'usb3_1' || disk.protocolCode === 'usb3_2' || disk.protocolCode === 'usb4'" class="audit-banner genuine-pass">
           <div class="banner-icon">✅</div>
           <div class="banner-text">
-            <h4>物理硬件校验通过 (Genuine USB 3.0+ Device)</h4>
-            <p>硬件物理层已成功建立 SuperSpeed/SuperSpeed+ 高速通道，实测协商速率为 <strong>{{ disk.usbSpeed || '5 Gb/s' }}</strong>。</p>
+            <h4>{{ t('inspector.genuine_title') }}</h4>
+            <p>{{ t('inspector.genuine_desc', { speed: disk.usbSpeed || '5 Gb/s' }) }}</p>
           </div>
         </div>
 
         <div v-else class="audit-banner usb2-info">
           <div class="banner-icon">ℹ️</div>
           <div class="banner-text">
-            <h4>标准 USB 2.0 传输接口</h4>
-            <p>设备硬件版本为 USB 2.0，理论物理最高速率 480 Mb/s (High-Speed)。</p>
+            <h4>{{ t('inspector.usb2_title') }}</h4>
+            <p>{{ t('inspector.usb2_desc') }}</p>
           </div>
         </div>
 
         <!-- Basic Device Info Header & Grid -->
         <div class="section-divider">
-          <span>📊 设备基础信息 (Basic Device Info)</span>
+          <span>{{ t('inspector.section_basic') }}</span>
         </div>
 
         <div class="spec-grid">
           <div class="spec-item">
-            <span class="spec-label">设备名称 (Device Name)</span>
+            <span class="spec-label">{{ t('inspector.lbl_name') }}</span>
             <span class="spec-val highlight">{{ disk.name }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">厂商/制造商 (Vendor)</span>
+            <span class="spec-label">{{ t('inspector.lbl_vendor') }}</span>
             <span class="spec-val">{{ disk.vendor || 'Generic USB Device' }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">设备容量 (Storage Size)</span>
+            <span class="spec-label">{{ t('inspector.lbl_size') }}</span>
             <span class="spec-val">{{ disk.formatted }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">可用剩余空间 (Free Space)</span>
+            <span class="spec-label">{{ t('inspector.lbl_free') }}</span>
             <span class="spec-val highlight">{{ disk.freeFormatted || 'N/A' }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">USB 协议版本 (Protocol Version)</span>
+            <span class="spec-label">{{ t('inspector.lbl_protocol') }}</span>
             <span class="spec-val badge-val" :class="disk.protocolCode || 'usb2'">
               {{ disk.usbVersion || 'USB 2.0' }}
             </span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">物理 PHY 速率 (Negotiated Speed)</span>
+            <span class="spec-label">{{ t('inspector.lbl_speed') }}</span>
             <span class="spec-val speed-val" :class="{ 'slow-speed': disk.isFakeUsb3 }">
               ⚡ {{ disk.usbSpeed || '480 Mb/s' }}
             </span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">文件系统格式 (File System)</span>
+            <span class="spec-label">{{ t('inspector.lbl_fs') }}</span>
             <span class="spec-val highlight">{{ disk.fileSystem || 'ExFAT / FAT32' }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">分区表架构 (Partition Scheme)</span>
+            <span class="spec-label">{{ t('inspector.lbl_scheme') }}</span>
             <span class="spec-val highlight">{{ disk.partitionScheme || 'GPT / MBR' }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">系统挂载路径 (Mount Path)</span>
+            <span class="spec-label">{{ t('inspector.lbl_mount') }}</span>
             <span class="spec-val code">{{ disk.device }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">读写权限 (Disk Permission)</span>
+            <span class="spec-label">{{ t('inspector.lbl_perm') }}</span>
             <span class="spec-val" :class="disk.writable !== false ? 'pass-val' : 'warn-val'">
-              {{ disk.writable !== false ? '✅ 可读写 (Read-Write)' : '🔒 写保护/只读 (Read-Only)' }}
+              {{ disk.writable !== false ? t('inspector.val_rw') : t('inspector.val_ro') }}
             </span>
           </div>
 
           <div class="spec-item spec-full">
-            <span class="spec-label">引导状态 (Boot Status)</span>
-            <span class="spec-val highlight">{{ disk.bootStatus || '📁 数据存储盘 (未检出系统引导)' }}</span>
+            <span class="spec-label">{{ t('inspector.lbl_boot_status') }}</span>
+            <span class="spec-val highlight">{{ disk.bootStatus || t('inspector.val_data_disk') }}</span>
           </div>
         </div>
 
         <!-- Hardware Details Header & Grid -->
         <div class="section-divider">
-          <span>🛠️ 设备硬件详情 (Hardware Details)</span>
+          <span>{{ t('inspector.section_hw') }}</span>
         </div>
 
         <div class="spec-grid advanced-grid">
           <div class="spec-item">
-            <span class="spec-label">S.M.A.R.T. 健康状态 (SMART Status)</span>
+            <span class="spec-label">{{ t('inspector.lbl_smart') }}</span>
             <span class="spec-val" :class="disk.smartStatus === 'Verified' ? 'pass-val' : 'highlight'">
-              {{ disk.smartStatus === 'Verified' ? '✅ 健康 (Verified)' : (disk.smartStatus || 'ℹ️ N/A') }}
+              {{ disk.smartStatus === 'Verified' ? t('inspector.val_smart_good') : (disk.smartStatus || 'ℹ️ N/A') }}
             </span>
           </div>
 
           <div class="spec-item" v-if="disk.busPower || disk.busPowerUsed">
-            <span class="spec-label">接口总线供电 (USB Bus Power)</span>
+            <span class="spec-label">{{ t('inspector.lbl_bus_power') }}</span>
             <span class="spec-val highlight">
-              {{ formatPower(disk.busPowerUsed || disk.busPower) }} (端口上限: {{ formatPower(disk.busPower) }})
+              {{ formatPower(disk.busPowerUsed || disk.busPower) }} {{ t('inspector.val_power_limit', { limit: formatPower(disk.busPower) }) }}
             </span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">底层传输协议 (Transport Protocol)</span>
+            <span class="spec-label">{{ t('inspector.lbl_transport') }}</span>
             <span class="spec-val highlight">{{ disk.transportProtocol || 'BOT (Bulk-Only Transport)' }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">物理扇区大小 (Physical Block Size)</span>
+            <span class="spec-label">{{ t('inspector.lbl_sector') }}</span>
             <span class="spec-val highlight">{{ disk.sectorSize || '512 Bytes (512n/512e)' }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">主控芯片厂商 (Controller Vendor)</span>
+            <span class="spec-label">{{ t('inspector.lbl_controller') }}</span>
             <span class="spec-val highlight">{{ disk.controllerVendor || '通用 Standard Controller' }}</span>
           </div>
 
