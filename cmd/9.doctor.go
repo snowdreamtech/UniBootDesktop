@@ -17,6 +17,7 @@ import (
 	"github.com/snowdreamtech/unigodesktop/internal/cli/output"
 	"github.com/snowdreamtech/unigodesktop/internal/database"
 	"github.com/snowdreamtech/unigodesktop/internal/env"
+	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
 	"github.com/spf13/cobra"
 )
 
@@ -140,7 +141,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		proxyURL := strings.TrimRight(firstProxy, "/")
 		ctxTimeout, cancel := context.WithTimeout(ctx, 3*time.Second)
 		req, _ := http.NewRequestWithContext(ctxTimeout, http.MethodGet, proxyURL, nil)
-		resp, err := http.DefaultClient.Do(req)
+		resp, err := pkgHttp.NewClient().Do(req)
 		cancel()
 		if err != nil {
 			output.Warningf("GOPROXY (%s) seems unreachable: %v", proxyURL, err)

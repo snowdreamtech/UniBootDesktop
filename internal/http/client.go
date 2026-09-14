@@ -35,7 +35,13 @@ var MockTransport http.RoundTripper
 // All other settings (connection pool, timeouts) are inherited from Go's
 // http.DefaultTransport via Clone(), so they stay in sync with upstream defaults.
 func DefaultTransport() *http.Transport {
-	trans := http.DefaultTransport.(*http.Transport).Clone()
+	base, ok := http.DefaultTransport.(*http.Transport)
+	var trans *http.Transport
+	if ok {
+		trans = base.Clone()
+	} else {
+		trans = &http.Transport{}
+	}
 
 	// 1. Smart proxy bypass + UNIRTM_/MISE_ env prefix support + NO_PROXY + ALL_PROXY
 	//
@@ -76,9 +82,13 @@ func DefaultTransport() *http.Transport {
 
 // NewClient returns an http.Client pre-configured with UniRTM's robust transport.
 func NewClient() *http.Client {
-	var tr http.RoundTripper = DefaultTransport()
+	var tr http.RoundTripper
 	if MockTransport != nil {
 		tr = MockTransport
+	} else if _, ok := http.DefaultTransport.(*http.Transport); !ok {
+		tr = http.DefaultTransport
+	} else {
+		tr = DefaultTransport()
 	}
 	return &http.Client{
 		Transport: tr,
@@ -87,9 +97,13 @@ func NewClient() *http.Client {
 
 // NewClientWithTimeout returns an http.Client with a timeout and the robust transport.
 func NewClientWithTimeout(timeout time.Duration) *http.Client {
-	var tr http.RoundTripper = DefaultTransport()
+	var tr http.RoundTripper
 	if MockTransport != nil {
 		tr = MockTransport
+	} else if _, ok := http.DefaultTransport.(*http.Transport); !ok {
+		tr = http.DefaultTransport
+	} else {
+		tr = DefaultTransport()
 	}
 	return &http.Client{
 		Timeout:   timeout,

@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/env"
+	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
 	"github.com/snowdreamtech/unigodesktop/pkg/updater"
 )
 
@@ -126,7 +127,7 @@ func FetchLatestUniBootRelease(ctx context.Context, proxyPrefix string) (*UniBoo
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 	req.Header.Set("User-Agent", "UniBootDesktop/1.0")
 
-	client := &http.Client{Timeout: 15 * time.Second}
+	client := pkgHttp.NewClientWithTimeout(15 * time.Second)
 	resp, err := client.Do(req)
 
 	// Fallback to direct URL if proxy request fails

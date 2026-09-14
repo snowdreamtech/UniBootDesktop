@@ -18,6 +18,7 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/pterm/pterm"
 	"github.com/snowdreamtech/unigodesktop/internal/env"
+	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
 	"github.com/snowdreamtech/unigodesktop/internal/version"
 )
 
@@ -122,8 +123,8 @@ func FetchLatestReleaseInfo(ctx context.Context) (*ReleaseInfo, error) {
 
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 
-	// Relies on default transport which respects HTTP_PROXY/HTTPS_PROXY env vars.
-	client := &http.Client{}
+	// Uses internal/http transport which respects HTTP_PROXY/HTTPS_PROXY/UNIRTM_HTTP_PROXY/NO_PROXY env vars and bypasses Chinese mirrors
+	client := pkgHttp.NewClient()
 
 	var resp *http.Response
 	var fetchErr error

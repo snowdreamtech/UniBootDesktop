@@ -5,17 +5,18 @@ package repository
 
 import (
 	"context"
-	"errors"
 	"time"
+
+	"github.com/snowdreamtech/unigodesktop/internal/errors"
 )
 
 // Common repository errors
 var (
 	// ErrNotFound indicates a resource was not found
-	ErrNotFound = errors.New("not found")
+	ErrNotFound = errors.ErrNotFound
 
 	// ErrAlreadyExists indicates a resource already exists
-	ErrAlreadyExists = errors.New("already exists")
+	ErrAlreadyExists = errors.ErrAlreadyExists
 )
 
 // BaseRepository provides a concrete base type for repository contexts

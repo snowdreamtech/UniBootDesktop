@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/env"
+	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
 	"github.com/snowdreamtech/unigodesktop/internal/updater"
 )
 
@@ -68,24 +69,22 @@ func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, 
 	proxyPrefix = strings.TrimSpace(proxyPrefix)
 
 	// Per-attempt timeout of 15s to prevent hanging endlessly on blocked networks
-	client := &http.Client{
-		Timeout: 15 * time.Second,
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			if len(via) >= 10 {
-				return fmt.Errorf("stopped after 10 redirects")
-			}
-			// If proxyPrefix is configured, ensure redirect target URL also goes through proxy
-			if proxyPrefix != "" && !strings.EqualFold(proxyPrefix, "direct") {
-				targetURL := req.URL.String()
-				if !strings.HasPrefix(targetURL, proxyPrefix) {
-					newURL := BuildProxyURL(targetURL, proxyPrefix)
-					if parsedURL, err := url.Parse(newURL); err == nil {
-						req.URL = parsedURL
-					}
+	client := pkgHttp.NewClientWithTimeout(15 * time.Second)
+	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if len(via) >= 10 {
+			return fmt.Errorf("stopped after 10 redirects")
+		}
+		// If proxyPrefix is configured, ensure redirect target URL also goes through proxy
+		if proxyPrefix != "" && !strings.EqualFold(proxyPrefix, "direct") {
+			targetURL := req.URL.String()
+			if !strings.HasPrefix(targetURL, proxyPrefix) {
+				newURL := BuildProxyURL(targetURL, proxyPrefix)
+				if parsedURL, err := url.Parse(newURL); err == nil {
+					req.URL = parsedURL
 				}
 			}
-			return nil
-		},
+		}
+		return nil
 	}
 
 	finalURL := BuildProxyURL(rawURL, proxyPrefix)
