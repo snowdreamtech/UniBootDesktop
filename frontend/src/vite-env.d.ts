@@ -1,6 +1,37 @@
 /// <reference types="vite/client" />
 
 declare global {
+  interface DiskInfo {
+    device: string;
+    name: string;
+    size: number;
+    formatted: string;
+    freeSpace?: number;
+    freeFormatted?: string;
+    isRemovable: boolean;
+    isSystem: boolean;
+    usbVersion?: string;
+    usbSpeed?: string;
+    vendor?: string;
+    fileSystem?: string;
+    partitionScheme?: string;
+    writable?: boolean;
+    serialNumber?: string;
+    vendorId?: string;
+    productId?: string;
+    smartStatus?: string;
+    busPower?: string;
+    busPowerUsed?: string;
+    sectorSize?: string;
+    transportProtocol?: string;
+    bootStatus?: string;
+    controllerVendor?: string;
+    isFakeUsb3?: boolean;
+    protocolCode?: string;
+    isRealVentoy?: boolean;
+    isModeB?: boolean;
+  }
+
   interface Window {
     runtime?: {
       EventsOn(eventName: string, callback: (data: any) => void): void;

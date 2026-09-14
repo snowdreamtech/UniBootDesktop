@@ -94,7 +94,9 @@ type DiskInfo struct {
 	BootStatus        string `json:"bootStatus"`        // Boot sector status (e.g. UniBoot/Ventoy Ready, MBR Bootable, Standard Data)
 	ControllerVendor  string `json:"controllerVendor"`  // Inferred USB Controller Vendor (e.g. Phison, SMI, Alcor)
 	IsFakeUsb3        bool   `json:"isFakeUsb3"`        // Warning flag for fake USB 3.0 (USB 2.0 PHY disguised as 3.0)
-	ProtocolCode    string `json:"protocolCode"`    // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
+	ProtocolCode      string `json:"protocolCode"`      // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
+	IsRealVentoy      bool   `json:"isRealVentoy"`      // True ONLY if drive contains Ventoy MBR Sector 0 signature
+	IsModeB           bool   `json:"isModeB"`           // True if drive is formatted in Mode B (iPXE ESP Cloud Pure)
 }
 
 // CheckFakeUsb3 determines if a USB drive is a fake USB 3.0 device (claims USB 3.0+ in name/marketing but uses USB 2.0 PHY speed).
@@ -175,11 +177,20 @@ func InferControllerVendor(vendorID string, productID string, vendor string) str
 	return "通用 Standard Controller"
 }
 
-// DetectBootStatus evaluates if the target drive contains bootloader structures.
-func DetectBootStatus(volName string, partitionScheme string) string {
+// DetectBootStatus evaluates the boot status text based on partition scheme, volume label, and Ventoy/Mode B flags.
+func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isModeB bool) string {
+	if isRealVentoy {
+		return "🛠️ Ventoy 模式 A (双模全能启动盘)"
+	}
+	if isModeB {
+		return "⚡ UniBoot 模式 B (1秒极速云引导盘)"
+	}
 	upperVol := strings.ToUpper(volName)
-	if strings.Contains(upperVol, "VENTOY") || strings.Contains(upperVol, "UNIBOOT") || strings.Contains(upperVol, "VTOYEFI") {
-		return "🚀 UniBoot / Ventoy 极速引导盘已部署"
+	if strings.Contains(upperVol, "VENTOY") || strings.Contains(upperVol, "VTOYEFI") {
+		return "🛠️ Ventoy 模式 A (双模全能启动盘)"
+	}
+	if strings.Contains(upperVol, "UNIBOOT") {
+		return "⚡ UniBoot 模式 B (1秒极速云引导盘)"
 	}
 	if strings.Contains(strings.ToUpper(partitionScheme), "GPT") {
 		return "💿 GPT / EFI 标准系统引导盘"
@@ -216,7 +227,7 @@ func IsVentoyDisk(targetDisk string) bool {
 					strOut := string(out)
 					volName := extractPlistValue(strOut, "VolumeName")
 					volNameUpper := strings.ToUpper(volName)
-					if strings.Contains(volNameUpper, "VENTOY") || strings.Contains(volNameUpper, "VTOYEFI") || strings.Contains(volNameUpper, "UNIBOOT") {
+					if strings.Contains(volNameUpper, "VENTOY") || strings.Contains(volNameUpper, "VTOYEFI") {
 						return true
 					}
 					mountPoint := extractPlistValue(strOut, "MountPoint")
@@ -229,7 +240,7 @@ func IsVentoyDisk(targetDisk string) bool {
 			}
 		}
 
-		for _, mount := range []string{"/Volumes/Ventoy", "/Volumes/VENTOY", "/Volumes/VTOYEFI", "/Volumes/UNIBOOT"} {
+		for _, mount := range []string{"/Volumes/Ventoy", "/Volumes/VENTOY", "/Volumes/VTOYEFI"} {
 			if info, err := os.Stat(mount); err == nil && info.IsDir() {
 				if infoV, errV := os.Stat(filepath.Join(mount, "ventoy")); errV == nil && infoV.IsDir() {
 					return true
@@ -645,13 +656,15 @@ func getDarwinDisks() ([]DiskInfo, error) {
 
 		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
-		bootStatusStr := DetectBootStatus(volName, partitionScheme)
-		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
-
 		devNode := volPath
 		if parentDisk != "" {
 			devNode = "/dev/" + parentDisk
 		}
+
+		isRealVentoy := IsRealVentoyDisk(devNode)
+		isModeB := IsModeBDisk(devNode)
+		bootStatusStr := DetectBootStatus(volName, partitionScheme, isRealVentoy, isModeB)
+		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
 
 		disks = append(disks, DiskInfo{
 			Device:            devNode,
@@ -680,6 +693,8 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			ControllerVendor:  controllerVendorStr,
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
+			IsRealVentoy:      isRealVentoy,
+			IsModeB:           isModeB,
 		})
 	}
 
@@ -861,10 +876,12 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      "500 mA",
 			SectorSize:        "512 Bytes (512n/512e)",
 			TransportProtocol: "BOT (Bulk-Only Transport)",
-			BootStatus:        DetectBootStatus(label, partitionScheme),
+			BootStatus:        DetectBootStatus(label, partitionScheme, IsRealVentoyDisk(mountPath), IsModeBDisk(mountPath)),
 			ControllerVendor:  InferControllerVendor("", "", vendor),
 			IsFakeUsb3:        isFake,
-			ProtocolCode:    protoCode,
+			ProtocolCode:      protoCode,
+			IsRealVentoy:      IsRealVentoyDisk(mountPath),
+			IsModeB:           IsModeBDisk(mountPath),
 		})
 	}
 
@@ -941,10 +958,12 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      "500 mA",
 			SectorSize:        "512 Bytes (512n/512e)",
 			TransportProtocol: "BOT (Bulk-Only Transport)",
-			BootStatus:        DetectBootStatus(displayName, "GPT / MBR"),
+			BootStatus:        DetectBootStatus(displayName, "GPT / MBR", IsRealVentoyDisk(driveLetter), IsModeBDisk(driveLetter)),
 			ControllerVendor:  InferControllerVendor("", "", "Generic"),
 			IsFakeUsb3:        isFake,
-			ProtocolCode:    protoCode,
+			ProtocolCode:      protoCode,
+			IsRealVentoy:      IsRealVentoyDisk(driveLetter),
+			IsModeB:           IsModeBDisk(driveLetter),
 		})
 	}
 

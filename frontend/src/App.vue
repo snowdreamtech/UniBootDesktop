@@ -212,8 +212,9 @@
 
           <button 
             class="btn-primary deploy-btn" 
-            :class="{ 'safe-btn': isNonDestructive }"
+            :class="{ 'safe-btn': isNonDestructive, 'danger-disabled': activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid }"
             :disabled="isDeployDisabled || isDeploying"
+            :title="deployDisabledReason"
             @click="openDeployConfirm"
           >
             {{ isDeploying ? '正在写入引导固件...' : (isNonDestructive ? '🛡️ 开始无损更新 (保留数据)' : (selectionMode === 'batch' ? `开始批量制作 (${selectedDevices.size} 块 U 盘)` : '开始制作启动盘')) }}
@@ -598,24 +599,23 @@ function onIconReset() {
   }
 }
 
-const isDeployDisabled = computed(() => {
-  if (selectionMode.value === 'single') {
-    return !selectedDisk.value;
-  }
-  return selectedDevices.value.size === 0;
-});
+const isMacOs = computed(() => navigator.userAgent.includes('Mac') || navigator.platform.includes('Mac'));
 
 const isSelectedVentoyDisk = computed(() => {
   if (selectionMode.value === 'single' && selectedDisk.value) {
     if (activeMode.value === 'cloud') {
+      return true; // Mode B is ALWAYS non-destructive (flashes ESP partition only)
+    }
+    // Mode A is ONLY non-destructive if the target disk is ALREADY a REAL Ventoy MBR disk!
+    if (selectedDisk.value.isRealVentoy) {
       return true;
     }
     const name = (selectedDisk.value.name || '').toUpperCase();
     const status = (selectedDisk.value.bootStatus || '').toUpperCase();
-    if (status.includes('MODE B') || status.includes('CLOUD PURE')) {
-      return false;
+    if (selectedDisk.value.isModeB || status.includes('模式 B') || status.includes('CLOUD PURE') || status.includes('极速云引导盘')) {
+      return false; // Mode B drive is NOT a Ventoy MBR drive, must be formatted via Ventoy CLI to convert to Mode A!
     }
-    return name.includes('VENTOY') || status.includes('VENTOY');
+    return status.includes('模式 A') || name.includes('VENTOY') || status.includes('VENTOY');
   }
   return false;
 });
@@ -625,13 +625,40 @@ const isNonDestructive = computed(() => {
     return isSelectedVentoyDisk.value;
   }
   if (selectedDevices.value.size === 0) return false;
-  return Array.from(selectedDevices.value).some((dev: string) => {
+  return Array.from(selectedDevices.value).every((dev: string) => {
     const d = diskList.value.find((disk: DiskInfo) => disk.device === dev);
     if (!d) return false;
+    if (activeMode.value === 'cloud') return true;
+    if (d.isRealVentoy) return true;
     const name = (d.name || '').toUpperCase();
     const status = (d.bootStatus || '').toUpperCase();
-    return name.includes('VENTOY') || status.includes('VENTOY') || status.includes('UNIBOOT');
+    if (d.isModeB || status.includes('模式 B') || status.includes('CLOUD PURE') || status.includes('极速云引导盘')) {
+      return false;
+    }
+    return status.includes('模式 A') || name.includes('VENTOY') || status.includes('VENTOY');
   });
+});
+
+const isDeployDisabled = computed(() => {
+  if (selectionMode.value === 'single') {
+    if (!selectedDisk.value) return true;
+  } else {
+    if (selectedDevices.value.size === 0) return true;
+  }
+  if (activeMode.value === 'hybrid' && !isNonDestructive.value && !ventoyStatus.value.valid) {
+    return true;
+  }
+  return false;
+});
+
+const deployDisabledReason = computed(() => {
+  if (isDeploying.value) return '正在写入引导固件...';
+  if (selectionMode.value === 'single' && !selectedDisk.value) return '请先选择要制作的目标 U 盘';
+  if (selectionMode.value === 'batch' && selectedDevices.value.size === 0) return '请先勾选要批量制作的目标 U 盘';
+  if (activeMode.value === 'hybrid' && !isNonDestructive.value && !ventoyStatus.value.valid) {
+    return ventoyStatus.value.message || '全新制作模式 A 需依赖 Ventoy CLI 环境';
+  }
+  return '';
 });
 
 const isQemuDisabled = computed(() => {

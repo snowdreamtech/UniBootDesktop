@@ -64,6 +64,8 @@ export namespace disk {
 	    controllerVendor: string;
 	    isFakeUsb3: boolean;
 	    protocolCode: string;
+	    isRealVentoy: boolean;
+	    isModeB: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new DiskInfo(source);
@@ -97,6 +99,8 @@ export namespace disk {
 	        this.controllerVendor = source["controllerVendor"];
 	        this.isFakeUsb3 = source["isFakeUsb3"];
 	        this.protocolCode = source["protocolCode"];
+	        this.isRealVentoy = source["isRealVentoy"];
+	        this.isModeB = source["isModeB"];
 	    }
 	}
 
