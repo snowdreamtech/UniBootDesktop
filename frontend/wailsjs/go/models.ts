@@ -11,7 +11,13 @@ export namespace config {
 	    proxyPort: number;
 	    proxyUser: string;
 	    proxyPassword: string;
+	    language: string;
 	    ventoyPath: string;
+	    ventoySecureBoot: boolean;
+	    ventoyPartitionStyle: string;
+	    ventoyReserveSpace: number;
+	    ventoyWin11Bypass: boolean;
+	    ventoyMenuTimeout: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new AppConfig(source);
@@ -29,7 +35,13 @@ export namespace config {
 	        this.proxyPort = source["proxyPort"];
 	        this.proxyUser = source["proxyUser"];
 	        this.proxyPassword = source["proxyPassword"];
+	        this.language = source["language"];
 	        this.ventoyPath = source["ventoyPath"];
+	        this.ventoySecureBoot = source["ventoySecureBoot"];
+	        this.ventoyPartitionStyle = source["ventoyPartitionStyle"];
+	        this.ventoyReserveSpace = source["ventoyReserveSpace"];
+	        this.ventoyWin11Bypass = source["ventoyWin11Bypass"];
+	        this.ventoyMenuTimeout = source["ventoyMenuTimeout"];
 	    }
 	}
 
