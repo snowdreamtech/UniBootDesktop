@@ -129,7 +129,7 @@
             @inspect="openInspector(disk)"
           />
           <div v-if="diskList.length === 0" class="empty-state">
-            Scanning removable USB drives...
+            {{ t('disk.scanning') }}
           </div>
         </div>
 
