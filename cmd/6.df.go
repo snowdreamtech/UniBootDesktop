@@ -4,6 +4,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -11,21 +12,71 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/snowdreamtech/unigodesktop/internal/env"
 	"github.com/snowdreamtech/unigodesktop/internal/utils"
+	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 	"github.com/spf13/cobra"
 )
 
-var dfHumanReadable bool
+var (
+	dfHumanReadable bool
+	dfUsb           bool
+)
 
 var dfCmd = &cobra.Command{
 	Use:   "df",
-	Short: "Display the disk usage of unigo data directories",
-	Long:  `Display the disk usage of various folders within the unigo data directory.`,
+	Short: "Display USB drives and UniBoot directory disk usage",
+	Long:  `Display information about removable USB storage devices and data directory disk usage.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		dataDir := env.GetDataDir()
+		// 1. If --usb flag or default run, display USB drive inspector table
+		if dfUsb || !cmd.Flags().Changed("human-readable") {
+			disks, err := disk.GetRemovableDisks()
+			if err == nil && len(disks) > 0 {
+				if jsonOutput {
+					b, _ := json.MarshalIndent(disks, "", "  ")
+					fmt.Println(string(b))
+					return nil
+				}
 
+				pterm.DefaultHeader.WithFullWidth().Println("🔌 REMOVABLE USB DRIVES & HARDWARE SPECS")
+				tableData := pterm.TableData{
+					{"Device", "Name / Model", "Capacity", "FileSystem", "Partition", "USB Protocol & Speed"},
+				}
+
+				for _, d := range disks {
+					sizeStr := d.Formatted
+					if sizeStr == "" {
+						sizeStr = utils.FormatBytes(int64(d.Size))
+					}
+					fsStr := d.FileSystem
+					if fsStr == "" {
+						fsStr = "Unknown"
+					}
+					schemeStr := d.PartitionScheme
+					if schemeStr == "" {
+						schemeStr = "MBR/GPT"
+					}
+					speedStr := fmt.Sprintf("%s (%s)", d.UsbVersion, d.UsbSpeed)
+					if d.UsbVersion == "" {
+						speedStr = "USB 2.0 / 3.0"
+					}
+					tableData = append(tableData, []string{
+						d.Device,
+						d.Name,
+						sizeStr,
+						fsStr,
+						schemeStr,
+						speedStr,
+					})
+				}
+
+				_ = pterm.DefaultTable.WithHasHeader().WithData(tableData).Render()
+				fmt.Println()
+			}
+		}
+
+		// 2. Display UniBoot App Data Directory Storage Usage
+		dataDir := env.GetDataDir()
 		entries, err := os.ReadDir(dataDir)
 		if err != nil {
-			// If data dir doesn't exist, maybe nothing is installed yet
 			if os.IsNotExist(err) {
 				fmt.Println("Data directory does not exist yet.")
 				return nil
@@ -33,12 +84,11 @@ var dfCmd = &cobra.Command{
 			return fmt.Errorf("failed to read data directory: %w", err)
 		}
 
-		tableData := pterm.TableData{
+		dirTableData := pterm.TableData{
 			{"Directory", "Size"},
 		}
 
 		var totalSize int64
-
 		for _, entry := range entries {
 			if !entry.IsDir() {
 				continue
@@ -51,27 +101,20 @@ var dfCmd = &cobra.Command{
 			}
 
 			totalSize += size
-
 			sizeStr := fmt.Sprintf("%d", size)
-			if dfHumanReadable {
+			if dfHumanReadable || true {
 				sizeStr = utils.FormatBytes(size)
 			}
 
-			tableData = append(tableData, []string{entry.Name(), sizeStr})
+			dirTableData = append(dirTableData, []string{entry.Name(), sizeStr})
 		}
 
-		// Add total
-		totalStr := fmt.Sprintf("%d", totalSize)
-		if dfHumanReadable {
-			totalStr = utils.FormatBytes(totalSize)
-		}
-		tableData = append(tableData, []string{"TOTAL", totalStr})
+		totalStr := utils.FormatBytes(totalSize)
+		dirTableData = append(dirTableData, []string{"TOTAL", totalStr})
 
-		fmt.Printf("Data Directory: %s\n\n", dataDir)
-		err = pterm.DefaultTable.WithHasHeader().WithData(tableData).Render()
-		if err != nil {
-			return fmt.Errorf("failed to render table: %w", err)
-		}
+		pterm.DefaultSection.Println("📦 UniBoot App Data Directory Storage Usage")
+		fmt.Printf("Path: %s\n\n", dataDir)
+		_ = pterm.DefaultTable.WithHasHeader().WithData(dirTableData).Render()
 
 		return nil
 	},
@@ -81,5 +124,6 @@ func init() {
 	if rootCmd != nil {
 		rootCmd.AddCommand(dfCmd)
 	}
-	dfCmd.Flags().BoolVarP(&dfHumanReadable, "human-readable", "h", false, "print sizes in powers of 1024 (e.g., 1023M)")
+	dfCmd.Flags().BoolVarP(&dfHumanReadable, "human-readable", "h", true, "print sizes in human readable format (e.g., 1023M, 14.8G)")
+	dfCmd.Flags().BoolVarP(&dfUsb, "usb", "u", false, "display removable USB drives and hardware specifications")
 }
