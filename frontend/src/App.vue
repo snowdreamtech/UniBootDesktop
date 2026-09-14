@@ -155,10 +155,10 @@
           <CustomSelect
             v-model="selectedFsType"
             :options="[
-              { value: 'exFAT', label: 'exFAT (Default • Supports >4GB ISO)' },
-              { value: 'NTFS', label: 'NTFS (Windows Native)' },
-              { value: 'FAT32', label: 'FAT32 (Legacy Compatible • 4GB Limit)' },
-              { value: 'ext4', label: 'ext4 (Linux Native)' }
+              { value: 'exFAT', label: t('fs.exfat') },
+              { value: 'NTFS', label: t('fs.ntfs') },
+              { value: 'FAT32', label: t('fs.fat32') },
+              { value: 'ext4', label: t('fs.ext4') }
             ]"
           />
         </div>
