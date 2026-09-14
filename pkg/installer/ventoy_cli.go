@@ -42,7 +42,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:          false,
 			Version:        "",
-			Message:        "❌ macOS Limitation: Official Ventoy CLI does not support running direct disk formatting on macOS. Fresh Mode A disk requires Ventoy CLI; we recommend natively supported Mode B (1-Sec Cloud Disk) on macOS.",
+			Message:        "❌ macOS Limitation: Official Ventoy CLI does not support running direct disk formatting on macOS.",
 			ExecutablePath: ventoyPath,
 		}
 	}

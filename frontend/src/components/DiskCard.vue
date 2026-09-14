@@ -513,8 +513,9 @@ const diskTagLabel = computed(() => {
 /* Light Theme Overrides for DiskCard */
 [data-theme="light"] .btn-inspect {
   background: #f1f5f9;
-  color: #334155;
+  color: #0f172a;
   border-color: #cbd5e1;
+  font-weight: 600;
 }
 
 [data-theme="light"] .btn-inspect:hover {
@@ -525,6 +526,25 @@ const diskTagLabel = computed(() => {
 
 [data-theme="light"] .speed-tag {
   background: #e2e8f0;
+  color: #475569;
+  font-weight: 600;
+}
+
+[data-theme="light"] .speed-tag.usb2 {
+  color: #475569;
+}
+
+[data-theme="light"] .speed-tag.usb3_0 {
+  color: #0284c7;
+}
+
+[data-theme="light"] .speed-tag.usb3_1, 
+[data-theme="light"] .speed-tag.usb3_2 {
+  color: #7c3aed;
+}
+
+[data-theme="light"] .speed-tag.usb4 {
+  color: #d97706;
 }
 
 [data-theme="light"] .disk-badge.boot {

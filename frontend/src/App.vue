@@ -522,7 +522,11 @@ async function selectMode(mode: 'cloud' | 'hybrid') {
   if (mode === 'hybrid') {
     await checkVentoyStatus();
     if (!isNonDestructive.value && !ventoyStatus.value.valid) {
-      showToast(ventoyStatus.value.message || t('deploy.tip_need_ventoy'), 'warning');
+      if (isMacOs.value) {
+        showToast(t('deploy.tip_macos_unsupported'), 'warning');
+      } else {
+        showToast(t('deploy.tip_need_ventoy'), 'warning');
+      }
     }
   }
 }
