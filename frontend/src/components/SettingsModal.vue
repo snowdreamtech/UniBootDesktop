@@ -130,7 +130,7 @@
           <!-- Section 2A: GitHub Proxy Acceleration -->
           <div class="settings-section">
             <h4 class="section-title">
-              <span>🌐 GitHub Proxy</span>
+              <span>🌐 {{ t('settings.github_proxy_title') }}</span>
             </h4>
 
             <div class="form-group">

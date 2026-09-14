@@ -129,7 +129,8 @@
             @inspect="openInspector(disk)"
           />
           <div v-if="diskList.length === 0" class="empty-state">
-            {{ t('disk.scanning') }}
+            <span v-if="isScanningDisks">🔍 {{ t('disk.scanning') }}</span>
+            <span v-else>⚠️ {{ t('disk.empty_list') }}</span>
           </div>
         </div>
 
@@ -899,71 +900,78 @@ function onDiskToggle(disk: DiskInfo) {
   selectedDevices.value = newSet;
 }
 
+const isScanningDisks = ref(false);
+
 // Wails JS binding fallbacks / mock data for standalone preview
 async function refreshDisks() {
-  if (window.go && window.go.main && window.go.main.App) {
-    try {
-      const fetched = await window.go.main.App.GetDiskList();
-      diskList.value = fetched || [];
-      if (selectedDisk.value) {
-        const stillExists = diskList.value.find(d => d.device === selectedDisk.value?.device);
-        if (stillExists) {
-          selectedDisk.value = stillExists;
-        } else {
-          selectedDisk.value = diskList.value.length > 0 ? diskList.value[0] : null;
+  isScanningDisks.value = true;
+  try {
+    if (window.go && window.go.main && window.go.main.App) {
+      try {
+        const fetched = await window.go.main.App.GetDiskList();
+        diskList.value = fetched || [];
+        if (selectedDisk.value) {
+          const stillExists = diskList.value.find(d => d.device === selectedDisk.value?.device);
+          if (stillExists) {
+            selectedDisk.value = stillExists;
+          } else {
+            selectedDisk.value = diskList.value.length > 0 ? diskList.value[0] : null;
+          }
+        } else if (diskList.value.length > 0) {
+          selectedDisk.value = diskList.value[0];
         }
-      } else if (diskList.value.length > 0) {
-        selectedDisk.value = diskList.value[0];
+      } catch (e) {
+        console.error(e);
+        diskList.value = [];
+        selectedDisk.value = null;
       }
-    } catch (e) {
-      console.error(e);
-      diskList.value = [];
-      selectedDisk.value = null;
+    } else {
+      // Fallback mock for browser preview demonstrating genuine vs fake USB 3.0
+      diskList.value = [
+        {
+          device: '/dev/disk2',
+          name: 'SanDisk Ultra USB 3.0 Flash Drive',
+          size: 32000000000,
+          formatted: '32 GB',
+          isRemovable: true,
+          isSystem: false,
+          usbVersion: 'USB 2.0',
+          usbSpeed: '480 Mb/s',
+          vendor: 'SanDisk (Suspected Fake)',
+          isFakeUsb3: true,
+          protocolCode: 'usb2'
+        },
+        {
+          device: '/dev/disk3',
+          name: 'Kingston DataTraveler 3.0',
+          size: 64000000000,
+          formatted: '64 GB',
+          isRemovable: true,
+          isSystem: false,
+          usbVersion: 'USB 3.0',
+          usbSpeed: '5 Gb/s',
+          vendor: 'Kingston Technology',
+          isFakeUsb3: false,
+          protocolCode: 'usb3_0'
+        },
+        {
+          device: '/dev/disk4',
+          name: 'Samsung Type-C Duo 3.1',
+          size: 128000000000,
+          formatted: '128 GB',
+          isRemovable: true,
+          isSystem: false,
+          usbVersion: 'USB 3.1 Gen 2',
+          usbSpeed: '10 Gb/s',
+          vendor: 'Samsung Electronics',
+          isFakeUsb3: false,
+          protocolCode: 'usb3_1'
+        }
+      ];
+      if (!selectedDisk.value) selectedDisk.value = diskList.value[0];
     }
-  } else {
-    // Fallback mock for browser preview demonstrating genuine vs fake USB 3.0
-    diskList.value = [
-      {
-        device: '/dev/disk2',
-        name: 'SanDisk Ultra USB 3.0 Flash Drive',
-        size: 32000000000,
-        formatted: '32 GB',
-        isRemovable: true,
-        isSystem: false,
-        usbVersion: 'USB 2.0',
-        usbSpeed: '480 Mb/s',
-        vendor: 'SanDisk (Suspected Fake)',
-        isFakeUsb3: true,
-        protocolCode: 'usb2'
-      },
-      {
-        device: '/dev/disk3',
-        name: 'Kingston DataTraveler 3.0',
-        size: 64000000000,
-        formatted: '64 GB',
-        isRemovable: true,
-        isSystem: false,
-        usbVersion: 'USB 3.0',
-        usbSpeed: '5 Gb/s',
-        vendor: 'Kingston Technology',
-        isFakeUsb3: false,
-        protocolCode: 'usb3_0'
-      },
-      {
-        device: '/dev/disk4',
-        name: 'Samsung Type-C Duo 3.1',
-        size: 128000000000,
-        formatted: '128 GB',
-        isRemovable: true,
-        isSystem: false,
-        usbVersion: 'USB 3.1 Gen 2',
-        usbSpeed: '10 Gb/s',
-        vendor: 'Samsung Electronics',
-        isFakeUsb3: false,
-        protocolCode: 'usb3_1'
-      }
-    ];
-    if (!selectedDisk.value) selectedDisk.value = diskList.value[0];
+  } finally {
+    isScanningDisks.value = false;
   }
 }
 
