@@ -159,3 +159,33 @@ body {
   background: rgba(255, 255, 255, 0.1);
   border-color: var(--accent-cyan);
 }
+
+/* Right-to-Left (RTL) Layout Adaptations for Arabic (ar-SA) */
+html[dir="rtl"],
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] input,
+html[dir="rtl"] select,
+html[dir="rtl"] textarea {
+  text-align: right;
+}
+
+html[dir="rtl"] .header-brand,
+html[dir="rtl"] .section-header-row,
+html[dir="rtl"] .iso-card-header,
+html[dir="rtl"] .modal-header,
+html[dir="rtl"] .sync-status,
+html[dir="rtl"] .tab-group,
+html[dir="rtl"] .protocol-radio-bar,
+html[dir="rtl"] .radio-group {
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .dropdown-caret,
+html[dir="rtl"] .opt-check {
+  margin-left: 0;
+  margin-right: auto;
+}
