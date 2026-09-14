@@ -90,9 +90,9 @@ export const itIt: TranslationDict = {
   "iso.empty_sub": "Supporta i formati .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
   "iso.summary": "{count} file immagine selezionato/i",
   "iso.clear": "Svuota Lista",
-  "deploy.title": "Creazione Disco Avviabile e Test QEMU",
-  "deploy.desc_cloud": "Disco di Avvio Cloud iPXE Puro • Struttura ultrarapida a doppia partizione con firmware di rete iPXE multi-architettura integrato",
-  "deploy.desc_hybrid": "Disco Ibrido a Doppio Motore Ventoy + UniBoot • Supporto per avvio ISO/IMG locale e distribuzione di rete",
+  "deploy.title": "Creazione unità avviabile e test QEMU",
+  "deploy.desc_cloud": "Avvio Cloud iPXE puro • Configurazione ultra-rapida a due partizioni con firmware di rete iPXE.",
+  "deploy.desc_hybrid": "Motore locale Ventoy CLI • Configurazione partizione ibrida Ventoy con gestione ISO locale.",
   "deploy.target_device": "Dispositivo di Destinazione:",
   "deploy.batch_target": "{count} unità USB selezionata/e",
   "deploy.start_create": "Avvia Creazione",
@@ -255,5 +255,6 @@ export const itIt: TranslationDict = {
   "fs.ntfs": "NTFS (Nativo Windows)",
   "fs.fat32": "FAT32 (Compatibile Datati • Limite 4GB)",
   "fs.ext4": "ext4 (Nativo Linux)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "Seleziona unità USB di destinazione",
+  "header.subtitle": "Creazione unità avviabile e test QEMU"
 };

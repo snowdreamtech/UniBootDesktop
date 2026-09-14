@@ -91,8 +91,8 @@ export const trTr: TranslationDict = {
   "iso.summary": "{count} görüntü kaynak dosyası seçildi",
   "iso.clear": "Listeyi Temizle",
   "deploy.title": "Önyüklenebilir Sürücü Oluşturma ve QEMU Testi",
-  "deploy.desc_cloud": "Saf iPXE Bulut Önyükleme Diski • Çift bölümlü ultra hızlı yapı ve çoklu mimari iPXE ağ ürün yazılımı yerleşik",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Çift Motorlu Hibrit Disk • Yerel ISO/IMG önyükleme ve bulut ağ dağıtımı desteği",
+  "deploy.desc_cloud": "Saf iPXE Bulut Önyüklemesi • Çoklu mimari iPXE ağ bellenimi ile ultra hızlı çift bölüm kurulumu.",
+  "deploy.desc_hybrid": "Ventoy CLI Yerel Motoru • Yerel ISO yönetimi ile Ventoy hibrit bölüm kurulumu.",
   "deploy.target_device": "Hedef Cihaz:",
   "deploy.batch_target": "{count} USB sürücüsü seçildi",
   "deploy.start_create": "Oluşturmayı Başlat",
@@ -255,5 +255,6 @@ export const trTr: TranslationDict = {
   "fs.ntfs": "NTFS (Yerel Windows)",
   "fs.fat32": "FAT32 (Eski Cihazlarla Uyumlu • 4GB Sınırı)",
   "fs.ext4": "ext4 (Yerel Linux)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "Hedef USB Sürücüsünü Seçin",
+  "header.subtitle": "Önyüklenebilir Sürücü Oluşturma ve QEMU Testi"
 };

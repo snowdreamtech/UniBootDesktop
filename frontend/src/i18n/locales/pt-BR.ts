@@ -90,9 +90,9 @@ export const ptBr: TranslationDict = {
   "iso.empty_sub": "Suporta formatos .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
   "iso.summary": "{count} arquivo(s) de imagem selecionado(s)",
   "iso.clear": "Limpar Lista",
-  "deploy.title": "Criação de Disco Inicializável e Teste QEMU",
-  "deploy.desc_cloud": "Disco de Boot em Nuvem iPXE Puro • Estrutura ultrarrápida de partição dupla com firmware de rede iPXE multiarquitetura integrado",
-  "deploy.desc_hybrid": "Disco Híbrido de Motor Duplo Ventoy + UniBoot • Suporte para boot ISO/IMG local e implantação em rede",
+  "deploy.title": "Criação de unidade inicializável e teste QEMU",
+  "deploy.desc_cloud": "Boot em nuvem iPXE puro • Configuração ultra-rápida de duas partições com firmware de rede iPXE.",
+  "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuração de partição híbrida Ventoy com gerenciamento ISO local.",
   "deploy.target_device": "Dispositivo Alvo:",
   "deploy.batch_target": "{count} unidade(s) USB selecionada(s)",
   "deploy.start_create": "Iniciar Criando Disco",
@@ -255,5 +255,6 @@ export const ptBr: TranslationDict = {
   "fs.ntfs": "NTFS (Nativo do Windows)",
   "fs.fat32": "FAT32 (Compatível com Legado • Limite 4GB)",
   "fs.ext4": "ext4 (Nativo do Linux)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "Selecionar unidade USB de destino",
+  "header.subtitle": "Criação de unidade inicializável e teste QEMU"
 };

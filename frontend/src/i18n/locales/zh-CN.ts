@@ -90,9 +90,9 @@ export const zhCn: TranslationDict = {
   "iso.empty_sub": "支持 .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw 等 Ventoy 全格式",
   "iso.summary": "已选 {count} 个系统镜像源文件",
   "iso.clear": "清空列表",
-  "deploy.title": "启动盘制作与 QEMU 模拟校验",
-  "deploy.desc_cloud": "纯 iPXE 云部署盘 • 极速双分区结构，内置多架构 iPXE 网络引导固件",
-  "deploy.desc_hybrid": "Ventoy + UniBoot 双引擎混合盘 • 支持全本地 ISO/IMG 启动与网络部署",
+  "deploy.title": "启动盘制作与 QEMU 模拟测试",
+  "deploy.desc_cloud": "纯 iPXE 云引导 • 双分区极速部署，内置多架构 iPXE 网络固件",
+  "deploy.desc_hybrid": "Ventoy CLI 本地引擎 • 部署 Ventoy 混合分区，支持本地 ISO 镜像管理",
   "deploy.target_device": "目标设备:",
   "deploy.batch_target": "已选中 {count} 块 U 盘",
   "deploy.start_create": "开始制作启动盘",
@@ -255,5 +255,6 @@ export const zhCn: TranslationDict = {
   "fs.ntfs": "NTFS (Windows 原生格式)",
   "fs.fat32": "FAT32 (兼容老旧设备 • 单文件限制 4GB)",
   "fs.ext4": "ext4 (Linux 原生格式)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "选择目标 U 盘",
+  "header.subtitle": "启动盘制作与 QEMU 模拟测试"
 };

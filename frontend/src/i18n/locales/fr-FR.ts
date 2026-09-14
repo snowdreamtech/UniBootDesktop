@@ -90,9 +90,9 @@ export const frFr: TranslationDict = {
   "iso.empty_sub": "Prend en charge les formats .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
   "iso.summary": "{count} fichier(s) image sélectionné(s)",
   "iso.clear": "Vider la liste",
-  "deploy.title": "Création de disque d'amorçage & Test QEMU",
-  "deploy.desc_cloud": "Disque d'amorçage Cloud iPXE pur • Structure à deux partitions ultra-rapide avec micrologiciel réseau iPXE multi-architecture intégré",
-  "deploy.desc_hybrid": "Disque hybride double moteur Ventoy + UniBoot • Prise en charge du démarrage ISO/IMG local et du déploiement réseau",
+  "deploy.title": "Création de lecteur démarrable et test QEMU",
+  "deploy.desc_cloud": "Démarrage Cloud iPXE Pur • Configuration ultra-rapide à deux partitions avec micrologiciel réseau iPXE multi-arch.",
+  "deploy.desc_hybrid": "Moteur local Ventoy CLI • Configuration de partition hybride Ventoy avec gestion ISO locale.",
   "deploy.target_device": "Périphérique cible :",
   "deploy.batch_target": "{count} disque(s) USB sélectionné(s)",
   "deploy.start_create": "Démarrer la création",
@@ -255,5 +255,6 @@ export const frFr: TranslationDict = {
   "fs.ntfs": "NTFS (Natif Windows)",
   "fs.fat32": "FAT32 (Compatible anciens systèmes • Limite 4 Go)",
   "fs.ext4": "ext4 (Natif Linux)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "Sélectionner le lecteur USB cible",
+  "header.subtitle": "Création de lecteur démarrable et test QEMU"
 };

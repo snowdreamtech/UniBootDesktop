@@ -90,9 +90,9 @@ export const taIn: TranslationDict = {
   "iso.empty_sub": "Supports .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formats",
   "iso.summary": "Selected {count} image source file(s)",
   "iso.clear": "Clear List",
-  "deploy.title": "Bootable Drive Creation & QEMU Test",
-  "deploy.desc_cloud": "Pure iPXE Cloud Boot • Ultra-fast dual-partition setup with multi-arch iPXE network firmware.",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Dual-Engine Hybrid • Supports local ISO/IMG boot & cloud network deployment.",
+  "deploy.title": "பூட் செய்யக்கூடிய டிரைவ் உருவாக்கம் மற்றும் QEMU சோதனை",
+  "deploy.desc_cloud": "தூய்மையான iPXE மேகக்கணி பூட் • பல கட்டிடக்கலை iPXE நெட்வொர்க் ஃபார்ம்வேருடன் கூடிய அதிவேக இரட்டைப் பிரிவு அமைவு.",
+  "deploy.desc_hybrid": "Ventoy CLI உள்ளூர் எஞ்சின் • உள்ளூர் ISO மேலாண்மையுடன் கூடிய Ventoy கலப்பின பிரிவு அமைவு.",
   "deploy.target_device": "Target Device:",
   "deploy.batch_target": "Selected {count} USB drive(s)",
   "deploy.start_create": "Start Deployment",
@@ -255,5 +255,6 @@ export const taIn: TranslationDict = {
   "fs.ntfs": "NTFS (Windows Native)",
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
-  "disk.title": "இலக்கு USB டிரைவை தேர்ந்தெடுக்கவும்"
+  "disk.title": "இலக்கு USB டிரைவை தேர்ந்தெடுக்கவும்",
+  "header.subtitle": "பூட் செய்யக்கூடிய டிரைவ் உருவாக்கம் மற்றும் QEMU சோதனை"
 };

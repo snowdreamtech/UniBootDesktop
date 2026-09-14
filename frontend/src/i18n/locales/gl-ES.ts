@@ -90,9 +90,9 @@ export const glEs: TranslationDict = {
   "iso.empty_sub": "Supports .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formats",
   "iso.summary": "Selected {count} image source file(s)",
   "iso.clear": "Clear List",
-  "deploy.title": "Bootable Drive Creation & QEMU Test",
-  "deploy.desc_cloud": "Pure iPXE Cloud Boot • Ultra-fast dual-partition setup with multi-arch iPXE network firmware.",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Dual-Engine Hybrid • Supports local ISO/IMG boot & cloud network deployment.",
+  "deploy.title": "Creación de disco de arranque e proba QEMU",
+  "deploy.desc_cloud": "Arranque na nube iPXE puro • Configuración ultrarrápida de dúas particións con firmware de red iPXE.",
+  "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuración de partición híbrida Ventoy con xestión ISO local.",
   "deploy.target_device": "Target Device:",
   "deploy.batch_target": "Selected {count} USB drive(s)",
   "deploy.start_create": "Start Deployment",
@@ -255,5 +255,6 @@ export const glEs: TranslationDict = {
   "fs.ntfs": "NTFS (Windows Native)",
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
-  "disk.title": "Seleccionar Unidade USB de Destino"
+  "disk.title": "Seleccionar Unidade USB de Destino",
+  "header.subtitle": "Creación de disco de arranque e proba QEMU"
 };

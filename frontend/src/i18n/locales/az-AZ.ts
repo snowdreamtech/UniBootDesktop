@@ -90,9 +90,9 @@ export const azAz: TranslationDict = {
   "iso.empty_sub": "Supports .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formats",
   "iso.summary": "Selected {count} image source file(s)",
   "iso.clear": "Clear List",
-  "deploy.title": "Bootable Drive Creation & QEMU Test",
-  "deploy.desc_cloud": "Pure iPXE Cloud Boot • Ultra-fast dual-partition setup with multi-arch iPXE network firmware.",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Dual-Engine Hybrid • Supports local ISO/IMG boot & cloud network deployment.",
+  "deploy.title": "Yüklənə bilən disk yaradılması və QEMU testi",
+  "deploy.desc_cloud": "Təmiz iPXE Bulud Yükləməsi • Çox arxitekturalı iPXE şəbəkə proqramı ilə ultra sürətli iki bölməli quraşdırma.",
+  "deploy.desc_hybrid": "Ventoy CLI Yerli Mühərriki • Yerli ISO idarəetməsi ilə Ventoy hibrid bölmə quraşdırması.",
   "deploy.target_device": "Target Device:",
   "deploy.batch_target": "Selected {count} USB drive(s)",
   "deploy.start_create": "Start Deployment",
@@ -255,5 +255,6 @@ export const azAz: TranslationDict = {
   "fs.ntfs": "NTFS (Windows Native)",
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
-  "disk.title": "Hədəf USB Diski Seçin"
+  "disk.title": "Hədəf USB Diski Seçin",
+  "header.subtitle": "Yüklənə bilən disk yaradılması və QEMU testi"
 };

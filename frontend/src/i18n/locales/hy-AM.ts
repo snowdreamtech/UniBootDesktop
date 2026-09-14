@@ -90,9 +90,9 @@ export const hyAm: TranslationDict = {
   "iso.empty_sub": "Supports .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formats",
   "iso.summary": "Selected {count} image source file(s)",
   "iso.clear": "Clear List",
-  "deploy.title": "Bootable Drive Creation & QEMU Test",
-  "deploy.desc_cloud": "Pure iPXE Cloud Boot • Ultra-fast dual-partition setup with multi-arch iPXE network firmware.",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Dual-Engine Hybrid • Supports local ISO/IMG boot & cloud network deployment.",
+  "deploy.title": "Բեռնավորվող կրիչի ստեղծում և QEMU թեստ",
+  "deploy.desc_cloud": "Մաքուր iPXE ամպային բեռնավորում • Գերարագ երկու բաժանմունքների կարգավորում բազմաճարտարապետական iPXE ցանցային ծրագրով:",
+  "deploy.desc_hybrid": "Ventoy CLI տեղական շարժիչ • Ventoy հիբրիդային բաժանմունքի կարգավորում ISO-ի տեղական կառավարմամբ:",
   "deploy.target_device": "Target Device:",
   "deploy.batch_target": "Selected {count} USB drive(s)",
   "deploy.start_create": "Start Deployment",
@@ -255,5 +255,6 @@ export const hyAm: TranslationDict = {
   "fs.ntfs": "NTFS (Windows Native)",
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
-  "disk.title": "Ընտրեք Նպատակակետ USB Կրիչը"
+  "disk.title": "Ընտրեք Նպատակակետ USB Կրիչը",
+  "header.subtitle": "Բեռնավորվող կրիչի ստեղծում և QEMU թեստ"
 };

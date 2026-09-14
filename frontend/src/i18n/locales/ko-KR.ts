@@ -90,9 +90,9 @@ export const koKr: TranslationDict = {
   "iso.empty_sub": ".iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw 등 모든 형식 지원",
   "iso.summary": "{count}개 이미지 파일 선택됨",
   "iso.clear": "목록 지우기",
-  "deploy.title": "부팅 디스크 제작 및 QEMU 시뮬레이션 검증",
-  "deploy.desc_cloud": "순수 iPXE 클라우드 부팅 디스크 • 초고속 듀얼 파티션 구조, 다중 아키텍처 iPXE 네트워크 부팅 펌웨어 내장",
-  "deploy.desc_hybrid": "Ventoy + UniBoot 듀얼 엔진 하이브리드 디스크 • 완전 로컬 ISO/IMG 부팅 및 클라우드 네트워크 배포 지원",
+  "deploy.title": "부팅 드라이브 제작 및 QEMU 시뮬레이션 테스트",
+  "deploy.desc_cloud": "순수 iPXE 클라우드 부팅 • 다중 아키텍처 iPXE 네트워크 펌웨어가 포함된 초고속 듀얼 파티션 구성",
+  "deploy.desc_hybrid": "Ventoy CLI 로컬 엔진 • 로컬 ISO 관리가 포함된 Ventoy 하이브리드 파티션 구성",
   "deploy.target_device": "대상 장치:",
   "deploy.batch_target": "{count}개 USB 드라이브 선택됨",
   "deploy.start_create": "부팅 디스크 제작 시작",
@@ -255,5 +255,6 @@ export const koKr: TranslationDict = {
   "fs.ntfs": "NTFS (Windows 네이티브)",
   "fs.fat32": "FAT32 (구형 호환 • 4GB 파일 제한)",
   "fs.ext4": "ext4 (Linux 네이티브)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "대상 USB 드라이브 선택",
+  "header.subtitle": "부팅 드라이브 제작 및 QEMU 시뮬레이션 테스트"
 };

@@ -90,9 +90,9 @@ export const beBy: TranslationDict = {
   "iso.empty_sub": "Supports .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formats",
   "iso.summary": "Selected {count} image source file(s)",
   "iso.clear": "Clear List",
-  "deploy.title": "Bootable Drive Creation & QEMU Test",
-  "deploy.desc_cloud": "Pure iPXE Cloud Boot • Ultra-fast dual-partition setup with multi-arch iPXE network firmware.",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Dual-Engine Hybrid • Supports local ISO/IMG boot & cloud network deployment.",
+  "deploy.title": "Стварэнне загрузачнага дыска і тэст QEMU",
+  "deploy.desc_cloud": "Чыстая воблачная загрузка iPXE • Надхуткае наладжванне двух раздзелаў з сеткавай прашыўкай iPXE.",
+  "deploy.desc_hybrid": "Лакальны рухавік Ventoy CLI • Наладжванне гібрыднага раздзела Ventoy з лакальным кіраваннем ISO.",
   "deploy.target_device": "Target Device:",
   "deploy.batch_target": "Selected {count} USB drive(s)",
   "deploy.start_create": "Start Deployment",
@@ -255,5 +255,6 @@ export const beBy: TranslationDict = {
   "fs.ntfs": "NTFS (Windows Native)",
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
-  "disk.title": "Выберыце Мэтавы USB-назапашвальнік"
+  "disk.title": "Выберыце Мэтавы USB-назапашвальнік",
+  "header.subtitle": "Стварэнне загрузачнага дыска і тэст QEMU"
 };

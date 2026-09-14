@@ -90,9 +90,9 @@ export const deDe: TranslationDict = {
   "iso.empty_sub": "Unterstützt die Formate .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
   "iso.summary": "{count} Image-Quelldatei(en) ausgewählt",
   "iso.clear": "Liste leeren",
-  "deploy.title": "Erstellung von bootfähigen Datenträgern & QEMU-Test",
-  "deploy.desc_cloud": "Reiner iPXE-Cloud-Boot-Datenträger • Ultraschnelle Zwei-Partitions-Struktur mit Multi-Architektur-iPXE-Netzwerk-Firmware",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Dual-Engine-Hybrid-Datenträger • Unterstützt lokalen ISO/IMG-Start und Cloud-Netzwerk-Bereitstellung",
+  "deploy.title": "Erstellung von bootfähigen Laufwerken & QEMU-Test",
+  "deploy.desc_cloud": "Reines iPXE Cloud-Boot • Ultraschnelle Zwei-Partitions-Einrichtung mit Multi-Arch iPXE Netzwerk-Firmware.",
+  "deploy.desc_hybrid": "Ventoy CLI Lokale Engine • Ventoy Hybrid-Partitions-Einrichtung mit lokaler ISO-Verwaltung.",
   "deploy.target_device": "Zielgerät:",
   "deploy.batch_target": "{count} USB-Laufwerk(e) ausgewählt",
   "deploy.start_create": "Erstellung starten",
@@ -255,5 +255,6 @@ export const deDe: TranslationDict = {
   "fs.ntfs": "NTFS (Windows-nativ)",
   "fs.fat32": "FAT32 (Legacy-kompatibel • 4GB Limit)",
   "fs.ext4": "ext4 (Linux-nativ)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "Ziel-USB-Laufwerk auswählen",
+  "header.subtitle": "Erstellung von bootfähigen Laufwerken & QEMU-Test"
 };

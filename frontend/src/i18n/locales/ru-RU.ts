@@ -90,9 +90,9 @@ export const ruRu: TranslationDict = {
   "iso.empty_sub": "Поддерживает форматы .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
   "iso.summary": "Выбрано файлов образов: {count}",
   "iso.clear": "Очистить список",
-  "deploy.title": "Создание загрузочного диска и тестирование QEMU",
-  "deploy.desc_cloud": "Чистый загрузочный диск iPXE Cloud • Сверхбыстрая двухраздельная структура со встроенной сетевой прошивкой iPXE для нескольких архитектур",
-  "deploy.desc_hybrid": "Гибридный диск с двумя движками Ventoy + UniBoot • Поддержка локальной загрузки ISO/IMG и сетевого развертывания",
+  "deploy.title": "Создание загрузочного диска и тест QEMU",
+  "deploy.desc_cloud": "Чистая облачная загрузка iPXE • Сверхбыстрая настройка двух разделов с сетевой прошивкой iPXE.",
+  "deploy.desc_hybrid": "Локальный движок Ventoy CLI • Настройка гибридного раздела Ventoy с локальным управлением ISO.",
   "deploy.target_device": "Целевое устройство:",
   "deploy.batch_target": "Выбрано USB-накопителей: {count}",
   "deploy.start_create": "Начать создание",
@@ -255,5 +255,6 @@ export const ruRu: TranslationDict = {
   "fs.ntfs": "NTFS (Родная система Windows)",
   "fs.fat32": "FAT32 (Совместимость со старыми • Лимит 4 ГБ)",
   "fs.ext4": "ext4 (Родная система Linux)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "Выберите целевой USB-накопитель",
+  "header.subtitle": "Создание загрузочного диска и тест QEMU"
 };

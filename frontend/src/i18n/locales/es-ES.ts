@@ -91,8 +91,8 @@ export const esEs: TranslationDict = {
   "iso.summary": "{count} archivo(s) de imagen seleccionado(s)",
   "iso.clear": "Vaciar lista",
   "deploy.title": "Creación de disco de arranque y prueba QEMU",
-  "deploy.desc_cloud": "Disco de arranque en la nube iPXE puro • Estructura ultrarrápida de doble partición con firmware de red iPXE multiarquitectura integrado",
-  "deploy.desc_hybrid": "Disco híbrido de doble motor Ventoy + UniBoot • Soporte para arranque ISO/IMG local y despliegue en red",
+  "deploy.desc_cloud": "Arranque en la nube iPXE puro • Configuración ultrarrápida de dos particiones con firmware de red iPXE multiarquitectura.",
+  "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuración de partición híbrida Ventoy con gestión ISO local.",
   "deploy.target_device": "Dispositivo objetivo:",
   "deploy.batch_target": "{count} unidad(es) USB seleccionada(s)",
   "deploy.start_create": "Iniciar creación",
@@ -255,5 +255,6 @@ export const esEs: TranslationDict = {
   "fs.ntfs": "NTFS (Nativo de Windows)",
   "fs.fat32": "FAT32 (Compatible con antiguos • Límite 4GB)",
   "fs.ext4": "ext4 (Nativo de Linux)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "Seleccionar unidad USB de destino",
+  "header.subtitle": "Creación de disco de arranque y prueba QEMU"
 };

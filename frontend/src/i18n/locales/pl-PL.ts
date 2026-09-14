@@ -84,15 +84,15 @@ export const plPl: TranslationDict = {
   "safe.title_hybrid": "🛡️ Mode A Aktualizacja w miejscu (Bez formatowania, istniejące ISO zachowane)",
   "safe.desc_hybrid": "Wykryto strukturę rozruchową Ventoy / UniBoot. Oprogramowanie układowe zostanie zaktualizowane z zachowaniem wszystkich plików i ISO.",
   "iso.title": "💿 Lokalne źródła obrazów systemu (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Dodaj pliki ISO do automatycznego kopiowania do katalogu /UNIBOOT/iso/ w celu bezpośredniego rozruchu Ventoy / UniBoot.",
+  "iso.desc": "Dodaj pliki ISO do automatycznego kopiowania do /UNIBOOT/iso/ dla bezpośredniego rozruchu Ventoy / UniBoot.",
   "iso.add_btn": "➕ Dodaj pliki obrazu",
   "iso.empty_title": "Kliknij, aby dodać pliki obrazów (Wybór pojedynczy lub masowy)",
   "iso.empty_sub": "Obsługuje formaty .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
   "iso.summary": "Wybrano {count} plik(ów) obrazu",
   "iso.clear": "Wyczyść listę",
-  "deploy.title": "Tworzenie Dysku Rozruchowego i Test QEMU",
-  "deploy.desc_cloud": "Czysty Dysk Rozruchowy z Chmury iPXE • Ultraszybka struktura dwupartycyjna z wbudowanym oprogramowaniem układowym iPXE",
-  "deploy.desc_hybrid": "Dysk Hybrydowy z Podwójnym Silnikiem Ventoy + UniBoot • Obsługa rozruchu lokalnego ISO/IMG i wdrażania sieciowego",
+  "deploy.title": "Tworzenie dysku rozruchowego i test QEMU",
+  "deploy.desc_cloud": "Czysty rozruch iPXE z chmury • Ultraszybka konfiguracja dwupartycyjna z oprogramowaniem układowym iPXE.",
+  "deploy.desc_hybrid": "Lokalny silnik Ventoy CLI • Konfiguracja partycji hybrydowej Ventoy z lokalnym zarządzaniem ISO.",
   "deploy.target_device": "Urządzenie docelowe:",
   "deploy.batch_target": "Wybrano {count} dysk(i) USB",
   "deploy.start_create": "Rozpocznij tworzenie",
@@ -255,5 +255,6 @@ export const plPl: TranslationDict = {
   "fs.ntfs": "NTFS (Natywny Windows)",
   "fs.fat32": "FAT32 (Zgodność ze starszymi • Limit 4GB)",
   "fs.ext4": "ext4 (Natywny Linux)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "Wybierz docelowy dysk USB",
+  "header.subtitle": "Tworzenie dysku rozruchowego i test QEMU"
 };

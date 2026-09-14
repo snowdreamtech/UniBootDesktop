@@ -90,9 +90,9 @@ export const jaJp: TranslationDict = {
   "iso.empty_sub": ".iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw などの全形式に対応",
   "iso.summary": "{count} 個のイメージファイルを選択中",
   "iso.clear": "リストを消去",
-  "deploy.title": "ブータブルディスク作成 & QEMU シミュレーション検証",
-  "deploy.desc_cloud": "純粋な iPXE クラウドブートディスク • 高速デュアルパーティション構造、マルチアーキテクチャ iPXE ネットワークブートファームウェア内蔵",
-  "deploy.desc_hybrid": "Ventoy + UniBoot デュアルエンジンハイブリッドディスク • 完全ローカル ISO/IMG 起動およびクラウドネットワーク展開対応",
+  "deploy.title": "起動ドライブ作成＆ QEMU シミュレーションテスト",
+  "deploy.desc_cloud": "純粋な iPXE クラウドブート • マルチアーキテクチャ iPXE ネットワークファームウェアを備えた高速デュアルパーティション構築",
+  "deploy.desc_hybrid": "Ventoy CLI ローカルエンジン • ローカル ISO 管理対応の Ventoy ハイブリッドパーティション構築",
   "deploy.target_device": "ターゲットデバイス:",
   "deploy.batch_target": "{count} 個の USB ドライブを選択中",
   "deploy.start_create": "ブートディスクの作成を開始",
@@ -255,5 +255,6 @@ export const jaJp: TranslationDict = {
   "fs.ntfs": "NTFS (Windows ネイティブ)",
   "fs.fat32": "FAT32 (レガシー対応 • 4GBファイル制限)",
   "fs.ext4": "ext4 (Linux ネイティブ)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "対象の USB ドライブを選択",
+  "header.subtitle": "起動ドライブ作成＆ QEMU シミュレーションテスト"
 };

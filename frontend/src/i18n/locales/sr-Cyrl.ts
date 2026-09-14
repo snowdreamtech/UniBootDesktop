@@ -90,9 +90,9 @@ export const srCyrl: TranslationDict = {
   "iso.empty_sub": "Supports .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formats",
   "iso.summary": "Selected {count} image source file(s)",
   "iso.clear": "Clear List",
-  "deploy.title": "Bootable Drive Creation & QEMU Test",
-  "deploy.desc_cloud": "Pure iPXE Cloud Boot • Ultra-fast dual-partition setup with multi-arch iPXE network firmware.",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Dual-Engine Hybrid • Supports local ISO/IMG boot & cloud network deployment.",
+  "deploy.title": "Израда покретачког погона и QEMU тест",
+  "deploy.desc_cloud": "Чисто iPXE покретање из облака • Ултрабрзо постављање две партиције са мрежним iPXE фирмвером.",
+  "deploy.desc_hybrid": "Локални мотор Ventoy CLI • Постављање хибридне партиције Ventoy са локалним управљањем ISO датотекама.",
   "deploy.target_device": "Target Device:",
   "deploy.batch_target": "Selected {count} USB drive(s)",
   "deploy.start_create": "Start Deployment",
@@ -255,5 +255,6 @@ export const srCyrl: TranslationDict = {
   "fs.ntfs": "NTFS (Windows Native)",
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
-  "disk.title": "Изаберите Циљни USB Погон"
+  "disk.title": "Изаберите Циљни USB Погон",
+  "header.subtitle": "Израда покретачког погона и QEMU тест"
 };

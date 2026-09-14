@@ -90,9 +90,9 @@ export const ltLt: TranslationDict = {
   "iso.empty_sub": "Supports .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formats",
   "iso.summary": "Selected {count} image source file(s)",
   "iso.clear": "Clear List",
-  "deploy.title": "Bootable Drive Creation & QEMU Test",
-  "deploy.desc_cloud": "Pure iPXE Cloud Boot • Ultra-fast dual-partition setup with multi-arch iPXE network firmware.",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Dual-Engine Hybrid • Supports local ISO/IMG boot & cloud network deployment.",
+  "deploy.title": "Bagažinės disko kūrimas ir QEMU testas",
+  "deploy.desc_cloud": "Grynasis iPXE debesų paleidimas • Itin greitas dviejų skSections nustatymas su kelių architektūrų iPXE tinklo aparatine įranga.",
+  "deploy.desc_hybrid": "„Ventoy CLI“ vietinis variklis • „Ventoy“ hibridinio skirsnio nustatymas su vietiniu ISO valdymu.",
   "deploy.target_device": "Target Device:",
   "deploy.batch_target": "Selected {count} USB drive(s)",
   "deploy.start_create": "Start Deployment",
@@ -255,5 +255,6 @@ export const ltLt: TranslationDict = {
   "fs.ntfs": "NTFS (Windows Native)",
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
-  "disk.title": "Pasirinkite Tikslinį USB Įrenginį"
+  "disk.title": "Pasirinkite Tikslinį USB Įrenginį",
+  "header.subtitle": "Bagažinės disko kūrimas ir QEMU testas"
 };

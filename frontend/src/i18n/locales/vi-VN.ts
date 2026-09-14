@@ -90,9 +90,9 @@ export const viVn: TranslationDict = {
   "iso.empty_sub": "Hỗ trợ các định dạng .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
   "iso.summary": "Đã chọn {count} tệp nguồn tệp ảnh",
   "iso.clear": "Xóa danh sách",
-  "deploy.title": "Tạo Ổ Đĩa Khởi Động & Kiểm Tra QEMU",
-  "deploy.desc_cloud": "Đĩa Khởi Động Đám Mây iPXE Nguyên Bản • Cấu trúc hai phân vùng siêu nhanh tích hợp firmware mạng iPXE đa kiến trúc",
-  "deploy.desc_hybrid": "Đĩa Lai Động Cơ Kép Ventoy + UniBoot • Hỗ trợ khởi động ISO/IMG cục bộ và triển khai mạng",
+  "deploy.title": "Tạo ổ đĩa khởi động & Thử nghiệm QEMU",
+  "deploy.desc_cloud": "Khởi động đám mây iPXE thuần túy • Thiết lập hai phân vùng siêu tốc với phần mềm mạng iPXE đa kiến trúc.",
+  "deploy.desc_hybrid": "Động cơ cục bộ Ventoy CLI • Thiết lập phân vùng hỗn hợp Ventoy với quản lý ISO cục bộ.",
   "deploy.target_device": "Thiết bị mục tiêu:",
   "deploy.batch_target": "Đã chọn {count} ổ USB",
   "deploy.start_create": "Bắt đầu tạo đĩa",
@@ -255,5 +255,6 @@ export const viVn: TranslationDict = {
   "fs.ntfs": "NTFS (Nguyên bản Windows)",
   "fs.fat32": "FAT32 (Tương thích máy cũ • Giới hạn 4GB)",
   "fs.ext4": "ext4 (Nguyên bản Linux)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "Chọn ổ USB mục tiêu",
+  "header.subtitle": "Tạo ổ đĩa khởi động & Thử nghiệm QEMU"
 };

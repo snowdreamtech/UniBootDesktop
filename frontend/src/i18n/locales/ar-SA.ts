@@ -90,9 +90,9 @@ export const arSa: TranslationDict = {
   "iso.empty_sub": "يدعم صيغ .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
   "iso.summary": "تم تحديد {count} ملف مصدر صورة",
   "iso.clear": "مسح القائمة",
-  "deploy.title": "إنشاء قرص الإقلاع واختبار QEMU",
-  "deploy.desc_cloud": "قرص إقلاع سحابي iPXE خالص • هيكل ذو تقسيم مزدوج فائق السرعة مع برنامج ثابت لشبكة iPXE متعدد الهندسات مدمج",
-  "deploy.desc_hybrid": "قرص هجين بمحرك مزدوج Ventoy + UniBoot • يدعم الإقلاع المحلي ISO/IMG والنشر عبر الشبكة السحابية",
+  "deploy.title": "إنشاء محرك أقراص قابل للتمهيد واختبار محاكاة QEMU",
+  "deploy.desc_cloud": "تمهيد سحابي نقي عبر iPXE • إعداد فائق السرعة لمقسمين مع برامج شبكة iPXE متعددة البنيات.",
+  "deploy.desc_hybrid": "محرك محلي Ventoy CLI • إعداد مقسم هجين لـ Ventoy مع إدارة صور ISO المحلية.",
   "deploy.target_device": "الجهاز المستهدف:",
   "deploy.batch_target": "تم تحديد {count} محرك أقراص USB",
   "deploy.start_create": "بدء إنشاء القرص",
@@ -255,5 +255,6 @@ export const arSa: TranslationDict = {
   "fs.ntfs": "NTFS (نظام Windows الأصلي)",
   "fs.fat32": "FAT32 (متوافق مع الأجهزة القديمة • حد 4 جيجابايت)",
   "fs.ext4": "ext4 (نظام Linux الأصلي)",
-  "disk.title": "Select Target USB Drive"
+  "disk.title": "اختر قرص USB المستهدف",
+  "header.subtitle": "إنشاء محرك أقراص قابل للتمهيد واختبار محاكاة QEMU"
 };

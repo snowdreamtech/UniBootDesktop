@@ -90,9 +90,9 @@ export const bnBd: TranslationDict = {
   "iso.empty_sub": "Supports .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formats",
   "iso.summary": "Selected {count} image source file(s)",
   "iso.clear": "Clear List",
-  "deploy.title": "Bootable Drive Creation & QEMU Test",
-  "deploy.desc_cloud": "Pure iPXE Cloud Boot • Ultra-fast dual-partition setup with multi-arch iPXE network firmware.",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Dual-Engine Hybrid • Supports local ISO/IMG boot & cloud network deployment.",
+  "deploy.title": "বুটযোগ্য ড্রাইভ তৈরি এবং QEMU পরীক্ষা",
+  "deploy.desc_cloud": "বিশুদ্ধ iPXE ক্লাউড বুট • মাল্টি-আর্ক iPXE নেটওয়ার্ক ফার্মওয়্যার সহ অতি-দ্রুত দ্বৈত-পার্টিশন সেটআপ।",
+  "deploy.desc_hybrid": "Ventoy CLI লোকাল ইঞ্জিন • লোকাল ISO ব্যবস্থাপনা সহ Ventoy হাইব্রিড পার্টিশন সেটআপ।",
   "deploy.target_device": "Target Device:",
   "deploy.batch_target": "Selected {count} USB drive(s)",
   "deploy.start_create": "Start Deployment",
@@ -255,5 +255,6 @@ export const bnBd: TranslationDict = {
   "fs.ntfs": "NTFS (Windows Native)",
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
-  "disk.title": "টার্গেট USB ড্রাইভ নির্বাচন করুন"
+  "disk.title": "টার্গেট USB ড্রাইভ নির্বাচন করুন",
+  "header.subtitle": "বুটযোগ্য ড্রাইভ তৈরি এবং QEMU পরীক্ষা"
 };

@@ -90,9 +90,9 @@ export const mlIn: TranslationDict = {
   "iso.empty_sub": "Supports .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formats",
   "iso.summary": "Selected {count} image source file(s)",
   "iso.clear": "Clear List",
-  "deploy.title": "Bootable Drive Creation & QEMU Test",
-  "deploy.desc_cloud": "Pure iPXE Cloud Boot • Ultra-fast dual-partition setup with multi-arch iPXE network firmware.",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Dual-Engine Hybrid • Supports local ISO/IMG boot & cloud network deployment.",
+  "deploy.title": "ബൂട്ട് ചെയ്യാവുന്ന ഡ്രൈവ് നിർമ്മാണവും QEMU ടെസ്റ്റും",
+  "deploy.desc_cloud": "പ്യുവർ iPXE ക്ലൗഡ് ബൂട്ട് • മൾട്ടി-ആർക്ക് iPXE നെറ്റ്‌വർക്ക് ഫേംവെയറുള്ള അതിവേഗ ദ്വി-പാർട്ടിഷൻ സജ്ജീകരണം.",
+  "deploy.desc_hybrid": "Ventoy CLI ലോക്കൽ എഞ്ചിൻ • ലോക്കൽ ISO മാനേജ്‌മെന്റുള്ള Ventoy ഹൈബ്രിഡ് പാർട്ടിഷൻ സജ്ജീകരണം.",
   "deploy.target_device": "Target Device:",
   "deploy.batch_target": "Selected {count} USB drive(s)",
   "deploy.start_create": "Start Deployment",
@@ -255,5 +255,6 @@ export const mlIn: TranslationDict = {
   "fs.ntfs": "NTFS (Windows Native)",
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
-  "disk.title": "ലക്ഷ്യ USB ഡ്രൈവ് തിരഞ്ഞെടുക്കുക"
+  "disk.title": "ലക്ഷ്യ USB ഡ്രൈവ് തിരഞ്ഞെടുക്കുക",
+  "header.subtitle": "ബൂട്ട് ചെയ്യാവുന്ന ഡ്രൈവ് നിർമ്മാണവും QEMU ടെസ്റ്റും"
 };

@@ -90,9 +90,9 @@ export const srLatn: TranslationDict = {
   "iso.empty_sub": "Supports .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formats",
   "iso.summary": "Selected {count} image source file(s)",
   "iso.clear": "Clear List",
-  "deploy.title": "Bootable Drive Creation & QEMU Test",
-  "deploy.desc_cloud": "Pure iPXE Cloud Boot • Ultra-fast dual-partition setup with multi-arch iPXE network firmware.",
-  "deploy.desc_hybrid": "Ventoy + UniBoot Dual-Engine Hybrid • Supports local ISO/IMG boot & cloud network deployment.",
+  "deploy.title": "Izrada pokretačkog pogona i QEMU test",
+  "deploy.desc_cloud": "Čisto iPXE pokretanje iz oblaka • Ultrabrzo postavljanje dve particije sa mrežnim iPXE firmverom.",
+  "deploy.desc_hybrid": "Lokalni motor Ventoy CLI • Postavljanje hibridne particije Ventoy sa lokalnim upravljanjem ISO datotekama.",
   "deploy.target_device": "Target Device:",
   "deploy.batch_target": "Selected {count} USB drive(s)",
   "deploy.start_create": "Start Deployment",
@@ -255,5 +255,6 @@ export const srLatn: TranslationDict = {
   "fs.ntfs": "NTFS (Windows Native)",
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
-  "disk.title": "Izaberite Ciljni USB Pogon"
+  "disk.title": "Izaberite Ciljni USB Pogon",
+  "header.subtitle": "Izrada pokretačkog pogona i QEMU test"
 };
