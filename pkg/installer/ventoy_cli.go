@@ -211,7 +211,7 @@ func FormatDiskWithVentoyCli(ctx context.Context, ventoyPath string, targetDisk 
 		if err != nil {
 			cmdFallback := exec.CommandContext(ctx, val.ExecutablePath, "-i", "-g", targetDisk)
 			cmdFallback.Dir = ventoyDir
-			if fbOut, fbErr := cmdFallback.CombinedOutput(); fbErr != nil {
+			if _, fbErr := cmdFallback.CombinedOutput(); fbErr != nil {
 				cmdFallback2 := exec.CommandContext(ctx, val.ExecutablePath, "-i", targetDisk)
 				cmdFallback2.Dir = ventoyDir
 				if fbOut2, fbErr2 := cmdFallback2.CombinedOutput(); fbErr2 != nil {
