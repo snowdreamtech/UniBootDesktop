@@ -562,9 +562,15 @@ const isDeployDisabled = computed(() => {
 
 const isSelectedVentoyDisk = computed(() => {
   if (selectionMode.value === 'single' && selectedDisk.value) {
+    if (activeMode.value === 'cloud') {
+      return true;
+    }
     const name = (selectedDisk.value.name || '').toUpperCase();
     const status = (selectedDisk.value.bootStatus || '').toUpperCase();
-    return name.includes('VENTOY') || status.includes('VENTOY') || status.includes('UNIBOOT');
+    if (status.includes('MODE B') || status.includes('CLOUD PURE')) {
+      return false;
+    }
+    return name.includes('VENTOY') || status.includes('VENTOY');
   }
   return false;
 });

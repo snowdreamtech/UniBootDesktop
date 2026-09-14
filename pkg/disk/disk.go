@@ -240,6 +240,44 @@ func IsVentoyDisk(targetDisk string) bool {
 	return false
 }
 
+// IsModeBDisk checks if a target disk is currently formatted in Mode B (Cloud Pure mode, having iPXE boot.ipxe in ESP but no Ventoy MBR).
+func IsModeBDisk(targetDisk string) bool {
+	if runtime.GOOS == "darwin" {
+		diskNode := filepath.Base(targetDisk)
+		if strings.HasPrefix(diskNode, "disk") {
+			p2 := diskNode
+			if !strings.Contains(diskNode, "s") {
+				p2 = diskNode + "s2"
+			}
+			out, err := exec.Command("diskutil", "info", "-plist", p2).Output()
+			if err == nil {
+				strOut := string(out)
+				mountPoint := extractPlistValue(strOut, "MountPoint")
+				if mountPoint != "" {
+					bootIpxe := filepath.Join(mountPoint, "boot.ipxe")
+					ventoyDir := filepath.Join(mountPoint, "ventoy")
+					_, errBoot := os.Stat(bootIpxe)
+					_, errVentoy := os.Stat(ventoyDir)
+					if errBoot == nil && os.IsNotExist(errVentoy) {
+						return true
+					}
+				}
+			}
+		}
+	}
+	return false
+}
+
+// IsRealVentoyDisk checks if a target disk is an active Ventoy drive containing Ventoy's MBR bootloader and configuration.
+func IsRealVentoyDisk(targetDisk string) bool {
+	if IsModeBDisk(targetDisk) {
+		return false
+	}
+	return IsVentoyDisk(targetDisk)
+}
+
+// FormatBytes formats byte counts into human-readable strings using 1024 base (e.g. 29.80 GB).
+
 
 // FormatBytes formats byte counts into human-readable strings using 1024 base (e.g. 29.80 GB).
 func FormatBytes(bytes uint64) string {

@@ -40,8 +40,8 @@ func DeployModeAWithIsoAndVentoyPath(ctx context.Context, targetDisk string, fsT
 		fsType = "exFAT"
 	}
 
-	// 1. Differential Treatment: Check if target drive is ALREADY an active Ventoy drive
-	isExistingVentoy := disk.IsVentoyDisk(targetDisk)
+	// 1. Differential Treatment: Check if target drive is ALREADY a REAL active Ventoy drive (with Ventoy MBR)
+	isExistingVentoy := disk.IsRealVentoyDisk(targetDisk)
 	var mountPoint string
 	var err error
 
