@@ -87,6 +87,9 @@ const zhCN: TranslationDict = {
   'iso.summary': '已选 {count} 个系统镜像源文件',
   'iso.clear': '清空列表',
 
+  'deploy.title': '启动盘制作与模拟测试',
+  'deploy.desc_cloud': '纯净 iPXE 云引导 • 极速初始化双分区并写入多架构 iPXE 网络引导固件。',
+  'deploy.desc_hybrid': '集成 Ventoy 核心 + UniBoot 专属暗色主题 & iPXE 网络扩展，支持放置数 GB 大 ISO 镜像。',
   'deploy.target_device': '目标设备:',
   'deploy.batch_target': '已选中 {count} 块 U 盘',
   'deploy.start_create': '开始制作启动盘',
@@ -198,6 +201,9 @@ const enUS: TranslationDict = {
   'iso.summary': 'Selected {count} image source file(s)',
   'iso.clear': 'Clear List',
 
+  'deploy.title': 'Bootable Drive Creation & QEMU Test',
+  'deploy.desc_cloud': 'Pure iPXE Cloud Boot • Ultra-fast dual-partition setup with multi-arch iPXE network firmware.',
+  'deploy.desc_hybrid': 'Integrated Ventoy core + UniBoot dark theme & iPXE cloud extension, supports multi-GB ISO images.',
   'deploy.target_device': 'Target Device:',
   'deploy.batch_target': 'Selected {count} USB drive(s)',
   'deploy.start_create': 'Start Deployment',

@@ -142,10 +142,10 @@
       <section class="glass-card section-card">
         <h2>{{ t('deploy.title') }}</h2>
         <p class="section-desc" v-if="activeMode === 'cloud'">
-          <strong>{{ t('mode.cloud') }}</strong> • Ultra-fast double partition initialization & multi-arch iPXE cloud boot.
+          {{ t('deploy.desc_cloud') }}
         </p>
         <p class="section-desc" v-else>
-          Integrated Ventoy core + UniBoot theme & iPXE cloud boot support.
+          {{ t('deploy.desc_hybrid') }}
         </p>
 
         <!-- Filesystem Selection for Mode A & Mode B (Hidden when upgrading an existing Ventoy/UniBoot drive) -->
