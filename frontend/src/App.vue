@@ -19,8 +19,8 @@
       <div class="brand">
         <span class="logo">🚀</span>
         <div>
-          <h1>UniGoDesktop</h1>
-          <span class="sub-brand">UniBoot Desktop Engine</span>
+          <h1>{{ t('app.title') }}</h1>
+          <span class="sub-brand">{{ t('app.subtitle') }}</span>
         </div>
       </div>
       <div class="mode-tabs">
@@ -29,25 +29,48 @@
           :class="{ active: activeMode === 'cloud' }"
           @click="selectMode('cloud')"
         >
-          ⚡ 模式 B (1秒极速云安装盘)
+          ⚡ {{ t('mode.cloud') }}
         </button>
         <button 
           class="tab-btn" 
           :class="{ active: activeMode === 'hybrid' }"
           @click="selectMode('hybrid')"
         >
-          🛠️ 模式 A (全能双模盘)
+          🛠️ {{ t('mode.hybrid') }}
         </button>
+
+        <!-- Header Quick Language Switcher Dropdown -->
+        <div class="lang-selector-header" ref="langDropdownRef">
+          <button 
+            class="lang-pill-btn" 
+            :title="t('settings.language')"
+            @click.stop="toggleLangMenu"
+          >
+            <span class="lang-icon">🌐</span>
+            <span class="lang-label">{{ currentLangLabel }}</span>
+            <span class="dropdown-caret">▾</span>
+          </button>
+
+          <transition name="dropdown-fade">
+            <div v-if="isLangMenuOpen" class="lang-dropdown-menu" @click.stop>
+              <button 
+                v-for="opt in langOptions" 
+                :key="opt.value"
+                class="lang-option"
+                :class="{ active: currentLang === opt.value }"
+                @click="selectLanguage(opt.value)"
+              >
+                <span class="opt-flag">{{ opt.flag }}</span>
+                <span class="opt-text">{{ opt.label }}</span>
+                <span v-if="currentLang === opt.value" class="opt-check">✓</span>
+              </button>
+            </div>
+          </transition>
+        </div>
+
         <button 
           class="settings-icon-btn" 
-          title="切换界面语言 (Language)"
-          @click="openSettings('general')"
-        >
-          🌐
-        </button>
-        <button 
-          class="settings-icon-btn" 
-          title="系统与 GitHub 代理加速设置"
+          :title="t('settings.title')"
           @click="openSettings('general')"
         >
           ⚙️
@@ -321,7 +344,55 @@ import DeployConfirmModal from './components/DeployConfirmModal.vue';
 import SettingsModal from './components/SettingsModal.vue';
 import VentoyAlertModal from './components/VentoyAlertModal.vue';
 import CustomSelect from './components/CustomSelect.vue';
-import { setLanguage } from './i18n';
+import { t, currentLang, setLanguage } from './i18n';
+
+const isLangMenuOpen = ref(false);
+const langDropdownRef = ref<HTMLElement | null>(null);
+
+const langOptions = [
+  { value: 'auto', label: '自动识别 (Auto)', flag: '🌐' },
+  { value: 'zh-CN', label: '简体中文', flag: '🇨🇳' },
+  { value: 'en-US', label: 'English', flag: '🇺🇸' },
+  { value: 'zh-TW', label: '繁體中文', flag: '🇭🇰' }
+];
+
+const currentLangLabel = computed(() => {
+  if (currentLang.value === 'auto') {
+    return '语言 / Lang (Auto)';
+  }
+  const opt = langOptions.find(o => o.value === currentLang.value);
+  return opt ? opt.label : '语言 / Lang';
+});
+
+function toggleLangMenu() {
+  isLangMenuOpen.value = !isLangMenuOpen.value;
+}
+
+function selectLanguage(langVal: string) {
+  setLanguage(langVal);
+  isLangMenuOpen.value = false;
+  saveLangToConfig(langVal);
+}
+
+async function saveLangToConfig(langVal: string) {
+  if (window.go && window.go.main && window.go.main.App && window.go.main.App.GetConfig && window.go.main.App.SaveConfig) {
+    try {
+      const cfg = await window.go.main.App.GetConfig();
+      if (cfg) {
+        cfg.language = langVal;
+        await window.go.main.App.SaveConfig(cfg);
+      }
+    } catch (e) {
+      console.error('Failed to save language config:', e);
+    }
+  }
+}
+
+function handleGlobalClick(event: MouseEvent) {
+  if (langDropdownRef.value && !langDropdownRef.value.contains(event.target as Node)) {
+    isLangMenuOpen.value = false;
+  }
+}
 
 interface DiskInfo {
   device: string;
@@ -1037,6 +1108,7 @@ onMounted(() => {
   refreshDisks();
   checkQemu();
   checkVentoyStatus();
+  window.addEventListener('click', handleGlobalClick);
 
   if (window.runtime && window.runtime.EventsOn) {
     window.runtime.EventsOn("iso-copy-progress", (data: any) => {
@@ -1059,6 +1131,7 @@ onUnmounted(() => {
   if (diskPollTimer) {
     clearInterval(diskPollTimer);
   }
+  window.removeEventListener('click', handleGlobalClick);
 });
 </script>
 
@@ -1102,6 +1175,8 @@ h1 {
 
 .mode-tabs {
   display: flex;
+  align-items: center;
+  gap: 0.4rem;
   background: rgba(255, 255, 255, 0.05);
   padding: 0.3rem;
   border-radius: 12px;
@@ -1122,6 +1197,106 @@ h1 {
 .tab-btn.active {
   background: var(--accent-cyan);
   color: #070a12;
+}
+
+/* Header Quick Language Dropdown */
+.lang-selector-header {
+  position: relative;
+  display: inline-block;
+}
+
+.lang-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-color, #e0e6ed);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.12));
+  padding: 0.45rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-pill-btn:hover {
+  background: rgba(0, 229, 255, 0.15);
+  color: var(--accent-cyan, #00e5ff);
+  border-color: rgba(0, 229, 255, 0.4);
+}
+
+.lang-icon {
+  font-size: 1rem;
+}
+
+.lang-label {
+  font-size: 0.825rem;
+  white-space: nowrap;
+}
+
+.dropdown-caret {
+  font-size: 0.7rem;
+  opacity: 0.75;
+}
+
+.lang-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  background: var(--card-bg, rgba(20, 24, 38, 0.96));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.15));
+  border-radius: 12px;
+  padding: 0.45rem;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--text-color, #e0e6ed);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.lang-option:hover {
+  background: rgba(0, 229, 255, 0.12);
+  color: var(--accent-cyan, #00e5ff);
+}
+
+.lang-option.active {
+  background: rgba(0, 229, 255, 0.2);
+  color: var(--accent-cyan, #00e5ff);
+  font-weight: 700;
+}
+
+.opt-flag {
+  font-size: 1.1rem;
+}
+
+.opt-text {
+  flex: 1;
+}
+
+.opt-check {
+  font-size: 0.85rem;
+  color: var(--accent-cyan, #00e5ff);
 }
 
 .content-grid {

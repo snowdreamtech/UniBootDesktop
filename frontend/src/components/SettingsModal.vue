@@ -61,6 +61,21 @@
             </h4>
 
             <div class="grid-form">
+              <div class="form-group highlight-form-group">
+                <label class="form-label highlight-label">🌐 界面语言 (Language):</label>
+                <CustomSelect
+                  v-model="appLanguage"
+                  :options="[
+                    { value: 'auto', label: '🌐 自动识别 (Auto - 匹配操作系统)' },
+                    { value: 'zh-CN', label: '🇨🇳 简体中文 (Simplified Chinese)' },
+                    { value: 'en-US', label: '🇺🇸 English (英文)' },
+                    { value: 'zh-TW', label: '🇭🇰 繁體中文 (Traditional Chinese)' }
+                  ]"
+                  @change="onLanguageChange"
+                />
+                <span class="field-hint">切换应用程序界面显示的语言文字</span>
+              </div>
+
               <div class="form-group">
                 <label class="form-label">默认部署模式 (Default Mode):</label>
                 <CustomSelect
@@ -101,21 +116,6 @@
                     <span>仅手动检测</span>
                   </label>
                 </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">界面语言 (Language):</label>
-                <CustomSelect
-                  v-model="appLanguage"
-                  :options="[
-                    { value: 'auto', label: '🌐 自动识别 (Auto - 匹配操作系统)' },
-                    { value: 'zh-CN', label: '🇨🇳 简体中文 (Simplified Chinese)' },
-                    { value: 'en-US', label: '🇺🇸 English (英文)' },
-                    { value: 'zh-TW', label: '🇭🇰 繁體中文 (Traditional Chinese)' }
-                  ]"
-                  @change="onLanguageChange"
-                />
-                <span class="field-hint">切换应用程序界面显示的语言文字</span>
               </div>
 
               <div class="form-group">
