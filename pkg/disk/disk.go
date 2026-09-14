@@ -149,56 +149,56 @@ func InferControllerVendor(vendorID string, productID string, vendor string) str
 	vid := strings.ToLower(strings.TrimSpace(vendorID))
 	switch {
 	case strings.Contains(vid, "0x0951") || strings.Contains(vid, "0x13fe"):
-		return "Phison (群联电子主控)"
+		return "Phison Controller"
 	case strings.Contains(vid, "0x090c"):
-		return "SMI (慧荣科技主控)"
+		return "SMI Controller"
 	case strings.Contains(vid, "0x058f"):
-		return "Alcor (安国微电子主控)"
+		return "Alcor Controller"
 	case strings.Contains(vid, "0x1f75"):
-		return "Innostor (银灿科技主控)"
+		return "Innostor Controller"
 	case strings.Contains(vid, "0x0781"):
-		return "SanDisk (闪迪自研主控)"
+		return "SanDisk Controller"
 	case strings.Contains(vid, "0x1b1c"):
-		return "Corsair / ASMedia (美商海盗船主控)"
+		return "Corsair / ASMedia Controller"
 	case strings.Contains(vid, "0x152d"):
-		return "JMicron (智微科技桥接主控)"
+		return "JMicron Bridge Controller"
 	case strings.Contains(vid, "0x174c"):
-		return "ASMedia (祥硕科技主控)"
+		return "ASMedia Controller"
 	case strings.Contains(vid, "0x1e3d"):
-		return "Chipsbank (芯邦读卡器主控)"
+		return "Chipsbank Controller"
 	case strings.Contains(vid, "0x0bda"):
-		return "Realtek (瑞昱读卡器主控)"
+		return "Realtek Controller"
 	case strings.Contains(vid, "0x05e3"):
-		return "Genesys Logic (创惟读卡器主控)"
+		return "Genesys Logic Controller"
 	}
 	if vendor != "" && vendor != "Generic" {
-		return vendor + " (通用主控)"
+		return vendor + " Controller"
 	}
-	return "通用 Standard Controller"
+	return "Standard Controller"
 }
 
 // DetectBootStatus evaluates the boot status text based on partition scheme, volume label, and Ventoy/Mode B flags.
 func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isModeB bool) string {
 	if isRealVentoy {
-		return "🛠️ Ventoy 模式 A (双模全能启动盘)"
+		return "Ventoy Mode A (Full Hybrid Disk)"
 	}
 	if isModeB {
-		return "⚡ UniBoot 模式 B (1秒极速云引导盘)"
+		return "UniBoot Mode B (1-Sec Cloud Install Disk)"
 	}
 	upperVol := strings.ToUpper(volName)
 	if strings.Contains(upperVol, "VENTOY") || strings.Contains(upperVol, "VTOYEFI") {
-		return "🛠️ Ventoy 模式 A (双模全能启动盘)"
+		return "Ventoy Mode A (Full Hybrid Disk)"
 	}
 	if strings.Contains(upperVol, "UNIBOOT") {
-		return "⚡ UniBoot 模式 B (1秒极速云引导盘)"
+		return "UniBoot Mode B (1-Sec Cloud Install Disk)"
 	}
 	if strings.Contains(strings.ToUpper(partitionScheme), "GPT") {
-		return "💿 GPT / EFI 标准系统引导盘"
+		return "GPT / EFI Standard System Bootloader"
 	}
 	if strings.Contains(strings.ToUpper(partitionScheme), "MBR") {
-		return "💾 MBR 主引导记录刻录完成"
+		return "MBR Master Boot Record"
 	}
-	return "📁 数据存储盘 (未检出系统引导)"
+	return "Data Storage Drive (No bootloader detected)"
 }
 
 // IsVentoyDisk determines if a given disk device path or mount path is already a Ventoy/UniBoot drive.
@@ -313,7 +313,7 @@ func FormatBytes(bytes uint64) string {
 }
 
 // FormatBytesDual formats byte counts with 1024-base system capacity and 1000-base hardware nominal capacity.
-// Example: "29.80 GB (标称 32 GB)"
+// Example: "29.80 GB (Nominal 32 GB)"
 func FormatBytesDual(bytes uint64) string {
 	if bytes == 0 {
 		return "0 B"
@@ -325,10 +325,10 @@ func FormatBytesDual(bytes uint64) string {
 	)
 	if bytes >= TB1000 {
 		nomVal := float64(bytes) / float64(TB1000)
-		return fmt.Sprintf("%s (标称 %.0f TB)", sysFormatted, nomVal)
+		return fmt.Sprintf("%s (Nominal %.0f TB)", sysFormatted, nomVal)
 	} else if bytes >= GB1000 {
 		nomVal := float64(bytes) / float64(GB1000)
-		return fmt.Sprintf("%s (标称 %.0f GB)", sysFormatted, nomVal)
+		return fmt.Sprintf("%s (Nominal %.0f GB)", sysFormatted, nomVal)
 	}
 	return sysFormatted
 }

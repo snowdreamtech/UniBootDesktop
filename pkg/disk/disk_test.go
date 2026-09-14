@@ -93,7 +93,7 @@ func TestFormatBytes(t *testing.T) {
 }
 
 func TestFormatBytesDual(t *testing.T) {
-	assert.Equal(t, "29.80 GB (标称 32 GB)", FormatBytesDual(32000000000))
+	assert.Equal(t, "29.80 GB (Nominal 32 GB)", FormatBytesDual(32000000000))
 }
 
 func TestGetRemovableDisks(t *testing.T) {

@@ -32,7 +32,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:          true,
 			Version:        "v1.0.99 (Dry-Run)",
-			Message:        "✅ Ventoy 目录检测通过 (Dry-Run)",
+			Message:        "✅ Ventoy CLI validated successfully (Dry-Run)",
 			ExecutablePath: "/mock/path/Ventoy2Disk",
 		}
 	}
@@ -42,7 +42,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:          false,
 			Version:        "",
-			Message:        "❌ macOS 平台提示：官方 Ventoy 暂不支持在 macOS 上直接运行格式化程序。制作【模式 A】全新盘需依赖 Ventoy CLI；建议在 macOS 上直接选择原生支持的【模式 B (1秒极速云引导盘)】！如需使用模式 A，请先在 Win/Linux 上完成 Ventoy 盘初始化后插入 macOS 无损升级。",
+			Message:        "❌ macOS Limitation: Official Ventoy CLI does not support running direct disk formatting on macOS. Fresh Mode A disk requires Ventoy CLI; we recommend natively supported Mode B (1-Sec Cloud Disk) on macOS.",
 			ExecutablePath: ventoyPath,
 		}
 	}
@@ -52,7 +52,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:   false,
 			Version: "",
-			Message: fmt.Sprintf("❌ 未配置 Ventoy 目录：制作【模式 A】全新盘需调用 Ventoy CLI。请在【设置】中配置适用于 %s 的 Ventoy 目录。", runtime.GOOS),
+			Message: fmt.Sprintf("❌ Ventoy directory not configured: Fresh Mode A deployment requires local Ventoy CLI executable for %s.", runtime.GOOS),
 		}
 	}
 
@@ -61,7 +61,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:   false,
 			Version: "",
-			Message: fmt.Sprintf("❌ Ventoy 配置路径不存在: %s", cleanPath),
+			Message: fmt.Sprintf("❌ Configured Ventoy directory does not exist: %s", cleanPath),
 		}
 	}
 
@@ -72,7 +72,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 			return &VentoyCliValidationResult{
 				Valid:   false,
 				Version: "",
-				Message: fmt.Sprintf("❌ 目录内未找到适用于 %s 系统的 Ventoy CLI 程序 (%s)", runtime.GOOS, cleanPath),
+				Message: fmt.Sprintf("❌ No compatible Ventoy CLI executable found for %s in directory: %s", runtime.GOOS, cleanPath),
 			}
 		}
 	} else {
@@ -84,7 +84,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:          false,
 			Version:        "",
-			Message:        fmt.Sprintf("❌ 操作系统版本不匹配: 当前为 %s 平台，无法直接调用 Windows .exe 程序", runtime.GOOS),
+			Message:        fmt.Sprintf("❌ OS architecture mismatch: Current OS is %s, cannot run Windows .exe binary directly", runtime.GOOS),
 			ExecutablePath: execPath,
 		}
 	}
@@ -102,7 +102,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 			return &VentoyCliValidationResult{
 				Valid:          false,
 				Version:        "",
-				Message:        fmt.Sprintf("❌ 无法成功调用 Ventoy 命令: %v (%s)", err, strings.TrimSpace(outputStr)),
+				Message:        fmt.Sprintf("❌ Failed to execute Ventoy command: %v (%s)", err, strings.TrimSpace(outputStr)),
 				ExecutablePath: execPath,
 			}
 		}
@@ -118,7 +118,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 	return &VentoyCliValidationResult{
 		Valid:          true,
 		Version:        version,
-		Message:        fmt.Sprintf("✅ Ventoy 目录检测通过 (版本 %s)", version),
+		Message:        fmt.Sprintf("✅ Ventoy CLI validated successfully (v%s)", version),
 		ExecutablePath: execPath,
 	}
 }

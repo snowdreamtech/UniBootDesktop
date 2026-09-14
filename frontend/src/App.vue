@@ -166,11 +166,11 @@
         <div v-if="activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid" class="ventoy-warning-card">
           <span class="warning-card-icon">⚠️</span>
           <div class="warning-card-body">
-            <div class="warning-card-title">Ventoy CLI Pre-flight Limitation</div>
-            <div class="warning-card-message">{{ ventoyStatus.message || 'Ventoy CLI executable is required for Mode A format.' }}</div>
+            <div class="warning-card-title">{{ isMacOs ? t('deploy.macos_alert_title') : t('deploy.no_ventoy_title') }}</div>
+            <div class="warning-card-message">{{ isMacOs ? t('deploy.macos_alert_desc') : t('deploy.no_ventoy_desc') }}</div>
           </div>
           <button class="btn-secondary btn-sm" @click="openSettings('ventoy')">
-            ⚙️ Settings
+            ⚙️ {{ t('settings.title') }}
           </button>
         </div>
 
