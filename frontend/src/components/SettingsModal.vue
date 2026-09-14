@@ -893,6 +893,18 @@ onMounted(() => {
   outline: none;
 }
 
+.form-input::placeholder {
+  color: rgba(148, 163, 184, 0.42);
+  opacity: 1;
+  font-size: 0.82rem;
+  font-weight: 400;
+  transition: color 0.2s ease;
+}
+
+.form-input:focus::placeholder {
+  color: rgba(148, 163, 184, 0.22);
+}
+
 .form-input:focus, .form-select:focus {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 10px var(--accent-cyan-glow);

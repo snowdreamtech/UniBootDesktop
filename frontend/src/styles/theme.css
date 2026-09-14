@@ -60,6 +60,35 @@ select, option, optgroup {
   color: #f8fafc !important;
 }
 
+/* Global Input & Textarea Placeholder Styling - Subtle & Muted Hint */
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+  color: rgba(148, 163, 184, 0.45) !important;
+  opacity: 1 !important;
+  font-size: 0.82rem;
+  font-weight: 400;
+  transition: color 0.2s ease;
+}
+
+input:focus::placeholder,
+textarea:focus::placeholder,
+select:focus::placeholder {
+  color: rgba(148, 163, 184, 0.22) !important;
+}
+
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder,
+[data-theme="light"] select::placeholder {
+  color: rgba(100, 116, 139, 0.45) !important;
+}
+
+[data-theme="light"] input:focus::placeholder,
+[data-theme="light"] textarea:focus::placeholder,
+[data-theme="light"] select:focus::placeholder {
+  color: rgba(100, 116, 139, 0.22) !important;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
