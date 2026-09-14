@@ -508,4 +508,26 @@ const diskTagLabel = computed(() => {
   accent-color: var(--accent-cyan);
   cursor: pointer;
 }
+
+/* Light Theme Overrides for DiskCard */
+[data-theme="light"] .btn-inspect {
+  background: #f1f5f9;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .btn-inspect:hover {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #38bdf8;
+}
+
+[data-theme="light"] .speed-tag {
+  background: #e2e8f0;
+}
+
+[data-theme="light"] .disk-badge.boot {
+  background: #fef3c7;
+  color: #b45309;
+}
 </style>

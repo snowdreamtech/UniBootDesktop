@@ -19,17 +19,17 @@
 
 [data-theme="light"] {
   color-scheme: light;
-  --bg-color: #f8fafc;
-  --card-bg: rgba(255, 255, 255, 0.95);
+  --bg-color: #f1f5f9;
+  --card-bg: #ffffff;
   --modal-bg: #ffffff;
-  --input-bg: #f1f5f9;
-  --section-bg: #f8fafc;
-  --card-border: rgba(2, 132, 199, 0.25);
-  --card-border-active: rgba(2, 132, 199, 0.6);
+  --input-bg: #f8fafc;
+  --section-bg: #f1f5f9;
+  --card-border: #cbd5e1;
+  --card-border-active: #0284c7;
   --text-main: #0f172a;
-  --text-muted: #64748b;
+  --text-muted: #475569;
   --accent-cyan: #0284c7;
-  --accent-cyan-glow: rgba(2, 132, 199, 0.25);
+  --accent-cyan-glow: rgba(2, 132, 199, 0.2);
   --accent-purple: #7c3aed;
   --success: #059669;
   --warning: #d97706;
@@ -44,18 +44,24 @@ select, option, optgroup {
 
 :root[data-theme="light"] select,
 :root[data-theme="light"] option,
+:root[data-theme="light"] optgroup,
 [data-theme="light"] select,
 [data-theme="light"] option,
+[data-theme="light"] optgroup,
 [data-theme="light"] select option {
+  color-scheme: light !important;
   background-color: #ffffff !important;
   color: #0f172a !important;
 }
 
 :root[data-theme="dark"] select,
 :root[data-theme="dark"] option,
+:root[data-theme="dark"] optgroup,
 [data-theme="dark"] select,
 [data-theme="dark"] option,
+[data-theme="dark"] optgroup,
 [data-theme="dark"] select option {
+  color-scheme: dark !important;
   background-color: #0d1424 !important;
   color: #f8fafc !important;
 }
