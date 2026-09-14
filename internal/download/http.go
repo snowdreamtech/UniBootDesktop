@@ -29,12 +29,11 @@ import (
 	"golang.org/x/crypto/blake2s"
 	"golang.org/x/crypto/sha3"
 
-	"log/slog"
-
 	"github.com/snowdreamtech/unigodesktop/internal/env"
 	"github.com/snowdreamtech/unigodesktop/internal/errors"
 	"github.com/snowdreamtech/unigodesktop/internal/gpg"
 	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
+	"github.com/snowdreamtech/unigodesktop/internal/logger"
 )
 
 // ErrGPGSkipped is returned when a signature file is not found (404) and verification is skipped.
@@ -395,11 +394,11 @@ func (h *HTTPDownloader) VerifyChecksum(ctx context.Context, file string, expect
 		if l == 32 {
 			hashers = append(hashers, md5.New())
 			algos = append(algos, "md5")
-			slog.Warn("Security Warning: Auto-detected length 32 implies weak MD5 algorithm, which is not cryptographically secure.")
+			logger.Warn("Security Warning: Auto-detected length 32 implies weak MD5 algorithm, which is not cryptographically secure.")
 		} else if l == 40 {
 			hashers = append(hashers, sha1.New())
 			algos = append(algos, "sha1")
-			slog.Warn("Security Warning: Auto-detected length 40 implies weak SHA-1 algorithm, which is not cryptographically secure.")
+			logger.Warn("Security Warning: Auto-detected length 40 implies weak SHA-1 algorithm, which is not cryptographically secure.")
 		} else if l == 56 {
 			hashers = append(hashers, sha256.New224(), sha3.New224())
 			algos = append(algos, "sha224", "sha3-224")
@@ -618,7 +617,7 @@ func parseURL(rawURL string) (*url.URL, error) {
 
 	// Validate scheme
 	if u.Scheme == "http" {
-		slog.Warn("Using insecure HTTP for download. This is vulnerable to man-in-the-middle attacks.", slog.String("url", rawURL))
+		logger.Warn("Using insecure HTTP for download. This is vulnerable to man-in-the-middle attacks.", "url", rawURL)
 	} else if u.Scheme != "https" {
 		return nil, fmt.Errorf("unsupported URL scheme %q (only http and https are supported)", u.Scheme)
 	}

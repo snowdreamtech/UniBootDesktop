@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"log/slog"
+	"github.com/snowdreamtech/unigodesktop/internal/logger"
 )
 
 // UIRunner manages the web backend server bridge and UI window binding.
@@ -62,7 +62,7 @@ func (r *UIRunner) Start(ctx context.Context) error {
 	}
 	r.mu.Unlock()
 
-	slog.Info("Desktop Web Bridge Server started", "url", fmt.Sprintf("http://127.0.0.1:%d", r.port))
+	logger.Info("Desktop Web Bridge Server started", "url", fmt.Sprintf("http://127.0.0.1:%d", r.port))
 
 	// Listen and serve
 	if err := r.server.Serve(ln); err != nil && err != http.ErrServerClosed {

@@ -5,16 +5,14 @@ package main
 
 import (
 	"context"
-	"log/slog"
-
-	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
-
+	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/config"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 	"github.com/snowdreamtech/unigodesktop/pkg/firmware"
 	"github.com/snowdreamtech/unigodesktop/pkg/installer"
 	"github.com/snowdreamtech/unigodesktop/pkg/qemu"
 	"github.com/snowdreamtech/unigodesktop/pkg/updater"
+	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct manages Wails GUI lifecycle and frontend bound APIs.
@@ -30,7 +28,7 @@ func NewApp() *App {
 // startup is called when the Wails application starts up.
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-	slog.Info("UniGoDesktop Wails GUI runtime started successfully")
+	logger.Info("UniGoDesktop Wails GUI runtime started successfully")
 }
 
 // GetDiskList returns all removable USB drives safely filtered.
