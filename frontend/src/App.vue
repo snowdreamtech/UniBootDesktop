@@ -628,7 +628,7 @@ async function openDeployConfirm() {
   let targets: string[] = [];
   if (selectionMode.value === 'single') {
     if (!selectedDisk.value) return;
-    targets = [selectedDisk.device];
+    targets = [selectedDisk.value.device];
   } else {
     targets = Array.from(selectedDevices.value);
     if (targets.length === 0) return;
@@ -711,17 +711,6 @@ const isNonDestructive = computed(() => {
   });
 });
 
-const isDeployDisabled = computed(() => {
-  if (selectionMode.value === 'single') {
-    if (!selectedDisk.value) return true;
-  } else {
-    if (selectedDevices.value.size === 0) return true;
-  }
-  if (activeMode.value === 'hybrid' && !isNonDestructive.value && !ventoyStatus.value.valid) {
-    return true;
-  }
-  return false;
-});
 
 const deployDisabledReason = computed(() => {
   if (isDeploying.value) return '正在写入引导固件...';
