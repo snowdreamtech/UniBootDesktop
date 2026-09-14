@@ -256,5 +256,5 @@ export const trTr: TranslationDict = {
   "fs.fat32": "FAT32 (Eski Cihazlarla Uyumlu • 4GB Sınırı)",
   "fs.ext4": "ext4 (Yerel Linux)",
   "disk.title": "Hedef USB Sürücüsünü Seçin",
-  "header.subtitle": "Önyüklenebilir Sürücü Oluşturma ve QEMU Testi"
+  "header.subtitle": "Önyüklenebilir Sürücü Oluşturma ve QEMU Testi",
 };

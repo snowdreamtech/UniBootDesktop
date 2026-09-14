@@ -256,5 +256,5 @@ export const frFr: TranslationDict = {
   "fs.fat32": "FAT32 (Compatible anciens systèmes • Limite 4 Go)",
   "fs.ext4": "ext4 (Natif Linux)",
   "disk.title": "Sélectionner le lecteur USB cible",
-  "header.subtitle": "Création de lecteur démarrable et test QEMU"
+  "header.subtitle": "Création de lecteur démarrable et test QEMU",
 };

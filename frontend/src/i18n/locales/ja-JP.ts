@@ -256,5 +256,5 @@ export const jaJp: TranslationDict = {
   "fs.fat32": "FAT32 (レガシー対応 • 4GBファイル制限)",
   "fs.ext4": "ext4 (Linux ネイティブ)",
   "disk.title": "対象の USB ドライブを選択",
-  "header.subtitle": "起動ドライブ作成＆ QEMU シミュレーションテスト"
+  "header.subtitle": "起動ドライブ作成＆ QEMU シミュレーションテスト",
 };

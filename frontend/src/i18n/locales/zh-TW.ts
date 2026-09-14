@@ -256,5 +256,5 @@ export const zhTw: TranslationDict = {
   "fs.fat32": "FAT32 (相容老舊設備 • 單檔案限制 4GB)",
   "fs.ext4": "ext4 (Linux 原生格式)",
   "disk.title": "選擇目標 U 盤",
-  "header.subtitle": "啟動盤製作與 QEMU 模擬測試"
+  "header.subtitle": "啟動盤製作與 QEMU 模擬測試",
 };

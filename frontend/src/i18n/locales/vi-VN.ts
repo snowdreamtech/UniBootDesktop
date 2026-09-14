@@ -256,5 +256,5 @@ export const viVn: TranslationDict = {
   "fs.fat32": "FAT32 (Tương thích máy cũ • Giới hạn 4GB)",
   "fs.ext4": "ext4 (Nguyên bản Linux)",
   "disk.title": "Chọn ổ USB mục tiêu",
-  "header.subtitle": "Tạo ổ đĩa khởi động & Thử nghiệm QEMU"
+  "header.subtitle": "Tạo ổ đĩa khởi động & Thử nghiệm QEMU",
 };

@@ -256,5 +256,5 @@ export const esEs: TranslationDict = {
   "fs.fat32": "FAT32 (Compatible con antiguos • Límite 4GB)",
   "fs.ext4": "ext4 (Nativo de Linux)",
   "disk.title": "Seleccionar unidad USB de destino",
-  "header.subtitle": "Creación de disco de arranque y prueba QEMU"
+  "header.subtitle": "Creación de disco de arranque y prueba QEMU",
 };

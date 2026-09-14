@@ -256,5 +256,5 @@ export const arSa: TranslationDict = {
   "fs.fat32": "FAT32 (متوافق مع الأجهزة القديمة • حد 4 جيجابايت)",
   "fs.ext4": "ext4 (نظام Linux الأصلي)",
   "disk.title": "اختر قرص USB المستهدف",
-  "header.subtitle": "إنشاء محرك أقراص قابل للتمهيد واختبار محاكاة QEMU"
+  "header.subtitle": "إنشاء محرك أقراص قابل للتمهيد واختبار محاكاة QEMU",
 };

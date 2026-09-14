@@ -256,5 +256,5 @@ export const koKr: TranslationDict = {
   "fs.fat32": "FAT32 (구형 호환 • 4GB 파일 제한)",
   "fs.ext4": "ext4 (Linux 네이티브)",
   "disk.title": "대상 USB 드라이브 선택",
-  "header.subtitle": "부팅 드라이브 제작 및 QEMU 시뮬레이션 테스트"
+  "header.subtitle": "부팅 드라이브 제작 및 QEMU 시뮬레이션 테스트",
 };

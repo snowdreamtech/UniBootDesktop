@@ -50,7 +50,7 @@ export const ptBr: TranslationDict = {
   "settings.testVentoyCli": "⚡ Testar CLI Ventoy",
   "settings.cliFormattingFlags": "🛡️ Parâmetros de Formatação Ventoy CLI",
   "settings.ventoyPlugins": "⚡ Plugins de Automação Ventoy (ventoy.json)",
-  "app.title": "UniBoot Desktop",
+  "app.title": "Área de Trabalho UniBoot",
   "app.subtitle": "Criador de Disco Inicializável Multi-Arquitetura UEFI / Legacy BIOS",
   "mode.cloud": "Modo B (Disco de Instalação em Nuvem de 1s)",
   "mode.hybrid": "Modo A (Disco Híbrido Completo)",
@@ -256,5 +256,5 @@ export const ptBr: TranslationDict = {
   "fs.fat32": "FAT32 (Compatível com Legado • Limite 4GB)",
   "fs.ext4": "ext4 (Nativo do Linux)",
   "disk.title": "Selecionar unidade USB de destino",
-  "header.subtitle": "Criação de unidade inicializável e teste QEMU"
+  "header.subtitle": "Criação de unidade inicializável e teste QEMU",
 };

@@ -213,7 +213,7 @@ export const itIt: TranslationDict = {
   "inspector.lbl_free": "Spazio Libero",
   "inspector.lbl_protocol": "Versione Protocollo USB",
   "inspector.lbl_speed": "Velocità Negoziata (PHY)",
-  "inspector.lbl_fs": "File System",
+  "inspector.lbl_fs": "Sistema di file",
   "inspector.lbl_scheme": "Tabella Partizioni",
   "inspector.lbl_mount": "Punto di Montaggio",
   "inspector.lbl_perm": "Permessi Disco",
@@ -256,5 +256,5 @@ export const itIt: TranslationDict = {
   "fs.fat32": "FAT32 (Compatibile Datati • Limite 4GB)",
   "fs.ext4": "ext4 (Nativo Linux)",
   "disk.title": "Seleziona unità USB di destinazione",
-  "header.subtitle": "Creazione unità avviabile e test QEMU"
+  "header.subtitle": "Creazione unità avviabile e test QEMU",
 };

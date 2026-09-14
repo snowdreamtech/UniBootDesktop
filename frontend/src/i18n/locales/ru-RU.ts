@@ -50,7 +50,7 @@ export const ruRu: TranslationDict = {
   "settings.testVentoyCli": "⚡ Тест Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Параметры форматирования Ventoy CLI",
   "settings.ventoyPlugins": "⚡ Плагины автоматизации Ventoy (ventoy.json)",
-  "app.title": "UniBoot Desktop",
+  "app.title": "UniBoot Рабочий стол",
   "app.subtitle": "Универсальный инструмент создания загрузочных дисков UEFI / Legacy BIOS",
   "mode.cloud": "Mode B (Облачный установочный диск за 1 сек)",
   "mode.hybrid": "Mode A (Полный гибридный диск)",
@@ -256,5 +256,5 @@ export const ruRu: TranslationDict = {
   "fs.fat32": "FAT32 (Совместимость со старыми • Лимит 4 ГБ)",
   "fs.ext4": "ext4 (Родная система Linux)",
   "disk.title": "Выберите целевой USB-накопитель",
-  "header.subtitle": "Создание загрузочного диска и тест QEMU"
+  "header.subtitle": "Создание загрузочного диска и тест QEMU",
 };

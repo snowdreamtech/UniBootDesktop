@@ -256,5 +256,5 @@ export const plPl: TranslationDict = {
   "fs.fat32": "FAT32 (Zgodność ze starszymi • Limit 4GB)",
   "fs.ext4": "ext4 (Natywny Linux)",
   "disk.title": "Wybierz docelowy dysk USB",
-  "header.subtitle": "Tworzenie dysku rozruchowego i test QEMU"
+  "header.subtitle": "Tworzenie dysku rozruchowego i test QEMU",
 };
