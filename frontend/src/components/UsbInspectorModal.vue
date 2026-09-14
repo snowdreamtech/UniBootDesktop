@@ -138,23 +138,23 @@
 
           <div class="spec-item">
             <span class="spec-label">{{ t('inspector.lbl_controller') }}</span>
-            <span class="spec-val highlight">{{ disk.controllerVendor || '通用 Standard Controller' }}</span>
+            <span class="spec-val highlight">{{ disk.controllerVendor || t('inspector.std_controller') }}</span>
           </div>
 
           <div class="spec-item" v-if="disk.vendorId || disk.productId">
-            <span class="spec-label">硬件设备标识 (USB VID / PID)</span>
+            <span class="spec-label">{{ t('inspector.lbl_vid_pid') }}</span>
             <span class="spec-val code">VID: {{ disk.vendorId || 'N/A' }} | PID: {{ disk.productId || 'N/A' }}</span>
           </div>
 
           <div class="spec-item spec-full" v-if="disk.serialNumber">
-            <span class="spec-label">设备物理序列号 (Serial Number)</span>
+            <span class="spec-label">{{ t('inspector.lbl_serial') }}</span>
             <span class="spec-val code">{{ disk.serialNumber }}</span>
           </div>
         </div>
 
         <!-- Protocol Compatibility Matrix -->
         <div class="protocol-matrix">
-          <h4>USB 协议支持库扩展 (Extensible Protocol Standards)</h4>
+          <h4>{{ t('inspector.ext_protocols') }}</h4>
           <div class="matrix-pills">
             <span class="matrix-pill" :class="{ active: disk.protocolCode === 'usb2' }">USB 2.0 (480 Mbps)</span>
             <span class="matrix-pill" :class="{ active: disk.protocolCode === 'usb3_0' }">USB 3.0 / 3.2 Gen 1 (5 Gbps)</span>
@@ -166,7 +166,7 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn-primary" @click="closeModal">确定</button>
+        <button class="btn-primary" @click="closeModal">{{ t('inspector.close') }}</button>
       </div>
     </div>
   </div>

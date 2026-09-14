@@ -228,14 +228,14 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
 });
 
 const diskTagLabel = computed(() => {
-  if (diskType.value === 'boot') return 'BOOT U盘';
-  if (diskType.value === 'ssd') return '移动固态';
-  if (diskType.value === 'typec') return 'Type-C 盘';
-  if (diskType.value === 'secure') return '加密 U盘';
-  if (diskType.value === 'reader') return '读卡器';
-  if (diskType.value === 'hdd') return '移动硬盘';
-  if (diskType.value === 'key') return '安全钥匙';
-  if (diskType.value === 'cdrom') return '虚拟光驱';
+  if (diskType.value === 'boot') return t('disk.tag_boot');
+  if (diskType.value === 'ssd') return t('disk.tag_ssd');
+  if (diskType.value === 'typec') return t('disk.tag_typec');
+  if (diskType.value === 'secure') return t('disk.tag_secure');
+  if (diskType.value === 'reader') return t('disk.tag_reader');
+  if (diskType.value === 'hdd') return t('disk.tag_hdd');
+  if (diskType.value === 'key') return t('disk.tag_key');
+  if (diskType.value === 'cdrom') return t('disk.tag_cdrom');
   if (diskType.value === 'usb2') return 'USB 2.0';
   if (diskType.value === 'usb3_1') return 'USB 3.1';
   if (diskType.value === 'usb3_2') return 'USB 3.2';

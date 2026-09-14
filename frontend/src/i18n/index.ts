@@ -222,6 +222,52 @@ const zhCN: TranslationDict = {
   'icon_picker.reader_desc': '插入式多功能内存读卡器',
   'icon_picker.hdd_desc': '2.5 寸高容量机械移动盘',
   'icon_picker.key_desc': '物理密钥 FIDO2 安全盘',
+
+  'disk.tag_boot': 'BOOT U盘',
+  'disk.tag_ssd': '移动固态',
+  'disk.tag_typec': 'Type-C 盘',
+  'disk.tag_secure': '加密 U盘',
+  'disk.tag_reader': '读卡器',
+  'disk.tag_hdd': '移动硬盘',
+  'disk.tag_key': '安全钥匙',
+  'disk.tag_cdrom': '虚拟光驱',
+
+  'inspector.std_controller': '通用 Standard Controller',
+  'inspector.lbl_vid_pid': '硬件设备标识 (USB VID / PID)',
+  'inspector.lbl_serial': '设备物理序列号 (Serial Number)',
+  'inspector.ext_protocols': 'USB 协议支持库扩展 (Extensible Protocol Standards)',
+  'inspector.close': '确定',
+
+  'deploy.toast_switched_b': '已切换至原生支持的【模式 B (1秒极速云引导盘)】！',
+  'deploy.toast_added_iso': '已成功添加 {count} 个镜像源文件',
+  'deploy.toast_added_demo_iso': '已添加 2 个示例镜像源文件 (浏览器演示)',
+  'deploy.toast_select_target': '⚠️ 请先在左侧磁盘列表中选择目标 U 盘',
+  'deploy.toast_select_batch': '⚠️ 请先勾选要批量制作的目标 U 盘',
+  'deploy.toast_no_disks': '⚠️ 当前未检测到任何可用的 U 盘设备！请插入 U 盘后再试。',
+
+  'deploy.tip_writing': '正在写入引导固件...',
+  'deploy.tip_select_single': '请先选择要制作的目标 U 盘',
+  'deploy.tip_select_batch': '请先勾选要批量制作的目标 U 盘',
+  'deploy.tip_macos_unsupported': '❌ macOS 平台暂不支持全新格式化制作 Mode A 盘 (请使用模式 B)',
+  'deploy.tip_need_ventoy': '全新制作模式 A 需依赖 Ventoy CLI 环境',
+
+  'deploy.macos_alert_title': 'macOS 暂不支持 Ventoy CLI 全新格式化',
+  'deploy.macos_alert_desc': '官方 Ventoy 暂不支持在 macOS 上直接运行格式化程序。制作【模式 A】全新盘需依赖 Ventoy CLI；建议直接选择原生支持的【模式 B (1秒极速云引导盘)】！如需使用模式 A，请先在 Win/Linux 上完成 Ventoy 盘初始化后插入 macOS 无损升级。',
+  'deploy.no_ventoy_title': '未检测到 Ventoy CLI 执行文件',
+  'deploy.no_ventoy_desc': '全新制作【模式 A (Ventoy 双模盘)】需依赖本地 Ventoy CLI 程序 (Ventoy2Disk)。请先前往设置配置 Ventoy 可执行文件路径，或直接一键切换至不需要 Ventoy CLI 的【模式 B (1秒极速云引导)】！',
+
+  'deploy.result_batch_success': '成功完成 {count} 块 U 盘的极速云安装盘部署！',
+  'deploy.result_success': '成功部署模式 {mode} 到 {targets}',
+  'deploy.alert_success': '🎉 部署成功！\n\n{msg}',
+  'deploy.alert_fail': '❌ 部署失败：\n\n{msg}',
+
+  'qemu.tip_launching': 'QEMU 模拟器正在拉起启动中...',
+  'qemu.tip_deploying': '烧录部署中，请等待部署完成后再测试',
+  'qemu.tip_not_installed': '未检测到 QEMU 模拟器，请先安装 QEMU (brew/port install qemu)',
+  'qemu.tip_select_target': '请先在左侧列表点击选择要测试的目标 U 盘',
+  'qemu.tip_ready': '点击在当前桌面拉起 QEMU 虚拟机校验 U 盘引导',
+  'qemu.toast_select_first': '⚠️ 请先在左侧磁盘列表中点击选择要测试的目标 U 盘！',
+  'qemu.toast_not_installed': '❌ 未检测到 QEMU 模拟器！请先安装 QEMU (brew install qemu 或 port install qemu)',
 };
 
 const enUS: TranslationDict = {
@@ -396,6 +442,52 @@ const enUS: TranslationDict = {
   'icon_picker.reader_desc': 'SD / MicroSD Card Reader',
   'icon_picker.hdd_desc': '2.5" Portable Mechanical Hard Drive (HDD)',
   'icon_picker.key_desc': 'FIDO2 Security Key Hardware',
+
+  'disk.tag_boot': 'Boot Drive',
+  'disk.tag_ssd': 'Portable SSD',
+  'disk.tag_typec': 'Type-C Drive',
+  'disk.tag_secure': 'Encrypted Drive',
+  'disk.tag_reader': 'Card Reader',
+  'disk.tag_hdd': 'Portable HDD',
+  'disk.tag_key': 'Security Key',
+  'disk.tag_cdrom': 'Virtual CD-ROM',
+
+  'inspector.std_controller': 'Standard Controller',
+  'inspector.lbl_vid_pid': 'Hardware ID (USB VID / PID)',
+  'inspector.lbl_serial': 'Physical Serial Number',
+  'inspector.ext_protocols': 'Extensible Protocol Standards',
+  'inspector.close': 'Close',
+
+  'deploy.toast_switched_b': 'Switched to native Mode B (1-Sec Cloud Install Disk)!',
+  'deploy.toast_added_iso': 'Successfully added {count} image source file(s)',
+  'deploy.toast_added_demo_iso': 'Added 2 demo image source files (Browser Demo)',
+  'deploy.toast_select_target': '⚠️ Please select a target USB drive from the left panel first',
+  'deploy.toast_select_batch': '⚠️ Please check target USB drives for batch format first',
+  'deploy.toast_no_disks': '⚠️ No USB drive detected! Please insert a USB drive and try again.',
+
+  'deploy.tip_writing': 'Writing boot firmware...',
+  'deploy.tip_select_single': 'Please select a target USB drive first',
+  'deploy.tip_select_batch': 'Please check target USB drives for batch formatting',
+  'deploy.tip_macos_unsupported': '❌ macOS does not support fresh formatting for Mode A drive (Please use Mode B)',
+  'deploy.tip_need_ventoy': 'Fresh Mode A deployment requires Ventoy CLI environment',
+
+  'deploy.macos_alert_title': 'macOS Ventoy CLI Fresh Formatting Unsupported',
+  'deploy.macos_alert_desc': 'Official Ventoy CLI does not support running direct disk formatting on macOS. Mode A fresh formatting requires Ventoy CLI; we recommend natively supported Mode B (1-Sec Cloud Disk)! For Mode A, initialize Ventoy drive on Windows/Linux first then perform in-place upgrade on macOS.',
+  'deploy.no_ventoy_title': 'Ventoy CLI Executable Not Detected',
+  'deploy.no_ventoy_desc': 'Fresh Mode A (Ventoy Hybrid Disk) requires local Ventoy CLI executable (Ventoy2Disk). Please configure Ventoy CLI path in Settings or switch to Mode B (Cloud Boot Disk) which requires no Ventoy CLI!',
+
+  'deploy.result_batch_success': 'Successfully deployed 1-Sec Cloud Install Disk to {count} USB drive(s)!',
+  'deploy.result_success': 'Successfully deployed Mode {mode} to {targets}',
+  'deploy.alert_success': '🎉 Deployment Successful!\n\n{msg}',
+  'deploy.alert_fail': '❌ Deployment Failed:\n\n{msg}',
+
+  'qemu.tip_launching': 'Launching QEMU emulator...',
+  'qemu.tip_deploying': 'Deploying boot files, please wait until finished',
+  'qemu.tip_not_installed': 'QEMU emulator not found. Please install QEMU first (brew/port install qemu)',
+  'qemu.tip_select_target': 'Please select a target USB drive from the left panel first',
+  'qemu.tip_ready': 'Click to launch QEMU VM to verify USB bootloader on current desktop',
+  'qemu.toast_select_first': '⚠️ Please click to select a target USB drive from the left panel first!',
+  'qemu.toast_not_installed': '❌ QEMU emulator not found! Please install QEMU (brew install qemu or port install qemu)',
 };
 
 const zhTW: TranslationDict = {

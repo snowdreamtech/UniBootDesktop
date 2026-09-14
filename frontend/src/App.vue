@@ -497,7 +497,7 @@ function handleVentoyAlertAction() {
 function handleVentoyAlertSwitchB() {
   isVentoyAlertOpen.value = false;
   activeMode.value = 'cloud';
-  showToast('已切换至原生支持的【模式 B (1秒极速云引导盘)】！', 'success');
+  showToast(t('deploy.toast_switched_b'), 'success');
 }
 
 function openSettings(tab: 'general' | 'network' | 'uniboot' | 'ventoy' = 'general') {
@@ -531,7 +531,7 @@ async function selectMode(mode: 'cloud' | 'hybrid') {
   if (mode === 'hybrid') {
     await checkVentoyStatus();
     if (!isNonDestructive.value && !ventoyStatus.value.valid) {
-      showToast(ventoyStatus.value.message || '⚠️ 模式 A 全新制作依赖 Ventoy CLI 环境', 'warning');
+      showToast(ventoyStatus.value.message || t('deploy.tip_need_ventoy'), 'warning');
     }
   }
 }
@@ -558,7 +558,7 @@ async function handleSelectIsoFiles() {
           }
         }
         if (added > 0) {
-          showToast(`已成功添加 ${added} 个镜像源文件`, 'success');
+          showToast(t('deploy.toast_added_iso', { count: added }), 'success');
         }
       }
     } catch (err: any) {
@@ -575,7 +575,7 @@ async function handleSelectIsoFiles() {
         selectedIsoFiles.value.push(m);
       }
     }
-    showToast('已添加 2 个示例镜像源文件 (浏览器演示)', 'info');
+    showToast(t('deploy.toast_added_demo_iso'), 'info');
   }
 }
 
@@ -694,11 +694,11 @@ async function handleDeployBtnClick() {
   if (isDeploying.value) return;
 
   if (selectionMode.value === 'single' && !selectedDisk.value) {
-    showToast('⚠️ 请先在左侧磁盘列表中选择目标 U 盘', 'warning');
+    showToast(t('deploy.toast_select_target'), 'warning');
     return;
   }
   if (selectionMode.value === 'batch' && selectedDevices.value.size === 0) {
-    showToast('⚠️ 请先勾选要批量制作的目标 U 盘', 'warning');
+    showToast(t('deploy.toast_select_batch'), 'warning');
     return;
   }
 
@@ -707,14 +707,14 @@ async function handleDeployBtnClick() {
     if (!ventoyStatus.value.valid) {
       if (isMacOs.value) {
         openVentoyAlert(
-          'macOS 暂不支持 Ventoy CLI 全新格式化',
-          '官方 Ventoy 暂不支持在 macOS 上直接运行格式化程序。制作【模式 A】全新盘需依赖 Ventoy CLI；建议直接选择原生支持的【模式 B (1秒极速云引导盘)】！如需使用模式 A，请先在 Win/Linux 上完成 Ventoy 盘初始化后插入 macOS 无损升级。',
+          t('deploy.macos_alert_title'),
+          t('deploy.macos_alert_desc'),
           'switch_b'
         );
       } else {
         openVentoyAlert(
-          '未检测到 Ventoy CLI 执行文件',
-          ventoyStatus.value.message || '全新制作【模式 A (Ventoy 双模盘)】需依赖本地 Ventoy CLI 程序 (Ventoy2Disk)。请先前往设置配置 Ventoy 可执行文件路径，或直接一键切换至不需要 Ventoy CLI 的【模式 B (1秒极速云引导)】！',
+          t('deploy.no_ventoy_title'),
+          ventoyStatus.value.message || t('deploy.no_ventoy_desc'),
           'open_settings'
         );
       }
@@ -814,14 +814,14 @@ const isNonDestructive = computed(() => {
 
 
 const deployDisabledReason = computed(() => {
-  if (isDeploying.value) return '正在写入引导固件...';
-  if (selectionMode.value === 'single' && !selectedDisk.value) return '请先选择要制作的目标 U 盘';
-  if (selectionMode.value === 'batch' && selectedDevices.value.size === 0) return '请先勾选要批量制作的目标 U 盘';
+  if (isDeploying.value) return t('deploy.tip_writing');
+  if (selectionMode.value === 'single' && !selectedDisk.value) return t('deploy.tip_select_single');
+  if (selectionMode.value === 'batch' && selectedDevices.value.size === 0) return t('deploy.tip_select_batch');
   if (activeMode.value === 'hybrid' && !isNonDestructive.value && !ventoyStatus.value.valid) {
     if (isMacOs.value) {
-      return '❌ macOS 平台暂不支持全新格式化制作 Mode A 盘 (请使用模式 B)';
+      return t('deploy.tip_macos_unsupported');
     }
-    return ventoyStatus.value.message || '全新制作模式 A 需依赖 Ventoy CLI 环境';
+    return ventoyStatus.value.message || t('deploy.tip_need_ventoy');
   }
   return '';
 });
@@ -837,18 +837,18 @@ const isQemuDisabled = computed(() => {
 
 const qemuDisabledReason = computed(() => {
   if (isLaunchingQemu.value) {
-    return 'QEMU 模拟器正在拉起启动中...';
+    return t('qemu.tip_launching');
   }
   if (isDeploying.value) {
-    return '烧录部署中，请等待部署完成后再测试';
+    return t('qemu.tip_deploying');
   }
   if (!qemuStatus.value.installed) {
-    return '未检测到 QEMU 模拟器，请先安装 QEMU (brew/port install qemu)';
+    return t('qemu.tip_not_installed');
   }
   if (!activeQemuTargetDevice.value) {
-    return '请先在左侧列表点击选择要测试的目标 U 盘';
+    return t('qemu.tip_select_target');
   }
-  return '点击在当前桌面拉起 QEMU 虚拟机校验 U 盘引导';
+  return t('qemu.tip_ready');
 });
 
 const activeQemuTargetDevice = computed(() => {
@@ -1032,14 +1032,15 @@ async function startDeployment() {
             success = false;
             resultMsg = failed.map(f => `${f.target}: ${f.message}`).join('\n');
           } else {
-            resultMsg = `成功完成 ${resList.length} 块 U 盘的极速云安装盘部署！`;
+            resultMsg = t('deploy.result_batch_success', { count: resList.length });
           }
         }
       }
     } else {
       // Mock execution for browser demo
       await new Promise(r => setTimeout(r, 800));
-      resultMsg = `成功部署模式 ${activeMode.value === 'cloud' ? 'B (极速云安装盘)' : 'A (混合双模)'} 到 ${targets.join(', ')}`;
+      const modeLabel = activeMode.value === 'cloud' ? 'B' : 'A';
+      resultMsg = t('deploy.result_success', { mode: modeLabel, targets: targets.join(', ') });
     }
   } catch (e: any) {
     console.error(e);
@@ -1055,12 +1056,12 @@ async function startDeployment() {
       isDeploying.value = false;
       deployProgress.value = 0;
       await refreshDisks();
-      alert(`🎉 部署成功！\n\n${resultMsg}`);
+      alert(t('deploy.alert_success', { msg: resultMsg }));
     }, 200);
   } else {
     isDeploying.value = false;
     deployProgress.value = 0;
-    alert(`❌ 部署失败：\n\n${resultMsg}`);
+    alert(t('deploy.alert_fail', { msg: resultMsg }));
   }
 }
 
@@ -1070,7 +1071,7 @@ async function launchQEMU() {
 
   // 1. Check if disk list is empty
   if (!diskList.value || diskList.value.length === 0) {
-    showToast('⚠️ 当前未检测到任何可用的 U 盘设备！请插入 U 盘后再试。', 'warning');
+    showToast(t('deploy.toast_no_disks'), 'warning');
     return;
   }
 
@@ -1079,13 +1080,13 @@ async function launchQEMU() {
   const diskLabel = activeQemuTargetName.value;
 
   if (!targetDevice) {
-    showToast('⚠️ 请先在左侧磁盘列表中点击选择要测试的目标 U 盘！', 'warning');
+    showToast(t('qemu.toast_select_first'), 'warning');
     return;
   }
 
   // 3. Check if QEMU is installed
   if (!qemuStatus.value.installed) {
-    showToast('❌ 未检测到 QEMU 模拟器！请先安装 QEMU (brew install qemu 或 port install qemu)', 'error');
+    showToast(t('qemu.toast_not_installed'), 'error');
     return;
   }
 

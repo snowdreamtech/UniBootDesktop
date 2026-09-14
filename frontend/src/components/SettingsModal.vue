@@ -6,8 +6,8 @@
         <div class="header-title">
           <span class="icon">⚙️</span>
           <div>
-            <h3>设置</h3>
-            <span class="sub-title">首选项与偏好</span>
+            <h3>{{ t('settings.title') }}</h3>
+            <span class="sub-title">{{ t('settings.subtitle') }}</span>
           </div>
         </div>
         <div class="header-actions">
@@ -25,14 +25,14 @@
           :class="{ active: activeTab === 'general' }" 
           @click="activeTab = 'general'"
         >
-          <span class="tab-icon">⚙️</span> 基础设置
+          <span class="tab-icon">⚙️</span> {{ t('settings.tab_general') }}
         </button>
         <button 
           class="tab-btn" 
           :class="{ active: activeTab === 'network' }" 
           @click="activeTab = 'network'"
         >
-          <span class="tab-icon">🌐</span> 网络设置
+          <span class="tab-icon">🌐</span> {{ t('settings.tab_network') }}
         </button>
         <button 
           class="tab-btn" 
@@ -52,12 +52,12 @@
 
       <!-- Modal Body -->
       <div class="modal-body">
-        <!-- Tab 1: General Settings (基础设置) -->
+        <!-- Tab 1: General Settings -->
         <div v-if="activeTab === 'general'" class="tab-content">
           <div class="settings-section">
             <h4 class="section-title">
-              <span>⚙️ 基础运行参数与偏好设置</span>
-              <span class="badge info">实时保存</span>
+              <span>⚙️ {{ t('settings.tab_general') }}</span>
+              <span class="badge info">{{ t('settings.realtime_save') }}</span>
             </h4>
 
             <div class="grid-form">
@@ -66,77 +66,74 @@
                 <CustomSelect
                   v-model="appLanguage"
                   :options="[
-                    { value: 'auto', label: '🌐 自动识别 (Auto - Match OS)' },
-                    { value: 'zh-CN', label: '🇨🇳 简体中文 (Simplified Chinese)' },
-                    { value: 'en-US', label: '🇺🇸 English (US)' },
-                    { value: 'zh-TW', label: '🇭🇰 繁體中文 (Traditional Chinese)' },
-                    { value: 'ja-JP', label: '🇯🇵 日本語 (Japanese)' },
-                    { value: 'ko-KR', label: '🇰🇷 한국어 (Korean)' },
-                    { value: 'de-DE', label: '🇩🇪 Deutsch (German)' },
-                    { value: 'fr-FR', label: '🇫🇷 Français (French)' },
-                    { value: 'es-ES', label: '🇪🇸 Español (Spanish)' },
-                    { value: 'ru-RU', label: '🇷🇺 Русский (Russian)' },
-                    { value: 'pt-BR', label: '🇧🇷 Português (Portuguese)' },
-                    { value: 'it-IT', label: '🇮🇹 Italiano (Italian)' },
-                    { value: 'tr-TR', label: '🇹🇷 Türkçe (Turkish)' },
-                    { value: 'pl-PL', label: '🇵🇱 Polski (Polish)' },
-                    { value: 'vi-VN', label: '🇻🇳 Tiếng Việt (Vietnamese)' },
-                    { value: 'ar-SA', label: '🇸🇦 العربية (Arabic)' }
+                    { value: 'auto', label: '🌐 自动识别 (Auto)' },
+                    { value: 'zh-CN', label: '🇨🇳 简体中文' },
+                    { value: 'en-US', label: '🇺🇸 English' },
+                    { value: 'zh-TW', label: '🇭🇰 繁體中文' },
+                    { value: 'ja-JP', label: '🇯🇵 日本語' },
+                    { value: 'ko-KR', label: '🇰🇷 한국어' },
+                    { value: 'de-DE', label: '🇩🇪 Deutsch' },
+                    { value: 'fr-FR', label: '🇫🇷 Français' },
+                    { value: 'es-ES', label: '🇪🇸 Español' },
+                    { value: 'ru-RU', label: '🇷🇺 Русский' },
+                    { value: 'pt-BR', label: '🇧🇷 Português' },
+                    { value: 'it-IT', label: '🇮🇹 Italiano' },
+                    { value: 'tr-TR', label: '🇹🇷 Türkçe' },
+                    { value: 'pl-PL', label: '🇵🇱 Polski' },
+                    { value: 'vi-VN', label: '🇻🇳 Tiếng Việt' },
+                    { value: 'ar-SA', label: '🇸🇦 العربية' }
                   ]"
                   @change="onLanguageChange"
                 />
-                <span class="field-hint">Switch interface display language</span>
               </div>
 
               <div class="form-group">
-                <label class="form-label">默认部署模式 (Default Mode):</label>
+                <label class="form-label">{{ t('settings.default_mode') }}</label>
                 <CustomSelect
                   v-model="defaultMode"
                   :options="[
-                    { value: 'cloud', label: 'Mode B (云端纯净在线模式 - 推荐)' },
-                    { value: 'hybrid', label: 'Mode A (本地/混合模式)' }
+                    { value: 'cloud', label: t('mode.cloud') },
+                    { value: 'hybrid', label: t('mode.hybrid') }
                   ]"
                   @change="triggerAutoSave"
                 />
-                <span class="field-hint">选择新建部署任务时的初始化默认模式</span>
               </div>
 
               <div class="form-group">
-                <label class="form-label">默认目标文件系统 (File System):</label>
+                <label class="form-label">{{ t('settings.default_fs') }}</label>
                 <CustomSelect
                   v-model="defaultFs"
                   :options="[
-                    { value: 'exFAT', label: 'exFAT (跨平台推荐)' },
-                    { value: 'NTFS', label: 'NTFS (Windows 推荐)' },
-                    { value: 'FAT32', label: 'FAT32 (大文件受限 4GB)' },
-                    { value: 'ext4', label: 'ext4 (Linux 原生)' }
+                    { value: 'exFAT', label: 'exFAT' },
+                    { value: 'NTFS', label: 'NTFS' },
+                    { value: 'FAT32', label: 'FAT32' },
+                    { value: 'ext4', label: 'ext4' }
                   ]"
                   @change="triggerAutoSave"
                 />
-                <span class="field-hint">格式化 USB 数据分区的默认系统类型</span>
               </div>
 
               <div class="form-group">
-                <label class="form-label">应用程序更新检测 (App Updates):</label>
+                <label class="form-label">{{ t('settings.app_update') }}</label>
                 <div class="radio-group">
                   <label class="radio-label">
                     <input type="radio" :value="true" v-model="autoCheckUpdate" @change="triggerAutoSave" />
-                    <span>启动时自动检测云端新版本</span>
+                    <span>{{ t('settings.update_auto') }}</span>
                   </label>
                   <label class="radio-label">
                     <input type="radio" :value="false" v-model="autoCheckUpdate" @change="triggerAutoSave" />
-                    <span>仅手动检测</span>
+                    <span>{{ t('settings.update_manual') }}</span>
                   </label>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="form-label">界面主题与视觉风格 (Theme):</label>
+                <label class="form-label">{{ t('settings.theme') }}</label>
                 <CustomSelect
                   v-model="appTheme"
                   :options="[
-                    { value: 'dark', label: '🌙 深色极客风 (Dark Cyber Glow)' },
-                    { value: 'light', label: '☀️ 浅色明亮风 (Light Crisp)' }
+                    { value: 'dark', label: '🌙 Dark' },
+                    { value: 'light', label: '☀️ Light' }
                   ]"
                   @change="triggerAutoSave"
                 />
@@ -145,28 +142,27 @@
           </div>
         </div>
 
-        <!-- Tab 2: Network Settings (网络设置) -->
+        <!-- Tab 2: Network Settings -->
         <div v-if="activeTab === 'network'" class="tab-content">
           <!-- Section 2A: GitHub Proxy Acceleration -->
           <div class="settings-section">
             <h4 class="section-title">
-              <span>🌐 GitHub 代理加速设置</span>
-              <span class="badge info">镜像前缀填空</span>
+              <span>🌐 GitHub Proxy</span>
             </h4>
 
             <div class="form-group">
-              <label class="form-label">自定义 GitHub 代理/镜像前缀 (GitHub Proxy Prefix):</label>
+              <label class="form-label">{{ t('settings.github_proxy') }}</label>
               <input 
                 v-model="proxyInputUrl" 
                 type="text" 
                 class="form-input" 
-                placeholder="默认为空（直接连接 GitHub 官方）。例如填入: https://your-proxy.com/"
+                :placeholder="t('settings.proxy_placeholder')"
               />
             </div>
 
             <div class="network-test-row">
               <button class="btn-secondary test-btn" :disabled="isTestingNet" @click="testConnection">
-                {{ isTestingNet ? '正在连通性测试中...' : '⚡ 测试 GitHub 连通性' }}
+                {{ isTestingNet ? t('settings.testing_net') : t('settings.test_net') }}
               </button>
               <span v-if="netTestResult" class="test-result" :class="netTestSuccess ? 'success' : 'error'">
                 {{ netTestResult }}
@@ -174,19 +170,18 @@
             </div>
           </div>
 
-          <!-- Section 2B: System Network Proxy (HTTP / HTTPS / SOCKS4 / SOCKS5) -->
+          <!-- Section 2B: System Network Proxy -->
           <div class="settings-section margin-top">
             <h4 class="section-title">
-              <span>🔌 系统网络代理设置 (HTTP / HTTPS / SOCKS4 / SOCKS5)</span>
-              <span class="badge info">支持 Auth (可选)</span>
+              <span>🔌 {{ t('settings.system_proxy') }}</span>
             </h4>
 
             <div class="grid-form">
               <div class="form-group span-full">
-                <label class="form-label">代理协议类型 (Protocol):</label>
+                <label class="form-label">{{ t('settings.proxy_proto') }}</label>
                 <div class="protocol-radio-bar">
                   <label class="protocol-pill" :class="{ active: proxyProtocol === 'direct' }">
-                    <input type="radio" v-model="proxyProtocol" value="direct" /> 直连 (Direct)
+                    <input type="radio" v-model="proxyProtocol" value="direct" /> {{ t('settings.proxy_direct') }}
                   </label>
                   <label class="protocol-pill" :class="{ active: proxyProtocol === 'http' }">
                     <input type="radio" v-model="proxyProtocol" value="http" /> HTTP
@@ -205,22 +200,22 @@
 
               <template v-if="proxyProtocol !== 'direct'">
                 <div class="form-group">
-                  <label class="form-label">代理服务器主机 (Host / IP):</label>
+                  <label class="form-label">{{ t('settings.proxy_host') }}</label>
                   <input 
                     v-model="proxyHost" 
                     type="text" 
                     class="form-input" 
-                    placeholder="例如: 127.0.0.1 或 proxy.example.com"
+                    placeholder="127.0.0.1"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">端口 (Port):</label>
+                  <label class="form-label">{{ t('settings.proxy_port') }}</label>
                   <input 
                     v-model.number="proxyPort" 
                     type="number" 
                     class="form-input" 
-                    placeholder="例如: 1080 / 7890"
+                    placeholder="7890"
                     min="1"
                     max="65535"
                   />
@@ -298,127 +293,103 @@
           </div>
         </div>
 
-        <!-- Tab 4: Ventoy Official Directory Settings (Ventoy 官方工具包) -->
+        <!-- Tab 4: Ventoy Official Directory Settings -->
         <div v-if="activeTab === 'ventoy'" class="tab-content">
           <div class="settings-section">
             <h4 class="section-title">
-              <span>🚀 Ventoy 官方工具包目录 (Ventoy Official)</span>
-              <span class="badge info">纯净盘初始化专用</span>
+              <span>🚀 Ventoy Official Toolchain</span>
             </h4>
 
             <div class="form-group span-full">
-              <label class="form-label">Ventoy 目录路径 (Ventoy Folder / Directory):</label>
+              <label class="form-label">{{ t('settings.ventoy_cli_path') }}</label>
               <div class="input-with-btn">
                 <input 
                   v-model="ventoyPath" 
                   type="text" 
                   class="form-input" 
-                  placeholder="例如选择目录: /opt/ventoy 或 C:\ventoy-1.0.99\"
+                  placeholder="/opt/ventoy or C:\ventoy-1.0.99\"
                 />
                 <button class="btn-secondary test-btn" :disabled="isValidatingVentoy" @click="checkVentoyCli">
-                  {{ isValidatingVentoy ? '正在检测...' : '⚡ 检测 Ventoy 目录' }}
+                  {{ isValidatingVentoy ? '...' : '⚡ Test Ventoy CLI' }}
                 </button>
-              </div>
-              <span class="field-hint">只需指定 Ventoy 官方向解压目录，系统将自动识别当前操作系统对应的命令。对于全新的纯净 U 盘，系统将自动调用 Ventoy 命令完成格式化与双分区制作；对于已制作好的 Ventoy 盘则自动跳过。</span>
-            </div>
-
-            <!-- Live Validation Result Card -->
-            <div v-if="ventoyValidation" class="ventoy-status-card" :class="ventoyValidation.valid ? 'success-card' : 'error-card'">
-              <div class="status-header">
-                <span class="status-icon">{{ ventoyValidation.valid ? '✅' : '❌' }}</span>
-                <span class="status-title">{{ ventoyValidation.valid ? 'Ventoy 目录检测成功' : 'Ventoy 目录检测未通过' }}</span>
-                <span v-if="ventoyValidation.valid && ventoyValidation.version" class="version-badge-green">
-                  {{ ventoyValidation.version }}
-                </span>
-              </div>
-              <div class="status-message">
-                {{ ventoyValidation.message }}
-              </div>
-              <div v-if="ventoyValidation.executablePath" class="exec-path">
-                自动匹配可执行命令: <code>{{ ventoyValidation.executablePath }}</code>
               </div>
             </div>
 
             <!-- Ventoy Formats & CLI Flags Group -->
             <div class="settings-sub-card">
-              <h5 class="sub-card-title">🛡️ 格式化与命令行初始化参数 (CLI Formatting Flags)</h5>
+              <h5 class="sub-card-title">🛡️ CLI Formatting Flags</h5>
               
               <div class="grid-form">
                 <div class="form-group">
-                  <label class="form-label">安全启动签名支持 (Secure Boot -s):</label>
+                  <label class="form-label">{{ t('settings.ventoy_secboot') }}</label>
                   <div class="radio-group horizontal">
                     <label class="radio-label">
                       <input type="radio" :value="true" v-model="ventoySecureBoot" @change="triggerAutoSave" />
-                      <span>开启 (-s 注入证书)</span>
+                      <span>ON (-s)</span>
                     </label>
                     <label class="radio-label">
                       <input type="radio" :value="false" v-model="ventoySecureBoot" @change="triggerAutoSave" />
-                      <span>关闭</span>
+                      <span>OFF</span>
                     </label>
                   </div>
-                  <span class="field-hint">允许 U 盘在已开启 Secure Boot 的品牌机/Surface 上顺利引导</span>
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">分区表架构 (Partition Style):</label>
+                  <label class="form-label">{{ t('settings.ventoy_part_style') }}</label>
                   <CustomSelect
                     v-model="ventoyPartitionStyle"
                     :options="[
-                      { value: 'MBR', label: 'MBR (官方默认推荐 • 兼容 Legacy/BIOS + UEFI)' },
-                      { value: 'GPT', label: 'GPT (仅现代 UEFI)' }
+                      { value: 'MBR', label: 'MBR (Legacy BIOS + UEFI)' },
+                      { value: 'GPT', label: 'GPT (UEFI Only)' }
                     ]"
                     @change="triggerAutoSave"
                   />
-                  <span class="field-hint">官方默认 MBR 分区表兼顾传统 BIOS 与 UEFI 启动，选 GPT 仅支持 UEFI</span>
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">末尾预留未分配空间 (MB):</label>
+                  <label class="form-label">{{ t('settings.ventoy_reserve') }}</label>
                   <input
                     v-model.number="ventoyReserveSpace"
                     type="number"
                     min="0"
                     class="form-input"
-                    placeholder="默认 0 (不预留)"
+                    placeholder="0"
                     @input="triggerAutoSave"
                   />
-                  <span class="field-hint">在 U 盘末端保留未分配区，可用于后续自行创建 Swap / 加密分区</span>
                 </div>
               </div>
             </div>
 
             <!-- Ventoy Engine & Plugins Group -->
             <div class="settings-sub-card">
-              <h5 class="sub-card-title">⚡ Ventoy 引擎与插件配置 (ventoy.json)</h5>
+              <h5 class="sub-card-title">⚡ Ventoy Plugins (ventoy.json)</h5>
               
               <div class="grid-form">
                 <div class="form-group">
-                  <label class="form-label">Windows 11 硬件限制绕过补丁:</label>
+                  <label class="form-label">{{ t('settings.ventoy_win11_bypass') }}</label>
                   <div class="radio-group horizontal">
                     <label class="radio-label">
                       <input type="radio" :value="true" v-model="ventoyWin11Bypass" @change="triggerAutoSave" />
-                      <span>自动注入 TPM 2.0 / CPU / RAM 绕过补丁</span>
+                      <span>ON (Bypass TPM/CPU/RAM)</span>
                     </label>
                     <label class="radio-label">
                       <input type="radio" :value="false" v-model="ventoyWin11Bypass" @change="triggerAutoSave" />
-                      <span>禁用补丁</span>
+                      <span>OFF</span>
                     </label>
                   </div>
-                  <span class="field-hint">老电脑可无障碍安装官方 Windows 11 镜像</span>
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">菜单默认启动倒计时 (秒):</label>
+                  <label class="form-label">{{ t('settings.ventoy_timeout') }}</label>
                   <input
                     v-model.number="ventoyMenuTimeout"
                     type="number"
                     min="0"
                     max="60"
                     class="form-input"
-                    placeholder="默认 0 秒 (不自动倒计时，无缝停留在菜单)"
+                    placeholder="0"
                     @input="triggerAutoSave"
                   />
-                  <span class="field-hint">官方默认 0 秒（等待按键挑选）。可设置为 >0 秒在超时后自动加载镜像</span>
                 </div>
               </div>
             </div>
