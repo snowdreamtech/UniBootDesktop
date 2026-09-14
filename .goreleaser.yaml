@@ -23,8 +23,9 @@ git:
 
 before:
   hooks:
-    # You may remove this if you don't use go modules.
     - go mod tidy
+    # Build Vue 3 i18n frontend assets before Go compilation
+    - cd frontend && npm install && npm run build
     # Generate shell completion scripts dynamically before building packages
     - go run ./main.go completion -d ./completions --all
     # Generate manpages
@@ -52,19 +53,19 @@ builds:
       - darwin
       - windows
     goarch:
-      - "386"
       - amd64
-      - arm
       - arm64
       - loong64
-      - ppc64le
       - riscv64
-      - s390x
-    goarm:
-      - "7"
     ignore:
       - goos: windows
-        goarch: arm
+        goarch: loong64
+      - goos: windows
+        goarch: riscv64
+      - goos: darwin
+        goarch: loong64
+      - goos: darwin
+        goarch: riscv64
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 archives:
