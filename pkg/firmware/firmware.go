@@ -349,6 +349,11 @@ func ExtractFirmwareModeB(efiMountDir string) error {
 	}
 
 	for _, mapping := range StandardFirmwareMappings {
+		// Mode B executes directly from ESP partition (64MB) and does NOT need 18.5MB UniBoot.iso
+		if mapping.ReleaseName == "UniBoot.iso" || (mapping.IsReserved && strings.HasSuffix(mapping.ReleaseName, ".iso")) {
+			continue
+		}
+
 		data, _, err := GetFirmwareData(mapping.ReleaseName)
 		if err != nil {
 			return fmt.Errorf("failed to load firmware asset %s: %w", mapping.ReleaseName, err)

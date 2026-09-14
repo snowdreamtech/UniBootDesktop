@@ -102,6 +102,55 @@ func TestExtractFirmwareToDir(t *testing.T) {
 	}
 }
 
+func TestExtractFirmwareModeA(t *testing.T) {
+	tmpDir := t.TempDir()
+	if err := ExtractFirmwareModeA(tmpDir); err != nil {
+		t.Fatalf("ExtractFirmwareModeA failed: %v", err)
+	}
+
+	expectedFiles := []string{
+		"ipxe/ipxe-x86_64.efi",
+		"ipxe/boot.ipxe",
+		"ipxe/background.png",
+		"iso/UniBoot.iso",
+	}
+
+	for _, f := range expectedFiles {
+		fullPath := filepath.Join(tmpDir, filepath.FromSlash(f))
+		if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+			t.Errorf("Mode A expected extracted file missing: %s", fullPath)
+		}
+	}
+}
+
+func TestExtractFirmwareModeB(t *testing.T) {
+	tmpDir := t.TempDir()
+	if err := ExtractFirmwareModeB(tmpDir); err != nil {
+		t.Fatalf("ExtractFirmwareModeB failed: %v", err)
+	}
+
+	expectedFiles := []string{
+		"EFI/BOOT/BOOTX64.EFI",
+		"EFI/BOOT/BOOTAA64.EFI",
+		"boot.ipxe",
+		"uniboot.ipxe",
+		"background.png",
+	}
+
+	for _, f := range expectedFiles {
+		fullPath := filepath.Join(tmpDir, filepath.FromSlash(f))
+		if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+			t.Errorf("Mode B expected extracted file missing: %s", fullPath)
+		}
+	}
+
+	// Mode B MUST NOT contain UniBoot.iso (saving ESP partition space)
+	isoPath := filepath.Join(tmpDir, "iso", "UniBoot.iso")
+	if _, err := os.Stat(isoPath); !os.IsNotExist(err) {
+		t.Errorf("Mode B should NOT extract UniBoot.iso into ESP partition")
+	}
+}
+
 func TestGetFirmwareData_Priority(t *testing.T) {
 	// Test embedded fallback default
 	data, src, err := GetFirmwareData("boot.ipxe")
