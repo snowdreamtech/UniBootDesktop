@@ -84,8 +84,8 @@
       <section class="glass-card section-card">
         <div class="section-header-row">
           <div>
-            <h2>选择目标 U 盘</h2>
-            <p class="section-desc">仅自动扫描安全的可移动 U 盘，系统盘自动过滤保护。</p>
+            <h2>{{ t('disk.select_title') }}</h2>
+            <p class="section-desc">{{ t('disk.select_desc') }}</p>
           </div>
         </div>
 
@@ -97,21 +97,21 @@
               :class="{ active: selectionMode === 'single' }" 
               @click="setSelectionMode('single')"
             >
-              🎯 单选模式
+              {{ t('disk.single_mode') }}
             </button>
             <button 
               class="sub-tab-btn" 
               :class="{ active: selectionMode === 'batch' }" 
               @click="setSelectionMode('batch')"
             >
-              📦 批量多选模式
+              {{ t('disk.batch_mode') }}
             </button>
           </div>
 
           <div v-if="selectionMode === 'batch'" class="batch-actions">
-            <button class="btn-text" @click="selectAllDisks">✅ 全选</button>
-            <button class="btn-text" @click="deselectAllDisks">❌ 清除选择</button>
-            <span class="selection-count">已选 {{ selectedDevices.size }}/{{ diskList.length }}</span>
+            <button class="btn-text" @click="selectAllDisks">{{ t('disk.select_all') }}</button>
+            <button class="btn-text" @click="deselectAllDisks">{{ t('disk.clear_select') }}</button>
+            <span class="selection-count">{{ t('disk.selected_count', { count: selectedDevices.size, total: diskList.length }) }}</span>
           </div>
         </div>
 
@@ -129,35 +129,35 @@
             @inspect="openInspector(disk)"
           />
           <div v-if="diskList.length === 0" class="empty-state">
-            正在查找移动 U 盘... 请插入 U 盘或点击刷新
+            Scanning removable USB drives...
           </div>
         </div>
 
         <button class="btn-secondary refresh-btn" @click="refreshDisks">
-          🔄 重新扫描 U 盘
+          🔄 {{ t('disk.rescan') }}
         </button>
       </section>
 
       <!-- Right: Deployment & Testing Panel -->
       <section class="glass-card section-card">
-        <h2>启动盘制作与模拟测试</h2>
+        <h2>{{ t('deploy.title') }}</h2>
         <p class="section-desc" v-if="activeMode === 'cloud'">
-          <strong>纯净 iPXE 云引导</strong> • 极速初始化双分区并写入多架构 iPXE 网络引导固件。
+          <strong>{{ t('mode.cloud') }}</strong> • Ultra-fast double partition initialization & multi-arch iPXE cloud boot.
         </p>
         <p class="section-desc" v-else>
-          集成 Ventoy 核心 + UniBoot 专属暗色主题 & iPXE 网络扩展，支持放置数 GB 大 ISO 镜像。
+          Integrated Ventoy core + UniBoot theme & iPXE cloud boot support.
         </p>
 
         <!-- Filesystem Selection for Mode A & Mode B (Hidden when upgrading an existing Ventoy/UniBoot drive) -->
         <div v-if="!isNonDestructive" class="fs-selector">
-          <label class="fs-label">主数据区格式 (File System):</label>
+          <label class="fs-label">{{ t('settings.default_fs') }}</label>
           <CustomSelect
             v-model="selectedFsType"
             :options="[
-              { value: 'exFAT', label: 'exFAT (默认推荐 • 支持 >4GB 单文件大 ISO)' },
-              { value: 'NTFS', label: 'NTFS (Windows 极速原生格式)' },
-              { value: 'FAT32', label: 'FAT32 (老旧机器全兼容 • 4GB单文件限制)' },
-              { value: 'ext4', label: 'ext4 (Linux 专属文件系统)' }
+              { value: 'exFAT', label: 'exFAT (Default • Supports >4GB ISO)' },
+              { value: 'NTFS', label: 'NTFS (Windows Native)' },
+              { value: 'FAT32', label: 'FAT32 (Legacy Compatible • 4GB Limit)' },
+              { value: 'ext4', label: 'ext4 (Linux Native)' }
             ]"
           />
         </div>
@@ -166,11 +166,11 @@
         <div v-if="activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid" class="ventoy-warning-card">
           <span class="warning-card-icon">⚠️</span>
           <div class="warning-card-body">
-            <div class="warning-card-title">全新模式 A (Ventoy 双模盘) 前置限制与说明</div>
-            <div class="warning-card-message">{{ ventoyStatus.message || '全新制作模式 A 需依赖 Ventoy CLI 可执行文件。' }}</div>
+            <div class="warning-card-title">Ventoy CLI Pre-flight Limitation</div>
+            <div class="warning-card-message">{{ ventoyStatus.message || 'Ventoy CLI executable is required for Mode A format.' }}</div>
           </div>
           <button class="btn-secondary btn-sm" @click="openSettings('ventoy')">
-            ⚙️ 配置 / 校验
+            ⚙️ Settings
           </button>
         </div>
 
@@ -179,12 +179,10 @@
           <span class="safe-notice-icon">🛡️</span>
           <div class="safe-notice-content">
             <div class="safe-notice-title">
-              {{ activeMode === 'cloud' ? '检测到现有 Ventoy/UniBoot 盘 (模式 B 仅刷新 ESP 引导区)' : '检测到现有的 Ventoy 启动盘 (免格式化无损更新)' }}
+              {{ activeMode === 'cloud' ? t('safe.title_cloud') : t('safe.title_hybrid') }}
             </div>
             <div class="safe-notice-desc">
-              {{ activeMode === 'cloud'
-                  ? '模式 B 坚持标准 UNIBOOT 双分区架构。部署将自动无损刷新 ESP 引导区直达 iPXE 云菜单，绝不抹擦或挪动主数据区原有文件与 ISO！'
-                  : '无需选择主数据区格式。模式 A 自动保留所有现有文件与 ISO 镜像（绝不挪动原文件位置），全自动无损注入 UniBoot 暗色主题与 iPXE 云引导！' }}
+              {{ activeMode === 'cloud' ? t('safe.desc_cloud') : t('safe.desc_hybrid') }}
             </div>
           </div>
         </div>
@@ -193,19 +191,19 @@
         <div v-if="activeMode === 'hybrid'" class="iso-card">
           <div class="iso-card-header">
             <div class="iso-title-group">
-              <h3>💿 本地系统镜像源 (ISO / IMG / WIM / VHD)</h3>
-              <span class="iso-subtitle">支持单选与多选系统镜像。一键制作完成将自动写入 `/UNIBOOT/iso/` 目录供 Ventoy / UniBoot 直接挂载。</span>
+              <h3>{{ t('iso.title') }}</h3>
+              <span class="iso-subtitle">{{ t('iso.desc') }}</span>
             </div>
             <button class="btn-secondary add-iso-btn" @click="handleSelectIsoFiles">
-              ➕ 添加镜像文件
+              {{ t('iso.add_btn') }}
             </button>
           </div>
 
           <div class="iso-list-container">
             <div v-if="selectedIsoFiles.length === 0" class="iso-empty-state" @click="handleSelectIsoFiles">
               <span class="empty-icon">📥</span>
-              <div class="empty-text">点击添加镜像文件 (支持单选与批量多选)</div>
-              <div class="empty-subtext">支持 .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw 等 Ventoy 全格式</div>
+              <div class="empty-text">{{ t('iso.empty_title') }}</div>
+              <div class="empty-subtext">{{ t('iso.empty_sub') }}</div>
             </div>
 
             <div v-else class="iso-file-list">
@@ -215,31 +213,31 @@
                   <div class="iso-file-name" :title="file.path">{{ file.name }}</div>
                   <div class="iso-file-path">{{ file.path }}</div>
                 </div>
-                <button class="iso-remove-btn" title="移除此文件" @click="removeIsoFile(index)">✕</button>
+                <button class="iso-remove-btn" title="Remove" @click="removeIsoFile(index)">✕</button>
               </div>
             </div>
 
             <div v-if="selectedIsoFiles.length > 0" class="iso-footer">
-              <span class="iso-count-summary">已选 <strong>{{ selectedIsoFiles.length }}</strong> 个系统镜像源文件</span>
-              <button class="btn-text-danger" @click="clearIsoFiles">清空列表</button>
+              <span class="iso-count-summary">{{ t('iso.summary', { count: selectedIsoFiles.length }) }}</span>
+              <button class="btn-text-danger" @click="clearIsoFiles">{{ t('iso.clear') }}</button>
             </div>
           </div>
         </div>
 
         <div class="deploy-box">
           <div class="selected-target">
-            <span>目标设备:</span>
+            <span>{{ t('deploy.target_device') }}</span>
             <strong v-if="selectionMode === 'single'">
-              {{ selectedDisk ? selectedDisk.name + ' (' + selectedDisk.device + ')' : '未选择 U 盘' }}
+              {{ selectedDisk ? selectedDisk.name + ' (' + selectedDisk.device + ')' : t('disk.no_disk') }}
             </strong>
             <strong v-else>
-              {{ selectedDevices.size > 0 ? `已选中 ${selectedDevices.size} 块 U 盘` : '未选择 U 盘' }}
+              {{ selectedDevices.size > 0 ? t('deploy.batch_target', { count: selectedDevices.size }) : t('disk.no_disk') }}
             </strong>
           </div>
 
           <ProgressBar 
             v-if="isDeploying" 
-            label="正在写入引导与固件包..." 
+            :label="t('deploy.writing')" 
             :progress="deployProgress" 
           />
 
@@ -250,25 +248,25 @@
             :title="deployDisabledReason"
             @click="handleDeployBtnClick"
           >
-            {{ isDeploying ? '正在写入引导固件...' : (isNonDestructive ? '🛡️ 开始无损更新 (保留数据)' : (selectionMode === 'batch' ? `开始批量制作 (${selectedDevices.size} 块 U 盘)` : '开始制作启动盘')) }}
+            {{ isDeploying ? t('deploy.writing') : (isNonDestructive ? t('deploy.start_update') : (selectionMode === 'batch' ? t('deploy.batch_create', { count: selectedDevices.size }) : t('deploy.start_create'))) }}
           </button>
         </div>
 
         <!-- QEMU Preview -->
         <div class="qemu-box">
           <div class="qemu-header">
-            <h3>QEMU 引导模拟测试</h3>
+            <h3>{{ t('qemu.title') }}</h3>
             <span class="badge" :class="qemuStatus.installed ? 'success' : 'muted'">
-              {{ qemuStatus.installed ? '已检测到 QEMU' : '未检测到 QEMU' }}
+              {{ qemuStatus.installed ? t('qemu.installed') : t('qemu.not_installed') }}
             </span>
           </div>
           <p class="qemu-desc">
-            校验目标: 
+            {{ t('qemu.target') }} 
             <strong v-if="activeQemuTargetDevice" class="target-highlight">
               {{ activeQemuTargetName }} ({{ activeQemuTargetDevice }})
             </strong>
             <span v-else class="target-warn">
-              ⚠️ 未选择 U 盘（请在左侧列表中点击选择要测试的 U 盘）
+              {{ t('qemu.no_disk_warn') }}
             </span>
           </p>
           <button 
@@ -277,7 +275,7 @@
             :title="qemuDisabledReason"
             @click="launchQEMU"
           >
-            {{ isLaunchingQemu ? '⏳ 正在拉起 QEMU 虚拟机...' : '▶ 运行 QEMU 启动测试' }}
+            {{ isLaunchingQemu ? t('qemu.launching') : t('qemu.run_test') }}
           </button>
         </div>
       </section>
@@ -353,7 +351,19 @@ const langOptions = [
   { value: 'auto', label: '自动识别 (Auto)', flag: '🌐' },
   { value: 'zh-CN', label: '简体中文', flag: '🇨🇳' },
   { value: 'en-US', label: 'English', flag: '🇺🇸' },
-  { value: 'zh-TW', label: '繁體中文', flag: '🇭🇰' }
+  { value: 'zh-TW', label: '繁體中文', flag: '🇭🇰' },
+  { value: 'ja-JP', label: '日本語', flag: '🇯🇵' },
+  { value: 'ko-KR', label: '한국어', flag: '🇰🇷' },
+  { value: 'de-DE', label: 'Deutsch', flag: '🇩🇪' },
+  { value: 'fr-FR', label: 'Français', flag: '🇫🇷' },
+  { value: 'es-ES', label: 'Español', flag: '🇪🇸' },
+  { value: 'ru-RU', label: 'Русский', flag: '🇷🇺' },
+  { value: 'pt-BR', label: 'Português', flag: '🇧🇷' },
+  { value: 'it-IT', label: 'Italiano', flag: '🇮🇹' },
+  { value: 'tr-TR', label: 'Türkçe', flag: '🇹🇷' },
+  { value: 'pl-PL', label: 'Polski', flag: '🇵🇱' },
+  { value: 'vi-VN', label: 'Tiếng Việt', flag: '🇻🇳' },
+  { value: 'ar-SA', label: 'العربية', flag: '🇸🇦' }
 ];
 
 const currentLangLabel = computed(() => {
@@ -1245,6 +1255,8 @@ h1 {
   top: calc(100% + 8px);
   right: 0;
   min-width: 220px;
+  max-height: 340px;
+  overflow-y: auto;
   background: var(--card-bg, rgba(20, 24, 38, 0.96));
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);

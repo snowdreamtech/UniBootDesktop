@@ -17,7 +17,7 @@
     <div 
       class="disk-icon-wrapper" 
       :class="diskType" 
-      title="点击自定义图标"
+      :title="t('disk.change_icon')"
       @click.stop="$emit('pick-icon', disk)"
     >
       <!-- Boot USB Icon with Lightning -->
@@ -116,8 +116,8 @@
     <div class="disk-details">
       <div class="disk-name-row">
         <span class="disk-name">{{ disk.name || disk.device }}</span>
-        <span v-if="disk.isFakeUsb3" class="fake-badge" title="警告：宣传 USB 3.0 但硬件物理层仅为 USB 2.0 480 Mbps 速率">
-          ⚠️ 假 USB 3.0
+        <span v-if="disk.isFakeUsb3" class="fake-badge" :title="t('disk.fake_usb3_warning')">
+          ⚠️ Fake USB 3.0
         </span>
       </div>
       <div class="disk-meta">
@@ -132,10 +132,10 @@
       <span class="disk-badge" :class="diskType">{{ diskTagLabel }}</span>
       <button 
         class="btn-inspect" 
-        title="查看 USB 设备硬件详情" 
+        :title="t('disk.hw_inspect')" 
         @click.stop="$emit('inspect', disk)"
       >
-        ℹ️ 详情
+        ℹ️ {{ t('disk.details') }}
       </button>
     </div>
   </div>
@@ -143,6 +143,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { t } from '../i18n';
 
 interface DiskInfo {
   device: string;

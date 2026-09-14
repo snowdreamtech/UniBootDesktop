@@ -17,13 +17,13 @@
 
         <div class="action-buttons-group">
           <button v-if="actionType === 'open_settings'" class="btn-primary flex-btn" @click="onAction">
-            ⚙️ 前往 Ventoy 设置配置
+            {{ t('ventoy_alert.goto_settings') }}
           </button>
           <button class="btn-accent flex-btn" @click="onSwitchB">
-            🚀 切换至【模式 B (1秒极速云引导)】
+            {{ t('ventoy_alert.switch_b') }}
           </button>
           <button class="btn-secondary flex-btn" @click="close">
-            取消
+            {{ t('ventoy_alert.close') }}
           </button>
         </div>
       </div>
@@ -32,6 +32,8 @@
 </template>
 
 <script setup lang="ts">
+import { t } from '../i18n';
+
 defineProps<{
   isOpen: boolean;
   title: string;

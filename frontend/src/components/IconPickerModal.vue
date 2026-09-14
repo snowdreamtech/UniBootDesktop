@@ -2,7 +2,7 @@
   <div v-if="isOpen" class="modal-backdrop" @click="close">
     <div class="glass-card modal-content" @click.stop>
       <div class="modal-header">
-        <h3>🎨 挑选 U 盘展示图标</h3>
+        <h3>🎨 {{ t('icon_picker.title') }}</h3>
         <button class="close-btn" @click="close">✕</button>
       </div>
       <p class="modal-desc">为目标设备 <strong>{{ diskName }}</strong> 挑选满意的形象外观：</p>
@@ -113,13 +113,14 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn-secondary" @click="resetToAuto">🔄 恢复系统智能识别</button>
+        <button class="btn-secondary" @click="resetToAuto">🔄 {{ t('icon_picker.reset') }}</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { t } from '../i18n';
 export type DiskIconType = 'usb' | 'usb2' | 'usb3_1' | 'usb3_2' | 'usb4' | 'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom';
 
 defineProps<{

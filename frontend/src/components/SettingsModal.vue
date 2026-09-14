@@ -62,18 +62,30 @@
 
             <div class="grid-form">
               <div class="form-group highlight-form-group">
-                <label class="form-label highlight-label">🌐 界面语言 (Language):</label>
+                <label class="form-label highlight-label">🌐 {{ t('settings.language') }}</label>
                 <CustomSelect
                   v-model="appLanguage"
                   :options="[
-                    { value: 'auto', label: '🌐 自动识别 (Auto - 匹配操作系统)' },
+                    { value: 'auto', label: '🌐 自动识别 (Auto - Match OS)' },
                     { value: 'zh-CN', label: '🇨🇳 简体中文 (Simplified Chinese)' },
-                    { value: 'en-US', label: '🇺🇸 English (英文)' },
-                    { value: 'zh-TW', label: '🇭🇰 繁體中文 (Traditional Chinese)' }
+                    { value: 'en-US', label: '🇺🇸 English (US)' },
+                    { value: 'zh-TW', label: '🇭🇰 繁體中文 (Traditional Chinese)' },
+                    { value: 'ja-JP', label: '🇯🇵 日本語 (Japanese)' },
+                    { value: 'ko-KR', label: '🇰🇷 한국어 (Korean)' },
+                    { value: 'de-DE', label: '🇩🇪 Deutsch (German)' },
+                    { value: 'fr-FR', label: '🇫🇷 Français (French)' },
+                    { value: 'es-ES', label: '🇪🇸 Español (Spanish)' },
+                    { value: 'ru-RU', label: '🇷🇺 Русский (Russian)' },
+                    { value: 'pt-BR', label: '🇧🇷 Português (Portuguese)' },
+                    { value: 'it-IT', label: '🇮🇹 Italiano (Italian)' },
+                    { value: 'tr-TR', label: '🇹🇷 Türkçe (Turkish)' },
+                    { value: 'pl-PL', label: '🇵🇱 Polski (Polish)' },
+                    { value: 'vi-VN', label: '🇻🇳 Tiếng Việt (Vietnamese)' },
+                    { value: 'ar-SA', label: '🇸🇦 العربية (Arabic)' }
                   ]"
                   @change="onLanguageChange"
                 />
-                <span class="field-hint">切换应用程序界面显示的语言文字</span>
+                <span class="field-hint">Switch interface display language</span>
               </div>
 
               <div class="form-group">
@@ -420,7 +432,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import CustomSelect from './CustomSelect.vue';
-import { setLanguage } from '../i18n';
+import { setLanguage, t } from '../i18n';
 
 interface FirmwareMapping {
   releaseName: string;

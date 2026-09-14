@@ -5,8 +5,8 @@
         <div class="header-title">
           <span class="modal-icon">ℹ️</span>
           <div>
-            <h3>USB 设备硬件详情</h3>
-            <p class="subtitle">物理 PHY 协议识别、底层传输速率与硬件数据</p>
+            <h3>{{ t('inspector.title') }}</h3>
+            <p class="subtitle">PHY Protocol, Speed & Hardware Analysis</p>
           </div>
         </div>
         <button class="close-btn" @click="closeModal">✕</button>
@@ -206,6 +206,8 @@ defineProps<{
   isOpen: boolean;
   disk: DiskInfo | null;
 }>();
+
+import { t } from '../i18n';
 
 const emit = defineEmits(['close']);
 

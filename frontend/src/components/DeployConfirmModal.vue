@@ -82,9 +82,9 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn-cancel" @click="close">取消</button>
+        <button class="btn-cancel" @click="close">{{ t('confirm.cancel_btn') }}</button>
         <button :class="isAllVentoy || isMixed ? 'btn-safe-confirm' : 'btn-danger-confirm'" @click="confirm">
-          {{ isAllVentoy ? '🛡️ 确认无损更新 (保留数据)' : (isMixed ? '🚀 开始混合制作' : '⚠️ 确认备份并开始写入') }}
+          {{ isAllVentoy ? t('deploy.start_update') : (isMixed ? '🚀 ' + t('confirm.confirm_btn') : t('confirm.confirm_btn')) }}
         </button>
       </div>
     </div>
@@ -93,6 +93,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { t } from '../i18n';
 
 interface DiskInfo {
   device: string;
