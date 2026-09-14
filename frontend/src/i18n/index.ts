@@ -96,6 +96,10 @@ const zhCN: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 云端 UniBoot {tag} 核心固件与引导脚本已成功同步下载并存入本地缓存！",
   "settings.syncSuccessShortAlert": "🎉 云端 UniBoot 核心固件已成功同步！",
   "settings.syncFailedAlert": "❌ 固件同步失败: {error}",
+  "settings.ventoyToolchain": "🚀 Ventoy 官方工具链",
+  "settings.testVentoyCli": "⚡ 测试 Ventoy CLI",
+  "settings.cliFormattingFlags": "🛡️ CLI 格式化参数",
+  "settings.ventoyPlugins": "⚡ Ventoy 插件配置 (ventoy.json)",
 
   "app.title": "UniGoDesktop",
   "app.subtitle": "UniBoot 桌面级软硬件引导制作引擎",
@@ -342,6 +346,10 @@ const enUS: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} firmware & scripts downloaded and cached successfully!",
   "settings.syncSuccessShortAlert": "🎉 Cloud UniBoot core firmware synced successfully!",
   "settings.syncFailedAlert": "❌ Firmware Sync Failed: {error}",
+  "settings.ventoyToolchain": "🚀 Ventoy Official Toolchain",
+  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.cliFormattingFlags": "🛡️ CLI Formatting Flags",
+  "settings.ventoyPlugins": "⚡ Ventoy Plugins (ventoy.json)",
 
   "app.title": "UniGoDesktop",
   "app.subtitle": "UniBoot Desktop Hardware & Software Boot Drive Engine",
@@ -988,6 +996,10 @@ const zhTW: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 雲端 UniBoot {tag} 核心固件與引導腳本已成功同步下載並存入本地快取！",
   "settings.syncSuccessShortAlert": "🎉 雲端 UniBoot 核心固件已成功同步！",
   "settings.syncFailedAlert": "❌ 固件同步失敗: {error}",
+  "settings.ventoyToolchain": "🚀 Ventoy 官方工具鏈",
+  "settings.testVentoyCli": "⚡ 測試 Ventoy CLI",
+  "settings.cliFormattingFlags": "🛡️ CLI 格式化參數",
+  "settings.ventoyPlugins": "⚡ Ventoy 插件配置 (ventoy.json)",
 
   "app.title": "UniGoDesktop",
   "app.subtitle": "UniBoot 桌面級軟硬體引導製作引擎",

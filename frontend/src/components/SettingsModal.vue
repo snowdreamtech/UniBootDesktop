@@ -297,7 +297,7 @@
         <div v-if="activeTab === 'ventoy'" class="tab-content">
           <div class="settings-section">
             <h4 class="section-title">
-              <span>🚀 Ventoy Official Toolchain</span>
+              <span>{{ t('settings.ventoyToolchain') }}</span>
             </h4>
 
             <div class="form-group span-full">
@@ -310,14 +310,14 @@
                   placeholder="/opt/ventoy or C:\ventoy-1.0.99\"
                 />
                 <button class="btn-secondary test-btn" :disabled="isValidatingVentoy" @click="checkVentoyCli">
-                  {{ isValidatingVentoy ? '...' : '⚡ Test Ventoy CLI' }}
+                  {{ isValidatingVentoy ? '...' : t('settings.testVentoyCli') }}
                 </button>
               </div>
             </div>
 
             <!-- Ventoy Formats & CLI Flags Group -->
             <div class="settings-sub-card">
-              <h5 class="sub-card-title">🛡️ CLI Formatting Flags</h5>
+              <h5 class="sub-card-title">{{ t('settings.cliFormattingFlags') }}</h5>
               
               <div class="grid-form">
                 <div class="form-group">
@@ -362,7 +362,7 @@
 
             <!-- Ventoy Engine & Plugins Group -->
             <div class="settings-sub-card">
-              <h5 class="sub-card-title">⚡ Ventoy Plugins (ventoy.json)</h5>
+              <h5 class="sub-card-title">{{ t('settings.ventoyPlugins') }}</h5>
               
               <div class="grid-form">
                 <div class="form-group">
