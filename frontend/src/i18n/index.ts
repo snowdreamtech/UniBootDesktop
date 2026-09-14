@@ -62,8 +62,8 @@ export const SUPPORTED_LANGUAGES = [
 ];
 
 
-// Vite glob import for dynamic lazy-loading locale chunks
-const localeLoaders = import.meta.glob<Record<string, any>>('./locales/*.ts');
+// Vite glob import for dynamic lazy-loading locale chunks (excluding pre-bundled zh-CN and en-US)
+const localeLoaders = import.meta.glob<Record<string, any>>(['./locales/*.ts', '!./locales/zh-CN.ts', '!./locales/en-US.ts']);
 
 // Reactive map of loaded locale dictionaries
 const loadedDictionaries = ref<Record<string, TranslationDict>>({
