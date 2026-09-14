@@ -72,7 +72,7 @@ function onSwitchB() {
 }
 
 .glass-modal {
-  background: rgba(30, 41, 59, 0.95);
+  background: var(--modal-bg, rgba(30, 41, 59, 0.95));
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: 16px;
   width: 90%;
@@ -199,5 +199,23 @@ function onSwitchB() {
 .btn-secondary:hover {
   background: rgba(71, 85, 105, 0.9);
   color: #fff;
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] .glass-modal {
+  background: #ffffff;
+  border-color: #fca5a5;
+  color: #0f172a;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.2);
+}
+
+[data-theme="light"] .btn-secondary {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .btn-secondary:hover {
+  background: #e2e8f0;
 }
 </style>

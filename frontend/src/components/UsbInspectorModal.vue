@@ -241,7 +241,7 @@ function closeModal() {
 }
 
 .glass-modal {
-  background: rgba(18, 24, 38, 0.95);
+  background: var(--modal-bg, rgba(18, 24, 38, 0.95));
   border: 1px solid rgba(0, 229, 255, 0.25);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 229, 255, 0.1);
   border-radius: 16px;
@@ -275,7 +275,7 @@ function closeModal() {
   font-size: 1.15rem;
   font-weight: 700;
   margin: 0;
-  color: #fff;
+  color: var(--text-main);
 }
 
 .subtitle {
@@ -517,5 +517,57 @@ function closeModal() {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   justify-content: flex-end;
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] .glass-modal {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.18);
+}
+
+[data-theme="light"] .modal-header h3 {
+  color: #0f172a;
+}
+
+[data-theme="light"] .subtitle {
+  color: #475569;
+}
+
+[data-theme="light"] .close-btn {
+  color: #64748b;
+}
+
+[data-theme="light"] .close-btn:hover {
+  color: #0f172a;
+}
+
+[data-theme="light"] .spec-card {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .spec-label {
+  color: #475569;
+}
+
+[data-theme="light"] .spec-val {
+  color: #0f172a;
+}
+
+[data-theme="light"] .matrix-pill {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+[data-theme="light"] .matrix-pill.active {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #38bdf8;
+}
+
+[data-theme="light"] .modal-footer {
+  background: #f8fafc;
+  border-top-color: #e2e8f0;
 }
 </style>

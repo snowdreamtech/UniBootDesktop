@@ -177,7 +177,7 @@ function confirm() {
 }
 
 .glass-modal {
-  background: rgba(18, 24, 38, 0.96);
+  background: var(--modal-bg, rgba(18, 24, 38, 0.96));
   border: 1px solid rgba(239, 68, 68, 0.4);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(239, 68, 68, 0.2);
   border-radius: 16px;
@@ -512,5 +512,65 @@ function confirm() {
   background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
   box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
   transform: translateY(-1px);
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] .glass-modal {
+  background: #ffffff;
+  border-color: #fca5a5;
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.18);
+}
+
+[data-theme="light"] .modal-header h3 {
+  color: #991b1b;
+}
+
+[data-theme="light"] .close-btn {
+  color: #64748b;
+}
+
+[data-theme="light"] .warning-banner {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+[data-theme="light"] .warning-title {
+  color: #991b1b;
+}
+
+[data-theme="light"] .warning-desc {
+  color: #7f1d1d;
+}
+
+[data-theme="light"] .detail-row {
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="light"] .detail-label {
+  color: #475569;
+}
+
+[data-theme="light"] .detail-value {
+  color: #0f172a;
+}
+
+[data-theme="light"] .batch-count {
+  color: #0f172a;
+}
+
+[data-theme="light"] .modal-footer {
+  background: #f8fafc;
+  border-top-color: #e2e8f0;
+}
+
+[data-theme="light"] .btn-cancel {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  font-weight: 600;
+}
+
+[data-theme="light"] .btn-cancel:hover {
+  background: #e2e8f0;
 }
 </style>

@@ -184,7 +184,7 @@ function resetToAuto() {
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  background: rgba(13, 19, 33, 0.95);
+  background: var(--modal-bg, rgba(13, 19, 33, 0.95));
   border: 1px solid var(--card-border);
   border-radius: 16px;
   padding: 1.5rem;
@@ -387,19 +387,76 @@ function resetToAuto() {
 }
 
 /* Light Theme Enhancements */
-[data-theme="light"] .icon-card {
+[data-theme="light"] .modal-content {
   background: #ffffff;
   border-color: #cbd5e1;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+}
+
+[data-theme="light"] .modal-backdrop {
+  background: rgba(15, 23, 42, 0.4);
+}
+
+[data-theme="light"] .modal-header h3 {
+  color: #0f172a;
+}
+
+[data-theme="light"] .close-btn {
+  color: #64748b;
+}
+
+[data-theme="light"] .close-btn:hover {
+  color: #0f172a;
+}
+
+[data-theme="light"] .modal-desc {
+  color: #475569;
+}
+
+[data-theme="light"] .icon-card {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
 [data-theme="light"] .icon-card:hover {
   background: #f0f9ff;
   border-color: #38bdf8;
+  transform: translateY(-2px);
 }
 
 [data-theme="light"] .icon-card.active {
   background: #e0f2fe;
   border-color: #0284c7;
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.2);
+}
+
+[data-theme="light"] .option-title {
+  color: #0f172a;
+}
+
+[data-theme="light"] .option-desc {
+  color: #475569;
+}
+
+[data-theme="light"] .btn-secondary {
+  background: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  font-weight: 600;
+}
+
+[data-theme="light"] .btn-secondary:hover {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #38bdf8;
+}
+
+[data-theme="light"] .modal-scroll-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .modal-scroll-body::-webkit-scrollbar-thumb {
+  background: rgba(2, 132, 199, 0.3);
 }
 </style>
