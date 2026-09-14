@@ -254,5 +254,6 @@ export const itIt: TranslationDict = {
   "fs.exfat": "exFAT (Predefinito • Supporta file >4GB)",
   "fs.ntfs": "NTFS (Nativo Windows)",
   "fs.fat32": "FAT32 (Compatibile Datati • Limite 4GB)",
-  "fs.ext4": "ext4 (Nativo Linux)"
+  "fs.ext4": "ext4 (Nativo Linux)",
+  "disk.title": "Select Target USB Drive"
 };

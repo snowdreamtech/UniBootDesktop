@@ -254,5 +254,6 @@ export const arSa: TranslationDict = {
   "fs.exfat": "exFAT (افتراضي • يدعم ملفات >4 جيجابايت)",
   "fs.ntfs": "NTFS (نظام Windows الأصلي)",
   "fs.fat32": "FAT32 (متوافق مع الأجهزة القديمة • حد 4 جيجابايت)",
-  "fs.ext4": "ext4 (نظام Linux الأصلي)"
+  "fs.ext4": "ext4 (نظام Linux الأصلي)",
+  "disk.title": "Select Target USB Drive"
 };

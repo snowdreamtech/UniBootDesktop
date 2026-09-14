@@ -254,5 +254,6 @@ export const ruRu: TranslationDict = {
   "fs.exfat": "exFAT (По умолчанию • Поддержка файлов >4 ГБ)",
   "fs.ntfs": "NTFS (Родная система Windows)",
   "fs.fat32": "FAT32 (Совместимость со старыми • Лимит 4 ГБ)",
-  "fs.ext4": "ext4 (Родная система Linux)"
+  "fs.ext4": "ext4 (Родная система Linux)",
+  "disk.title": "Select Target USB Drive"
 };

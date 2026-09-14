@@ -254,5 +254,6 @@ export const jaJp: TranslationDict = {
   "fs.exfat": "exFAT (デフォルト推奨 • 4GB超ファイル対応)",
   "fs.ntfs": "NTFS (Windows ネイティブ)",
   "fs.fat32": "FAT32 (レガシー対応 • 4GBファイル制限)",
-  "fs.ext4": "ext4 (Linux ネイティブ)"
+  "fs.ext4": "ext4 (Linux ネイティブ)",
+  "disk.title": "Select Target USB Drive"
 };

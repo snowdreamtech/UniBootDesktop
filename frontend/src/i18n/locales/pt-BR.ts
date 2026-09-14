@@ -254,5 +254,6 @@ export const ptBr: TranslationDict = {
   "fs.exfat": "exFAT (Padrão • Suporta arquivos >4GB)",
   "fs.ntfs": "NTFS (Nativo do Windows)",
   "fs.fat32": "FAT32 (Compatível com Legado • Limite 4GB)",
-  "fs.ext4": "ext4 (Nativo do Linux)"
+  "fs.ext4": "ext4 (Nativo do Linux)",
+  "disk.title": "Select Target USB Drive"
 };

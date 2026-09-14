@@ -254,5 +254,6 @@ export const koKr: TranslationDict = {
   "fs.exfat": "exFAT (기본 권장 • 4GB 초과 파일 지원)",
   "fs.ntfs": "NTFS (Windows 네이티브)",
   "fs.fat32": "FAT32 (구형 호환 • 4GB 파일 제한)",
-  "fs.ext4": "ext4 (Linux 네이티브)"
+  "fs.ext4": "ext4 (Linux 네이티브)",
+  "disk.title": "Select Target USB Drive"
 };

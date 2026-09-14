@@ -254,5 +254,6 @@ export const plPl: TranslationDict = {
   "fs.exfat": "exFAT (Domyślny • Obsługuje pliki >4GB)",
   "fs.ntfs": "NTFS (Natywny Windows)",
   "fs.fat32": "FAT32 (Zgodność ze starszymi • Limit 4GB)",
-  "fs.ext4": "ext4 (Natywny Linux)"
+  "fs.ext4": "ext4 (Natywny Linux)",
+  "disk.title": "Select Target USB Drive"
 };

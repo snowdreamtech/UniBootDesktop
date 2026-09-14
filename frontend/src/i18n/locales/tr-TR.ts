@@ -254,5 +254,6 @@ export const trTr: TranslationDict = {
   "fs.exfat": "exFAT (Varsayılan • >4GB Dosyaları Destekler)",
   "fs.ntfs": "NTFS (Yerel Windows)",
   "fs.fat32": "FAT32 (Eski Cihazlarla Uyumlu • 4GB Sınırı)",
-  "fs.ext4": "ext4 (Yerel Linux)"
+  "fs.ext4": "ext4 (Yerel Linux)",
+  "disk.title": "Select Target USB Drive"
 };

@@ -254,5 +254,6 @@ export const deDe: TranslationDict = {
   "fs.exfat": "exFAT (Standard • Unterstützt >4GB ISO)",
   "fs.ntfs": "NTFS (Windows-nativ)",
   "fs.fat32": "FAT32 (Legacy-kompatibel • 4GB Limit)",
-  "fs.ext4": "ext4 (Linux-nativ)"
+  "fs.ext4": "ext4 (Linux-nativ)",
+  "disk.title": "Select Target USB Drive"
 };

@@ -254,5 +254,6 @@ export const zhTw: TranslationDict = {
   "fs.exfat": "exFAT (預設推薦 • 支援 >4GB 單檔案大鏡像)",
   "fs.ntfs": "NTFS (Windows 原生格式)",
   "fs.fat32": "FAT32 (相容老舊設備 • 單檔案限制 4GB)",
-  "fs.ext4": "ext4 (Linux 原生格式)"
+  "fs.ext4": "ext4 (Linux 原生格式)",
+  "disk.title": "Select Target USB Drive"
 };

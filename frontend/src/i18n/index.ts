@@ -2,8 +2,8 @@ import { ref, computed } from 'vue';
 import type { TranslationDict } from './types';
 export type { TranslationDict };
 
-import { zhCN } from './locales/zh-CN';
-import { enUS } from './locales/en-US';
+import { zhCn } from './locales/zh-CN';
+import { enUs } from './locales/en-US';
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'zh-CN', name: '简体中文', nativeName: '简体中文', flag: '🇨🇳' },
@@ -67,8 +67,8 @@ const localeLoaders = import.meta.glob<Record<string, any>>('./locales/*.ts');
 
 // Reactive map of loaded locale dictionaries
 const loadedDictionaries = ref<Record<string, TranslationDict>>({
-  'zh-CN': zhCN,
-  'en-US': enUS,
+  'zh-CN': zhCn,
+  'en-US': enUs,
 });
 
 const DEFAULT_LOCALE = 'zh-CN';
@@ -137,8 +137,8 @@ export function updateDocumentDir() {
 updateDocumentDir();
 
 export function t(key: keyof TranslationDict, params?: Record<string, string | number>): string {
-  const dict = loadedDictionaries.value[currentLocale.value] || loadedDictionaries.value[DEFAULT_LOCALE] || zhCN;
-  let text = dict[key] || loadedDictionaries.value[DEFAULT_LOCALE]?.[key] || zhCN[key] || key;
+  const dict = loadedDictionaries.value[currentLocale.value] || loadedDictionaries.value[DEFAULT_LOCALE] || zhCn;
+  let text = dict[key] || loadedDictionaries.value[DEFAULT_LOCALE]?.[key] || zhCn[key] || key;
 
   if (params) {
     Object.keys(params).forEach(pKey => {

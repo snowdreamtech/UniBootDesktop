@@ -254,5 +254,6 @@ export const viVn: TranslationDict = {
   "fs.exfat": "exFAT (Mặc định • Hỗ trợ tệp >4GB)",
   "fs.ntfs": "NTFS (Nguyên bản Windows)",
   "fs.fat32": "FAT32 (Tương thích máy cũ • Giới hạn 4GB)",
-  "fs.ext4": "ext4 (Nguyên bản Linux)"
+  "fs.ext4": "ext4 (Nguyên bản Linux)",
+  "disk.title": "Select Target USB Drive"
 };

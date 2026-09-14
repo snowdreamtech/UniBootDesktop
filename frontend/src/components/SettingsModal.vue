@@ -252,7 +252,7 @@
                 </div>
                 <div class="fw-meta">
                   <span class="badge success">{{ t('settings.embeddedBadge') }}</span>
-                  <span class="fw-desc">{{ fw.descKey ? t(fw.descKey) : fw.description }}</span>
+                  <span class="fw-desc">{{ fw.descKey ? t(fw.descKey as keyof TranslationDict) : fw.description }}</span>
                 </div>
               </div>
             </div>

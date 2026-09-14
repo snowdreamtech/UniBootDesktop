@@ -253,4 +253,5 @@ export interface TranslationDict {
   "fs.ntfs": string;
   "fs.fat32": string;
   "fs.ext4": string;
+  "disk.title": string;
 }

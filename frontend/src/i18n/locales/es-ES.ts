@@ -254,5 +254,6 @@ export const esEs: TranslationDict = {
   "fs.exfat": "exFAT (Predeterminado • Soporta >4GB ISO)",
   "fs.ntfs": "NTFS (Nativo de Windows)",
   "fs.fat32": "FAT32 (Compatible con antiguos • Límite 4GB)",
-  "fs.ext4": "ext4 (Nativo de Linux)"
+  "fs.ext4": "ext4 (Nativo de Linux)",
+  "disk.title": "Select Target USB Drive"
 };
