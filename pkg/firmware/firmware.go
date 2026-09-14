@@ -341,12 +341,31 @@ func ExtractFirmwareModeA(dataMountDir string) error {
 	return nil
 }
 
+// CleanDirectoryContents removes all files and subdirectories inside dirPath without deleting dirPath itself.
+func CleanDirectoryContents(dirPath string) error {
+	if dirPath == "" || dirPath == "/" || dirPath == "." {
+		return fmt.Errorf("refusing to clean unsafe root directory: %q", dirPath)
+	}
+	entries, err := os.ReadDir(dirPath)
+	if err != nil {
+		return err
+	}
+	for _, entry := range entries {
+		path := filepath.Join(dirPath, entry.Name())
+		_ = os.RemoveAll(path)
+	}
+	return nil
+}
+
 // ExtractFirmwareModeB extracts Mode B assets (EFI/BOOT/ & root scripts & background image) directly to ESP partition (Partition 2),
 // providing 100% native iPXE cloud boot matching 1:1 Ventoy theme design.
 func ExtractFirmwareModeB(efiMountDir string) error {
 	if efiMountDir == "" {
 		return fmt.Errorf("EFI mount directory cannot be empty")
 	}
+
+	// Wipe all stale files/directories inside ESP partition before extracting fresh Mode B firmware
+	_ = CleanDirectoryContents(efiMountDir)
 
 	for _, mapping := range StandardFirmwareMappings {
 		// Mode B executes directly from ESP partition (64MB) and does NOT need 18.5MB UniBoot.iso

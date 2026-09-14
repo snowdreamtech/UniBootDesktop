@@ -197,6 +197,24 @@ func TestGetLocalUniBootVersion(t *testing.T) {
 	}
 }
 
+func TestCleanDirectoryContents(t *testing.T) {
+	tmpDir := t.TempDir()
+	subDir := filepath.Join(tmpDir, "subfolder")
+	dummyFile := filepath.Join(tmpDir, "stale_file.txt")
+
+	_ = os.MkdirAll(subDir, 0755)
+	_ = os.WriteFile(dummyFile, []byte("stale content"), 0644)
+
+	if err := CleanDirectoryContents(tmpDir); err != nil {
+		t.Fatalf("CleanDirectoryContents failed: %v", err)
+	}
+
+	entries, _ := os.ReadDir(tmpDir)
+	if len(entries) != 0 {
+		t.Errorf("expected 0 entries after cleaning, got %d", len(entries))
+	}
+}
+
 func TestFetchLatestUniBootRelease(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping network test in short mode")
