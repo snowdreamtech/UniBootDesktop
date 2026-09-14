@@ -570,4 +570,59 @@ function closeModal() {
   background: #f8fafc;
   border-top-color: #e2e8f0;
 }
+
+[data-theme="light"] .spec-grid {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .section-divider span {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  font-weight: 600;
+}
+
+[data-theme="light"] .audit-banner.fake-alert {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+[data-theme="light"] .audit-banner.fake-alert h4 {
+  color: #991b1b;
+}
+
+[data-theme="light"] .audit-banner.fake-alert p {
+  color: #7f1d1d;
+  font-weight: 500;
+}
+
+[data-theme="light"] .audit-banner.genuine-pass {
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+}
+
+[data-theme="light"] .audit-banner.genuine-pass h4 {
+  color: #065f46;
+}
+
+[data-theme="light"] .audit-banner.genuine-pass p {
+  color: #047857;
+  font-weight: 500;
+}
+
+[data-theme="light"] .audit-banner.usb2-info {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+[data-theme="light"] .audit-banner.usb2-info h4 {
+  color: #1e40af;
+  font-weight: 700;
+}
+
+[data-theme="light"] .audit-banner.usb2-info p {
+  color: #1e3a8a;
+  font-weight: 500;
+}
 </style>
