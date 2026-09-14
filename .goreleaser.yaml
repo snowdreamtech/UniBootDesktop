@@ -52,20 +52,42 @@ builds:
       - linux
       - darwin
       - windows
+      - freebsd
+      - openbsd
     goarch:
+      - "386"
       - amd64
+      - arm
       - arm64
       - loong64
+      - ppc64le
       - riscv64
+      - s390x
+    goarm:
+      - "7"
     ignore:
       - goos: windows
+        goarch: arm
+      - goos: windows
         goarch: loong64
       - goos: windows
+        goarch: ppc64le
+      - goos: windows
         goarch: riscv64
+      - goos: windows
+        goarch: s390x
+      - goos: darwin
+        goarch: "386"
+      - goos: darwin
+        goarch: arm
       - goos: darwin
         goarch: loong64
       - goos: darwin
+        goarch: ppc64le
+      - goos: darwin
         goarch: riscv64
+      - goos: darwin
+        goarch: s390x
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 archives:
