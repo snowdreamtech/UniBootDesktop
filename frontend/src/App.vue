@@ -60,7 +60,6 @@
                 :class="{ active: currentLang === opt.value }"
                 @click="selectLanguage(opt.value)"
               >
-                <span class="opt-flag">{{ opt.flag }}</span>
                 <span class="opt-text">{{ opt.label }}</span>
                 <span v-if="currentLang === opt.value" class="opt-check">✓</span>
               </button>
@@ -349,20 +348,19 @@ const isLangMenuOpen = ref(false);
 const langDropdownRef = ref<HTMLElement | null>(null);
 
 const langOptions = computed(() => [
-  { value: 'auto', label: t('common.autoDetect'), flag: '🌐' },
+  { value: 'auto', label: '🌐 ' + t('common.autoDetect') },
   ...SUPPORTED_LANGUAGES.map(item => ({
     value: item.code,
-    label: item.nativeName,
-    flag: item.flag
+    label: item.nativeName
   }))
 ]);
 
 const currentLangLabel = computed(() => {
   if (currentLang.value === 'auto') {
-    return t('common.langAuto');
+    return '🌐 ' + t('common.langAuto');
   }
   const opt = langOptions.value.find(o => o.value === currentLang.value);
-  return opt ? `${opt.flag} ${opt.label}` : t('common.lang');
+  return opt ? opt.label : t('common.lang');
 });
 
 function toggleLangMenu() {

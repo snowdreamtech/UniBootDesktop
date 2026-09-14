@@ -392,7 +392,7 @@ const languageSelectOptions = computed(() => [
   { value: 'auto', label: '🌐 ' + t('common.autoDetect') },
   ...SUPPORTED_LANGUAGES.map(item => ({
     value: item.code,
-    label: `${item.flag} ${item.nativeName}`
+    label: item.nativeName
   }))
 ]);
 
