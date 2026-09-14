@@ -337,12 +337,12 @@
                   <CustomSelect
                     v-model="ventoyPartitionStyle"
                     :options="[
-                      { value: 'GPT', label: 'GPT (现代电脑推荐 • UEFI)' },
-                      { value: 'MBR', label: 'MBR (老旧机器兼容 • Legacy/BIOS)' }
+                      { value: 'MBR', label: 'MBR (官方默认推荐 • 兼容 Legacy/BIOS + UEFI)' },
+                      { value: 'GPT', label: 'GPT (仅现代 UEFI)' }
                     ]"
                     @change="triggerAutoSave"
                   />
-                  <span class="field-hint">选 GPT 适配 UEFI 启动，选 MBR 兼顾老款 BIOS 主板</span>
+                  <span class="field-hint">官方默认 MBR 分区表兼顾传统 BIOS 与 UEFI 启动，选 GPT 仅支持 UEFI</span>
                 </div>
 
                 <div class="form-group">
@@ -470,7 +470,7 @@ const proxyPassword = ref('');
 // Ventoy CLI & Options state
 const ventoyPath = ref('');
 const ventoySecureBoot = ref(true);
-const ventoyPartitionStyle = ref('GPT');
+const ventoyPartitionStyle = ref('MBR');
 const ventoyReserveSpace = ref(0);
 const ventoyWin11Bypass = ref(true);
 const ventoyMenuTimeout = ref(10);

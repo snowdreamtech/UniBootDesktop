@@ -47,7 +47,7 @@ func GetDefaultConfig() *AppConfig {
 		ProxyPassword:        "",
 		VentoyPath:           "",
 		VentoySecureBoot:     true,
-		VentoyPartitionStyle: "GPT",
+		VentoyPartitionStyle: "MBR",
 		VentoyReserveSpace:   0,
 		VentoyWin11Bypass:    true,
 		VentoyMenuTimeout:    10,

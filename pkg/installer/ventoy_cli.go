@@ -199,11 +199,11 @@ func FormatDiskWithVentoyCliWithConfig(ctx context.Context, ventoyPath string, t
 
 	ventoyDir := filepath.Dir(val.ExecutablePath)
 
-	partFlag := "-g"
-	winPartFlag := "/GPT"
-	if strings.EqualFold(cfg.VentoyPartitionStyle, "MBR") {
-		partFlag = "-m"
-		winPartFlag = "/MBR"
+	partFlag := "-m"
+	winPartFlag := "/MBR"
+	if strings.EqualFold(cfg.VentoyPartitionStyle, "GPT") {
+		partFlag = "-g"
+		winPartFlag = "/GPT"
 	}
 
 	baseArgs := []string{"-i", partFlag}

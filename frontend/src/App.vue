@@ -580,7 +580,7 @@ async function onSaveSettings(payload: any) {
         proxyPassword: payload.proxyPassword || '',
         ventoyPath: payload.ventoyPath || '',
         ventoySecureBoot: payload.ventoySecureBoot !== false,
-        ventoyPartitionStyle: payload.ventoyPartitionStyle || 'GPT',
+        ventoyPartitionStyle: payload.ventoyPartitionStyle || 'MBR',
         ventoyReserveSpace: Number(payload.ventoyReserveSpace) || 0,
         ventoyWin11Bypass: payload.ventoyWin11Bypass !== false,
         ventoyMenuTimeout: Number(payload.ventoyMenuTimeout) || 10,
