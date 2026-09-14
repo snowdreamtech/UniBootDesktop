@@ -68,8 +68,17 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		execPath = cleanPath
 	}
 
-	// OS Compatibility check: detect Windows .exe on non-Windows OS
+	// OS Compatibility check: detect macOS or non-Windows binaries
 	lowerExec := strings.ToLower(execPath)
+	if runtime.GOOS == "darwin" && os.Getenv("UNIBOOT_DRY_RUN") == "" {
+		return &VentoyCliValidationResult{
+			Valid:          false,
+			Version:        "",
+			Message:        "❌ macOS 平台说明：官方 Ventoy 暂不提供 macOS 原生格式化程序。如需在全新盘制作【模式 A】，请先在 Windows/Linux 上完成 Ventoy 初始化；或在当前 macOS 上直接使用原生支持的【模式 B (1秒极速云引导盘)】！",
+			ExecutablePath: execPath,
+		}
+	}
+
 	if runtime.GOOS != "windows" && strings.HasSuffix(lowerExec, ".exe") {
 		return &VentoyCliValidationResult{
 			Valid:          false,

@@ -47,6 +47,7 @@ func TestValidateVentoyCliDummyScript(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Skipping bash script test on Windows")
 	}
+	t.Setenv("UNIBOOT_DRY_RUN", "1")
 
 	tmpDir, err := os.MkdirTemp("", "ventoy-test-*")
 	if err != nil {
