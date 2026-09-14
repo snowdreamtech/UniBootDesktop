@@ -65,24 +65,7 @@
                 <label class="form-label highlight-label">🌐 {{ t('settings.language') }}</label>
                 <CustomSelect
                   v-model="appLanguage"
-                  :options="[
-                    { value: 'auto', label: '🌐 ' + t('common.autoDetect') },
-                    { value: 'zh-CN', label: '🇨🇳 ' + t('lang.zhCN') },
-                    { value: 'en-US', label: '🇺🇸 English' },
-                    { value: 'zh-TW', label: '🇭🇰 ' + t('lang.zhTW') },
-                    { value: 'ja-JP', label: '🇯🇵 ' + t('lang.jaJP') },
-                    { value: 'ko-KR', label: '🇰🇷 한국어' },
-                    { value: 'de-DE', label: '🇩🇪 Deutsch' },
-                    { value: 'fr-FR', label: '🇫🇷 Français' },
-                    { value: 'es-ES', label: '🇪🇸 Español' },
-                    { value: 'ru-RU', label: '🇷🇺 Русский' },
-                    { value: 'pt-BR', label: '🇧🇷 Português' },
-                    { value: 'it-IT', label: '🇮🇹 Italiano' },
-                    { value: 'tr-TR', label: '🇹🇷 Türkçe' },
-                    { value: 'pl-PL', label: '🇵🇱 Polski' },
-                    { value: 'vi-VN', label: '🇻🇳 Tiếng Việt' },
-                    { value: 'ar-SA', label: '🇸🇦 العربية' }
-                  ]"
+                  :options="languageSelectOptions"
                   @change="onLanguageChange"
                 />
               </div>
@@ -403,7 +386,15 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue';
 import CustomSelect from './CustomSelect.vue';
-import { setLanguage, t } from '../i18n';
+import { setLanguage, t, SUPPORTED_LANGUAGES } from '../i18n';
+
+const languageSelectOptions = computed(() => [
+  { value: 'auto', label: '🌐 ' + t('common.autoDetect') },
+  ...SUPPORTED_LANGUAGES.map(item => ({
+    value: item.code,
+    label: `${item.flag} ${item.nativeName}`
+  }))
+]);
 
 interface FirmwareMapping {
   releaseName: string;

@@ -342,28 +342,18 @@ import DeployConfirmModal from './components/DeployConfirmModal.vue';
 import SettingsModal from './components/SettingsModal.vue';
 import VentoyAlertModal from './components/VentoyAlertModal.vue';
 import CustomSelect from './components/CustomSelect.vue';
-import { t, currentLang, setLanguage } from './i18n';
+import { t, currentLang, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
 
 const isLangMenuOpen = ref(false);
 const langDropdownRef = ref<HTMLElement | null>(null);
 
 const langOptions = computed(() => [
   { value: 'auto', label: t('common.autoDetect'), flag: '🌐' },
-  { value: 'zh-CN', label: t('lang.zhCN'), flag: '🇨🇳' },
-  { value: 'en-US', label: 'English', flag: '🇺🇸' },
-  { value: 'zh-TW', label: t('lang.zhTW'), flag: '🇭🇰' },
-  { value: 'ja-JP', label: t('lang.jaJP'), flag: '🇯🇵' },
-  { value: 'ko-KR', label: '한국어', flag: '🇰🇷' },
-  { value: 'de-DE', label: 'Deutsch', flag: '🇩🇪' },
-  { value: 'fr-FR', label: 'Français', flag: '🇫🇷' },
-  { value: 'es-ES', label: 'Español', flag: '🇪🇸' },
-  { value: 'ru-RU', label: 'Русский', flag: '🇷🇺' },
-  { value: 'pt-BR', label: 'Português', flag: '🇧🇷' },
-  { value: 'it-IT', label: 'Italiano', flag: '🇮🇹' },
-  { value: 'tr-TR', label: 'Türkçe', flag: '🇹🇷' },
-  { value: 'pl-PL', label: 'Polski', flag: '🇵🇱' },
-  { value: 'vi-VN', label: 'Tiếng Việt', flag: '🇻🇳' },
-  { value: 'ar-SA', label: 'العربية', flag: '🇸🇦' }
+  ...SUPPORTED_LANGUAGES.map(item => ({
+    value: item.code,
+    label: item.nativeName,
+    flag: item.flag
+  }))
 ]);
 
 const currentLangLabel = computed(() => {
@@ -371,7 +361,7 @@ const currentLangLabel = computed(() => {
     return t('common.langAuto');
   }
   const opt = langOptions.value.find(o => o.value === currentLang.value);
-  return opt ? opt.label : t('common.lang');
+  return opt ? `${opt.flag} ${opt.label}` : t('common.lang');
 });
 
 function toggleLangMenu() {

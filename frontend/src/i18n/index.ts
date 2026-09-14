@@ -18,6 +18,31 @@ export type LanguageCode =
   | 'vi-VN' 
   | 'ar-SA';
 
+export interface LanguageMeta {
+  code: LanguageCode;
+  nativeName: string;
+  englishName: string;
+  flag: string;
+}
+
+export const SUPPORTED_LANGUAGES: LanguageMeta[] = [
+  { code: 'zh-CN', nativeName: '简体中文', englishName: 'Simplified Chinese', flag: '🇨🇳' },
+  { code: 'en-US', nativeName: 'English', englishName: 'English', flag: '🇺🇸' },
+  { code: 'zh-TW', nativeName: '繁體中文', englishName: 'Traditional Chinese', flag: '🇭🇰' },
+  { code: 'ja-JP', nativeName: '日本語', englishName: 'Japanese', flag: '🇯🇵' },
+  { code: 'ko-KR', nativeName: '한국어', englishName: 'Korean', flag: '🇰🇷' },
+  { code: 'de-DE', nativeName: 'Deutsch', englishName: 'German', flag: '🇩🇪' },
+  { code: 'fr-FR', nativeName: 'Français', englishName: 'French', flag: '🇫🇷' },
+  { code: 'es-ES', nativeName: 'Español', englishName: 'Spanish', flag: '🇪🇸' },
+  { code: 'ru-RU', nativeName: 'Русский', englishName: 'Russian', flag: '🇷🇺' },
+  { code: 'pt-BR', nativeName: 'Português', englishName: 'Portuguese (Brazil)', flag: '🇧🇷' },
+  { code: 'it-IT', nativeName: 'Italiano', englishName: 'Italian', flag: '🇮🇹' },
+  { code: 'tr-TR', nativeName: 'Türkçe', englishName: 'Turkish', flag: '🇹🇷' },
+  { code: 'pl-PL', nativeName: 'Polski', englishName: 'Polish', flag: '🇵🇱' },
+  { code: 'vi-VN', nativeName: 'Tiếng Việt', englishName: 'Vietnamese', flag: '🇻🇳' },
+  { code: 'ar-SA', nativeName: 'العربية', englishName: 'Arabic', flag: '🇸🇦' }
+];
+
 export const currentLang = ref<LanguageCode>('auto');
 
 export function detectSystemLanguage(): LanguageCode {
