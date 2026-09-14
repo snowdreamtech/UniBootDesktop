@@ -256,8 +256,5 @@ export const csCz: TranslationDict = {
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
   "disk.title": "Vyberte Cílový USB Disk",
-  "header.subtitle": "Vytvoření bootovacího disku a test QEMU",
-  "settings.tabFirmware": "Správa firmwaru UniBoot",
-  "settings.tab_qemu": "Simulační prostředí QEMU",
-  "settings.tab_about": "O aplikaci UniBoot Desktop"
+  "header.subtitle": "Vytvoření bootovacího disku a test QEMU"
 };

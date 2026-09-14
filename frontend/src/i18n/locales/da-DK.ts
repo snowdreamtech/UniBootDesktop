@@ -256,8 +256,5 @@ export const daDk: TranslationDict = {
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
   "disk.title": "Vælg Mål-USB-drev",
-  "header.subtitle": "Oprettelse af bootbart drev og QEMU-test",
-  "settings.tabFirmware": "UniBoot-firmwarestyring",
-  "settings.tab_qemu": "QEMU-simuleringsmiljø",
-  "settings.tab_about": "Om UniBoot Desktop"
+  "header.subtitle": "Oprettelse af bootbart drev og QEMU-test"
 };

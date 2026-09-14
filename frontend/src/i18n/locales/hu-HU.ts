@@ -256,8 +256,5 @@ export const huHu: TranslationDict = {
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
   "disk.title": "Válassza ki a Cél USB-meghajtót",
-  "header.subtitle": "Indítólemez létrehozása és QEMU teszt",
-  "settings.tabFirmware": "UniBoot belső vezérlőprogram kezelés",
-  "settings.tab_qemu": "QEMU szimulációs környezet",
-  "settings.tab_about": "A UniBoot Desktopról"
+  "header.subtitle": "Indítólemez létrehozása és QEMU teszt"
 };

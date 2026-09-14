@@ -256,8 +256,5 @@ export const svSe: TranslationDict = {
   "fs.fat32": "FAT32 (Legacy Compatible • 4GB File Limit)",
   "fs.ext4": "ext4 (Linux Native)",
   "disk.title": "Välj Mål-USB-enhet",
-  "header.subtitle": "Skapa startbar enhet och QEMU-test",
-  "settings.tabFirmware": "UniBoot-firmwarehantering",
-  "settings.tab_qemu": "QEMU-simuleringsmiljö",
-  "settings.tab_about": "Om UniBoot Desktop"
+  "header.subtitle": "Skapa startbar enhet och QEMU-test"
 };
