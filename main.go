@@ -99,6 +99,15 @@ func RunWails() error {
 		Bind: []interface{}{
 			app,
 		},
+		SingleInstanceLock: &options.SingleInstanceLock{
+			UniqueId: "d6f1a8c0-87a4-4a24-9b57-unigodesktop-single-instance",
+			OnSecondInstanceLaunch: func(secondInstanceData options.SecondInstanceData) {
+				if app.ctx != nil {
+					wailsRuntime.WindowUnminimise(app.ctx)
+					wailsRuntime.WindowShow(app.ctx)
+				}
+			},
+		},
 		Mac: &mac.Options{
 			TitleBar: &mac.TitleBar{
 				TitlebarAppearsTransparent: false,
