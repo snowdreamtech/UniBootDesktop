@@ -217,3 +217,8 @@ func (a *App) PerformGuiUpdate() (*updater.GuiUpdateResult, error) {
 	return updater.PerformGuiUpdate(a.ctx, proxy, progressCb)
 }
 
+// OpenBrowserURL opens the target URL in the user's default system browser.
+func (a *App) OpenBrowserURL(targetURL string) {
+	wailsRuntime.BrowserOpenURL(a.ctx, targetURL)
+}
+

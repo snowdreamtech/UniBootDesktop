@@ -32,6 +32,8 @@ export function GetUniBootReleaseInfo():Promise<firmware.UniBootReleaseInfo>;
 
 export function LaunchQEMU(arg1:string):Promise<void>;
 
+export function OpenBrowserURL(arg1:string):Promise<void>;
+
 export function PerformGuiUpdate():Promise<updater.GuiUpdateResult>;
 
 export function SaveConfig(arg1:config.AppConfig):Promise<void>;

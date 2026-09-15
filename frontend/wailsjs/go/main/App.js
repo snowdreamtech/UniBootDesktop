@@ -50,6 +50,10 @@ export function LaunchQEMU(arg1) {
   return window['go']['main']['App']['LaunchQEMU'](arg1);
 }
 
+export function OpenBrowserURL(arg1) {
+  return window['go']['main']['App']['OpenBrowserURL'](arg1);
+}
+
 export function PerformGuiUpdate() {
   return window['go']['main']['App']['PerformGuiUpdate']();
 }
