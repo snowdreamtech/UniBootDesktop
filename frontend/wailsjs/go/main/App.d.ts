@@ -40,6 +40,8 @@ export function OpenBrowserURL(arg1:string):Promise<void>;
 
 export function PerformGuiUpdate():Promise<updater.GuiUpdateResult>;
 
+export function ReloadAppMenu(arg1:string):Promise<void>;
+
 export function SaveConfig(arg1:config.AppConfig):Promise<void>;
 
 export function SelectIsoFiles():Promise<Array<string>>;

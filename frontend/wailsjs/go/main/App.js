@@ -66,6 +66,10 @@ export function PerformGuiUpdate() {
   return window['go']['main']['App']['PerformGuiUpdate']();
 }
 
+export function ReloadAppMenu(arg1) {
+  return window['go']['main']['App']['ReloadAppMenu'](arg1);
+}
+
 export function SaveConfig(arg1) {
   return window['go']['main']['App']['SaveConfig'](arg1);
 }

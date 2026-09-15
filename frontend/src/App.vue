@@ -395,6 +395,11 @@ function selectLanguage(langVal: string) {
   setLanguage(langVal);
   isLangMenuOpen.value = false;
   saveLangToConfig(langVal);
+  if (window.go && window.go.main && window.go.main.App && window.go.main.App.ReloadAppMenu) {
+    window.go.main.App.ReloadAppMenu(langVal).catch((err: any) => {
+      console.warn('Failed to reload app menu:', err);
+    });
+  }
 }
 
 async function saveLangToConfig(langVal: string) {
@@ -652,7 +657,12 @@ async function loadConfig() {
       if (cfg) {
         if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
         if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
-        if (cfg.language) setLanguage(cfg.language);
+        if (cfg.language) {
+          setLanguage(cfg.language);
+          if (window.go.main.App.ReloadAppMenu) {
+            window.go.main.App.ReloadAppMenu(cfg.language).catch(() => {});
+          }
+        }
         applyTheme(cfg.theme);
         autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
       }
@@ -706,6 +716,9 @@ async function onSaveSettings(payload: any) {
       };
 
       await window.go.main.App.SaveConfig(configObj as any);
+      if (configObj.language && window.go.main.App.ReloadAppMenu) {
+        await window.go.main.App.ReloadAppMenu(configObj.language);
+      }
     } catch (e) {
       console.error('Failed to save config:', e);
     }

@@ -233,3 +233,15 @@ func (a *App) OpenAboutModal() {
 	wailsRuntime.EventsEmit(a.ctx, "open-about-modal")
 }
 
+// ReloadAppMenu rebuilds and updates the native application menu with the specified language.
+func (a *App) ReloadAppMenu(lang string) error {
+	if a.ctx == nil {
+		return nil
+	}
+	appMenu := BuildAppMenu(a, lang)
+	wailsRuntime.MenuSetApplicationMenu(a.ctx, appMenu)
+	wailsRuntime.MenuUpdateApplicationMenu(a.ctx)
+	return nil
+}
+
+
