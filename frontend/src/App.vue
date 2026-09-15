@@ -1146,6 +1146,9 @@ onMounted(() => {
         deployProgress.value = Math.min(99, Math.max(50, Math.floor(50 + data.progress / 2)));
       }
     });
+    window.runtime.EventsOn("open-about-modal", () => {
+      isAboutOpen.value = true;
+    });
   }
 
   // Auto-poll USB drives every 2.5s when idle for instant hotplug detection

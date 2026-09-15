@@ -7,12 +7,16 @@ import (
 	"embed"
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/snowdreamtech/unigodesktop/cmd"
 	"github.com/wailsapp/wails/v2"
+	"github.com/wailsapp/wails/v2/pkg/menu"
+	"github.com/wailsapp/wails/v2/pkg/menu/keys"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
+	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 //go:embed all:frontend/dist
@@ -23,12 +27,49 @@ func RunWails() error {
 	fmt.Println(">>> Starting Wails GUI Runtime...")
 	app := NewApp()
 
+	appMenu := menu.NewMenu()
+	if runtime.GOOS == "darwin" {
+		appSubMenu := appMenu.AddSubmenu("UniGoDesktop")
+		appSubMenu.AddText("关于 UniGoDesktop", keys.CmdOrCtrl("i"), func(cd *menu.CallbackData) {
+			if app.ctx != nil {
+				wailsRuntime.EventsEmit(app.ctx, "open-about-modal")
+			}
+		})
+		appSubMenu.AddSeparator()
+		appSubMenu.AddText("隐藏 UniGoDesktop", keys.CmdOrCtrl("h"), func(cd *menu.CallbackData) {
+			if app.ctx != nil {
+				wailsRuntime.WindowHide(app.ctx)
+			}
+		})
+		appSubMenu.AddText("显示全部", nil, func(cd *menu.CallbackData) {
+			if app.ctx != nil {
+				wailsRuntime.WindowShow(app.ctx)
+			}
+		})
+		appSubMenu.AddSeparator()
+		appSubMenu.AddText("退出 UniGoDesktop", keys.CmdOrCtrl("q"), func(cd *menu.CallbackData) {
+			if app.ctx != nil {
+				wailsRuntime.Quit(app.ctx)
+			}
+		})
+
+		appMenu.Append(menu.EditMenu())
+
+		helpMenu := appMenu.AddSubmenu("帮助")
+		helpMenu.AddText("关于 UniGoDesktop", nil, func(cd *menu.CallbackData) {
+			if app.ctx != nil {
+				wailsRuntime.EventsEmit(app.ctx, "open-about-modal")
+			}
+		})
+	}
+
 	return wails.Run(&options.App{
 		Title:  "UniGoDesktop",
 		Width:  1180,
 		Height: 820,
 		MinWidth: 1024,
 		MinHeight: 728,
+		Menu:   appMenu,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},

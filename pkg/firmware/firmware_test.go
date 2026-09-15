@@ -183,6 +183,12 @@ func TestExtractFirmwareModeB(t *testing.T) {
 func TestGetFirmwareData_Priority(t *testing.T) {
 	envMutex.Lock()
 	defer envMutex.Unlock()
+
+	baseDir := t.TempDir()
+	dataDir := filepath.Join(baseDir, "data")
+	_ = os.MkdirAll(dataDir, 0755)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", dataDir)
+
 	// Test embedded fallback default
 	data, src, err := GetFirmwareData("boot.ipxe")
 	if err != nil {
@@ -196,10 +202,7 @@ func TestGetFirmwareData_Priority(t *testing.T) {
 	}
 
 	// Test local downloaded file override
-	tmpDataDir := t.TempDir()
-	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", tmpDataDir)
-
-	localFwDir := filepath.Join(tmpDataDir, "firmware")
+	localFwDir := filepath.Join(dataDir, "firmware")
 	if err := os.MkdirAll(localFwDir, 0755); err != nil {
 		t.Fatalf("failed to create local firmware dir: %v", err)
 	}
@@ -222,6 +225,8 @@ func TestGetFirmwareData_Priority(t *testing.T) {
 }
 
 func TestGetLocalUniBootVersion(t *testing.T) {
+	envMutex.Lock()
+	defer envMutex.Unlock()
 	ver := GetLocalUniBootVersion()
 	if ver == "" {
 		t.Errorf("expected non-empty version string")
@@ -262,6 +267,8 @@ func TestFetchLatestUniBootRelease(t *testing.T) {
 }
 
 func TestSyncUniBootFirmware(t *testing.T) {
+	envMutex.Lock()
+	defer envMutex.Unlock()
 	if testing.Short() {
 		t.Skip("skipping network test in short mode")
 	}

@@ -222,3 +222,8 @@ func (a *App) OpenBrowserURL(targetURL string) {
 	wailsRuntime.BrowserOpenURL(a.ctx, targetURL)
 }
 
+// OpenAboutModal emits an event to the frontend to trigger the About dialog.
+func (a *App) OpenAboutModal() {
+	wailsRuntime.EventsEmit(a.ctx, "open-about-modal")
+}
+
