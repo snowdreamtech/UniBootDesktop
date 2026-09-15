@@ -80,8 +80,21 @@ run = "unirtm exec -- wails dev"
 output = "interleaved"
 
 [tasks.build]
-description = "Build Wails GUI application binary"
-run = "unirtm exec -- wails build"
+description = "Build Wails GUI application binary with version injection"
+run = '''
+  TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "dev")
+  COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+  COMMITFULL=$(git rev-parse HEAD 2>/dev/null || echo "unknown")
+  DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  PKG="github.com/snowdreamtech/unigodesktop/internal/env"
+  unirtm exec -- wails build \
+    -ldflags "-s -w \
+      -X '${PKG}.GitTag=${TAG}' \
+      -X '${PKG}.CommitHash=${COMMIT}' \
+      -X '${PKG}.CommitHashFull=${COMMITFULL}' \
+      -X '${PKG}.BuildTime=${DATE}' \
+      -X '${PKG}.ProjectName=unigodesktop'"
+'''
 output = "interleaved"
 
 [tasks.audit]
