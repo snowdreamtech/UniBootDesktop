@@ -74,6 +74,14 @@
         >
           ⚙️
         </button>
+
+        <button 
+          class="settings-icon-btn" 
+          :title="t('about.title')"
+          @click="isAboutOpen = true"
+        >
+          ℹ️
+        </button>
       </div>
     </header>
 
@@ -329,6 +337,12 @@
       @action="handleVentoyAlertAction"
       @switch-b="handleVentoyAlertSwitchB"
     />
+
+    <!-- About Modal -->
+    <AboutModal
+      :show="isAboutOpen"
+      @close="isAboutOpen = false"
+    />
   </div>
 </template>
 
@@ -341,6 +355,7 @@ import UsbInspectorModal from './components/UsbInspectorModal.vue';
 import DeployConfirmModal from './components/DeployConfirmModal.vue';
 import SettingsModal from './components/SettingsModal.vue';
 import VentoyAlertModal from './components/VentoyAlertModal.vue';
+import AboutModal from './components/AboutModal.vue';
 import CustomSelect from './components/CustomSelect.vue';
 import { t, currentLang, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
 
@@ -464,6 +479,7 @@ const isInspectorOpen = ref(false);
 const targetInspectorDisk = ref<DiskInfo | null>(null);
 const isDeployConfirmOpen = ref(false);
 const isSettingsOpen = ref(false);
+const isAboutOpen = ref(false);
 const settingsInitialTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
 
 const isVentoyAlertOpen = ref(false);

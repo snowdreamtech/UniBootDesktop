@@ -255,4 +255,16 @@ export interface TranslationDict {
   "fs.ext4": string;
   "disk.title": string;
   "header.subtitle": string;
+  "about.title"?: string;
+  "about.gitTag"?: string;
+  "about.commitHash"?: string;
+  "about.buildTime"?: string;
+  "about.environment"?: string;
+  "about.copied"?: string;
+  "about.copyInfo"?: string;
+  "about.checking"?: string;
+  "about.checkUpdate"?: string;
+  "about.updateAvailable"?: string;
+  "about.isLatest"?: string;
+  "about.checkFailed"?: string;
 }

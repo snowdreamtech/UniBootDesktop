@@ -5,6 +5,10 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"runtime"
+
+	"github.com/snowdreamtech/unigodesktop/internal/env"
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/config"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
@@ -14,6 +18,21 @@ import (
 	"github.com/snowdreamtech/unigodesktop/pkg/updater"
 	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
+
+// AppInfo contains dynamic build and environment metadata.
+type AppInfo struct {
+	ProjectName    string `json:"projectName"`
+	Version        string `json:"version"`
+	GitTag         string `json:"gitTag"`
+	CommitHash     string `json:"commitHash"`
+	CommitHashFull string `json:"commitHashFull"`
+	BuildTime      string `json:"buildTime"`
+	Author         string `json:"author"`
+	Copyright      string `json:"copyright"`
+	License        string `json:"license"`
+	GoVersion      string `json:"goVersion"`
+	OsArch         string `json:"osArch"`
+}
 
 // App struct manages Wails GUI lifecycle and frontend bound APIs.
 type App struct {
@@ -145,5 +164,26 @@ func (a *App) SyncUniBootFirmware() (*firmware.UniBootReleaseInfo, error) {
 		proxy = cfg.GithubProxy
 	}
 	return firmware.SyncUniBootFirmware(a.ctx, proxy)
+}
+
+// GetAppInfo returns dynamic build, environment, and version metadata.
+func (a *App) GetAppInfo() AppInfo {
+	versionStr := env.GitTag
+	if versionStr == "" || versionStr == "N/A" {
+		versionStr = "v0.1.0"
+	}
+	return AppInfo{
+		ProjectName:    env.ProjectName,
+		Version:        versionStr,
+		GitTag:         env.GitTag,
+		CommitHash:     env.CommitHash,
+		CommitHashFull: env.CommitHashFull,
+		BuildTime:      env.BuildTime,
+		Author:         env.Author,
+		Copyright:      env.COPYRIGHT,
+		License:        env.LICENSE,
+		GoVersion:      runtime.Version(),
+		OsArch:         fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
+	}
 }
 

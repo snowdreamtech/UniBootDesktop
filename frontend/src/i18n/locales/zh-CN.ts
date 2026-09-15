@@ -256,5 +256,17 @@ export const zhCn: TranslationDict = {
   "fs.fat32": "FAT32 (兼容老旧设备 • 单文件限制 4GB)",
   "fs.ext4": "ext4 (Linux 原生格式)",
   "disk.title": "选择目标 U 盘",
-  "header.subtitle": "启动盘制作与 QEMU 模拟测试"
+  "header.subtitle": "启动盘制作与 QEMU 模拟测试",
+  "about.title": "关于 UniGoDesktop",
+  "about.gitTag": "Git 版本标签",
+  "about.commitHash": "Commit Hash",
+  "about.buildTime": "构建时间",
+  "about.environment": "运行环境",
+  "about.copied": "已复制诊断信息",
+  "about.copyInfo": "复制系统诊断信息",
+  "about.checking": "正在检查更新...",
+  "about.checkUpdate": "检查最新版本",
+  "about.updateAvailable": "发现新版本",
+  "about.isLatest": "当前已是最新版本！",
+  "about.checkFailed": "检查更新失败，请重试"
 };
