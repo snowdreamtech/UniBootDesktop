@@ -267,7 +267,29 @@
           >
             {{ isDeploying ? t('deploy.writing') : (isNonDestructive ? t('deploy.start_update') : (selectionMode === 'batch' ? t('deploy.batch_create', { count: selectedDevices.size }) : t('deploy.start_create'))) }}
           </button>
+
+          <!-- Deploy success banner with Safely Eject button -->
+          <transition name="toast-fade">
+            <div v-if="deploySuccessBanner.visible" class="deploy-success-banner">
+              <div class="deploy-success-icon">🎉</div>
+              <div class="deploy-success-content">
+                <div class="deploy-success-title">{{ t('deploy.success_banner_title') }}</div>
+                <div class="deploy-success-desc">{{ t('deploy.success_banner_desc') }}</div>
+              </div>
+              <div class="deploy-success-actions">
+                <button
+                  id="btn-safely-eject-after-deploy"
+                  class="btn-eject-success"
+                  @click="handleSafelyEjectAfterDeploy"
+                >
+                  ⏏️ {{ t('deploy.safely_eject_btn') }}
+                </button>
+                <button class="btn-dismiss" @click="deploySuccessBanner.visible = false">✕</button>
+              </div>
+            </div>
+          </transition>
         </div>
+
 
         <!-- QEMU Preview -->
         <div class="qemu-box">
@@ -529,6 +551,7 @@ const pendingTargets = ref<string[]>([]);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
 const autoEjectAfterDeploy = ref(false);
+const deploySuccessBanner = ref<{ visible: boolean; msg: string; targets: string[] }>({ visible: false, msg: '', targets: [] });
 const qemuStatus = ref({ installed: false, path: '', version: '' });
 const isLaunchingQemu = ref(false);
 const ventoyStatus = ref({ valid: true, version: '', message: '', executablePath: '' });
@@ -793,6 +816,26 @@ async function handleEjectDisk(disk: DiskInfo) {
     await refreshDisks();
   } catch (err: any) {
     showToast(t('disk.toast_ejected_failed', { device: disk.device, error: err?.toString() || 'Unknown error' }), 'error');
+  }
+}
+
+async function handleSafelyEjectAfterDeploy() {
+  const targets = deploySuccessBanner.value.targets;
+  deploySuccessBanner.value.visible = false;
+  let ejectedCount = 0;
+  for (const dev of targets) {
+    try {
+      if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
+        await window.go.main.App.EjectDisk(dev);
+        ejectedCount++;
+      }
+    } catch (err) {
+      console.warn(`Eject failed for ${dev}:`, err);
+    }
+  }
+  await refreshDisks();
+  if (ejectedCount > 0) {
+    showToast(t('deploy.toast_auto_ejected', { count: ejectedCount }), 'success');
   }
 }
 
@@ -1160,7 +1203,12 @@ async function startDeployment() {
       if (autoEjectedCount > 0) {
         showToast(t('deploy.toast_auto_ejected', { count: autoEjectedCount }), 'success');
       }
-      alert(t('deploy.alert_success', { msg: resultMsg }));
+      // Show success banner with optional safe-eject button instead of native alert
+      if (autoEjectedCount === 0) {
+        deploySuccessBanner.value = { visible: true, msg: resultMsg, targets: [...targets] };
+      } else {
+        showToast(`🎉 ${t('deploy.alert_success', { msg: resultMsg })}`, 'success');
+      }
     }, 200);
   } else {
     isDeploying.value = false;
@@ -1669,6 +1717,90 @@ h1 {
 .deploy-btn.safe-btn:hover {
   background: linear-gradient(135deg, #38bdf8 0%, #00e5ff 100%);
   box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5);
+}
+
+.deploy-success-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  margin-top: 0.75rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 12px;
+  animation: bannerFadeIn 0.35s ease;
+}
+
+@keyframes bannerFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.deploy-success-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.deploy-success-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.deploy-success-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #6ee7b7;
+  margin-bottom: 0.25rem;
+}
+
+.deploy-success-desc {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.4;
+}
+
+.deploy-success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.btn-eject-success {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+}
+
+.btn-eject-success:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.55);
+  transform: translateY(-1px);
+}
+
+.btn-dismiss {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  transition: all 0.15s ease;
+}
+
+.btn-dismiss:hover {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.8);
 }
 
 .qemu-box {
