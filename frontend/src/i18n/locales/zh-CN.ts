@@ -89,7 +89,7 @@ export const zhCn: TranslationDict = {
   "disk.hw_inspect": "物理硬件真伪检测与速率分析",
   "disk.details": "详情",
   "disk.eject": "弹出",
-  "disk.batch_eject": "弹出选中 U 盘",
+  "disk.batch_eject": "弹出",
   "disk.toast_batch_eject_success": "🎉 已成功安全弹出选中的 {count} 个 U 盘！",
   "disk.toast_batch_eject_partial": "⚠️ 已弹出 {successCount} 个 U 盘，{failCount} 个弹出失败",
   "disk.toast_ejected_success": "🎉 U 盘 {name} ({device}) 已成功安全弹出！",

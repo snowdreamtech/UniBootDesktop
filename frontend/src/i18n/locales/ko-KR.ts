@@ -89,7 +89,7 @@ export const koKr: TranslationDict = {
   "disk.hw_inspect": "하드웨어 검증 및 PHY 속도 분석",
   "disk.details": "상세",
   "disk.eject": "Eject",
-  "disk.batch_eject": "Eject Selected",
+  "disk.batch_eject": "꺼내기",
   "disk.toast_batch_eject_success": "🎉 Successfully safely ejected {count} selected USB drive(s)!",
   "disk.toast_batch_eject_partial": "⚠️ Ejected {successCount} drive(s), failed to eject {failCount} drive(s)",
   "disk.toast_ejected_success": "🎉 USB drive {name} ({device}) has been safely ejected!",

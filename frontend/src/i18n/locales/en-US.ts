@@ -89,7 +89,7 @@ export const enUs: TranslationDict = {
   "disk.hw_inspect": "Hardware Analysis & PHY Speed Inspector",
   "disk.details": "Details",
   "disk.eject": "Eject",
-  "disk.batch_eject": "Eject Selected",
+  "disk.batch_eject": "Eject",
   "disk.toast_batch_eject_success": "🎉 Successfully safely ejected {count} selected USB drive(s)!",
   "disk.toast_batch_eject_partial": "⚠️ Ejected {successCount} drive(s), failed to eject {failCount} drive(s)",
   "disk.toast_ejected_success": "🎉 USB drive {name} ({device}) has been safely ejected!",

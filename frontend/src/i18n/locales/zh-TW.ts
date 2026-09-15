@@ -89,7 +89,7 @@ export const zhTw: TranslationDict = {
   "disk.hw_inspect": "物理硬體真偽檢測與速率分析",
   "disk.details": "詳情",
   "disk.eject": "彈出",
-  "disk.batch_eject": "彈出選中隨身碟",
+  "disk.batch_eject": "彈出",
   "disk.toast_batch_eject_success": "🎉 已成功安全彈出選中的 {count} 個隨身碟！",
   "disk.toast_batch_eject_partial": "⚠️ 已彈出 {successCount} 個隨身碟，{failCount} 個彈出失敗",
   "disk.toast_ejected_success": "🎉 隨身碟 {name} ({device}) 已成功安全彈出！",

@@ -118,7 +118,12 @@
           <div v-if="selectionMode === 'batch'" class="batch-actions">
             <button class="btn-text" @click="selectAllDisks">{{ t('disk.select_all') }}</button>
             <button class="btn-text" @click="deselectAllDisks">{{ t('disk.clear_select') }}</button>
-            <button class="btn-text btn-batch-eject" :disabled="selectedDevices.size === 0" @click="handleBatchEjectDisks">
+            <button 
+              class="btn-eject" 
+              :disabled="selectedDevices.size === 0" 
+              :title="t('disk.batch_eject')" 
+              @click="handleBatchEjectDisks"
+            >
               ⏏️ {{ t('disk.batch_eject') }}
             </button>
             <span class="selection-count">{{ t('disk.selected_count', { count: selectedDevices.size, total: diskList.length }) }}</span>
@@ -1448,18 +1453,26 @@ h1 {
   transition: all 0.2s ease;
 }
 
-.btn-text:disabled {
+.btn-eject {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-eject:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.btn-eject:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-  background: transparent !important;
-}
-
-.btn-batch-eject {
-  color: #ef4444;
-}
-
-.btn-batch-eject:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.15);
 }
 
 .btn-text:hover {

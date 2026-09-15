@@ -89,7 +89,7 @@ export const hiIn: TranslationDict = {
   "disk.hw_inspect": "हार्डवेयर विश्लेषण एवं PHY स्पीड इंस्पेक्टर",
   "disk.details": "विवरण",
   "disk.eject": "Eject",
-  "disk.batch_eject": "Eject Selected",
+  "disk.batch_eject": "Eject",
   "disk.toast_batch_eject_success": "🎉 Successfully safely ejected {count} selected USB drive(s)!",
   "disk.toast_batch_eject_partial": "⚠️ Ejected {successCount} drive(s), failed to eject {failCount} drive(s)",
   "disk.toast_ejected_success": "🎉 USB drive {name} ({device}) has been safely ejected!",
