@@ -71,7 +71,7 @@ const loadedDictionaries = ref<Record<string, TranslationDict>>({
   'en-US': enUs,
 });
 
-const DEFAULT_LOCALE = 'zh-CN';
+const DEFAULT_LOCALE = 'en-US';
 
 function resolveAutoLocale(): string {
   const navLang = navigator.language;
@@ -150,8 +150,8 @@ export function updateDocumentDir() {
 updateDocumentDir();
 
 export function t(key: keyof TranslationDict, params?: Record<string, string | number>): string {
-  const dict = loadedDictionaries.value[currentLocale.value] || loadedDictionaries.value[DEFAULT_LOCALE] || zhCn;
-  let text = dict[key] || loadedDictionaries.value[DEFAULT_LOCALE]?.[key] || zhCn[key] || key;
+  const dict = loadedDictionaries.value[currentLocale.value] || loadedDictionaries.value[DEFAULT_LOCALE] || enUs;
+  let text = dict[key] || loadedDictionaries.value[DEFAULT_LOCALE]?.[key] || enUs[key] || key;
 
   if (params) {
     Object.keys(params).forEach(pKey => {
