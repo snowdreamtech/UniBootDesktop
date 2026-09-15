@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const viVn: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Về UniGoDesktop",
+  "menu.hide": "Ẩn UniGoDesktop",
+  "menu.showAll": "Hiện tất cả",
+  "menu.quit": "Thoát UniGoDesktop",
+  "menu.edit": "Chỉnh sửa",
+  "menu.undo": "Hoàn tác",
+  "menu.redo": "Làm lại",
+  "menu.cut": "Cắt",
+  "menu.copy": "Sao chép",
+  "menu.paste": "Dán",
+  "menu.selectAll": "Chọn tất cả",
+  "menu.window": "Cửa sổ",
+  "menu.minimize": "Thu nhỏ",
+  "menu.zoom": "Phóng to/Thu nhỏ",
+  "menu.help": "Trợ giúp",
+
   "lang.zhCN": "Tiếng Trung Giản Thể",
   "lang.zhTW": "Tiếng Trung Phồn Thể",
   "lang.jaJP": "Tiếng Nhật",

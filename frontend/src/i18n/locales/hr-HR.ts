@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const hrHr: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "O aplikaciji UniGoDesktop",
+  "menu.hide": "Sakrij UniGoDesktop",
+  "menu.showAll": "Prikaži sve",
+  "menu.quit": "Zatvori UniGoDesktop",
+  "menu.edit": "Uredi",
+  "menu.undo": "Poništi",
+  "menu.redo": "Ponovi",
+  "menu.cut": "Izreži",
+  "menu.copy": "Kopiraj",
+  "menu.paste": "Zalijepi",
+  "menu.selectAll": "Odaberi sve",
+  "menu.window": "Prozor",
+  "menu.minimize": "Minimiziraj",
+  "menu.zoom": "Zumiraj",
+  "menu.help": "Pomoć",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

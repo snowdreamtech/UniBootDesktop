@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const ocFr: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "A propòs de UniGoDesktop",
+  "menu.hide": "Amagar UniGoDesktop",
+  "menu.showAll": "Mstrar tot",
+  "menu.quit": "Quitar UniGoDesktop",
+  "menu.edit": "Edicion",
+  "menu.undo": "Anullar",
+  "menu.redo": "Tornar far",
+  "menu.cut": "Copar",
+  "menu.copy": "Copiar",
+  "menu.paste": "Pgar",
+  "menu.selectAll": "Seleccionar tot",
+  "menu.window": "Fenèstra",
+  "menu.minimize": "Reduire",
+  "menu.zoom": "Agrandir",
+  "menu.help": "Ajuda",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

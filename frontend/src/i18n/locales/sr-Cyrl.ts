@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const srCyrl: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "О апликацији UniGoDesktop",
+  "menu.hide": "Сакриј UniGoDesktop",
+  "menu.showAll": "Прикажи све",
+  "menu.quit": "Напусти UniGoDesktop",
+  "menu.edit": "Уређивање",
+  "menu.undo": "Поништи",
+  "menu.redo": "Понови",
+  "menu.cut": "Исеци",
+  "menu.copy": "Копирај",
+  "menu.paste": "Налепи",
+  "menu.selectAll": "Изабери све",
+  "menu.window": "Прозор",
+  "menu.minimize": "Минимализуј",
+  "menu.zoom": "Увећај",
+  "menu.help": "Помоћ",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

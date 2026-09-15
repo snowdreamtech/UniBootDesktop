@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const csCz: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "O aplikaci UniGoDesktop",
+  "menu.hide": "Skrýt UniGoDesktop",
+  "menu.showAll": "Zobrazit vše",
+  "menu.quit": "Ukončit UniGoDesktop",
+  "menu.edit": "Úpravy",
+  "menu.undo": "Zpět",
+  "menu.redo": "Znovu",
+  "menu.cut": "Vyjmout",
+  "menu.copy": "Kopírovat",
+  "menu.paste": "Vložit",
+  "menu.selectAll": "Vybrat vše",
+  "menu.window": "Okno",
+  "menu.minimize": "Minimalizovat",
+  "menu.zoom": "Přiblížit",
+  "menu.help": "Nápověda",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

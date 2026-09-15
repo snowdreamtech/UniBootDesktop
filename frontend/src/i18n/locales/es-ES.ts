@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const esEs: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Acerca de UniGoDesktop",
+  "menu.hide": "Ocultar UniGoDesktop",
+  "menu.showAll": "Mostrar todo",
+  "menu.quit": "Salir de UniGoDesktop",
+  "menu.edit": "Edición",
+  "menu.undo": "Deshacer",
+  "menu.redo": "Rehacer",
+  "menu.cut": "Cortar",
+  "menu.copy": "Copiar",
+  "menu.paste": "Pegar",
+  "menu.selectAll": "Seleccionar todo",
+  "menu.window": "Ventana",
+  "menu.minimize": "Minimizar",
+  "menu.zoom": "Zoom",
+  "menu.help": "Ayuda",
+
   "lang.zhCN": "Chino simplificado",
   "lang.zhTW": "Chino tradicional",
   "lang.jaJP": "Japonés",

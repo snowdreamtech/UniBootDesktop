@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const slSi: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "O programu UniGoDesktop",
+  "menu.hide": "Skrij UniGoDesktop",
+  "menu.showAll": "Prikaži vse",
+  "menu.quit": "Zapri UniGoDesktop",
+  "menu.edit": "Uredi",
+  "menu.undo": "Razveljavi",
+  "menu.redo": "Uveljavi",
+  "menu.cut": "Izreži",
+  "menu.copy": "Kopiraj",
+  "menu.paste": "Prilepi",
+  "menu.selectAll": "Izberi vse",
+  "menu.window": "Okno",
+  "menu.minimize": "Minimiziraj",
+  "menu.zoom": "Povečaj",
+  "menu.help": "Pomoč",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

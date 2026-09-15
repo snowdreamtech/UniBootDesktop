@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const ptBr: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Sobre o UniGoDesktop",
+  "menu.hide": "Ocultar UniGoDesktop",
+  "menu.showAll": "Mostrar Tudo",
+  "menu.quit": "Encerrar o UniGoDesktop",
+  "menu.edit": "Editar",
+  "menu.undo": "Desfazer",
+  "menu.redo": "Refazer",
+  "menu.cut": "Recortar",
+  "menu.copy": "Copiar",
+  "menu.paste": "Colar",
+  "menu.selectAll": "Selecionar Tudo",
+  "menu.window": "Janela",
+  "menu.minimize": "Minimizar",
+  "menu.zoom": "Deminuir/Aumentar Zoom",
+  "menu.help": "Ajuda",
+
   "lang.zhCN": "Chinês Simplificado",
   "lang.zhTW": "Chinês Tradicional",
   "lang.jaJP": "Japonês",

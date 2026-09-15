@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const daDk: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Om UniGoDesktop",
+  "menu.hide": "Skjul UniGoDesktop",
+  "menu.showAll": "Vis alle",
+  "menu.quit": "Slut UniGoDesktop",
+  "menu.edit": "Rediger",
+  "menu.undo": "Fortryd",
+  "menu.redo": "Gentag",
+  "menu.cut": "Klip",
+  "menu.copy": "Kopier",
+  "menu.paste": "Sæt ind",
+  "menu.selectAll": "Vælg alt",
+  "menu.window": "Vindue",
+  "menu.minimize": "Minimer",
+  "menu.zoom": "Zoom",
+  "menu.help": "Hjælp",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

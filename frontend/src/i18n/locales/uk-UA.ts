@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const ukUa: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Про програму UniGoDesktop",
+  "menu.hide": "Сховати UniGoDesktop",
+  "menu.showAll": "Показати всі",
+  "menu.quit": "Завершити UniGoDesktop",
+  "menu.edit": "Редагування",
+  "menu.undo": "Скасувати",
+  "menu.redo": "Повторити",
+  "menu.cut": "Вирізати",
+  "menu.copy": "Копіювати",
+  "menu.paste": "Вставити",
+  "menu.selectAll": "Виділити все",
+  "menu.window": "Вікно",
+  "menu.minimize": "Згорнути",
+  "menu.zoom": "Масштаб",
+  "menu.help": "Довідка",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const roRo: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Despre UniGoDesktop",
+  "menu.hide": "Ascunde UniGoDesktop",
+  "menu.showAll": "Afișează toate",
+  "menu.quit": "Închide UniGoDesktop",
+  "menu.edit": "Editare",
+  "menu.undo": "Anulează",
+  "menu.redo": "Refă",
+  "menu.cut": "Tunde",
+  "menu.copy": "Copiază",
+  "menu.paste": "Lipește",
+  "menu.selectAll": "Selectează tot",
+  "menu.window": "Fereastră",
+  "menu.minimize": "Minimizează",
+  "menu.zoom": "Zoom",
+  "menu.help": "Ajutor",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const koKr: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop 정보",
+  "menu.hide": "UniGoDesktop 가리기",
+  "menu.showAll": "모두 보기",
+  "menu.quit": "UniGoDesktop 종료",
+  "menu.edit": "편집",
+  "menu.undo": "실행 취소",
+  "menu.redo": "다시 실행",
+  "menu.cut": "오려두기",
+  "menu.copy": "복사",
+  "menu.paste": "붙여넣기",
+  "menu.selectAll": "전체 선택",
+  "menu.window": "윈도우",
+  "menu.minimize": "최소화",
+  "menu.zoom": "확대/축소",
+  "menu.help": "도움말",
+
   "lang.zhCN": "중국어 간체",
   "lang.zhTW": "중국어 번체",
   "lang.jaJP": "일본어",

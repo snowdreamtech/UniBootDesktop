@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const bgBg: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Относно UniGoDesktop",
+  "menu.hide": "Скриване на UniGoDesktop",
+  "menu.showAll": "Показване на всички",
+  "menu.quit": "Изход от UniGoDesktop",
+  "menu.edit": "Редактиране",
+  "menu.undo": "Отмяна",
+  "menu.redo": "Повторение",
+  "menu.cut": "Изрязване",
+  "menu.copy": "Копиране",
+  "menu.paste": "Поставяне",
+  "menu.selectAll": "Избиране на всички",
+  "menu.window": "Прозорец",
+  "menu.minimize": "Минимизиране",
+  "menu.zoom": "Мащабиране",
+  "menu.help": "Помощ",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

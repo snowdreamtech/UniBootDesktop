@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const hyAm: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop-ի մասին",
+  "menu.hide": "Թաքցնել UniGoDesktop",
+  "menu.showAll": "Ցուցադրել բոլորը",
+  "menu.quit": "Փակել UniGoDesktop",
+  "menu.edit": "Խմբագրել",
+  "menu.undo": "Հետարկել",
+  "menu.redo": "Կրկնել",
+  "menu.cut": "Կտրել",
+  "menu.copy": "Պատճենել",
+  "menu.paste": "Տեղադրել",
+  "menu.selectAll": "Ընտրել բոլորը",
+  "menu.window": "Պատուհան",
+  "menu.minimize": "Փոքրացնել",
+  "menu.zoom": "Մեծացնել",
+  "menu.help": "Օգնություն",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

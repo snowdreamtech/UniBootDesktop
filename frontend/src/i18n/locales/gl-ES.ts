@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const glEs: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Sobre UniGoDesktop",
+  "menu.hide": "Ocultar UniGoDesktop",
+  "menu.showAll": "Amosar todo",
+  "menu.quit": "Saír de UniGoDesktop",
+  "menu.edit": "Editar",
+  "menu.undo": "Desfacer",
+  "menu.redo": "Refacer",
+  "menu.cut": "Cortar",
+  "menu.copy": "Copiar",
+  "menu.paste": "Pegar",
+  "menu.selectAll": "Seleccionar todo",
+  "menu.window": "Xanela",
+  "menu.minimize": "Minimizar",
+  "menu.zoom": "Ampliar",
+  "menu.help": "Axuda",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

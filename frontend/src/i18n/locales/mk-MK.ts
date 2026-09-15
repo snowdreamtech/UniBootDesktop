@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const mkMk: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "За UniGoDesktop",
+  "menu.hide": "Скриј го UniGoDesktop",
+  "menu.showAll": "Прикажи ги сите",
+  "menu.quit": "Напушти го UniGoDesktop",
+  "menu.edit": "Уреди",
+  "menu.undo": "Врати",
+  "menu.redo": "Повтори",
+  "menu.cut": "Исечи",
+  "menu.copy": "Копирај",
+  "menu.paste": "Залепи",
+  "menu.selectAll": "Избери сѐ",
+  "menu.window": "Прозорец",
+  "menu.minimize": "Минимизирај",
+  "menu.zoom": "Зумирај",
+  "menu.help": "Помош",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

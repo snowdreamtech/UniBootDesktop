@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const nbNo: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Om UniGoDesktop",
+  "menu.hide": "Skjul UniGoDesktop",
+  "menu.showAll": "Vis alle",
+  "menu.quit": "Avslutt UniGoDesktop",
+  "menu.edit": "Rediger",
+  "menu.undo": "Angre",
+  "menu.redo": "Gjør om",
+  "menu.cut": "Klipp ut",
+  "menu.copy": "Kopier",
+  "menu.paste": "Lim inn",
+  "menu.selectAll": "Marker alt",
+  "menu.window": "Vindu",
+  "menu.minimize": "Minimer",
+  "menu.zoom": "Zoom",
+  "menu.help": "Hjelp",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

@@ -1,4 +1,20 @@
 export interface TranslationDict {
+  "menu.app": string;
+  "menu.about": string;
+  "menu.hide": string;
+  "menu.showAll": string;
+  "menu.quit": string;
+  "menu.edit": string;
+  "menu.undo": string;
+  "menu.redo": string;
+  "menu.cut": string;
+  "menu.copy": string;
+  "menu.paste": string;
+  "menu.selectAll": string;
+  "menu.window": string;
+  "menu.minimize": string;
+  "menu.zoom": string;
+  "menu.help": string;
   "lang.zhCN": string;
   "lang.zhTW": string;
   "lang.jaJP": string;

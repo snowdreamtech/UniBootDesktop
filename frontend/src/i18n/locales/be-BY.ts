@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const beBy: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Пра праграму UniGoDesktop",
+  "menu.hide": "Схаваць UniGoDesktop",
+  "menu.showAll": "Паказаць усё",
+  "menu.quit": "Скончыць UniGoDesktop",
+  "menu.edit": "Праўка",
+  "menu.undo": "Адмяніць",
+  "menu.redo": "Паўтарыць",
+  "menu.cut": "Выразаць",
+  "menu.copy": "Капіраваць",
+  "menu.paste": "Уставіць",
+  "menu.selectAll": "Вылучыць усё",
+  "menu.window": "Акно",
+  "menu.minimize": "Згарнуць",
+  "menu.zoom": "Маштаб",
+  "menu.help": "Даведка",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

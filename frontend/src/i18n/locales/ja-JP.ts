@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const jaJp: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop について",
+  "menu.hide": "UniGoDesktop を非表示",
+  "menu.showAll": "すべてを表示",
+  "menu.quit": "UniGoDesktop を終了",
+  "menu.edit": "編集",
+  "menu.undo": "元に戻す",
+  "menu.redo": "やり直す",
+  "menu.cut": "切り取り",
+  "menu.copy": "コピー",
+  "menu.paste": "貼り付け",
+  "menu.selectAll": "すべてを選択",
+  "menu.window": "ウィンドウ",
+  "menu.minimize": "最小化",
+  "menu.zoom": "拡大/縮小",
+  "menu.help": "ヘルプ",
+
   "lang.zhCN": "簡体字中国語",
   "lang.zhTW": "繁体字中国語",
   "lang.jaJP": "日本語",

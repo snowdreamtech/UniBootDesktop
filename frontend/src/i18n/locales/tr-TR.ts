@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const trTr: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop Hakkında",
+  "menu.hide": "UniGoDesktop'ı Gizle",
+  "menu.showAll": "Tümünü Göster",
+  "menu.quit": "UniGoDesktop'tan Çık",
+  "menu.edit": "Düzenle",
+  "menu.undo": "Geri Al",
+  "menu.redo": "Yinele",
+  "menu.cut": "Kes",
+  "menu.copy": "Kopyala",
+  "menu.paste": "Yapıştır",
+  "menu.selectAll": "Tümünü Seç",
+  "menu.window": "Pencere",
+  "menu.minimize": "Simge Durumuna Küçült",
+  "menu.zoom": "Büyüt/Küçült",
+  "menu.help": "Yardım",
+
   "lang.zhCN": "Basitleştirilmiş Çince",
   "lang.zhTW": "Geleneksel Çince",
   "lang.jaJP": "Japonca",

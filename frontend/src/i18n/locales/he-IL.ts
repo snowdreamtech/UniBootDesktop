@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const heIl: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "על אודות UniGoDesktop",
+  "menu.hide": "הסתר את UniGoDesktop",
+  "menu.showAll": "הצג הכל",
+  "menu.quit": "סיום UniGoDesktop",
+  "menu.edit": "עריכה",
+  "menu.undo": "בטל",
+  "menu.redo": "בצע שוב",
+  "menu.cut": "גזור",
+  "menu.copy": "העתק",
+  "menu.paste": "הדבק",
+  "menu.selectAll": "בחר הכל",
+  "menu.window": "חלון",
+  "menu.minimize": "מזער",
+  "menu.zoom": "זום",
+  "menu.help": "עזרה",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

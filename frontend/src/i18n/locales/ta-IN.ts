@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const taIn: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop பற்றி",
+  "menu.hide": "UniGoDesktop மறை",
+  "menu.showAll": "அனைத்தையும் காட்டு",
+  "menu.quit": "UniGoDesktop வெளியேறு",
+  "menu.edit": "தொகு",
+  "menu.undo": "செயல் நீக்கு",
+  "menu.redo": "மீண்டும் செய்",
+  "menu.cut": "வெட்டு",
+  "menu.copy": "நகலெடு",
+  "menu.paste": "ஒட்டு",
+  "menu.selectAll": "அனைத்தையும் தேர்ந்தெடு",
+  "menu.window": "சாளரம்",
+  "menu.minimize": "சிறிதாக்கு",
+  "menu.zoom": "பெரிதாக்கு",
+  "menu.help": "உதவி",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

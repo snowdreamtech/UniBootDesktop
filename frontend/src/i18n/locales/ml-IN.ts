@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const mlIn: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop നെ കുറിച്ച്",
+  "menu.hide": "UniGoDesktop മറയ്ക്കുക",
+  "menu.showAll": "എല്ലാം കാണിക്കുക",
+  "menu.quit": "UniGoDesktop പുറത്തുകടക്കുക",
+  "menu.edit": "എഡിറ്റ് ചെയ്യുക",
+  "menu.undo": "തിരുത്തുക",
+  "menu.redo": "വീണ്ടും ചെയ്യുക",
+  "menu.cut": "മുറിക്കുക",
+  "menu.copy": "പകർപ്പുക",
+  "menu.paste": "ഒട്ടിക്കുക",
+  "menu.selectAll": "എല്ലാം തിരഞ്ഞെടുക്കുക",
+  "menu.window": "വിൻഡോ",
+  "menu.minimize": "ചെറുതാക്കുക",
+  "menu.zoom": "വലുതാക്കുക",
+  "menu.help": "സഹായം",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

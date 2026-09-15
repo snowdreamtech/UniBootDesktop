@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const urPk: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop کے بارے میں",
+  "menu.hide": "UniGoDesktop چھپائیں",
+  "menu.showAll": "سب دکھائیں",
+  "menu.quit": "UniGoDesktop بند کریں",
+  "menu.edit": "ترمیم",
+  "menu.undo": "منسوخ کریں",
+  "menu.redo": "دوبارہ کریں",
+  "menu.cut": "کٹ کریں",
+  "menu.copy": "کپی کریں",
+  "menu.paste": "پیسٹ کریں",
+  "menu.selectAll": "تمام منتخب کریں",
+  "menu.window": "ونڈو",
+  "menu.minimize": "چھوٹا کریں",
+  "menu.zoom": "زوم",
+  "menu.help": "مدد",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

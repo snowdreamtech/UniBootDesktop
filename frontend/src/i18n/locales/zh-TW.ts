@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const zhTw: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "關於 UniGoDesktop",
+  "menu.hide": "隱藏 UniGoDesktop",
+  "menu.showAll": "顯示全部",
+  "menu.quit": "結束 UniGoDesktop",
+  "menu.edit": "編輯",
+  "menu.undo": "復原",
+  "menu.redo": "重做",
+  "menu.cut": "剪下",
+  "menu.copy": "複製",
+  "menu.paste": "貼上",
+  "menu.selectAll": "全選",
+  "menu.window": "視窗",
+  "menu.minimize": "縮到最小",
+  "menu.zoom": "縮放",
+  "menu.help": "說明",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

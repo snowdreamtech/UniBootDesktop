@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const elGr: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Σχετικά με το UniGoDesktop",
+  "menu.hide": "Απόκρυψη UniGoDesktop",
+  "menu.showAll": "Εμφάνιση όλων",
+  "menu.quit": "Έξοδος από UniGoDesktop",
+  "menu.edit": "Επεξεργασία",
+  "menu.undo": "Αναίρεση",
+  "menu.redo": "Επανάληψη",
+  "menu.cut": "Αποκοπή",
+  "menu.copy": "Αντιγραφή",
+  "menu.paste": "Επικόλληση",
+  "menu.selectAll": "Επιλογή όλων",
+  "menu.window": "Παράθυρο",
+  "menu.minimize": "Ελαχιστοποίηση",
+  "menu.zoom": "Εστίαση",
+  "menu.help": "Βοήθεια",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

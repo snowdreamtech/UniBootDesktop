@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const hiIn: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop के बारे में",
+  "menu.hide": "UniGoDesktop छिपाएं",
+  "menu.showAll": "सभी दिखाएं",
+  "menu.quit": "UniGoDesktop से बाहर निकलें",
+  "menu.edit": "संपादित करें",
+  "menu.undo": "पूर्ववत करें",
+  "menu.redo": "फिर से करें",
+  "menu.cut": "कट करें",
+  "menu.copy": "कॉपी करें",
+  "menu.paste": "पेस्ट करें",
+  "menu.selectAll": "सभी चुनें",
+  "menu.window": "विंडो",
+  "menu.minimize": "छोटा करें",
+  "menu.zoom": "ज़ूम",
+  "menu.help": "सहायता",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

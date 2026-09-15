@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const idId: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Tentang UniGoDesktop",
+  "menu.hide": "Sembunyikan UniGoDesktop",
+  "menu.showAll": "Tampilkan Semua",
+  "menu.quit": "Keluar UniGoDesktop",
+  "menu.edit": "Edit",
+  "menu.undo": "Batalkan",
+  "menu.redo": "Ulangi",
+  "menu.cut": "Potong",
+  "menu.copy": "Salin",
+  "menu.paste": "Tempel",
+  "menu.selectAll": "Pilih Semua",
+  "menu.window": "Jendela",
+  "menu.minimize": "Minimalkan",
+  "menu.zoom": "Perbesar",
+  "menu.help": "Bantuan",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

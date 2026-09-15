@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const faIr: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "درباره UniGoDesktop",
+  "menu.hide": "پنهان کردن UniGoDesktop",
+  "menu.showAll": "نمایش همه",
+  "menu.quit": "خروج از UniGoDesktop",
+  "menu.edit": "ویرایش",
+  "menu.undo": "واکشی",
+  "menu.redo": "انجام دوباره",
+  "menu.cut": "برش",
+  "menu.copy": "کپی",
+  "menu.paste": "جای‌گذاری",
+  "menu.selectAll": "انتخاب همه",
+  "menu.window": "پنجره",
+  "menu.minimize": "کمینه کردن",
+  "menu.zoom": "بزرگ‌نمایی",
+  "menu.help": "راهنما",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

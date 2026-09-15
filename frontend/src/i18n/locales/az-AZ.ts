@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const azAz: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop haqqında",
+  "menu.hide": "UniGoDesktop Gizlət",
+  "menu.showAll": "Hamısını Göstər",
+  "menu.quit": "UniGoDesktop-dan Çıx",
+  "menu.edit": "Düzəliş et",
+  "menu.undo": "Ləğv et",
+  "menu.redo": "Təkrar et",
+  "menu.cut": "Kəs",
+  "menu.copy": "Kopyala",
+  "menu.paste": "Yapışdır",
+  "menu.selectAll": "Hamısını seç",
+  "menu.window": "Pəncərə",
+  "menu.minimize": "Kiçilt",
+  "menu.zoom": "Miqyas",
+  "menu.help": "Kömək",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

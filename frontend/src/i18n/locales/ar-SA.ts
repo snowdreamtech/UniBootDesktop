@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const arSa: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "حول UniGoDesktop",
+  "menu.hide": "إخفاء UniGoDesktop",
+  "menu.showAll": "إظهار الكل",
+  "menu.quit": "إنهاء UniGoDesktop",
+  "menu.edit": "تعديل",
+  "menu.undo": "تراجع",
+  "menu.redo": "إعادة",
+  "menu.cut": "قص",
+  "menu.copy": "نسخ",
+  "menu.paste": "لصق",
+  "menu.selectAll": "تحديد الكل",
+  "menu.window": "نافذة",
+  "menu.minimize": "تصغير",
+  "menu.zoom": "تكبير/تصغير",
+  "menu.help": "مساعدة",
+
   "lang.zhCN": "الصينية المبسطة",
   "lang.zhTW": "الصينية التقليدية",
   "lang.jaJP": "اليابانية",

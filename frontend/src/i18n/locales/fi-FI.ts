@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const fiFi: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Tietoja UniGoDesktopista",
+  "menu.hide": "Kätke UniGoDesktop",
+  "menu.showAll": "Näytä kaikki",
+  "menu.quit": "Lopeta UniGoDesktop",
+  "menu.edit": "Muokkaa",
+  "menu.undo": "Peru",
+  "menu.redo": "Tee uudelleen",
+  "menu.cut": "Leikkaa",
+  "menu.copy": "Kopioi",
+  "menu.paste": "Sijoita",
+  "menu.selectAll": "Valitse kaikki",
+  "menu.window": "Ikkuna",
+  "menu.minimize": "Pienennä",
+  "menu.zoom": "Zoomaa",
+  "menu.help": "Ohje",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

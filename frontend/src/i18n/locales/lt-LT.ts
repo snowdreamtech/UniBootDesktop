@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const ltLt: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Apie „UniGoDesktop“",
+  "menu.hide": "Slėpti „UniGoDesktop“",
+  "menu.showAll": "Rodyti visus",
+  "menu.quit": "Baigti „UniGoDesktop“",
+  "menu.edit": "Redaguoti",
+  "menu.undo": "Atšaukti",
+  "menu.redo": "Grąžinti",
+  "menu.cut": "Iškirpti",
+  "menu.copy": "Kopijuoti",
+  "menu.paste": "Įklijuoti",
+  "menu.selectAll": "Žymėti viską",
+  "menu.window": "Langas",
+  "menu.minimize": "Sumažinti",
+  "menu.zoom": "Mastelis",
+  "menu.help": "Pagalba",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const svSe: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "Om UniGoDesktop",
+  "menu.hide": "Göm UniGoDesktop",
+  "menu.showAll": "Visa alla",
+  "menu.quit": "Avsluta UniGoDesktop",
+  "menu.edit": "Redigera",
+  "menu.undo": "Ångra",
+  "menu.redo": "Gör om",
+  "menu.cut": "Klipp ut",
+  "menu.copy": "Kopiera",
+  "menu.paste": "Klistra in",
+  "menu.selectAll": "Markera allt",
+  "menu.window": "Fönster",
+  "menu.minimize": "Minimera",
+  "menu.zoom": "Zooma",
+  "menu.help": "Hjälp",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

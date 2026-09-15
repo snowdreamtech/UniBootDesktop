@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const ruRu: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "О программе UniGoDesktop",
+  "menu.hide": "Скрыть UniGoDesktop",
+  "menu.showAll": "Показать все",
+  "menu.quit": "Завершить UniGoDesktop",
+  "menu.edit": "Правка",
+  "menu.undo": "Отменить",
+  "menu.redo": "Повторить",
+  "menu.cut": "Вырезать",
+  "menu.copy": "Скопировать",
+  "menu.paste": "Вставить",
+  "menu.selectAll": "Выделить все",
+  "menu.window": "Окно",
+  "menu.minimize": "Свернуть",
+  "menu.zoom": "Изменить масштаб",
+  "menu.help": "Справка",
+
   "lang.zhCN": "Упрощённый китайский",
   "lang.zhTW": "Традиционный китайский",
   "lang.jaJP": "Японский",

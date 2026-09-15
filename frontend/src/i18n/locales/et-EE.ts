@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const etEe: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop teave",
+  "menu.hide": "Peida UniGoDesktop",
+  "menu.showAll": "Kuva kõik",
+  "menu.quit": "Välju UniGoDesktopist",
+  "menu.edit": "Redigeeri",
+  "menu.undo": "Võta tagasi",
+  "menu.redo": "Tee uuesti",
+  "menu.cut": "Lõika",
+  "menu.copy": "Kopeeri",
+  "menu.paste": "Aseta",
+  "menu.selectAll": "Vali kõik",
+  "menu.window": "Aken",
+  "menu.minimize": "Minimeeri",
+  "menu.zoom": "Suurenda",
+  "menu.help": "Abi",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

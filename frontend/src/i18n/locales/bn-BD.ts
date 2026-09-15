@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const bnBd: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop সম্পর্কে",
+  "menu.hide": "UniGoDesktop লুকান",
+  "menu.showAll": "সব দেখান",
+  "menu.quit": "UniGoDesktop বন্ধ করুন",
+  "menu.edit": "সম্পাদনা",
+  "menu.undo": "পূর্বাবস্থায় ফেরান",
+  "menu.redo": "পুনরায় করুন",
+  "menu.cut": "কাট",
+  "menu.copy": "কপি",
+  "menu.paste": "পেস্ট",
+  "menu.selectAll": "সব নির্বাচন করুন",
+  "menu.window": "উইন্ডো",
+  "menu.minimize": "ছোট করুন",
+  "menu.zoom": "জুম",
+  "menu.help": "সহায়তা",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

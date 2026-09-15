@@ -10,6 +10,7 @@ import (
 	"runtime"
 
 	"github.com/snowdreamtech/unigodesktop/cmd"
+	"github.com/snowdreamtech/unigodesktop/internal/i18n"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/menu"
 	"github.com/wailsapp/wails/v2/pkg/menu/keys"
@@ -27,36 +28,56 @@ func RunWails() error {
 	fmt.Println(">>> Starting Wails GUI Runtime...")
 	app := NewApp()
 
+	mt := i18n.GetMenuTranslations("auto")
 	appMenu := menu.NewMenu()
 	if runtime.GOOS == "darwin" {
-		appSubMenu := appMenu.AddSubmenu("UniGoDesktop")
-		appSubMenu.AddText("关于 UniGoDesktop", keys.CmdOrCtrl("i"), func(cd *menu.CallbackData) {
+		appSubMenu := appMenu.AddSubmenu(mt.App)
+		appSubMenu.AddText(mt.About, keys.CmdOrCtrl("i"), func(cd *menu.CallbackData) {
 			if app.ctx != nil {
 				wailsRuntime.EventsEmit(app.ctx, "open-about-modal")
 			}
 		})
 		appSubMenu.AddSeparator()
-		appSubMenu.AddText("隐藏 UniGoDesktop", keys.CmdOrCtrl("h"), func(cd *menu.CallbackData) {
+		appSubMenu.AddText(mt.Hide, keys.CmdOrCtrl("h"), func(cd *menu.CallbackData) {
 			if app.ctx != nil {
 				wailsRuntime.WindowHide(app.ctx)
 			}
 		})
-		appSubMenu.AddText("显示全部", nil, func(cd *menu.CallbackData) {
+		appSubMenu.AddText(mt.ShowAll, nil, func(cd *menu.CallbackData) {
 			if app.ctx != nil {
 				wailsRuntime.WindowShow(app.ctx)
 			}
 		})
 		appSubMenu.AddSeparator()
-		appSubMenu.AddText("退出 UniGoDesktop", keys.CmdOrCtrl("q"), func(cd *menu.CallbackData) {
+		appSubMenu.AddText(mt.Quit, keys.CmdOrCtrl("q"), func(cd *menu.CallbackData) {
 			if app.ctx != nil {
 				wailsRuntime.Quit(app.ctx)
 			}
 		})
 
-		appMenu.Append(menu.EditMenu())
+		editMenu := appMenu.AddSubmenu(mt.Edit)
+		editMenu.AddText(mt.Undo, keys.CmdOrCtrl("z"), nil)
+		editMenu.AddText(mt.Redo, keys.CmdOrCtrl("Z"), nil)
+		editMenu.AddSeparator()
+		editMenu.AddText(mt.Cut, keys.CmdOrCtrl("x"), nil)
+		editMenu.AddText(mt.Copy, keys.CmdOrCtrl("c"), nil)
+		editMenu.AddText(mt.Paste, keys.CmdOrCtrl("v"), nil)
+		editMenu.AddText(mt.SelectAll, keys.CmdOrCtrl("a"), nil)
 
-		helpMenu := appMenu.AddSubmenu("帮助")
-		helpMenu.AddText("关于 UniGoDesktop", nil, func(cd *menu.CallbackData) {
+		windowMenu := appMenu.AddSubmenu(mt.Window)
+		windowMenu.AddText(mt.Minimize, keys.CmdOrCtrl("m"), func(cd *menu.CallbackData) {
+			if app.ctx != nil {
+				wailsRuntime.WindowMinimise(app.ctx)
+			}
+		})
+		windowMenu.AddText(mt.Zoom, nil, func(cd *menu.CallbackData) {
+			if app.ctx != nil {
+				wailsRuntime.WindowToggleMaximise(app.ctx)
+			}
+		})
+
+		helpMenu := appMenu.AddSubmenu(mt.Help)
+		helpMenu.AddText(mt.About, nil, func(cd *menu.CallbackData) {
 			if app.ctx != nil {
 				wailsRuntime.EventsEmit(app.ctx, "open-about-modal")
 			}

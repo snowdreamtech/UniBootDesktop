@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const huHu: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "A UniGoDesktop névjegye",
+  "menu.hide": "A UniGoDesktop elrejtése",
+  "menu.showAll": "Összes megjelenítése",
+  "menu.quit": "Kilépés a UniGoDesktopból",
+  "menu.edit": "Szerkesztés",
+  "menu.undo": "Visszavonás",
+  "menu.redo": "Ismétlés",
+  "menu.cut": "Kivágás",
+  "menu.copy": "Másolás",
+  "menu.paste": "Beillesztés",
+  "menu.selectAll": "Összes kijelölése",
+  "menu.window": "Ablak",
+  "menu.minimize": "Kis méret",
+  "menu.zoom": "Nagyítás",
+  "menu.help": "Súgó",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",

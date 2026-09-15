@@ -1,6 +1,23 @@
 import type { TranslationDict } from '../types';
 
 export const kaGe: TranslationDict = {
+  "menu.app": "UniGoDesktop",
+  "menu.about": "UniGoDesktop-ის შესახებ",
+  "menu.hide": "UniGoDesktop-ის დამალვა",
+  "menu.showAll": "ყველას ჩვენება",
+  "menu.quit": "UniGoDesktop-იდან გამოსვლা",
+  "menu.edit": "რედაქტირება",
+  "menu.undo": "დაბრუნება",
+  "menu.redo": "გამეორება",
+  "menu.cut": "ამოჭრა",
+  "menu.copy": "კოპირება",
+  "menu.paste": "ჩასმა",
+  "menu.selectAll": "ყველაფრის მონიშვნാ",
+  "menu.window": "ფანჯარა",
+  "menu.minimize": "ჩაკეცილი",
+  "menu.zoom": "მასშტაბირება",
+  "menu.help": "დახმარება",
+
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",
