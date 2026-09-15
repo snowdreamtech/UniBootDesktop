@@ -55,6 +55,12 @@ func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
 	return disk.GetRemovableDisks()
 }
 
+// EjectDisk safely unmounts and ejects the target removable USB storage drive.
+func (a *App) EjectDisk(targetDisk string) error {
+	return disk.EjectDisk(targetDisk)
+}
+
+
 // SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
 func (a *App) SelectIsoFiles() ([]string, error) {
 	return wailsRuntime.OpenMultipleFilesDialog(a.ctx, wailsRuntime.OpenDialogOptions{

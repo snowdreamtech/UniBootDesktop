@@ -987,3 +987,53 @@ func ValidateTargetDisk(targetDevice string) error {
 	return nil
 }
 
+// EjectDisk safely unmounts and ejects the target removable USB storage drive.
+func EjectDisk(device string) error {
+	if device == "" {
+		return fmt.Errorf("device path cannot be empty")
+	}
+	if err := ValidateTargetDisk(device); err != nil {
+		return err
+	}
+
+	switch runtime.GOOS {
+	case "darwin":
+		cmd := execCommand("diskutil", "eject", device)
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			fallbackCmd := execCommand("diskutil", "unmountDisk", device)
+			if fallbackOut, fallbackErr := fallbackCmd.CombinedOutput(); fallbackErr != nil {
+				return fmt.Errorf("failed to eject disk %s: %s (%w)", device, strings.TrimSpace(string(output)), err)
+			} else {
+				_ = fallbackOut
+			}
+		}
+		return nil
+
+	case "windows":
+		driveLetter := strings.TrimSuffix(device, "\\")
+		if !strings.HasSuffix(driveLetter, ":") {
+			driveLetter = driveLetter + ":"
+		}
+		psCmd := fmt.Sprintf("(New-Object -ComObject Shell.Application).NameSpace(17).ParseName('%s').InvokeVerb('Eject')", driveLetter)
+		cmd := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd)
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			return fmt.Errorf("failed to eject drive %s: %s (%w)", device, strings.TrimSpace(string(output)), err)
+		}
+		return nil
+
+	default:
+		cmd := execCommand("udisksctl", "power-off", "-b", device)
+		if output, err := cmd.CombinedOutput(); err == nil {
+			_ = output
+			return nil
+		}
+		fallbackCmd := execCommand("eject", device)
+		if output, err := fallbackCmd.CombinedOutput(); err != nil {
+			return fmt.Errorf("failed to eject device %s: %s (%w)", device, strings.TrimSpace(string(output)), err)
+		}
+		return nil
+	}
+}
+

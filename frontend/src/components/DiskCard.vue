@@ -137,6 +137,13 @@
       >
         ℹ️ {{ t('disk.details') }}
       </button>
+      <button 
+        class="btn-eject" 
+        :title="t('disk.eject')" 
+        @click.stop="$emit('eject', disk)"
+      >
+        ⏏️ {{ t('disk.eject') }}
+      </button>
     </div>
   </div>
 </template>
@@ -171,7 +178,7 @@ const props = withDefaults(defineProps<{
   isBatchMode: false
 });
 
-defineEmits(['select', 'toggle', 'pick-icon', 'inspect']);
+defineEmits(['select', 'toggle', 'pick-icon', 'inspect', 'eject']);
 
 const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom' | 'usb2' | 'usb3_1' | 'usb3_2' | 'usb4' | 'usb'>(() => {
   if (props.customIcon && ['boot', 'ssd', 'typec', 'secure', 'reader', 'hdd', 'key', 'cdrom', 'usb2', 'usb3_1', 'usb3_2', 'usb4', 'usb'].includes(props.customIcon)) {
@@ -427,6 +434,23 @@ const diskTagLabel = computed(() => {
   border-color: rgba(0, 229, 255, 0.3);
 }
 
+.btn-eject {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-eject:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
 .disk-badge {
   background: rgba(0, 229, 255, 0.15);
   color: var(--accent-cyan);
@@ -522,6 +546,19 @@ const diskTagLabel = computed(() => {
   background: #e0f2fe;
   color: #0284c7;
   border-color: #38bdf8;
+}
+
+[data-theme="light"] .btn-eject {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  font-weight: 600;
+}
+
+[data-theme="light"] .btn-eject:hover {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fca5a5;
 }
 
 [data-theme="light"] .speed-tag {

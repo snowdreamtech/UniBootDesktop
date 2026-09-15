@@ -134,6 +134,7 @@
             @toggle="onDiskToggle(disk)"
             @pick-icon="openIconPicker(disk)"
             @inspect="openInspector(disk)"
+            @eject="handleEjectDisk(disk)"
           />
           <div v-if="diskList.length === 0" class="empty-state">
             <span v-if="isScanningDisks">🔍 {{ t('disk.scanning') }}</span>
@@ -756,6 +757,18 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
 function openInspector(disk: DiskInfo) {
   targetInspectorDisk.value = disk;
   isInspectorOpen.value = true;
+}
+
+async function handleEjectDisk(disk: DiskInfo) {
+  try {
+    if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
+      await window.go.main.App.EjectDisk(disk.device);
+    }
+    showToast(t('disk.toast_ejected_success', { device: disk.device, name: disk.name || disk.device }), 'success');
+    await refreshDisks();
+  } catch (err: any) {
+    showToast(t('disk.toast_ejected_failed', { device: disk.device, error: err?.toString() || 'Unknown error' }), 'error');
+  }
 }
 
 function openIconPicker(disk: DiskInfo) {

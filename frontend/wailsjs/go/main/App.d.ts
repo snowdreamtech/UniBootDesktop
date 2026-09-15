@@ -20,6 +20,8 @@ export function DeployModeB(arg1:string,arg2:string):Promise<installer.DeployRes
 
 export function DeployModeBBatch(arg1:Array<string>,arg2:string):Promise<Array<installer.DeployResult>>;
 
+export function EjectDisk(arg1:string):Promise<void>;
+
 export function GetAppInfo():Promise<main.AppInfo>;
 
 export function GetConfig():Promise<config.AppConfig>;

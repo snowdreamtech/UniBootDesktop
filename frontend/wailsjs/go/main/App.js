@@ -26,6 +26,10 @@ export function DeployModeBBatch(arg1, arg2) {
   return window['go']['main']['App']['DeployModeBBatch'](arg1, arg2);
 }
 
+export function EjectDisk(arg1) {
+  return window['go']['main']['App']['EjectDisk'](arg1);
+}
+
 export function GetAppInfo() {
   return window['go']['main']['App']['GetAppInfo']();
 }
