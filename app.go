@@ -169,24 +169,24 @@ func (a *App) SyncUniBootFirmware() (*firmware.UniBootReleaseInfo, error) {
 // GetAppInfo returns dynamic build, environment, and version metadata.
 func (a *App) GetAppInfo() AppInfo {
 	versionStr := env.GitTag
-	if versionStr == "" || versionStr == "N/A" {
-		versionStr = "v0.1.0"
+	if versionStr == "" {
+		versionStr = "N/A"
 	}
 	gitTag := env.GitTag
-	if gitTag == "" || gitTag == "N/A" {
-		gitTag = versionStr
+	if gitTag == "" {
+		gitTag = "N/A"
 	}
 	commitHash := env.CommitHash
-	if commitHash == "" || commitHash == "N/A" {
-		commitHash = "fcbae59b"
+	if commitHash == "" {
+		commitHash = "N/A"
 	}
 	commitHashFull := env.CommitHashFull
-	if commitHashFull == "" || commitHashFull == "N/A" {
-		commitHashFull = "fcbae59b758833c7"
+	if commitHashFull == "" {
+		commitHashFull = "N/A"
 	}
 	buildTime := env.BuildTime
-	if buildTime == "" || buildTime == "N/A" {
-		buildTime = "2026-09-15 08:50:00"
+	if buildTime == "" {
+		buildTime = "N/A"
 	}
 
 	return AppInfo{

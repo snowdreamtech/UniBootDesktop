@@ -25,7 +25,7 @@
             <p class="app-subtitle">Universal Go Desktop Suite</p>
             <div class="version-badge">
               <span class="badge-dot"></span>
-              <span class="badge-text">{{ appInfo.version || 'v0.1.0' }}</span>
+              <span class="badge-text">{{ displayVersion }}</span>
             </div>
           </div>
 
@@ -45,7 +45,7 @@
             </div>
             <div class="info-item">
               <span class="info-label">{{ t('about.environment') }}</span>
-              <span class="info-val font-mono">{{ appInfo.osArch || 'macOS/arm64' }} ({{ appInfo.goVersion || 'Go 1.24' }})</span>
+              <span class="info-val font-mono">{{ appInfo.osArch || 'N/A' }} ({{ appInfo.goVersion || 'N/A' }})</span>
             </div>
           </div>
 
@@ -152,34 +152,19 @@ interface AppInfo {
 
 const appInfo = ref<AppInfo>({
   projectName: 'unigodesktop',
-  version: 'v0.1.0',
-  gitTag: 'v0.1.0',
-  commitHash: 'fcbae59b',
-  buildTime: '2026-09-15 08:50:00',
+  version: 'N/A',
+  gitTag: 'N/A',
+  commitHash: 'N/A',
+  buildTime: 'N/A',
   copyright: 'Copyright © 2026-present SnowdreamTech Inc.',
-  goVersion: 'Go 1.24',
-  osArch: 'macOS/arm64'
+  goVersion: 'N/A',
+  osArch: 'N/A'
 });
 
-const displayVersion = computed(() => {
-  const v = appInfo.value.version || appInfo.value.gitTag;
-  return v && v !== 'N/A' ? v : 'v0.1.0';
-});
-
-const displayGitTag = computed(() => {
-  const tag = appInfo.value.gitTag;
-  return tag && tag !== 'N/A' ? tag : 'v0.1.0';
-});
-
-const displayCommitHash = computed(() => {
-  const hash = appInfo.value.commitHash;
-  return hash && hash !== 'N/A' ? hash : 'fcbae59b';
-});
-
-const displayBuildTime = computed(() => {
-  const bt = appInfo.value.buildTime;
-  return bt && bt !== 'N/A' ? bt : '2026-09-15 08:50:00';
-});
+const displayVersion = computed(() => appInfo.value.version || appInfo.value.gitTag || 'N/A');
+const displayGitTag = computed(() => appInfo.value.gitTag || 'N/A');
+const displayCommitHash = computed(() => appInfo.value.commitHash || 'N/A');
+const displayBuildTime = computed(() => appInfo.value.buildTime || 'N/A');
 
 const copied = ref(false);
 const checking = ref(false);
@@ -246,9 +231,9 @@ const copySystemInfo = async () => {
 Version: ${displayVersion.value} (${displayGitTag.value})
 Commit: ${displayCommitHash.value}
 Build Time: ${displayBuildTime.value}
-OS/Arch: ${appInfo.value.osArch || 'macOS/arm64'}
-Go Runtime: ${appInfo.value.goVersion || 'Go 1.24'}
-License: ${appInfo.value.license || 'MIT'}
+OS/Arch: ${appInfo.value.osArch || 'N/A'}
+Go Runtime: ${appInfo.value.goVersion || 'N/A'}
+License: ${appInfo.value.license || 'N/A'}
 ------------------------------------`;
 
   try {
