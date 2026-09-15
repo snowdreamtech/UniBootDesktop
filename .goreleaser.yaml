@@ -153,12 +153,8 @@ release:
   github:
     owner: snowdreamtech
     name: unigodesktop
-  extra_files:
-    - glob: ./build/bin/*gui*
-    - glob: ./build/bin/*portable*
-    - glob: ./build/bin/*setup*
-    - glob: ./build/bin/*.dmg
-    - glob: ./build/bin/*.AppImage
+  # GUI installers/packages are produced by the dedicated Wails workflow on
+  # native OS runners and uploaded separately to this GitHub Release.
   header: |
     **Snowdream Tech AI IDE Template** is an enterprise-grade, foundational template designed for multi-AI IDE collaboration.
 
