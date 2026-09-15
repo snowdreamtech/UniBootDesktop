@@ -20,6 +20,7 @@ import (
 	"github.com/snowdreamtech/unigodesktop/internal/env"
 	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
 	"github.com/snowdreamtech/unigodesktop/internal/updater"
+	"github.com/snowdreamtech/unigodesktop/internal/version"
 	"github.com/spf13/cobra"
 )
 
@@ -56,7 +57,7 @@ func runSelfUpdate(cmd *cobra.Command, args []string) error {
 	fmt.Printf("Current version: %s\n", currentVer)
 	fmt.Printf("Latest version:  %s\n", latestVer)
 
-	if latestVer == currentVer || latestVer == "" {
+	if latestVer == "" || version.CompareVersions(latestVer, currentVer) <= 0 {
 		fmt.Println("Already up to date.")
 		return nil
 	}
