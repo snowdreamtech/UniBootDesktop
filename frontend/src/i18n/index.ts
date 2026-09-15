@@ -73,41 +73,52 @@ const loadedDictionaries = ref<Record<string, TranslationDict>>({
 
 const DEFAULT_LOCALE = 'zh-CN';
 
+function resolveAutoLocale(): string {
+  const navLang = navigator.language;
+  const matched = SUPPORTED_LANGUAGES.find(l => l.code === navLang || l.code.startsWith(navLang.split('-')[0]));
+  return matched ? matched.code : DEFAULT_LOCALE;
+}
+
 function getInitialLocale(): string {
   const saved = localStorage.getItem('unigo_locale');
+  if (saved === 'auto') {
+    return resolveAutoLocale();
+  }
   if (saved && SUPPORTED_LANGUAGES.some(l => l.code === saved)) {
     return saved;
   }
-  const navLang = navigator.language;
-  const matched = SUPPORTED_LANGUAGES.find(l => l.code === navLang || l.code.startsWith(navLang.split('-')[0]));
-  if (matched) {
-    return matched.code;
-  }
-  return DEFAULT_LOCALE;
+  return resolveAutoLocale();
 }
 
 export const currentLocale = ref<string>(getInitialLocale());
 export const currentLang = currentLocale;
 
 export async function setLocale(locale: string) {
-  if (!SUPPORTED_LANGUAGES.some(l => l.code === locale)) return;
+  let targetLocale = locale;
+  if (locale === 'auto') {
+    targetLocale = resolveAutoLocale();
+  }
 
-  if (!loadedDictionaries.value[locale]) {
-    const loader = localeLoaders[`./locales/${locale}.ts`];
+  if (!SUPPORTED_LANGUAGES.some(l => l.code === targetLocale)) {
+    targetLocale = DEFAULT_LOCALE;
+  }
+
+  if (!loadedDictionaries.value[targetLocale]) {
+    const loader = localeLoaders[`./locales/${targetLocale}.ts`];
     if (loader) {
       try {
         const mod = await loader();
         const exportKey = Object.keys(mod).find(k => k !== 'default') || Object.keys(mod)[0];
         if (exportKey && mod[exportKey]) {
-          loadedDictionaries.value[locale] = mod[exportKey];
+          loadedDictionaries.value[targetLocale] = mod[exportKey];
         }
       } catch (e) {
-        console.error(`Failed to load locale chunk for ${locale}:`, e);
+        console.error(`Failed to load locale chunk for ${targetLocale}:`, e);
       }
     }
   }
 
-  currentLocale.value = locale;
+  currentLocale.value = targetLocale;
   localStorage.setItem('unigo_locale', locale);
   updateDocumentDir();
 }
@@ -121,15 +132,17 @@ if (initLoc !== 'zh-CN' && initLoc !== 'en-US') {
 }
 
 export const isRtl = computed(() => {
-  return ['ar-SA', 'he-IL', 'fa-IR', 'ur-PK'].includes(currentLocale.value);
+  const lang = currentLocale.value.toLowerCase();
+  return ['ar-sa', 'he-il', 'fa-ir', 'ur-pk'].includes(lang) ||
+    lang.startsWith('ar') || lang.startsWith('he') || lang.startsWith('fa') || lang.startsWith('ur');
 });
 
 export function updateDocumentDir() {
   if (typeof document !== 'undefined') {
-    if (isRtl.value) {
-      document.documentElement.setAttribute('dir', 'rtl');
-    } else {
-      document.documentElement.removeAttribute('dir');
+    const dir = isRtl.value ? 'rtl' : 'ltr';
+    document.documentElement.setAttribute('dir', dir);
+    if (document.body) {
+      document.body.setAttribute('dir', dir);
     }
   }
 }

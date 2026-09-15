@@ -160,6 +160,36 @@ body {
   border-color: var(--accent-cyan);
 }
 
+/* Left-to-Right (LTR) Layout Explicit Reset */
+html[dir="ltr"],
+[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
+html[dir="ltr"] input,
+html[dir="ltr"] select,
+html[dir="ltr"] textarea {
+  text-align: left;
+}
+
+html[dir="ltr"] .header-brand,
+html[dir="ltr"] .section-header-row,
+html[dir="ltr"] .iso-card-header,
+html[dir="ltr"] .modal-header,
+html[dir="ltr"] .sync-status,
+html[dir="ltr"] .tab-group,
+html[dir="ltr"] .protocol-radio-bar,
+html[dir="ltr"] .radio-group {
+  flex-direction: row;
+}
+
+html[dir="ltr"] .dropdown-caret,
+html[dir="ltr"] .opt-check {
+  margin-left: auto;
+  margin-right: 0;
+}
+
 /* Right-to-Left (RTL) Layout Adaptations for Arabic (ar-SA) */
 html[dir="rtl"],
 [dir="rtl"] {
