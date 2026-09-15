@@ -18,6 +18,7 @@ export namespace config {
 	    ventoyReserveSpace: number;
 	    ventoyWin11Bypass: boolean;
 	    ventoyMenuTimeout: number;
+	    autoEjectAfterDeploy: boolean;
 	
 	    static createFrom(source: any = {}) {
 	        return new AppConfig(source);
@@ -42,6 +43,7 @@ export namespace config {
 	        this.ventoyReserveSpace = source["ventoyReserveSpace"];
 	        this.ventoyWin11Bypass = source["ventoyWin11Bypass"];
 	        this.ventoyMenuTimeout = source["ventoyMenuTimeout"];
+	        this.autoEjectAfterDeploy = source["autoEjectAfterDeploy"];
 	    }
 	}
 
