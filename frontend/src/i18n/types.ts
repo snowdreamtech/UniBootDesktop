@@ -137,6 +137,9 @@ export interface TranslationDict {
   "deploy.result_batch_success": string;
   "deploy.result_success": string;
   "deploy.alert_success": string;
+  "deploy.safely_eject_btn": string;
+  "deploy.success_banner_title": string;
+  "deploy.success_banner_desc": string;
   "deploy.toast_auto_ejected": string;
   "deploy.alert_fail": string;
   "qemu.title": string;
