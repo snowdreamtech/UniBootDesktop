@@ -140,6 +140,7 @@ export const arSa: TranslationDict = {
   "deploy.result_batch_success": "تم بنجاح نشر قرص التثبيت السحابي في 1 ثانية على {count} محرك أقرص USB!",
   "deploy.result_success": "تم بنجاح نشر النمط {mode} على {targets}",
   "deploy.alert_success": "🎉 نجح النشر!",
+  "deploy.toast_auto_ejected": "🎉 Creation complete! Automatically safely ejected {count} USB drive(s). All data flushed; safe to remove.",
   "deploy.alert_fail": "❌ فشل النشر:",
   "qemu.title": "اختبار محاكاة إقلاع QEMU",
   "qemu.installed": "تم اكتشاف QEMU",

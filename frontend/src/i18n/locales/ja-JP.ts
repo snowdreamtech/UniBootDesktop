@@ -140,6 +140,7 @@ export const jaJp: TranslationDict = {
   "deploy.result_batch_success": "{count} 個の USB ドライブに 1秒クラウドディスクを一括展開しました！",
   "deploy.result_success": "Mode {mode} を {targets} に正常に展開しました",
   "deploy.alert_success": "🎉 展開成功！",
+  "deploy.toast_auto_ejected": "🎉 Creation complete! Automatically safely ejected {count} USB drive(s). All data flushed; safe to remove.",
   "deploy.alert_fail": "❌ 展開失敗：",
   "qemu.title": "QEMU ブートシミュレーションテスト",
   "qemu.installed": "QEMU 検出済み",

@@ -1122,7 +1122,25 @@ async function startDeployment() {
     setTimeout(async () => {
       isDeploying.value = false;
       deployProgress.value = 0;
+
+      // Auto safely eject all created USB drives to flush OS write buffers & ensure complete data persistence
+      let autoEjectedCount = 0;
+      for (const dev of targets) {
+        try {
+          if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
+            await window.go.main.App.EjectDisk(dev);
+            autoEjectedCount++;
+          }
+        } catch (ejectErr) {
+          console.warn(`Auto eject failed for ${dev}:`, ejectErr);
+        }
+      }
+
       await refreshDisks();
+
+      if (autoEjectedCount > 0) {
+        showToast(t('deploy.toast_auto_ejected', { count: autoEjectedCount }), 'success');
+      }
       alert(t('deploy.alert_success', { msg: resultMsg }));
     }, 200);
   } else {

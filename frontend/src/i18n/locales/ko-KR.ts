@@ -140,6 +140,7 @@ export const koKr: TranslationDict = {
   "deploy.result_batch_success": "{count}개의 USB 드라이브에 1초 클라우드 디스크 일괄 배포 완료!",
   "deploy.result_success": "Mode {mode}을(를) {targets}에 성공적으로 배포했습니다",
   "deploy.alert_success": "🎉 배포 성공!",
+  "deploy.toast_auto_ejected": "🎉 Creation complete! Automatically safely ejected {count} USB drive(s). All data flushed; safe to remove.",
   "deploy.alert_fail": "❌ 배포 실패:",
   "qemu.title": "QEMU 부팅 시뮬레이션 테스트",
   "qemu.installed": "QEMU 감지됨",

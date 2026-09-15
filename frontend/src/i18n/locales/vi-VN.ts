@@ -140,6 +140,7 @@ export const viVn: TranslationDict = {
   "deploy.result_batch_success": "Đã triển khai thành công Ổ đĩa đám mây 1 giây tới {count} ổ USB!",
   "deploy.result_success": "Đã triển khai thành công Chế độ {mode} tới {targets}",
   "deploy.alert_success": "🎉 Triển khai thành công!",
+  "deploy.toast_auto_ejected": "🎉 Creation complete! Automatically safely ejected {count} USB drive(s). All data flushed; safe to remove.",
   "deploy.alert_fail": "❌ Triển khai thất bại:",
   "qemu.title": "Kiểm tra mô phỏng khởi động QEMU",
   "qemu.installed": "Đã tìm thấy QEMU",

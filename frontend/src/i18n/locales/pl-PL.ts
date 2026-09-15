@@ -140,6 +140,7 @@ export const plPl: TranslationDict = {
   "deploy.result_batch_success": "Pomyślnie wdrożono Dysk Chmurowy w 1 Sek na {count} napędach USB!",
   "deploy.result_success": "Pomyślnie wdrożono Tryb {mode} na {targets}",
   "deploy.alert_success": "🎉 Wdrożenie zakończone sukcesem!",
+  "deploy.toast_auto_ejected": "🎉 Creation complete! Automatically safely ejected {count} USB drive(s). All data flushed; safe to remove.",
   "deploy.alert_fail": "❌ Wdrożenie nie powiodło się:",
   "qemu.title": "Test symulacji rozruchu QEMU",
   "qemu.installed": "Wykryto QEMU",

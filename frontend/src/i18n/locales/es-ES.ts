@@ -140,6 +140,7 @@ export const esEs: TranslationDict = {
   "deploy.result_batch_success": "¡Disco Cloud 1 seg desplegado con éxito en {count} unidades USB!",
   "deploy.result_success": "Mode {mode} desplegado con éxito en {targets}",
   "deploy.alert_success": "🎉 ¡Despliegue exitoso!",
+  "deploy.toast_auto_ejected": "🎉 Creation complete! Automatically safely ejected {count} USB drive(s). All data flushed; safe to remove.",
   "deploy.alert_fail": "❌ Despliegue fallido:",
   "qemu.title": "Prueba de simulación de arranque QEMU",
   "qemu.installed": "QEMU detectado",

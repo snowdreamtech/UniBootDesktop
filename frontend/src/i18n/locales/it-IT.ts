@@ -140,6 +140,7 @@ export const itIt: TranslationDict = {
   "deploy.result_batch_success": "Disco Cloud in 1 Sec distribuito con successo su {count} unità USB!",
   "deploy.result_success": "Modalità {mode} distribuita con successo su {targets}",
   "deploy.alert_success": "🎉 Distribuzione riuscita!",
+  "deploy.toast_auto_ejected": "🎉 Creation complete! Automatically safely ejected {count} USB drive(s). All data flushed; safe to remove.",
   "deploy.alert_fail": "❌ Distribuzione fallita:",
   "qemu.title": "Test di Simulazione di Avvio QEMU",
   "qemu.installed": "QEMU Rilevato",

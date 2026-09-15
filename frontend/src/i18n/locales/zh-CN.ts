@@ -140,6 +140,7 @@ export const zhCn: TranslationDict = {
   "deploy.result_batch_success": "成功批量部署 1 秒极速云引导盘到 {count} 个 U 盘！",
   "deploy.result_success": "成功部署模式 {mode} 到 {targets}",
   "deploy.alert_success": "🎉 部署成功！",
+  "deploy.toast_auto_ejected": "🎉 制作完成！已自动安全弹出 {count} 个 U 盘，所有数据已完全落盘，可放心拔出。",
   "deploy.alert_fail": "❌ 部署失败：",
   "qemu.title": "QEMU 引导模拟测试",
   "qemu.installed": "已检测到 QEMU",

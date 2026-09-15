@@ -140,6 +140,7 @@ export const deDe: TranslationDict = {
   "deploy.result_batch_success": "1-Sek. Cloud Disk erfolgreich auf {count} USB-Laufwerken bereitgestellt!",
   "deploy.result_success": "Mode {mode} erfolgreich auf {targets} bereitgestellt",
   "deploy.alert_success": "🎉 Bereitstellung erfolgreich!",
+  "deploy.toast_auto_ejected": "🎉 Creation complete! Automatically safely ejected {count} USB drive(s). All data flushed; safe to remove.",
   "deploy.alert_fail": "❌ Bereitstellung fehlgeschlagen:",
   "qemu.title": "QEMU-Boot-Simulationstest",
   "qemu.installed": "QEMU erkannt",

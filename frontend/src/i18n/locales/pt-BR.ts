@@ -140,6 +140,7 @@ export const ptBr: TranslationDict = {
   "deploy.result_batch_success": "Disco Nuvem em 1 Seg implantado com sucesso em {count} unidades USB!",
   "deploy.result_success": "Modo {mode} implantado com sucesso em {targets}",
   "deploy.alert_success": "🎉 Implantação com sucesso!",
+  "deploy.toast_auto_ejected": "🎉 Creation complete! Automatically safely ejected {count} USB drive(s). All data flushed; safe to remove.",
   "deploy.alert_fail": "❌ Falha na implantação:",
   "qemu.title": "Teste de Simulação de Boot QEMU",
   "qemu.installed": "QEMU Detectado",

@@ -140,6 +140,7 @@ export const trTr: TranslationDict = {
   "deploy.result_batch_success": "1 Saniyede Bulut Diski {count} USB sürücüsüne başarıyla dağıtıldı!",
   "deploy.result_success": "Mod {mode}, {targets} üzerine başarıyla dağıtıldı",
   "deploy.alert_success": "🎉 Dağıtım Başarılı!",
+  "deploy.toast_auto_ejected": "🎉 Creation complete! Automatically safely ejected {count} USB drive(s). All data flushed; safe to remove.",
   "deploy.alert_fail": "❌ Dağıtım Başarısız:",
   "qemu.title": "QEMU Önyükleme Simülasyon Testi",
   "qemu.installed": "QEMU Algılandı",

@@ -140,6 +140,7 @@ export const zhTw: TranslationDict = {
   "deploy.result_batch_success": "成功批量部署 1 秒極速雲引導碟到 {count} 個 U 碟！",
   "deploy.result_success": "成功部署模式 {mode} 到 {targets}",
   "deploy.alert_success": "🎉 部署成功！",
+  "deploy.toast_auto_ejected": "🎉 製作完成！已自動安全彈出 {count} 個隨身碟，所有資料已完全落盤，可放心拔出。",
   "deploy.alert_fail": "❌ 部署失敗：",
   "qemu.title": "QEMU 引導模擬測試",
   "qemu.installed": "已檢測到 QEMU",

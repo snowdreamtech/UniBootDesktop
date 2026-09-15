@@ -140,6 +140,7 @@ export const ruRu: TranslationDict = {
   "deploy.result_batch_success": "Облачный диск за 1 сек успешно развернут на {count} USB-накопителях!",
   "deploy.result_success": "Mode {mode} успешно развернут на {targets}",
   "deploy.alert_success": "🎉 Развертывание успешно!",
+  "deploy.toast_auto_ejected": "🎉 Creation complete! Automatically safely ejected {count} USB drive(s). All data flushed; safe to remove.",
   "deploy.alert_fail": "❌ Ошибка развертывания:",
   "qemu.title": "Тестирование эмуляции загрузки QEMU",
   "qemu.installed": "QEMU обнаружен",
