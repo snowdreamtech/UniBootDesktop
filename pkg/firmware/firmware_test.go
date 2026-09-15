@@ -7,8 +7,11 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"sync"
 	"testing"
 )
+
+var envMutex sync.Mutex
 
 func TestStandardFirmwareMappings(t *testing.T) {
 	mappings := GetFirmwareMappings()
@@ -72,8 +75,15 @@ func TestTargetPathForReleaseAsset(t *testing.T) {
 }
 
 func TestExtractFirmwareToDir(t *testing.T) {
-	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", filepath.Join(t.TempDir(), "empty_data"))
-	tmpDir := t.TempDir()
+	envMutex.Lock()
+	defer envMutex.Unlock()
+	baseDir := t.TempDir()
+	dataDir := filepath.Join(baseDir, "data")
+	_ = os.MkdirAll(dataDir, 0755)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", dataDir)
+
+	tmpDir := filepath.Join(baseDir, "dest")
+	_ = os.MkdirAll(tmpDir, 0755)
 
 	err := ExtractFirmwareToDir(tmpDir)
 	if err != nil {
@@ -104,8 +114,16 @@ func TestExtractFirmwareToDir(t *testing.T) {
 }
 
 func TestExtractFirmwareModeA(t *testing.T) {
-	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", filepath.Join(t.TempDir(), "empty_data"))
-	tmpDir := t.TempDir()
+	envMutex.Lock()
+	defer envMutex.Unlock()
+	baseDir := t.TempDir()
+	dataDir := filepath.Join(baseDir, "data")
+	_ = os.MkdirAll(dataDir, 0755)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", dataDir)
+
+	tmpDir := filepath.Join(baseDir, "dest")
+	_ = os.MkdirAll(tmpDir, 0755)
+
 	if err := ExtractFirmwareModeA(tmpDir); err != nil {
 		t.Fatalf("ExtractFirmwareModeA failed: %v", err)
 	}
@@ -126,8 +144,16 @@ func TestExtractFirmwareModeA(t *testing.T) {
 }
 
 func TestExtractFirmwareModeB(t *testing.T) {
-	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", filepath.Join(t.TempDir(), "empty_data"))
-	tmpDir := t.TempDir()
+	envMutex.Lock()
+	defer envMutex.Unlock()
+	baseDir := t.TempDir()
+	dataDir := filepath.Join(baseDir, "data")
+	_ = os.MkdirAll(dataDir, 0755)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", dataDir)
+
+	tmpDir := filepath.Join(baseDir, "dest")
+	_ = os.MkdirAll(tmpDir, 0755)
+
 	if err := ExtractFirmwareModeB(tmpDir); err != nil {
 		t.Fatalf("ExtractFirmwareModeB failed: %v", err)
 	}
@@ -155,6 +181,8 @@ func TestExtractFirmwareModeB(t *testing.T) {
 }
 
 func TestGetFirmwareData_Priority(t *testing.T) {
+	envMutex.Lock()
+	defer envMutex.Unlock()
 	// Test embedded fallback default
 	data, src, err := GetFirmwareData("boot.ipxe")
 	if err != nil {

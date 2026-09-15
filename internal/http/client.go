@@ -4,6 +4,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"time"
@@ -11,6 +12,7 @@ import (
 	"golang.org/x/net/http/httpproxy"
 
 	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unigodesktop/pkg/config"
 )
 
 // ClientConfig provides HTTP client configurations.
@@ -28,9 +30,8 @@ var MockTransport http.RoundTripper
 //     are forced to use DIRECT connections, preventing local proxy software from
 //     returning "Bad Request" errors when routing Chinese CDN traffic.
 //
-//  2. UNIRTM_/MISE_ env prefix support: reads HTTP_PROXY/HTTPS_PROXY/ALL_PROXY
-//     through env.Get(), which resolves UNIRTM_HTTP_PROXY and MISE_HTTP_PROXY
-//     in addition to the standard names that http.ProxyFromEnvironment covers.
+//  2. UNIRTM_/MISE_ env prefix & AppConfig GUI proxy support: reads HTTP_PROXY/HTTPS_PROXY/ALL_PROXY
+//     through env.Get(), and falls back to user AppConfig (ProxyProtocol, ProxyHost, ProxyPort) settings.
 //
 // All other settings (connection pool, timeouts) are inherited from Go's
 // http.DefaultTransport via Clone(), so they stay in sync with upstream defaults.
@@ -43,11 +44,7 @@ func DefaultTransport() *http.Transport {
 		trans = &http.Transport{}
 	}
 
-	// 1. Smart proxy bypass + UNIRTM_/MISE_ env prefix support + NO_PROXY + ALL_PROXY
-	//
-	// Proxy config is resolved ONCE at transport creation time (not per request).
-	// httpproxy.Config is used to correctly enforce NO_PROXY rules alongside
-	// UNIRTM_/MISE_ prefixed proxy variables.
+	// 1. Smart proxy bypass + UNIRTM_/MISE_ env prefix & AppConfig GUI proxy support
 	httpProxy := env.Get("HTTP_PROXY")
 	httpsProxy := env.Get("HTTPS_PROXY")
 	if allProxy := env.Get("ALL_PROXY"); allProxy != "" {
@@ -58,10 +55,32 @@ func DefaultTransport() *http.Transport {
 			httpsProxy = allProxy
 		}
 	}
+
+	// Fallback to GUI settings in config if env vars are empty
+	if httpProxy == "" && httpsProxy == "" {
+		if cfg, err := config.Load(); err == nil && cfg != nil {
+			if cfg.ProxyProtocol != "" && cfg.ProxyProtocol != "direct" && cfg.ProxyHost != "" && cfg.ProxyPort > 0 {
+				var proxyURLStr string
+				if cfg.ProxyUser != "" {
+					proxyURLStr = fmt.Sprintf("%s://%s:%s@%s:%d", cfg.ProxyProtocol, url.QueryEscape(cfg.ProxyUser), url.QueryEscape(cfg.ProxyPassword), cfg.ProxyHost, cfg.ProxyPort)
+				} else {
+					proxyURLStr = fmt.Sprintf("%s://%s:%d", cfg.ProxyProtocol, cfg.ProxyHost, cfg.ProxyPort)
+				}
+				httpProxy = proxyURLStr
+				httpsProxy = proxyURLStr
+			}
+		}
+	}
+
+	noProxy := env.Get("NO_PROXY")
+	if noProxy == "" {
+		noProxy = "localhost,127.0.0.1,::1"
+	}
+
 	proxyFunc := (&httpproxy.Config{
 		HTTPProxy:  httpProxy,
 		HTTPSProxy: httpsProxy,
-		NoProxy:    env.Get("NO_PROXY"),
+		NoProxy:    noProxy,
 	}).ProxyFunc()
 
 	trans.Proxy = func(req *http.Request) (*url.URL, error) {

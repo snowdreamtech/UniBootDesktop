@@ -123,7 +123,7 @@ func FetchLatestReleaseInfo(ctx context.Context) (*ReleaseInfo, error) {
 
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 
-	// Uses internal/http transport which respects HTTP_PROXY/HTTPS_PROXY/UNIRTM_HTTP_PROXY/NO_PROXY env vars and bypasses Chinese mirrors
+	// Uses internal/http transport which respects HTTP_PROXY/HTTPS_PROXY/UNIRTM_HTTP_PROXY/NO_PROXY env vars & GUI AppConfig proxy server settings
 	client := pkgHttp.NewClient()
 
 	var resp *http.Response
