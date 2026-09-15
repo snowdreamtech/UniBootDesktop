@@ -118,6 +118,9 @@
           <div v-if="selectionMode === 'batch'" class="batch-actions">
             <button class="btn-text" @click="selectAllDisks">{{ t('disk.select_all') }}</button>
             <button class="btn-text" @click="deselectAllDisks">{{ t('disk.clear_select') }}</button>
+            <button class="btn-text btn-batch-eject" :disabled="selectedDevices.size === 0" @click="handleBatchEjectDisks">
+              ⏏️ {{ t('disk.batch_eject') }}
+            </button>
             <span class="selection-count">{{ t('disk.selected_count', { count: selectedDevices.size, total: diskList.length }) }}</span>
           </div>
         </div>
@@ -771,6 +774,34 @@ async function handleEjectDisk(disk: DiskInfo) {
   }
 }
 
+async function handleBatchEjectDisks() {
+  const targets = Array.from(selectedDevices.value);
+  if (targets.length === 0) return;
+
+  let successCount = 0;
+  let failCount = 0;
+
+  for (const device of targets) {
+    try {
+      if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
+        await window.go.main.App.EjectDisk(device);
+      }
+      successCount++;
+      selectedDevices.value.delete(device);
+    } catch (err) {
+      failCount++;
+    }
+  }
+
+  if (failCount === 0) {
+    showToast(t('disk.toast_batch_eject_success', { count: successCount }), 'success');
+  } else {
+    showToast(t('disk.toast_batch_eject_partial', { successCount, failCount }), 'warning');
+  }
+
+  await refreshDisks();
+}
+
 function openIconPicker(disk: DiskInfo) {
   targetPickerDisk.value = disk;
   isPickerOpen.value = true;
@@ -1414,6 +1445,21 @@ h1 {
   font-size: 0.8rem;
   padding: 0.1rem 0.4rem;
   border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-text:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: transparent !important;
+}
+
+.btn-batch-eject {
+  color: #ef4444;
+}
+
+.btn-batch-eject:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.15);
 }
 
 .btn-text:hover {

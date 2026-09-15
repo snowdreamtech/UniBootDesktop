@@ -57,6 +57,7 @@ declare global {
           GetUniBootReleaseInfo(): Promise<any>;
           SyncUniBootFirmware(): Promise<any>;
           ValidateVentoyCli(ventoyPath: string): Promise<any>;
+          EjectDisk(targetDisk: string): Promise<void>;
         };
       };
     };

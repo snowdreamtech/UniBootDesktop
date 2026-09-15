@@ -86,8 +86,11 @@ export interface TranslationDict {
   "disk.hw_inspect": string;
   "disk.details": string;
   "disk.eject": string;
+  "disk.batch_eject": string;
   "disk.toast_ejected_success": string;
   "disk.toast_ejected_failed": string;
+  "disk.toast_batch_eject_success": string;
+  "disk.toast_batch_eject_partial": string;
   "disk.tag_boot": string;
   "disk.tag_ssd": string;
   "disk.tag_typec": string;
