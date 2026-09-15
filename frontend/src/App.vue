@@ -523,6 +523,7 @@ const currentGithubProxy = ref('');
 const pendingTargets = ref<string[]>([]);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
+const autoEjectAfterDeploy = ref(false);
 const qemuStatus = ref({ installed: false, path: '', version: '' });
 const isLaunchingQemu = ref(false);
 const ventoyStatus = ref({ valid: true, version: '', message: '', executablePath: '' });
@@ -653,6 +654,7 @@ async function loadConfig() {
         if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
         if (cfg.language) setLanguage(cfg.language);
         applyTheme(cfg.theme);
+        autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
       }
     } catch (e) {
       console.error('Failed to load config:', e);
@@ -671,6 +673,7 @@ async function onSaveSettings(payload: any) {
     if (payload.fileSystem) selectedFsType.value = payload.fileSystem as any;
     if (payload.mode) activeMode.value = payload.mode as any;
     if (payload.theme) applyTheme(payload.theme);
+    if (typeof payload.autoEjectAfterDeploy === 'boolean') autoEjectAfterDeploy.value = payload.autoEjectAfterDeploy;
   }
 
   if (window.go && window.go.main && window.go.main.App) {
@@ -693,6 +696,7 @@ async function onSaveSettings(payload: any) {
         ventoyReserveSpace: Number(payload.ventoyReserveSpace) || 0,
         ventoyWin11Bypass: payload.ventoyWin11Bypass === true,
         ventoyMenuTimeout: Number(payload.ventoyMenuTimeout) || 0,
+        autoEjectAfterDeploy: payload.autoEjectAfterDeploy === true,
       } : {
         mode: activeMode.value,
         autoCheckUpdate: true,
@@ -1123,16 +1127,18 @@ async function startDeployment() {
       isDeploying.value = false;
       deployProgress.value = 0;
 
-      // Auto safely eject all created USB drives to flush OS write buffers & ensure complete data persistence
+      // Auto safely eject all created USB drives — only if user has enabled this setting
       let autoEjectedCount = 0;
-      for (const dev of targets) {
-        try {
-          if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
-            await window.go.main.App.EjectDisk(dev);
-            autoEjectedCount++;
+      if (autoEjectAfterDeploy.value) {
+        for (const dev of targets) {
+          try {
+            if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
+              await window.go.main.App.EjectDisk(dev);
+              autoEjectedCount++;
+            }
+          } catch (ejectErr) {
+            console.warn(`Auto eject failed for ${dev}:`, ejectErr);
           }
-        } catch (ejectErr) {
-          console.warn(`Auto eject failed for ${dev}:`, ejectErr);
         }
       }
 

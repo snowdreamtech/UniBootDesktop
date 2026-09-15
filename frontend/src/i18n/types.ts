@@ -167,6 +167,9 @@ export interface TranslationDict {
   "settings.app_update": string;
   "settings.update_auto": string;
   "settings.update_manual": string;
+  "settings.auto_eject_after_deploy": string;
+  "settings.auto_eject_enabled": string;
+  "settings.auto_eject_disabled": string;
   "settings.github_proxy": string;
   "settings.proxy_placeholder": string;
   "settings.test_net": string;

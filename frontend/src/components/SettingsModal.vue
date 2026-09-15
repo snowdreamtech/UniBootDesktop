@@ -97,6 +97,20 @@
               </div>
 
               <div class="form-group">
+                <label class="form-label">{{ t('settings.auto_eject_after_deploy') }}</label>
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input type="radio" :value="false" v-model="autoEjectAfterDeploy" @change="triggerAutoSave" />
+                    <span>{{ t('settings.auto_eject_disabled') }}</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" :value="true" v-model="autoEjectAfterDeploy" @change="triggerAutoSave" />
+                    <span>{{ t('settings.auto_eject_enabled') }}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
                 <label class="form-label">{{ t('settings.app_update') }}</label>
                 <div class="radio-group">
                   <label class="radio-label">
@@ -421,6 +435,7 @@ const emit = defineEmits<{
     mode: string;
     fileSystem: string;
     autoCheckUpdate: boolean;
+    autoEjectAfterDeploy: boolean;
     theme: string;
     language: string;
     ventoyPath: string;
@@ -449,6 +464,7 @@ watch(() => props.isOpen, (newVal) => {
 const defaultMode = ref('cloud');
 const defaultFs = ref('exFAT');
 const autoCheckUpdate = ref(true);
+const autoEjectAfterDeploy = ref(false);
 const appTheme = ref('dark');
 const appLanguage = ref('auto');
 
@@ -528,6 +544,7 @@ function triggerAutoSave() {
       mode: defaultMode.value,
       fileSystem: defaultFs.value,
       autoCheckUpdate: autoCheckUpdate.value,
+      autoEjectAfterDeploy: autoEjectAfterDeploy.value,
       theme: appTheme.value,
       language: appLanguage.value,
       ventoyPath: ventoyPath.value.trim(),
@@ -560,6 +577,7 @@ watch(
     defaultMode,
     defaultFs,
     autoCheckUpdate,
+    autoEjectAfterDeploy,
     appTheme,
     appLanguage,
     proxyInputUrl,
@@ -621,6 +639,7 @@ async function loadFullConfig() {
         defaultMode.value = cfg.mode || 'cloud';
         defaultFs.value = cfg.fileSystem || 'exFAT';
         autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
+        autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
         appTheme.value = cfg.theme || 'dark';
         appLanguage.value = cfg.language || 'auto';
         setLanguage(appLanguage.value);
