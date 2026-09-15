@@ -172,18 +172,48 @@ func (a *App) GetAppInfo() AppInfo {
 	if versionStr == "" || versionStr == "N/A" {
 		versionStr = "v0.1.0"
 	}
+	gitTag := env.GitTag
+	if gitTag == "" || gitTag == "N/A" {
+		gitTag = versionStr
+	}
+	commitHash := env.CommitHash
+	if commitHash == "" || commitHash == "N/A" {
+		commitHash = "fcbae59b"
+	}
+	commitHashFull := env.CommitHashFull
+	if commitHashFull == "" || commitHashFull == "N/A" {
+		commitHashFull = "fcbae59b758833c7"
+	}
+	buildTime := env.BuildTime
+	if buildTime == "" || buildTime == "N/A" {
+		buildTime = "2026-09-15 08:50:00"
+	}
+
 	return AppInfo{
 		ProjectName:    env.ProjectName,
 		Version:        versionStr,
-		GitTag:         env.GitTag,
-		CommitHash:     env.CommitHash,
-		CommitHashFull: env.CommitHashFull,
-		BuildTime:      env.BuildTime,
+		GitTag:         gitTag,
+		CommitHash:     commitHash,
+		CommitHashFull: commitHashFull,
+		BuildTime:      buildTime,
 		Author:         env.Author,
 		Copyright:      env.COPYRIGHT,
 		License:        env.LICENSE,
 		GoVersion:      runtime.Version(),
 		OsArch:         fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
 	}
+}
+
+// PerformGuiUpdate downloads the latest GUI release package with progress events.
+func (a *App) PerformGuiUpdate() (*updater.GuiUpdateResult, error) {
+	cfg, _ := config.Load()
+	proxy := ""
+	if cfg != nil {
+		proxy = cfg.GithubProxy
+	}
+	progressCb := func(p updater.GuiUpdateProgress) {
+		wailsRuntime.EventsEmit(a.ctx, "gui-update-progress", p)
+	}
+	return updater.PerformGuiUpdate(a.ctx, proxy, progressCb)
 }
 

@@ -26,6 +26,10 @@ export function DeployModeBBatch(arg1, arg2) {
   return window['go']['main']['App']['DeployModeBBatch'](arg1, arg2);
 }
 
+export function GetAppInfo() {
+  return window['go']['main']['App']['GetAppInfo']();
+}
+
 export function GetConfig() {
   return window['go']['main']['App']['GetConfig']();
 }
@@ -44,6 +48,10 @@ export function GetUniBootReleaseInfo() {
 
 export function LaunchQEMU(arg1) {
   return window['go']['main']['App']['LaunchQEMU'](arg1);
+}
+
+export function PerformGuiUpdate() {
+  return window['go']['main']['App']['PerformGuiUpdate']();
 }
 
 export function SaveConfig(arg1) {

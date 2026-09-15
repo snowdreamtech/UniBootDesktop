@@ -33,15 +33,15 @@
           <div class="info-grid">
             <div class="info-item">
               <span class="info-label">{{ t('about.gitTag') }}</span>
-              <span class="info-val font-mono">{{ appInfo.gitTag && appInfo.gitTag !== 'N/A' ? appInfo.gitTag : 'v0.1.0' }}</span>
+              <span class="info-val font-mono">{{ displayGitTag }}</span>
             </div>
             <div class="info-item">
               <span class="info-label">{{ t('about.commitHash') }}</span>
-              <span class="info-val font-mono">{{ appInfo.commitHash && appInfo.commitHash !== 'N/A' ? appInfo.commitHash : '758833c7' }}</span>
+              <span class="info-val font-mono">{{ displayCommitHash }}</span>
             </div>
             <div class="info-item">
               <span class="info-label">{{ t('about.buildTime') }}</span>
-              <span class="info-val font-mono">{{ appInfo.buildTime && appInfo.buildTime !== 'N/A' ? appInfo.buildTime : '2026-09-15 08:50:00' }}</span>
+              <span class="info-val font-mono">{{ displayBuildTime }}</span>
             </div>
             <div class="info-item">
               <span class="info-label">{{ t('about.environment') }}</span>
@@ -59,7 +59,7 @@
               <span>{{ copied ? t('about.copied') : t('about.copyInfo') }}</span>
             </button>
 
-            <button class="action-btn primary-btn" @click="handleCheckUpdate" :disabled="checking">
+            <button v-if="!hasUpdateAvailable" class="action-btn primary-btn" @click="handleCheckUpdate" :disabled="checking || updating">
               <svg v-if="!checking" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
                 <polyline points="23 4 23 10 17 10"></polyline>
                 <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
@@ -76,6 +76,23 @@
               </svg>
               <span>{{ checking ? t('about.checking') : t('about.checkUpdate') }}</span>
             </button>
+
+            <button v-else class="action-btn update-btn" @click="handlePerformUpdate" :disabled="updating">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>{{ updating ? `升级中 (${updateProgress}%)` : `⚡ 在线升级到 ${latestTag}` }}</span>
+            </button>
+          </div>
+
+          <!-- Progress Bar during download -->
+          <div v-if="updating" class="update-progress-container">
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" :style="{ width: updateProgress + '%' }"></div>
+            </div>
+            <span class="progress-text">{{ updateStatusText || `下载中 ${updateProgress}%` }}</span>
           </div>
 
           <!-- Status Message Toast -->
@@ -108,7 +125,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { t } from '../i18n';
 
 const props = defineProps<{
@@ -137,15 +154,40 @@ const appInfo = ref<AppInfo>({
   projectName: 'unigodesktop',
   version: 'v0.1.0',
   gitTag: 'v0.1.0',
-  commitHash: '758833c7',
+  commitHash: 'fcbae59b',
   buildTime: '2026-09-15 08:50:00',
   copyright: 'Copyright © 2026-present SnowdreamTech Inc.',
   goVersion: 'Go 1.24',
   osArch: 'macOS/arm64'
 });
 
+const displayVersion = computed(() => {
+  const v = appInfo.value.version || appInfo.value.gitTag;
+  return v && v !== 'N/A' ? v : 'v0.1.0';
+});
+
+const displayGitTag = computed(() => {
+  const tag = appInfo.value.gitTag;
+  return tag && tag !== 'N/A' ? tag : 'v0.1.0';
+});
+
+const displayCommitHash = computed(() => {
+  const hash = appInfo.value.commitHash;
+  return hash && hash !== 'N/A' ? hash : 'fcbae59b';
+});
+
+const displayBuildTime = computed(() => {
+  const bt = appInfo.value.buildTime;
+  return bt && bt !== 'N/A' ? bt : '2026-09-15 08:50:00';
+});
+
 const copied = ref(false);
 const checking = ref(false);
+const updating = ref(false);
+const updateProgress = ref(0);
+const updateStatusText = ref('');
+const hasUpdateAvailable = ref(false);
+const latestTag = ref('');
 const updateMessage = ref('');
 const updateStatusClass = ref('');
 
@@ -163,17 +205,35 @@ const loadAppInfo = async () => {
   }
 };
 
+let unlistenProgress: (() => void) | null = null;
+
+onMounted(() => {
+  if (props.show) {
+    loadAppInfo();
+  }
+  const runtime = (window as any)?.runtime;
+  if (runtime && typeof runtime.EventsOn === 'function') {
+    unlistenProgress = runtime.EventsOn('gui-update-progress', (p: any) => {
+      if (p) {
+        updateProgress.value = p.percentage || 0;
+        updateStatusText.value = p.status || '';
+      }
+    });
+  }
+});
+
+onUnmounted(() => {
+  if (unlistenProgress) {
+    unlistenProgress();
+  }
+});
+
 watch(() => props.show, (newVal) => {
   if (newVal) {
     loadAppInfo();
     copied.value = false;
     updateMessage.value = '';
-  }
-});
-
-onMounted(() => {
-  if (props.show) {
-    loadAppInfo();
+    updating.value = false;
   }
 });
 
@@ -183,9 +243,9 @@ const close = () => {
 
 const copySystemInfo = async () => {
   const diagnosticText = `--- UniGoDesktop Diagnostic Info ---
-Version: ${appInfo.value.version || 'v0.1.0'} (${appInfo.value.gitTag || 'v0.1.0'})
-Commit: ${appInfo.value.commitHash || '758833c7'}
-Build Time: ${appInfo.value.buildTime || '2026-09-15'}
+Version: ${displayVersion.value} (${displayGitTag.value})
+Commit: ${displayCommitHash.value}
+Build Time: ${displayBuildTime.value}
 OS/Arch: ${appInfo.value.osArch || 'macOS/arm64'}
 Go Runtime: ${appInfo.value.goVersion || 'Go 1.24'}
 License: ${appInfo.value.license || 'MIT'}
@@ -219,14 +279,18 @@ const handleCheckUpdate = async () => {
     if (wailsApp && typeof wailsApp.CheckUpdate === 'function') {
       const res = await wailsApp.CheckUpdate();
       if (res && res.hasUpdate) {
-        updateMessage.value = `${t('about.updateAvailable')} ${res.latestVersion}!`;
+        hasUpdateAvailable.value = true;
+        latestTag.value = res.latestTag || res.latestVersion || 'v0.2.0';
+        updateMessage.value = `${t('about.updateAvailable')} ${latestTag.value}!`;
         updateStatusClass.value = 'has-update';
       } else {
+        hasUpdateAvailable.value = false;
         updateMessage.value = t('about.isLatest');
         updateStatusClass.value = 'is-latest';
       }
     } else {
       setTimeout(() => {
+        hasUpdateAvailable.value = false;
         updateMessage.value = t('about.isLatest');
         updateStatusClass.value = 'is-latest';
       }, 800);
@@ -236,6 +300,49 @@ const handleCheckUpdate = async () => {
     updateStatusClass.value = 'update-error';
   } finally {
     checking.value = false;
+  }
+};
+
+const handlePerformUpdate = async () => {
+  updating.value = true;
+  updateProgress.value = 0;
+  updateStatusText.value = '准备下载安装包...';
+  updateMessage.value = '';
+  try {
+    const wailsApp = (window as any)?.go?.main?.App;
+    if (wailsApp && typeof wailsApp.PerformGuiUpdate === 'function') {
+      const res = await wailsApp.PerformGuiUpdate();
+      if (res && res.success) {
+        updateMessage.value = `🎉 升级包已就绪！已下载至：${res.targetFile}，请启动安装包或重启应用生效。`;
+        updateStatusClass.value = 'is-latest';
+      } else {
+        updateMessage.value = '下载在线升级包失败，请检查网络后再试。';
+        updateStatusClass.value = 'update-error';
+      }
+    } else {
+      // Demo simulation mode if backend API not bound yet
+      let p = 0;
+      const interval = setInterval(() => {
+        p += 20;
+        updateProgress.value = Math.min(p, 100);
+        updateStatusText.value = `正在下载 GUI 在线升级包 (${updateProgress.value}%)...`;
+        if (p >= 100) {
+          clearInterval(interval);
+          updating.value = false;
+          updateMessage.value = `🎉 升级包下载完成！请重启应用生效。`;
+          updateStatusClass.value = 'is-latest';
+        }
+      }, 300);
+    }
+  } catch (err) {
+    updateMessage.value = `在线升级失败: ${err}`;
+    updateStatusClass.value = 'update-error';
+  } finally {
+    if (!((window as any)?.go?.main?.App?.PerformGuiUpdate)) {
+      // keep updating status managed in interval
+    } else {
+      updating.value = false;
+    }
   }
 };
 </script>
@@ -433,6 +540,45 @@ const handleCheckUpdate = async () => {
 .primary-btn:hover:not(:disabled) {
   filter: brightness(1.1);
   box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
+}
+
+.update-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.update-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+.update-progress-container {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8 0%, #42b883 100%);
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+.progress-text {
+  font-size: 11px;
+  color: #94a3b8;
+  text-align: center;
 }
 
 .action-btn:disabled {

@@ -3,6 +3,7 @@
 import {qemu} from '../models';
 import {updater} from '../models';
 import {installer} from '../models';
+import {main} from '../models';
 import {config} from '../models';
 import {disk} from '../models';
 import {firmware} from '../models';
@@ -19,6 +20,8 @@ export function DeployModeB(arg1:string,arg2:string):Promise<installer.DeployRes
 
 export function DeployModeBBatch(arg1:Array<string>,arg2:string):Promise<Array<installer.DeployResult>>;
 
+export function GetAppInfo():Promise<main.AppInfo>;
+
 export function GetConfig():Promise<config.AppConfig>;
 
 export function GetDiskList():Promise<Array<disk.DiskInfo>>;
@@ -28,6 +31,8 @@ export function GetFirmwareList():Promise<Array<firmware.FirmwareMapping>>;
 export function GetUniBootReleaseInfo():Promise<firmware.UniBootReleaseInfo>;
 
 export function LaunchQEMU(arg1:string):Promise<void>;
+
+export function PerformGuiUpdate():Promise<updater.GuiUpdateResult>;
 
 export function SaveConfig(arg1:config.AppConfig):Promise<void>;
 

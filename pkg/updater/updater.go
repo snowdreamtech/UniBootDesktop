@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
@@ -153,6 +154,160 @@ func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, 
 	}
 
 	return fmt.Errorf("download failed (%s): %w", rawURL, lastErr)
+}
+
+// GuiUpdateProgress represents realtime download progress for GUI updates.
+type GuiUpdateProgress struct {
+	Percentage  int    `json:"percentage"`
+	Transferred int64  `json:"transferred"`
+	Total       int64  `json:"total"`
+	Status      string `json:"status"`
+	TargetFile  string `json:"targetFile"`
+}
+
+// GuiUpdateResult represents the GUI update operation outcome.
+type GuiUpdateResult struct {
+	Success        bool   `json:"success"`
+	Message        string `json:"message"`
+	TargetFile     string `json:"targetFile"`
+	RequireRestart bool   `json:"requireRestart"`
+}
+
+type progressWriter struct {
+	total       int64
+	transferred int64
+	onProgress  func(transferred int64, total int64)
+}
+
+func (pw *progressWriter) Write(p []byte) (int, error) {
+	n := len(p)
+	pw.transferred += int64(n)
+	if pw.onProgress != nil {
+		pw.onProgress(pw.transferred, pw.total)
+	}
+	return n, nil
+}
+
+// PerformGuiUpdate fetches latest GUI release asset and downloads with progress reporting.
+func PerformGuiUpdate(ctx context.Context, proxyPrefix string, progressCb func(p GuiUpdateProgress)) (*GuiUpdateResult, error) {
+	rel, err := updater.FetchLatestReleaseInfo(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch latest release: %w", err)
+	}
+
+	var bestAsset *updater.ReleaseAsset
+	goos := runtime.GOOS
+	goarch := runtime.GOARCH
+
+	for _, asset := range rel.Assets {
+		nameLower := strings.ToLower(asset.Name)
+		if strings.Contains(nameLower, "gui") || strings.Contains(nameLower, "desktop") || strings.HasSuffix(nameLower, ".dmg") || strings.HasSuffix(nameLower, ".exe") || strings.HasSuffix(nameLower, ".appimage") {
+			if goos == "darwin" && (strings.HasSuffix(nameLower, ".dmg") || strings.HasSuffix(nameLower, ".zip")) {
+				bestAsset = &asset
+				break
+			} else if goos == "windows" && (strings.HasSuffix(nameLower, ".exe") || strings.HasSuffix(nameLower, ".zip")) {
+				bestAsset = &asset
+				break
+			} else if goos == "linux" && (strings.HasSuffix(nameLower, ".appimage") || strings.HasSuffix(nameLower, ".deb") || strings.HasSuffix(nameLower, ".tar.gz")) {
+				bestAsset = &asset
+				break
+			}
+		}
+	}
+
+	if bestAsset == nil && len(rel.Assets) > 0 {
+		bestAsset = &rel.Assets[0]
+	}
+
+	if bestAsset == nil {
+		return nil, fmt.Errorf("no suitable GUI release package found for %s/%s", goos, goarch)
+	}
+
+	downloadDir := filepath.Join(env.GetDataDir(), "downloads")
+	_ = os.MkdirAll(downloadDir, 0755)
+	destPath := filepath.Join(downloadDir, bestAsset.Name)
+
+	if progressCb != nil {
+		progressCb(GuiUpdateProgress{
+			Percentage: 0,
+			Status:     fmt.Sprintf("Downloading %s...", bestAsset.Name),
+			TargetFile: destPath,
+		})
+	}
+
+	err = DownloadFileWithProgress(ctx, bestAsset.BrowserDownloadURL, destPath, proxyPrefix, func(transferred, total int64) {
+		pct := 0
+		if total > 0 {
+			pct = int((float64(transferred) / float64(total)) * 100)
+		}
+		if progressCb != nil {
+			progressCb(GuiUpdateProgress{
+				Percentage:  pct,
+				Transferred: transferred,
+				Total:       total,
+				Status:      fmt.Sprintf("Downloading %s (%d%%)", bestAsset.Name, pct),
+				TargetFile:  destPath,
+			})
+		}
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &GuiUpdateResult{
+		Success:        true,
+		Message:        fmt.Sprintf("Successfully downloaded %s (%s)", rel.TagName, bestAsset.Name),
+		TargetFile:     destPath,
+		RequireRestart: true,
+	}, nil
+}
+
+// DownloadFileWithProgress downloads a file with progress reporting and optional proxy.
+func DownloadFileWithProgress(ctx context.Context, rawURL string, destPath string, proxyPrefix string, onProgress func(transferred, total int64)) error {
+	finalURL := BuildProxyURL(rawURL, proxyPrefix)
+	client := pkgHttp.NewClientWithTimeout(60 * time.Second)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, finalURL, nil)
+	if err != nil {
+		return fmt.Errorf("failed to create download request: %w", err)
+	}
+	req.Header.Set("User-Agent", "UniGoDesktop/1.0")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to connect to download URL: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("HTTP status %d", resp.StatusCode)
+	}
+
+	tmpPath := destPath + ".tmp"
+	out, err := os.Create(tmpPath)
+	if err != nil {
+		return fmt.Errorf("failed to create temp file: %w", err)
+	}
+	defer out.Close()
+
+	pw := &progressWriter{
+		total:      resp.ContentLength,
+		onProgress: onProgress,
+	}
+
+	if _, err := io.Copy(out, io.TeeReader(resp.Body, pw)); err != nil {
+		os.Remove(tmpPath)
+		return fmt.Errorf("failed during download: %w", err)
+	}
+
+	_ = os.Remove(destPath)
+	if err := os.Rename(tmpPath, destPath); err != nil {
+		os.Remove(tmpPath)
+		return fmt.Errorf("failed to place downloaded file: %w", err)
+	}
+
+	return nil
 }
 
 

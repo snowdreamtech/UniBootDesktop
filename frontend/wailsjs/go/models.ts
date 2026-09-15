@@ -240,6 +240,43 @@ export namespace installer {
 
 }
 
+export namespace main {
+	
+	export class AppInfo {
+	    projectName: string;
+	    version: string;
+	    gitTag: string;
+	    commitHash: string;
+	    commitHashFull: string;
+	    buildTime: string;
+	    author: string;
+	    copyright: string;
+	    license: string;
+	    goVersion: string;
+	    osArch: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new AppInfo(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.projectName = source["projectName"];
+	        this.version = source["version"];
+	        this.gitTag = source["gitTag"];
+	        this.commitHash = source["commitHash"];
+	        this.commitHashFull = source["commitHashFull"];
+	        this.buildTime = source["buildTime"];
+	        this.author = source["author"];
+	        this.copyright = source["copyright"];
+	        this.license = source["license"];
+	        this.goVersion = source["goVersion"];
+	        this.osArch = source["osArch"];
+	    }
+	}
+
+}
+
 export namespace qemu {
 	
 	export class QEMUStatus {
@@ -263,6 +300,24 @@ export namespace qemu {
 
 export namespace updater {
 	
+	export class GuiUpdateResult {
+	    success: boolean;
+	    message: string;
+	    targetFile: string;
+	    requireRestart: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new GuiUpdateResult(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.success = source["success"];
+	        this.message = source["message"];
+	        this.targetFile = source["targetFile"];
+	        this.requireRestart = source["requireRestart"];
+	    }
+	}
 	export class UpdateStatus {
 	    hasUpdate: boolean;
 	    currentTag: string;
