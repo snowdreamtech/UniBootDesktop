@@ -277,10 +277,13 @@
               <div class="deploy-success-icon">🎉</div>
               <div class="deploy-success-content">
                 <div class="deploy-success-title">{{ t('deploy.success_banner_title') }}</div>
-                <div class="deploy-success-desc">{{ t('deploy.success_banner_desc') }}</div>
+                <div class="deploy-success-desc">
+                  {{ deploySuccessBanner.autoEjected ? t('deploy.toast_auto_ejected', { count: deploySuccessBanner.targets.length }) : t('deploy.success_banner_desc') }}
+                </div>
               </div>
               <div class="deploy-success-actions">
                 <button
+                  v-if="!deploySuccessBanner.autoEjected"
                   id="btn-safely-eject-after-deploy"
                   class="btn-eject-success"
                   @click="handleSafelyEjectAfterDeploy"
@@ -591,7 +594,7 @@ const pendingTargetSnapshots = ref<DiskInfo[]>([]);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
 const autoEjectAfterDeploy = ref(false);
-const deploySuccessBanner = ref<{ visible: boolean; msg: string; targets: string[] }>({ visible: false, msg: '', targets: [] });
+const deploySuccessBanner = ref<{ visible: boolean; msg: string; targets: string[]; autoEjected?: boolean }>({ visible: false, msg: '', targets: [], autoEjected: false });
 const qemuStatus = ref({ installed: false, path: '', version: '' });
 const isLaunchingQemu = ref(false);
 const ventoyStatus = ref({ valid: true, version: '', message: '', executablePath: '' });
@@ -1319,11 +1322,15 @@ async function startDeployment() {
 
       await refreshDisks();
 
+      deploySuccessBanner.value = {
+        visible: true,
+        msg: resultMsg,
+        targets: [...targets],
+        autoEjected: autoEjectedCount > 0
+      };
+
       if (autoEjectedCount > 0) {
         showToast(t('deploy.toast_auto_ejected', { count: autoEjectedCount }), 'success');
-      } else {
-        // Show success banner with optional manual safe-eject button
-        deploySuccessBanner.value = { visible: true, msg: resultMsg, targets: [...targets] };
       }
     }, 200);
   } else {
