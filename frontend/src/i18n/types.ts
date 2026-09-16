@@ -141,6 +141,10 @@ export interface TranslationDict {
   "deploy.success_banner_title": string;
   "deploy.success_banner_desc": string;
   "deploy.toast_auto_ejected": string;
+  "deploy.confirm_auto_eject_title": string;
+  "deploy.confirm_auto_eject_desc": string;
+  "deploy.confirm_auto_eject_yes": string;
+  "deploy.confirm_auto_eject_no": string;
   "deploy.alert_fail": string;
   "qemu.title": string;
   "qemu.installed": string;

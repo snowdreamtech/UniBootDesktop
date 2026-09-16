@@ -392,6 +392,14 @@
       :show="isAboutOpen"
       @close="isAboutOpen = false"
     />
+
+    <!-- Auto Eject Safe Confirmation Modal -->
+    <AutoEjectConfirmModal
+      :isOpen="isAutoEjectConfirmOpen"
+      :targets="pendingEjectTargets"
+      @close="handleCancelAutoEject"
+      @confirm="handleConfirmAutoEject"
+    />
   </div>
 </template>
 
@@ -406,6 +414,7 @@ import SettingsModal from './components/SettingsModal.vue';
 import VentoyAlertModal from './components/VentoyAlertModal.vue';
 import DiagnosticsModal, { InstallDiagnosticsData } from './components/DiagnosticsModal.vue';
 import AboutModal from './components/AboutModal.vue';
+import AutoEjectConfirmModal from './components/AutoEjectConfirmModal.vue';
 import CustomSelect from './components/CustomSelect.vue';
 import { t, currentLang, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
 
@@ -591,6 +600,9 @@ const pendingTargetSnapshots = ref<DiskInfo[]>([]);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
 const autoEjectAfterDeploy = ref(false);
+const isAutoEjectConfirmOpen = ref(false);
+const pendingEjectTargets = ref<string[]>([]);
+const pendingEjectResultMsg = ref('');
 const deploySuccessBanner = ref<{ visible: boolean; msg: string; targets: string[] }>({ visible: false, msg: '', targets: [] });
 const qemuStatus = ref({ installed: false, path: '', version: '' });
 const isLaunchingQemu = ref(false);
@@ -884,6 +896,33 @@ async function handleSafelyEjectAfterDeploy() {
   if (ejectedCount > 0) {
     showToast(t('deploy.toast_auto_ejected', { count: ejectedCount }), 'success');
   }
+}
+
+async function handleConfirmAutoEject() {
+  isAutoEjectConfirmOpen.value = false;
+  const targets = pendingEjectTargets.value;
+  let autoEjectedCount = 0;
+  for (const dev of targets) {
+    try {
+      if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
+        await window.go.main.App.EjectDisk(dev);
+        autoEjectedCount++;
+      }
+    } catch (ejectErr) {
+      console.warn(`Auto eject failed for ${dev}:`, ejectErr);
+    }
+  }
+  await refreshDisks();
+  if (autoEjectedCount > 0) {
+    showToast(t('deploy.toast_auto_ejected', { count: autoEjectedCount }), 'success');
+  } else {
+    showToast(`🎉 ${t('deploy.alert_success', { msg: pendingEjectResultMsg.value })}`, 'success');
+  }
+}
+
+function handleCancelAutoEject() {
+  isAutoEjectConfirmOpen.value = false;
+  deploySuccessBanner.value = { visible: true, msg: pendingEjectResultMsg.value, targets: [...pendingEjectTargets.value] };
 }
 
 async function handleBatchEjectDisks() {
@@ -1302,31 +1341,15 @@ async function startDeployment() {
       isDeploying.value = false;
       deployProgress.value = 0;
 
-      // Auto safely eject all created USB drives — only if user has enabled this setting
-      let autoEjectedCount = 0;
-      if (autoEjectAfterDeploy.value) {
-        for (const dev of targets) {
-          try {
-            if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
-              await window.go.main.App.EjectDisk(dev);
-              autoEjectedCount++;
-            }
-          } catch (ejectErr) {
-            console.warn(`Auto eject failed for ${dev}:`, ejectErr);
-          }
-        }
-      }
-
       await refreshDisks();
 
-      if (autoEjectedCount > 0) {
-        showToast(t('deploy.toast_auto_ejected', { count: autoEjectedCount }), 'success');
-      }
-      // Show success banner with optional safe-eject button instead of native alert
-      if (autoEjectedCount === 0) {
-        deploySuccessBanner.value = { visible: true, msg: resultMsg, targets: [...targets] };
+      // Only prompt for auto safe eject if ALL tasks in deployment (single or batch) succeeded AND autoEjectAfterDeploy is enabled
+      if (autoEjectAfterDeploy.value) {
+        pendingEjectTargets.value = [...targets];
+        pendingEjectResultMsg.value = resultMsg;
+        isAutoEjectConfirmOpen.value = true;
       } else {
-        showToast(`🎉 ${t('deploy.alert_success', { msg: resultMsg })}`, 'success');
+        deploySuccessBanner.value = { visible: true, msg: resultMsg, targets: [...targets] };
       }
     }, 200);
   } else {
