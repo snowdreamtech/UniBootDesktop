@@ -812,9 +812,6 @@ function openDeployConfirm() {
   pendingTargets.value = targets;
   pendingTargetSnapshots.value = refreshedSnapshots as DiskInfo[];
   isDeployConfirmOpen.value = true;
-
-  // Background refresh disk info without blocking UI modal pop-up
-  refreshDisks().catch(() => {});
 }
 
 function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
