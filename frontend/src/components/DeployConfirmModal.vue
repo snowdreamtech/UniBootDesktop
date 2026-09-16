@@ -125,6 +125,11 @@
             </div>
           </div>
         </div>
+
+        <!-- ESP Partition Note Banner -->
+        <div class="esp-note-banner">
+          {{ t("confirm.esp_partition_note") }}
+        </div>
       </div>
 
       <div class="modal-footer">
@@ -511,6 +516,17 @@ function confirm() {
 .pill-tag.safe-tag {
   border-color: var(--success);
   color: var(--success);
+}
+
+.esp-note-banner {
+  margin-top: 0.85rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: var(--text-main);
+  line-height: 1.45;
 }
 
 .target-disk-details {

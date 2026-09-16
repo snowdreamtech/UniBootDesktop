@@ -104,6 +104,11 @@
             <span class="spec-label">{{ t('inspector.lbl_boot_status') }}</span>
             <span class="spec-val highlight">{{ disk.bootStatus || t('inspector.val_data_disk') }}</span>
           </div>
+
+          <div class="spec-item spec-full" v-if="disk.isVentoy || disk.bootStatus">
+            <span class="spec-label">{{ t('inspector.lbl_esp_partition') }}</span>
+            <span class="spec-val highlight">{{ t('inspector.val_esp_partition') }}</span>
+          </div>
         </div>
 
         <!-- Hardware Details Header & Grid -->

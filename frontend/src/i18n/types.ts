@@ -299,6 +299,9 @@ export interface TranslationDict {
   "disk.scanning": string;
   "disk.empty_list": string;
   "disk.nominal"?: string;
+  "confirm.esp_partition_note"?: string;
+  "inspector.lbl_esp_partition"?: string;
+  "inspector.val_esp_partition"?: string;
   "settings.github_proxy_title": string;
   "fs.exfat": string;
   "fs.ntfs": string;
