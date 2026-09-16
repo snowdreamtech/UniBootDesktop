@@ -76,7 +76,11 @@ python = "3.14.7"
 [tasks]
 [tasks.dev]
 description = "Launch Wails GUI application in development mode"
-run = "unirtm exec -- wails dev"
+run = '''
+  lsof -ti :34115,5173 | xargs kill -9 2>/dev/null || true
+  pkill -f "unigodesktop" 2>/dev/null || true
+  unirtm exec -- wails dev
+'''
 output = "interleaved"
 
 [tasks.build]
