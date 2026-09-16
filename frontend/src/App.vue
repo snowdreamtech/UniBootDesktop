@@ -1362,17 +1362,22 @@ onMounted(() => {
         deployProgress.value = Math.min(99, Math.max(50, Math.floor(50 + data.progress / 2)));
       }
     });
+    window.runtime.EventsOn("disk-list-changed", () => {
+      if (!isDeploying.value) {
+        refreshDisks();
+      }
+    });
     window.runtime.EventsOn("open-about-modal", () => {
       isAboutOpen.value = true;
     });
   }
 
-  // Auto-poll USB drives every 6.0s when idle for hotplug detection without high CPU overhead
+  // Safety fallback poll every 30s (event-driven OS hotplug handles instant updates)
   diskPollTimer = window.setInterval(() => {
     if (!isDeploying.value) {
       refreshDisks();
     }
-  }, 6000);
+  }, 30000);
 });
 
 onUnmounted(() => {

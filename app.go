@@ -48,6 +48,9 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	logger.Info("UniGoDesktop Wails GUI runtime started successfully")
+	disk.StartHotplugMonitor(ctx, func() {
+		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
+	})
 }
 
 // GetDiskList returns all removable USB drives safely filtered.

@@ -348,6 +348,69 @@ func InvalidateDiskCache() {
 	diskCacheMutex.Unlock()
 }
 
+// StartHotplugMonitor listens for OS drive mount/unmount events lightweightly and triggers onChange.
+func StartHotplugMonitor(ctx context.Context, onChange func()) {
+	go func() {
+		ticker := time.NewTicker(1 * time.Second)
+		defer ticker.Stop()
+
+		lastSnapshot := getVolumeSnapshot()
+
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
+				currentSnapshot := getVolumeSnapshot()
+				if currentSnapshot != lastSnapshot {
+					lastSnapshot = currentSnapshot
+					InvalidateDiskCache()
+					if onChange != nil {
+						onChange()
+					}
+				}
+			}
+		}
+	}()
+}
+
+func getVolumeSnapshot() string {
+	switch runtime.GOOS {
+	case "darwin":
+		entries, err := os.ReadDir("/Volumes")
+		if err != nil {
+			return ""
+		}
+		var names []string
+		for _, e := range entries {
+			if !IsIgnoredVolume(e.Name()) {
+				names = append(names, e.Name())
+			}
+		}
+		return strings.Join(names, "|")
+	case "windows":
+		var letters []string
+		for c := 'C'; c <= 'Z'; c++ {
+			drive := fmt.Sprintf("%c:\\", c)
+			if _, err := os.Stat(drive); err == nil {
+				letters = append(letters, string(c))
+			}
+		}
+		return strings.Join(letters, "|")
+	default:
+		dirs := []string{"/media", "/run/media", "/mnt"}
+		var names []string
+		for _, d := range dirs {
+			if entries, err := os.ReadDir(d); err == nil {
+				for _, e := range entries {
+					names = append(names, e.Name())
+				}
+			}
+		}
+		return strings.Join(names, "|")
+	}
+}
+
 // GetRemovableDisks lists removable USB drives safely while protecting system drives.
 func GetRemovableDisks() ([]DiskInfo, error) {
 	diskCacheMutex.Lock()
