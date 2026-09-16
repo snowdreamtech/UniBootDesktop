@@ -141,7 +141,7 @@ export const zhTw: TranslationDict = {
   "deploy.result_success": "成功部署模式 {mode} 到 {targets}",
   "deploy.alert_success": "🎉 部署成功！",
   "deploy.safely_eject_btn": "Safely Eject USB Drive",
-  "deploy.success_banner_title": "Boot Drive Created Successfully!",
+  "deploy.success_banner_title": "啟動碟製作完成！",
   "deploy.success_banner_desc": "Boot files & firmware written. Safely eject before unplugging.",
   "deploy.toast_auto_ejected": "🎉 製作完成！已自動安全彈出 {count} 個隨身碟，所有資料已完全落盤，可放心拔出。",
   "deploy.confirm_auto_eject_title": "寫入已完成，是否安全移除？",
