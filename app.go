@@ -57,6 +57,7 @@ func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
 
 // EjectDisk safely unmounts and ejects the target removable USB storage drive.
 func (a *App) EjectDisk(targetDisk string) error {
+	disk.InvalidateDiskCache()
 	return disk.EjectDisk(targetDisk)
 }
 

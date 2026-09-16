@@ -335,16 +335,50 @@ func FormatBytesDual(bytes uint64) string {
 	return sysFormatted
 }
 
+var (
+	diskCacheMutex sync.Mutex
+	diskCacheList  []DiskInfo
+	diskCacheTime  time.Time
+)
+
+// InvalidateDiskCache clears the memory disk cache to force an immediate fresh hardware scan.
+func InvalidateDiskCache() {
+	diskCacheMutex.Lock()
+	diskCacheList = nil
+	diskCacheMutex.Unlock()
+}
+
 // GetRemovableDisks lists removable USB drives safely while protecting system drives.
 func GetRemovableDisks() ([]DiskInfo, error) {
+	diskCacheMutex.Lock()
+	if diskCacheList != nil && time.Since(diskCacheTime) < 3*time.Second {
+		cached := make([]DiskInfo, len(diskCacheList))
+		copy(cached, diskCacheList)
+		diskCacheMutex.Unlock()
+		return cached, nil
+	}
+	diskCacheMutex.Unlock()
+
+	var disks []DiskInfo
+	var err error
+
 	switch runtime.GOOS {
 	case "darwin":
-		return getDarwinDisks()
+		disks, err = getDarwinDisks()
 	case "windows":
-		return getWindowsDisks()
+		disks, err = getWindowsDisks()
 	default:
-		return getLinuxDisks()
+		disks, err = getLinuxDisks()
 	}
+
+	if err == nil {
+		diskCacheMutex.Lock()
+		diskCacheList = disks
+		diskCacheTime = time.Now()
+		diskCacheMutex.Unlock()
+	}
+
+	return disks, err
 }
 
 // macOS implementation structures for system_profiler SPUSBDataType -json
