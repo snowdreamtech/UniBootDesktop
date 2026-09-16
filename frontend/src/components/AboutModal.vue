@@ -370,10 +370,10 @@ const handlePerformUpdate = async () => {
   max-width: 90vw;
   padding: 24px;
   border-radius: 20px;
-  background: rgba(23, 32, 51, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(66, 184, 131, 0.1);
-  color: #e2e8f0;
+  background: var(--modal-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  color: var(--text-main);
   position: relative;
   overflow: hidden;
 }
@@ -386,7 +386,7 @@ const handlePerformUpdate = async () => {
 .close-btn {
   background: transparent;
   border: none;
-  color: #94a3b8;
+  color: var(--text-muted);
   cursor: pointer;
   padding: 6px;
   border-radius: 50%;
@@ -397,8 +397,8 @@ const handlePerformUpdate = async () => {
 }
 
 .close-btn:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  background: var(--section-bg);
 }
 
 .about-hero {
@@ -421,7 +421,7 @@ const handlePerformUpdate = async () => {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(66, 184, 131, 0.4) 0%, rgba(56, 189, 248, 0.2) 60%, transparent 80%);
+  background: radial-gradient(circle, var(--accent-cyan-glow) 0%, transparent 80%);
   filter: blur(16px);
   z-index: 0;
 }
@@ -429,23 +429,20 @@ const handlePerformUpdate = async () => {
 .app-logo-icon {
   position: relative;
   z-index: 1;
-  color: #42b883;
-  filter: drop-shadow(0 4px 12px rgba(66, 184, 131, 0.3));
+  color: var(--accent-cyan);
 }
 
 .app-title {
   font-size: 24px;
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-main);
   letter-spacing: -0.5px;
 }
 
 .app-subtitle {
   font-size: 13px;
-  color: #94a3b8;
+  color: var(--text-muted);
   margin: 4px 0 12px 0;
 }
 
@@ -455,9 +452,9 @@ const handlePerformUpdate = async () => {
   gap: 6px;
   padding: 4px 12px;
   border-radius: 20px;
-  background: rgba(66, 184, 131, 0.12);
-  border: 1px solid rgba(66, 184, 131, 0.3);
-  color: #42b883;
+  background: var(--alert-success-bg);
+  border: 1px solid var(--alert-success-border);
+  color: var(--alert-success-title);
   font-size: 12px;
   font-weight: 600;
 }
@@ -466,15 +463,14 @@ const handlePerformUpdate = async () => {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #42b883;
-  box-shadow: 0 0 8px #42b883;
+  background: var(--success);
 }
 
 .info-grid {
-  background: rgba(15, 23, 42, 0.5);
+  background: var(--section-bg);
   border-radius: 12px;
   padding: 14px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--card-border);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -489,12 +485,13 @@ const handlePerformUpdate = async () => {
 }
 
 .info-label {
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .info-val {
-  color: #f1f5f9;
+  color: var(--text-main);
   font-size: 12px;
+  font-weight: 600;
 }
 
 .font-mono {
@@ -523,36 +520,32 @@ const handlePerformUpdate = async () => {
 }
 
 .secondary-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #e2e8f0;
+  background: var(--section-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
 }
 
 .secondary-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
+  background: var(--card-border);
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  background: #2563eb;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+
 }
 
 .primary-btn:hover:not(:disabled) {
-  filter: brightness(1.1);
-  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
+  background: #1d4ed8;
 }
 
 .update-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: #059669;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .update-btn:hover:not(:disabled) {
-  filter: brightness(1.1);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+  background: #047857;
 }
 
 .update-progress-container {
@@ -565,21 +558,21 @@ const handlePerformUpdate = async () => {
 .progress-bar-track {
   width: 100%;
   height: 8px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--section-bg);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #38bdf8 0%, #42b883 100%);
+  background: var(--accent-cyan);
   border-radius: 4px;
   transition: width 0.2s ease;
 }
 
 .progress-text {
   font-size: 11px;
-  color: #94a3b8;
+  color: var(--text-muted);
   text-align: center;
 }
 
@@ -606,26 +599,26 @@ const handlePerformUpdate = async () => {
 }
 
 .has-update {
-  background: rgba(245, 158, 11, 0.15);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  color: #fbbf24;
+  background: var(--alert-warning-bg);
+  border: 1px solid var(--alert-warning-border);
+  color: var(--alert-warning-title);
 }
 
 .is-latest {
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  color: #4ade80;
+  background: var(--alert-success-bg);
+  border: 1px solid var(--alert-success-border);
+  color: var(--alert-success-title);
 }
 
 .update-error {
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #f87171;
+  background: var(--alert-danger-bg);
+  border: 1px solid var(--alert-danger-border);
+  color: var(--alert-danger-title);
 }
 
 .about-footer {
   text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--card-border);
   padding-top: 16px;
 }
 
@@ -641,7 +634,7 @@ const handlePerformUpdate = async () => {
 .footer-link-btn {
   background: transparent;
   border: none;
-  color: #38bdf8;
+  color: var(--accent-cyan);
   font-size: 12px;
   cursor: pointer;
   display: inline-flex;
@@ -654,18 +647,17 @@ const handlePerformUpdate = async () => {
 
 .footer-link:hover,
 .footer-link-btn:hover {
-  color: #7dd3fc;
   text-decoration: underline;
 }
 
 .link-separator {
-  color: #475569;
+  color: var(--text-muted);
   font-size: 12px;
 }
 
 .copyright-text {
   font-size: 11px;
-  color: #64748b;
+  color: var(--text-subtle);
   margin: 0;
 }
 
