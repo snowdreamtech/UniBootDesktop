@@ -30,6 +30,7 @@ declare global {
     protocolCode?: string;
     isRealVentoy?: boolean;
     isModeB?: boolean;
+    mountPoint?: string;
   }
 
   interface Window {
