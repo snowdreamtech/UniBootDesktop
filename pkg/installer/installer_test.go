@@ -87,3 +87,33 @@ func TestDeployModeBBatch(t *testing.T) {
 	_, err = DeployModeBBatch(ctx, []string{"dummy_usb_1", "/"}, "exFAT")
 	assert.Error(t, err)
 }
+
+func TestDeployModeABatchPartialFailure(t *testing.T) {
+	os.Setenv("UNIBOOT_DRY_RUN", "true")
+	defer os.Unsetenv("UNIBOOT_DRY_RUN")
+
+	ctx := context.Background()
+
+	// Dry run mode A with invalid target path to trigger per-disk failure in loop
+	results, err := DeployModeABatchWithVentoyAndIso(ctx, []string{"dummy_usb_1", "/dev/invalid_disk_path_test"}, "exFAT", "", nil, nil)
+	require.NoError(t, err)
+	assert.Len(t, results, 2)
+	assert.True(t, results[0].Success)
+	assert.False(t, results[1].Success)
+	assert.NotNil(t, results[1].Diagnostics)
+}
+
+func TestDeployModeBBatchPartialFailure(t *testing.T) {
+	os.Setenv("UNIBOOT_DRY_RUN", "true")
+	defer os.Unsetenv("UNIBOOT_DRY_RUN")
+
+	ctx := context.Background()
+
+	// Dry run mode B with invalid target path to trigger per-disk failure in loop
+	results, err := DeployModeBBatchWithProgress(ctx, []string{"dummy_usb_1", "/dev/invalid_disk_path_test"}, "exFAT", nil)
+	require.NoError(t, err)
+	assert.Len(t, results, 2)
+	assert.True(t, results[0].Success)
+	assert.False(t, results[1].Success)
+	assert.NotNil(t, results[1].Diagnostics)
+}
