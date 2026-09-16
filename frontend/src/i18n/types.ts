@@ -220,6 +220,9 @@ export interface TranslationDict {
   "confirm.unavailable"?: string;
   "confirm.yes"?: string;
   "confirm.no"?: string;
+  "common.optional"?: string;
+  "common.optional_test"?: string;
+  "qemu.desc_optional"?: string;
   "confirm.will_format"?: string;
   "confirm.no_format"?: string;
   "deploy.toast_target_changed"?: string;

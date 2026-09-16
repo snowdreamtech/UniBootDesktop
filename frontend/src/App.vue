@@ -208,7 +208,10 @@
         <div v-if="activeMode === 'hybrid'" class="iso-card">
           <div class="iso-card-header">
             <div class="iso-title-group">
-              <h3>{{ t('iso.title') }}</h3>
+              <h3>
+                {{ t('iso.title') }}
+                <span class="optional-badge">{{ t('common.optional') || '可选' }}</span>
+              </h3>
               <span class="iso-subtitle">{{ t('iso.desc') }}</span>
             </div>
             <button class="btn-secondary add-iso-btn" @click="handleSelectIsoFiles">
@@ -294,7 +297,12 @@
         <!-- QEMU Preview -->
         <div class="qemu-box">
           <div class="qemu-header">
-            <h3>{{ t('qemu.title') }}</h3>
+            <div class="qemu-title-group">
+              <h3>
+                {{ t('qemu.title') }}
+                <span class="optional-badge">{{ t('common.optional_test') || t('common.optional') || '可选测试' }}</span>
+              </h3>
+            </div>
             <span class="badge" :class="qemuStatus.installed ? 'success' : 'muted'">
               {{ qemuStatus.installed ? t('qemu.installed') : t('qemu.not_installed') }}
             </span>
@@ -1868,8 +1876,33 @@ h1 {
   margin-bottom: 0.4rem;
 }
 
-.qemu-header h3 {
+.qemu-title-group h3 {
   font-size: 1rem;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.optional-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.12rem 0.55rem;
+  margin-left: 0.55rem;
+  border-radius: 20px;
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  vertical-align: middle;
+  line-height: 1.2;
+}
+
+[data-theme="light"] .optional-badge {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+  font-weight: 600;
 }
 
 .badge {
