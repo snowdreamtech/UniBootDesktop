@@ -980,6 +980,17 @@ const deployDisabledReason = computed(() => {
     }
     return ventoyStatus.value.message || t('deploy.tip_need_ventoy');
   }
+  if (selectionMode.value === 'batch') {
+    const total = selectedDevices.value.size;
+    const bootCount = ventoyCountInBatch.value;
+    const blankCount = total - bootCount;
+    if (bootCount > 0 && blankCount > 0) {
+      return `批量混合部署：${bootCount} 块 U 盘执行原位无损更新 (保留数据)，${blankCount} 块 U 盘执行全新格式化制作`;
+    }
+    if (bootCount === total && total > 0) {
+      return `批量无损更新：全选的 ${total} 块 U 盘均将执行原位更新 (保留盘内数据与 ISO)`;
+    }
+  }
   return '';
 });
 
