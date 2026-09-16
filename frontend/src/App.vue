@@ -1653,9 +1653,8 @@ h1 {
 }
 
 .disk-list {
-  flex: 1 1 auto;
+  flex: 1 1 0px;
   min-height: 180px;
-  max-height: 480px;
   overflow-y: auto;
   padding-right: 0.4rem;
   display: flex;
@@ -1691,7 +1690,8 @@ h1 {
 .refresh-btn {
   flex: 0 0 auto;
   width: 100%;
-  margin-top: 1rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
 }
 
 .fs-selector {
