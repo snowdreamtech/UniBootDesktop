@@ -10,6 +10,10 @@ export function CheckUpdate() {
   return window['go']['main']['App']['CheckUpdate']();
 }
 
+export function ClearProxyPassword() {
+  return window['go']['main']['App']['ClearProxyPassword']();
+}
+
 export function DeployModeA(arg1, arg2, arg3) {
   return window['go']['main']['App']['DeployModeA'](arg1, arg2, arg3);
 }

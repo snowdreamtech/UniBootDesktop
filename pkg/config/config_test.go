@@ -4,8 +4,40 @@
 package config
 
 import (
+	"errors"
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 )
+
+type memorySecretStore struct {
+	password string
+}
+
+func newMemorySecretStore() *memorySecretStore {
+	return &memorySecretStore{}
+}
+
+func (s *memorySecretStore) Get(_ string, _ string) (string, error) {
+	if s.password == "" {
+		return "", errors.New("credential not found")
+	}
+	return s.password, nil
+}
+
+func (s *memorySecretStore) Set(_ string, _ string, password string) error {
+	s.password = password
+	return nil
+}
+
+func (s *memorySecretStore) Delete(_ string, _ string) error {
+	if s.password == "" {
+		return errors.New("credential not found")
+	}
+	s.password = ""
+	return nil
+}
 
 func TestDefaultConfig(t *testing.T) {
 	cfg := GetDefaultConfig()
@@ -50,7 +82,47 @@ func TestConfigSaveAndLoad(t *testing.T) {
 	if loaded.FileSystem != "NTFS" {
 		t.Errorf("expected FileSystem 'NTFS', got %s", loaded.FileSystem)
 	}
-	if loaded.ProxyProtocol != "socks5" || loaded.ProxyHost != "127.0.0.1" || loaded.ProxyPort != 1080 || loaded.ProxyUser != "dummy_user" || loaded.ProxyPassword != "dummy_password" {
+	if loaded.ProxyProtocol != "socks5" || loaded.ProxyHost != "127.0.0.1" || loaded.ProxyPort != 1080 || loaded.ProxyUser != "dummy_user" || loaded.ProxyPassword != "" {
 		t.Errorf("proxy config mismatch: %+v", loaded)
+	}
+
+	data, err := os.ReadFile(filepath.Join(tmpDir, "unibootdesktop.toml"))
+	if err != nil {
+		t.Fatalf("read saved config failed: %v", err)
+	}
+	if strings.Contains(string(data), "dummy_password") || strings.Contains(string(data), "proxyPassword") {
+		t.Fatalf("proxy password must not be written to config file: %s", data)
+	}
+	info, err := os.Stat(filepath.Join(tmpDir, "unibootdesktop.toml"))
+	if err != nil {
+		t.Fatalf("stat saved config failed: %v", err)
+	}
+	if mode := info.Mode().Perm(); mode != 0600 {
+		t.Fatalf("expected config mode 0600, got %04o", mode)
+	}
+}
+
+func TestProxyPasswordStore(t *testing.T) {
+	previousStore := proxyPasswordStore
+	store := newMemorySecretStore()
+	proxyPasswordStore = store
+	t.Cleanup(func() { proxyPasswordStore = previousStore })
+
+	if err := SaveProxyPassword("secret"); err != nil {
+		t.Fatalf("save proxy password failed: %v", err)
+	}
+	password, err := LoadProxyPassword()
+	if err != nil {
+		t.Fatalf("load proxy password failed: %v", err)
+	}
+	if password != "secret" {
+		t.Fatalf("expected stored password, got %q", password)
+	}
+
+	if err := DeleteProxyPassword(); err != nil {
+		t.Fatalf("delete proxy password failed: %v", err)
+	}
+	if _, err := LoadProxyPassword(); err == nil {
+		t.Fatal("expected deleted proxy password to be unavailable")
 	}
 }

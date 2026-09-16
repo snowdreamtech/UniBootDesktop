@@ -61,8 +61,9 @@ func DefaultTransport() *http.Transport {
 		if cfg, err := config.Load(); err == nil && cfg != nil {
 			if cfg.ProxyProtocol != "" && cfg.ProxyProtocol != "direct" && cfg.ProxyHost != "" && cfg.ProxyPort > 0 {
 				var proxyURLStr string
+				proxyPassword, _ := config.LoadProxyPassword()
 				if cfg.ProxyUser != "" {
-					proxyURLStr = fmt.Sprintf("%s://%s:%s@%s:%d", cfg.ProxyProtocol, url.QueryEscape(cfg.ProxyUser), url.QueryEscape(cfg.ProxyPassword), cfg.ProxyHost, cfg.ProxyPort)
+					proxyURLStr = fmt.Sprintf("%s://%s:%s@%s:%d", cfg.ProxyProtocol, url.QueryEscape(cfg.ProxyUser), url.QueryEscape(proxyPassword), cfg.ProxyHost, cfg.ProxyPort)
 				} else {
 					proxyURLStr = fmt.Sprintf("%s://%s:%d", cfg.ProxyProtocol, cfg.ProxyHost, cfg.ProxyPort)
 				}

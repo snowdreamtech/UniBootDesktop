@@ -60,7 +60,6 @@ func (a *App) EjectDisk(targetDisk string) error {
 	return disk.EjectDisk(targetDisk)
 }
 
-
 // SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
 func (a *App) SelectIsoFiles() ([]string, error) {
 	return wailsRuntime.OpenMultipleFilesDialog(a.ctx, wailsRuntime.OpenDialogOptions{
@@ -144,7 +143,18 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 	if cfg == nil {
 		return config.GetDefaultConfig().Save()
 	}
+	if cfg.ProxyPassword != "" {
+		if err := config.SaveProxyPassword(cfg.ProxyPassword); err != nil {
+			return err
+		}
+		cfg.ProxyPassword = ""
+	}
 	return cfg.Save()
+}
+
+// ClearProxyPassword removes the saved proxy password from the system credential store.
+func (a *App) ClearProxyPassword() error {
+	return config.DeleteProxyPassword()
 }
 
 // GetFirmwareList returns the standard UniBoot firmware mapping matrix.
@@ -243,5 +253,3 @@ func (a *App) ReloadAppMenu(lang string) error {
 	wailsRuntime.MenuUpdateApplicationMenu(a.ctx)
 	return nil
 }
-
-

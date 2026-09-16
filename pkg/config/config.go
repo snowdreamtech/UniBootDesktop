@@ -14,17 +14,17 @@ import (
 
 // AppConfig represents application-wide configuration parameters.
 type AppConfig struct {
-	Mode            string `json:"mode" toml:"mode"`                         // Mode A (hybrid) or Mode B (cloud)
-	AutoCheckUpdate bool   `json:"autoCheckUpdate" toml:"autoCheckUpdate"`   // Automatically check for updates
-	Theme           string `json:"theme" toml:"theme"`                       // UI theme preference (dark/light)
-	GithubProxy     string `json:"githubProxy" toml:"githubProxy"`           // GitHub proxy server URL (e.g. https://proxy.example.com/)
-	FileSystem      string `json:"fileSystem" toml:"fileSystem"`             // Default file system for Mode A (exFAT/NTFS/FAT32/ext4)
-	ProxyProtocol   string `json:"proxyProtocol" toml:"proxyProtocol"`       // Network proxy protocol: direct, http, https, socks4, socks5
-	ProxyHost       string `json:"proxyHost" toml:"proxyHost"`               // Network proxy server host
-	ProxyPort       int    `json:"proxyPort" toml:"proxyPort"`               // Network proxy server port
-	ProxyUser       string `json:"proxyUser" toml:"proxyUser"`               // Network proxy authentication username
-	ProxyPassword   string `json:"proxyPassword" toml:"proxyPassword"`       // Network proxy authentication password
-	Language        string `json:"language" toml:"language"`                 // UI Language (auto/zh-CN/en-US/zh-TW)
+	Mode                 string `json:"mode" toml:"mode"`                                 // Mode A (hybrid) or Mode B (cloud)
+	AutoCheckUpdate      bool   `json:"autoCheckUpdate" toml:"autoCheckUpdate"`           // Automatically check for updates
+	Theme                string `json:"theme" toml:"theme"`                               // UI theme preference (dark/light)
+	GithubProxy          string `json:"githubProxy" toml:"githubProxy"`                   // GitHub proxy server URL (e.g. https://proxy.example.com/)
+	FileSystem           string `json:"fileSystem" toml:"fileSystem"`                     // Default file system for Mode A (exFAT/NTFS/FAT32/ext4)
+	ProxyProtocol        string `json:"proxyProtocol" toml:"proxyProtocol"`               // Network proxy protocol: direct, http, https, socks4, socks5
+	ProxyHost            string `json:"proxyHost" toml:"proxyHost"`                       // Network proxy server host
+	ProxyPort            int    `json:"proxyPort" toml:"proxyPort"`                       // Network proxy server port
+	ProxyUser            string `json:"proxyUser" toml:"proxyUser"`                       // Network proxy authentication username
+	ProxyPassword        string `json:"proxyPassword" toml:"-"`                           // Transient input; persisted in the OS credential store
+	Language             string `json:"language" toml:"language"`                         // UI Language (auto/zh-CN/en-US/zh-TW)
 	VentoyPath           string `json:"ventoyPath" toml:"ventoyPath"`                     // Path to official Ventoy CLI directory / executable
 	VentoySecureBoot     bool   `json:"ventoySecureBoot" toml:"ventoySecureBoot"`         // Enable Ventoy Secure Boot support (-s)
 	VentoyPartitionStyle string `json:"ventoyPartitionStyle" toml:"ventoyPartitionStyle"` // Ventoy partition style: GPT or MBR
@@ -40,8 +40,8 @@ func GetDefaultConfig() *AppConfig {
 		Mode:                 "cloud", // Mode B Cloud Pure Mode by default
 		AutoCheckUpdate:      true,
 		Theme:                "dark",
-		Language:             "auto",  // Auto detect OS system language by default
-		GithubProxy:          "", // Default to empty (Direct connection, no hardcoded proxy preset)
+		Language:             "auto", // Auto detect OS system language by default
+		GithubProxy:          "",     // Default to empty (Direct connection, no hardcoded proxy preset)
 		FileSystem:           "exFAT",
 		ProxyProtocol:        "direct",
 		ProxyHost:            "",
@@ -50,11 +50,11 @@ func GetDefaultConfig() *AppConfig {
 		ProxyPassword:        "",
 		VentoyPath:           "",
 		VentoySecureBoot:     true,  // Official Ventoy default: Enabled (Checked)
-		VentoyPartitionStyle: "MBR",   // Official Ventoy default: MBR
-		VentoyReserveSpace:   0,       // Official Ventoy default: 0 MB
-		VentoyWin11Bypass:    false,   // Official Ventoy default: Disabled (False)
-		VentoyMenuTimeout:    0,       // Official Ventoy default: 0 (No timeout / wait indefinitely)
-		AutoEjectAfterDeploy: false,   // Default: do NOT auto eject — user should verify the disk first
+		VentoyPartitionStyle: "MBR", // Official Ventoy default: MBR
+		VentoyReserveSpace:   0,     // Official Ventoy default: 0 MB
+		VentoyWin11Bypass:    false, // Official Ventoy default: Disabled (False)
+		VentoyMenuTimeout:    0,     // Official Ventoy default: 0 (No timeout / wait indefinitely)
+		AutoEjectAfterDeploy: false, // Default: do NOT auto eject — user should verify the disk first
 	}
 }
 
@@ -81,5 +81,11 @@ func (c *AppConfig) Save() error {
 	if err != nil {
 		return fmt.Errorf("marshal config error: %w", err)
 	}
-	return os.WriteFile(cfgPath, data, 0644)
+	if err := os.WriteFile(cfgPath, data, 0600); err != nil {
+		return err
+	}
+	if err := os.Chmod(cfgPath, 0600); err != nil {
+		return fmt.Errorf("set config file permissions: %w", err)
+	}
+	return nil
 }
