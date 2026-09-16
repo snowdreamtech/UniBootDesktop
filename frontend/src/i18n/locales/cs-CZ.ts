@@ -280,6 +280,7 @@ export const csCz: TranslationDict = {
   "icon_picker.key_desc": "Hardware bezpečnostního klíče FIDO2",
   "disk.scanning": "Skenování vyměnitelných USB disků...",
   "disk.empty_list": "Nebyl zjištěn žádný vyměnitelný USB disk. Vložte prosím USB disk.",
+  "disk.nominal": "Nominální",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Speed Acceleration",
   "fs.exfat": "exFAT (výchozí • Podporuje > 4 GB souborů ISO)",
   "fs.ntfs": "NTFS (Windows Native)",

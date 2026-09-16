@@ -280,6 +280,7 @@ export const thTh: TranslationDict = {
   "icon_picker.key_desc": "ฮาร์ดแวร์คีย์ความปลอดภัย FIDO2",
   "disk.scanning": "กำลังสแกนไดรฟ์ USB แบบถอดได้...",
   "disk.empty_list": "ไม่พบไดรฟ์ USB แบบถอดได้ กรุณาใส่ไดรฟ์ USB",
+  "disk.nominal": "ความจุระบุ",
   "settings.github_proxy_title": "GitHub Cloud Mirror และการเร่งความเร็ว",
   "fs.exfat": "exFAT (ค่าเริ่มต้น • รองรับไฟล์ ISO >4GB)",
   "fs.ntfs": "NTFS (วินโดวส์เนทิฟ)",

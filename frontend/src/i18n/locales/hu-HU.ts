@@ -280,6 +280,7 @@ export const huHu: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 biztonsági kulcs hardver",
   "disk.scanning": "Cserélhető USB-meghajtók szkennelése...",
   "disk.empty_list": "Nem észlelt eltávolítható USB-meghajtót. Kérjük, helyezzen be egy USB-meghajtót.",
+  "disk.nominal": "Névleges",
   "settings.github_proxy_title": "GitHub felhőtükör és sebességgyorsítás",
   "fs.exfat": "exFAT (alapértelmezett • 4 GB-nál nagyobb ISO fájlokat támogat)",
   "fs.ntfs": "NTFS (Windows Native)",

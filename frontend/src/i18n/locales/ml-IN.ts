@@ -280,6 +280,7 @@ export const mlIn: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 സുരക്ഷാ കീ ഹാർഡ്‌വെയർ",
   "disk.scanning": "നീക്കം ചെയ്യാവുന്ന USB ഡ്രൈവുകൾ സ്കാൻ ചെയ്യുന്നു...",
   "disk.empty_list": "നീക്കം ചെയ്യാവുന്ന USB ഡ്രൈവ് കണ്ടെത്തിയില്ല. ദയവായി ഒരു USB ഡ്രൈവ് ചേർക്കുക.",
+  "disk.nominal": "നാമമാത്ര",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Speed Acceleration",
   "fs.exfat": "exFAT (ഡിഫോൾട്ട് • പിന്തുണയ്ക്കുന്നു >4GB ISO ഫയലുകൾ)",
   "fs.ntfs": "NTFS (വിൻഡോസ് നേറ്റീവ്)",

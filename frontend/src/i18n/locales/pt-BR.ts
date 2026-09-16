@@ -280,6 +280,7 @@ export const ptBr: TranslationDict = {
   "icon_picker.key_desc": "Chave de Segurança de Hardware FIDO2",
   "disk.scanning": "Escaneando unidades USB removíveis...",
   "disk.empty_list": "Nenhuma unidade USB removível detectada. Por favor, insira um pendrive.",
+  "disk.nominal": "Nominal",
   "settings.github_proxy_title": "Espelho em Nuvem e Aceleração do GitHub",
   "fs.exfat": "exFAT (Padrão • Suporta arquivos >4GB)",
   "fs.ntfs": "NTFS (Nativo do Windows)",

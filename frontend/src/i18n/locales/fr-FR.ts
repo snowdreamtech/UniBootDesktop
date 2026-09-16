@@ -280,6 +280,7 @@ export const frFr: TranslationDict = {
   "icon_picker.key_desc": "Clé de sécurité matérielle FIDO2",
   "disk.scanning": "Analyse des clés USB amovibles en cours...",
   "disk.empty_list": "Aucune clé USB amovible détectée. Veuillez insérer une clé USB.",
+  "disk.nominal": "Nominale",
   "settings.github_proxy_title": "Miroir Cloud GitHub & Accélération réseau",
   "fs.exfat": "exFAT (Par défaut • Prise en charge >4 Go)",
   "fs.ntfs": "NTFS (Natif Windows)",

@@ -280,6 +280,7 @@ export const mkMk: TranslationDict = {
   "icon_picker.key_desc": "Хардвер за безбедносен клуч FIDO2",
   "disk.scanning": "Се скенираат отстранливи USB-дискови...",
   "disk.empty_list": "Не е откриен отстранлив USB-диск. Вметнете USB-уред.",
+  "disk.nominal": "Номинална",
   "settings.github_proxy_title": "GitHub Cloud Mirror и забрзување на брзината",
   "fs.exfat": "exFAT (стандардно • Поддржува >4 GB ISO-датотеки)",
   "fs.ntfs": "NTFS (Windows Native)",

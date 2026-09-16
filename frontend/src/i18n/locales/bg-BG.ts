@@ -280,6 +280,7 @@ export const bgBg: TranslationDict = {
   "icon_picker.key_desc": "Хардуерен ключ за сигурност FIDO2",
   "disk.scanning": "Сканиране на сменяеми USB устройства...",
   "disk.empty_list": "Не е открито сменяемо USB устройство. Моля, поставете USB устройство.",
+  "disk.nominal": "Номинален",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Ускоряване на скоростта",
   "fs.exfat": "exFAT (по подразбиране • Поддържа >4GB ISO файлове)",
   "fs.ntfs": "NTFS (основен за Windows)",

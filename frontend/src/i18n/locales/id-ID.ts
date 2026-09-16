@@ -280,6 +280,7 @@ export const idId: TranslationDict = {
   "icon_picker.key_desc": "Perangkat Keras Kunci Keamanan FIDO2",
   "disk.scanning": "Memindai drive USB yang dapat dilepas...",
   "disk.empty_list": "Tidak ada drive USB yang dapat dilepas yang terdeteksi. Silakan masukkan drive USB.",
+  "disk.nominal": "Nominal",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Akselerasi Kecepatan",
   "fs.exfat": "exFAT (Default • Mendukung File ISO >4GB)",
   "fs.ntfs": "NTFS (Windows Asli)",

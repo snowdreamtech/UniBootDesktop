@@ -280,6 +280,7 @@ export const esEs: TranslationDict = {
   "icon_picker.key_desc": "Llave de seguridad de hardware FIDO2",
   "disk.scanning": "Escaneando unidades USB extraíbles...",
   "disk.empty_list": "No se detectó ninguna unidad USB extraíble. Por favor inserte una unidad.",
+  "disk.nominal": "Nominal",
   "settings.github_proxy_title": "Espejo en la nube de GitHub y aceleración de red",
   "fs.exfat": "exFAT (Predeterminado • Soporta >4GB ISO)",
   "fs.ntfs": "NTFS (Nativo de Windows)",

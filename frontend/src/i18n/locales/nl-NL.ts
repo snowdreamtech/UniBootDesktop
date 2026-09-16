@@ -280,6 +280,7 @@ export const nlNl: TranslationDict = {
   "icon_picker.key_desc": "FIDO2-beveiligingssleutelhardware",
   "disk.scanning": "Verwisselbare USB-drives scannen...",
   "disk.empty_list": "Geen verwisselbaar USB-station gedetecteerd. Plaats een USB-stick.",
+  "disk.nominal": "Nominaal",
   "settings.github_proxy_title": "GitHub Cloud Mirror en snelheidsversnelling",
   "fs.exfat": "exFAT (standaard • Ondersteunt >4GB ISO-bestanden)",
   "fs.ntfs": "NTFS (Windows-native)",

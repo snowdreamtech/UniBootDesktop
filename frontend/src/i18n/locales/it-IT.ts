@@ -280,6 +280,7 @@ export const itIt: TranslationDict = {
   "icon_picker.key_desc": "Chiave di Sicurezza Hardware FIDO2",
   "disk.scanning": "Scansione unità USB rimovibili in corso...",
   "disk.empty_list": "Nessuna unità USB rimovibile rilevata. Inserire un'unità USB.",
+  "disk.nominal": "Nominale",
   "settings.github_proxy_title": "Mirror Cloud e Accelerazione Rete GitHub",
   "fs.exfat": "exFAT (Predefinito • Supporta file >4GB)",
   "fs.ntfs": "NTFS (Nativo Windows)",

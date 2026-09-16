@@ -280,6 +280,7 @@ export const noNo: TranslationDict = {
   "icon_picker.key_desc": "Maskinvare for FIDO2-sikkerhetsnøkkel",
   "disk.scanning": "Skanner flyttbare USB-stasjoner...",
   "disk.empty_list": "Ingen flyttbar USB-stasjon oppdaget. Sett inn en USB-stasjon.",
+  "disk.nominal": "Nominell",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Speed Acceleration",
   "fs.exfat": "exFAT (Standard • Støtter >4GB ISO-filer)",
   "fs.ntfs": "NTFS (Windows Native)",

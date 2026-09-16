@@ -280,6 +280,7 @@ export const daDk: TranslationDict = {
   "icon_picker.key_desc": "FIDO2-sikkerhedsnøglehardware",
   "disk.scanning": "Scanner aftagelige USB-drev...",
   "disk.empty_list": "Der blev ikke fundet noget flytbart USB-drev. Indsæt venligst et USB-drev.",
+  "disk.nominal": "Nominel",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Speed Acceleration",
   "fs.exfat": "exFAT (Standard • Understøtter >4GB ISO-filer)",
   "fs.ntfs": "NTFS (Windows Native)",

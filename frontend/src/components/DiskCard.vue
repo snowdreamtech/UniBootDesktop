@@ -121,7 +121,7 @@
         </span>
       </div>
       <div class="disk-meta">
-        {{ disk.device }} • {{ disk.formatted }}
+        {{ disk.device }} • {{ formatDiskCapacity(disk.formatted) }}
         <span class="speed-tag" :class="disk.protocolCode || 'usb2'">
           {{ disk.usbVersion || 'USB 2.0' }} • {{ disk.usbSpeed || '480 Mb/s' }}
         </span>
@@ -150,7 +150,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { t } from '../i18n';
+import { t, formatDiskCapacity } from '../i18n';
 
 interface DiskInfo {
   device: string;

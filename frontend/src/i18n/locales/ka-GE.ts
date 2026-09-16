@@ -280,6 +280,7 @@ export const kaGe: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 უსაფრთხოების გასაღების აპარატურა",
   "disk.scanning": "მიმდინარეობს მოსახსნელი USB დისკების სკანირება...",
   "disk.empty_list": "მოსახსნელი USB დისკი არ არის აღმოჩენილი. გთხოვთ ჩადეთ USB დისკი.",
+  "disk.nominal": "ნომინალური",
   "settings.github_proxy_title": "GitHub Cloud Mirror და სიჩქარის აჩქარება",
   "fs.exfat": "exFAT (ნაგულისხმევი • მხარს უჭერს >4 GB ISO ფაილებს)",
   "fs.ntfs": "NTFS (Windows Native)",

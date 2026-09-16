@@ -298,6 +298,7 @@ export interface TranslationDict {
   "icon_picker.key_desc": string;
   "disk.scanning": string;
   "disk.empty_list": string;
+  "disk.nominal"?: string;
   "settings.github_proxy_title": string;
   "fs.exfat": string;
   "fs.ntfs": string;

@@ -280,6 +280,7 @@ export const etEe: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 turvavõtme riistvara",
   "disk.scanning": "Eemaldatavate USB-draivide skannimine...",
   "disk.empty_list": "Eemaldatavat USB-draivi ei tuvastatud. Palun sisestage USB-draiv.",
+  "disk.nominal": "Nominaalne",
   "settings.github_proxy_title": "GitHubi pilvepeegel ja kiiruskiirendus",
   "fs.exfat": "exFAT (vaikimisi • Toetab >4 GB ISO-faile)",
   "fs.ntfs": "NTFS (Windows Native)",

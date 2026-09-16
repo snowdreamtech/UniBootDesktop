@@ -280,6 +280,7 @@ export const ukUa: TranslationDict = {
   "icon_picker.key_desc": "Обладнання ключа безпеки FIDO2",
   "disk.scanning": "Сканування знімних USB-накопичувачів...",
   "disk.empty_list": "Знімний USB-накопичувач не виявлено. Вставте USB-накопичувач.",
+  "disk.nominal": "Номінальний",
   "settings.github_proxy_title": "GitHub Cloud Mirror і прискорення швидкості",
   "fs.exfat": "exFAT (за замовчуванням • Підтримує файли ISO >4 ГБ)",
   "fs.ntfs": "NTFS (власний Windows)",

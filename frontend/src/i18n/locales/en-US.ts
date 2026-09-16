@@ -301,6 +301,7 @@ export const enUs: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 Security Key Hardware",
   "disk.scanning": "Scanning removable USB drives...",
   "disk.empty_list": "No removable USB drive detected. Please insert a USB drive.",
+  "disk.nominal": "Nominal",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Speed Acceleration",
   "fs.exfat": "exFAT (Default • Supports >4GB ISO Files)",
   "fs.ntfs": "NTFS (Windows Native)",

@@ -280,6 +280,7 @@ export const hrHr: TranslationDict = {
   "icon_picker.key_desc": "Hardver sigurnosnog ključa FIDO2",
   "disk.scanning": "Skeniranje izmjenjivih USB pogona...",
   "disk.empty_list": "Nije otkriven prijenosni USB pogon. Umetnite USB pogon.",
+  "disk.nominal": "Nominalna",
   "settings.github_proxy_title": "GitHub Cloud Mirror & ubrzanje brzine",
   "fs.exfat": "exFAT (zadano • Podržava >4GB ISO datoteke)",
   "fs.ntfs": "NTFS (Windows izvorni)",

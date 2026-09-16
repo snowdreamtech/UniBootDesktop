@@ -56,7 +56,7 @@
 
           <div class="spec-item">
             <span class="spec-label">{{ t('inspector.lbl_size') }}</span>
-            <span class="spec-val">{{ disk.formatted }}</span>
+            <span class="spec-val">{{ formatDiskCapacity(disk.formatted) }}</span>
           </div>
 
           <div class="spec-item">
@@ -207,7 +207,7 @@ defineProps<{
   disk: DiskInfo | null;
 }>();
 
-import { t } from '../i18n';
+import { t, formatDiskCapacity } from '../i18n';
 
 const emit = defineEmits(['close']);
 

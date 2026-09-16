@@ -280,6 +280,7 @@ export const bnBd: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 নিরাপত্তা কী হার্ডওয়্যার",
   "disk.scanning": "অপসারণযোগ্য USB ড্রাইভ স্ক্যান করা হচ্ছে...",
   "disk.empty_list": "কোনো অপসারণযোগ্য USB ড্রাইভ সনাক্ত করা যায়নি৷ একটি USB ড্রাইভ সন্নিবেশ করুন.",
+  "disk.nominal": "নামমাত্র",
   "settings.github_proxy_title": "গিটহাব ক্লাউড মিরর এবং গতি ত্বরণ",
   "fs.exfat": "exFAT (ডিফল্ট • 4GB ISO ফাইল সমর্থন করে)",
   "fs.ntfs": "NTFS (উইন্ডোজ নেটিভ)",

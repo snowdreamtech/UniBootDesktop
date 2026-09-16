@@ -280,6 +280,7 @@ export const ocFr: TranslationDict = {
   "icon_picker.key_desc": "Material de clau de seguretat FIDO2",
   "disk.scanning": "Escanar de discs USB amovibles...",
   "disk.empty_list": "Cap de disc USB amovible pas detectada. Mercés d'inserir una unitat USB.",
+  "disk.nominal": "Nominal",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Acceleracion de velocitat",
   "fs.exfat": "exFAT (Per defaut • Supòrta >4 Go de fichièrs ISO)",
   "fs.ntfs": "NTFS (Windows Native)",

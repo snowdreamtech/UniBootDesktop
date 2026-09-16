@@ -280,6 +280,7 @@ export const glEs: TranslationDict = {
   "icon_picker.key_desc": "Hardware da chave de seguridade FIDO2",
   "disk.scanning": "Escaneando unidades USB extraíbles...",
   "disk.empty_list": "Non se detectou ningunha unidade USB extraíble. Insira unha unidade USB.",
+  "disk.nominal": "Nominal",
   "settings.github_proxy_title": "GitHub Cloud Mirror e aceleración de velocidade",
   "fs.exfat": "exFAT (predeterminado • Admite ficheiros ISO > 4 GB)",
   "fs.ntfs": "NTFS (nativo de Windows)",

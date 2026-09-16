@@ -280,6 +280,7 @@ export const heIl: TranslationDict = {
   "icon_picker.key_desc": "חומרת מפתח אבטחה FIDO2",
   "disk.scanning": "סורק כונני USB נשלפים...",
   "disk.empty_list": "לא זוהה כונן USB נשלף. אנא הכנס כונן USB.",
+  "disk.nominal": "נומינלי",
   "settings.github_proxy_title": "GitHub Cloud Mirror והאצת מהירות",
   "fs.exfat": "exFAT (ברירת מחדל • תומך בקבצי ISO של>4GB)",
   "fs.ntfs": "NTFS (Windows Native)",

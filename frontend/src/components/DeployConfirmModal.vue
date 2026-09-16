@@ -47,7 +47,7 @@
               <span class="disk-path">{{ targetDisk.device }}</span>
             </div>
             <div class="disk-meta-pills">
-              <span class="pill-tag">{{ targetDisk.formatted }}</span>
+              <span class="pill-tag">{{ formatDiskCapacity(targetDisk.formatted) }}</span>
               <span class="pill-tag">{{ targetDisk.fileSystem || "FAT32" }}</span>
               <span class="pill-tag">{{ targetDisk.partitionScheme || "Unknown partition table" }}</span>
               <span class="pill-tag accent" v-if="mode === 'hybrid'">{{
@@ -76,7 +76,7 @@
                     <span class="batch-dev-path">{{ disk.device }}</span>
                   </div>
                   <div class="batch-dev-info-grid">
-                    <div><span>{{ disk.formatted || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
+                    <div><span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
                     <div><strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}</div>
                     <div><strong>{{ t("confirm.system_disk") }}:</strong> {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
                     <div><strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}</div>
@@ -94,7 +94,7 @@
                     <span class="batch-dev-path">{{ disk.device }}</span>
                   </div>
                   <div class="batch-dev-info-grid">
-                    <div><span>{{ disk.formatted || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
+                    <div><span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
                     <div><strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}</div>
                     <div><strong>{{ t("confirm.system_disk") }}:</strong> {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
                     <div><strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}</div>
@@ -115,7 +115,7 @@
                   <span class="batch-dev-path">{{ disk.device }}</span>
                 </div>
                 <div class="batch-dev-info-grid">
-                  <div><span>{{ disk.formatted || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
+                  <div><span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
                   <div><strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}</div>
                   <div><strong>{{ t("confirm.system_disk") }}:</strong> {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
                   <div><strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}</div>
@@ -139,7 +139,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { t } from "../i18n";
+import { t, formatDiskCapacity } from "../i18n";
 
 interface DiskInfo {
   device: string;

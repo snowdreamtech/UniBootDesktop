@@ -280,6 +280,7 @@ export const taIn: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 பாதுகாப்பு விசை வன்பொருள்",
   "disk.scanning": "நீக்கக்கூடிய USB டிரைவ்களை ஸ்கேன் செய்கிறது...",
   "disk.empty_list": "நீக்கக்கூடிய USB டிரைவ் எதுவும் கண்டறியப்படவில்லை. USB டிரைவைச் செருகவும்.",
+  "disk.nominal": "பெயரளவு",
   "settings.github_proxy_title": "கிட்ஹப் கிளவுட் மிரர் & வேக முடுக்கம்",
   "fs.exfat": "exFAT (இயல்புநிலை • ஆதரிக்கிறது >4GB ISO கோப்புகள்)",
   "fs.ntfs": "NTFS (விண்டோஸ் நேட்டிவ்)",

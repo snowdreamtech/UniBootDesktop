@@ -280,6 +280,7 @@ export const arSa: TranslationDict = {
   "icon_picker.key_desc": "مفتاح أمان الأجهزة FIDO2",
   "disk.scanning": "جاري فحص محركات أقراص USB القابلة للإزالة...",
   "disk.empty_list": "لم يتم اكتشاف أي محرك أقراص USB قابل للإزالة. يرجى إدخال محرك أقراص.",
+  "disk.nominal": "إسمي",
   "settings.github_proxy_title": "مرآة GitHub السحابية وتسريع الشبكة",
   "fs.exfat": "exFAT (افتراضي • يدعم ملفات >4 جيجابايت)",
   "fs.ntfs": "NTFS (نظام Windows الأصلي)",

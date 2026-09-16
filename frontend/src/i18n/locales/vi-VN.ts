@@ -280,6 +280,7 @@ export const viVn: TranslationDict = {
   "icon_picker.key_desc": "Khóa bảo mật phần cứng FIDO2",
   "disk.scanning": "Đang quét các ổ USB di động...",
   "disk.empty_list": "Không tìm thấy ổ USB di động nào. Vui lòng cắm ổ USB.",
+  "disk.nominal": "Danh định",
   "settings.github_proxy_title": "Máy chủ gương đám mây & Tăng tốc mạng GitHub",
   "fs.exfat": "exFAT (Mặc định • Hỗ trợ tệp >4GB)",
   "fs.ntfs": "NTFS (Nguyên bản Windows)",

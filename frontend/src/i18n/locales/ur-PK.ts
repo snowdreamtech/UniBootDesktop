@@ -280,6 +280,7 @@ export const urPk: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 سیکیورٹی کلیدی ہارڈ ویئر",
   "disk.scanning": "ہٹنے کے قابل USB ڈرائیوز کو اسکین کیا جا رہا ہے...",
   "disk.empty_list": "کوئی ہٹنے کے قابل USB ڈرائیو کا پتہ نہیں چلا۔ براہ کرم ایک USB ڈرائیو داخل کریں۔",
+  "disk.nominal": "نامی",
   "settings.github_proxy_title": "GitHub کلاؤڈ مرر اور سپیڈ ایکسلریشن",
   "fs.exfat": "exFAT (پہلے سے طے شدہ • 4GB ISO فائلوں کو سپورٹ کرتا ہے)",
   "fs.ntfs": "NTFS (Windows Native)",

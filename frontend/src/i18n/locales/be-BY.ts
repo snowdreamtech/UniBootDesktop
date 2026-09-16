@@ -280,6 +280,7 @@ export const beBy: TranslationDict = {
   "icon_picker.key_desc": "Абсталяванне ключа бяспекі FIDO2",
   "disk.scanning": "Сканаванне здымных USB-дыскаў...",
   "disk.empty_list": "Здымны USB-дыск не знойдзены. Устаўце USB-дыск.",
+  "disk.nominal": "Намінальны",
   "settings.github_proxy_title": "GitHub Cloud Mirror і паскарэнне хуткасці",
   "fs.exfat": "exFAT (па змаўчанні • Падтрымлівае файлы ISO >4 ГБ)",
   "fs.ntfs": "NTFS (уласны Windows)",

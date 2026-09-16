@@ -280,6 +280,7 @@ export const jaJp: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 ハードウェアセキュリティキー",
   "disk.scanning": "リムーバブル USB ドライブをスキャン中...",
   "disk.empty_list": "リムーバブル USB ドライブが検出されません。挿入して再試行してください",
+  "disk.nominal": "公称",
   "settings.github_proxy_title": "GitHub クラウドミラー & ネットワーク加速",
   "fs.exfat": "exFAT (デフォルト推奨 • 4GB超ファイル対応)",
   "fs.ntfs": "NTFS (Windows ネイティブ)",

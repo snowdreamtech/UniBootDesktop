@@ -280,6 +280,7 @@ export const roRo: TranslationDict = {
   "icon_picker.key_desc": "Hardware cheie de securitate FIDO2",
   "disk.scanning": "Se scanează unități USB amovibile...",
   "disk.empty_list": "Nu a fost detectată nicio unitate USB amovibilă. Vă rugăm să introduceți o unitate USB.",
+  "disk.nominal": "Nominală",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Speed Acceleration",
   "fs.exfat": "exFAT (implicit • Suportă > 4 GB fișiere ISO)",
   "fs.ntfs": "NTFS (Windows nativ)",

@@ -280,6 +280,7 @@ export const elGr: TranslationDict = {
   "icon_picker.key_desc": "Υλικό κλειδιού ασφαλείας FIDO2",
   "disk.scanning": "Σάρωση αφαιρούμενων μονάδων USB...",
   "disk.empty_list": "Δεν εντοπίστηκε αφαιρούμενη μονάδα USB. Εισαγάγετε μια μονάδα USB.",
+  "disk.nominal": "Ονομαστική",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Speed Acceleration",
   "fs.exfat": "exFAT (Προεπιλογή • Υποστηρίζει >4 GB αρχεία ISO)",
   "fs.ntfs": "NTFS (Windows Native)",

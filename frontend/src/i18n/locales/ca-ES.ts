@@ -280,6 +280,7 @@ export const caEs: TranslationDict = {
   "icon_picker.key_desc": "Maquinari de claus de seguretat FIDO2",
   "disk.scanning": "S'estan escanejant unitats USB extraïbles...",
   "disk.empty_list": "No s'ha detectat cap unitat USB extraïble. Si us plau, inseriu una unitat USB.",
+  "disk.nominal": "Nominal",
   "settings.github_proxy_title": "Mirall del núvol de GitHub i acceleració de velocitat",
   "fs.exfat": "exFAT (per defecte • Admet > 4 GB de fitxers ISO)",
   "fs.ntfs": "NTFS (natiu de Windows)",

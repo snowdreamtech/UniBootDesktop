@@ -280,6 +280,7 @@ export const esLa: TranslationDict = {
   "icon_picker.key_desc": "Hardware de llave de seguridad FIDO2",
   "disk.scanning": "Escaneando unidades USB extraíbles...",
   "disk.empty_list": "No se detectó ninguna unidad USB extraíble. Inserte una unidad USB.",
+  "disk.nominal": "Nominal",
   "settings.github_proxy_title": "GitHub Cloud Mirror y aceleración de velocidad",
   "fs.exfat": "exFAT (predeterminado • Admite archivos ISO de >4 GB)",
   "fs.ntfs": "NTFS (nativo de Windows)",

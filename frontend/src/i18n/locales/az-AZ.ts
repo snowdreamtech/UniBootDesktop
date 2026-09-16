@@ -280,6 +280,7 @@ export const azAz: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 Təhlükəsizlik Açarı Hardware",
   "disk.scanning": "Çıxarılan USB disklər skan edilir...",
   "disk.empty_list": "Çıxarılan USB disk aşkarlanmadı. Zəhmət olmasa USB sürücüsünü daxil edin.",
+  "disk.nominal": "Nominal",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Speed ​​Acceleration",
   "fs.exfat": "exFAT (Defolt • >4GB ISO fayllarını dəstəkləyir)",
   "fs.ntfs": "NTFS (Windows Native)",

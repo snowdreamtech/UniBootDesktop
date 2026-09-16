@@ -280,6 +280,7 @@ export const deDe: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 Hardware-Sicherheitsschlüssel",
   "disk.scanning": "Scannen nach Wechsel-USB-Laufwerken...",
   "disk.empty_list": "Kein Wechsel-USB-Laufwerk erkannt. Bitte USB-Laufwerk einstecken.",
+  "disk.nominal": "Nennkapazität",
   "settings.github_proxy_title": "GitHub-Cloud-Mirror & Netzwerkbeschleunigung",
   "fs.exfat": "exFAT (Standard • Unterstützt >4GB ISO)",
   "fs.ntfs": "NTFS (Windows-nativ)",

@@ -280,6 +280,7 @@ export const svSe: TranslationDict = {
   "icon_picker.key_desc": "Hårdvara för FIDO2 säkerhetsnyckel",
   "disk.scanning": "Skannar flyttbara USB-enheter...",
   "disk.empty_list": "Ingen flyttbar USB-enhet upptäcktes. Sätt i en USB-enhet.",
+  "disk.nominal": "Nominell",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Speed Acceleration",
   "fs.exfat": "exFAT (Standard • Stöder >4GB ISO-filer)",
   "fs.ntfs": "NTFS (Windows Native)",

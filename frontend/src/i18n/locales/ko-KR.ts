@@ -280,6 +280,7 @@ export const koKr: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 하드웨어 보안 키",
   "disk.scanning": "이동식 USB 드라이브 스캔 중...",
   "disk.empty_list": "이동식 USB 드라이브가 감지되지 않았습니다. USB를 연결 후 다시 시도하세요",
+  "disk.nominal": "공칭",
   "settings.github_proxy_title": "GitHub 클라우드 미러 및 네트워크 가속",
   "fs.exfat": "exFAT (기본 권장 • 4GB 초과 파일 지원)",
   "fs.ntfs": "NTFS (Windows 네이티브)",

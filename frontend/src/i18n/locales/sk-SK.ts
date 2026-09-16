@@ -280,6 +280,7 @@ export const skSk: TranslationDict = {
   "icon_picker.key_desc": "Hardvér bezpečnostného kľúča FIDO2",
   "disk.scanning": "Skenujú sa vymeniteľné jednotky USB...",
   "disk.empty_list": "Nebola zistená žiadna vymeniteľná jednotka USB. Vložte USB disk.",
+  "disk.nominal": "Nominálna",
   "settings.github_proxy_title": "GitHub Cloud Mirror & Speed Acceleration",
   "fs.exfat": "exFAT (predvolené • podporuje > 4 GB ISO súbory)",
   "fs.ntfs": "NTFS (natívny systém Windows)",

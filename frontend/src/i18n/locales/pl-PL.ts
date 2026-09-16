@@ -280,6 +280,7 @@ export const plPl: TranslationDict = {
   "icon_picker.key_desc": "Sprzętowy klucz bezpieczeństwa FIDO2",
   "disk.scanning": "Skanowanie wymiennych dysków USB...",
   "disk.empty_list": "Nie wykryto wymiennego dysku USB. Włóż dysk USB.",
+  "disk.nominal": "Nominalna",
   "settings.github_proxy_title": "Serwer lustrzany w chmurze GitHub i przyspieszenie",
   "fs.exfat": "exFAT (Domyślny • Obsługuje pliki >4GB)",
   "fs.ntfs": "NTFS (Natywny Windows)",

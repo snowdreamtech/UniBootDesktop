@@ -280,6 +280,7 @@ export const hyAm: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 անվտանգության բանալի ապարատ",
   "disk.scanning": "Շարժական USB կրիչների սկանավորում...",
   "disk.empty_list": "Շարժական USB կրիչ չի հայտնաբերվել: Խնդրում ենք տեղադրել USB կրիչ:",
+  "disk.nominal": "Անվանական",
   "settings.github_proxy_title": "GitHub Cloud Mirror և արագության արագացում",
   "fs.exfat": "exFAT (կանխադրված • Աջակցում է >4 ԳԲ ISO ֆայլեր)",
   "fs.ntfs": "NTFS (Windows Native)",

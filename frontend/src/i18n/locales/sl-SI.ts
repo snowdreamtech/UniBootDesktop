@@ -280,6 +280,7 @@ export const slSi: TranslationDict = {
   "icon_picker.key_desc": "Strojna oprema varnostnega ključa FIDO2",
   "disk.scanning": "Skeniranje izmenljivih pogonov USB ...",
   "disk.empty_list": "Odstranljiv pogon USB ni bil zaznan. Vstavite pogon USB.",
+  "disk.nominal": "Nominalna",
   "settings.github_proxy_title": "GitHub Cloud Mirror & pospešek hitrosti",
   "fs.exfat": "exFAT (privzeto • podpira >4GB datotek ISO)",
   "fs.ntfs": "NTFS (Windows Native)",

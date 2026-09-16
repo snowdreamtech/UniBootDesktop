@@ -280,6 +280,7 @@ export const zhTw: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 硬體安全 Key 金鑰",
   "disk.scanning": "正在掃描可移動隨身碟...",
   "disk.empty_list": "未檢測到可移動隨身碟，請插入隨身碟後重試",
+  "disk.nominal": "標稱",
   "settings.github_proxy_title": "GitHub 雲端鏡像與網路加速",
   "fs.exfat": "exFAT (預設推薦 • 支援 >4GB 單檔案大鏡像)",
   "fs.ntfs": "NTFS (Windows 原生格式)",

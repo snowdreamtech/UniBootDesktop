@@ -301,6 +301,7 @@ export const zhCn: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 硬件安全 Key 密钥",
   "disk.scanning": "正在扫描可移动 U 盘...",
   "disk.empty_list": "未检测到可移动 U 盘，请插入 U 盘后重试",
+  "disk.nominal": "标称",
   "settings.github_proxy_title": "GitHub 云端镜像与网络加速",
   "fs.exfat": "exFAT (默认推荐 • 支持 >4GB 单文件大镜像)",
   "fs.ntfs": "NTFS (Windows 原生格式)",

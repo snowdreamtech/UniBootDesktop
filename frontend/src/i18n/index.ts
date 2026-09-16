@@ -161,3 +161,9 @@ export function t(key: keyof TranslationDict, params?: Record<string, string | n
 
   return text;
 }
+
+export function formatDiskCapacity(formattedStr: string): string {
+  if (!formattedStr) return '';
+  const nominalWord = t('disk.nominal' as any) || 'Nominal';
+  return formattedStr.replace(/\(Nominal /g, `(${nominalWord} `);
+}

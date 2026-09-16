@@ -280,6 +280,7 @@ export const srLatn: TranslationDict = {
   "icon_picker.key_desc": "ФИДО2 сигурносни кључ Хардвер",
   "disk.scanning": "Скенирање преносивих УСБ дискова...",
   "disk.empty_list": "Није откривен преносиви УСБ диск. Убаците УСБ диск.",
+  "disk.nominal": "Nominalna",
   "settings.github_proxy_title": "ГитХуб Цлоуд Миррор и убрзање брзине",
   "fs.exfat": "екФАТ (подразумевано • Подржава >4ГБ ИСО датотека)",
   "fs.ntfs": "НТФС (Виндовс изворни)",

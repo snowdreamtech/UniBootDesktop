@@ -280,6 +280,7 @@ export const hiIn: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 सुरक्षा कुंजी हार्डवेयर",
   "disk.scanning": "हटाने योग्य USB ड्राइव को स्कैन किया जा रहा है...",
   "disk.empty_list": "कोई हटाने योग्य USB ड्राइव का पता नहीं चला. कृपया एक यूएसबी ड्राइव डालें.",
+  "disk.nominal": "नाममात्र",
   "settings.github_proxy_title": "GitHub क्लाउड मिरर और स्पीड एक्सेलेरेशन",
   "fs.exfat": "exFAT (डिफ़ॉल्ट • >4GB ISO फ़ाइलों का समर्थन करता है)",
   "fs.ntfs": "एनटीएफएस (विंडोज नेटिव)",

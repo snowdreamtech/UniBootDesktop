@@ -280,6 +280,7 @@ export const ruRu: TranslationDict = {
   "icon_picker.key_desc": "Аппаратный ключ безопасности FIDO2",
   "disk.scanning": "Сканирование съемных USB-накопителей...",
   "disk.empty_list": "Съемные USB-накопители не обнаружены. Вставьте USB-диск.",
+  "disk.nominal": "Номинальный",
   "settings.github_proxy_title": "Облачное зеркало GitHub и ускорение сети",
   "fs.exfat": "exFAT (По умолчанию • Поддержка файлов >4 ГБ)",
   "fs.ntfs": "NTFS (Родная система Windows)",

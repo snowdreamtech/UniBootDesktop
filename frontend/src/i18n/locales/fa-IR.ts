@@ -280,6 +280,7 @@ export const faIr: TranslationDict = {
   "icon_picker.key_desc": "سخت افزار کلید امنیتی FIDO2",
   "disk.scanning": "اسکن درایوهای USB قابل جابجایی...",
   "disk.empty_list": "درایو USB قابل جابجایی شناسایی نشد. لطفا یک درایو USB وارد کنید.",
+  "disk.nominal": "اسمی",
   "settings.github_proxy_title": "GitHub Cloud Mirror و شتاب سرعت",
   "fs.exfat": "exFAT (پیش‌فرض • از فایل‌های ISO > 4 گیگابایت پشتیبانی می‌کند)",
   "fs.ntfs": "NTFS (ویندوز نیتیو)",

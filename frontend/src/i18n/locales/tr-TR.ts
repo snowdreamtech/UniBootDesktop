@@ -280,6 +280,7 @@ export const trTr: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 Donanım Güvenlik Anahtarı",
   "disk.scanning": "Çıkarılabilir USB sürücüleri taranıyor...",
   "disk.empty_list": "Çıkarılabilir USB sürücüsü algılanmadı. Lütfen bir USB sürücüsü takın.",
+  "disk.nominal": "Nominal",
   "settings.github_proxy_title": "GitHub Bulut Yansıması ve Ağ Hızlandırması",
   "fs.exfat": "exFAT (Varsayılan • >4GB Dosyaları Destekler)",
   "fs.ntfs": "NTFS (Yerel Windows)",

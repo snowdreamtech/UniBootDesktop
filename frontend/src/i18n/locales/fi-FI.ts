@@ -280,6 +280,7 @@ export const fiFi: TranslationDict = {
   "icon_picker.key_desc": "FIDO2-suojausavainlaitteisto",
   "disk.scanning": "Skannataan irrotettavia USB-asemia...",
   "disk.empty_list": "Irrotettavaa USB-asemaa ei havaittu. Aseta USB-asema.",
+  "disk.nominal": "Nimellinen",
   "settings.github_proxy_title": "GitHub-pilvipeili ja nopeuden kiihdytys",
   "fs.exfat": "exFAT (oletus • Tukee >4 Gt ISO-tiedostoja)",
   "fs.ntfs": "NTFS (Windows Native)",

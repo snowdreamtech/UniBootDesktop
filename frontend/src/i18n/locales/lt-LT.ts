@@ -280,6 +280,7 @@ export const ltLt: TranslationDict = {
   "icon_picker.key_desc": "FIDO2 saugos rakto aparatinė įranga",
   "disk.scanning": "Nuskaitomi išimami USB diskai...",
   "disk.empty_list": "Nerasta nuimamo USB disko. Įdėkite USB atmintinę.",
+  "disk.nominal": "Nominalus",
   "settings.github_proxy_title": "„GitHub“ debesies veidrodis ir greičio pagreitis",
   "fs.exfat": "exFAT (numatytasis nustatymas • Palaiko >4 GB ISO failus)",
   "fs.ntfs": "NTFS („Windows Native“)",
