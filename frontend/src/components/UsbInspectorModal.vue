@@ -333,53 +333,54 @@ function closeModal() {
 }
 
 .audit-banner.fake-alert {
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: var(--alert-danger-bg);
+  border: 1px solid var(--alert-danger-border);
 }
 
 .audit-banner.fake-alert h4 {
-  color: #f87171;
+  color: var(--alert-danger-title);
   margin: 0 0 0.3rem 0;
 }
 
 .audit-banner.fake-alert p {
-  color: #fca5a5;
-  font-size: 0.825rem;
+  color: var(--alert-danger-text);
+  font-size: 0.85rem;
   margin: 0;
   line-height: 1.45;
 }
 
 .audit-banner.genuine-pass {
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: var(--alert-success-bg);
+  border: 1px solid var(--alert-success-border);
 }
 
 .audit-banner.genuine-pass h4 {
-  color: #34d399;
+  color: var(--alert-success-title);
   margin: 0 0 0.3rem 0;
 }
 
 .audit-banner.genuine-pass p {
-  color: #a7f3d0;
-  font-size: 0.825rem;
+  color: var(--alert-success-text);
+  font-size: 0.85rem;
   margin: 0;
   line-height: 1.45;
 }
 
 .audit-banner.usb2-info {
-  background: rgba(59, 130, 246, 0.15);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: var(--alert-info-bg);
+  border: 1px solid var(--alert-info-border);
 }
 
 .audit-banner.usb2-info h4 {
-  color: #60a5fa;
+  color: var(--alert-info-title);
   margin: 0 0 0.3rem 0;
 }
 
 .audit-banner.usb2-info p {
-  color: #bfdbfe;
-  font-size: 0.825rem;
+  color: var(--alert-info-text);
+  font-size: 0.85rem;
   margin: 0;
+  line-height: 1.45;
 }
 
 .banner-icon {

@@ -1691,8 +1691,8 @@ h1 {
   display: flex;
   align-items: flex-start;
   gap: 0.8rem;
-  background: rgba(0, 229, 255, 0.08);
-  border: 1px solid rgba(0, 229, 255, 0.3);
+  background: var(--alert-info-bg);
+  border: 1px solid var(--alert-info-border);
   border-radius: 12px;
   padding: 0.9rem 1.1rem;
   margin-bottom: 1.25rem;
@@ -1710,27 +1710,28 @@ h1 {
 }
 
 .safe-notice-title {
-  color: var(--accent-cyan);
+  color: var(--alert-info-title);
   font-weight: 700;
   font-size: 0.875rem;
 }
 
 .safe-notice-desc {
-  color: #a5f3fc;
+  color: var(--alert-info-text);
   font-size: 0.8rem;
   line-height: 1.45;
 }
 
 .safe-notice-desc b {
-  color: #fff;
+  color: var(--text-main);
+  font-weight: 700;
 }
 
 .warn-modeb-notice {
   display: flex;
   align-items: flex-start;
   gap: 0.8rem;
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.35);
+  background: var(--alert-warning-bg);
+  border: 1px solid var(--alert-warning-border);
   border-radius: 12px;
   padding: 0.9rem 1.1rem;
   margin-bottom: 1.25rem;
@@ -1748,19 +1749,20 @@ h1 {
 }
 
 .warn-notice-title {
-  color: #fbbf24;
+  color: var(--alert-warning-title);
   font-weight: 700;
   font-size: 0.875rem;
 }
 
 .warn-notice-desc {
-  color: #fef08a;
+  color: var(--alert-warning-text);
   font-size: 0.8rem;
   line-height: 1.45;
 }
 
 .warn-notice-desc b {
-  color: #fff;
+  color: var(--text-main);
+  font-weight: 700;
 }
 
 .deploy-box {

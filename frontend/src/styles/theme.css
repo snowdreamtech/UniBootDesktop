@@ -1,38 +1,88 @@
 /* Glassmorphism Theme CSS — UniGoDesktop Design System */
 :root, [data-theme="dark"] {
   color-scheme: dark;
-  --bg-color: #070a12;
-  --card-bg: rgba(18, 26, 43, 0.92);
-  --modal-bg: rgba(13, 20, 36, 0.95);
-  --input-bg: rgba(8, 14, 26, 0.8);
-  --section-bg: rgba(0, 0, 0, 0.25);
-  --card-border: rgba(0, 229, 255, 0.15);
-  --card-border-active: rgba(0, 229, 255, 0.6);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --accent-cyan: #00e5ff;
-  --accent-cyan-glow: rgba(0, 229, 255, 0.35);
-  --accent-purple: #9d4edd;
+  --bg-color: #0b0f19;
+  --card-bg: rgba(17, 24, 39, 0.95);
+  --modal-bg: #111827;
+  --modal-header-bg: #1f2937;
+  --input-bg: #1f2937;
+  --section-bg: rgba(31, 41, 55, 0.5);
+  --card-border: #374151;
+  --card-border-active: #3b82f6;
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+  --text-subtle: #6b7280;
+
+  --accent-cyan: #38bdf8;
+  --accent-cyan-glow: rgba(56, 189, 248, 0.2);
+  --accent-purple: #a855f7;
+
+  --alert-danger-bg: rgba(239, 68, 68, 0.15);
+  --alert-danger-border: rgba(239, 68, 68, 0.35);
+  --alert-danger-title: #fca5a5;
+  --alert-danger-text: #f3f4f6;
+
+  --alert-warning-bg: rgba(245, 158, 11, 0.15);
+  --alert-warning-border: rgba(245, 158, 11, 0.35);
+  --alert-warning-title: #fcd34d;
+  --alert-warning-text: #f3f4f6;
+
+  --alert-info-bg: rgba(59, 130, 246, 0.15);
+  --alert-info-border: rgba(59, 130, 246, 0.35);
+  --alert-info-title: #93c5fd;
+  --alert-info-text: #f3f4f6;
+
+  --alert-success-bg: rgba(16, 185, 129, 0.15);
+  --alert-success-border: rgba(16, 185, 129, 0.35);
+  --alert-success-title: #6ee7b7;
+  --alert-success-text: #f3f4f6;
+
   --success: #10b981;
   --warning: #f59e0b;
+  --danger: #ef4444;
 }
 
 [data-theme="light"] {
   color-scheme: light;
-  --bg-color: #f1f5f9;
+  --bg-color: #f8fafc;
   --card-bg: #ffffff;
   --modal-bg: #ffffff;
+  --modal-header-bg: #f1f5f9;
   --input-bg: #f8fafc;
   --section-bg: #f1f5f9;
-  --card-border: #cbd5e1;
-  --card-border-active: #0284c7;
+  --card-border: #e2e8f0;
+  --card-border-active: #2563eb;
   --text-main: #0f172a;
   --text-muted: #475569;
+  --text-subtle: #64748b;
+
   --accent-cyan: #0284c7;
-  --accent-cyan-glow: rgba(2, 132, 199, 0.2);
+  --accent-cyan-glow: rgba(2, 132, 199, 0.12);
   --accent-purple: #7c3aed;
+
+  --alert-danger-bg: #fef2f2;
+  --alert-danger-border: #fecaca;
+  --alert-danger-title: #991b1b;
+  --alert-danger-text: #1f2937;
+
+  --alert-warning-bg: #fffbeb;
+  --alert-warning-border: #fde68a;
+  --alert-warning-title: #92400e;
+  --alert-warning-text: #1f2937;
+
+  --alert-info-bg: #eff6ff;
+  --alert-info-border: #bfdbfe;
+  --alert-info-title: #1e40af;
+  --alert-info-text: #1f2937;
+
+  --alert-success-bg: #f0fdf4;
+  --alert-success-border: #bbf7d0;
+  --alert-success-title: #166534;
+  --alert-success-text: #1f2937;
+
   --success: #059669;
   --warning: #d97706;
+  --danger: #dc2626;
 }
 
 /* Global Select & Option Dropdown Light/Dark Theme Adaptations */
