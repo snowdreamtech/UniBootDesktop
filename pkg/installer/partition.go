@@ -30,6 +30,9 @@ func FormatDiskModeB(ctx context.Context, targetDisk string) (string, error) {
 
 	// Dry-run mode for tests or safe simulation
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
+		if strings.Contains(targetDisk, "fail") {
+			return "", fmt.Errorf("simulated formatting failure for disk %s", targetDisk)
+		}
 		tempMount, err := os.MkdirTemp("", "uniboot-dryrun-mount-*")
 		if err != nil {
 			return "", fmt.Errorf("failed to create dry-run mount point: %w", err)
@@ -183,6 +186,9 @@ func FormatDiskModeA(ctx context.Context, targetDisk string, fsType string) (str
 
 	// Dry-run mode for tests or safe simulation
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
+		if strings.Contains(targetDisk, "fail") {
+			return "", fmt.Errorf("simulated Mode A formatting failure for disk %s", targetDisk)
+		}
 		tempMount, err := os.MkdirTemp("", "uniboot-dryrun-modea-*")
 		if err != nil {
 			return "", fmt.Errorf("failed to create dry-run mount point for Mode A: %w", err)

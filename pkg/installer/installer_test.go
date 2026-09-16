@@ -94,8 +94,7 @@ func TestDeployModeABatchPartialFailure(t *testing.T) {
 
 	ctx := context.Background()
 
-	// Dry run mode A with invalid target path to trigger per-disk failure in loop
-	results, err := DeployModeABatchWithVentoyAndIso(ctx, []string{"dummy_usb_1", "/dev/invalid_disk_path_test"}, "exFAT", "", nil, nil)
+	results, err := DeployModeABatchWithVentoyAndIso(ctx, []string{"dummy_usb_1", "dummy_usb_fail"}, "exFAT", "", nil, nil)
 	require.NoError(t, err)
 	assert.Len(t, results, 2)
 	assert.True(t, results[0].Success)
@@ -109,8 +108,7 @@ func TestDeployModeBBatchPartialFailure(t *testing.T) {
 
 	ctx := context.Background()
 
-	// Dry run mode B with invalid target path to trigger per-disk failure in loop
-	results, err := DeployModeBBatchWithProgress(ctx, []string{"dummy_usb_1", "/dev/invalid_disk_path_test"}, "exFAT", nil)
+	results, err := DeployModeBBatch(ctx, []string{"dummy_usb_1", "dummy_usb_fail"}, "exFAT")
 	require.NoError(t, err)
 	assert.Len(t, results, 2)
 	assert.True(t, results[0].Success)
