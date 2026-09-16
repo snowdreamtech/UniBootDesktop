@@ -4,6 +4,7 @@
 package disk
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
