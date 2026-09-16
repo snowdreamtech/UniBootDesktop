@@ -259,6 +259,20 @@ const diskTagLabel = computed(() => {
   padding: 0.8rem 1rem;
   cursor: pointer;
   margin-bottom: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.disk-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .disk-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .disk-card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
 .disk-card.selected {
