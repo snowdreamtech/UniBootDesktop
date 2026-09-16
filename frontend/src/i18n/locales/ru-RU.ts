@@ -122,7 +122,7 @@ export const ruRu: TranslationDict = {
   "deploy.tip_batch_update_all": "Пакетное обновление без потери данных: все {count} выбранных USB будут обновлены на месте",
   "deploy.tip_batch_mixed": "Пакетное смешанное развертывание: {bootCount} USB обновление без потери данных, {blankCount} USB полное форматирование",
   "deploy.batch_mixed": "Начать пакетное смешанное развертывание ({count} USB)",
-  "deploy.batch_update": "Начать пакетное обновление ({count} USB)",
+  "deploy.batch_update": "Начать пакетное обновление без потери данных ({count} USB)",
   "deploy.start_cloud_create": "🚀 Запустить облачное развертывание Режима B",
   "deploy.start_update": "🛡️ Обновление на месте (Без потери данных)",
   "deploy.batch_create": "Пакетное создание ({count} дисков)",

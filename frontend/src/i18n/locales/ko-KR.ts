@@ -119,7 +119,7 @@ export const koKr: TranslationDict = {
   "deploy.target_device": "대상 장치:",
   "deploy.batch_target": "{count}개 USB 드라이브 선택됨",
   "deploy.start_create": "부팅 디스크 제작 시작",
-  "deploy.tip_batch_update_all": "일괄 무손실 업데이트: 선택한 {count}개 USB 모두 제자리 업데이트",
+  "deploy.tip_batch_update_all": "일괄 무손실 업데이트: 선택한 {count}개 USB 모두 제자리 업데이트 (데이터 및 ISO 보존)",
   "deploy.tip_batch_mixed": "일괄 혼합 배포: {bootCount}개 USB 데이터 보존 업데이트, {blankCount}개 USB 신규 포맷 생성",
   "deploy.batch_mixed": "일괄 혼합 배포 시작 ({count}개 USB)",
   "deploy.batch_update": "일괄 보존 업데이트 시작 ({count}개 USB)",
