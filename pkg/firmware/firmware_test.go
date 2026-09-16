@@ -207,7 +207,11 @@ func TestGetFirmwareData_Priority(t *testing.T) {
 		t.Fatalf("failed to create local firmware dir: %v", err)
 	}
 
-	overrideContent := []byte("# Custom downloaded boot.ipxe override")
+	validEmbedded, err := embeddedAssets.ReadFile("assets/boot.ipxe")
+	if err != nil {
+		t.Fatalf("failed to read embedded boot.ipxe: %v", err)
+	}
+	overrideContent := validEmbedded
 	if err := os.WriteFile(filepath.Join(localFwDir, "boot.ipxe"), overrideContent, 0644); err != nil {
 		t.Fatalf("failed to write override file: %v", err)
 	}
@@ -221,6 +225,37 @@ func TestGetFirmwareData_Priority(t *testing.T) {
 	}
 	if overrideSrc == "" {
 		t.Errorf("expected non-empty override source string")
+	}
+}
+
+func TestGetFirmwareData_RejectsTamperedLocalAsset(t *testing.T) {
+	envMutex.Lock()
+	defer envMutex.Unlock()
+
+	baseDir := t.TempDir()
+	dataDir := filepath.Join(baseDir, "data")
+	_ = os.MkdirAll(dataDir, 0755)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", dataDir)
+
+	localFwDir := filepath.Join(dataDir, "firmware")
+	if err := os.MkdirAll(localFwDir, 0755); err != nil {
+		t.Fatalf("failed to create local firmware dir: %v", err)
+	}
+
+	tampered := []byte("not a valid boot.ipxe payload that will fail checksum validation")
+	if err := os.WriteFile(filepath.Join(localFwDir, "boot.ipxe"), tampered, 0644); err != nil {
+		t.Fatalf("failed to write tampered override file: %v", err)
+	}
+
+	data, src, err := GetFirmwareData("boot.ipxe")
+	if err != nil {
+		t.Fatalf("expected tampered local firmware asset to fall back to embedded trusted copy: %v", err)
+	}
+	if src == "" {
+		t.Fatal("expected a non-empty source label after fallback")
+	}
+	if string(data) == string(tampered) {
+		t.Fatal("expected tampered local file to be rejected and not returned")
 	}
 }
 

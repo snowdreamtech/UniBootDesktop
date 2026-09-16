@@ -4,7 +4,10 @@
 package firmware
 
 import (
+	"bufio"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"embed"
 	"encoding/json"
 	"fmt"
@@ -21,6 +24,61 @@ import (
 
 //go:embed assets/*
 var embeddedAssets embed.FS
+
+func firmwareChecksumManifest() (map[string]string, error) {
+	manifest, err := embeddedAssets.ReadFile("assets/checksums.sha256")
+	if err != nil {
+		return nil, fmt.Errorf("failed to read UniBoot checksum manifest: %w", err)
+	}
+
+	checksums := make(map[string]string)
+	scanner := bufio.NewScanner(strings.NewReader(string(manifest)))
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+
+		parts := strings.Fields(line)
+		if len(parts) < 2 {
+			continue
+		}
+		checksums[parts[1]] = strings.ToLower(parts[0])
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("failed to parse UniBoot checksum manifest: %w", err)
+	}
+
+	return checksums, nil
+}
+
+func validateFirmwareAssetData(releaseName string, data []byte) error {
+	manifest, err := firmwareChecksumManifest()
+	if err != nil {
+		return err
+	}
+
+	expected, ok := manifest[releaseName]
+	if !ok {
+		return fmt.Errorf("missing checksum entry for %s", releaseName)
+	}
+
+	actual := sha256.Sum256(data)
+	actualHex := hex.EncodeToString(actual[:])
+	if strings.ToLower(actualHex) != strings.ToLower(expected) {
+		return fmt.Errorf("checksum mismatch for %s: expected %s, got %s", releaseName, expected, actualHex)
+	}
+
+	return nil
+}
+
+func validateFirmwareAssetFile(filePath string, releaseName string) error {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf("failed to read %s: %w", filePath, err)
+	}
+	return validateFirmwareAssetData(releaseName, data)
+}
 
 // FirmwareMapping defines the mapping between a UniBoot release asset name and its UEFI/BIOS standard target path.
 type FirmwareMapping struct {
@@ -220,6 +278,13 @@ func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootRelea
 				}
 				continue
 			}
+			if err := validateFirmwareAssetFile(destPath, asset.Name); err != nil {
+				_ = os.Remove(destPath)
+				if firstErr == nil {
+					firstErr = fmt.Errorf("downloaded firmware asset %s failed checksum validation: %w", asset.Name, err)
+				}
+				continue
+			}
 			downloadedCount++
 		}
 	}
@@ -251,7 +316,10 @@ func GetFirmwareData(releaseName string) ([]byte, string, error) {
 	if info, err := os.Stat(localPath); err == nil && info.Size() > 0 {
 		data, err := os.ReadFile(localPath)
 		if err == nil {
-			return data, fmt.Sprintf("Local Cache (%s)", localPath), nil
+			if err := validateFirmwareAssetData(releaseName, data); err == nil {
+				return data, fmt.Sprintf("Local Cache (%s)", localPath), nil
+			}
+			_ = os.Remove(localPath)
 		}
 	}
 
@@ -260,6 +328,9 @@ func GetFirmwareData(releaseName string) ([]byte, string, error) {
 	data, err := embeddedAssets.ReadFile(embeddedPath)
 	if err != nil {
 		return nil, "", fmt.Errorf("firmware asset %s not found: %w", releaseName, err)
+	}
+	if err := validateFirmwareAssetData(releaseName, data); err != nil {
+		return nil, "", fmt.Errorf("firmware asset %s failed checksum validation: %w", releaseName, err)
 	}
 	return data, "Embedded Binary (embed.FS)", nil
 }
