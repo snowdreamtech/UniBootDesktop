@@ -205,6 +205,8 @@ interface DiskInfo {
   controllerVendor?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
+  isVentoy?: boolean;
+  isRealVentoy?: boolean;
 }
 
 defineProps<{

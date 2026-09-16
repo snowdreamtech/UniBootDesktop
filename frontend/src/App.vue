@@ -577,7 +577,7 @@ function handleCopyReport() {
 
 function handleRetryDeploy() {
   isDiagnosticsOpen.value = false;
-  confirmDeploy();
+  openDeployConfirm();
 }
 
 function openSettings(tab: 'general' | 'network' | 'uniboot' | 'ventoy' = 'general') {

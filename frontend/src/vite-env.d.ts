@@ -29,6 +29,7 @@ declare global {
     isFakeUsb3?: boolean;
     protocolCode?: string;
     isRealVentoy?: boolean;
+    isVentoy?: boolean;
     isModeB?: boolean;
     mountPoint?: string;
   }

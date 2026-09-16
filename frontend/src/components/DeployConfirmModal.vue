@@ -158,6 +158,8 @@ interface DiskInfo {
   serialNumber?: string;
   isSystem?: boolean;
   mountPoint?: string;
+  isVentoy?: boolean;
+  isRealVentoy?: boolean;
 }
 
 const props = defineProps<{
