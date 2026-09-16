@@ -11,6 +11,8 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
+	"time"
 )
 
 var (
@@ -468,11 +470,22 @@ func parseDarwinUSBSpeed(speed string, bcd string) (version string, phySpeed str
 	return "USB 2.0", "480 Mb/s"
 }
 
-func getDarwinDisks() ([]DiskInfo, error) {
-	disks := make([]DiskInfo, 0)
-	usbMap := make(map[string]*darwinUSBInfo)
+var (
+	darwinUSBCacheMutex sync.Mutex
+	darwinUSBCacheMap   map[string]*darwinUSBInfo
+	darwinUSBCacheTime  time.Time
+)
 
-	// Step 1: Probe system_profiler for rich hardware details (~0.3s runtime)
+func getCachedDarwinUSBMap() map[string]*darwinUSBInfo {
+	darwinUSBCacheMutex.Lock()
+	defer darwinUSBCacheMutex.Unlock()
+
+	// Cache hardware profile details for 6 seconds to prevent system_profiler CPU spikes
+	if darwinUSBCacheMap != nil && time.Since(darwinUSBCacheTime) < 6*time.Second {
+		return darwinUSBCacheMap
+	}
+
+	usbMap := make(map[string]*darwinUSBInfo)
 	cmd := execCommand("system_profiler", "SPUSBDataType", "-json")
 	output, err := cmd.Output()
 	if err == nil {
@@ -483,6 +496,17 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			}
 		}
 	}
+
+	darwinUSBCacheMap = usbMap
+	darwinUSBCacheTime = time.Now()
+	return usbMap
+}
+
+func getDarwinDisks() ([]DiskInfo, error) {
+	disks := make([]DiskInfo, 0)
+
+	// Step 1: Probe system_profiler for rich hardware details (cached for 6s to eliminate CPU spikes)
+	usbMap := getCachedDarwinUSBMap()
 
 	// Step 2: Scan /Volumes for mounted removable drives
 	entries, err := os.ReadDir("/Volumes")

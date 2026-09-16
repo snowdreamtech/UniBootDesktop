@@ -1087,6 +1087,7 @@ const isScanningDisks = ref(false);
 
 // Wails JS binding fallbacks / mock data for standalone preview
 async function refreshDisks() {
+  if (isScanningDisks.value) return;
   isScanningDisks.value = true;
   try {
     if (window.go && window.go.main && window.go.main.App) {
@@ -1346,12 +1347,12 @@ onMounted(() => {
     });
   }
 
-  // Auto-poll USB drives every 2.5s when idle for instant hotplug detection
+  // Auto-poll USB drives every 6.0s when idle for hotplug detection without high CPU overhead
   diskPollTimer = window.setInterval(() => {
     if (!isDeploying.value) {
       refreshDisks();
     }
-  }, 2500);
+  }, 6000);
 });
 
 onUnmounted(() => {
