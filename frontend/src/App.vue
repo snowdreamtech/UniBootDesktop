@@ -210,7 +210,7 @@
             <div class="iso-title-group">
               <h3>
                 {{ t('iso.title') }}
-                <span class="optional-badge">{{ t('common.optional') || '可选' }}</span>
+                <span class="optional-badge">{{ t('common.optional') }}</span>
               </h3>
               <span class="iso-subtitle">{{ t('iso.desc') }}</span>
             </div>
@@ -575,7 +575,7 @@ function openDiagnosticsModal(diag: InstallDiagnosticsData | null, msg: string) 
 }
 
 function handleCopyReport() {
-  showToast('📋 已复制写盘失败诊断报告到剪贴板', 'info');
+  showToast(t('diag.toast_copied'), 'info');
 }
 
 function handleRetryDeploy() {

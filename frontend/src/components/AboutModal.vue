@@ -5,7 +5,7 @@
         <div class="about-modal-container glass-card">
           <!-- Header / Close button -->
           <div class="about-header">
-            <button class="close-btn" @click="close" title="关闭">
+            <button class="close-btn" @click="close" :title="t('common.close')">
               <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -83,7 +83,7 @@
                 <polyline points="7 10 12 15 17 10"></polyline>
                 <line x1="12" y1="15" x2="12" y2="3"></line>
               </svg>
-              <span>{{ updating ? `升级中 (${updateProgress}%)` : `⚡ 在线升级到 ${latestTag}` }}</span>
+              <span>{{ updating ? t('about.updating', { progress: updateProgress }) : t('about.updateTo', { tag: latestTag }) }}</span>
             </button>
           </div>
 
@@ -92,7 +92,7 @@
             <div class="progress-bar-track">
               <div class="progress-bar-fill" :style="{ width: updateProgress + '%' }"></div>
             </div>
-            <span class="progress-text">{{ updateStatusText || `下载中 ${updateProgress}%` }}</span>
+            <span class="progress-text">{{ updateStatusText || t('about.downloading', { progress: updateProgress }) }}</span>
           </div>
 
           <!-- Status Message Toast -->
@@ -308,17 +308,17 @@ const handleCheckUpdate = async () => {
 const handlePerformUpdate = async () => {
   updating.value = true;
   updateProgress.value = 0;
-  updateStatusText.value = '准备下载安装包...';
+  updateStatusText.value = t('about.preparingDownload');
   updateMessage.value = '';
   try {
     const wailsApp = (window as any)?.go?.main?.App;
     if (wailsApp && typeof wailsApp.PerformGuiUpdate === 'function') {
       const res = await wailsApp.PerformGuiUpdate();
       if (res && res.success) {
-        updateMessage.value = `🎉 升级包已就绪！已下载至：${res.targetFile}，请启动安装包或重启应用生效。`;
+        updateMessage.value = t('about.updateReady', { path: res.targetFile });
         updateStatusClass.value = 'is-latest';
       } else {
-        updateMessage.value = '下载在线升级包失败，请检查网络后再试。';
+        updateMessage.value = t('about.updateDownloadFailed');
         updateStatusClass.value = 'update-error';
       }
     } else {
@@ -327,17 +327,17 @@ const handlePerformUpdate = async () => {
       const interval = setInterval(() => {
         p += 20;
         updateProgress.value = Math.min(p, 100);
-        updateStatusText.value = `正在下载 GUI 在线升级包 (${updateProgress.value}%)...`;
+        updateStatusText.value = t('about.downloadingGuiUpdate', { progress: updateProgress.value });
         if (p >= 100) {
           clearInterval(interval);
           updating.value = false;
-          updateMessage.value = `🎉 升级包下载完成！请重启应用生效。`;
+          updateMessage.value = t('about.updateCompleteRestart');
           updateStatusClass.value = 'is-latest';
         }
       }, 300);
     }
   } catch (err) {
-    updateMessage.value = `在线升级失败: ${err}`;
+    updateMessage.value = t('about.onlineUpdateFailed', { error: String(err) });
     updateStatusClass.value = 'update-error';
   } finally {
     if (!((window as any)?.go?.main?.App?.PerformGuiUpdate)) {
