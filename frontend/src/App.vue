@@ -265,7 +265,7 @@
             :title="deployDisabledReason"
             @click="handleDeployBtnClick"
           >
-            {{ isDeploying ? t('deploy.writing') : (isNonDestructive ? t('deploy.start_update') : (selectionMode === 'batch' ? t('deploy.batch_create', { count: selectedDevices.size }) : t('deploy.start_create'))) }}
+            {{ deployBtnText }}
           </button>
 
           <!-- Deploy success banner with Safely Eject button -->
@@ -901,22 +901,24 @@ function onIconReset() {
 
 const isMacOs = computed(() => navigator.userAgent.includes('Mac') || navigator.platform.includes('Mac'));
 
+function checkIsExistingBootDisk(d: DiskInfo): boolean {
+  if (!d) return false;
+  if (d.isRealVentoy || d.isModeB) return true;
+  const name = (d.name || '').toUpperCase();
+  const status = (d.bootStatus || '').toUpperCase();
+  const rawStatus = d.bootStatus || '';
+  if (name.includes('VENTOY') || status.includes('VENTOY') || name.includes('UNIBOOT') || status.includes('UNIBOOT')) {
+    return true;
+  }
+  if (status.includes('MODE A') || status.includes('MODE B') || rawStatus.includes('模式 A') || rawStatus.includes('模式 B')) {
+    return true;
+  }
+  return false;
+}
+
 const isSelectedVentoyDisk = computed(() => {
   if (selectionMode.value === 'single' && selectedDisk.value) {
-    if (activeMode.value === 'cloud') {
-      return true; // Mode B is ALWAYS non-destructive (flashes ESP partition only)
-    }
-    // Mode A is ONLY non-destructive if the target disk is ALREADY a REAL Ventoy MBR disk!
-    if (selectedDisk.value.isRealVentoy) {
-      return true;
-    }
-    const name = (selectedDisk.value.name || '').toUpperCase();
-    const status = (selectedDisk.value.bootStatus || '').toUpperCase();
-    const rawStatus = selectedDisk.value.bootStatus || '';
-    if (selectedDisk.value.isModeB || status.includes('MODE B') || status.includes('CLOUD PURE') || rawStatus.includes('模式 B') || rawStatus.includes('极速云引导盘')) {
-      return false; // Mode B drive is NOT a Ventoy MBR drive, must be formatted via Ventoy CLI to convert to Mode A!
-    }
-    return status.includes('MODE A') || name.includes('VENTOY') || status.includes('VENTOY') || rawStatus.includes('模式 A');
+    return checkIsExistingBootDisk(selectedDisk.value);
   }
   return false;
 });
@@ -928,17 +930,43 @@ const isNonDestructive = computed(() => {
   if (selectedDevices.value.size === 0) return false;
   return Array.from(selectedDevices.value).every((dev: string) => {
     const d = diskList.value.find((disk: DiskInfo) => disk.device === dev);
-    if (!d) return false;
-    if (activeMode.value === 'cloud') return true;
-    if (d.isRealVentoy) return true;
-    const name = (d.name || '').toUpperCase();
-    const status = (d.bootStatus || '').toUpperCase();
-    const rawStatus = d.bootStatus || '';
-    if (d.isModeB || status.includes('MODE B') || status.includes('CLOUD PURE') || rawStatus.includes('模式 B') || rawStatus.includes('极速云引导盘')) {
-      return false;
-    }
-    return status.includes('MODE A') || name.includes('VENTOY') || status.includes('VENTOY') || rawStatus.includes('模式 A');
+    return d ? checkIsExistingBootDisk(d) : false;
   });
+});
+
+const ventoyCountInBatch = computed(() => {
+  if (selectionMode.value !== 'batch' || selectedDevices.value.size === 0) return 0;
+  let count = 0;
+  selectedDevices.value.forEach((dev: string) => {
+    const d = diskList.value.find((disk: DiskInfo) => disk.device === dev);
+    if (d && checkIsExistingBootDisk(d)) {
+      count++;
+    }
+  });
+  return count;
+});
+
+const deployBtnText = computed(() => {
+  if (isDeploying.value) return t('deploy.writing');
+
+  if (selectionMode.value === 'single') {
+    if (isNonDestructive.value) {
+      return t('deploy.start_update');
+    }
+    return activeMode.value === 'cloud' ? t('deploy.start_cloud_create') : t('deploy.start_create');
+  }
+
+  const total = selectedDevices.value.size;
+  const bootCount = ventoyCountInBatch.value;
+  const blankCount = total - bootCount;
+
+  if (bootCount === total && total > 0) {
+    return t('deploy.batch_update', { count: total });
+  } else if (blankCount === total && total > 0) {
+    return t('deploy.batch_create', { count: total });
+  } else {
+    return t('deploy.batch_mixed', { count: total });
+  }
 });
 
 

@@ -223,6 +223,12 @@ export interface TranslationDict {
   "confirm.will_format"?: string;
   "confirm.no_format"?: string;
   "deploy.toast_target_changed"?: string;
+  "deploy.start_cloud_create"?: string;
+  "deploy.batch_update"?: string;
+  "deploy.batch_mixed"?: string;
+  "confirm.batch_safe_confirm"?: string;
+  "confirm.batch_mixed_confirm"?: string;
+  "confirm.batch_danger_confirm"?: string;
   "ventoy_alert.goto_settings": string;
   "ventoy_alert.switch_b": string;
   "ventoy_alert.close": string;

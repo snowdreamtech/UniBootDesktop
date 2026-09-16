@@ -130,13 +130,7 @@
       <div class="modal-footer">
         <button class="btn-cancel" @click="close">{{ t("confirm.cancel_btn") }}</button>
         <button :class="isAllVentoy || isMixed ? 'btn-safe-confirm' : 'btn-danger-confirm'" @click="confirm">
-          {{
-            isAllVentoy
-              ? t("deploy.start_update")
-              : isMixed
-                ? "🚀 " + t("confirm.confirm_btn")
-                : t("confirm.confirm_btn")
-          }}
+          {{ confirmBtnText }}
         </button>
       </div>
     </div>
@@ -172,25 +166,31 @@ const props = defineProps<{
 
 const emit = defineEmits(["close", "confirm"]);
 
+function checkIsExistingBootDisk(disk: any): boolean {
+  if (!disk) return false;
+  if (disk.isRealVentoy || disk.isModeB) return true;
+  const name = (disk.name || "").toUpperCase();
+  const status = (disk.bootStatus || "").toUpperCase();
+  const rawStatus = disk.bootStatus || "";
+  if (name.includes("VENTOY") || status.includes("VENTOY") || name.includes("UNIBOOT") || status.includes("UNIBOOT")) {
+    return true;
+  }
+  if (status.includes("MODE A") || status.includes("MODE B") || rawStatus.includes("模式 A") || rawStatus.includes("模式 B")) {
+    return true;
+  }
+  return false;
+}
+
 const ventoyDisks = computed(() => {
   if (!props.allDisks || props.allDisks.length === 0) {
-    if (props.targetDisk) {
-      const name = (props.targetDisk.name || "").toUpperCase();
-      const status = (props.targetDisk.bootStatus || "").toUpperCase();
-      if (name.includes("VENTOY") || status.includes("VENTOY") || status.includes("UNIBOOT")) {
-        return [props.targetDisk.device];
-      }
+    if (props.targetDisk && checkIsExistingBootDisk(props.targetDisk)) {
+      return [props.targetDisk.device];
     }
     return [];
   }
   return props.targetDisks.filter((dev) => {
     const found = props.allDisks?.find((d) => d.device === dev);
-    if (found) {
-      const name = (found.name || "").toUpperCase();
-      const status = (found.bootStatus || "").toUpperCase();
-      return name.includes("VENTOY") || status.includes("VENTOY") || status.includes("UNIBOOT");
-    }
-    return dev.toUpperCase().includes("VENTOY");
+    return found ? checkIsExistingBootDisk(found) : false;
   });
 });
 
@@ -225,6 +225,25 @@ const isAllVentoy = computed(() => {
 
 const isMixed = computed(() => {
   return ventoyDisks.value.length > 0 && blankDisks.value.length > 0;
+});
+
+const confirmBtnText = computed(() => {
+  if (props.targetDisks.length === 1) {
+    return isAllVentoy.value
+      ? t("deploy.start_update")
+      : t("confirm.confirm_btn");
+  }
+
+  if (isAllVentoy.value) {
+    return t("confirm.batch_safe_confirm", { count: props.targetDisks.length });
+  } else if (isMixed.value) {
+    return t("confirm.batch_mixed_confirm", {
+      ventoy: ventoyDisks.value.length,
+      blank: blankDisks.value.length,
+    });
+  } else {
+    return t("confirm.batch_danger_confirm", { count: props.targetDisks.length });
+  }
 });
 
 function close() {
