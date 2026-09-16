@@ -1659,7 +1659,7 @@ h1 {
   padding-right: 0.4rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .disk-list::-webkit-scrollbar {

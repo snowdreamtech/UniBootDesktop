@@ -255,10 +255,10 @@ const diskTagLabel = computed(() => {
 .disk-card {
   display: flex;
   align-items: center;
-  gap: 1.15rem;
-  padding: 1.1rem 1.25rem;
+  gap: 0.85rem;
+  padding: 0.8rem 1rem;
   cursor: pointer;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0;
 }
 
 .disk-card.selected {
