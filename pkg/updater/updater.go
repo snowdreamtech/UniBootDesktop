@@ -18,14 +18,15 @@ import (
 	"github.com/snowdreamtech/unigodesktop/internal/env"
 	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
 	"github.com/snowdreamtech/unigodesktop/internal/updater"
+	internalVersion "github.com/snowdreamtech/unigodesktop/internal/version"
 )
 
 // UpdateStatus represents release update metadata.
 type UpdateStatus struct {
-	HasUpdate     bool   `json:"hasUpdate"`
-	CurrentTag    string `json:"currentTag"`
-	LatestTag     string `json:"latestTag"`
-	DownloadURL   string `json:"downloadUrl"`
+	HasUpdate   bool   `json:"hasUpdate"`
+	CurrentTag  string `json:"currentTag"`
+	LatestTag   string `json:"latestTag"`
+	DownloadURL string `json:"downloadUrl"`
 }
 
 // CheckUpdate queries GitHub Releases for newer release versions.
@@ -38,7 +39,7 @@ func CheckUpdate(ctx context.Context) *UpdateStatus {
 	info, err := updater.FetchLatestReleaseInfo(ctx)
 	if err == nil && info != nil {
 		return &UpdateStatus{
-			HasUpdate:   true,
+			HasUpdate:   isNewerVersion(currentTag, info.TagName),
 			CurrentTag:  currentTag,
 			LatestTag:   info.TagName,
 			DownloadURL: "https://github.com/snowdreamtech/UniGoDesktop/releases/tag/" + info.TagName,
@@ -51,6 +52,15 @@ func CheckUpdate(ctx context.Context) *UpdateStatus {
 		LatestTag:   currentTag,
 		DownloadURL: "",
 	}
+}
+
+func isNewerVersion(currentTag string, latestTag string) bool {
+	current, currentErr := internalVersion.ParseSemVer(currentTag)
+	latest, latestErr := internalVersion.ParseSemVer(latestTag)
+	if currentErr != nil || latestErr != nil {
+		return false
+	}
+	return latest.Compare(current) > 0
 }
 
 // BuildProxyURL formats a URL with the given GitHub proxy prefix if configured.
@@ -309,5 +319,3 @@ func DownloadFileWithProgress(ctx context.Context, rawURL string, destPath strin
 
 	return nil
 }
-
-
