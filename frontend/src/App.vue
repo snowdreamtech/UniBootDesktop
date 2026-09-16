@@ -300,7 +300,7 @@
             <div class="qemu-title-group">
               <h3>
                 {{ t('qemu.title') }}
-                <span class="optional-badge">{{ t('common.optional_test') || t('common.optional') || '可选测试' }}</span>
+                <span class="optional-badge">{{ t('common.optional') }}</span>
               </h3>
             </div>
             <span class="badge" :class="qemuStatus.installed ? 'success' : 'muted'">
