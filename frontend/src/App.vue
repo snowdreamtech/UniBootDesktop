@@ -771,7 +771,6 @@ async function handleDeployBtnClick() {
   }
 
   if (activeMode.value === 'hybrid' && !isNonDestructive.value) {
-    await checkVentoyStatus();
     if (!ventoyStatus.value.valid) {
       if (isMacOs.value) {
         openVentoyAlert(
@@ -788,12 +787,13 @@ async function handleDeployBtnClick() {
       }
       return;
     }
+    checkVentoyStatus().catch(() => {});
   }
 
-  await openDeployConfirm();
+  openDeployConfirm();
 }
 
-async function openDeployConfirm() {
+function openDeployConfirm() {
   let targets: string[] = [];
   if (selectionMode.value === 'single') {
     if (!selectedDisk.value) return;
@@ -803,7 +803,6 @@ async function openDeployConfirm() {
     if (targets.length === 0) return;
   }
 
-  await refreshDisks();
   const refreshedSnapshots = targets.map((device) => diskList.value.find((disk) => disk.device === device));
   if (refreshedSnapshots.some((disk) => !disk)) {
     showToast(t('deploy.toast_target_changed'), 'error');
@@ -813,6 +812,9 @@ async function openDeployConfirm() {
   pendingTargets.value = targets;
   pendingTargetSnapshots.value = refreshedSnapshots as DiskInfo[];
   isDeployConfirmOpen.value = true;
+
+  // Background refresh disk info without blocking UI modal pop-up
+  refreshDisks().catch(() => {});
 }
 
 function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
