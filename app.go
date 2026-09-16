@@ -91,7 +91,11 @@ func (a *App) DeployModeA(targetDisk string, fsType string, isoPaths []string, e
 	progressCb := func(p installer.IsoCopyProgress) {
 		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
 	}
-	return installer.DeployModeAWithExpectedDisk(a.ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, expected)
+	res, err := installer.DeployModeAWithExpectedDisk(a.ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, expected)
+	if err != nil && res != nil {
+		return res, nil
+	}
+	return res, err
 }
 
 // ValidateVentoyCli verifies the user-specified Ventoy CLI path.
@@ -114,7 +118,11 @@ func (a *App) DeployModeABatch(targetDisks []string, fsType string, isoPaths []s
 
 // DeployModeB triggers Mode B (Cloud Pure Mode) with customizable file system.
 func (a *App) DeployModeB(targetDisk string, fsType string, expected disk.DiskInfo) (*installer.DeployResult, error) {
-	return installer.DeployModeBWithExpectedDisk(a.ctx, targetDisk, fsType, expected)
+	res, err := installer.DeployModeBWithExpectedDisk(a.ctx, targetDisk, fsType, expected)
+	if err != nil && res != nil {
+		return res, nil
+	}
+	return res, err
 }
 
 // DeployModeBBatch triggers Mode B deployment for multiple target USB drives with customizable file system.

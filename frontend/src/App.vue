@@ -377,6 +377,16 @@
       @switch-b="handleVentoyAlertSwitchB"
     />
 
+    <!-- Diagnostics Modal -->
+    <DiagnosticsModal
+      :isOpen="isDiagnosticsOpen"
+      :diagnostics="currentDiagnostics"
+      :errorMsg="currentDiagErrorMsg"
+      @close="isDiagnosticsOpen = false"
+      @retry="handleRetryDeploy"
+      @copy-report="handleCopyReport"
+    />
+
     <!-- About Modal -->
     <AboutModal
       :show="isAboutOpen"
@@ -394,6 +404,7 @@ import UsbInspectorModal from './components/UsbInspectorModal.vue';
 import DeployConfirmModal from './components/DeployConfirmModal.vue';
 import SettingsModal from './components/SettingsModal.vue';
 import VentoyAlertModal from './components/VentoyAlertModal.vue';
+import DiagnosticsModal, { InstallDiagnosticsData } from './components/DiagnosticsModal.vue';
 import AboutModal from './components/AboutModal.vue';
 import CustomSelect from './components/CustomSelect.vue';
 import { t, currentLang, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
@@ -548,6 +559,25 @@ function handleVentoyAlertSwitchB() {
   isVentoyAlertOpen.value = false;
   activeMode.value = 'cloud';
   showToast(t('deploy.toast_switched_b'), 'success');
+}
+
+const isDiagnosticsOpen = ref(false);
+const currentDiagnostics = ref<InstallDiagnosticsData | null>(null);
+const currentDiagErrorMsg = ref('');
+
+function openDiagnosticsModal(diag: InstallDiagnosticsData | null, msg: string) {
+  currentDiagnostics.value = diag;
+  currentDiagErrorMsg.value = msg || t('deploy.alert_fail', { msg: '' });
+  isDiagnosticsOpen.value = true;
+}
+
+function handleCopyReport() {
+  showToast('📋 已复制写盘失败诊断报告到剪贴板', 'info');
+}
+
+function handleRetryDeploy() {
+  isDiagnosticsOpen.value = false;
+  confirmDeploy();
 }
 
 function openSettings(tab: 'general' | 'network' | 'uniboot' | 'ventoy' = 'general') {
@@ -1208,6 +1238,7 @@ async function startDeployment() {
 
   let success = true;
   let resultMsg = '';
+  let latestDiagnostics: any = null;
 
   try {
     if (window.go && window.go.main && window.go.main.App) {
@@ -1224,6 +1255,9 @@ async function startDeployment() {
         if (res) {
           success = res.success;
           resultMsg = res.message || '';
+          if (res.diagnostics) {
+            latestDiagnostics = res.diagnostics;
+          }
         }
       } else {
         if (pendingTargetSnapshots.value.length !== targets.length) {
@@ -1240,6 +1274,9 @@ async function startDeployment() {
           if (failed.length > 0) {
             success = false;
             resultMsg = failed.map(f => `${f.target}: ${f.message}`).join('\n');
+            if (failed[0].diagnostics) {
+              latestDiagnostics = failed[0].diagnostics;
+            }
           } else {
             resultMsg = t('deploy.result_batch_success', { count: resList.length });
           }
@@ -1295,7 +1332,7 @@ async function startDeployment() {
   } else {
     isDeploying.value = false;
     deployProgress.value = 0;
-    alert(t('deploy.alert_fail', { msg: resultMsg }));
+    openDiagnosticsModal(latestDiagnostics, resultMsg);
   }
 }
 
