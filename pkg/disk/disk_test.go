@@ -53,6 +53,57 @@ func TestValidateTargetDisk(t *testing.T) {
 	assert.NoError(t, ValidateTargetDisk("/Volumes/MyUSBKey"))
 }
 
+func TestValidateTargetDiskSnapshot(t *testing.T) {
+	expected := DiskInfo{
+		Device:       "/dev/disk4",
+		Size:         128000000000,
+		IsRemovable:  true,
+		IsSystem:     false,
+		SerialNumber: "SN-123",
+		Vendor:       "Example Vendor",
+	}
+
+	tests := []struct {
+		name    string
+		actual  DiskInfo
+		wantErr bool
+	}{
+		{
+			name:   "same device identity",
+			actual: expected,
+		},
+		{
+			name:    "device path changed",
+			actual:  DiskInfo{Device: "/dev/disk5", Size: expected.Size, IsRemovable: true, SerialNumber: expected.SerialNumber, Vendor: expected.Vendor},
+			wantErr: true,
+		},
+		{
+			name:    "capacity changed",
+			actual:  DiskInfo{Device: expected.Device, Size: 64000000000, IsRemovable: true, SerialNumber: expected.SerialNumber, Vendor: expected.Vendor},
+			wantErr: true,
+		},
+		{
+			name:    "serial number changed",
+			actual:  DiskInfo{Device: expected.Device, Size: expected.Size, IsRemovable: true, SerialNumber: "SN-456", Vendor: expected.Vendor},
+			wantErr: true,
+		},
+		{
+			name:    "system disk detected",
+			actual:  DiskInfo{Device: expected.Device, Size: expected.Size, IsRemovable: true, IsSystem: true, SerialNumber: expected.SerialNumber, Vendor: expected.Vendor},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := ValidateTargetDiskSnapshot(expected, tt.actual)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("ValidateTargetDiskSnapshot() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestCheckFakeUsb3(t *testing.T) {
 	tests := []struct {
 		name       string
@@ -101,4 +152,3 @@ func TestGetRemovableDisks(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, disks)
 }
-

@@ -80,6 +80,7 @@ export namespace disk {
 	    protocolCode: string;
 	    isRealVentoy: boolean;
 	    isModeB: boolean;
+	    mountPoint: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new DiskInfo(source);
@@ -115,6 +116,7 @@ export namespace disk {
 	        this.protocolCode = source["protocolCode"];
 	        this.isRealVentoy = source["isRealVentoy"];
 	        this.isModeB = source["isModeB"];
+	        this.mountPoint = source["mountPoint"];
 	    }
 	}
 

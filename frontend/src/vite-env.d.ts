@@ -44,10 +44,10 @@ declare global {
         App?: {
           GetDiskList(): Promise<any[]>;
           SelectIsoFiles(): Promise<string[]>;
-          DeployModeA(targetDisk: string, fsType?: string, isoPaths?: string[]): Promise<any>;
-          DeployModeABatch(targetDisks: string[], fsType?: string, isoPaths?: string[]): Promise<any[]>;
-          DeployModeB(targetDisk: string, fsType?: string): Promise<any>;
-          DeployModeBBatch(targetDisks: string[], fsType?: string): Promise<any[]>;
+          DeployModeA(targetDisk: string, fsType?: string, isoPaths?: string[], expected?: DiskInfo): Promise<any>;
+          DeployModeABatch(targetDisks: string[], fsType?: string, isoPaths?: string[], expected?: DiskInfo[]): Promise<any[]>;
+          DeployModeB(targetDisk: string, fsType?: string, expected?: DiskInfo): Promise<any>;
+          DeployModeBBatch(targetDisks: string[], fsType?: string, expected?: DiskInfo[]): Promise<any[]>;
           CheckQEMU(): Promise<any>;
           LaunchQEMU(targetDisk: string): Promise<void>;
           CheckUpdate(): Promise<any>;

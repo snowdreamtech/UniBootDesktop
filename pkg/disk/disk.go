@@ -69,26 +69,26 @@ func IsIgnoredVolume(name string) bool {
 
 // DiskInfo represents metadata about an available disk/USB drive.
 type DiskInfo struct {
-	Device          string `json:"device"`          // Device path (e.g., /dev/disk2, E:)
-	Name            string `json:"name"`            // Friendly label / vendor model
-	Size            uint64 `json:"size"`            // Total capacity in bytes
-	Formatted       string `json:"formatted"`       // Human readable size string
-	FreeSpace       uint64 `json:"freeSpace"`       // Free available space in bytes
-	FreeFormatted   string `json:"freeFormatted"`   // Human readable free space string
-	IsRemovable     bool   `json:"isRemovable"`     // Removable USB flag
-	IsSystem        bool   `json:"isSystem"`        // System disk safety flag
-	UsbVersion      string `json:"usbVersion"`      // Protocol version (USB 2.0, USB 3.0, USB 3.1, USB 3.2, USB4)
-	UsbSpeed        string `json:"usbSpeed"`        // Physical bus speed (480 Mb/s, 5 Gb/s, 10 Gb/s, 20 Gb/s)
-	Vendor          string `json:"vendor"`          // Device manufacturer / vendor
-	FileSystem      string `json:"fileSystem"`      // File system format (e.g., ExFAT, FAT32, NTFS, APFS, ext4)
-	PartitionScheme string `json:"partitionScheme"` // Partition scheme (e.g., GPT, MBR)
-	Writable        bool   `json:"writable"`        // Read-Write status (true = Read-Write, false = Read-Only)
-	SerialNumber    string `json:"serialNumber"`    // Hardware Serial Number
-	VendorId        string `json:"vendorId"`        // USB Vendor ID (e.g., 0x21c4)
-	ProductId       string `json:"productId"`       // USB Product ID (e.g., 0x0cd1)
-	SmartStatus     string `json:"smartStatus"`     // S.M.A.R.T. health status (e.g. Verified, Not Supported, Failing)
-	BusPower        string `json:"busPower"`        // Bus power available (e.g. 500 mA, 900 mA)
-	BusPowerUsed    string `json:"busPowerUsed"`    // Bus power required/used (e.g. 500 mA, 224 mA)
+	Device            string `json:"device"`            // Device path (e.g., /dev/disk2, E:)
+	Name              string `json:"name"`              // Friendly label / vendor model
+	Size              uint64 `json:"size"`              // Total capacity in bytes
+	Formatted         string `json:"formatted"`         // Human readable size string
+	FreeSpace         uint64 `json:"freeSpace"`         // Free available space in bytes
+	FreeFormatted     string `json:"freeFormatted"`     // Human readable free space string
+	IsRemovable       bool   `json:"isRemovable"`       // Removable USB flag
+	IsSystem          bool   `json:"isSystem"`          // System disk safety flag
+	UsbVersion        string `json:"usbVersion"`        // Protocol version (USB 2.0, USB 3.0, USB 3.1, USB 3.2, USB4)
+	UsbSpeed          string `json:"usbSpeed"`          // Physical bus speed (480 Mb/s, 5 Gb/s, 10 Gb/s, 20 Gb/s)
+	Vendor            string `json:"vendor"`            // Device manufacturer / vendor
+	FileSystem        string `json:"fileSystem"`        // File system format (e.g., ExFAT, FAT32, NTFS, APFS, ext4)
+	PartitionScheme   string `json:"partitionScheme"`   // Partition scheme (e.g., GPT, MBR)
+	Writable          bool   `json:"writable"`          // Read-Write status (true = Read-Write, false = Read-Only)
+	SerialNumber      string `json:"serialNumber"`      // Hardware Serial Number
+	VendorId          string `json:"vendorId"`          // USB Vendor ID (e.g., 0x21c4)
+	ProductId         string `json:"productId"`         // USB Product ID (e.g., 0x0cd1)
+	SmartStatus       string `json:"smartStatus"`       // S.M.A.R.T. health status (e.g. Verified, Not Supported, Failing)
+	BusPower          string `json:"busPower"`          // Bus power available (e.g. 500 mA, 900 mA)
+	BusPowerUsed      string `json:"busPowerUsed"`      // Bus power required/used (e.g. 500 mA, 224 mA)
 	SectorSize        string `json:"sectorSize"`        // Sector block size (e.g. 512 Bytes, 4096 Bytes / 4Kn)
 	TransportProtocol string `json:"transportProtocol"` // USB Transport Protocol (e.g. UASP, BOT)
 	BootStatus        string `json:"bootStatus"`        // Boot sector status (e.g. UniBoot/Ventoy Ready, MBR Bootable, Standard Data)
@@ -97,6 +97,7 @@ type DiskInfo struct {
 	ProtocolCode      string `json:"protocolCode"`      // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
 	IsRealVentoy      bool   `json:"isRealVentoy"`      // True ONLY if drive contains Ventoy MBR Sector 0 signature
 	IsModeB           bool   `json:"isModeB"`           // True if drive is formatted in Mode B (iPXE ESP Cloud Pure)
+	MountPoint        string `json:"mountPoint"`        // Mount point or volume path (e.g. /Volumes/UNTITLED, E:\)
 }
 
 // CheckFakeUsb3 determines if a USB drive is a fake USB 3.0 device (claims USB 3.0+ in name/marketing but uses USB 2.0 PHY speed).
@@ -288,7 +289,6 @@ func IsRealVentoyDisk(targetDisk string) bool {
 }
 
 // FormatBytes formats byte counts into human-readable strings using 1024 base (e.g. 29.80 GB).
-
 
 // FormatBytes formats byte counts into human-readable strings using 1024 base (e.g. 29.80 GB).
 func FormatBytes(bytes uint64) string {
@@ -695,6 +695,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      isRealVentoy,
 			IsModeB:           isModeB,
+			MountPoint:        volPath,
 		})
 	}
 
@@ -857,19 +858,19 @@ func getLinuxDisks() ([]DiskInfo, error) {
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
 		disks = append(disks, DiskInfo{
-			Device:          mountPath,
-			Name:            label,
-			Size:            dev.Size,
-			Formatted:       formattedSize,
-			FreeSpace:       freeSpace,
-			FreeFormatted:   freeFormatted,
-			IsRemovable:     true,
-			IsSystem:        false,
-			UsbVersion:      usbVer,
-			UsbSpeed:        usbSpeed,
-			Vendor:          vendor,
-			FileSystem:      fileSystem,
-			PartitionScheme: partitionScheme,
+			Device:            mountPath,
+			Name:              label,
+			Size:              dev.Size,
+			Formatted:         formattedSize,
+			FreeSpace:         freeSpace,
+			FreeFormatted:     freeFormatted,
+			IsRemovable:       true,
+			IsSystem:          false,
+			UsbVersion:        usbVer,
+			UsbSpeed:          usbSpeed,
+			Vendor:            vendor,
+			FileSystem:        fileSystem,
+			PartitionScheme:   partitionScheme,
 			Writable:          !dev.Ro,
 			SmartStatus:       "Verified",
 			BusPower:          "500 mA",
@@ -882,6 +883,7 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      IsRealVentoyDisk(mountPath),
 			IsModeB:           IsModeBDisk(mountPath),
+			MountPoint:        mountPath,
 		})
 	}
 
@@ -939,19 +941,19 @@ func getWindowsDisks() ([]DiskInfo, error) {
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
 		disks = append(disks, DiskInfo{
-			Device:          driveLetter,
-			Name:            displayName,
-			Size:            drive.Size,
-			Formatted:       formattedSize,
-			FreeSpace:       freeSpace,
-			FreeFormatted:   freeFormatted,
-			IsRemovable:     true,
-			IsSystem:        false,
-			UsbVersion:      usbVer,
-			UsbSpeed:        usbSpeed,
-			Vendor:          "Generic",
-			FileSystem:      "FAT32 / NTFS",
-			PartitionScheme: "GPT / MBR",
+			Device:            driveLetter,
+			Name:              displayName,
+			Size:              drive.Size,
+			Formatted:         formattedSize,
+			FreeSpace:         freeSpace,
+			FreeFormatted:     freeFormatted,
+			IsRemovable:       true,
+			IsSystem:          false,
+			UsbVersion:        usbVer,
+			UsbSpeed:          usbSpeed,
+			Vendor:            "Generic",
+			FileSystem:        "FAT32 / NTFS",
+			PartitionScheme:   "GPT / MBR",
 			Writable:          true,
 			SmartStatus:       "Verified",
 			BusPower:          "500 mA",
@@ -964,6 +966,7 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      IsRealVentoyDisk(driveLetter),
 			IsModeB:           IsModeBDisk(driveLetter),
+			MountPoint:        driveLetter,
 		})
 	}
 
@@ -985,6 +988,55 @@ func ValidateTargetDisk(targetDevice string) error {
 		return fmt.Errorf("CRITICAL: Safety block triggered! %s is a system drive", targetDevice)
 	}
 	return nil
+}
+
+// ValidateTargetDiskSnapshot verifies that a disk still matches the identity captured before deployment.
+func ValidateTargetDiskSnapshot(expected DiskInfo, actual DiskInfo) error {
+	if err := ValidateTargetDisk(actual.Device); err != nil {
+		return err
+	}
+	if expected.Device == "" || actual.Device != expected.Device {
+		return fmt.Errorf("target disk changed: expected device %q, got %q", expected.Device, actual.Device)
+	}
+	if expected.Size > 0 && actual.Size > 0 && expected.Size != actual.Size {
+		return fmt.Errorf("target disk capacity changed: expected %d bytes, got %d bytes", expected.Size, actual.Size)
+	}
+	if !actual.IsRemovable {
+		return fmt.Errorf("target disk is no longer removable: %s", actual.Device)
+	}
+	if actual.IsSystem {
+		return fmt.Errorf("target disk is a system disk: %s", actual.Device)
+	}
+	if expected.SerialNumber != "" && actual.SerialNumber != "" && expected.SerialNumber != actual.SerialNumber {
+		return fmt.Errorf("target disk serial number changed: expected %q, got %q", expected.SerialNumber, actual.SerialNumber)
+	}
+	if expected.Vendor != "" && actual.Vendor != "" && !strings.EqualFold(expected.Vendor, actual.Vendor) {
+		return fmt.Errorf("target disk vendor changed: expected %q, got %q", expected.Vendor, actual.Vendor)
+	}
+	return nil
+}
+
+// ValidateLiveTargetDisk confirms that a target is still present in the current removable-disk inventory.
+func ValidateLiveTargetDisk(targetDevice string) error {
+	if err := ValidateTargetDisk(targetDevice); err != nil {
+		return err
+	}
+
+	disks, err := GetRemovableDisks()
+	if err != nil {
+		return fmt.Errorf("failed to refresh target disk inventory: %w", err)
+	}
+	for _, candidate := range disks {
+		if candidate.Device != targetDevice {
+			continue
+		}
+		if err := ValidateTargetDiskSnapshot(candidate, candidate); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return fmt.Errorf("target disk is no longer present as a removable disk: %s", targetDevice)
 }
 
 // EjectDisk safely unmounts and ejects the target removable USB storage drive.
@@ -1036,4 +1088,3 @@ func EjectDisk(device string) error {
 		return nil
 	}
 }
-

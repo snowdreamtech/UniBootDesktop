@@ -14,20 +14,20 @@ export function ClearProxyPassword() {
   return window['go']['main']['App']['ClearProxyPassword']();
 }
 
-export function DeployModeA(arg1, arg2, arg3) {
-  return window['go']['main']['App']['DeployModeA'](arg1, arg2, arg3);
+export function DeployModeA(arg1, arg2, arg3, arg4) {
+  return window['go']['main']['App']['DeployModeA'](arg1, arg2, arg3, arg4);
 }
 
-export function DeployModeABatch(arg1, arg2, arg3) {
-  return window['go']['main']['App']['DeployModeABatch'](arg1, arg2, arg3);
+export function DeployModeABatch(arg1, arg2, arg3, arg4) {
+  return window['go']['main']['App']['DeployModeABatch'](arg1, arg2, arg3, arg4);
 }
 
-export function DeployModeB(arg1, arg2) {
-  return window['go']['main']['App']['DeployModeB'](arg1, arg2);
+export function DeployModeB(arg1, arg2, arg3) {
+  return window['go']['main']['App']['DeployModeB'](arg1, arg2, arg3);
 }
 
-export function DeployModeBBatch(arg1, arg2) {
-  return window['go']['main']['App']['DeployModeBBatch'](arg1, arg2);
+export function DeployModeBBatch(arg1, arg2, arg3) {
+  return window['go']['main']['App']['DeployModeBBatch'](arg1, arg2, arg3);
 }
 
 export function EjectDisk(arg1) {

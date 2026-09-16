@@ -78,7 +78,7 @@ func (a *App) SelectIsoFiles() ([]string, error) {
 }
 
 // DeployModeA triggers Mode A (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system and optional ISO files.
-func (a *App) DeployModeA(targetDisk string, fsType string, isoPaths []string) (*installer.DeployResult, error) {
+func (a *App) DeployModeA(targetDisk string, fsType string, isoPaths []string, expected disk.DiskInfo) (*installer.DeployResult, error) {
 	cfg, _ := config.Load()
 	ventoyPath := ""
 	if cfg != nil {
@@ -87,7 +87,7 @@ func (a *App) DeployModeA(targetDisk string, fsType string, isoPaths []string) (
 	progressCb := func(p installer.IsoCopyProgress) {
 		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
 	}
-	return installer.DeployModeAWithIsoAndVentoyPath(a.ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb)
+	return installer.DeployModeAWithExpectedDisk(a.ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, expected)
 }
 
 // ValidateVentoyCli verifies the user-specified Ventoy CLI path.
@@ -96,7 +96,7 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 }
 
 // DeployModeABatch triggers Mode A deployment for multiple target USB drives with customizable file system and optional ISO files.
-func (a *App) DeployModeABatch(targetDisks []string, fsType string, isoPaths []string) ([]*installer.DeployResult, error) {
+func (a *App) DeployModeABatch(targetDisks []string, fsType string, isoPaths []string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
 	cfg, _ := config.Load()
 	ventoyPath := ""
 	if cfg != nil {
@@ -105,17 +105,17 @@ func (a *App) DeployModeABatch(targetDisks []string, fsType string, isoPaths []s
 	progressCb := func(p installer.IsoCopyProgress) {
 		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
 	}
-	return installer.DeployModeABatchWithVentoyAndIso(a.ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb)
+	return installer.DeployModeABatchWithExpectedDisks(a.ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected)
 }
 
 // DeployModeB triggers Mode B (Cloud Pure Mode) with customizable file system.
-func (a *App) DeployModeB(targetDisk string, fsType string) (*installer.DeployResult, error) {
-	return installer.DeployModeB(a.ctx, targetDisk, fsType)
+func (a *App) DeployModeB(targetDisk string, fsType string, expected disk.DiskInfo) (*installer.DeployResult, error) {
+	return installer.DeployModeBWithExpectedDisk(a.ctx, targetDisk, fsType, expected)
 }
 
 // DeployModeBBatch triggers Mode B deployment for multiple target USB drives with customizable file system.
-func (a *App) DeployModeBBatch(targetDisks []string, fsType string) ([]*installer.DeployResult, error) {
-	return installer.DeployModeBBatch(a.ctx, targetDisks, fsType)
+func (a *App) DeployModeBBatch(targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
+	return installer.DeployModeBBatchWithExpectedDisks(a.ctx, targetDisks, fsType, expected)
 }
 
 // CheckQEMU returns QEMU detection metadata.

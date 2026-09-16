@@ -548,6 +548,7 @@ function openSettings(tab: 'general' | 'network' | 'uniboot' | 'ventoy' = 'gener
 
 const currentGithubProxy = ref('');
 const pendingTargets = ref<string[]>([]);
+const pendingTargetSnapshots = ref<DiskInfo[]>([]);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
 const autoEjectAfterDeploy = ref(false);
@@ -793,7 +794,15 @@ async function openDeployConfirm() {
     if (targets.length === 0) return;
   }
 
+  await refreshDisks();
+  const refreshedSnapshots = targets.map((device) => diskList.value.find((disk) => disk.device === device));
+  if (refreshedSnapshots.some((disk) => !disk)) {
+    showToast(t('deploy.toast_target_changed'), 'error');
+    return;
+  }
+
   pendingTargets.value = targets;
+  pendingTargetSnapshots.value = refreshedSnapshots as DiskInfo[];
   isDeployConfirmOpen.value = true;
 }
 
@@ -1136,22 +1145,27 @@ async function startDeployment() {
     if (window.go && window.go.main && window.go.main.App) {
       const isoPaths = selectedIsoFiles.value.map(f => f.path);
       if (targets.length === 1) {
+        const expected = pendingTargetSnapshots.value[0];
+        if (!expected) throw new Error(t('deploy.toast_target_changed'));
         let res: any;
         if (activeMode.value === 'cloud') {
-          res = await window.go.main.App.DeployModeB(targets[0], selectedFsType.value);
+          res = await window.go.main.App.DeployModeB(targets[0], selectedFsType.value, expected);
         } else {
-          res = await window.go.main.App.DeployModeA(targets[0], selectedFsType.value, isoPaths);
+          res = await window.go.main.App.DeployModeA(targets[0], selectedFsType.value, isoPaths, expected);
         }
         if (res) {
           success = res.success;
           resultMsg = res.message || '';
         }
       } else {
+        if (pendingTargetSnapshots.value.length !== targets.length) {
+          throw new Error(t('deploy.toast_target_changed'));
+        }
         let resList: any[];
         if (activeMode.value === 'cloud') {
-          resList = await window.go.main.App.DeployModeBBatch(targets, selectedFsType.value);
+          resList = await window.go.main.App.DeployModeBBatch(targets, selectedFsType.value, pendingTargetSnapshots.value);
         } else {
-          resList = await window.go.main.App.DeployModeABatch(targets, selectedFsType.value, isoPaths);
+          resList = await window.go.main.App.DeployModeABatch(targets, selectedFsType.value, isoPaths, pendingTargetSnapshots.value);
         }
         if (resList && resList.length > 0) {
           const failed = resList.filter(r => !r.success);

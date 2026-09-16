@@ -1,11 +1,11 @@
 <template>
   <div v-if="isOpen" class="modal-overlay" @click="close">
     <div class="glass-modal confirm-card" :class="{ 'safe-card': isAllVentoy, 'mixed-card': isMixed }" @click.stop>
-      <div class="modal-header" :class="isAllVentoy ? 'safe-header' : (isMixed ? 'mixed-header' : 'danger-header')">
+      <div class="modal-header" :class="isAllVentoy ? 'safe-header' : isMixed ? 'mixed-header' : 'danger-header'">
         <div class="header-title">
-          <span class="warning-icon">{{ isAllVentoy ? '🛡️' : (isMixed ? '⚡' : '⚠️') }}</span>
+          <span class="warning-icon">{{ isAllVentoy ? "🛡️" : isMixed ? "⚡" : "⚠️" }}</span>
           <h3>
-            {{ isAllVentoy ? t('confirm.title_safe') : (isMixed ? t('confirm.title_mixed') : t('confirm.title_danger')) }}
+            {{ isAllVentoy ? t("confirm.title_safe") : isMixed ? t("confirm.title_mixed") : t("confirm.title_danger") }}
           </h3>
         </div>
         <button class="close-btn" @click="close">✕</button>
@@ -14,32 +14,32 @@
       <div class="modal-body">
         <!-- Safe Info Banner for ALL Ventoy Disks -->
         <div v-if="isAllVentoy" class="safe-banner">
-          <div class="banner-title">{{ t('confirm.safe_banner_title') }}</div>
+          <div class="banner-title">{{ t("confirm.safe_banner_title") }}</div>
           <div class="banner-desc">
-            {{ t('confirm.safe_banner_desc') }}
+            {{ t("confirm.safe_banner_desc") }}
           </div>
         </div>
 
         <!-- Mixed Mode Info Banner for Mixed Selections -->
         <div v-else-if="isMixed" class="mixed-banner">
-          <div class="banner-title">{{ t('confirm.mixed_banner_title') }}</div>
+          <div class="banner-title">{{ t("confirm.mixed_banner_title") }}</div>
           <div class="banner-desc">
-            {{ t('confirm.mixed_banner_desc', { ventoyCount: ventoyDisks.length, blankCount: blankDisks.length }) }}
+            {{ t("confirm.mixed_banner_desc", { ventoyCount: ventoyDisks.length, blankCount: blankDisks.length }) }}
           </div>
         </div>
 
         <!-- Danger Warning Alert Banner for Pure Blank Disks -->
         <div v-else class="danger-banner">
-          <div class="banner-title">{{ t('confirm.danger_banner_title') }}</div>
+          <div class="banner-title">{{ t("confirm.danger_banner_title") }}</div>
           <div class="banner-desc">
-            {{ t('confirm.danger_banner_desc') }}
+            {{ t("confirm.danger_banner_desc") }}
           </div>
         </div>
 
         <!-- Target Devices Summary Box -->
         <div class="target-summary-box">
-          <div class="summary-label">{{ t('confirm.summary_title') }}</div>
-          
+          <div class="summary-label">{{ t("confirm.summary_title") }}</div>
+
           <!-- Single Disk Summary -->
           <div v-if="targetDisks.length === 1 && targetDisk" class="target-disk-item">
             <div class="disk-main-info">
@@ -48,43 +48,95 @@
             </div>
             <div class="disk-meta-pills">
               <span class="pill-tag">{{ targetDisk.formatted }}</span>
-              <span class="pill-tag">{{ targetDisk.fileSystem || 'FAT32' }}</span>
-              <span class="pill-tag accent" v-if="mode === 'hybrid'">{{ t('confirm.fs_format', { fs: fsType || '' }) }}</span>
-              <span class="pill-tag highlight">{{ mode === 'cloud' ? t('mode.cloud') : t('mode.hybrid') }}</span>
-              <span class="pill-tag safe-tag" v-if="isAllVentoy">{{ t('confirm.smart_safe_tag') }}</span>
+              <span class="pill-tag">{{ targetDisk.fileSystem || "FAT32" }}</span>
+              <span class="pill-tag">{{ targetDisk.partitionScheme || "Unknown partition table" }}</span>
+              <span class="pill-tag accent" v-if="mode === 'hybrid'">{{
+                t("confirm.fs_format", { fs: fsType || "" })
+              }}</span>
+              <span class="pill-tag highlight">{{ mode === "cloud" ? t("mode.cloud") : t("mode.hybrid") }}</span>
+              <span class="pill-tag safe-tag" v-if="isAllVentoy">{{ t("confirm.smart_safe_tag") }}</span>
+            </div>
+            <div class="target-disk-details">
+              <div class="detail-item"><strong>{{ t("confirm.vendor") }}:</strong> {{ targetDisk.vendor || t("confirm.unknown") }}</div>
+              <div class="detail-item"><strong>{{ t("confirm.serial") }}:</strong> {{ targetDisk.serialNumber || t("confirm.unavailable") }}</div>
+              <div class="detail-item"><strong>{{ t("confirm.system_disk") }}:</strong> {{ targetDisk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
+              <div class="detail-item"><strong>{{ t("confirm.mounted") }}:</strong> {{ targetDisk.mountPoint || t("confirm.unavailable") }}</div>
+              <div class="detail-item full-width"><strong>{{ t("confirm.format_action") }}:</strong> {{ isAllVentoy ? t("confirm.no_format") : t("confirm.will_format") }}</div>
             </div>
           </div>
 
           <!-- Batch Disks Mixed Summary -->
           <div v-else-if="isMixed" class="batch-summary">
             <div class="mixed-group" v-if="ventoyDisks.length > 0">
-              <div class="group-title safe-title">{{ t('confirm.ventoy_group_title') }}</div>
-              <div class="batch-tags">
-                <span v-for="dev in ventoyDisks" :key="dev" class="batch-dev-tag safe-dev-tag">🛡️ {{ dev }}</span>
+              <div class="group-title safe-title">{{ t("confirm.ventoy_group_title") }}</div>
+              <div class="batch-device-list">
+                <div v-for="disk in ventoyDiskDetails" :key="disk.device" class="batch-device-detail safe-dev-tag">
+                  <div class="batch-dev-header">
+                    <strong>🛡️ {{ disk.name || disk.device }}</strong>
+                    <span class="batch-dev-path">{{ disk.device }}</span>
+                  </div>
+                  <div class="batch-dev-info-grid">
+                    <div><span>{{ disk.formatted || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
+                    <div><strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}</div>
+                    <div><strong>{{ t("confirm.system_disk") }}:</strong> {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
+                    <div><strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}</div>
+                    <div class="full-width action-text safe-action"><strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.no_format") }}</div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="mixed-group" v-if="blankDisks.length > 0">
-              <div class="group-title danger-title">{{ t('confirm.blank_group_title') }}</div>
-              <div class="batch-tags">
-                <span v-for="dev in blankDisks" :key="dev" class="batch-dev-tag danger-dev-tag">💾 {{ dev }}</span>
+              <div class="group-title danger-title">{{ t("confirm.blank_group_title") }}</div>
+              <div class="batch-device-list">
+                <div v-for="disk in blankDiskDetails" :key="disk.device" class="batch-device-detail danger-dev-tag">
+                  <div class="batch-dev-header">
+                    <strong>💾 {{ disk.name || disk.device }}</strong>
+                    <span class="batch-dev-path">{{ disk.device }}</span>
+                  </div>
+                  <div class="batch-dev-info-grid">
+                    <div><span>{{ disk.formatted || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
+                    <div><strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}</div>
+                    <div><strong>{{ t("confirm.system_disk") }}:</strong> {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
+                    <div><strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}</div>
+                    <div class="full-width action-text danger-action"><strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.will_format") }}</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Batch Disks Pure Summary -->
           <div v-else class="batch-summary">
-            <div class="batch-count">{{ t('confirm.batch_summary_title', { count: targetDisks.length }) }}</div>
-            <div class="batch-tags">
-              <span v-for="dev in targetDisks" :key="dev" class="batch-dev-tag">💾 {{ dev }}</span>
+            <div class="batch-count">{{ t("confirm.batch_summary_title", { count: targetDisks.length }) }}</div>
+            <div class="batch-device-list">
+              <div v-for="disk in targetDiskDetails" :key="disk.device" class="batch-device-detail danger-dev-tag">
+                <div class="batch-dev-header">
+                  <strong>💾 {{ disk.name || disk.device }}</strong>
+                  <span class="batch-dev-path">{{ disk.device }}</span>
+                </div>
+                <div class="batch-dev-info-grid">
+                  <div><span>{{ disk.formatted || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
+                  <div><strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}</div>
+                  <div><strong>{{ t("confirm.system_disk") }}:</strong> {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
+                  <div><strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}</div>
+                  <div class="full-width action-text danger-action"><strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.will_format") }}</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="modal-footer">
-        <button class="btn-cancel" @click="close">{{ t('confirm.cancel_btn') }}</button>
+        <button class="btn-cancel" @click="close">{{ t("confirm.cancel_btn") }}</button>
         <button :class="isAllVentoy || isMixed ? 'btn-safe-confirm' : 'btn-danger-confirm'" @click="confirm">
-          {{ isAllVentoy ? t('deploy.start_update') : (isMixed ? '🚀 ' + t('confirm.confirm_btn') : t('confirm.confirm_btn')) }}
+          {{
+            isAllVentoy
+              ? t("deploy.start_update")
+              : isMixed
+                ? "🚀 " + t("confirm.confirm_btn")
+                : t("confirm.confirm_btn")
+          }}
         </button>
       </div>
     </div>
@@ -92,8 +144,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { t } from '../i18n';
+import { computed } from "vue";
+import { t } from "../i18n";
 
 interface DiskInfo {
   device: string;
@@ -102,44 +154,69 @@ interface DiskInfo {
   formatted: string;
   fileSystem?: string;
   bootStatus?: string;
+  partitionScheme?: string;
+  vendor?: string;
+  serialNumber?: string;
+  isSystem?: boolean;
+  mountPoint?: string;
 }
 
 const props = defineProps<{
   isOpen: boolean;
-  mode: 'cloud' | 'hybrid';
+  mode: "cloud" | "hybrid";
   fsType?: string;
   targetDisk: DiskInfo | null;
   targetDisks: string[];
   allDisks?: DiskInfo[];
 }>();
 
-const emit = defineEmits(['close', 'confirm']);
+const emit = defineEmits(["close", "confirm"]);
 
 const ventoyDisks = computed(() => {
   if (!props.allDisks || props.allDisks.length === 0) {
     if (props.targetDisk) {
-      const name = (props.targetDisk.name || '').toUpperCase();
-      const status = (props.targetDisk.bootStatus || '').toUpperCase();
-      if (name.includes('VENTOY') || status.includes('VENTOY') || status.includes('UNIBOOT')) {
+      const name = (props.targetDisk.name || "").toUpperCase();
+      const status = (props.targetDisk.bootStatus || "").toUpperCase();
+      if (name.includes("VENTOY") || status.includes("VENTOY") || status.includes("UNIBOOT")) {
         return [props.targetDisk.device];
       }
     }
     return [];
   }
-  return props.targetDisks.filter(dev => {
-    const found = props.allDisks?.find(d => d.device === dev);
+  return props.targetDisks.filter((dev) => {
+    const found = props.allDisks?.find((d) => d.device === dev);
     if (found) {
-      const name = (found.name || '').toUpperCase();
-      const status = (found.bootStatus || '').toUpperCase();
-      return name.includes('VENTOY') || status.includes('VENTOY') || status.includes('UNIBOOT');
+      const name = (found.name || "").toUpperCase();
+      const status = (found.bootStatus || "").toUpperCase();
+      return name.includes("VENTOY") || status.includes("VENTOY") || status.includes("UNIBOOT");
     }
-    return dev.toUpperCase().includes('VENTOY');
+    return dev.toUpperCase().includes("VENTOY");
   });
 });
 
 const blankDisks = computed(() => {
-  return props.targetDisks.filter(dev => !ventoyDisks.value.includes(dev));
+  return props.targetDisks.filter((dev) => !ventoyDisks.value.includes(dev));
 });
+
+const targetDiskDetails = computed(() =>
+  props.targetDisks.map((device) => {
+    return (
+      props.allDisks?.find((disk) => disk.device === device) || {
+        device,
+        name: "",
+        size: 0,
+        formatted: "",
+      }
+    );
+  })
+);
+
+const ventoyDiskDetails = computed(() =>
+  targetDiskDetails.value.filter((disk) => ventoyDisks.value.includes(disk.device))
+);
+const blankDiskDetails = computed(() =>
+  targetDiskDetails.value.filter((disk) => blankDisks.value.includes(disk.device))
+);
 
 const isAllVentoy = computed(() => {
   if (props.targetDisks.length === 0) return false;
@@ -151,11 +228,11 @@ const isMixed = computed(() => {
 });
 
 function close() {
-  emit('close');
+  emit("close");
 }
 
 function confirm() {
-  emit('confirm');
+  emit("confirm");
   close();
 }
 </script>
@@ -179,7 +256,9 @@ function confirm() {
 .glass-modal {
   background: var(--modal-bg, rgba(18, 24, 38, 0.96));
   border: 1px solid rgba(239, 68, 68, 0.4);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(239, 68, 68, 0.2);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(239, 68, 68, 0.2);
   border-radius: 16px;
   width: 100%;
   max-width: 580px;
@@ -198,12 +277,16 @@ function confirm() {
 
 .glass-modal.safe-card {
   border: 1px solid rgba(0, 229, 255, 0.4);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 229, 255, 0.2);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(0, 229, 255, 0.2);
 }
 
 .glass-modal.mixed-card {
   border: 1px solid rgba(168, 85, 247, 0.4);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(168, 85, 247, 0.2);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(168, 85, 247, 0.2);
 }
 
 .modal-header.safe-header {
@@ -514,48 +597,263 @@ function confirm() {
   transform: translateY(-1px);
 }
 
+.target-disk-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.4rem 1rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-top: 0.25rem;
+}
+
+.detail-item {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.detail-item strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.detail-item.full-width {
+  grid-column: span 2;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  padding-top: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.batch-device-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.batch-device-detail {
+  padding: 0.75rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.batch-dev-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.batch-dev-path {
+  font-family: monospace;
+  font-size: 0.775rem;
+  opacity: 0.9;
+}
+
+.batch-dev-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.3rem 0.8rem;
+  font-size: 0.775rem;
+  line-height: 1.4;
+}
+
+.batch-dev-info-grid .full-width {
+  grid-column: span 2;
+}
+
+.batch-dev-info-grid .action-text {
+  font-weight: 600;
+  margin-top: 0.1rem;
+}
+
+.safe-action {
+  color: #4ade80;
+}
+
+.danger-action {
+  color: #f87171;
+}
+
 /* Light Theme Overrides */
 [data-theme="light"] .glass-modal {
   background: #ffffff;
-  border-color: #fca5a5;
-  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.18);
+  border-color: #cbd5e1;
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.22);
 }
 
-[data-theme="light"] .modal-header h3 {
-  color: #991b1b;
+[data-theme="light"] .glass-modal.safe-card {
+  border-color: #06b6d4;
+  box-shadow: 0 25px 60px rgba(6, 182, 212, 0.18);
+}
+
+[data-theme="light"] .glass-modal.mixed-card {
+  border-color: #a855f7;
+  box-shadow: 0 25px 60px rgba(168, 85, 247, 0.18);
+}
+
+[data-theme="light"] .modal-header {
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="light"] .modal-header.safe-header {
+  background: #ecfeff;
+}
+
+[data-theme="light"] .modal-header.safe-header h3 {
+  color: #0891b2;
+}
+
+[data-theme="light"] .modal-header.mixed-header {
+  background: #faf5ff;
+}
+
+[data-theme="light"] .modal-header.mixed-header h3 {
+  color: #7e22ce;
+}
+
+[data-theme="light"] .modal-header.danger-header {
+  background: #fef2f2;
+}
+
+[data-theme="light"] .modal-header.danger-header h3 {
+  color: #dc2626;
 }
 
 [data-theme="light"] .close-btn {
   color: #64748b;
 }
 
-[data-theme="light"] .warning-banner {
+[data-theme="light"] .close-btn:hover {
+  color: #0f172a;
+}
+
+[data-theme="light"] .safe-banner {
+  background: #ecfeff;
+  border-color: #67e8f9;
+}
+
+[data-theme="light"] .safe-banner .banner-title {
+  color: #0891b2;
+}
+
+[data-theme="light"] .safe-banner .banner-desc {
+  color: #0e7490;
+  font-weight: 500;
+}
+
+[data-theme="light"] .mixed-banner {
+  background: #faf5ff;
+  border-color: #d8b4fe;
+}
+
+[data-theme="light"] .mixed-banner .banner-title {
+  color: #7e22ce;
+}
+
+[data-theme="light"] .mixed-banner .banner-desc {
+  color: #6b21a8;
+  font-weight: 500;
+}
+
+[data-theme="light"] .danger-banner {
   background: #fef2f2;
   border-color: #fca5a5;
 }
 
-[data-theme="light"] .warning-title {
+[data-theme="light"] .danger-banner .banner-title {
+  color: #dc2626;
+}
+
+[data-theme="light"] .danger-banner .banner-desc {
   color: #991b1b;
+  font-weight: 500;
 }
 
-[data-theme="light"] .warning-desc {
-  color: #7f1d1d;
+[data-theme="light"] .target-summary-box {
+  background: #f8fafc;
+  border-color: #e2e8f0;
 }
 
-[data-theme="light"] .detail-row {
-  border-bottom-color: #e2e8f0;
+[data-theme="light"] .summary-label {
+  color: #475569;
+  font-weight: 600;
 }
 
-[data-theme="light"] .detail-label {
+[data-theme="light"] .disk-name {
+  color: #0f172a;
+}
+
+[data-theme="light"] .disk-path {
+  color: #0284c7;
+}
+
+[data-theme="light"] .target-disk-details {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .detail-item {
   color: #475569;
 }
 
-[data-theme="light"] .detail-value {
+[data-theme="light"] .detail-item strong {
   color: #0f172a;
+}
+
+[data-theme="light"] .detail-item.full-width {
+  border-top-color: #cbd5e1;
+}
+
+[data-theme="light"] .pill-tag {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+[data-theme="light"] .pill-tag.accent {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+  color: #0369a1;
+}
+
+[data-theme="light"] .pill-tag.highlight {
+  background: #f3e8ff;
+  border-color: #d8b4fe;
+  color: #6b21a8;
+}
+
+[data-theme="light"] .pill-tag.safe-tag {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #15803d;
 }
 
 [data-theme="light"] .batch-count {
   color: #0f172a;
+}
+
+[data-theme="light"] .batch-dev-tag.safe-dev-tag {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #166534;
+}
+
+[data-theme="light"] .batch-dev-tag.safe-dev-tag .safe-action {
+  color: #15803d;
+}
+
+[data-theme="light"] .batch-dev-tag.danger-dev-tag {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+[data-theme="light"] .batch-dev-tag.danger-dev-tag .danger-action {
+  color: #b91c1c;
 }
 
 [data-theme="light"] .modal-footer {

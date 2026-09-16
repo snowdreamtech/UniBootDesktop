@@ -24,6 +24,37 @@ type DeployResult struct {
 	Message string `json:"message"`
 }
 
+func validateLiveTargetDisk(targetDisk string) error {
+	return validateLiveTargetDiskSnapshot(targetDisk, nil)
+}
+
+func validateLiveTargetDiskSnapshot(targetDisk string, expected *disk.DiskInfo) error {
+	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
+		return nil
+	}
+	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
+		return fmt.Errorf("final target disk validation failed: %w", err)
+	}
+
+	disks, err := disk.GetRemovableDisks()
+	if err != nil {
+		return fmt.Errorf("final target disk validation failed: refresh disk inventory: %w", err)
+	}
+	for _, actual := range disks {
+		if actual.Device != targetDisk {
+			continue
+		}
+		if expected == nil {
+			expected = &actual
+		}
+		if err := disk.ValidateTargetDiskSnapshot(*expected, actual); err != nil {
+			return fmt.Errorf("final target disk validation failed: %w", err)
+		}
+		return nil
+	}
+	return fmt.Errorf("final target disk validation failed: target disk is no longer present as a removable disk: %s", targetDisk)
+}
+
 // DeployModeA executes Mode A: Hybrid Pro Mode (Ventoy + UniBoot theme + iPXE network extension) with customizable file system.
 // Performs non-destructive in-place upgrade on existing Ventoy drives, or fresh partition initialization on blank drives.
 func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
@@ -37,8 +68,20 @@ func DeployModeAWithVentoyPath(ctx context.Context, targetDisk string, fsType st
 
 // DeployModeAWithIsoAndVentoyPath executes Mode A with customizable Ventoy CLI path, ISO file paths, and progress callback.
 func DeployModeAWithIsoAndVentoyPath(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) (*DeployResult, error) {
+	return deployModeAWithExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, nil)
+}
+
+// DeployModeAWithExpectedDisk deploys Mode A after confirming the target still matches the selected disk snapshot.
+func DeployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected disk.DiskInfo) (*DeployResult, error) {
+	return deployModeAWithExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, &expected)
+}
+
+func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected *disk.DiskInfo) (*DeployResult, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return nil, fmt.Errorf("disk validation failed: %w", err)
+	}
+	if err := validateLiveTargetDiskSnapshot(targetDisk, expected); err != nil {
+		return nil, err
 	}
 
 	if fsType == "" {
@@ -111,7 +154,6 @@ func DeployModeAWithIsoAndVentoyPath(ctx context.Context, targetDisk string, fsT
 	}, nil
 }
 
-
 // DeployModeABatch executes Mode A on multiple target USB drives with specified file system.
 func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
 	return DeployModeABatchWithIso(ctx, targetDisks, fsType, nil, nil)
@@ -124,19 +166,42 @@ func DeployModeABatchWithIso(ctx context.Context, targetDisks []string, fsType s
 
 // DeployModeABatchWithVentoyAndIso executes Mode A on multiple target USB drives with customizable Ventoy CLI path, ISO files, and progress reporting.
 func DeployModeABatchWithVentoyAndIso(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
+	return deployModeABatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, nil)
+}
+
+// DeployModeABatchWithExpectedDisks deploys Mode A only after all selected disk snapshots pass final validation.
+func DeployModeABatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected []disk.DiskInfo) ([]*DeployResult, error) {
+	return deployModeABatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected)
+}
+
+func deployModeABatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected []disk.DiskInfo) ([]*DeployResult, error) {
 	if len(targetDisks) == 0 {
 		return nil, fmt.Errorf("no target disks specified for batch deployment")
 	}
+	if len(expected) > 0 && len(expected) != len(targetDisks) {
+		return nil, fmt.Errorf("target disk snapshot count does not match target disk count")
+	}
 
-	for _, d := range targetDisks {
+	for index, d := range targetDisks {
 		if err := disk.ValidateTargetDisk(d); err != nil {
 			return nil, fmt.Errorf("disk validation failed for %s: %w", d, err)
+		}
+		var snapshot *disk.DiskInfo
+		if len(expected) > 0 {
+			snapshot = &expected[index]
+		}
+		if err := validateLiveTargetDiskSnapshot(d, snapshot); err != nil {
+			return nil, err
 		}
 	}
 
 	results := make([]*DeployResult, 0, len(targetDisks))
-	for _, d := range targetDisks {
-		res, err := DeployModeAWithIsoAndVentoyPath(ctx, d, fsType, ventoyPath, isoPaths, progressCb)
+	for index, d := range targetDisks {
+		var snapshot disk.DiskInfo
+		if len(expected) > 0 {
+			snapshot = expected[index]
+		}
+		res, err := deployModeAWithExpectedDisk(ctx, d, fsType, ventoyPath, isoPaths, progressCb, snapshotPointer(snapshot, len(expected) > 0))
 		if err != nil {
 			results = append(results, &DeployResult{
 				Success: false,
@@ -177,8 +242,20 @@ func CleanMbrBootstrapCode(targetDisk string) error {
 // DeployModeB executes Mode B: Cloud Pure Mode (1-sec native format & multi-arch iPXE firmware) with customizable file system.
 // For existing Ventoy drives, it non-destructively flashes ONLY Partition 2 (VTOYEFI / ESP), keeping Partition 1 (Data) untouched!
 func DeployModeB(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
+	return deployModeBWithExpectedDisk(ctx, targetDisk, fsType, nil)
+}
+
+// DeployModeBWithExpectedDisk deploys Mode B after confirming the target still matches the selected disk snapshot.
+func DeployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected disk.DiskInfo) (*DeployResult, error) {
+	return deployModeBWithExpectedDisk(ctx, targetDisk, fsType, &expected)
+}
+
+func deployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected *disk.DiskInfo) (*DeployResult, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return nil, fmt.Errorf("disk validation failed: %w", err)
+	}
+	if err := validateLiveTargetDiskSnapshot(targetDisk, expected); err != nil {
+		return nil, err
 	}
 
 	if fsType == "" {
@@ -234,19 +311,42 @@ func DeployModeB(ctx context.Context, targetDisk string, fsType string) (*Deploy
 
 // DeployModeBBatch executes Mode B on multiple target USB drives concurrently/sequentially with customizable file system.
 func DeployModeBBatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
+	return deployModeBBatchWithExpectedDisks(ctx, targetDisks, fsType, nil)
+}
+
+// DeployModeBBatchWithExpectedDisks deploys Mode B only after all selected disk snapshots pass final validation.
+func DeployModeBBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*DeployResult, error) {
+	return deployModeBBatchWithExpectedDisks(ctx, targetDisks, fsType, expected)
+}
+
+func deployModeBBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*DeployResult, error) {
 	if len(targetDisks) == 0 {
 		return nil, fmt.Errorf("no target disks specified for batch deployment")
 	}
+	if len(expected) > 0 && len(expected) != len(targetDisks) {
+		return nil, fmt.Errorf("target disk snapshot count does not match target disk count")
+	}
 
-	for _, d := range targetDisks {
+	for index, d := range targetDisks {
 		if err := disk.ValidateTargetDisk(d); err != nil {
 			return nil, fmt.Errorf("disk validation failed for %s: %w", d, err)
+		}
+		var snapshot *disk.DiskInfo
+		if len(expected) > 0 {
+			snapshot = &expected[index]
+		}
+		if err := validateLiveTargetDiskSnapshot(d, snapshot); err != nil {
+			return nil, err
 		}
 	}
 
 	results := make([]*DeployResult, 0, len(targetDisks))
-	for _, d := range targetDisks {
-		res, err := DeployModeB(ctx, d, fsType)
+	for index, d := range targetDisks {
+		var snapshot *disk.DiskInfo
+		if len(expected) > 0 {
+			snapshot = &expected[index]
+		}
+		res, err := deployModeBWithExpectedDisk(ctx, d, fsType, snapshot)
 		if err != nil {
 			results = append(results, &DeployResult{
 				Success: false,
@@ -261,3 +361,9 @@ func DeployModeBBatch(ctx context.Context, targetDisks []string, fsType string) 
 	return results, nil
 }
 
+func snapshotPointer(snapshot disk.DiskInfo, enabled bool) *disk.DiskInfo {
+	if !enabled {
+		return nil
+	}
+	return &snapshot
+}

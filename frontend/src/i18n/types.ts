@@ -211,6 +211,18 @@ export interface TranslationDict {
   "confirm.blank_group_title": string;
   "confirm.batch_summary_title": string;
   "confirm.fs_format": string;
+  "confirm.vendor"?: string;
+  "confirm.serial"?: string;
+  "confirm.system_disk"?: string;
+  "confirm.mounted"?: string;
+  "confirm.format_action"?: string;
+  "confirm.unknown"?: string;
+  "confirm.unavailable"?: string;
+  "confirm.yes"?: string;
+  "confirm.no"?: string;
+  "confirm.will_format"?: string;
+  "confirm.no_format"?: string;
+  "deploy.toast_target_changed"?: string;
   "ventoy_alert.goto_settings": string;
   "ventoy_alert.switch_b": string;
   "ventoy_alert.close": string;
