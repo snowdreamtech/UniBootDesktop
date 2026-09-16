@@ -313,7 +313,7 @@ func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootRelea
 func GetFirmwareData(releaseName string) ([]byte, string, error) {
 	// Check user data directory for manually downloaded / updated firmware
 	localPath := filepath.Join(env.GetDataDir(), "firmware", releaseName)
-	if info, err := os.Stat(localPath); err == nil && info.Size() > 0 {
+	if info, err := os.Stat(localPath); err == nil && !info.IsDir() && info.Size() > 0 {
 		data, err := os.ReadFile(localPath)
 		if err == nil {
 			if err := validateFirmwareAssetData(releaseName, data); err == nil {
@@ -405,8 +405,11 @@ func ExtractFirmwareModeA(dataMountDir string) error {
 		// 2. Populate iso/ directory for UniBoot ISO placement
 		if mapping.ReleaseName == "UniBoot.iso" {
 			isoPath := filepath.Join(dataMountDir, "iso", "UniBoot.iso")
-			if err := os.MkdirAll(filepath.Dir(isoPath), 0755); err == nil {
-				_ = os.WriteFile(isoPath, data, 0644)
+			if err := os.MkdirAll(filepath.Dir(isoPath), 0755); err != nil {
+				return fmt.Errorf("failed to create directory for %s: %w", isoPath, err)
+			}
+			if err := os.WriteFile(isoPath, data, 0644); err != nil {
+				return fmt.Errorf("failed to write %s: %w", isoPath, err)
 			}
 		}
 	}
