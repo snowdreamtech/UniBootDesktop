@@ -481,6 +481,7 @@ interface DiskInfo {
   protocolCode?: string;
   isRealVentoy?: boolean;
   isModeB?: boolean;
+  mountPoint?: string;
 }
 
 const activeMode = ref<'cloud' | 'hybrid'>('cloud');
