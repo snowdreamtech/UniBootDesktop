@@ -1346,8 +1346,6 @@ async function launchQEMU() {
   }
 }
 
-let diskPollTimer: number | undefined;
-
 onMounted(() => {
   loadConfig();
   refreshDisks();
@@ -1371,19 +1369,9 @@ onMounted(() => {
       isAboutOpen.value = true;
     });
   }
-
-  // Safety fallback poll every 30s (event-driven OS hotplug handles instant updates)
-  diskPollTimer = window.setInterval(() => {
-    if (!isDeploying.value) {
-      refreshDisks();
-    }
-  }, 30000);
 });
 
 onUnmounted(() => {
-  if (diskPollTimer) {
-    clearInterval(diskPollTimer);
-  }
   window.removeEventListener('click', handleGlobalClick);
 });
 </script>
