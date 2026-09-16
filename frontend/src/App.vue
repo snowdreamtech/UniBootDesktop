@@ -1548,6 +1548,12 @@ h1 {
   gap: 1.75rem;
 }
 
+.section-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .section-card h2 {
   font-size: 1.25rem;
   margin-bottom: 0.4rem;
@@ -1647,10 +1653,14 @@ h1 {
 }
 
 .disk-list {
-  min-height: 220px;
-  max-height: 440px;
+  flex: 1 1 auto;
+  min-height: 180px;
+  max-height: 480px;
   overflow-y: auto;
   padding-right: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .disk-list::-webkit-scrollbar {
@@ -1679,6 +1689,7 @@ h1 {
 }
 
 .refresh-btn {
+  flex: 0 0 auto;
   width: 100%;
   margin-top: 1rem;
 }
