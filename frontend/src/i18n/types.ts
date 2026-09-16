@@ -116,8 +116,11 @@ export interface TranslationDict {
   "deploy.target_device": string;
   "deploy.batch_target": string;
   "deploy.start_create": string;
+  "deploy.start_cloud_create": string;
   "deploy.start_update": string;
   "deploy.batch_create": string;
+  "deploy.batch_update": string;
+  "deploy.batch_mixed": string;
   "deploy.writing": string;
   "deploy.toast_switched_b": string;
   "deploy.toast_added_iso": string;
@@ -128,6 +131,8 @@ export interface TranslationDict {
   "deploy.tip_writing": string;
   "deploy.tip_select_single": string;
   "deploy.tip_select_batch": string;
+  "deploy.tip_batch_mixed": string;
+  "deploy.tip_batch_update_all": string;
   "deploy.tip_macos_unsupported": string;
   "deploy.tip_need_ventoy": string;
   "deploy.macos_alert_title": string;
@@ -230,9 +235,6 @@ export interface TranslationDict {
   "confirm.will_format"?: string;
   "confirm.no_format"?: string;
   "deploy.toast_target_changed"?: string;
-  "deploy.start_cloud_create"?: string;
-  "deploy.batch_update"?: string;
-  "deploy.batch_mixed"?: string;
   "confirm.batch_safe_confirm"?: string;
   "confirm.batch_mixed_confirm"?: string;
   "confirm.batch_danger_confirm"?: string;
