@@ -262,17 +262,26 @@ func isDiskMounted(diskNode string) bool {
 	return false
 }
 
-// GetRecommendedVCPUs dynamically determines optimal VM CPU core count based on host hardware.
+// GetRecommendedVCPUs dynamically calculates optimal VM CPU core count as roughly ~1/4 of total host CPU cores,
+// with safe bounds (min 1 vCPU, max 4 vCPUs).
 func GetRecommendedVCPUs() int {
 	cpus := runtime.NumCPU()
-	if cpus <= 2 {
-		return 1
+	vcpus := cpus / 4
+	if vcpus < 2 {
+		vcpus = 2
 	}
-	return 2
+	if cpus <= 2 {
+		vcpus = 1
+	}
+	if vcpus > 4 {
+		vcpus = 4
+	}
+	return vcpus
 }
 
-// GetRecommendedVMMemoryMB dynamically determines optimal VM RAM (in MB)
-// based on host system's total physical memory to prevent host OOM on 4GB RAM machines.
+// GetRecommendedVMMemoryMB dynamically calculates optimal VM RAM (in MB)
+// proportional to host RAM (~1/4 total RAM) with bounds (min 2048MB, max 8192MB),
+// allocating up to 8GB RAM on 24GB+ host systems while protecting 4GB host RAM machines.
 func GetRecommendedVMMemoryMB() int {
 	totalRAMBytes := getHostTotalRAMBytes()
 	if totalRAMBytes == 0 {
@@ -280,14 +289,22 @@ func GetRecommendedVMMemoryMB() int {
 	}
 
 	totalMB := int(totalRAMBytes / (1024 * 1024))
-	// If host has 4.5GB RAM or less (e.g. 4GB physical RAM), allocate 2048MB (2GB) to VM
-	if totalMB <= 4608 {
-		logger.Info("Host RAM <= 4GB detected, allocating 2048MB RAM to VM preview", "hostRAMMB", totalMB)
-		return 2048
+	recommendedMB := totalMB / 4
+
+	if recommendedMB < 2048 {
+		recommendedMB = 2048
 	}
-	// On hosts with > 4.5GB RAM (8GB/16GB/32GB+), allocate 4096MB (4GB) for smooth preview
-	logger.Info("Host RAM > 4GB detected, allocating 4096MB RAM to VM preview", "hostRAMMB", totalMB)
-	return 4096
+	if recommendedMB > 8192 {
+		recommendedMB = 8192
+	}
+
+	// Safety cap for <= 4.5GB host RAM machines to prevent host OS thrashing
+	if totalMB <= 4608 && recommendedMB > 2048 {
+		recommendedMB = 2048
+	}
+
+	logger.Info("Proportional VM RAM recommendation evaluated", "hostRAMMB", totalMB, "recommendedRAMMB", recommendedMB)
+	return recommendedMB
 }
 
 func getHostTotalRAMBytes() uint64 {
