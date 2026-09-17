@@ -12,6 +12,7 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 )
 
@@ -54,15 +55,26 @@ func FormatDiskCloudMode(ctx context.Context, targetDisk string) (string, error)
 
 // formatDiskMacOS formats disk on macOS using diskutil with UNIBOOT dual-partition layout (Data Partition + ESP)
 func formatDiskMacOS(ctx context.Context, targetDisk string) (string, error) {
-	// Normalize disk device path (e.g., /dev/disk2 -> disk2)
+	// Normalize disk device path (e.g., /dev/disk2 -> disk2, /dev/disk2s1 -> disk2)
 	diskNode := filepath.Base(targetDisk)
+	if idx := strings.Index(diskNode, "s"); idx > 0 {
+		diskNode = diskNode[:idx]
+	}
+
+	logger.Info("Unmounting existing volumes on disk...", "diskNode", diskNode)
+	_ = execCommand("diskutil", "unmountDisk", "force", diskNode).Run()
+
+	logger.Info("Executing macOS diskutil partition command (MBR + ExFAT + 64MB FAT32 ESP)...", "diskNode", diskNode)
 
 	// Dual-Partition Command: Partition 1 ExFAT UNIBOOT (rest of disk), Partition 2 FAT32 VTOYEFI (64MB ESP)
 	cmd := execCommand("diskutil", "partitionDisk", diskNode, "2", "MBRFormat", "ExFAT", "UNIBOOT", "R", "FAT32", "VTOYEFI", "64M")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
+		logger.Error("diskutil partitionDisk command failed", "diskNode", diskNode, "error", string(output))
 		return "", fmt.Errorf("diskutil partitionDisk failed (%v): %s", err, string(output))
 	}
+
+	logger.Info("Partitioning succeeded, mounting ESP boot partition (Partition 2)...", "diskNode", diskNode)
 
 	// Mount Partition 2 (VTOYEFI) explicitly on macOS so dual partitions are visible in Finder/system
 	part2Node := diskNode + "s2"

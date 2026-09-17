@@ -12,6 +12,7 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 	"github.com/snowdreamtech/unigodesktop/pkg/firmware"
 )
@@ -84,15 +85,20 @@ func deployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fs
 	modeLabel := fmt.Sprintf("Hybrid Mode (%s)", fsType)
 	tracker := NewDeployTracker(targetDisk, modeLabel, expected)
 
+	logger.Info("Starting Hybrid Mode deployment...", "target", targetDisk, "fsType", fsType)
+
 	// Step 1: Target Disk & Snapshot Validation
 	tracker.SetStage("验证设备与底层盘状态", StepValidateDisk, ActionRetry)
+	logger.Info("[Step 1/6] Validating target disk status and Ventoy CLI dependency...", "target", targetDisk)
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		errFormatted := fmt.Errorf("disk validation failed: %w", err)
 		diag := tracker.BuildDiagnostics(errFormatted)
+		logger.Error("Target disk validation failed", "target", targetDisk, "error", errFormatted)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errFormatted.Error(), Diagnostics: diag}, errFormatted
 	}
 	if err := validateLiveTargetDiskSnapshot(targetDisk, expected); err != nil {
 		diag := tracker.BuildDiagnostics(err)
+		logger.Error("Target disk snapshot mismatch", "target", targetDisk, "error", err)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: err.Error(), Diagnostics: diag}, err
 	}
 
@@ -103,6 +109,7 @@ func deployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fs
 	var err error
 
 	if isExistingVentoy {
+		logger.Info("[Step 2/6] Existing Ventoy partition detected, performing in-place upgrade (data preserved)...", "target", targetDisk)
 		tracker.SetFormatted(true)
 		mountPoint, err = ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
 		if err != nil {
@@ -115,10 +122,12 @@ func deployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fs
 			mountPoint, err = FormatDiskHybridMode(ctx, targetDisk, fsType)
 		}
 	} else {
+		logger.Info(fmt.Sprintf("[Step 2/6] Running Ventoy CLI engine to format %s disk...", fsType), "target", targetDisk)
 		val := ValidateVentoyCli(ventoyPath)
 		if !val.Valid {
 			errVentoy := fmt.Errorf("cannot create Hybrid Mode: target disk drive is clean and no valid Ventoy directory detected. Please configure Ventoy directory in Settings first (%s)", val.Message)
 			diag := tracker.BuildDiagnostics(errVentoy)
+			logger.Error("Valid Ventoy CLI environment not found", "target", targetDisk, "error", errVentoy)
 			return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errVentoy.Error(), Diagnostics: diag}, errVentoy
 		}
 		mountPoint, err = FormatDiskWithVentoyCli(ctx, ventoyPath, targetDisk, fsType)
@@ -129,15 +138,18 @@ func deployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fs
 	if err != nil {
 		errPrep := fmt.Errorf("preparing disk for Hybrid Mode failed: %w", err)
 		diag := tracker.BuildDiagnostics(errPrep)
+		logger.Error("Preparing Ventoy partition failed", "target", targetDisk, "error", errPrep)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errPrep.Error(), Diagnostics: diag}, errPrep
 	}
 	tracker.SetFormatted(true)
 
 	// Step 3: Extract Firmware Assets
 	tracker.SetStage("解压固件资源", StepExtractFirmware, ActionReformat)
+	logger.Info("[Step 3/6] Writing iPXE cloud boot firmware extensions...", "mountPoint", mountPoint)
 	if err := firmware.ExtractFirmwareHybridMode(mountPoint); err != nil {
 		errExtract := fmt.Errorf("extracting firmware assets failed: %w", err)
 		diag := tracker.BuildDiagnostics(errExtract)
+		logger.Error("Writing firmware assets failed", "target", targetDisk, "error", errExtract)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errExtract.Error(), Diagnostics: diag}, errExtract
 	}
 	tracker.AddWrittenFiles([]string{
@@ -147,9 +159,11 @@ func deployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fs
 
 	// Step 4: Write Ventoy Configuration
 	tracker.SetStage("写入Ventoy配置", StepWriteVentoyConfig, ActionRetry)
+	logger.Info("[Step 4/6] Writing Ventoy Grub config and UniBoot visual theme pack...", "mountPoint", mountPoint)
 	if err := WriteVentoyConfig(mountPoint); err != nil {
 		errCfg := fmt.Errorf("writing Ventoy configuration failed: %w", err)
 		diag := tracker.BuildDiagnostics(errCfg)
+		logger.Error("Writing Ventoy theme config failed", "target", targetDisk, "error", errCfg)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errCfg.Error(), Diagnostics: diag}, errCfg
 	}
 	tracker.AddWrittenFiles([]string{
@@ -161,9 +175,11 @@ func deployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fs
 	// Step 5: Copy Selected ISO / IMG Files
 	if len(isoPaths) > 0 {
 		tracker.SetStage("复制系统镜像", StepCopyIso, ActionRemount)
+		logger.Info(fmt.Sprintf("[Step 5/6] Copying %d ISO image file(s) to disk...", len(isoPaths)), "mountPoint", mountPoint)
 		if err := CopyIsoFilesToDisk(mountPoint, isoPaths, progressCb); err != nil {
 			errCopy := fmt.Errorf("copying selected ISO/IMG files failed: %w", err)
 			diag := tracker.BuildDiagnostics(errCopy)
+			logger.Error("Copying ISO files failed", "target", targetDisk, "error", errCopy)
 			return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errCopy.Error(), Diagnostics: diag}, errCopy
 		}
 		for _, iso := range isoPaths {
@@ -173,6 +189,7 @@ func deployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fs
 
 	// Step 6: Update Volume Label
 	tracker.SetStage("更新卷标", StepUpdateLabel, ActionRetry)
+	logger.Info("[Step 6/6] Updating volume label to UNIBOOT...", "target", targetDisk)
 	mountPoint = UpdateVolumeLabel(targetDisk, mountPoint, "UNIBOOT")
 
 	msg := fmt.Sprintf("Successfully deployed Hybrid Mode (%s/UNIBOOT) to %s (mount: %s)", fsType, targetDisk, mountPoint)
@@ -182,6 +199,8 @@ func deployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fs
 	if len(isoPaths) > 0 {
 		msg += fmt.Sprintf(" (%d ISO/IMG file(s) copied)", len(isoPaths))
 	}
+
+	logger.Info("Hybrid Mode Boot Disk created successfully!", "target", targetDisk, "mountPoint", mountPoint)
 
 	return &DeployResult{
 		Success: true,
@@ -301,15 +320,20 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 	modeLabel := fmt.Sprintf("Cloud Mode (%s)", fsType)
 	tracker := NewDeployTracker(targetDisk, modeLabel, expected)
 
+	logger.Info("Starting Cloud Mode deployment...", "target", targetDisk, "fsType", fsType)
+
 	// Step 1: Target Disk & Snapshot Validation
 	tracker.SetStage("验证设备与底层盘状态", StepValidateDisk, ActionRetry)
+	logger.Info("[Step 1/3] Validating target disk drive and read-only protection status...", "target", targetDisk)
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		errFormatted := fmt.Errorf("disk validation failed: %w", err)
 		diag := tracker.BuildDiagnostics(errFormatted)
+		logger.Error("Target disk validation failed", "target", targetDisk, "error", errFormatted)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errFormatted.Error(), Diagnostics: diag}, errFormatted
 	}
 	if err := validateLiveTargetDiskSnapshot(targetDisk, expected); err != nil {
 		diag := tracker.BuildDiagnostics(err)
+		logger.Error("Target disk snapshot mismatch", "target", targetDisk, "error", err)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: err.Error(), Diagnostics: diag}, err
 	}
 
@@ -320,22 +344,27 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 	var err error
 
 	if isExistingVentoy {
+		logger.Info("[Step 2/3] Existing Ventoy/UniBoot partition detected, upgrading ESP partition...", "target", targetDisk)
 		_ = CleanMbrBootstrapCode(targetDisk)
 		tracker.SetFormatted(true)
 		efiMountPoint, err = MountAndResolveEFIPartition(targetDisk)
 		if err != nil {
 			errMount := fmt.Errorf("failed to mount/resolve EFI partition (Partition 2): %w", err)
 			diag := tracker.BuildDiagnostics(errMount)
+			logger.Error("Mounting ESP boot partition failed", "target", targetDisk, "error", errMount)
 			return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errMount.Error(), Diagnostics: diag}, errMount
 		}
 	} else {
+		logger.Info(fmt.Sprintf("[Step 2/3] Formatting dual partitions (Main Data Partition %s + 64MB FAT32 ESP)...", fsType), "target", targetDisk)
 		_, errFormat := FormatDiskCloudMode(ctx, targetDisk)
 		if errFormat != nil {
 			errFmt := fmt.Errorf("formatting dual partitions for Cloud Mode failed: %w", errFormat)
 			diag := tracker.BuildDiagnostics(errFmt)
+			logger.Error("Formatting dual partitions failed", "target", targetDisk, "error", errFmt)
 			return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errFmt.Error(), Diagnostics: diag}, errFmt
 		}
 		tracker.SetFormatted(true)
+		logger.Info("Mounting and resolving newly created ESP boot partition...", "target", targetDisk)
 		efiMountPoint, err = MountAndResolveEFIPartition(targetDisk)
 		if err != nil {
 			efiMountPoint, err = ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
@@ -344,15 +373,18 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 	if err != nil {
 		errPrep := fmt.Errorf("preparing EFI partition for Cloud Mode failed: %w", err)
 		diag := tracker.BuildDiagnostics(errPrep)
+		logger.Error("Resolving ESP boot partition failed", "target", targetDisk, "error", errPrep)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errPrep.Error(), Diagnostics: diag}, errPrep
 	}
 	tracker.SetFormatted(true)
 
 	// Step 3: Extract Firmware Assets to ESP Partition
 	tracker.SetStage("解压ESP固件资源", StepExtractFirmware, ActionReformat)
+	logger.Info("[Step 3/3] Extracting iPXE multi-arch cloud boot firmware to ESP partition...", "efiMountPoint", efiMountPoint)
 	if err := firmware.ExtractFirmwareCloudMode(efiMountPoint); err != nil {
 		errExtract := fmt.Errorf("extracting firmware assets to EFI partition failed: %w", err)
 		diag := tracker.BuildDiagnostics(errExtract)
+		logger.Error("Extracting iPXE cloud firmware assets failed", "target", targetDisk, "error", errExtract)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errExtract.Error(), Diagnostics: diag}, errExtract
 	}
 	tracker.AddWrittenFiles([]string{
@@ -364,6 +396,8 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 	if isExistingVentoy {
 		msg = fmt.Sprintf("Successfully converted Ventoy drive to Cloud Mode iPXE Cloud Boot by flashing EFI partition at %s (Main Data Partition untouched, ISO data preserved!)", efiMountPoint)
 	}
+
+	logger.Info("Cloud Boot Disk created successfully!", "target", targetDisk, "efiMountPoint", efiMountPoint)
 
 	return &DeployResult{
 		Success: true,
