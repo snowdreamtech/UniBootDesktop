@@ -792,6 +792,7 @@ function handleRetryDeploy() {
 function openSettings(tab: 'general' | 'network' | 'uniboot' | 'ventoy' = 'general') {
   settingsInitialTab.value = tab;
   isSettingsOpen.value = true;
+  logUserAction('INFO', 'User opened settings modal', tab);
 }
 
 const currentGithubProxy = ref('');
@@ -1071,6 +1072,7 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
 function openInspector(disk: DiskInfo) {
   targetInspectorDisk.value = disk;
   isInspectorOpen.value = true;
+  logUserAction('INFO', 'User opened USB hardware inspector modal', `${disk.name || disk.device} (${disk.formatted})`);
 }
 
 async function handleEjectDisk(disk: DiskInfo) {

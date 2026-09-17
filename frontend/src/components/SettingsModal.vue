@@ -599,6 +599,10 @@ watch(
   { deep: true }
 );
 
+watch(activeTab, (newTab) => {
+  logUserAction('INFO', 'User switched settings modal tab', newTab);
+});
+
 watch(ventoyPath, (newVal) => {
   if (isInitializing) return;
   if (ventoyDebounceTimer) clearTimeout(ventoyDebounceTimer);
