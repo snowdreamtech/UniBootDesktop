@@ -151,8 +151,13 @@ func launchVMwareVM(status *VMStatus, targetPath string, bootMode string) error 
 	if strings.HasPrefix(diskDev, "/dev/rdisk") {
 		diskDev = strings.Replace(diskDev, "/dev/rdisk", "/dev/disk", 1)
 	}
-	if idx := strings.Index(diskDev, "s"); idx != -1 && strings.HasPrefix(diskDev, "/dev/disk") {
-		diskDev = diskDev[:idx]
+	prefix := "/dev/disk"
+	if strings.HasPrefix(diskDev, prefix) {
+		remainder := diskDev[len(prefix):]
+		if sIdx := strings.Index(remainder, "s"); sIdx != -1 {
+			remainder = remainder[:sIdx]
+		}
+		diskDev = prefix + remainder
 	}
 
 	// 1. On macOS, use official vmware-rawdiskCreator if available
