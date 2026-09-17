@@ -47,8 +47,10 @@
           >
             <span class="log-time"><bdi>{{ formatLogTime(log.timestamp) }}</bdi></span>
             <span class="log-level-badge" :class="log.level.toLowerCase()"><bdi>[{{ log.level }}]</bdi></span>
-            <span class="log-msg"><bdi>{{ log.message }}</bdi></span>
-            <span v-if="log.details" class="log-details"><bdi>{{ log.details }}</bdi></span>
+            <div class="log-content">
+              <span class="log-msg"><bdi>{{ log.message }}</bdi></span>
+              <span v-if="log.details" class="log-details"><bdi>{{ log.details }}</bdi></span>
+            </div>
           </div>
         </div>
       </div>
@@ -354,10 +356,17 @@ function exportLogFile() {
   border: 1px solid rgba(168, 85, 247, 0.3);
 }
 
-.terminal-window .log-msg {
-  color: #e2e8f0;
+.terminal-window .log-content {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.terminal-window .log-msg {
+  color: #e2e8f0;
   font-size: 0.82rem;
   line-height: 22px;
   white-space: pre-wrap;
@@ -373,10 +382,13 @@ function exportLogFile() {
 .terminal-window .log-details {
   color: #94a3b8;
   font-size: 0.78rem;
-  margin-left: 0.5rem;
+  line-height: 22px;
   white-space: pre-wrap;
   word-break: break-word;
   overflow-wrap: anywhere;
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: embed;
 }
 
 .footer-left {
@@ -454,6 +466,10 @@ function exportLogFile() {
 
 [data-theme="light"] .terminal-window .log-msg {
   color: #0f172a;
+}
+
+[data-theme="light"] .terminal-window .log-details {
+  color: #64748b;
 }
 
 [data-theme="light"] .terminal-window .log-row.info .log-msg {

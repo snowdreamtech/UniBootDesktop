@@ -163,6 +163,12 @@ func launchVMwareVM(status *VMStatus, targetPath string, bootMode string) error 
 			cmd := exec.Command(rawCreator, "create", diskDev, "fullDevice", vmdkBase, "ide")
 			if err := cmd.Run(); err != nil {
 				logger.Warn("vmware-rawdiskCreator returned error, using fallback descriptor", "error", err)
+			} else {
+				// Swap /dev/disk with /dev/rdisk in VMDK descriptor to avoid macOS block device Resource Busy locks
+				if content, rErr := os.ReadFile(vmdkPath); rErr == nil {
+					newContent := strings.ReplaceAll(string(content), `"/dev/disk`, `"/dev/rdisk`)
+					_ = os.WriteFile(vmdkPath, []byte(newContent), 0644)
+				}
 			}
 		}
 	}
@@ -199,6 +205,7 @@ pciBridge0.present = "TRUE"
 mks.enable3d = "TRUE"
 memsize = "2048"
 firmware = "%s"
+nvram = "UniBootPreview.nvram"
 ide0:0.present = "TRUE"
 ide0:0.fileName = "uniboot_raw.vmdk"
 displayName = "UniBoot Boot Preview"

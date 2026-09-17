@@ -235,6 +235,8 @@ func ensureDiskPermissions(targetPath string) {
 
 // getOrCreateVarsFile finds or generates an EFI VARS file for QEMU dual pflash drives.
 func getOrCreateVarsFile() string {
+	tmpVars := filepath.Join(os.TempDir(), "uniboot_vars.fd")
+
 	varsCandidates := []string{
 		"/opt/local/share/qemu/edk2-i386-vars.fd",
 		"/opt/homebrew/share/qemu/edk2-i386-vars.fd",
@@ -245,10 +247,13 @@ func getOrCreateVarsFile() string {
 	}
 	for _, p := range varsCandidates {
 		if info, err := os.Stat(p); err == nil && !info.IsDir() {
-			return p
+			data, err := os.ReadFile(p)
+			if err == nil && len(data) > 0 {
+				_ = os.WriteFile(tmpVars, data, 0644)
+				return tmpVars
+			}
 		}
 	}
-	tmpVars := filepath.Join(os.TempDir(), "uniboot_vars.fd")
 	if _, err := os.Stat(tmpVars); err != nil {
 		buf := make([]byte, 540*1024)
 		_ = os.WriteFile(tmpVars, buf, 0644)
