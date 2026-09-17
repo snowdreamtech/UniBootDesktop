@@ -199,9 +199,31 @@ func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool,
 	return "数据存储盘 (未检测到引导包)"
 }
 
+// IsEmptyDirectory returns true if a mount point contains no user files or directories,
+// ignoring OS system metadata files (.DS_Store, .Spotlight-V100, .Trashes, $RECYCLE.BIN, System Volume Information).
+func IsEmptyDirectory(mountPoint string) bool {
+	if mountPoint == "" {
+		return true
+	}
+	entries, err := os.ReadDir(mountPoint)
+	if err != nil {
+		return true
+	}
+	for _, entry := range entries {
+		name := entry.Name()
+		if name == ".DS_Store" || name == ".Spotlight-V100" || name == ".Trashes" ||
+			name == ".fseventsd" || name == "$RECYCLE.BIN" || name == "System Volume Information" ||
+			strings.HasPrefix(name, "._") {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
 // HasVentoyEngineFiles verifies physical presence of Ventoy core engine files inside a mount directory.
 func HasVentoyEngineFiles(mountPoint string) bool {
-	if mountPoint == "" {
+	if mountPoint == "" || IsEmptyDirectory(mountPoint) {
 		return false
 	}
 	ventoyDir := filepath.Join(mountPoint, "ventoy")
@@ -259,7 +281,7 @@ func CheckVentoyMbrSignature(targetDisk string) bool {
 
 // HasUniBootCloudFiles verifies physical presence of UniBoot Cloud iPXE firmware files inside ESP partition.
 func HasUniBootCloudFiles(mountPoint string) bool {
-	if mountPoint == "" {
+	if mountPoint == "" || IsEmptyDirectory(mountPoint) {
 		return false
 	}
 	bootIpxe := filepath.Join(mountPoint, "boot.ipxe")

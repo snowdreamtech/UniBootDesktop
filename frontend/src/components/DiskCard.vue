@@ -169,6 +169,7 @@ interface DiskInfo {
   protocolCode?: string;
   isVentoy?: boolean;
   isRealVentoy?: boolean;
+  isModeB?: boolean;
 }
 
 const props = withDefaults(defineProps<{
@@ -197,7 +198,7 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
                    controllerUpper.includes('CARD') || controllerUpper.includes('READER') || controllerUpper.includes('读卡器') || controllerUpper.includes('CHIPSBANK') || controllerUpper.includes('CHIPSBRAND') ||
                    vidUpper.includes('0X1E3D') || vidUpper.includes('0X0BDA') || vidUpper.includes('0X05E3');
 
-  if (nameUpper.includes('VENTOY') || nameUpper.includes('UNIBOOT') || nameUpper.includes('BOOT')) {
+  if (props.disk.isRealVentoy || props.disk.isModeB) {
     return 'boot';
   }
   if (isReader) {
