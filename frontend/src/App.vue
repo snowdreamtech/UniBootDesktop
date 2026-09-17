@@ -313,37 +313,41 @@
                 <span class="optional-badge">{{ t('common.optional') }}</span>
               </h3>
             </div>
-            
-            <div class="vm-controls-group">
-              <!-- Boot Mode Selector -->
-              <div class="vm-selector-container">
-                <span class="vm-selector-label">{{ t('vm.boot_mode_label') }}</span>
-                <div class="vm-select-wrapper">
-                  <select v-model="selectedBootMode" class="vm-select boot-select">
-                    <option value="uefi">{{ t('vm.boot_mode_uefi') }}</option>
-                    <option value="bios">{{ t('vm.boot_mode_bios') }}</option>
-                    <option value="auto">{{ t('vm.boot_mode_auto') }}</option>
-                  </select>
-                  <span class="select-arrow">▾</span>
-                </div>
+          </div>
+
+          <!-- VM Options Bar -->
+          <div class="vm-options-bar">
+            <!-- Boot Mode Selector -->
+            <div class="vm-selector-container">
+              <span class="vm-selector-label">{{ t('vm.boot_mode_label') }}</span>
+              <div class="vm-select-wrapper">
+                <select v-model="selectedBootMode" class="vm-select boot-select">
+                  <option value="uefi">{{ t('vm.boot_mode_uefi') }}</option>
+                  <option value="bios">{{ t('vm.boot_mode_bios') }}</option>
+                  <option value="auto">{{ t('vm.boot_mode_auto') }}</option>
+                </select>
+                <span class="select-arrow">▾</span>
               </div>
+            </div>
 
-              <!-- Single Hypervisor Badge -->
-              <span v-if="hypervisorList.length <= 1" class="badge" :class="hypervisorList.length === 1 ? 'success' : 'muted'">
-                {{ hypervisorList.length === 1 ? t('vm.detected_single', { name: hypervisorList[0].name }) : t('vm.not_installed') }}
+            <!-- Single Hypervisor Badge -->
+            <div v-if="hypervisorList.length <= 1" class="vm-selector-container">
+              <span class="vm-selector-label">{{ t('vm.select_vm_label') }}</span>
+              <span class="badge" :class="hypervisorList.length === 1 ? 'success' : 'muted'">
+                {{ hypervisorList.length === 1 ? hypervisorList[0].name : t('vm.not_installed') }}
               </span>
+            </div>
 
-              <!-- Multiple Hypervisors Selector -->
-              <div v-else class="vm-selector-container">
-                <span class="vm-selector-label">{{ t('vm.select_vm_label') }}</span>
-                <div class="vm-select-wrapper">
-                  <select v-model="selectedVMType" class="vm-select">
-                    <option v-for="vm in hypervisorList" :key="vm.type" :value="vm.type">
-                      {{ vm.name }}
-                    </option>
-                  </select>
-                  <span class="select-arrow">▾</span>
-                </div>
+            <!-- Multiple Hypervisors Selector -->
+            <div v-else class="vm-selector-container">
+              <span class="vm-selector-label">{{ t('vm.select_vm_label') }}</span>
+              <div class="vm-select-wrapper">
+                <select v-model="selectedVMType" class="vm-select">
+                  <option v-for="vm in hypervisorList" :key="vm.type" :value="vm.type">
+                    {{ vm.name }}
+                  </option>
+                </select>
+                <span class="select-arrow">▾</span>
               </div>
             </div>
           </div>
@@ -2717,22 +2721,26 @@ h1 {
   color: var(--text-muted);
 }
 
-.vm-controls-group {
+.vm-options-bar {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 1.2rem;
+  margin: 0.6rem 0 0.6rem 0;
+  flex-wrap: wrap;
 }
 
 .vm-selector-container {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
+  white-space: nowrap;
 }
 
 .vm-selector-label {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .vm-select-wrapper {
