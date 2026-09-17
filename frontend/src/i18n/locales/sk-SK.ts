@@ -119,7 +119,7 @@ export const skSk: TranslationDict = {
   "log.level_info": "INFO",
   "log.level_warn": "UPOZORNENIE",
   "log.level_error": "CHYBA",
-  "log.level_debug": "DEBUG",
+  "log.level_debug": "LADIŤ",
   "safe.title_cloud": "Zistená existujúca jednotka Ventoy/UniBoot (Cloudový režim obnovuje iba oddiel ESP)",
   "safe.desc_cloud": "Cloudový režim zachováva dvojdielne usporiadanie UNIBOOT. Obnovenie oddielu ESP ponechá všetky ISO a súbory nedotknuté!",
   "safe.title_hybrid": "Zistená existujúca jednotka Ventoy (Aktualizácia na mieste v hybridnom režime)",
