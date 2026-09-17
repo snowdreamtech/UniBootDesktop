@@ -62,7 +62,7 @@ export const koKr: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 클라우드 UniBoot {tag} 펌웨어 다운로드 완료!",
   "settings.syncSuccessShortAlert": "🎉 UniBoot 클라우드 펌웨어 동기화 완료!",
   "settings.syncFailedAlert": "❌ 펌웨어 동기화 실패: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy 공식 도구 체인",
+  "settings.ventoyToolchain": "🚀 Ventoy 공식 툴체인",
   "settings.testVentoyCli": "⚡ Ventoy CLI 테스트",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI 포맷 매개변수 구성",
   "settings.ventoyPlugins": "⚡ Ventoy 자동화 플러그인 (ventoy.json)",

@@ -62,7 +62,7 @@ export const enUs: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} firmware & scripts downloaded and cached successfully!",
   "settings.syncSuccessShortAlert": "🎉 Cloud UniBoot core firmware synced successfully!",
   "settings.syncFailedAlert": "❌ Firmware Sync Failed: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Official Toolchain",
+  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
   "settings.testVentoyCli": "⚡ Test Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI Formatting Flags",
   "settings.ventoyPlugins": "⚡ Ventoy Automation Plugins (ventoy.json)",

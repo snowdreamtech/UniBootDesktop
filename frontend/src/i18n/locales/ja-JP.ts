@@ -63,7 +63,7 @@ export const jaJp: TranslationDict = {
   "settings.syncSuccessShortAlert": "🎉 UniBoot クラウドファームウェア同期完了！",
   "settings.syncFailedAlert": "❌ ファームウェアの同期に失敗しました: {error}",
   "settings.ventoyToolchain": "🚀 Ventoy 公式ツールチェーン",
-  "settings.testVentoyCli": "⚡ Ventoy CLI をテスト",
+  "settings.testVentoyCli": "⚡ Ventoy CLIのテスト",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI フォーマットパラメータ設定",
   "settings.ventoyPlugins": "⚡ Ventoy 自動化プラグイン (ventoy.json)",
   "app.title": "UniBoot デスクトップ",

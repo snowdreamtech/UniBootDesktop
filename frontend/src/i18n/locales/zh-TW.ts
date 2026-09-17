@@ -191,7 +191,7 @@ export const zhTw: TranslationDict = {
   "settings.realtime_save": "修改已實時生效",
   "settings.tab_general": "常規基礎設定",
   "settings.tab_network": "網路代理與加速",
-  "settings.tab_uniboot": "UniBoot 固件矩陣",
+  "settings.tab_uniboot": "UniBoot 矩陣",
   "settings.tab_ventoy": "Ventoy 工具鏈設置",
   "settings.language": "應用語言 / Language:",
   "settings.theme": "UI 主題風格:",

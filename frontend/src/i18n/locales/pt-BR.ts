@@ -62,7 +62,7 @@ export const ptBr: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Firmware e scripts UniBoot {tag} baixados com sucesso!",
   "settings.syncSuccessShortAlert": "🎉 Firmware UniBoot sincronizado com sucesso!",
   "settings.syncFailedAlert": "❌ Falha na sincronização do firmware: {error}",
-  "settings.ventoyToolchain": "🚀 Cadeia de ferramentas oficial do Ventoy",
+  "settings.ventoyToolchain": "🚀 Conjunto de ferramentas oficial Ventoy",
   "settings.testVentoyCli": "⚡ Testar Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Parâmetros de Formatação Ventoy CLI",
   "settings.ventoyPlugins": "⚡ Plugins de automação Ventoy (ventoy.json)",

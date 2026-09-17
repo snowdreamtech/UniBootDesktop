@@ -63,7 +63,7 @@ export const viVn: TranslationDict = {
   "settings.syncSuccessShortAlert": "🎉 Đồng bộ firmware UniBoot thành công!",
   "settings.syncFailedAlert": "❌ Đồng bộ firmware thất bại: {error}",
   "settings.ventoyToolchain": "🚀 Chuỗi công cụ chính thức Ventoy",
-  "settings.testVentoyCli": "⚡ Kiểm tra Ventoy CLI",
+  "settings.testVentoyCli": "⚡ Thử nghiệm Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Tham số định dạng Ventoy CLI",
   "settings.ventoyPlugins": "⚡ Plugin tự động hóa Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",
