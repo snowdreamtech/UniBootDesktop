@@ -314,36 +314,47 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode strin
 
 	args = append(args, "-drive", fmt.Sprintf("file=%s,format=raw", targetPath))
 
-	cmd := exec.Command(status.Path, args...)
-	var stderr bytes.Buffer
-	cmd.Stderr = &stderr
+	runQEMU := func() error {
+		cmd := exec.Command(status.Path, args...)
+		var stderr bytes.Buffer
+		cmd.Stderr = &stderr
 
-	if runtime.GOOS != "windows" {
-		cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true}
-	}
-
-	if err := cmd.Start(); err != nil {
-		return fmt.Errorf("failed to start QEMU process: %w", err)
-	}
-
-	done := make(chan error, 1)
-	go func() {
-		err := cmd.Wait()
-		remountTargetDisk(targetPath)
-		done <- err
-	}()
-
-	select {
-	case err := <-done:
-		if err != nil {
-			errOutput := strings.TrimSpace(stderr.String())
-			if errOutput != "" {
-				return fmt.Errorf("QEMU launch message: %s", errOutput)
-			}
-			return fmt.Errorf("QEMU exited unexpectedly: %w", err)
+		if runtime.GOOS != "windows" {
+			cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true}
 		}
-		return nil
-	case <-time.After(800 * time.Millisecond):
-		return nil
+
+		if err := cmd.Start(); err != nil {
+			return fmt.Errorf("failed to start QEMU process: %w", err)
+		}
+
+		done := make(chan error, 1)
+		go func() {
+			err := cmd.Wait()
+			remountTargetDisk(targetPath)
+			done <- err
+		}()
+
+		select {
+		case err := <-done:
+			if err != nil {
+				errOutput := strings.TrimSpace(stderr.String())
+				if errOutput != "" {
+					return fmt.Errorf("QEMU launch message: %s", errOutput)
+				}
+				return fmt.Errorf("QEMU exited unexpectedly: %w", err)
+			}
+			return nil
+		case <-time.After(800 * time.Millisecond):
+			return nil
+		}
 	}
+
+	err := runQEMU()
+	if err != nil && (strings.Contains(err.Error(), "Resource busy") || strings.Contains(err.Error(), "busy")) {
+		logger.Warn("QEMU failed with Resource busy, retrying after disk unmount", "disk", targetPath)
+		time.Sleep(500 * time.Millisecond)
+		unmountTargetDisk(targetPath)
+		err = runQEMU()
+	}
+	return err
 }

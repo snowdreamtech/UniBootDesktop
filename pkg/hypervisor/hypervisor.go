@@ -193,16 +193,30 @@ func unmountTargetDisk(targetPath string) {
 		}
 		cmd := exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode))
 		_ = cmd.Run()
-		time.Sleep(300 * time.Millisecond)
+
+		// Poll up to 2.5s for macOS kernel/diskarbitrationd lock release to prevent "Resource busy"
+		deadline := time.Now().Add(2500 * time.Millisecond)
+		for time.Now().Before(deadline) {
+			time.Sleep(150 * time.Millisecond)
+			if f, err := os.OpenFile(targetPath, os.O_RDWR, 0); err == nil {
+				_ = f.Close()
+				break
+			} else if os.IsPermission(err) {
+				break
+			} else if strings.Contains(err.Error(), "busy") {
+				_ = exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode)).Run()
+			}
+		}
 	} else if runtime.GOOS == "linux" {
 		cmd := exec.Command("udisksctl", "unmount", "-b", targetPath)
 		if err := cmd.Run(); err != nil {
 			_ = exec.Command("umount", targetPath).Run()
 		}
-		time.Sleep(200 * time.Millisecond)
+		time.Sleep(300 * time.Millisecond)
 	} else if runtime.GOOS == "windows" {
 		psCmd := fmt.Sprintf(`Get-Volume | Where-DriveLetter | Where-Object { $_.Path -like "*%s*" } | Dismount-Volume -Confirm:$false`, targetPath)
 		_ = exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd).Run()
+		time.Sleep(300 * time.Millisecond)
 	}
 }
 
