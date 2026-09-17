@@ -253,7 +253,7 @@ export const mkMk: TranslationDict = {
   "confirm.will_format": "Целосно форматирање",
   "confirm.no_format": "Паметно ажурирање на лице место",
   "deploy.toast_target_changed": "Избраниот целен диск се промени или повеќе не е достапен. Ве молиме скенирајте повторно.",
-  "deploy.start_cloud_create": "🚀 Започни облачно распоредување",
+  "deploy.start_cloud_create": "🚀 Create Cloud Boot Disk",
   "deploy.batch_update": "Започни групно ажурирање без губење податоци ({count} USB уреди)",
   "deploy.batch_mixed": "Започни групна мешана имплементација ({count} USB уреди)",
   "confirm.batch_safe_confirm": "🛡️ Потврди групно ажурирање на лице место ({count} дискови)",

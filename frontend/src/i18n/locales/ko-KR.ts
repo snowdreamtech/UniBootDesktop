@@ -253,7 +253,7 @@ export const koKr: TranslationDict = {
   "confirm.will_format": "전체 포맷",
   "confirm.no_format": "스마트 제자리 업데이트",
   "deploy.toast_target_changed": "선택한 대상 디스크가 변경되었거나 더 이상 사용할 수 없습니다. 다시 스캔하세요.",
-  "deploy.start_cloud_create": "🚀 클라우드 배포 시작",
+  "deploy.start_cloud_create": "🚀 클라우드 부팅 디스크 만들기",
   "deploy.batch_update": "일괄 무손실 업데이트 시작 ({count}개 드라이브)",
   "deploy.batch_mixed": "일괄 혼합 배포 시작 ({count}개 드라이브)",
   "confirm.batch_safe_confirm": "🛡️ 일괄 제자리 업그레이드 확인 ({count}개 드라이브)",

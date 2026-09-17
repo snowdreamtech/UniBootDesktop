@@ -253,7 +253,7 @@ export const glEs: TranslationDict = {
   "confirm.will_format": "Formatación completa",
   "confirm.no_format": "Actualización in-situ intelixente",
   "deploy.toast_target_changed": "O disco de destino seleccionado mudou ou xa non está dispoñible. Volva a escanear.",
-  "deploy.start_cloud_create": "🚀 Iniciar despregue na Nube",
+  "deploy.start_cloud_create": "🚀 Crear disco de arranque na Nube",
   "deploy.batch_update": "Iniciar actualización en lote sen perda de datos ({count} unidades USB)",
   "deploy.batch_mixed": "Iniciar despregamento mixto en lote ({count} unidades USB)",
   "confirm.batch_safe_confirm": "🛡️ Confirmar actualización in-situ en lote ({count} discos)",

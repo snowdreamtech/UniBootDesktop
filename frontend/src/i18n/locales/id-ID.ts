@@ -253,7 +253,7 @@ export const idId: TranslationDict = {
   "confirm.will_format": "Format Penuh",
   "confirm.no_format": "Pembaruan Pintar di Tempat",
   "deploy.toast_target_changed": "Disk target yang dipilih berubah atau tidak lagi tersedia. Silakan pindai ulang.",
-  "deploy.start_cloud_create": "🚀 Mulai Penggelaran Cloud",
+  "deploy.start_cloud_create": "🚀 Buat Diska Booting Cloud",
   "deploy.batch_update": "Mulai Pembaruan Massal Tanpa Kehilangan Data ({count} drive USB)",
   "deploy.batch_mixed": "Mulai Penyebaran Massal Campuran ({count} drive USB)",
   "confirm.batch_safe_confirm": "🛡️ Konfirmasi Pembaruan di Tempat Masal ({count} drive)",

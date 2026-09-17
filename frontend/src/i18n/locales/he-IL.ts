@@ -253,7 +253,7 @@ export const heIl: TranslationDict = {
   "confirm.will_format": "פרמוט מלא",
   "confirm.no_format": "שדרוג מקומי חכם",
   "deploy.toast_target_changed": "כונן היעד שנבחר השתנה או אינו זמין עוד. אנא סרוק שוב.",
-  "deploy.start_cloud_create": "🚀 התחל פריסת ענן",
+  "deploy.start_cloud_create": "🚀 צור דיסק אתחول ענן",
   "deploy.batch_update": "התחל עדכון אצווה ללא אובדן נתונים ({count} כונני דיסק)",
   "deploy.batch_mixed": "התחל הפצת אצווה מעורבת ({count} כונני דיסק)",
   "confirm.batch_safe_confirm": "🛡️ אישור שדרוג מקומי באצווה ({count} כוננים)",

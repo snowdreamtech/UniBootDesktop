@@ -253,7 +253,7 @@ export const kaGe: TranslationDict = {
   "confirm.will_format": "სრული ფორმატირება",
   "confirm.no_format": "ჭკვიანი ადგილობრივი განახლება",
   "deploy.toast_target_changed": "არჩეული სამიზნე დისკი შეიცვალა ან აღარ არის ხელმისაწვდომი. გთხოვთ ხელახლა დაასკანიროთ.",
-  "deploy.start_cloud_create": "🚀 ღრუბლოვანი განლაგების დაწყება",
+  "deploy.start_cloud_create": "🚀 ღრუბლოვანი ჩამტვირთავი დისკის შექმნა",
   "deploy.batch_update": "მონაცემთა დაკარგვის გარეშე ჯგუფური განახლების დაწყება ({count} USB დისკი)",
   "deploy.batch_mixed": "ჯგუფური შერეული განთავსების დაწყება ({count} USB დისკი)",
   "confirm.batch_safe_confirm": "🛡️ დაადასტურეთ ჯგუფური ადგილობრივი განახლება ({count} დისკი)",

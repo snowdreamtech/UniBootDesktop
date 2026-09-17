@@ -253,7 +253,7 @@ export const ruRu: TranslationDict = {
   "confirm.will_format": "Полное форматирование",
   "confirm.no_format": "Умное обновление на месте",
   "deploy.toast_target_changed": "Выбранный целевой диск изменился или больше не доступен. Пожалуйста, выполните повторное сканирование.",
-  "deploy.start_cloud_create": "🚀 Начать облачную развертывание",
+  "deploy.start_cloud_create": "🚀 Создать облачный загрузочный диск",
   "deploy.batch_update": "Начать обновление без потери данных ({count} накопителей)",
   "deploy.batch_mixed": "Начать смешанное развертывание ({count} накопителей)",
   "confirm.batch_safe_confirm": "🛡️ Подтвердить обновление на месте ({count} накопителей)",

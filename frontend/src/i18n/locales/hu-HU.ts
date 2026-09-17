@@ -253,7 +253,7 @@ export const huHu: TranslationDict = {
   "confirm.will_format": "Teljes formázás",
   "confirm.no_format": "Intelligens helybeni frissítés",
   "deploy.toast_target_changed": "A kiválasztott céllemez megváltozott vagy már nem érhető el. Kérjük, szkenneljen újra.",
-  "deploy.start_cloud_create": "🚀 Felhőalapú telepítés indítása",
+  "deploy.start_cloud_create": "🚀 Felhőalapú indítólemez létrehozása",
   "deploy.batch_update": "Kötegelt frissítés indítása adatvesztés nélkül ({count} USB-meghajtó)",
   "deploy.batch_mixed": "Kötegelt vegyes telepítés indítása ({count} USB-meghajtó)",
   "confirm.batch_safe_confirm": "🛡️ Tömbös helybeni frissítés megerősítése ({count} lemez)",

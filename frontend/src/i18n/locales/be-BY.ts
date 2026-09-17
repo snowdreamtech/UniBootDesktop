@@ -253,7 +253,7 @@ export const beBy: TranslationDict = {
   "confirm.will_format": "Поўнае фарматаванне",
   "confirm.no_format": "Разумнае абнаўленне на месцы",
   "deploy.toast_target_changed": "Выбраны мэтавы дыск змяніўся або больш недаступны. Сканаваць зноў.",
-  "deploy.start_cloud_create": "🚀 Пачаць воблачнае разгортванне",
+  "deploy.start_cloud_create": "🚀 Create Cloud Boot Disk",
   "deploy.batch_update": "Пачаць пакетнае абнаўленне без страты даных ({count} USB)",
   "deploy.batch_mixed": "Пачаць пакетнае змяшанае разгортванне ({count} USB)",
   "confirm.batch_safe_confirm": "🛡️ Пацвердзіце пакетнае абнаўленне на месцы ({count} дыскаў)",

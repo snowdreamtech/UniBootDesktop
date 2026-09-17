@@ -253,7 +253,7 @@ export const nlNl: TranslationDict = {
   "confirm.will_format": "Volledige formattering",
   "confirm.no_format": "Slimme in-place upgrade",
   "deploy.toast_target_changed": "De geselecteerde doelschijf is gewijzigd of niet meer beschikbaar. Scan opnieuw.",
-  "deploy.start_cloud_create": "🚀 Start Cloudimplementatie",
+  "deploy.start_cloud_create": "🚀 Cloud-opstartschijf maken",
   "deploy.batch_update": "Start update zonder gegevensverlies ({count} stations)",
   "deploy.batch_mixed": "Start gemengde batchuitrol ({count} stations)",
   "confirm.batch_safe_confirm": "🛡️ Bevestig directe update ({count} stations)",

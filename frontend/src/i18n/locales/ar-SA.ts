@@ -253,7 +253,7 @@ export const arSa: TranslationDict = {
   "confirm.will_format": "تهيئة كاملة",
   "confirm.no_format": "تحديث ذكي في مكانه",
   "deploy.toast_target_changed": "القرص الهدف المحدد تغير أو لم يعد متاحاً. يرجى المسح مجدداً.",
-  "deploy.start_cloud_create": "🚀 بدء النشر السحابي",
+  "deploy.start_cloud_create": "🚀 إنشاء قرص الإقلاع السحابي",
   "deploy.batch_update": "بدء التحديث بدون فقدان البيانات ({count} محرك قرص)",
   "deploy.batch_mixed": "بدء النشر المختلط تجميعياً ({count} محرك قرص)",
   "confirm.batch_safe_confirm": "🛡️ تأكيد التحديث في المكان ({count} محرك قرص)",

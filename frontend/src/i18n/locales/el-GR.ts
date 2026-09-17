@@ -253,7 +253,7 @@ export const elGr: TranslationDict = {
   "confirm.will_format": "Πλήρης διαμόρφωση",
   "confirm.no_format": "Έξυπνη αναβάθμιση επί τόπου",
   "deploy.toast_target_changed": "Ο επιλεγμένος δίσκος προορισμού άλλαξε ή δεν είναι πλέον διαθέσιμος. Παρακαλώ σαρώστε ξανά.",
-  "deploy.start_cloud_create": "🚀 Έναρξη ανάπτυξης Cloud",
+  "deploy.start_cloud_create": "🚀 Δημιουργία δίσκου εκκίνησης Cloud",
   "deploy.batch_update": "Έναρξη μαζικής ενημέρωσης χωρίς απώλεια δεδομένων ({count} USB)",
   "deploy.batch_mixed": "Έναρξη μαζικής μικτής ανάπτυξης ({count} USB)",
   "confirm.batch_safe_confirm": "🛡️ Επιβεβαίωση μαζικής αναβάθμισης επί τόπου ({count} δίσκοι)",

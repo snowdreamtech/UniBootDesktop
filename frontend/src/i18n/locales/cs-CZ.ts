@@ -253,7 +253,7 @@ export const csCz: TranslationDict = {
   "confirm.will_format": "Úplné formátování",
   "confirm.no_format": "Inteligentní aktualizace na místě",
   "deploy.toast_target_changed": "Vybraný cílový disk se změnil nebo již není dostupný. Proveďte nový sken.",
-  "deploy.start_cloud_create": "🚀 Spustit cloudové nasazení",
+  "deploy.start_cloud_create": "🚀 Vytvořit cloudový bootovací disk",
   "deploy.batch_update": "Spustit hromadnou aktualizaci bez ztráty dat ({count} USB disků)",
   "deploy.batch_mixed": "Spustit hromadné smíšené nasazení ({count} USB disků)",
   "confirm.batch_safe_confirm": "🛡️ Potvrdit hromadnou aktualizaci na místě ({count} disků)",

@@ -253,7 +253,7 @@ export const deDe: TranslationDict = {
   "confirm.will_format": "Vollständige Formatierung",
   "confirm.no_format": "Intelligente Vor-Ort-Aktualisierung",
   "deploy.toast_target_changed": "Der ausgewählte Zieldatenträger hat sich geändert oder ist nicht mehr verfügbar. Bitte erneut scannen.",
-  "deploy.start_cloud_create": "🚀 Cloud-Bereitstellung starten",
+  "deploy.start_cloud_create": "🚀 Cloud-Boot-Disk erstellen",
   "deploy.batch_update": "Stapel-Update ohne Datenverlust starten ({count} Laufwerke)",
   "deploy.batch_mixed": "Gemischte Stapel-Bereitstellung starten ({count} Laufwerke)",
   "confirm.batch_safe_confirm": "🛡️ In-Place-Update bestätigen ({count} Laufwerke)",

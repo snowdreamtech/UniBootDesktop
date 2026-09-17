@@ -253,7 +253,7 @@ export const slSi: TranslationDict = {
   "confirm.will_format": "Popolno formatiranje",
   "confirm.no_format": "Pametna nadgradnja na mestu",
   "deploy.toast_target_changed": "Izbrani ciljni disk se je spremenil ali ni več na voljo. Prosimo, ponovno poskenirajte.",
-  "deploy.start_cloud_create": "🚀 Začni oblačno namestitev",
+  "deploy.start_cloud_create": "🚀 Ustvari oblačni zagonski disk",
   "deploy.batch_update": "Zaženi skupinsko posodobitev brez izgube podatkov ({count} USB pogonov)",
   "deploy.batch_mixed": "Zaženi mešano skupinsko namestitev ({count} USB pogonov)",
   "confirm.batch_safe_confirm": "🛡️ Potrdi skupinsko nadgradnjo na mestu ({count} diskov)",

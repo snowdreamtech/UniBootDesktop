@@ -253,7 +253,7 @@ export const frFr: TranslationDict = {
   "confirm.will_format": "Formatage complet",
   "confirm.no_format": "Mise à jour intelligente sur place",
   "deploy.toast_target_changed": "Le disque cible sélectionné a changé ou n'est plus disponible. Veuillez relancer l'analyse.",
-  "deploy.start_cloud_create": "🚀 Démarrer le déploiement Cloud",
+  "deploy.start_cloud_create": "🚀 Créer un disque de démarrage Cloud",
   "deploy.batch_update": "Démarrer la mise à jour sans perte ({count} disques)",
   "deploy.batch_mixed": "Démarrer le déploiement mixte ({count} disques)",
   "confirm.batch_safe_confirm": "🛡️ Confirmer la mise à jour sur place ({count} clé(s))",

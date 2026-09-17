@@ -253,7 +253,7 @@ export const noNo: TranslationDict = {
   "confirm.will_format": "Full formatering",
   "confirm.no_format": "Intelligent oppgradering på stedet",
   "deploy.toast_target_changed": "Den valgte måldisken har endret seg eller er ikke lenger tilgjengelig. Skann på nytt.",
-  "deploy.start_cloud_create": "🚀 Start skydistribusjon",
+  "deploy.start_cloud_create": "🚀 Opprett skyoppstartsdisk",
   "deploy.batch_update": "Start batch-oppdatering uten datatap ({count} USB-stasjoner)",
   "deploy.batch_mixed": "Start blandet batch-distribusjon ({count} USB-stasjoner)",
   "confirm.batch_safe_confirm": "🛡️ Bekreft oppgradering i pulje på stedet ({count} disker)",

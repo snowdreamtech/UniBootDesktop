@@ -253,7 +253,7 @@ export const hyAm: TranslationDict = {
   "confirm.will_format": "Ամբողջական ֆորմատավորում",
   "confirm.no_format": "Խելացի տեղական թարմացում",
   "deploy.toast_target_changed": "Ընտրված թիրախային սկավառակը փոխվել է կամ այլևս հասանելի չէ: Խնդրում ենք կրկին սկանավորել:",
-  "deploy.start_cloud_create": "🚀 Սկսել ամպային տեղակայումը",
+  "deploy.start_cloud_create": "🚀 Ստեղծել ամպային բեռնավորման սկավառակ",
   "deploy.batch_update": "Սկսել խմբային թարմացումը առանց տվյալների կորստի ({count} USB կրիչ)",
   "deploy.batch_mixed": "Սկսել խմբային խառը տեղադրումը ({count} USB կրիչ)",
   "confirm.batch_safe_confirm": "🛡️ Հաստատել տեղական խմբային թարմացումը ({count} սկավառակ)",

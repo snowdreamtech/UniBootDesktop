@@ -253,7 +253,7 @@ export const jaJp: TranslationDict = {
   "confirm.will_format": "フルフォーマット",
   "confirm.no_format": "スマート上書き更新",
   "deploy.toast_target_changed": "選択したターゲットディスクが変化したか、使用できなくなりました。再度スキャンしてください。",
-  "deploy.start_cloud_create": "🚀 クラウド展開を開始",
+  "deploy.start_cloud_create": "🚀 クラウド起動ディスクを作成",
   "deploy.batch_update": "一括非破壊更新を開始 ({count} 個の ディスク)",
   "deploy.batch_mixed": "一括混合展開を開始 ({count} 個の ディスク)",
   "confirm.batch_safe_confirm": "🛡️ 一括インプレース更新の確認 ({count} 個のドライブ)",

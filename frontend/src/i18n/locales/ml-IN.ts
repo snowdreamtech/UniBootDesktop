@@ -253,7 +253,7 @@ export const mlIn: TranslationDict = {
   "confirm.will_format": "പൂർണ്ണ ഫോർമാറ്റ്",
   "confirm.no_format": "സ്മാർട്ട് ഇൻ-പ്ലേസ് അപ്ഡേറ്റ്",
   "deploy.toast_target_changed": "തിരഞ്ഞെടുത്ത ടാർഗെറ്റ് ഡിസ്ക് മാറുകയോ ലഭ്യല്ലാതാവുകയോ ചെയ്തു. വീണ്ടും സ്കാൻ ചെയ്യുക.",
-  "deploy.start_cloud_create": "🚀 ക്ലൗഡ് വിന്യാസം ആരംഭിക്കുക",
+  "deploy.start_cloud_create": "🚀 ക്ലൗഡ് ബൂട്ട് ഡിസ്ക് സൃഷ്ടിക്കുക",
   "deploy.batch_update": "ഡാറ്റ നഷ്ടമില്ലാതെ ബാച്ച് അപ്‌ഡേറ്റ് ആരംഭിക്കുക ({count} USB ഡ്രൈവുകൾ)",
   "deploy.batch_mixed": "ബാച്ച് മിക്സഡ് ഡിപ്ലോയ്മെന്റ് ആരംഭിക്കുക ({count} USB ഡ്രൈവുകൾ)",
   "confirm.batch_safe_confirm": "🛡️ ബാച്ച് ഇൻ-പ്ലേസ് അപ്ഡേറ്റ് സ്ഥിരീകരിക്കുക ({count} ഡ്രൈവുകൾ)",

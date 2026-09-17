@@ -253,7 +253,7 @@ export const daDk: TranslationDict = {
   "confirm.will_format": "Fuld formatering",
   "confirm.no_format": "Intelligent opgradering på stedet",
   "deploy.toast_target_changed": "Det valgte måldrev har ændret sig eller er ikke længere tilgængeligt. Scan venligst igen.",
-  "deploy.start_cloud_create": "🚀 Start Cloud-implementering",
+  "deploy.start_cloud_create": "🚀 Opret cloud-bootdisk",
   "deploy.batch_update": "Start batch-opdatering uden datatab ({count} USB-drev)",
   "deploy.batch_mixed": "Start blandet batch-implementering ({count} USB-drev)",
   "confirm.batch_safe_confirm": "🛡️ Bekræft batch-opgradering på stedet ({count} drev)",

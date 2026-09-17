@@ -253,7 +253,7 @@ export const azAz: TranslationDict = {
   "confirm.will_format": "Tam formatlaşdırma",
   "confirm.no_format": "Yerində ağıllı yeniləmə",
   "deploy.toast_target_changed": "Seçilmiş hədəf disk dəyişdi və ya artıq əlçatan deyil. Yenidən skan edin.",
-  "deploy.start_cloud_create": "🚀 Bulud yerləşdirməsini başladın",
+  "deploy.start_cloud_create": "🚀 Create Cloud Boot Disk",
   "deploy.batch_update": "Toplu İtkisiz Yeniləməni Başlat ({count} USB disk)",
   "deploy.batch_mixed": "Toplu Qarışıq Yerləşdirməni Başlat ({count} USB disk)",
   "confirm.batch_safe_confirm": "🛡️ Yerində toplu yeniləməni təsdiqləyin ({count} disk)",

@@ -253,7 +253,7 @@ export const plPl: TranslationDict = {
   "confirm.will_format": "Pełne formatowanie",
   "confirm.no_format": "Inteligentna aktualizacja w miejscu",
   "deploy.toast_target_changed": "Wybrany dysk docelowy uległ zmianie lub nie jest już dostępny. Wykonaj ponowne skanowanie.",
-  "deploy.start_cloud_create": "🚀 Rozpocznij wdrażanie w chmurze",
+  "deploy.start_cloud_create": "🚀 Utwórz chmurowy dysk rozruchowy",
   "deploy.batch_update": "Rozpocznij aktualizację bez utraty danych ({count} dysków)",
   "deploy.batch_mixed": "Rozpocznij wdrożenie mieszane ({count} dysków)",
   "confirm.batch_safe_confirm": "🛡️ Potwierdź aktualizację w miejscu ({count} dysków)",

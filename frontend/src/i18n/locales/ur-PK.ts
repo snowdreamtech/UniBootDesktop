@@ -253,7 +253,7 @@ export const urPk: TranslationDict = {
   "confirm.will_format": "مکمل فارمیٹ",
   "confirm.no_format": "سمارٹ ان-پلیس اپ ڈیٹ",
   "deploy.toast_target_changed": "منتخب کردہ ہدف ڈسک تبدیل ہو گئی ہے یا اب دستیاب نہیں ہے۔ براہ کرم دوبارہ اسکین کریں۔",
-  "deploy.start_cloud_create": "🚀 کلاؤڈ تعیناتی شروع کریں",
+  "deploy.start_cloud_create": "🚀 کلاؤڈ بوٹ ڈسک بنائیں",
   "deploy.batch_update": "ڈیٹا کے نقصان کے بغیر بیچ اپ ڈیٹ شروع کریں ({count} ڈسک ڈرائیوز)",
   "deploy.batch_mixed": "بیچ مخلوط ڈیپلائمنٹ شروع کریں ({count} ڈسک ڈرائیوز)",
   "confirm.batch_safe_confirm": "🛡️ ان-پلیس بیچ اپ ڈیٹ کی تصدیق کریں ({count} ڈرائیوز)",

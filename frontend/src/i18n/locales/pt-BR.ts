@@ -253,7 +253,7 @@ export const ptBr: TranslationDict = {
   "confirm.will_format": "Formatação completa",
   "confirm.no_format": "Atualização inteligente in-place",
   "deploy.toast_target_changed": "O disco alvo selecionado mudou ou não está mais disponível. Por favor, faça uma nova varredura.",
-  "deploy.start_cloud_create": "🚀 Iniciar implantação na Nuvem",
+  "deploy.start_cloud_create": "🚀 Criar disco de inicialização na Nuvem",
   "deploy.batch_update": "Iniciar atualização sem perda de dados ({count} unidades)",
   "deploy.batch_mixed": "Iniciar implantação mista ({count} unidades)",
   "confirm.batch_safe_confirm": "🛡️ Confirmar atualização no local ({count} unidades)",

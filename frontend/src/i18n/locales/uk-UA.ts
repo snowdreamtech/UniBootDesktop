@@ -253,7 +253,7 @@ export const ukUa: TranslationDict = {
   "confirm.will_format": "Повне форматування",
   "confirm.no_format": "Розумне оновлення на місці",
   "deploy.toast_target_changed": "Вибраний цільовий диск змінився або більше недоступний. Будь ласка, виконайте сканування знову.",
-  "deploy.start_cloud_create": "🚀 Розпочати хмарне розгортання",
+  "deploy.start_cloud_create": "🚀 Створити хмарний завантажувальний диск",
   "deploy.batch_update": "Розпочати оновлення без втрати даних ({count} дисків)",
   "deploy.batch_mixed": "Розпочати змішане розгортання ({count} дисків)",
   "confirm.batch_safe_confirm": "🛡️ Підтвердити оновлення на місці ({count} дисків)",

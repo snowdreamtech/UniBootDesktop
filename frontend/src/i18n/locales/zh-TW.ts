@@ -253,7 +253,7 @@ export const zhTw: TranslationDict = {
   "confirm.will_format": "全量格式化",
   "confirm.no_format": "智慧原位升級",
   "deploy.toast_target_changed": "所選目標磁盤已發生變化或不再可用，請重新掃描後再試。",
-  "deploy.start_cloud_create": "🚀 開始雲端部署",
+  "deploy.start_cloud_create": "🚀 製作雲端引導碟",
   "deploy.batch_update": "開始批量無損更新 ({count} 塊磁碟)",
   "deploy.batch_mixed": "開始批量混合部署 ({count} 塊磁碟)",
   "confirm.batch_safe_confirm": "🛡️ 確認批量原位升級 ({count} 塊磁碟)",

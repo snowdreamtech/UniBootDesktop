@@ -253,7 +253,7 @@ export const taIn: TranslationDict = {
   "confirm.will_format": "முழு வடிவமைப்பு",
   "confirm.no_format": "ஸ்மார்ட் உள்ளூர் புதுப்பிப்பு",
   "deploy.toast_target_changed": "தேர்ந்தெடுக்கப்பட்ட இலக்கு டிஸ்க் மாறியுள்ளது அல்லது இனி கிடைக்காது. மீண்டும் ஸ்கேன் செய்யவும்.",
-  "deploy.start_cloud_create": "🚀 கிளவுட் வரிசைப்படுத்தலைத் தொடங்கு",
+  "deploy.start_cloud_create": "🚀 கிளவுட் பூட் டிஸ்க் உருவாக்கவும்",
   "deploy.batch_update": "தரவு இழப்பின்றி தொகுதி புதுப்பித்தலைத் தொடங்கு ({count} USB இயக்கிகள்)",
   "deploy.batch_mixed": "கலப்பு தொகுதி வரிசைப்படுத்தலைத் தொடங்கு ({count} USB இயக்கிகள்)",
   "confirm.batch_safe_confirm": "🛡️ உள்ளூர் தொகுதி புதுப்பிப்பை உறுதிப்படுத்துக ({count} டிரைவ்கள்)",

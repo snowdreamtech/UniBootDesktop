@@ -253,7 +253,7 @@ export const ocFr: TranslationDict = {
   "confirm.will_format": "Formatatge complet",
   "confirm.no_format": "Mesa a jorn intelligenta in-situ",
   "deploy.toast_target_changed": "Lo disque de destinacion seleccionat a cambiat o es pas mai disponible. Tornatz scanar.",
-  "deploy.start_cloud_create": "🚀 Començar lo desplaçament Cloud",
+  "deploy.start_cloud_create": "🚀 Crear un disc de darrancament en la Nívol",
   "deploy.batch_update": "Començar la mesa a jorn en lòt sens pèrda de donadas ({count} claus USB)",
   "deploy.batch_mixed": "Començar lo desplaçament mixte en lòt ({count} claus USB)",
   "confirm.batch_safe_confirm": "🛡️ Confirmar la mesa a jorn in-situ en lòt ({count} disques)",

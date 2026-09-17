@@ -253,7 +253,7 @@ export const skSk: TranslationDict = {
   "confirm.will_format": "Úplné formátovanie",
   "confirm.no_format": "Inteligentná aktualizácia na mieste",
   "deploy.toast_target_changed": "Vybraný cieľový disk sa zmenil alebo už nie je dostupný. Vykonajte nový sken.",
-  "deploy.start_cloud_create": "🚀 Spustiť cloudové nasadenie",
+  "deploy.start_cloud_create": "🚀 Vytvoriť cloudový bootovací disk",
   "deploy.batch_update": "Spustiť hromadnú aktualizáciu bez straty dát ({count} USB diskov)",
   "deploy.batch_mixed": "Spustiť hromadné zmiešané nasadenie ({count} USB diskov)",
   "confirm.batch_safe_confirm": "🛡️ Potvrdiť hromadnú aktualizáciu na mieste ({count} diskov)",

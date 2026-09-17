@@ -253,7 +253,7 @@ export const thTh: TranslationDict = {
   "confirm.will_format": "ฟอร์แมตทั้งหมด",
   "confirm.no_format": "การอัปเดตอัจฉริยะในที่",
   "deploy.toast_target_changed": "ดิสก์เป้าหมายที่เลือกเปลี่ยนไปหรือไม่พร้อมใช้งานแล้ว โปรดสแกนอีกครั้ง",
-  "deploy.start_cloud_create": "🚀 เริ่มต้นการปรับใช้ออนคลาวด์",
+  "deploy.start_cloud_create": "🚀 สร้างดิสก์บูตคลาวด์",
   "deploy.batch_update": "เริ่มการอัปเดตเป็นชุดโดยไม่สูญเสียข้อมูล ({count} ไดรฟ์ USB)",
   "deploy.batch_mixed": "เริ่มการปรับใช้แบบผสมเป็นชุด ({count} ไดรฟ์ USB)",
   "confirm.batch_safe_confirm": "🛡️ ยืนยันการอัปเดตแบบกลุ่มในที่ ({count} ไดรฟ์)",

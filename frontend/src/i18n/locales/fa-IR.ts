@@ -253,7 +253,7 @@ export const faIr: TranslationDict = {
   "confirm.will_format": "فرمت کامل",
   "confirm.no_format": "ارتقای در‌محل هوشمند",
   "deploy.toast_target_changed": "دیسک هدف انتخاب‌شده تغییر کرده یا دیگر در دسترس نیست. لطفاً دوباره اسکن کنید.",
-  "deploy.start_cloud_create": "🚀 شروع استقرار ابری",
+  "deploy.start_cloud_create": "🚀 ساخت دیسک بوت ابری",
   "deploy.batch_update": "شروع به‌روزرسانی گروهی بدون از دست رفتن داده ({count} درایو دیسک)",
   "deploy.batch_mixed": "شروع استقرار ترکیبی گروهی ({count} درایو دیسک)",
   "confirm.batch_safe_confirm": "🛡️ تایید ارتقای در‌محل گروهی ({count} دیسک)",
