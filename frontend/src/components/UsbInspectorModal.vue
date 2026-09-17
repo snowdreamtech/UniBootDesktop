@@ -102,7 +102,7 @@
 
           <div class="spec-item spec-full">
             <span class="spec-label">{{ t('inspector.lbl_boot_status') }}</span>
-            <span class="spec-val highlight">{{ disk.bootStatus || t('inspector.val_data_disk') }}</span>
+            <span class="spec-val highlight">{{ formatBootStatus(disk.bootStatus) }}</span>
           </div>
 
           <div class="spec-item spec-full" v-if="disk.isVentoy || disk.bootStatus">
@@ -225,6 +225,30 @@ function formatPower(val?: string): string {
     return `${str} mA`;
   }
   return str;
+}
+
+function formatBootStatus(status?: string): string {
+  if (!status) return t('inspector.val_data_disk');
+
+  if (status.includes('混合模式') || status.includes('Hybrid')) {
+    return t('inspector.val_boot_hybrid');
+  }
+  if (status.includes('1秒极速云引导盘') || status.includes('Cloud Mode')) {
+    return t('inspector.val_boot_cloud');
+  }
+  if (status.includes('第三方引导盘') || status.includes('Third-Party')) {
+    return t('inspector.val_boot_thirdparty');
+  }
+  if (status.includes('GPT 数据盘') || status.includes('GPT Data')) {
+    return t('inspector.val_boot_gpt_data');
+  }
+  if (status.includes('MBR 数据盘') || status.includes('MBR Data')) {
+    return t('inspector.val_boot_mbr_data');
+  }
+  if (status.includes('数据存储盘') || status.includes('Data Storage')) {
+    return t('inspector.val_data_disk');
+  }
+  return status;
 }
 
 const logUserAction = (level: string, message: string, details: string = '') => {
