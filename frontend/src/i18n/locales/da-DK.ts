@@ -105,7 +105,7 @@ export const daDk: TranslationDict = {
   "disk.tooltip_uniboot_hybrid": "Ventoy / UniBoot Boot Drive (Hybrid Mode, Non-destructive Upgrade Supported)",
   "disk.tooltip_uniboot_cloud": "UniBoot Cloud Boot Drive (Cloud Mode, Non-destructive Update Supported)",
   "disk.tooltip_third_party_boot": "3rd-Party Boot Drive (Contains Rufus/PE/ISO structure, fresh format required)",
-  "log.title": "System Real-Time Log Center",
+  "log.title": "Logcenter",
   "log.live": "LIVE",
   "log.search_placeholder": "Search log entries...",
   "log.empty": "No log entries recorded",

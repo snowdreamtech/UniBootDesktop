@@ -105,7 +105,7 @@ export const zhCn: TranslationDict = {
   "disk.tooltip_uniboot_hybrid": "Ventoy / UniBoot 引导盘 (混合模式，支持无损升级)",
   "disk.tooltip_uniboot_cloud": "UniBoot 云端引导盘 (1秒极速模式，支持无损更新)",
   "disk.tooltip_third_party_boot": "第三方引导盘 (含 Rufus/PE/ISO 结构，全新制作需格式化)",
-  "log.title": "系统实时运行日志中心",
+  "log.title": "日志中心",
   "log.live": "实时",
   "log.search_placeholder": "搜索日志关键词...",
   "log.empty": "暂无日志记录",

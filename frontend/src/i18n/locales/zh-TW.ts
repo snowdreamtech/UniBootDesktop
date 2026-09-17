@@ -105,7 +105,7 @@ export const zhTw: TranslationDict = {
   "disk.tooltip_uniboot_hybrid": "Ventoy / UniBoot 開機碟 (混合模式，支援無損升級)",
   "disk.tooltip_uniboot_cloud": "UniBoot 雲端開機碟 (1秒極速模式，支援無損更新)",
   "disk.tooltip_third_party_boot": "第三方開機碟 (含 Rufus/PE/ISO 結構，全新製作需格式化)",
-  "log.title": "系統即時運行日誌中心",
+  "log.title": "日誌中心",
   "log.live": "即時",
   "log.search_placeholder": "搜尋日誌關鍵字...",
   "log.empty": "暫無日誌記錄",
