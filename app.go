@@ -49,10 +49,21 @@ func NewApp() *App {
 // startup is called when the Wails application starts up.
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	logger.SetWailsContext(ctx)
 	logger.Info("UniGoDesktop Wails GUI runtime started successfully")
 	disk.StartHotplugMonitor(ctx, func() {
 		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
 	})
+}
+
+// GetRecentLogs returns recent log entries from the memory buffer.
+func (a *App) GetRecentLogs() []logger.LogEntry {
+	return logger.GetRecentLogs()
+}
+
+// ClearLogs clears the in-memory log buffer.
+func (a *App) ClearLogs() {
+	logger.ClearLogs()
 }
 
 // GetDiskList returns all removable disks safely filtered.

@@ -484,7 +484,7 @@ import AboutModal from './components/AboutModal.vue';
 import type { LogItem } from './components/LogViewerModal.vue';
 import CustomSelect from './components/CustomSelect.vue';
 import { t, currentLang, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
-import { ExportLogs, SelectIsoFiles } from '../wailsjs/go/main/App';
+import { ExportLogs, SelectIsoFiles, GetRecentLogs } from '../wailsjs/go/main/App';
 
 const isLangMenuOpen = ref(false);
 const langDropdownRef = ref<HTMLElement | null>(null);
@@ -1570,10 +1570,28 @@ onMounted(() => {
   checkVentoyStatus();
   window.addEventListener('click', handleGlobalClick);
 
-  runtimeLogs.value.push({
-    timestamp: new Date().toISOString(),
-    level: 'INFO',
-    message: 'UniGoDesktop engine ready. Real-time log stream connected.'
+  GetRecentLogs().then((logs: any[]) => {
+    if (logs && logs.length > 0) {
+      runtimeLogs.value = logs.map((entry: any) => ({
+        id: entry.id,
+        timestamp: entry.timestamp,
+        level: entry.level || 'INFO',
+        message: entry.message || '',
+        details: entry.details || ''
+      }));
+    } else {
+      runtimeLogs.value = [{
+        timestamp: new Date().toISOString(),
+        level: 'INFO',
+        message: 'UniGoDesktop engine ready. Real-time log stream connected.'
+      }];
+    }
+  }).catch(() => {
+    runtimeLogs.value = [{
+      timestamp: new Date().toISOString(),
+      level: 'INFO',
+      message: 'UniGoDesktop engine ready. Real-time log stream connected.'
+    }];
   });
 
   if (window.runtime && window.runtime.EventsOn) {
