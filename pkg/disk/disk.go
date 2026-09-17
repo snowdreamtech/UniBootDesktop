@@ -4,6 +4,7 @@
 package disk
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -198,16 +199,94 @@ func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool,
 	return "数据存储盘 (未检测到引导包)"
 }
 
-// IsVentoyDisk determines if a given disk device path or mount path is already a Ventoy drive.
+// HasVentoyEngineFiles verifies physical presence of Ventoy core engine files inside a mount directory.
+func HasVentoyEngineFiles(mountPoint string) bool {
+	if mountPoint == "" {
+		return false
+	}
+	ventoyDir := filepath.Join(mountPoint, "ventoy")
+	if info, err := os.Stat(ventoyDir); err == nil && info.IsDir() {
+		engineFiles := []string{
+			"ventoy.json",
+			"ventoy_grub.cfg",
+			"ventoy.disk.img",
+			"ventoy_os_list.json",
+			"ventoy.wim",
+		}
+		for _, f := range engineFiles {
+			if _, statErr := os.Stat(filepath.Join(ventoyDir, f)); statErr == nil {
+				return true
+			}
+		}
+		if entries, errRead := os.ReadDir(ventoyDir); errRead == nil && len(entries) > 0 {
+			return true
+		}
+	}
+	espVentoyImg := filepath.Join(mountPoint, "ventoy", "ventoy.disk.img")
+	if _, err := os.Stat(espVentoyImg); err == nil {
+		return true
+	}
+	return false
+}
+
+// CheckVentoyMbrSignature inspects MBR Sector 0 for Ventoy's bootloader magic byte signature.
+func CheckVentoyMbrSignature(targetDisk string) bool {
+	if targetDisk == "" {
+		return false
+	}
+	devicePath := targetDisk
+	if runtime.GOOS == "darwin" && strings.HasPrefix(targetDisk, "/dev/disk") && !strings.HasPrefix(targetDisk, "/dev/rdisk") {
+		devicePath = "/dev/r" + strings.TrimPrefix(targetDisk, "/dev/")
+	}
+
+	f, err := os.Open(devicePath)
+	if err != nil {
+		f, err = os.Open(targetDisk)
+	}
+	if err != nil {
+		return false
+	}
+	defer f.Close()
+
+	buf := make([]byte, 512)
+	n, err := f.Read(buf)
+	if err != nil || n < 512 {
+		return false
+	}
+
+	return bytes.Contains(buf, []byte("Ventoy")) || bytes.Contains(buf, []byte("VENTOY"))
+}
+
+// HasUniBootCloudFiles verifies physical presence of UniBoot Cloud iPXE firmware files inside ESP partition.
+func HasUniBootCloudFiles(mountPoint string) bool {
+	if mountPoint == "" {
+		return false
+	}
+	bootIpxe := filepath.Join(mountPoint, "boot.ipxe")
+	unibootIpxe := filepath.Join(mountPoint, "ipxe", "uniboot.ipxe")
+	_, errBoot := os.Stat(bootIpxe)
+	_, errUni := os.Stat(unibootIpxe)
+	return errBoot == nil || errUni == nil
+}
+
+// IsVentoyDisk determines if a target disk device path or mount path is physically a Ventoy drive.
+// Strictly checks MBR sector signatures and core ventoy engine files. NEVER relies on volume names alone.
 func IsVentoyDisk(targetDisk string) bool {
 	if targetDisk == "" {
 		return false
 	}
-	// Direct directory check if targetDisk is a mount point
-	if info, err := os.Stat(filepath.Join(targetDisk, "ventoy")); err == nil && info.IsDir() {
+
+	// 1. Physical MBR Sector 0 signature check
+	if CheckVentoyMbrSignature(targetDisk) {
 		return true
 	}
 
+	// 2. Direct mount directory check if targetDisk is already a mount point
+	if HasVentoyEngineFiles(targetDisk) {
+		return true
+	}
+
+	// 3. Platform-specific target partition inspection
 	if runtime.GOOS == "darwin" {
 		diskNode := filepath.Base(targetDisk)
 		if strings.HasPrefix(diskNode, "disk") {
@@ -220,34 +299,24 @@ func IsVentoyDisk(targetDisk string) bool {
 			for _, p := range []string{p1, p2} {
 				out, err := exec.Command("diskutil", "info", "-plist", p).Output()
 				if err == nil {
-					strOut := string(out)
-					volName := extractPlistValue(strOut, "VolumeName")
-					volNameUpper := strings.ToUpper(volName)
-					mountPoint := extractPlistValue(strOut, "MountPoint")
-
-					if strings.Contains(volNameUpper, "VENTOY") || strings.Contains(volNameUpper, "VTOYEFI") {
-						if mountPoint != "" {
-							if info, statErr := os.Stat(filepath.Join(mountPoint, "ventoy")); statErr == nil && info.IsDir() {
-								return true
-							}
-							if infoEfi, statEfi := os.Stat(filepath.Join(mountPoint, "EFI")); statEfi == nil && infoEfi.IsDir() {
-								return true
-							}
-						}
-					}
-					if mountPoint != "" {
-						if info, statErr := os.Stat(filepath.Join(mountPoint, "ventoy")); statErr == nil && info.IsDir() {
-							return true
-						}
+					mountPoint := extractPlistValue(string(out), "MountPoint")
+					if HasVentoyEngineFiles(mountPoint) {
+						return true
 					}
 				}
 			}
 		}
+	} else {
+		if HasVentoyEngineFiles(targetDisk) {
+			return true
+		}
 	}
+
 	return false
 }
 
-// IsModeBDisk checks if a target disk is currently formatted in Mode B (Cloud Pure mode, having iPXE boot.ipxe in ESP but no Ventoy MBR).
+// IsModeBDisk checks if a target disk is currently formatted in UniBoot Cloud mode (iPXE boot firmware in ESP, no Ventoy engine).
+// Strictly checks physical iPXE files. NEVER relies on volume names alone.
 func IsModeBDisk(targetDisk string) bool {
 	if targetDisk == "" {
 		return false
@@ -255,26 +324,25 @@ func IsModeBDisk(targetDisk string) bool {
 	if runtime.GOOS == "darwin" {
 		diskNode := filepath.Base(targetDisk)
 		if strings.HasPrefix(diskNode, "disk") {
+			p1 := diskNode
 			p2 := diskNode
 			if !strings.Contains(diskNode, "s") {
+				p1 = diskNode + "s1"
 				p2 = diskNode + "s2"
 			}
-			out, err := exec.Command("diskutil", "info", "-plist", p2).Output()
-			if err == nil {
-				strOut := string(out)
-				mountPoint := extractPlistValue(strOut, "MountPoint")
-				if mountPoint != "" {
-					bootIpxe := filepath.Join(mountPoint, "boot.ipxe")
-					unibootIpxe := filepath.Join(mountPoint, "ipxe", "uniboot.ipxe")
-					ventoyDir := filepath.Join(mountPoint, "ventoy")
-					_, errBoot := os.Stat(bootIpxe)
-					_, errUni := os.Stat(unibootIpxe)
-					_, errVentoy := os.Stat(ventoyDir)
-					if (errBoot == nil || errUni == nil) && os.IsNotExist(errVentoy) {
+			for _, p := range []string{p1, p2} {
+				out, err := exec.Command("diskutil", "info", "-plist", p).Output()
+				if err == nil {
+					mountPoint := extractPlistValue(string(out), "MountPoint")
+					if HasUniBootCloudFiles(mountPoint) && !HasVentoyEngineFiles(mountPoint) {
 						return true
 					}
 				}
 			}
+		}
+	} else {
+		if HasUniBootCloudFiles(targetDisk) && !HasVentoyEngineFiles(targetDisk) {
+			return true
 		}
 	}
 	return false
