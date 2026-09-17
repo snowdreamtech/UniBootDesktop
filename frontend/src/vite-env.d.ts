@@ -47,6 +47,7 @@ declare global {
         App?: {
           GetDiskList(): Promise<any[]>;
           SelectIsoFiles(title?: string, ventoyFilter?: string, allFilter?: string): Promise<string[]>;
+          LogAction?(level: string, message: string, details?: string): Promise<void>;
           DeployHybridMode(targetDisk: string, fsType?: string, isoPaths?: string[], expected?: DiskInfo): Promise<any>;
           DeployHybridModeBatch(targetDisks: string[], fsType?: string, isoPaths?: string[], expected?: DiskInfo[]): Promise<any[]>;
           DeployCloudMode(targetDisk: string, fsType?: string, expected?: DiskInfo): Promise<any>;

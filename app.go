@@ -64,7 +64,20 @@ func (a *App) GetRecentLogs() []logger.LogEntry {
 
 // ClearLogs clears the in-memory log buffer.
 func (a *App) ClearLogs() {
+	logger.Info("User cleared in-memory log history")
 	logger.ClearLogs()
+}
+
+// LogAction allows the frontend to log user UI interaction events directly into the Log Center.
+func (a *App) LogAction(level string, message string, details string) {
+	if level == "" {
+		level = "INFO"
+	}
+	if details != "" {
+		logger.RecordLog(level, message, "details", details)
+	} else {
+		logger.RecordLog(level, message)
+	}
 }
 
 // GetDiskList returns all removable disks safely filtered.

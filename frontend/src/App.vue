@@ -716,8 +716,32 @@ function scrollToEmbeddedTerminalBottom() {
   }
 }
 
+function logUserAction(level: string, message: string, details: string = '') {
+  if (window.go && window.go.main && window.go.main.App && (window.go.main.App as any).LogAction) {
+    (window.go.main.App as any).LogAction(level, message, details);
+  }
+}
+
 watch(() => runtimeLogs.value.length, () => {
   scrollToEmbeddedTerminalBottom();
+});
+
+watch(activeMode, (newMode) => {
+  logUserAction('INFO', 'User switched deployment mode', newMode);
+});
+
+watch(selectedFsType, (newFs) => {
+  logUserAction('INFO', 'User selected target file system', newFs);
+});
+
+watch(selectionMode, (newMode) => {
+  logUserAction('INFO', 'User switched disk selection mode', newMode);
+});
+
+watch(selectedDisk, (disk) => {
+  if (disk) {
+    logUserAction('INFO', 'User selected target disk drive', `${disk.name || disk.device} (${disk.formatted})`);
+  }
 });
 const settingsInitialTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
 
@@ -854,11 +878,17 @@ async function handleSelectIsoFiles() {
 }
 
 function removeIsoFile(index: number) {
+  const item = selectedIsoFiles.value[index];
+  const name = item ? (typeof item === 'string' ? item : item.name || item.path) : '';
   selectedIsoFiles.value.splice(index, 1);
+  if (name) {
+    logUserAction('INFO', 'User removed ISO source file from selection list', name);
+  }
 }
 
 function clearIsoFiles() {
   selectedIsoFiles.value = [];
+  logUserAction('INFO', 'User cleared all ISO source files from selection list');
 }
 
 function getFileIcon(filename: string) {
