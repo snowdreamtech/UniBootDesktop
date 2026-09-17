@@ -69,6 +69,14 @@
 
         <button 
           class="settings-icon-btn" 
+          :title="t('log.title')"
+          @click="isLogViewerOpen = true"
+        >
+          📋
+        </button>
+
+        <button 
+          class="settings-icon-btn" 
           :title="t('settings.title')"
           @click="openSettings('general')"
         >
@@ -395,6 +403,14 @@
       :show="isAboutOpen"
       @close="isAboutOpen = false"
     />
+
+    <!-- Log Viewer Modal -->
+    <LogViewerModal
+      :is-open="isLogViewerOpen"
+      :logs="runtimeLogs"
+      @close="isLogViewerOpen = false"
+      @clear="runtimeLogs = []"
+    />
   </div>
 </template>
 
@@ -409,6 +425,7 @@ import SettingsModal from './components/SettingsModal.vue';
 import VentoyAlertModal from './components/VentoyAlertModal.vue';
 import DiagnosticsModal, { InstallDiagnosticsData } from './components/DiagnosticsModal.vue';
 import AboutModal from './components/AboutModal.vue';
+import LogViewerModal, { LogItem } from './components/LogViewerModal.vue';
 import CustomSelect from './components/CustomSelect.vue';
 import { t, currentLang, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
 
@@ -539,6 +556,8 @@ const targetInspectorDisk = ref<DiskInfo | null>(null);
 const isDeployConfirmOpen = ref(false);
 const isSettingsOpen = ref(false);
 const isAboutOpen = ref(false);
+const isLogViewerOpen = ref(false);
+const runtimeLogs = ref<LogItem[]>([]);
 const settingsInitialTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
 
 const isVentoyAlertOpen = ref(false);
@@ -1386,7 +1405,27 @@ onMounted(() => {
   checkVentoyStatus();
   window.addEventListener('click', handleGlobalClick);
 
+  runtimeLogs.value.push({
+    timestamp: new Date().toISOString(),
+    level: 'INFO',
+    message: 'UniGoDesktop engine ready. Real-time log stream connected.'
+  });
+
   if (window.runtime && window.runtime.EventsOn) {
+    window.runtime.EventsOn("log:entry", (entry: any) => {
+      if (entry) {
+        runtimeLogs.value.push({
+          id: entry.id,
+          timestamp: entry.timestamp,
+          level: entry.level || 'INFO',
+          message: entry.message || '',
+          details: entry.details || ''
+        });
+        if (runtimeLogs.value.length > 500) {
+          runtimeLogs.value.shift();
+        }
+      }
+    });
     window.runtime.EventsOn("iso-copy-progress", (data: any) => {
       if (data) {
         isoCopyStatus.value = t('disk.writingImageProgress', { fileIndex: data.fileIndex, totalFiles: data.totalFiles, currentFile: data.currentFile, progress: data.progress.toFixed(1) });
@@ -1400,6 +1439,9 @@ onMounted(() => {
     });
     window.runtime.EventsOn("open-about-modal", () => {
       isAboutOpen.value = true;
+    });
+    window.runtime.EventsOn("open-log-modal", () => {
+      isLogViewerOpen.value = true;
     });
   }
 });

@@ -102,6 +102,16 @@ export interface TranslationDict {
   "disk.tooltip_uniboot_hybrid": string;
   "disk.tooltip_uniboot_cloud": string;
   "disk.tooltip_third_party_boot": string;
+  "log.title": string;
+  "log.live": string;
+  "log.search_placeholder": string;
+  "log.empty": string;
+  "log.auto_scroll": string;
+  "log.copy": string;
+  "log.export": string;
+  "log.clear": string;
+  "log.copied_toast": string;
+
   "safe.title_cloud": string;
   "safe.desc_cloud": string;
   "safe.title_hybrid": string;

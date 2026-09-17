@@ -47,20 +47,24 @@ func Init(debug, quiet, silent, jsonFmt bool) {
 
 // Info logs at LevelInfo using the configured default logger.
 func Info(msg string, args ...any) {
+	RecordLog("INFO", msg, args...)
 	slog.Info(msg, args...)
 }
 
 // Debug logs at LevelDebug using the configured default logger.
 func Debug(msg string, args ...any) {
+	RecordLog("DEBUG", msg, args...)
 	slog.Debug(msg, args...)
 }
 
 // Warn logs at LevelWarn using the configured default logger.
 func Warn(msg string, args ...any) {
+	RecordLog("WARN", msg, args...)
 	slog.Warn(msg, args...)
 }
 
 // Error logs at LevelError using the configured default logger.
 func Error(msg string, args ...any) {
+	RecordLog("ERROR", msg, args...)
 	slog.Error(msg, args...)
 }
