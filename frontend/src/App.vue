@@ -338,50 +338,6 @@
         </div>
       </section>
 
-      <!-- Bottom: Embedded Log Center Card (日志中心卡片) -->
-      <section class="glass-card log-section-card">
-        <div class="log-section-header">
-          <div class="log-title-group">
-            <h2>📋 {{ t('log.title') }}</h2>
-            <span class="badge live-badge">● {{ t('log.live') }}</span>
-          </div>
-
-          <div class="log-section-controls">
-            <div class="filter-tabs-sm">
-              <button 
-                v-for="level in logLevels" 
-                :key="level.key"
-                class="btn-tab-sm"
-                :class="{ active: currentEmbeddedLogFilter === level.key }"
-                @click="currentEmbeddedLogFilter = level.key"
-              >
-                {{ level.label }}
-              </button>
-            </div>
-
-            <button class="btn-text-sm" @click="handleCopyEmbeddedLogs">📋 {{ t('log.copy') }}</button>
-            <button class="btn-text-sm" @click="handleExportEmbeddedLogs">📥 {{ t('log.export') }}</button>
-            <button class="btn-text-danger-sm" @click="runtimeLogs = []">🗑️ {{ t('log.clear') }}</button>
-          </div>
-        </div>
-
-        <div class="embedded-terminal-window" ref="embeddedTerminalRef">
-          <div v-if="filteredEmbeddedLogs.length === 0" class="empty-logs">
-            {{ t('log.empty') }}
-          </div>
-          <div 
-            v-for="log in filteredEmbeddedLogs" 
-            :key="log.id || String(log.timestamp)"
-            class="log-row"
-            :class="log.level.toLowerCase()"
-          >
-            <span class="log-time">{{ formatLogTime(log.timestamp) }}</span>
-            <span class="log-level-badge" :class="log.level.toLowerCase()">[{{ log.level }}]</span>
-            <span class="log-msg">{{ log.message }}</span>
-            <span v-if="log.details" class="log-details">{{ log.details }}</span>
-          </div>
-        </div>
-      </section>
     </main>
 
     <!-- Icon Picker Modal -->
@@ -460,7 +416,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import DiskCard from './components/DiskCard.vue';
 import ProgressBar from './components/ProgressBar.vue';
 import IconPickerModal, { DiskIconType } from './components/IconPickerModal.vue';
@@ -605,77 +561,6 @@ const isSettingsOpen = ref(false);
 const isAboutOpen = ref(false);
 const isLogViewerOpen = ref(false);
 const runtimeLogs = ref<LogItem[]>([]);
-const currentEmbeddedLogFilter = ref<string>('ALL');
-const embeddedTerminalRef = ref<HTMLDivElement | null>(null);
-
-const logLevels = computed(() => [
-  { key: 'ALL', label: t('log.level_all') },
-  { key: 'INFO', label: t('log.level_info') },
-  { key: 'WARN', label: t('log.level_warn') },
-  { key: 'ERROR', label: t('log.level_error') },
-  { key: 'DEBUG', label: t('log.level_debug') }
-]);
-
-function formatLogTime(ts: string | Date): string {
-  if (!ts) return '';
-  const date = new Date(ts);
-  if (isNaN(date.getTime())) return String(ts);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const seconds = date.getSeconds().toString().padStart(2, '0');
-  const ms = date.getMilliseconds().toString().padStart(3, '0');
-  return `${hours}:${minutes}:${seconds}.${ms}`;
-}
-
-const filteredEmbeddedLogs = computed(() => {
-  return runtimeLogs.value.filter(log => {
-    if (currentEmbeddedLogFilter.value === 'ALL') return true;
-    return (log.level || '').toUpperCase() === currentEmbeddedLogFilter.value;
-  });
-});
-
-function handleCopyEmbeddedLogs() {
-  if (filteredEmbeddedLogs.value.length === 0) {
-    showToast(t('log.empty'), 'info');
-    return;
-  }
-  const text = filteredEmbeddedLogs.value
-    .map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message}${l.details ? ' - ' + l.details : ''}`)
-    .join('\n');
-  navigator.clipboard.writeText(text);
-  showToast(t('log.copied_toast'), 'success');
-}
-
-function handleExportEmbeddedLogs() {
-  if (filteredEmbeddedLogs.value.length === 0) {
-    showToast(t('log.empty'), 'info');
-    return;
-  }
-  const text = filteredEmbeddedLogs.value
-    .map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message}${l.details ? ' - ' + l.details : ''}`)
-    .join('\n');
-  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `unigodesktop-log-${new Date().toISOString().slice(0, 10)}.log`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function scrollToEmbeddedTerminalBottom() {
-  if (embeddedTerminalRef.value) {
-    nextTick(() => {
-      if (embeddedTerminalRef.value) {
-        embeddedTerminalRef.value.scrollTop = embeddedTerminalRef.value.scrollHeight;
-      }
-    });
-  }
-}
-
-watch(() => runtimeLogs.value.length, () => {
-  scrollToEmbeddedTerminalBottom();
-});
 const settingsInitialTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
 
 const isVentoyAlertOpen = ref(false);

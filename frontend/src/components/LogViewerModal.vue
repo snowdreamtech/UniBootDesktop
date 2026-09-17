@@ -100,8 +100,13 @@ defineEmits(['close', 'clear']);
 
 const currentFilter = ref('ALL');
 const searchQuery = ref('');
-const autoScroll = ref(true);
+const savedAutoScroll = localStorage.getItem('unigodesktop_log_autoscroll');
+const autoScroll = ref(savedAutoScroll !== null ? savedAutoScroll === 'true' : true);
 const terminalRef = ref<HTMLDivElement | null>(null);
+
+watch(autoScroll, (val) => {
+  localStorage.setItem('unigodesktop_log_autoscroll', String(val));
+});
 
 const logLevels = computed(() => [
   { key: 'ALL', label: t('log.level_all') },
@@ -148,6 +153,12 @@ function scrollToBottom() {
 
 watch(() => props.logs.length, () => {
   scrollToBottom();
+});
+
+watch(() => props.isOpen, (newVal) => {
+  if (newVal) {
+    scrollToBottom();
+  }
 });
 
 function copyAllLogs() {
@@ -261,7 +272,7 @@ function exportLogFile() {
 .terminal-window .log-row {
   display: flex;
   align-items: flex-start;
-  gap: 1.25rem;
+  gap: 1rem;
   padding: 0.35rem 0;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
   box-sizing: border-box;
@@ -274,19 +285,31 @@ function exportLogFile() {
   font-family: 'JetBrains Mono', monospace;
   white-space: nowrap;
   flex-shrink: 0;
-  min-width: 105px;
+  width: 100px;
+  min-width: 100px;
+  height: 22px;
+  line-height: 22px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .terminal-window .log-level-badge {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  padding: 0.12rem 0.55rem;
+  height: 20px;
+  line-height: 18px;
+  padding: 0 0.5rem;
   border-radius: 4px;
   white-space: nowrap;
   flex-shrink: 0;
-  min-width: 62px;
-  text-align: center;
+  width: 64px;
+  min-width: 64px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   letter-spacing: 0.5px;
+  margin-top: 1px;
 }
 
 .terminal-window .log-level-badge.info {
@@ -317,6 +340,8 @@ function exportLogFile() {
   color: #e2e8f0;
   flex: 1;
   min-width: 0;
+  font-size: 0.82rem;
+  line-height: 22px;
   white-space: pre-wrap;
   word-break: break-word;
   overflow-wrap: anywhere;
