@@ -199,3 +199,27 @@ func unmountTargetDisk(targetPath string) {
 		_ = exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd).Run()
 	}
 }
+
+// remountTargetDisk automatically remounts target disk partitions back to host OS after VM exit.
+func remountTargetDisk(targetPath string) {
+	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" {
+		return
+	}
+	logger.Info("Remounting target disk partitions back to host OS after VM exit", "targetPath", targetPath)
+
+	if runtime.GOOS == "darwin" {
+		diskNode := strings.TrimPrefix(targetPath, "/dev/rdisk")
+		diskNode = strings.TrimPrefix(diskNode, "/dev/disk")
+		if !strings.HasPrefix(diskNode, "disk") {
+			diskNode = "disk" + diskNode
+		}
+		cmd := exec.Command("diskutil", "mountDisk", fmt.Sprintf("/dev/%s", diskNode))
+		_ = cmd.Run()
+	} else if runtime.GOOS == "linux" {
+		cmd := exec.Command("udisksctl", "mount", "-b", targetPath)
+		_ = cmd.Run()
+	} else if runtime.GOOS == "windows" {
+		psCmd := fmt.Sprintf(`Get-Volume | Where-DriveLetter | Where-Object { $_.Path -like "*%s*" } | Mount-Volume`, targetPath)
+		_ = exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd).Run()
+	}
+}

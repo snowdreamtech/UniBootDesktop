@@ -291,7 +291,9 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string) error {
 
 	done := make(chan error, 1)
 	go func() {
-		done <- cmd.Wait()
+		err := cmd.Wait()
+		remountTargetDisk(targetPath)
+		done <- err
 	}()
 
 	select {

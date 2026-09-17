@@ -167,5 +167,12 @@ func launchVirtualBoxVM(vboxManage string, targetPath string) error {
 	_ = exec.Command(vboxManage, "modifyvm", vmName, "--firmware", "efi", "--memory", "2048").Run()
 
 	startCmd := exec.Command(vboxManage, "startvm", vmName)
-	return startCmd.Run()
+	if err := startCmd.Start(); err != nil {
+		return err
+	}
+	go func() {
+		_ = startCmd.Wait()
+		remountTargetDisk(targetPath)
+	}()
+	return nil
 }
