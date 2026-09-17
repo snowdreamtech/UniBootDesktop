@@ -177,14 +177,23 @@ guestOS = "other-64"
 `, vmdkPath)
 	_ = os.WriteFile(vmxPath, []byte(vmxContent), 0644)
 
+	var cmd *exec.Cmd
 	if runtime.GOOS == "darwin" {
-		cmd := exec.Command("open", "-a", "VMware Fusion", vmxPath)
-		return cmd.Run()
+		cmd = exec.Command("open", "-W", "-a", "VMware Fusion", vmxPath)
 	} else if strings.HasSuffix(status.Path, "vmrun") || strings.HasSuffix(status.Path, "vmrun.exe") {
-		cmd := exec.Command(status.Path, "-T", "ws", "start", vmxPath, "gui")
-		return cmd.Run()
+		cmd = exec.Command(status.Path, "-T", "ws", "start", vmxPath, "gui")
+	} else {
+		cmd = exec.Command(status.Path, vmxPath)
 	}
 
-	cmd := exec.Command(status.Path, vmxPath)
-	return cmd.Start()
+	if err := cmd.Start(); err != nil {
+		return err
+	}
+
+	go func() {
+		_ = cmd.Wait()
+		remountTargetDisk(targetPath)
+	}()
+
+	return nil
 }

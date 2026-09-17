@@ -107,10 +107,15 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string) error {
 	}
 
 	// Open UTM Application with raw disk parameter or bundle
-	cmd := exec.Command("open", "-a", "UTM")
-	if err := cmd.Run(); err != nil {
+	cmd := exec.Command("open", "-W", "-a", "UTM")
+	if err := cmd.Start(); err != nil {
 		return fmt.Errorf("failed to open UTM application: %w", err)
 	}
+
+	go func() {
+		_ = cmd.Wait()
+		remountTargetDisk(targetPath)
+	}()
 
 	return nil
 }

@@ -127,5 +127,10 @@ func (d *KVMDriver) Launch(ctx context.Context, diskPath string) error {
 		return fmt.Errorf("failed to launch KVM tool: %w", err)
 	}
 
+	go func() {
+		_ = cmd.Wait()
+		remountTargetDisk(targetPath)
+	}()
+
 	return nil
 }

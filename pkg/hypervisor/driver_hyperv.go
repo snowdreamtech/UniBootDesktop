@@ -108,5 +108,10 @@ func (d *HyperVDriver) Launch(ctx context.Context, diskPath string) error {
 		return fmt.Errorf("failed to launch Hyper-V connection tool: %w", err)
 	}
 
+	go func() {
+		_ = cmd.Wait()
+		remountTargetDisk(targetPath)
+	}()
+
 	return nil
 }
