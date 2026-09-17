@@ -337,6 +337,51 @@
           </button>
         </div>
       </section>
+
+      <!-- Bottom: Embedded Log Center Card (日志中心卡片) -->
+      <section class="glass-card log-section-card">
+        <div class="log-section-header">
+          <div class="log-title-group">
+            <h2>📋 {{ t('log.title') }}</h2>
+            <span class="badge live-badge">● {{ t('log.live') }}</span>
+          </div>
+
+          <div class="log-section-controls">
+            <div class="filter-tabs-sm">
+              <button 
+                v-for="level in ['ALL', 'INFO', 'WARN', 'ERROR', 'DEBUG']" 
+                :key="level"
+                class="btn-tab-sm"
+                :class="{ active: currentEmbeddedLogFilter === level }"
+                @click="currentEmbeddedLogFilter = level"
+              >
+                {{ level }}
+              </button>
+            </div>
+
+            <button class="btn-text-sm" @click="handleCopyEmbeddedLogs">📋 {{ t('log.copy') }}</button>
+            <button class="btn-text-sm" @click="handleExportEmbeddedLogs">📥 {{ t('log.export') }}</button>
+            <button class="btn-text-danger-sm" @click="runtimeLogs = []">🗑️ {{ t('log.clear') }}</button>
+          </div>
+        </div>
+
+        <div class="embedded-terminal-window" ref="embeddedTerminalRef">
+          <div v-if="filteredEmbeddedLogs.length === 0" class="empty-logs">
+            {{ t('log.empty') }}
+          </div>
+          <div 
+            v-for="log in filteredEmbeddedLogs" 
+            :key="log.id || String(log.timestamp)"
+            class="log-row"
+            :class="log.level.toLowerCase()"
+          >
+            <span class="log-time">{{ formatLogTime(log.timestamp) }}</span>
+            <span class="log-level-badge" :class="log.level.toLowerCase()">[{{ log.level }}]</span>
+            <span class="log-msg">{{ log.message }}</span>
+            <span v-if="log.details" class="log-details">{{ log.details }}</span>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Icon Picker Modal -->
@@ -415,7 +460,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import DiskCard from './components/DiskCard.vue';
 import ProgressBar from './components/ProgressBar.vue';
 import IconPickerModal, { DiskIconType } from './components/IconPickerModal.vue';
@@ -560,6 +605,69 @@ const isSettingsOpen = ref(false);
 const isAboutOpen = ref(false);
 const isLogViewerOpen = ref(false);
 const runtimeLogs = ref<LogItem[]>([]);
+const currentEmbeddedLogFilter = ref<string>('ALL');
+const embeddedTerminalRef = ref<HTMLDivElement | null>(null);
+
+function formatLogTime(ts: string | Date): string {
+  if (!ts) return '';
+  const date = new Date(ts);
+  if (isNaN(date.getTime())) return String(ts);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  const ms = date.getMilliseconds().toString().padStart(3, '0');
+  return `${hours}:${minutes}:${seconds}.${ms}`;
+}
+
+const filteredEmbeddedLogs = computed(() => {
+  return runtimeLogs.value.filter(log => {
+    if (currentEmbeddedLogFilter.value === 'ALL') return true;
+    return (log.level || '').toUpperCase() === currentEmbeddedLogFilter.value;
+  });
+});
+
+function handleCopyEmbeddedLogs() {
+  if (filteredEmbeddedLogs.value.length === 0) {
+    showToast(t('log.empty'), 'info');
+    return;
+  }
+  const text = filteredEmbeddedLogs.value
+    .map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message}${l.details ? ' - ' + l.details : ''}`)
+    .join('\n');
+  navigator.clipboard.writeText(text);
+  showToast(t('log.copied_toast'), 'success');
+}
+
+function handleExportEmbeddedLogs() {
+  if (filteredEmbeddedLogs.value.length === 0) {
+    showToast(t('log.empty'), 'info');
+    return;
+  }
+  const text = filteredEmbeddedLogs.value
+    .map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message}${l.details ? ' - ' + l.details : ''}`)
+    .join('\n');
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `unigodesktop-log-${new Date().toISOString().slice(0, 10)}.log`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function scrollToEmbeddedTerminalBottom() {
+  if (embeddedTerminalRef.value) {
+    nextTick(() => {
+      if (embeddedTerminalRef.value) {
+        embeddedTerminalRef.value.scrollTop = embeddedTerminalRef.value.scrollHeight;
+      }
+    });
+  }
+}
+
+watch(() => runtimeLogs.value.length, () => {
+  scrollToEmbeddedTerminalBottom();
+});
 const settingsInitialTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
 
 const isVentoyAlertOpen = ref(false);
@@ -1623,6 +1731,151 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.75rem;
+}
+
+/* Embedded Log Center Card */
+.log-section-card {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1.5rem;
+  background: var(--card-bg, rgba(16, 24, 40, 0.6));
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.1));
+  border-radius: 16px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.log-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.log-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.log-title-group h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-color, #f0f4f8);
+}
+
+.live-badge {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.log-section-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.filter-tabs-sm {
+  display: flex;
+  gap: 0.3rem;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-tab-sm {
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #94a3b8);
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-tab-sm:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-tab-sm.active {
+  background: var(--accent-cyan, #00e5ff);
+  color: #0b1120;
+}
+
+.btn-text-sm {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-color, #e2e8f0);
+  font-size: 0.78rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-text-sm:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-text-danger-sm {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-text-danger-sm:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.embedded-terminal-window {
+  background: rgba(10, 15, 28, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  height: 220px;
+  max-height: 260px;
+  overflow-y: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.embedded-terminal-window::-webkit-scrollbar {
+  width: 6px;
+}
+
+.embedded-terminal-window::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.embedded-terminal-window::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.embedded-terminal-window::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .section-card {
