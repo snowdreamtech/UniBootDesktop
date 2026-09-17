@@ -738,9 +738,11 @@ watch(selectionMode, (newMode) => {
   logUserAction('INFO', 'User switched disk selection mode', newMode);
 });
 
-watch(selectedDisk, (disk) => {
+watch(selectedDisk, (disk, oldDisk) => {
   if (disk) {
     logUserAction('INFO', 'User selected target disk drive', `${disk.name || disk.device} (${disk.formatted})`);
+  } else if (oldDisk) {
+    logUserAction('INFO', 'User deselected target disk drive', `${oldDisk.name || oldDisk.device}`);
   }
 });
 const settingsInitialTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
@@ -1142,6 +1144,7 @@ function onIconSelected(type: DiskIconType) {
     customIcons.value[fp] = type;
     customIcons.value[targetPickerDisk.value.device] = type;
     saveCustomIcons(customIcons.value);
+    logUserAction('INFO', 'User updated custom disk icon', `${targetPickerDisk.value.name || targetPickerDisk.value.device} -> ${type}`);
   }
 }
 
@@ -1151,6 +1154,7 @@ function onIconReset() {
     delete customIcons.value[fp];
     delete customIcons.value[targetPickerDisk.value.device];
     saveCustomIcons(customIcons.value);
+    logUserAction('INFO', 'User reset custom disk icon to default', targetPickerDisk.value.name || targetPickerDisk.value.device);
   }
 }
 
