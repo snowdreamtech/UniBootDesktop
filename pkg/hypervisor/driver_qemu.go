@@ -201,7 +201,10 @@ func extractPlistString(plistStr string, key string) string {
 }
 
 func ensureDiskPermissions(targetPath string) {
-	if targetPath == "" {
+	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" || !strings.HasPrefix(targetPath, "/dev/") {
+		return
+	}
+	if _, err := os.Stat(targetPath); err != nil {
 		return
 	}
 	f, err := os.OpenFile(targetPath, os.O_RDWR, 0)
@@ -234,6 +237,11 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string) error {
 	status := d.Detect()
 	if !status.Installed {
 		return fmt.Errorf("QEMU simulator not detected! Please install QEMU first (e.g. via brew install qemu).")
+	}
+
+	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run QEMU launch complete", "diskPath", diskPath)
+		return nil
 	}
 
 	targetPath := ResolveRawDiskDevice(diskPath)

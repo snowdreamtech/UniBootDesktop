@@ -84,6 +84,11 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string) error {
 		return fmt.Errorf("UTM virtual machine application not detected on macOS system")
 	}
 
+	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run UTM launch complete", "diskPath", diskPath)
+		return nil
+	}
+
 	logger.Info("Executing UTM preview test instance", "disk", diskPath, "utmPath", status.Path)
 
 	// Ensure disk permissions on macOS

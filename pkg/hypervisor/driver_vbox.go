@@ -97,6 +97,11 @@ func (d *VirtualBoxDriver) Launch(ctx context.Context, diskPath string) error {
 		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
+	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run VirtualBox launch complete", "diskPath", diskPath)
+		return nil
+	}
+
 	logger.Info("Executing VirtualBox preview test instance", "disk", diskPath, "vboxPath", status.Path)
 
 	targetPath := ResolveRawDiskDevice(diskPath)

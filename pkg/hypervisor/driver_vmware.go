@@ -99,6 +99,11 @@ func (d *VMwareDriver) Launch(ctx context.Context, diskPath string) error {
 		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
+	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run VMware launch complete", "diskPath", diskPath)
+		return nil
+	}
+
 	logger.Info("Executing VMware preview test instance", "disk", diskPath, "vmwarePath", status.Path)
 
 	targetPath := ResolveRawDiskDevice(diskPath)
