@@ -275,7 +275,7 @@ export const kaGe: TranslationDict = {
   "inspector.smart": "SMART ჯანმრთელობის მდგომარეობა:",
   "inspector.sector": "სექტორის ზომა:",
   "inspector.fake_title": "Fake USB 3.0 გაფრთხილება Alert!",
-  "inspector.fake_desc": "მოწყობილობა ავრცელებს რეკლამას USB 3.0/3.1, მაგრამ რეალური ფიზიკური შრის სიჩქარეზე მოლაპარაკება ხდება მხოლოდ {სიჩქარით} (USB 2.0 High-Speed PHY ({speed})). ამ დისკს სავარაუდოდ აქვს გაყალბებული firmware ან ყალბი ლურჯი პორტი.",
+  "inspector.fake_desc": "Device advertises USB 3.0/3.1, but actual physical layer speed is negotiated at only {speed} (USB 2.0 High-Speed PHY). This drive likely has spoofed firmware or a fake blue port.",
   "inspector.genuine_title": "ფიზიკური ტექნიკის დადასტურება გავიდა (ნამდვილი USB 3.0+ მოწყობილობა)",
   "inspector.genuine_desc": "ფიზიკურმა PHY ფენამ დაადგინა SuperSpeed/SuperSpeed+ ({speed}) ბმული {სიჩქარის გაზომილი სიჩქარით.",
   "inspector.usb2_title": "სტანდარტული USB 2.0 ინტერფეისი",

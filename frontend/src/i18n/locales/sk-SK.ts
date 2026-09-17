@@ -275,7 +275,7 @@ export const skSk: TranslationDict = {
   "inspector.smart": "Stav zdravia SMART:",
   "inspector.sector": "Veľkosť sektora:",
   "inspector.fake_title": "Fake USB 3.0 Upozornenie Alert!",
-  "inspector.fake_desc": "Zariadenie propaguje USB 3.0/3.1, ale skutočná rýchlosť fyzickej vrstvy je dohodnutá iba na {rýchlosti} (USB 2.0 High-Speed PHY ({speed})). Táto jednotka má pravdepodobne falošný firmvér alebo falošný modrý port.",
+  "inspector.fake_desc": "Device advertises USB 3.0/3.1, but actual physical layer speed is negotiated at only {speed} (USB 2.0 High-Speed PHY). This drive likely has spoofed firmware or a fake blue port.",
   "inspector.genuine_title": "Fyzické overenie hardvéru prebehlo úspešne (originálne zariadenie USB 3.0+)",
   "inspector.genuine_desc": "Fyzická vrstva PHY vytvorila prepojenie SuperSpeed/SuperSpeed+ s nameranou rýchlosťou {speed}.",
   "inspector.usb2_title": "Štandardné rozhranie USB 2.0",

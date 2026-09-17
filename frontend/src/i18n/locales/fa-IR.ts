@@ -275,7 +275,7 @@ export const faIr: TranslationDict = {
   "inspector.smart": "وضعیت سلامت SMART:",
   "inspector.sector": "اندازه بخش:",
   "inspector.fake_title": "Fake USB 3.0 هشدار Alert!",
-  "inspector.fake_desc": "دستگاه USB 3.0/3.1 را تبلیغ می کند، اما سرعت لایه فیزیکی واقعی فقط با {سرعت} (USB 2.0 High-Speed PHY ({speed})) قابل مذاکره است. این درایو احتمالا دارای سیستم عامل جعلی یا یک پورت آبی جعلی است.",
+  "inspector.fake_desc": "Device advertises USB 3.0/3.1, but actual physical layer speed is negotiated at only {speed} (USB 2.0 High-Speed PHY). This drive likely has spoofed firmware or a fake blue port.",
   "inspector.genuine_title": "تأیید صحت سخت‌افزار فیزیکی (دستگاه USB 3.0 و بالاتر)",
   "inspector.genuine_desc": "لایه فیزیکی PHY پیوند SuperSpeed/SuperSpeed+ را با سرعت اندازه گیری شده {speed} ایجاد کرد.",
   "inspector.usb2_title": "رابط استاندارد USB 2.0",

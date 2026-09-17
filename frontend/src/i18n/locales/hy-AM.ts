@@ -275,7 +275,7 @@ export const hyAm: TranslationDict = {
   "inspector.smart": "SMART առողջության կարգավիճակ․",
   "inspector.sector": "Ոլորտի չափը:",
   "inspector.fake_title": "Fake USB 3.0 Զգուշացում Alert!",
-  "inspector.fake_desc": "Սարքը գովազդում է USB 3.0/3.1, բայց իրական ֆիզիկական շերտի արագությունը որոշվում է միայն {արագությամբ} (USB 2.0 High-Speed PHY ({speed})): Այս սկավառակը, հավանաբար, ունի կեղծված որոնվածը կամ կեղծ կապույտ պորտ:",
+  "inspector.fake_desc": "Device advertises USB 3.0/3.1, but actual physical layer speed is negotiated at only {speed} (USB 2.0 High-Speed PHY). This drive likely has spoofed firmware or a fake blue port.",
   "inspector.genuine_title": "Ֆիզիկական ապարատային հաստատումն անցավ (Բնական USB 3.0+ սարք)",
   "inspector.genuine_desc": "Ֆիզիկական PHY շերտը ստեղծեց SuperSpeed/SuperSpeed+ կապը՝ {speed} չափված արագությամբ:",
   "inspector.usb2_title": "Ստանդարտ USB 2.0 ինտերֆեյս",

@@ -277,7 +277,7 @@ export const azAz: TranslationDict = {
   "inspector.fake_title": "Fake USB 3.0 Xəbərdarlıq Alert!",
   "inspector.fake_desc": "Device advertises USB 3.0/3.1, but actual physical layer speed is negotiated at only {speed} (USB 2.0 High-Speed PHY). This drive likely has spoofed firmware or a fake blue port.",
   "inspector.genuine_title": "Fiziki Aparat Yoxlanması Keçildi (Orijinal USB 3.0+ Cihazı)",
-  "inspector.genuine_desc": "Fiziki PHY qatı {sürət} ölçülmüş sürət ilə SuperSpeed/SuperSpeed+ ({speed}) əlaqəsini yaratdı.",
+  "inspector.genuine_desc": "Physical PHY layer established SuperSpeed/SuperSpeed+ link with measured speed of {speed}.",
   "inspector.usb2_title": "Standart USB 2.0 interfeysi",
   "inspector.usb2_desc": "Cihazın texniki təchizatı USB 2.0, nəzəri fiziki maksimum sürət 480 Mb/s-dir.",
   "inspector.section_basic": "📊 Əsas Cihaz Məlumatı",
