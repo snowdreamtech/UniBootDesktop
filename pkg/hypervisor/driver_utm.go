@@ -98,6 +98,16 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	ensureDiskPermissions(targetPath)
 	unmountTargetDisk(targetPath)
 
+	// macOS App Sandbox (com.utmapp.UTM) strictly forbids UTM.app from reading raw host block devices (/dev/rdiskN).
+	// If system QEMU is installed, delegate physical disk preview testing to host QEMU engine.
+	if strings.HasPrefix(targetPath, "/dev/") {
+		qemuDrv := &QEMUDriver{}
+		if qemuStatus := qemuDrv.Detect(); qemuStatus.Installed {
+			logger.Info("UTM.app is sandboxed on macOS and cannot access raw block devices directly; delegating physical disk preview test to host QEMU engine", "disk", targetPath, "bootMode", bootMode)
+			return qemuDrv.Launch(ctx, diskPath, bootMode)
+		}
+	}
+
 	// Generate native .utm bundle with raw disk mapping and launch via UTM app
 	tmpDir := "/tmp/uniboot_utm"
 	_ = os.RemoveAll(tmpDir)
@@ -153,16 +163,18 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 		return fmt.Errorf("failed to open UTM application: %w", err)
 	}
 
-	// Trigger UTM URL Scheme and utmctl to automatically boot the VM without requiring manual Play click
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(1 * time.Second)
 	utmctlPath := "/Applications/UTM.app/Contents/MacOS/utmctl"
-	if _, err := os.Stat(utmctlPath); err == nil {
-		_ = exec.Command(utmctlPath, "start", "UniBoot Preview").Run()
+	vmUUID := getLatestUTMUUID()
+
+	if vmUUID != "" {
+		if _, err := os.Stat(utmctlPath); err == nil {
+			logger.Info("Triggering auto-start for UTM VM", "uuid", vmUUID)
+			_ = exec.Command(utmctlPath, "start", vmUUID).Run()
+		}
 	}
-	_ = exec.Command("open", "utm://run?name=UniBoot%20Preview").Run()
 
 	go func() {
-		utmctlPath := "/Applications/UTM.app/Contents/MacOS/utmctl"
 		ticker := time.NewTicker(1500 * time.Millisecond)
 		defer ticker.Stop()
 
@@ -175,15 +187,27 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 				remountTargetDisk(targetPath)
 				return
 			case <-ticker.C:
-				if _, err := os.Stat(utmctlPath); err == nil {
-					out, err := exec.Command(utmctlPath, "status", "UniBoot Preview").Output()
-					statusStr := strings.ToLower(string(out))
-					if err == nil && (strings.Contains(statusStr, "started") || strings.Contains(statusStr, "running")) {
-						started = true
-					} else if started && (!strings.Contains(statusStr, "started") || err != nil) {
-						// VM was running and has now stopped or UTM exited!
-						remountTargetDisk(targetPath)
-						return
+				// Check if UTM process itself was closed
+				utmCheck := exec.Command("pgrep", "-x", "UTM")
+				if err := utmCheck.Run(); err != nil {
+					// UTM app process has exited!
+					logger.Info("UTM process terminated, auto-remounting target disk", "targetPath", targetPath)
+					remountTargetDisk(targetPath)
+					return
+				}
+
+				if vmUUID != "" {
+					if _, err := os.Stat(utmctlPath); err == nil {
+						out, err := exec.Command(utmctlPath, "status", vmUUID).Output()
+						statusStr := strings.ToLower(string(out))
+						if err == nil && (strings.Contains(statusStr, "started") || strings.Contains(statusStr, "running")) {
+							started = true
+						} else if started && (!strings.Contains(statusStr, "started") || err != nil) {
+							// VM was running and has now stopped
+							logger.Info("UTM VM stopped, auto-remounting target disk", "targetPath", targetPath)
+							remountTargetDisk(targetPath)
+							return
+						}
 					}
 				}
 			}
@@ -191,4 +215,24 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	}()
 
 	return nil
+}
+
+func getLatestUTMUUID() string {
+	utmctlPath := "/Applications/UTM.app/Contents/MacOS/utmctl"
+	out, err := exec.Command(utmctlPath, "list").Output()
+	if err != nil {
+		return ""
+	}
+	lines := strings.Split(string(out), "\n")
+	var lastUUID string
+	for i, line := range lines {
+		if i == 0 {
+			continue // skip header
+		}
+		fields := strings.Fields(line)
+		if len(fields) > 0 && len(fields[0]) == 36 && strings.Count(fields[0], "-") == 4 {
+			lastUUID = fields[0]
+		}
+	}
+	return lastUUID
 }
