@@ -35,8 +35,8 @@ var (
 var (
 	urlCredRegex    = regexp.MustCompile(`(?i)(https?://[^:]+:)[^@]+(@)`)
 	authHeaderRegex = regexp.MustCompile(`(?i)(bearer|basic)\s+\S+`)
-	kvPairRegex     = regexp.MustCompile(`(?i)\b(password|passwd|pass|pwd|pin|code|secret|token|apikey|api_key|access_key|secret_key|private_key|key|auth|credential|credentials|session|cookie|sig|signature)=[^&\s,;]+`)
-	pemKeyRegex     = regexp.MustCompile(`(?s)-----BEGIN [A-Z ]*PRIVATE KEY-----.*?-----END [A-Z ]*PRIVATE KEY-----`)
+	kvPairRegex     = regexp.MustCompile(`(?i)\b(password|passwd|pass|pwd|pin|code|secret|token|apikey|api_key|access_key|secret_key|private_key|key|auth|credential|credentials|session|cookie|sig|signature|gpg|ssh|rsa|dsa|ecdsa|ed25519)=[^&\s,;]+`)
+	pemKeyRegex     = regexp.MustCompile(`(?s)-----BEGIN [A-Z ]*(PRIVATE KEY|PGP PRIVATE KEY BLOCK|RSA PRIVATE KEY|DSA PRIVATE KEY|EC PRIVATE KEY|OPENSSH PRIVATE KEY)-----.*?-----END [A-Z ]*(PRIVATE KEY|PGP PRIVATE KEY BLOCK|RSA PRIVATE KEY|DSA PRIVATE KEY|EC PRIVATE KEY|OPENSSH PRIVATE KEY)-----`)
 )
 
 // SetWailsContext registers the Wails runtime context for broadcasting real-time logs to the UI.
@@ -56,6 +56,7 @@ func isSensitiveKey(keyStr string) bool {
 	exactKeys := []string{
 		"key", "pass", "pwd", "cred", "creds", "sig", "auth",
 		"pin", "code", "token", "secret", "cookie", "sid", "cert", "pem",
+		"gpg", "ssh", "rsa", "dsa", "ecdsa", "ed25519", "idrsa", "ided25519",
 	}
 	for _, e := range exactKeys {
 		if k == e {
@@ -65,8 +66,9 @@ func isSensitiveKey(keyStr string) bool {
 	// 2. Substring match for explicit security term keywords
 	substringKeys := []string{
 		"password", "passwd", "passcode", "secret", "token", "credential", "authorization",
-		"privatekey", "apikey", "accesskey", "secretkey", "publickey", "authkey",
-		"clientkey", "userkey", "sshkey", "gpgkey", "masterkey", "appsecret", "clientsecret",
+		"privatekey", "private", "apikey", "accesskey", "secretkey", "publickey", "authkey",
+		"clientkey", "userkey", "sshkey", "gpgkey", "rsakey", "dsakey", "ecdsakey", "ed25519key",
+		"masterkey", "appsecret", "clientsecret", "gpg", "ssh", "rsa", "dsa", "ecdsa", "ed25519", "pgp",
 		"session", "sessionid", "cookie", "accesstoken", "refreshtoken", "idtoken",
 		"bearer", "signature", "certificate", "keystore", "passphrase", "proxyauth",
 		"proxypassword", "verificationcode", "otp", "2fa",

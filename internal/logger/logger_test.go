@@ -156,6 +156,9 @@ func TestSanitizeArgs(t *testing.T) {
 		"header", "Bearer eyJhbGciOi...",
 		"query", "api_key=secret_val&param=1",
 		"pem", "-----BEGIN RSA PRIVATE KEY-----\nMIIEogIBAAKCAQ...\n-----END RSA PRIVATE KEY-----",
+		"gpg_key", "gpg_secret_data",
+		"ssh_key", "ssh_rsa_secret",
+		"rsa_private", "rsa_secret",
 	}
 	clean := sanitizeArgs(args...)
 
@@ -183,10 +186,16 @@ func TestSanitizeArgs(t *testing.T) {
 	assert.Equal(t, "api_key=******&param=1", clean[21])
 	assert.Equal(t, "pem", clean[22])
 	assert.Equal(t, "******", clean[23])
+	assert.Equal(t, "gpg_key", clean[24])
+	assert.Equal(t, "******", clean[25])
+	assert.Equal(t, "ssh_key", clean[26])
+	assert.Equal(t, "******", clean[27])
+	assert.Equal(t, "rsa_private", clean[28])
+	assert.Equal(t, "******", clean[29])
 }
 
 func TestSanitizeString_PEMBlock(t *testing.T) {
-	rawPem := "Here is my key: -----BEGIN PRIVATE KEY-----\nSecretDataHere\n-----END PRIVATE KEY-----"
+	rawPem := "Here is my key: -----BEGIN PGP PRIVATE KEY BLOCK-----\nSecretDataHere\n-----END PGP PRIVATE KEY BLOCK-----"
 	cleaned := sanitizeString(rawPem)
 	assert.Equal(t, "Here is my key: [REDACTED PRIVATE KEY]", cleaned)
 }
