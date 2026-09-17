@@ -283,10 +283,7 @@ func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []s
 // preserving bytes 446-511 (Partition Table & MBR Signature) 100% intact.
 // This neutralizes stale Ventoy MBR hooks when converting Hybrid Mode to Cloud Mode, preventing Legacy BIOS boot crashes.
 func CleanMbrBootstrapCode(targetDisk string) error {
-	diskNode := filepath.Base(targetDisk)
-	if idx := strings.Index(diskNode, "s"); idx > 0 {
-		diskNode = diskNode[:idx]
-	}
+	diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
 
 	var rawDev string
 	if runtime.GOOS == "darwin" {

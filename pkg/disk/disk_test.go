@@ -47,6 +47,26 @@ func TestIsIgnoredVolume(t *testing.T) {
 	}
 }
 
+func TestNormalizeDarwinDiskNode(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"/dev/disk2", "disk2"},
+		{"/dev/rdisk2", "disk2"},
+		{"/dev/disk2s1", "disk2"},
+		{"disk2s2", "disk2"},
+		{"/dev/disk12s3", "disk12"},
+		{"disk0", "disk0"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			assert.Equal(t, tt.expected, NormalizeDarwinDiskNode(tt.input))
+		})
+	}
+}
+
 func TestValidateTargetDisk(t *testing.T) {
 	assert.Error(t, ValidateTargetDisk(""))
 	assert.Error(t, ValidateTargetDisk("/"))

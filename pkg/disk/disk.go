@@ -295,6 +295,27 @@ func HasUniBootCloudFiles(mountPoint string) bool {
 	return errBoot == nil || errUni == nil
 }
 
+// NormalizeDarwinDiskNode extracts the parent physical disk node (e.g. "disk2") from a macOS disk or partition path.
+// Examples:
+//   "/dev/disk2"    -> "disk2"
+//   "/dev/rdisk2"   -> "disk2"
+//   "/dev/disk2s1"  -> "disk2"
+//   "disk2s2"       -> "disk2"
+//   "/dev/disk12s3" -> "disk12"
+func NormalizeDarwinDiskNode(targetDisk string) string {
+	node := filepath.Base(targetDisk)
+	node = strings.TrimPrefix(node, "r") // Remove raw disk prefix if present (rdisk2 -> disk2)
+
+	if strings.HasPrefix(node, "disk") {
+		rest := node[4:] // Part after "disk", e.g. "2", "2s1", "12s3"
+		if idx := strings.Index(rest, "s"); idx > 0 {
+			return "disk" + rest[:idx]
+		}
+		return node
+	}
+	return node
+}
+
 // IsVentoyDisk determines if a target disk device path or mount path is physically a Ventoy drive.
 // Strictly checks MBR sector signatures, core ventoy engine files, and VTOYEFI/UNIBOOTEFI partition labels.
 func IsVentoyDisk(targetDisk string) bool {
@@ -314,13 +335,8 @@ func IsVentoyDisk(targetDisk string) bool {
 
 	// 3. Platform-specific target partition inspection with label and metadata checks
 	if runtime.GOOS == "darwin" {
-		diskNode := filepath.Base(targetDisk)
-		if strings.HasPrefix(diskNode, "disk") {
-			baseDisk := diskNode
-			if idx := strings.Index(diskNode, "s"); idx != -1 {
-				baseDisk = diskNode[:idx]
-			}
-
+		baseDisk := NormalizeDarwinDiskNode(targetDisk)
+		if strings.HasPrefix(baseDisk, "disk") {
 			p1 := baseDisk + "s1"
 			p2 := baseDisk + "s2"
 

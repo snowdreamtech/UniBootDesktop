@@ -56,10 +56,7 @@ func FormatDiskCloudMode(ctx context.Context, targetDisk string) (string, error)
 // formatDiskMacOS formats disk on macOS using diskutil with UNIBOOT dual-partition layout (Data Partition + ESP)
 func formatDiskMacOS(ctx context.Context, targetDisk string) (string, error) {
 	// Normalize disk device path (e.g., /dev/disk2 -> disk2, /dev/disk2s1 -> disk2)
-	diskNode := filepath.Base(targetDisk)
-	if idx := strings.Index(diskNode, "s"); idx > 0 {
-		diskNode = diskNode[:idx]
-	}
+	diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
 
 	logger.Info("Unmounting existing volumes on disk...", "diskNode", diskNode)
 	_ = execCommand("diskutil", "unmountDisk", "force", diskNode).Run()
@@ -401,11 +398,8 @@ func MountAndResolveEFIPartition(targetDisk string) (string, error) {
 	}
 
 	if runtime.GOOS == "darwin" {
-		diskNode := filepath.Base(targetDisk)
-		part2 := diskNode
-		if !strings.Contains(part2, "s") {
-			part2 = diskNode + "s2"
-		}
+		diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
+		part2 := diskNode + "s2"
 
 		// 1. Check if part2 is already mounted
 		infoCmd := execCommand("diskutil", "info", "-plist", part2)

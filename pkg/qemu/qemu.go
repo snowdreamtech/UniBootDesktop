@@ -14,6 +14,8 @@ import (
 	"strings"
 	"syscall"
 	"time"
+
+	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 )
 
 // QEMUStatus contains detection metadata for QEMU installation.
@@ -176,11 +178,8 @@ func ResolveRawDiskDevice(diskPath string) string {
 			}
 		}
 
-		if strings.HasPrefix(diskPath, "disk") {
-			node := diskPath
-			if idx := strings.Index(node, "s"); idx != -1 {
-				node = node[:idx]
-			}
+		if strings.HasPrefix(diskPath, "disk") || strings.HasPrefix(filepath.Base(diskPath), "disk") {
+			node := disk.NormalizeDarwinDiskNode(diskPath)
 			return "/dev/r" + node
 		}
 
