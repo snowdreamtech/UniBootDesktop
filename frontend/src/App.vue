@@ -305,23 +305,23 @@
 
 
         <!-- Hypervisor Simulation Test Card -->
-        <div class="qemu-box">
-          <div class="qemu-header">
-            <div class="qemu-title-group">
+        <div class="vm-box">
+          <div class="vm-header">
+            <div class="vm-title-group">
               <h3>
-                {{ t('qemu.box_title') }}
+                {{ t('vm.box_title') }}
                 <span class="optional-badge">{{ t('common.optional') }}</span>
               </h3>
             </div>
             
             <!-- Single Hypervisor Badge -->
             <span v-if="hypervisorList.length <= 1" class="badge" :class="hypervisorList.length === 1 ? 'success' : 'muted'">
-              {{ hypervisorList.length === 1 ? t('qemu.detected_single', { name: hypervisorList[0].name }) : t('qemu.not_installed') }}
+              {{ hypervisorList.length === 1 ? t('vm.detected_single', { name: hypervisorList[0].name }) : t('vm.not_installed') }}
             </span>
 
             <!-- Multiple Hypervisors Selector -->
             <div v-else class="vm-selector-container">
-              <span class="vm-selector-label">{{ t('qemu.select_vm_label') }}</span>
+              <span class="vm-selector-label">{{ t('vm.select_vm_label') }}</span>
               <div class="vm-select-wrapper">
                 <select v-model="selectedVMType" class="vm-select">
                   <option v-for="vm in hypervisorList" :key="vm.type" :value="vm.type">
@@ -332,22 +332,22 @@
               </div>
             </div>
           </div>
-          <p class="qemu-desc">
-            {{ t('qemu.target') }} 
-            <strong v-if="activeQemuTargetDevice" class="target-highlight">
-              {{ activeQemuTargetName }} ({{ activeQemuTargetDevice }})
+          <p class="vm-desc">
+            {{ t('vm.target') }} 
+            <strong v-if="activeVmTargetDevice" class="target-highlight">
+              {{ activeVmTargetName }} ({{ activeVmTargetDevice }})
             </strong>
             <span v-else class="target-warn">
-              {{ t('qemu.no_disk_warn') }}
+              {{ t('vm.no_disk_warn') }}
             </span>
           </p>
           <button 
             class="btn-secondary" 
-            :disabled="isQemuDisabled" 
-            :title="qemuDisabledReason"
-            @click="launchQEMU"
+            :disabled="isVmDisabled" 
+            :title="vmDisabledReason"
+            @click="launchVM"
           >
-            {{ isLaunchingQemu ? t('qemu.launching') : t('qemu.run_test') }}
+            {{ isLaunchingQemu ? t('vm.launching') : t('vm.run_test') }}
           </button>
         </div>
       </section>
@@ -1336,32 +1336,32 @@ const deployDisabledReason = computed(() => {
   return '';
 });
 
-const isQemuDisabled = computed(() => {
+const isVmDisabled = computed(() => {
   return (
     isLaunchingQemu.value ||
     isDeploying.value ||
     hypervisorList.value.length === 0 ||
-    !activeQemuTargetDevice.value
+    !activeVmTargetDevice.value
   );
 });
 
-const qemuDisabledReason = computed(() => {
+const vmDisabledReason = computed(() => {
   if (isLaunchingQemu.value) {
-    return t('qemu.tip_launching');
+    return t('vm.tip_launching');
   }
   if (isDeploying.value) {
-    return t('qemu.tip_deploying');
+    return t('vm.tip_deploying');
   }
   if (hypervisorList.value.length === 0) {
-    return t('qemu.tip_not_installed');
+    return t('vm.tip_not_installed');
   }
-  if (!activeQemuTargetDevice.value) {
-    return t('qemu.tip_select_target');
+  if (!activeVmTargetDevice.value) {
+    return t('vm.tip_select_target');
   }
-  return t('qemu.tip_ready');
+  return t('vm.tip_ready');
 });
 
-const activeQemuTargetDevice = computed(() => {
+const activeVmTargetDevice = computed(() => {
   if (selectionMode.value === 'single') {
     return selectedDisk.value?.device || '';
   }
@@ -1371,7 +1371,7 @@ const activeQemuTargetDevice = computed(() => {
   return '';
 });
 
-const activeQemuTargetName = computed(() => {
+const activeVmTargetName = computed(() => {
   if (selectionMode.value === 'single') {
     return selectedDisk.value?.name || selectedDisk.value?.device || '';
   }
@@ -1680,24 +1680,24 @@ async function startDeployment() {
 }
 
 
-async function launchQEMU() {
-  console.log('[UniBoot] launchQEMU clicked, target:', activeQemuTargetDevice.value, 'vmType:', selectedVMType.value);
+async function launchVM() {
+  console.log('[UniBoot] launchVM clicked, target:', activeVmTargetDevice.value, 'vmType:', selectedVMType.value);
 
   if (!diskList.value || diskList.value.length === 0) {
     showToast(t('deploy.toast_no_disks'), 'warning');
     return;
   }
 
-  const targetDevice = activeQemuTargetDevice.value;
-  const diskLabel = activeQemuTargetName.value;
+  const targetDevice = activeVmTargetDevice.value;
+  const diskLabel = activeVmTargetName.value;
 
   if (!targetDevice) {
-    showToast(t('qemu.toast_select_first'), 'warning');
+    showToast(t('vm.toast_select_first'), 'warning');
     return;
   }
 
   if (hypervisorList.value.length === 0) {
-    showToast(t('qemu.toast_not_installed'), 'error');
+    showToast(t('vm.toast_not_installed'), 'error');
     return;
   }
 
@@ -1710,22 +1710,22 @@ async function launchQEMU() {
       if (typeof window.go.main.App.LaunchVM === 'function') {
         await window.go.main.App.LaunchVM(targetDevice, selectedVMType.value);
         logUserAction('INFO', 'User launched hypervisor simulation test', `${vmName} (${selectedVMType.value}) on ${targetDevice}`);
-        showToast(t('qemu.startSuccess_vm', { name: vmName, disk: diskLabel, device: targetDevice }), 'success');
+        showToast(t('vm.startSuccess_vm', { name: vmName, disk: diskLabel, device: targetDevice }), 'success');
       } else if (typeof window.go.main.App.LaunchQEMU === 'function') {
         await window.go.main.App.LaunchQEMU(targetDevice);
         logUserAction('INFO', 'User launched hypervisor simulation test', `QEMU on ${targetDevice}`);
-        showToast(t('qemu.startSuccess', { disk: diskLabel, device: targetDevice }), 'success');
+        showToast(t('vm.startSuccess', { disk: diskLabel, device: targetDevice }), 'success');
       } else {
-        showToast(t('qemu.backendNotReady'), 'warning');
+        showToast(t('vm.backendNotReady'), 'warning');
       }
     } else {
       await new Promise(r => setTimeout(r, 600));
       logUserAction('INFO', 'User launched hypervisor simulation test (demo mode)', `${vmName} on ${targetDevice}`);
-      showToast(t('qemu.demoModeStart', { name: vmName, disk: diskLabel, device: targetDevice }), 'info');
+      showToast(t('vm.demoModeStart', { name: vmName, disk: diskLabel, device: targetDevice }), 'info');
     }
   } catch (e: any) {
     console.error('[UniBoot] LaunchVM error:', e);
-    showToast(t('qemu.startFailed', { error: e?.message || String(e) }), 'error');
+    showToast(t('vm.startFailed', { error: e?.message || String(e) }), 'error');
   } finally {
     isLaunchingQemu.value = false;
   }
@@ -2645,19 +2645,19 @@ h1 {
   color: #ffffff;
 }
 
-.qemu-box {
+.vm-box {
   border-top: 1px solid var(--card-border);
   padding-top: 1.25rem;
 }
 
-.qemu-header {
+.vm-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.4rem;
 }
 
-.qemu-title-group h3 {
+.vm-title-group h3 {
   font-size: 1rem;
   display: flex;
   align-items: center;
@@ -2764,7 +2764,7 @@ h1 {
   color: #0f172a;
 }
 
-.qemu-desc {
+.vm-desc {
   font-size: 0.8rem;
   color: var(--text-muted);
   margin-bottom: 1rem;
