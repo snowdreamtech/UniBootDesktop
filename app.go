@@ -67,19 +67,16 @@ func (a *App) EjectDisk(targetDisk string) error {
 }
 
 // SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
-func (a *App) SelectIsoFiles(opts ...string) ([]string, error) {
-	title := "Select System Image Files (*.iso, *.wim, *.img, *.vhd, etc.)"
-	ventoyFilter := "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)"
-	allFilter := "All Files (*.*)"
-
-	if len(opts) > 0 && opts[0] != "" {
-		title = opts[0]
+// SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
+func (a *App) SelectIsoFiles(title string, ventoyFilter string, allFilter string) ([]string, error) {
+	if title == "" {
+		title = "Select System Image Files (*.iso, *.wim, *.img, *.vhd, etc.)"
 	}
-	if len(opts) > 1 && opts[1] != "" {
-		ventoyFilter = opts[1]
+	if ventoyFilter == "" {
+		ventoyFilter = "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)"
 	}
-	if len(opts) > 2 && opts[2] != "" {
-		allFilter = opts[2]
+	if allFilter == "" {
+		allFilter = "All Files (*.*)"
 	}
 
 	return wailsRuntime.OpenMultipleFilesDialog(a.ctx, wailsRuntime.OpenDialogOptions{
@@ -98,23 +95,18 @@ func (a *App) SelectIsoFiles(opts ...string) ([]string, error) {
 }
 
 // ExportLogs opens a native save file dialog to export log content to a file (.log or .txt).
-func (a *App) ExportLogs(content string, opts ...string) (string, error) {
-	title := "Export Log File"
-	logFilter := "Log Files (*.log)"
-	textFilter := "Text Files (*.txt)"
-	allFilter := "All Files (*.*)"
-
-	if len(opts) > 0 && opts[0] != "" {
-		title = opts[0]
+func (a *App) ExportLogs(content string, title string, logFilter string, textFilter string, allFilter string) (string, error) {
+	if title == "" {
+		title = "Export Log File"
 	}
-	if len(opts) > 1 && opts[1] != "" {
-		logFilter = opts[1]
+	if logFilter == "" {
+		logFilter = "Log Files (*.log)"
 	}
-	if len(opts) > 2 && opts[2] != "" {
-		textFilter = opts[2]
+	if textFilter == "" {
+		textFilter = "Text Files (*.txt)"
 	}
-	if len(opts) > 3 && opts[3] != "" {
-		allFilter = opts[3]
+	if allFilter == "" {
+		allFilter = "All Files (*.*)"
 	}
 
 	defaultFilename := fmt.Sprintf("unigodesktop-log-%s.log", time.Now().Format("2006-01-02-150405"))
