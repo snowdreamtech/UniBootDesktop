@@ -175,7 +175,7 @@ export const jaJp: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 任意プレビュー機能：PC を再起動せずに、デスクトップ上の仮想マシンで USB ブート動作を確認できます。",
   "vm.installed": "QEMU 検出済み",
   "vm.not_installed": "QEMU 未検出",

@@ -175,7 +175,7 @@ export const urPk: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 اختیاری خصوصیت: پی سی کو ریبوٹ کیے بغیر ورچوئل مشین میں ڈسک بوٹ کا پیش نظارہ کریں۔",
   "vm.installed": "QEMU کا پتہ چلا",
   "vm.not_installed": "QEMU کا پتہ نہیں چلا",

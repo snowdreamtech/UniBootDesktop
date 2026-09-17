@@ -175,7 +175,7 @@ export const thTh: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 ฟีเจอร์เสริม: พรีวิวการบู้ต USB ในเครื่องเสมือนโดยไม่ต้องรีสตาร์ทคอมพิวเตอร์จริง",
   "vm.installed": "ตรวจพบ QEMU",
   "vm.not_installed": "ตรวจไม่พบ QEMU",

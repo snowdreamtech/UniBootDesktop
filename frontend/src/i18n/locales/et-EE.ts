@@ -175,7 +175,7 @@ export const etEe: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Valikuline funktsioon: Eelvaadake USB-laadimist virtuaalmasinas ilma arvutit taaskäivitamata.",
   "vm.installed": "Tuvastati QEMU",
   "vm.not_installed": "QEMU-d ei tuvastatud",

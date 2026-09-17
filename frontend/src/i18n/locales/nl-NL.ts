@@ -175,7 +175,7 @@ export const nlNl: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Optionele functie: Bekijk USB-boot in een virtuele machine zonder de pc opnieuw op te starten.",
   "vm.installed": "QEMU gedetecteerd",
   "vm.not_installed": "QEMU niet gedetecteerd",

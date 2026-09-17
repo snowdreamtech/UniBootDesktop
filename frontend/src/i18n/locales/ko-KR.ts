@@ -175,7 +175,7 @@ export const koKr: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 선택적 미리보기 기능: PC를 재부팅하지 않고 데스크톱 가상 머신에서 USB 부팅을 미리 확인합니다.",
   "vm.installed": "QEMU 감지됨",
   "vm.not_installed": "QEMU 감지되지 않음",

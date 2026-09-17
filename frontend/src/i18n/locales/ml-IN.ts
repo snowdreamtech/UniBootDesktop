@@ -175,7 +175,7 @@ export const mlIn: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 ഓപ്ഷണൽ ഫീച്ചർ: കമ്പ്യൂട്ടർ റീബൂട്ട് ചെയ്യാതെ തന്നെ വെർച്വൽ മെഷീനിൽ USB ബൂട്ട് പ്രിവ്യൂ കാണുക.",
   "vm.installed": "QEMU കണ്ടെത്തി",
   "vm.not_installed": "QEMU കണ്ടെത്തിയില്ല",

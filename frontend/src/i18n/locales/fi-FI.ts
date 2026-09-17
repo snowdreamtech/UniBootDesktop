@@ -175,7 +175,7 @@ export const fiFi: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Valinnainen ominaisuus: Esikatsele USB-käynnistystä virtuaalikoneessa ilman tietokoneen uudelleenkäynnistystä.",
   "vm.installed": "QEMU havaittu",
   "vm.not_installed": "QEMU Ei havaittu",

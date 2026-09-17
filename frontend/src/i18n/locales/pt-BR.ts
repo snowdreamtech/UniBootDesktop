@@ -175,7 +175,7 @@ export const ptBr: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Recurso opcional: Pré-visualize a inicialização do USB em uma máquina virtual sem reiniciar o PC.",
   "vm.installed": "QEMU Detectado",
   "vm.not_installed": "QEMU Não Detectado",

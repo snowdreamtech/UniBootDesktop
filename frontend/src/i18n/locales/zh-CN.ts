@@ -175,7 +175,7 @@ export const zhCn: TranslationDict = {
   "vm.box_title": "引导模拟测试",
   "vm.detected_single": "已检测到 {name}",
   "vm.select_vm_label": "虚拟机:",
-  "vm.startSuccess_vm": "启动 {name} 模拟测试成功 ({disk})",
+  "vm.startSuccess_vm": "启动 {name} 模拟测试成功",
   "vm.desc_optional": "💡 可选预览功能：制作完成后无需重启真实电脑，即可在桌面直接拉起虚拟机预览磁盘引导效果。",
   "vm.installed": "已检测到 QEMU",
   "vm.not_installed": "未检测到 QEMU",

@@ -175,7 +175,7 @@ export const glEs: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Función opcional: Previsualice o arranque USB nunha máquina virtual sen reiniciar o equipo.",
   "vm.installed": "QEMU detectado",
   "vm.not_installed": "QEMU non detectado",

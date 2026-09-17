@@ -175,7 +175,7 @@ export const enUs: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Optional Feature: Preview disk boot direct on desktop in VM without rebooting real PC.",
   "vm.installed": "QEMU Detected",
   "vm.not_installed": "QEMU Not Detected",

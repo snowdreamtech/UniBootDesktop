@@ -175,7 +175,7 @@ export const bnBd: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 ঐচ্ছিক বৈশিষ্ট্য: পিসি রিবুট না করেই ভার্চুয়াল মেশিনে USB বুটের পূর্বরূপ দেখুন।",
   "vm.installed": "QEMU সনাক্ত করা হয়েছে",
   "vm.not_installed": "QEMU সনাক্ত করা যায়নি",

@@ -175,7 +175,7 @@ export const itIt: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Funzione opzionale: Anteprima dell'avvio USB in una macchina virtuale senza riavviare il PC.",
   "vm.installed": "QEMU Rilevato",
   "vm.not_installed": "QEMU Non Rilevato",

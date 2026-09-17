@@ -175,7 +175,7 @@ export const trTr: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 İsteğe bağlı özellik: PC'yi yeniden başlatmadan USB önyüklemesini sanal makinede önizleyin.",
   "vm.installed": "QEMU Algılandı",
   "vm.not_installed": "QEMU Algılanmadı",

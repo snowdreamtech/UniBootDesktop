@@ -175,7 +175,7 @@ export const srCyrl: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Опциона функција: Преглед покретања са USB-а у виртуелној машини без поновног покретања рачунара.",
   "vm.installed": "КЕМУ откривен",
   "vm.not_installed": "КЕМУ није откривен",

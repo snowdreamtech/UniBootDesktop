@@ -175,7 +175,7 @@ export const noNo: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Valgfri funksjon: Forhåndsvis USB-boot i virtuell maskin uten å starte på nytt.",
   "vm.installed": "Installert",
   "vm.not_installed": "Ikke installert",

@@ -175,7 +175,7 @@ export const svSe: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Valfri funktion: Förhandsgranska USB-boot i virtuell maskin utan att starta om datorn.",
   "vm.installed": "Installerad",
   "vm.not_installed": "Inte installerad",

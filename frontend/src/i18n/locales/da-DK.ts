@@ -175,7 +175,7 @@ export const daDk: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Valgfri funktion: Forhåndsvis USB-boot i virtuel maskine uden at genstarte pc'en.",
   "vm.installed": "Installeret",
   "vm.not_installed": "Ikke installeret",

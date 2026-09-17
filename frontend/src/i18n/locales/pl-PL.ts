@@ -175,7 +175,7 @@ export const plPl: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Funkcja opcjonalna: Podgląd rozruchu USB w maszynie wirtualnej bez ponownego uruchamiania komputera.",
   "vm.installed": "Wykryto QEMU",
   "vm.not_installed": "Nie wykryto QEMU",

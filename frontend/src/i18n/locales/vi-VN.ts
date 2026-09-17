@@ -175,7 +175,7 @@ export const viVn: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Tính năng tùy chọn: Xem trước khởi động USB trong máy ảo mà không cần khởi động lại máy tính.",
   "vm.installed": "Đã tìm thấy QEMU",
   "vm.not_installed": "Không tìm thấy QEMU",

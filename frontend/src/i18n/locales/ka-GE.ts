@@ -175,7 +175,7 @@ export const kaGe: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 არასავალდებულო ფუნქცია: USB ჩატვირთვის წინასწარი გადახედვა ვირტუალურ მანქანაში კომპიუტერის გადატვირთვის გარეშე.",
   "vm.installed": "QEMU აღმოჩენილია",
   "vm.not_installed": "QEMU არ არის გამოვლენილი",

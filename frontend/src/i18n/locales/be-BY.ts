@@ -175,7 +175,7 @@ export const beBy: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Дадатковая функцыя: Папярэдні прагляд загрузкі USB у віртуальнай машыне без перазагрузкі ПК.",
   "vm.installed": "Выяўлены QEMU",
   "vm.not_installed": "QEMU не выяўлены",

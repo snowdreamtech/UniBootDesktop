@@ -1689,7 +1689,6 @@ async function launchVM() {
   }
 
   const targetDevice = activeVmTargetDevice.value;
-  const diskLabel = activeVmTargetName.value;
 
   if (!targetDevice) {
     showToast(t('vm.toast_select_first'), 'warning');
@@ -1710,18 +1709,18 @@ async function launchVM() {
       if (typeof window.go.main.App.LaunchVM === 'function') {
         await window.go.main.App.LaunchVM(targetDevice, selectedVMType.value);
         logUserAction('INFO', 'User launched hypervisor simulation test', `${vmName} (${selectedVMType.value}) on ${targetDevice}`);
-        showToast(t('vm.startSuccess_vm', { name: vmName, disk: diskLabel, device: targetDevice }), 'success');
+        showToast(t('vm.startSuccess_vm', { name: vmName }), 'success');
       } else if (typeof window.go.main.App.LaunchQEMU === 'function') {
         await window.go.main.App.LaunchQEMU(targetDevice);
         logUserAction('INFO', 'User launched hypervisor simulation test', `QEMU on ${targetDevice}`);
-        showToast(t('vm.startSuccess', { disk: diskLabel, device: targetDevice }), 'success');
+        showToast(t('vm.startSuccess', { name: 'QEMU' }), 'success');
       } else {
         showToast(t('vm.backendNotReady'), 'warning');
       }
     } else {
       await new Promise(r => setTimeout(r, 600));
       logUserAction('INFO', 'User launched hypervisor simulation test (demo mode)', `${vmName} on ${targetDevice}`);
-      showToast(t('vm.demoModeStart', { name: vmName, disk: diskLabel, device: targetDevice }), 'info');
+      showToast(t('vm.demoModeStart', { name: vmName }), 'info');
     }
   } catch (e: any) {
     console.error('[UniBoot] LaunchVM error:', e);

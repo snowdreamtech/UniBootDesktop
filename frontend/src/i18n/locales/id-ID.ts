@@ -175,7 +175,7 @@ export const idId: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Fitur opsional: Pratinjau booting USB dalam mesin virtual tanpa menyalakan ulang PC.",
   "vm.installed": "QEMU Terdeteksi",
   "vm.not_installed": "QEMU Tidak Terdeteksi",

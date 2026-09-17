@@ -175,7 +175,7 @@ export const zhTw: TranslationDict = {
   "vm.box_title": "引導模擬測試",
   "vm.detected_single": "已檢測到 {name}",
   "vm.select_vm_label": "虛擬機:",
-  "vm.startSuccess_vm": "啟動 {name} 模擬測試成功 ({disk})",
+  "vm.startSuccess_vm": "啟動 {name} 模擬測試成功",
   "vm.desc_optional": "💡 可選預覽功能：製作完成後無需重啟真實電腦，即可在桌面直接拉起虛擬機預覽磁碟引導效果。",
   "vm.installed": "已檢測到 QEMU",
   "vm.not_installed": "未檢測到 QEMU",

@@ -175,7 +175,7 @@ export const elGr: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Προαιρετική λειτουργία: Προεπισκόπηση εκκίνησης USB σε εικονική μηχανή χωρίς επανεκκίνηση του υπολογιστή.",
   "vm.installed": "Εντοπίστηκε QEMU",
   "vm.not_installed": "Το QEMU δεν ανιχνεύθηκε",

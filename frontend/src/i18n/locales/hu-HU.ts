@@ -175,7 +175,7 @@ export const huHu: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Opcionális funkció: USB indítás előnézete virtuális gépben a PC újraindítása nélkül.",
   "vm.installed": "Telepítve",
   "vm.not_installed": "Nincs telepítve",

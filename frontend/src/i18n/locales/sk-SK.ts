@@ -175,7 +175,7 @@ export const skSk: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Voliteľná funkcia: Náhľad bootovania USB vo virtuálnom stroji bez reštartovania PC.",
   "vm.installed": "Zistené QEMU",
   "vm.not_installed": "QEMU nebolo zistené",

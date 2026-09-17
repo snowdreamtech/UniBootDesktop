@@ -175,7 +175,7 @@ export const ukUa: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Додаткова функція: Попередній перегляд завантаження USB у віртуальній машині без перезавантаження ПК.",
   "vm.installed": "QEMU виявлено",
   "vm.not_installed": "QEMU не виявлено",

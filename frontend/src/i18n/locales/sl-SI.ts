@@ -175,7 +175,7 @@ export const slSi: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 Izbirna funkcija: Predogled zagona USB v virtualnem stroju brez ponovnega zagona računalnika.",
   "vm.installed": "Zaznan QEMU",
   "vm.not_installed": "QEMU ni zaznan",

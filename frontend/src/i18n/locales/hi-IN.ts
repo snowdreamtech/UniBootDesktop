@@ -175,7 +175,7 @@ export const hiIn: TranslationDict = {
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",
   "vm.select_vm_label": "Hypervisor:",
-  "vm.startSuccess_vm": "{name} simulation test started successfully ({disk})",
+  "vm.startSuccess_vm": "{name} simulation test started successfully",
   "vm.desc_optional": "💡 वैकल्पिक सुविधा: असली पीसी को रीबूट किए बिना डेस्कटॉप पर वर्चुअल मशीन में बूट का पूर्वावलोकन करें।",
   "vm.installed": "क्यूईएमयू का पता चला",
   "vm.not_installed": "QEMU का पता नहीं चला",
