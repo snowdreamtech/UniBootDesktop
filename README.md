@@ -8,7 +8,7 @@
 
 [English](README.md) | [简体中文](README_zh-CN.md)
 
-**UniBoot Desktop (UniGoDesktop)** is a fast, multi-architecture, dual-engine cross-platform bootable USB creator and diagnostic suite powered by **Go + Wails + Vue 3**. It natively supports **macOS (Apple Silicon M1~M4 native / Intel), Windows, and Linux**.
+**UniBoot Desktop (UniGoDesktop)** is a fast, multi-architecture, dual-engine cross-platform bootable disk creator and diagnostic suite powered by **Go + Wails + Vue 3**. It natively supports **macOS (Apple Silicon M1~M4 native / Intel), Windows, and Linux**.
 
 ---
 
@@ -18,13 +18,13 @@
   - **Mode A (Ventoy MultiBoot Hybrid Pro)**: Powered by Ventoy core protocol. Non-destructive in-place upgrades preserving user space with unlimited ISO/WIM/VHD/IMG placement.
   - **Mode B (1-Sec Cloud Disk)**: macOS-native friendly iPXE cloud network boot with all-architecture firmware support (x86_64, UEFI, Legacy MBR, ARM64, RISC-V 64).
 - **QEMU Simulator VM Test**:
-  - Embedded QEMU simulator test module in both GUI and CLI. Verify bootable USB drives instantly without rebooting your computer.
-- **USB Hardware Inspector**:
+  - Embedded QEMU simulator test module in both GUI and CLI. Verify bootable disks instantly without rebooting your computer.
+- **Disk Hardware Inspector**:
   - Displays 480 Mb/s physical bus speed, SMART health, partition scheme (GPT/MBR), and filesystem type.
 - **53 Native Locales (100% Ventoy Parity)**:
   - 100% translated across 256 UI keys with ZERO English fallbacks. Includes RTL (Right-to-Left) auto-layout flipping for Arabic, Hebrew, Persian, and Urdu.
-- **Single & Batch Multi-USB Parallel Deployment**:
-  - Powerful CLI supporting single USB deployment, concurrent multi-USB batch deployment (`--disks`), and auto-all USB deployment (`--all-usb`).
+- **Single & Batch Multi-Disk Parallel Deployment**:
+  - Powerful CLI supporting single disk deployment, concurrent multi-disk batch deployment (`--disks`), and auto-all disk deployment (`--all-usb`).
 - **13 Embedded Firmware Matrix**:
   - Statically embedded Go `embed.FS` firmware matrix with automated GitHub cloud mirror synchronization.
 
@@ -35,19 +35,19 @@
 UniBoot features a **Dual-Mode Engine** where 100% of GUI features are accessible via the Cobra CLI:
 
 ```bash
-# 1. Inspect USB drives and hardware specs (supports --json)
+# 1. Inspect disks and hardware specs (supports --json)
 unigodesktop df --usb
 
-# 2. Deploy Mode A (Ventoy) to a single USB drive with ISO copy
+# 2. Deploy Mode A (Ventoy) to a single disk with ISO copy
 unigodesktop deploy --disk /dev/disk2 --mode A --fs exfat -i ~/Downloads/Ubuntu.iso -y
 
-# 3. High-concurrency batch parallel deployment for multiple USB drives
+# 3. High-concurrency batch parallel deployment for multiple disks
 unigodesktop deploy --disks /dev/disk2,/dev/disk3,/dev/disk4 --mode B -y
 
-# 4. Automatically deploy to ALL detected removable USB drives
+# 4. Automatically deploy to ALL detected removable disks
 unigodesktop deploy --all-usb --mode A -y
 
-# 5. Launch QEMU simulator to test target USB drive from CLI
+# 5. Launch QEMU simulator to test target disk from CLI
 unigodesktop qemu --disk /dev/disk2 -m 4096
 
 # 6. Configure GitHub cloud mirror speed acceleration
