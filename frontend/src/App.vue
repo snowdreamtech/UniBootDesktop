@@ -480,6 +480,7 @@ import AboutModal from './components/AboutModal.vue';
 import type { LogItem } from './components/LogViewerModal.vue';
 import CustomSelect from './components/CustomSelect.vue';
 import { t, currentLang, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
+import { ExportLogs } from '../wailsjs/go/main/App';
 
 const isLangMenuOpen = ref(false);
 const langDropdownRef = ref<HTMLElement | null>(null);
@@ -676,17 +677,14 @@ async function handleExportEmbeddedLogs() {
     .map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message}${l.details ? ' - ' + l.details : ''}`)
     .join('\n');
 
-  if (window.go && window.go.main && window.go.main.App && (window.go.main.App as any).ExportLogs) {
-    try {
-      const filePath = await (window.go.main.App as any).ExportLogs(text);
-      if (filePath) {
-        showToast(t('log.exported_path_toast', { path: filePath }), 'success');
-      }
-    } catch (e) {
-      console.error('Failed to export logs:', e);
+  try {
+    const filePath = await ExportLogs(text);
+    if (filePath) {
+      showToast(t('log.exported_path_toast', { path: filePath }), 'success');
     }
-  } else {
-    // Fallback for browser dev mode
+  } catch (e) {
+    console.error('Failed to export logs via native Wails dialog:', e);
+    // Fallback for web browser mode
     const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
