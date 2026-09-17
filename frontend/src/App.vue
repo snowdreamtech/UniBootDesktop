@@ -281,28 +281,26 @@
           </button>
 
           <!-- Deploy success banner with Safely Eject button -->
-          <transition name="toast-fade">
-            <div v-if="showDeploySuccessBanner" class="deploy-success-banner">
-              <div class="deploy-success-icon">🎉</div>
-              <div class="deploy-success-content">
-                <div class="deploy-success-title">{{ t('deploy.success_banner_title') }}</div>
-                <div class="deploy-success-desc">
-                  {{ deploySuccessBanner.autoEjected ? t('deploy.toast_auto_ejected', { count: deploySuccessBanner.targets.length }) : t('deploy.success_banner_desc') }}
-                </div>
-              </div>
-              <div class="deploy-success-actions">
-                <button class="btn-dismiss" @click="dismissDeploySuccessBanner" :title="t('common.close')">✕</button>
-                <button
-                  v-if="!deploySuccessBanner.autoEjected"
-                  id="btn-safely-eject-after-deploy"
-                  class="btn-eject-success"
-                  @click="handleSafelyEjectAfterDeploy"
-                >
-                  ⏏️ {{ t('deploy.safely_eject_btn') }}
-                </button>
+          <div v-if="showDeploySuccessBanner" class="deploy-success-banner">
+            <div class="deploy-success-icon">🎉</div>
+            <div class="deploy-success-content">
+              <div class="deploy-success-title">{{ t('deploy.success_banner_title') }}</div>
+              <div class="deploy-success-desc">
+                {{ deploySuccessBanner.autoEjected ? t('deploy.toast_auto_ejected', { count: deploySuccessBanner.targets.length }) : t('deploy.success_banner_desc') }}
               </div>
             </div>
-          </transition>
+            <div class="deploy-success-actions">
+              <button class="btn-dismiss" @click="dismissDeploySuccessBanner" :title="t('common.close')">✕</button>
+              <button
+                v-if="!deploySuccessBanner.autoEjected"
+                id="btn-safely-eject-after-deploy"
+                class="btn-eject-success"
+                @click="handleSafelyEjectAfterDeploy"
+              >
+                ⏏️ {{ t('deploy.safely_eject_btn') }}
+              </button>
+            </div>
+          </div>
         </div>
 
 
