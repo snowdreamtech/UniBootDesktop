@@ -152,6 +152,7 @@ select:focus::placeholder {
 }
 
 html {
+  overflow-y: scroll;
   scrollbar-gutter: stable;
 }
 
