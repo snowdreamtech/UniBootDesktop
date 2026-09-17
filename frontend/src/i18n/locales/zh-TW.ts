@@ -107,7 +107,7 @@ export const zhTw: TranslationDict = {
   "disk.tooltip_third_party_boot": "第三方開機碟 (含 Rufus/PE/ISO 結構，全新製作需格式化)",
   "log.title": "日誌中心",
   "log.live": "即時",
-  "log.search_placeholder": "搜尋日誌關鍵字...",
+  "log.search_placeholder": "搜尋日誌記錄...",
   "log.empty": "暫無日誌記錄",
   "log.auto_scroll": "自動滾動到底部",
   "log.copy": "複製",

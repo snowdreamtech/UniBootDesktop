@@ -107,7 +107,7 @@ export const zhCn: TranslationDict = {
   "disk.tooltip_third_party_boot": "第三方引导盘 (含 Rufus/PE/ISO 结构，全新制作需格式化)",
   "log.title": "日志中心",
   "log.live": "实时",
-  "log.search_placeholder": "搜索日志关键词...",
+  "log.search_placeholder": "搜索日志记录...",
   "log.empty": "暂无日志记录",
   "log.auto_scroll": "自动滚动到底部",
   "log.copy": "复制",
