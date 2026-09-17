@@ -115,6 +115,7 @@ export const svSe: TranslationDict = {
   "log.clear": "Clear",
   "log.copied_toast": "Log content copied to clipboard!",
   "log.exported_toast": "Log exported to file successfully!",
+  "log.exported_path_toast": "Log successfully exported to file: {path}",
   "log.level_all": "ALL",
   "log.level_info": "INFO",
   "log.level_warn": "WARN",

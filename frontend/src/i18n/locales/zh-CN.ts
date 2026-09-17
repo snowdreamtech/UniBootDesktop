@@ -115,6 +115,7 @@ export const zhCn: TranslationDict = {
   "log.clear": "清空",
   "log.copied_toast": "日志内容已成功复制到剪贴板！",
   "log.exported_toast": "日志已成功导出到文件！",
+  "log.exported_path_toast": "日志已成功导出至文件：{path}",
   "log.level_all": "全部",
   "log.level_info": "信息",
   "log.level_warn": "警告",

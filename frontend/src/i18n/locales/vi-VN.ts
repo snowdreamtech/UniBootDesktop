@@ -115,6 +115,7 @@ export const viVn: TranslationDict = {
   "log.clear": "Clear",
   "log.copied_toast": "Log content copied to clipboard!",
   "log.exported_toast": "Log exported to file successfully!",
+  "log.exported_path_toast": "Log successfully exported to file: {path}",
   "log.level_all": "TẤT CẢ",
   "log.level_info": "THÔNG TIN",
   "log.level_warn": "CẢNH BÁO",

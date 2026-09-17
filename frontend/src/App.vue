@@ -680,7 +680,7 @@ async function handleExportEmbeddedLogs() {
     try {
       const filePath = await (window.go.main.App as any).ExportLogs(text);
       if (filePath) {
-        showToast(t('log.exported_toast'), 'success');
+        showToast(t('log.exported_path_toast', { path: filePath }), 'success');
       }
     } catch (e) {
       console.error('Failed to export logs:', e);
