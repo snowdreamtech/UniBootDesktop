@@ -99,6 +99,9 @@ export interface TranslationDict {
   "disk.tag_hdd": string;
   "disk.tag_key": string;
   "disk.tag_cdrom": string;
+  "disk.tooltip_uniboot_hybrid": string;
+  "disk.tooltip_uniboot_cloud": string;
+  "disk.tooltip_third_party_boot": string;
   "safe.title_cloud": string;
   "safe.desc_cloud": string;
   "safe.title_hybrid": string;

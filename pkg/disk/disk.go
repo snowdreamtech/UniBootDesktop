@@ -101,6 +101,7 @@ type DiskInfo struct {
 	ProtocolCode      string `json:"protocolCode"`      // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
 	IsRealVentoy      bool   `json:"isRealVentoy"`      // True ONLY if drive contains Ventoy MBR Sector 0 signature
 	IsModeB           bool   `json:"isModeB"`           // True if drive is formatted in Mode B (iPXE ESP Cloud Pure)
+	IsGenericBoot     bool   `json:"isGenericBoot"`     // True if drive contains generic 3rd-party bootloader (Rufus/PE/ISO)
 	MountPoint        string `json:"mountPoint"`        // Mount point or volume path (e.g. /Volumes/UNTITLED, E:\)
 }
 
@@ -182,19 +183,22 @@ func InferControllerVendor(vendorID string, productID string, vendor string) str
 	return "Standard Controller"
 }
 
-// DetectBootStatus evaluates the boot status text based on partition scheme, volume label, and Ventoy/Mode B flags.
-func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isModeB bool) string {
+// DetectBootStatus evaluates the boot status text based on partition scheme, volume label, Ventoy/Mode B, and generic boot flags.
+func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isModeB bool, isGenericBoot bool) string {
 	if isRealVentoy {
-		return "Ventoy (Ventoy 混合引导盘)"
+		return "Ventoy / UniBoot (混合模式)"
 	}
 	if isModeB {
 		return "UniBoot (1秒极速云引导盘)"
 	}
+	if isGenericBoot {
+		return "第三方引导盘 (Rufus / PE / ISO)"
+	}
 	if strings.Contains(strings.ToUpper(partitionScheme), "GPT") {
-		return "GPT / EFI 标准系统引导盘"
+		return "GPT 数据盘"
 	}
 	if strings.Contains(strings.ToUpper(partitionScheme), "MBR") {
-		return "MBR 主引导记录盘"
+		return "MBR 数据盘"
 	}
 	return "数据存储盘 (未检测到引导包)"
 }
@@ -292,53 +296,81 @@ func HasUniBootCloudFiles(mountPoint string) bool {
 }
 
 // IsVentoyDisk determines if a target disk device path or mount path is physically a Ventoy drive.
-// Strictly checks MBR sector signatures and core ventoy engine files. NEVER relies on volume names alone.
+// Strictly checks MBR sector signatures, core ventoy engine files, and VTOYEFI/UNIBOOTEFI partition labels.
 func IsVentoyDisk(targetDisk string) bool {
 	if targetDisk == "" {
 		return false
 	}
 
-	// 1. Physical MBR Sector 0 signature check (Fast 0.01ms check)
-	if CheckVentoyMbrSignature(targetDisk) {
-		return true
-	}
-
-	// 2. Direct mount directory check if targetDisk is already a mount point
+	// 1. Direct mount directory check if targetDisk is already a mount point
 	if HasVentoyEngineFiles(targetDisk) {
 		return true
 	}
 
-	// 3. Platform-specific target partition inspection with Fast Short-Circuit
+	// 2. Physical MBR Sector 0 signature check (Fast check when root/sudo permitted)
+	if CheckVentoyMbrSignature(targetDisk) {
+		return true
+	}
+
+	// 3. Platform-specific target partition inspection with label and metadata checks
 	if runtime.GOOS == "darwin" {
 		diskNode := filepath.Base(targetDisk)
 		if strings.HasPrefix(diskNode, "disk") {
-			// Single partition short-circuit: Ventoy requires dual partitions (Partition 1 Data + Partition 2 VTOYEFI ESP).
-			// If Partition 2 (diskXs2) does not exist, it's a 1-partition drive -> Short-circuit false in 0.01ms!
-			if !strings.Contains(diskNode, "s") {
-				p2 := diskNode + "s2"
-				if err := exec.Command("diskutil", "info", p2).Run(); err != nil {
-					return false
+			baseDisk := diskNode
+			if idx := strings.Index(diskNode, "s"); idx != -1 {
+				baseDisk = diskNode[:idx]
+			}
+
+			p1 := baseDisk + "s1"
+			p2 := baseDisk + "s2"
+
+			// Inspect Partition 2 (VTOYEFI / UNIBOOTEFI ESP Partition)
+			outP2, errP2 := exec.Command("diskutil", "info", "-plist", p2).Output()
+			if errP2 == nil {
+				strP2 := string(outP2)
+				volNameP2 := strings.ToUpper(extractPlistValue(strP2, "VolumeName"))
+				mountP2 := extractPlistValue(strP2, "MountPoint")
+
+				if strings.Contains(volNameP2, "VTOYEFI") || strings.Contains(volNameP2, "UNIBOOTEFI") {
+					return true
+				}
+				if mountP2 != "" && HasVentoyEngineFiles(mountP2) {
+					return true
 				}
 			}
-			p1 := diskNode
-			p2 := diskNode
-			if !strings.Contains(diskNode, "s") {
-				p1 = diskNode + "s1"
-				p2 = diskNode + "s2"
-			}
-			for _, p := range []string{p1, p2} {
-				out, err := exec.Command("diskutil", "info", "-plist", p).Output()
-				if err == nil {
-					mountPoint := extractPlistValue(string(out), "MountPoint")
-					if HasVentoyEngineFiles(mountPoint) {
-						return true
-					}
+
+			// Inspect Partition 1 (Ventoy / UniBoot Data Partition)
+			outP1, errP1 := exec.Command("diskutil", "info", "-plist", p1).Output()
+			if errP1 == nil {
+				strP1 := string(outP1)
+				volNameP1 := strings.ToUpper(extractPlistValue(strP1, "VolumeName"))
+				mountP1 := extractPlistValue(strP1, "MountPoint")
+
+				if mountP1 != "" && HasVentoyEngineFiles(mountP1) {
+					return true
+				}
+
+				if (strings.Contains(volNameP1, "VENTOY") || strings.Contains(volNameP1, "UNIBOOT")) && errP2 == nil {
+					return true
 				}
 			}
 		}
-	} else {
-		if HasVentoyEngineFiles(targetDisk) {
-			return true
+	} else if runtime.GOOS == "linux" {
+		out, err := exec.Command("lsblk", "-o", "NAME,LABEL", "-J", targetDisk).Output()
+		if err == nil {
+			upperOut := strings.ToUpper(string(out))
+			if strings.Contains(upperOut, "VTOYEFI") || strings.Contains(upperOut, "UNIBOOTEFI") {
+				return true
+			}
+		}
+	} else if runtime.GOOS == "windows" {
+		out, err := exec.Command("powershell", "-NoProfile", "-Command",
+			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber | Get-Volume | Select-Object -ExpandProperty FileSystemLabel", filepath.Base(targetDisk))).Output()
+		if err == nil {
+			upperOut := strings.ToUpper(string(out))
+			if strings.Contains(upperOut, "VTOYEFI") || strings.Contains(upperOut, "UNIBOOTEFI") {
+				return true
+			}
 		}
 	}
 
@@ -391,6 +423,66 @@ func IsRealVentoyDisk(targetDisk string) bool {
 		return false
 	}
 	return IsVentoyDisk(targetDisk)
+}
+
+// HasGenericBootFiles verifies physical presence of generic 3rd-party bootloader files
+// (e.g. Rufus, UltraISO, PE, BalenaEtcher, WinToUSB, ISO9660).
+func HasGenericBootFiles(mountPoint string) bool {
+	if mountPoint == "" || IsEmptyDirectory(mountPoint) {
+		return false
+	}
+	bootPaths := []string{
+		filepath.Join(mountPoint, "EFI", "BOOT", "BOOTX64.EFI"),
+		filepath.Join(mountPoint, "EFI", "BOOT", "BOOTIA32.EFI"),
+		filepath.Join(mountPoint, "EFI", "BOOT", "BOOTARM.EFI"),
+		filepath.Join(mountPoint, "EFI", "BOOT", "BOOTAA64.EFI"),
+		filepath.Join(mountPoint, "sources", "boot.wim"),
+		filepath.Join(mountPoint, "bootmgr"),
+		filepath.Join(mountPoint, "boot", "bcd"),
+		filepath.Join(mountPoint, "boot", "grub", "grub.cfg"),
+		filepath.Join(mountPoint, "isolinux", "isolinux.bin"),
+		filepath.Join(mountPoint, "syslinux.cfg"),
+	}
+	for _, p := range bootPaths {
+		if _, err := os.Stat(p); err == nil {
+			return true
+		}
+	}
+	return false
+}
+
+// IsGenericBootDisk checks if a target disk is a 3rd-party boot disk (Rufus, PE, ISO) that is NOT a Ventoy or Mode B drive.
+func IsGenericBootDisk(targetDisk string) bool {
+	if targetDisk == "" {
+		return false
+	}
+	if IsRealVentoyDisk(targetDisk) || IsModeBDisk(targetDisk) {
+		return false
+	}
+
+	if HasGenericBootFiles(targetDisk) {
+		return true
+	}
+
+	if runtime.GOOS == "darwin" {
+		diskNode := filepath.Base(targetDisk)
+		if strings.HasPrefix(diskNode, "disk") {
+			partitions := []string{diskNode}
+			if !strings.Contains(diskNode, "s") {
+				partitions = []string{diskNode + "s1", diskNode + "s2"}
+			}
+			for _, p := range partitions {
+				out, err := exec.Command("diskutil", "info", "-plist", p).Output()
+				if err == nil {
+					mountPoint := extractPlistValue(string(out), "MountPoint")
+					if HasGenericBootFiles(mountPoint) {
+						return true
+					}
+				}
+			}
+		}
+	}
+	return false
 }
 
 // FormatBytes formats byte counts into human-readable strings using 1024 base (e.g. 29.80 GB).
@@ -854,7 +946,12 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			if parentInfo.UsbSpeed != "" {
 				usbSpeed = parentInfo.UsbSpeed
 			}
-			if parentInfo.Model != "" && parentInfo.Model != "USB Flash Drive" && parentInfo.Model != "Disk 2.0" {
+			modelUpper := strings.ToUpper(parentInfo.Model)
+			if parentInfo.Model != "" &&
+				!strings.Contains(modelUpper, "COMPOSITE") &&
+				!strings.Contains(modelUpper, "MASS STORAGE") &&
+				parentInfo.Model != "USB Flash Drive" &&
+				parentInfo.Model != "Disk 2.0" {
 				displayName = fmt.Sprintf("%s (%s)", parentInfo.Model, volName)
 			}
 			serialNum = parentInfo.SerialNumber
@@ -887,7 +984,8 @@ func getDarwinDisks() ([]DiskInfo, error) {
 
 		isRealVentoy := IsRealVentoyDisk(devNode)
 		isModeB := IsModeBDisk(devNode)
-		bootStatusStr := DetectBootStatus(volName, partitionScheme, isRealVentoy, isModeB)
+		isGenericBoot := IsGenericBootDisk(devNode)
+		bootStatusStr := DetectBootStatus(volName, partitionScheme, isRealVentoy, isModeB, isGenericBoot)
 		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
 
 		disks = append(disks, DiskInfo{
@@ -919,6 +1017,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      isRealVentoy,
 			IsModeB:           isModeB,
+			IsGenericBoot:     isGenericBoot,
 			MountPoint:        volPath,
 		})
 	}
@@ -1101,12 +1200,13 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      "500 mA",
 			SectorSize:        "512 Bytes (512n/512e)",
 			TransportProtocol: "BOT (Bulk-Only Transport)",
-			BootStatus:        DetectBootStatus(label, partitionScheme, IsRealVentoyDisk(mountPath), IsModeBDisk(mountPath)),
+			BootStatus:        DetectBootStatus(label, partitionScheme, IsRealVentoyDisk(mountPath), IsModeBDisk(mountPath), IsGenericBootDisk(mountPath)),
 			ControllerVendor:  InferControllerVendor("", "", vendor),
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      IsRealVentoyDisk(mountPath),
 			IsModeB:           IsModeBDisk(mountPath),
+			IsGenericBoot:     IsGenericBootDisk(mountPath),
 			MountPoint:        mountPath,
 		})
 	}
@@ -1184,12 +1284,13 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      "500 mA",
 			SectorSize:        "512 Bytes (512n/512e)",
 			TransportProtocol: "BOT (Bulk-Only Transport)",
-			BootStatus:        DetectBootStatus(displayName, "GPT / MBR", IsRealVentoyDisk(driveLetter), IsModeBDisk(driveLetter)),
+			BootStatus:        DetectBootStatus(displayName, "GPT / MBR", IsRealVentoyDisk(driveLetter), IsModeBDisk(driveLetter), IsGenericBootDisk(driveLetter)),
 			ControllerVendor:  InferControllerVendor("", "", "Generic"),
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      IsRealVentoyDisk(driveLetter),
 			IsModeB:           IsModeBDisk(driveLetter),
+			IsGenericBoot:     IsGenericBootDisk(driveLetter),
 			MountPoint:        driveLetter,
 		})
 	}

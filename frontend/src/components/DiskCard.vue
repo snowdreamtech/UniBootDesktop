@@ -129,7 +129,7 @@
     </div>
 
     <div class="disk-tags">
-      <span class="disk-badge" :class="diskType">{{ diskTagLabel }}</span>
+      <span class="disk-badge" :class="diskType" :title="bootTooltip">{{ diskTagLabel }}</span>
       <button 
         class="btn-inspect" 
         :title="t('disk.hw_inspect')" 
@@ -170,6 +170,7 @@ interface DiskInfo {
   isVentoy?: boolean;
   isRealVentoy?: boolean;
   isModeB?: boolean;
+  isGenericBoot?: boolean;
 }
 
 const props = withDefaults(defineProps<{
@@ -198,7 +199,8 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
                    controllerUpper.includes('CARD') || controllerUpper.includes('READER') || controllerUpper.includes('读卡器') || controllerUpper.includes('CHIPSBANK') || controllerUpper.includes('CHIPSBRAND') ||
                    vidUpper.includes('0X1E3D') || vidUpper.includes('0X0BDA') || vidUpper.includes('0X05E3');
 
-  if (props.disk.isRealVentoy || props.disk.isModeB) {
+  const isVentoyName = nameUpper.includes('VENTOY') || nameUpper.includes('UNIBOOT');
+  if (props.disk.isRealVentoy || props.disk.isModeB || props.disk.isGenericBoot || props.disk.isVentoy || isVentoyName) {
     return 'boot';
   }
   if (isReader) {
@@ -235,6 +237,19 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
     return 'usb2';
   }
   return 'usb';
+});
+
+const bootTooltip = computed(() => {
+  if (diskType.value === 'boot') {
+    if (props.disk.isRealVentoy) {
+      return t('disk.tooltip_uniboot_hybrid');
+    }
+    if (props.disk.isModeB) {
+      return t('disk.tooltip_uniboot_cloud');
+    }
+    return t('disk.tooltip_third_party_boot');
+  }
+  return '';
 });
 
 const diskTagLabel = computed(() => {
