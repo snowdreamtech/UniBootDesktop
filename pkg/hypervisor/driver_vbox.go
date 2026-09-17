@@ -108,6 +108,7 @@ func (d *VirtualBoxDriver) Launch(ctx context.Context, diskPath string) error {
 	if targetPath == "" {
 		targetPath = diskPath
 	}
+	unmountTargetDisk(targetPath)
 	ensureDiskPermissions(targetPath)
 
 	vboxManage, _ := exec.LookPath("VBoxManage")

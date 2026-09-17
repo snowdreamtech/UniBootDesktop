@@ -91,11 +91,11 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string) error {
 
 	logger.Info("Executing UTM preview test instance", "disk", diskPath, "utmPath", status.Path)
 
-	// Ensure disk permissions on macOS
 	targetPath := ResolveRawDiskDevice(diskPath)
 	if targetPath == "" {
 		targetPath = diskPath
 	}
+	unmountTargetDisk(targetPath)
 	ensureDiskPermissions(targetPath)
 
 	if path, err := exec.LookPath("utmctl"); err == nil {

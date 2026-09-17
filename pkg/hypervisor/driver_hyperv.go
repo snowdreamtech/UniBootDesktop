@@ -96,6 +96,13 @@ func (d *HyperVDriver) Launch(ctx context.Context, diskPath string) error {
 
 	logger.Info("Executing Hyper-V preview simulation test", "disk", diskPath, "path", status.Path)
 
+	targetPath := ResolveRawDiskDevice(diskPath)
+	if targetPath == "" {
+		targetPath = diskPath
+	}
+	unmountTargetDisk(targetPath)
+	ensureDiskPermissions(targetPath)
+
 	cmd := exec.Command(status.Path)
 	if err := cmd.Start(); err != nil {
 		return fmt.Errorf("failed to launch Hyper-V connection tool: %w", err)

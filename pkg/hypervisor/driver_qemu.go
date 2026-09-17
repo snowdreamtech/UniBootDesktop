@@ -250,20 +250,7 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string) error {
 	}
 	logger.Info("Executing QEMU preview simulation test", "disk", targetPath, "qemuPath", status.Path)
 
-	if runtime.GOOS == "darwin" {
-		diskNode := strings.TrimPrefix(targetPath, "/dev/rdisk")
-		diskNode = strings.TrimPrefix(diskNode, "/dev/disk")
-		if !strings.HasPrefix(diskNode, "disk") {
-			diskNode = "disk" + diskNode
-		}
-		unmountCmd := exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode))
-		_ = unmountCmd.Run()
-		time.Sleep(300 * time.Millisecond)
-	} else if runtime.GOOS == "linux" {
-		unmountCmd := exec.Command("udisksctl", "unmount", "-b", diskPath)
-		_ = unmountCmd.Run()
-	}
-
+	unmountTargetDisk(targetPath)
 	ensureDiskPermissions(targetPath)
 
 	ovmfFw := DetectOVMF()

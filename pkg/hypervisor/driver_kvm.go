@@ -119,6 +119,7 @@ func (d *KVMDriver) Launch(ctx context.Context, diskPath string) error {
 	if targetPath == "" {
 		targetPath = diskPath
 	}
+	unmountTargetDisk(targetPath)
 	ensureDiskPermissions(targetPath)
 
 	cmd := exec.Command(status.Path)

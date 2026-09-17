@@ -7,7 +7,11 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/exec"
+	"runtime"
+	"strings"
 	"sync"
+	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 )
@@ -166,4 +170,32 @@ func (m *Manager) LaunchSpecified(ctx context.Context, targetDisk string, hType 
 	}
 
 	return fmt.Errorf("unknown hypervisor type '%s'", hType)
+}
+
+// unmountTargetDisk safely unmounts disk partitions across macOS, Linux, and Windows before hypervisor launch.
+func unmountTargetDisk(targetPath string) {
+	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" {
+		return
+	}
+	logger.Info("Safely unmounting target disk partitions before VM launch", "targetPath", targetPath)
+
+	if runtime.GOOS == "darwin" {
+		diskNode := strings.TrimPrefix(targetPath, "/dev/rdisk")
+		diskNode = strings.TrimPrefix(diskNode, "/dev/disk")
+		if !strings.HasPrefix(diskNode, "disk") {
+			diskNode = "disk" + diskNode
+		}
+		cmd := exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode))
+		_ = cmd.Run()
+		time.Sleep(300 * time.Millisecond)
+	} else if runtime.GOOS == "linux" {
+		cmd := exec.Command("udisksctl", "unmount", "-b", targetPath)
+		if err := cmd.Run(); err != nil {
+			_ = exec.Command("umount", targetPath).Run()
+		}
+		time.Sleep(200 * time.Millisecond)
+	} else if runtime.GOOS == "windows" {
+		psCmd := fmt.Sprintf(`Get-Volume | Where-DriveLetter | Where-Object { $_.Path -like "*%s*" } | Dismount-Volume -Confirm:$false`, targetPath)
+		_ = exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd).Run()
+	}
 }
