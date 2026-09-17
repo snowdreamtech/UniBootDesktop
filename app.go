@@ -6,7 +6,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"runtime"
+	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/env"
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
