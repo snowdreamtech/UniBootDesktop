@@ -378,4 +378,10 @@ export interface TranslationDict {
   "diag.action_reformat_desc": string;
   "diag.action_remount_desc": string;
   "diag.action_retry_desc": string;
+  "dialog.exportTitle": string;
+  "dialog.logFilesFilter": string;
+  "dialog.textFilesFilter": string;
+  "dialog.allFilesFilter": string;
+  "dialog.selectIsoTitle": string;
+  "dialog.ventoyFilter": string;
 }

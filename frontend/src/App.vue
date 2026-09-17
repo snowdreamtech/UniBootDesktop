@@ -682,7 +682,7 @@ async function handleExportEmbeddedLogs() {
     .join('\n');
 
   try {
-    const filePath = await (ExportLogs as any)(
+    const filePath = await ExportLogs(
       text,
       t('dialog.exportTitle'),
       t('dialog.logFilesFilter'),
