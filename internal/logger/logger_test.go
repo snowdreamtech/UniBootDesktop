@@ -150,9 +150,12 @@ func TestSanitizeArgs(t *testing.T) {
 		"key", "my_api_key_value",
 		"apiKey", "ak_99999",
 		"private_key", "pem_secret",
+		"session_id", "sess_999",
+		"otp", "123456",
 		"url", "http://admin:pass123@proxy.example.com",
 		"header", "Bearer eyJhbGciOi...",
 		"query", "api_key=secret_val&param=1",
+		"pem", "-----BEGIN RSA PRIVATE KEY-----\nMIIEogIBAAKCAQ...\n-----END RSA PRIVATE KEY-----",
 	}
 	clean := sanitizeArgs(args...)
 
@@ -168,10 +171,22 @@ func TestSanitizeArgs(t *testing.T) {
 	assert.Equal(t, "******", clean[9])
 	assert.Equal(t, "private_key", clean[10])
 	assert.Equal(t, "******", clean[11])
-	assert.Equal(t, "url", clean[12])
-	assert.Equal(t, "http://admin:******@proxy.example.com", clean[13])
-	assert.Equal(t, "header", clean[14])
-	assert.Equal(t, "Bearer ******", clean[15])
-	assert.Equal(t, "query", clean[16])
-	assert.Equal(t, "api_key=******&param=1", clean[17])
+	assert.Equal(t, "session_id", clean[12])
+	assert.Equal(t, "******", clean[13])
+	assert.Equal(t, "otp", clean[14])
+	assert.Equal(t, "******", clean[15])
+	assert.Equal(t, "url", clean[16])
+	assert.Equal(t, "http://admin:******@proxy.example.com", clean[17])
+	assert.Equal(t, "header", clean[18])
+	assert.Equal(t, "Bearer ******", clean[19])
+	assert.Equal(t, "query", clean[20])
+	assert.Equal(t, "api_key=******&param=1", clean[21])
+	assert.Equal(t, "pem", clean[22])
+	assert.Equal(t, "******", clean[23])
+}
+
+func TestSanitizeString_PEMBlock(t *testing.T) {
+	rawPem := "Here is my key: -----BEGIN PRIVATE KEY-----\nSecretDataHere\n-----END PRIVATE KEY-----"
+	cleaned := sanitizeString(rawPem)
+	assert.Equal(t, "Here is my key: [REDACTED PRIVATE KEY]", cleaned)
 }

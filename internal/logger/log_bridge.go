@@ -35,7 +35,8 @@ var (
 var (
 	urlCredRegex    = regexp.MustCompile(`(?i)(https?://[^:]+:)[^@]+(@)`)
 	authHeaderRegex = regexp.MustCompile(`(?i)(bearer|basic)\s+\S+`)
-	kvPairRegex     = regexp.MustCompile(`(?i)\b(password|passwd|pass|pwd|secret|token|apikey|api_key|access_key|secret_key|private_key|key|auth|credential|credentials)=[^&\s,;]+`)
+	kvPairRegex     = regexp.MustCompile(`(?i)\b(password|passwd|pass|pwd|pin|code|secret|token|apikey|api_key|access_key|secret_key|private_key|key|auth|credential|credentials|session|cookie|sig|signature)=[^&\s,;]+`)
+	pemKeyRegex     = regexp.MustCompile(`(?s)-----BEGIN [A-Z ]*PRIVATE KEY-----.*?-----END [A-Z ]*PRIVATE KEY-----`)
 )
 
 // SetWailsContext registers the Wails runtime context for broadcasting real-time logs to the UI.
@@ -52,7 +53,10 @@ func isSensitiveKey(keyStr string) bool {
 		return false
 	}
 	// 1. Exact match for short keywords
-	exactKeys := []string{"key", "pass", "pwd", "cred", "creds", "sig", "auth"}
+	exactKeys := []string{
+		"key", "pass", "pwd", "cred", "creds", "sig", "auth",
+		"pin", "code", "token", "secret", "cookie", "sid", "cert", "pem",
+	}
 	for _, e := range exactKeys {
 		if k == e {
 			return true
@@ -60,9 +64,12 @@ func isSensitiveKey(keyStr string) bool {
 	}
 	// 2. Substring match for explicit security term keywords
 	substringKeys := []string{
-		"password", "passwd", "secret", "token", "credential", "authorization",
+		"password", "passwd", "passcode", "secret", "token", "credential", "authorization",
 		"privatekey", "apikey", "accesskey", "secretkey", "publickey", "authkey",
-		"clientkey", "userkey", "bearer", "signature",
+		"clientkey", "userkey", "sshkey", "gpgkey", "masterkey", "appsecret", "clientsecret",
+		"session", "sessionid", "cookie", "accesstoken", "refreshtoken", "idtoken",
+		"bearer", "signature", "certificate", "keystore", "passphrase", "proxyauth",
+		"proxypassword", "verificationcode", "otp", "2fa",
 	}
 	for _, s := range substringKeys {
 		if strings.Contains(k, s) {
@@ -77,6 +84,7 @@ func sanitizeString(str string) string {
 	if str == "" {
 		return str
 	}
+	str = pemKeyRegex.ReplaceAllString(str, "[REDACTED PRIVATE KEY]")
 	str = urlCredRegex.ReplaceAllString(str, "${1}******${2}")
 	str = authHeaderRegex.ReplaceAllString(str, "${1} ******")
 	str = kvPairRegex.ReplaceAllString(str, "${1}=******")
