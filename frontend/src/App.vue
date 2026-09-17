@@ -758,6 +758,7 @@ watch(isAboutOpen, (val) => {
 });
 
 watch(activeMode, (newMode) => {
+  deploySuccessBanner.value.visible = false;
   logUserAction('INFO', 'User switched deployment mode', newMode);
 });
 
@@ -766,6 +767,7 @@ watch(selectedFsType, (newFs) => {
 });
 
 watch(selectionMode, (newMode) => {
+  deploySuccessBanner.value.visible = false;
   logUserAction('INFO', 'User switched disk selection mode', newMode);
 });
 
@@ -1112,6 +1114,9 @@ async function handleEjectDisk(disk: DiskInfo) {
   try {
     if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
       await window.go.main.App.EjectDisk(disk.device);
+    }
+    if (deploySuccessBanner.value.targets.includes(disk.device)) {
+      deploySuccessBanner.value.visible = false;
     }
     showToast(t('disk.toast_ejected_success', { device: disk.device, name: disk.name || disk.device }), 'success');
     await refreshDisks();
