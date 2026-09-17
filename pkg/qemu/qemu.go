@@ -15,6 +15,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 )
 
@@ -101,13 +102,14 @@ func DetectOVMF() string {
 		"/usr/share/edk2-ovmf/x64/OVMF_CODE.fd",
 		// Windows
 		`C:\Program Files\qemu\share\edk2-x86_64-code.fd`,
-		`C:\Program Files (x86)\qemu\share\edk2-x86_64-code.fd`,
 	}
-	for _, p := range searchPaths {
-		if info, err := os.Stat(p); err == nil && !info.IsDir() {
-			return p
+
+	for _, path := range searchPaths {
+		if info, err := os.Stat(path); err == nil && !info.IsDir() {
+			return path
 		}
 	}
+
 	return ""
 }
 
@@ -220,11 +222,13 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 
 	// Dry-run mode for tests or simulation
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(diskPath, "dummy") || strings.HasPrefix(diskPath, "test") {
+		logger.Info("Dry-run QEMU simulation test executed", "disk", diskPath)
 		return nil
 	}
 
 	status := Detect()
 	if !status.Installed {
+		logger.Error("QEMU simulator not detected on host system")
 		return fmt.Errorf("QEMU simulator not detected! Please install QEMU first (e.g. via brew install qemu).")
 	}
 
@@ -233,6 +237,7 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 	if targetPath == "" {
 		targetPath = diskPath
 	}
+	logger.Info("Executing QEMU preview simulation test", "disk", targetPath, "qemuPath", status.Path)
 
 	if runtime.GOOS == "darwin" {
 		diskNode := strings.TrimPrefix(targetPath, "/dev/rdisk")

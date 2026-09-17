@@ -50,7 +50,7 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	logger.SetWailsContext(ctx)
-	logger.Info("UniGoDesktop Wails GUI runtime started successfully")
+	logger.Info(fmt.Sprintf("UniGoDesktop Wails GUI runtime started successfully (%s/%s)", runtime.GOOS, runtime.GOARCH))
 	disk.StartHotplugMonitor(ctx, func() {
 		logger.Info("Removable disk change detected, refreshing drive list")
 		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
@@ -86,7 +86,6 @@ func (a *App) EjectDisk(targetDisk string) error {
 }
 
 // SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
-// SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
 func (a *App) SelectIsoFiles(title string, ventoyFilter string, allFilter string) ([]string, error) {
 	if title == "" {
 		title = "Select System Image Files (*.iso, *.wim, *.img, *.vhd, etc.)"
@@ -98,7 +97,8 @@ func (a *App) SelectIsoFiles(title string, ventoyFilter string, allFilter string
 		allFilter = "All Files (*.*)"
 	}
 
-	return wailsRuntime.OpenMultipleFilesDialog(a.ctx, wailsRuntime.OpenDialogOptions{
+	logger.Info("Opening native system image file picker dialog")
+	paths, err := wailsRuntime.OpenMultipleFilesDialog(a.ctx, wailsRuntime.OpenDialogOptions{
 		Title: title,
 		Filters: []wailsRuntime.FileFilter{
 			{
@@ -111,6 +111,14 @@ func (a *App) SelectIsoFiles(title string, ventoyFilter string, allFilter string
 			},
 		},
 	})
+	if err != nil {
+		logger.Error("Failed to open system image file picker", "error", err)
+		return nil, err
+	}
+	if len(paths) > 0 {
+		logger.Info(fmt.Sprintf("Selected %d system image file(s)", len(paths)))
+	}
+	return paths, nil
 }
 
 // ExportLogs opens a native save file dialog to export log content to a file (.log or .txt).
@@ -148,19 +156,23 @@ func (a *App) ExportLogs(content string, title string, logFilter string, textFil
 		},
 	})
 	if err != nil {
+		logger.Error("Failed to open save file dialog for log export", "error", err)
 		return "", fmt.Errorf("open save file dialog: %w", err)
 	}
 	if filePath == "" {
 		return "", nil // User cancelled
 	}
 	if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
+		logger.Error("Failed to write log export file", "path", filePath, "error", err)
 		return "", fmt.Errorf("write log file: %w", err)
 	}
+	logger.Info("Logs exported successfully", "path", filePath)
 	return filePath, nil
 }
 
 // DeployHybridMode triggers Hybrid Mode (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system and optional ISO files.
 func (a *App) DeployHybridMode(targetDisk string, fsType string, isoPaths []string, expected disk.DiskInfo) (*installer.DeployResult, error) {
+	logger.Info("User confirmed Hybrid Mode boot disk creation", "disk", targetDisk, "fs", fsType, "isoCount", len(isoPaths))
 	cfg, _ := config.Load()
 	ventoyPath := ""
 	if cfg != nil {
@@ -183,6 +195,7 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 
 // DeployHybridModeBatch triggers Hybrid Mode deployment for multiple target disk drives with customizable file system and optional ISO files.
 func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPaths []string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
+	logger.Info("User confirmed batch Hybrid Mode boot disk creation", "diskCount", len(targetDisks), "fs", fsType)
 	cfg, _ := config.Load()
 	ventoyPath := ""
 	if cfg != nil {
@@ -196,6 +209,7 @@ func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPath
 
 // DeployCloudMode triggers Cloud Mode (Cloud Pure Mode) with customizable file system.
 func (a *App) DeployCloudMode(targetDisk string, fsType string, expected disk.DiskInfo) (*installer.DeployResult, error) {
+	logger.Info("User confirmed Cloud Mode boot disk creation", "disk", targetDisk, "fs", fsType)
 	res, err := installer.DeployCloudModeWithExpectedDisk(a.ctx, targetDisk, fsType, expected)
 	if err != nil && res != nil {
 		return res, nil
@@ -205,6 +219,7 @@ func (a *App) DeployCloudMode(targetDisk string, fsType string, expected disk.Di
 
 // DeployCloudModeBatch triggers Cloud Mode deployment for multiple target disk drives with customizable file system.
 func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
+	logger.Info("User confirmed batch Cloud Mode boot disk creation", "diskCount", len(targetDisks), "fs", fsType)
 	return installer.DeployCloudModeBatchWithExpectedDisks(a.ctx, targetDisks, fsType, expected)
 }
 
@@ -215,7 +230,14 @@ func (a *App) CheckQEMU() *qemu.QEMUStatus {
 
 // LaunchQEMU triggers a QEMU virtual machine test instance for the target disk drive.
 func (a *App) LaunchQEMU(targetDisk string) error {
-	return qemu.LaunchTest(a.ctx, targetDisk)
+	logger.Info("Requesting QEMU preview test launch", "disk", targetDisk)
+	err := qemu.LaunchTest(a.ctx, targetDisk)
+	if err != nil {
+		logger.Error("Failed to launch QEMU preview test", "disk", targetDisk, "error", err)
+		return err
+	}
+	logger.Info("QEMU preview test launched successfully", "disk", targetDisk)
+	return nil
 }
 
 // CheckUpdate returns GitHub release update metadata.
@@ -230,16 +252,24 @@ func (a *App) GetConfig() (*config.AppConfig, error) {
 
 // SaveConfig updates and saves application settings.
 func (a *App) SaveConfig(cfg *config.AppConfig) error {
+	logger.Info("Saving updated application settings")
 	if cfg == nil {
 		return config.GetDefaultConfig().Save()
 	}
 	if cfg.ProxyPassword != "" {
 		if err := config.SaveProxyPassword(cfg.ProxyPassword); err != nil {
+			logger.Error("Failed to save proxy password", "error", err)
 			return err
 		}
 		cfg.ProxyPassword = ""
 	}
-	return cfg.Save()
+	err := cfg.Save()
+	if err != nil {
+		logger.Error("Failed to save application config", "error", err)
+		return err
+	}
+	logger.Info("Application settings saved successfully")
+	return nil
 }
 
 // ClearProxyPassword removes the saved proxy password from the system credential store.
