@@ -946,13 +946,8 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			if parentInfo.UsbSpeed != "" {
 				usbSpeed = parentInfo.UsbSpeed
 			}
-			modelUpper := strings.ToUpper(parentInfo.Model)
-			if parentInfo.Model != "" &&
-				!strings.Contains(modelUpper, "COMPOSITE") &&
-				!strings.Contains(modelUpper, "MASS STORAGE") &&
-				parentInfo.Model != "USB Flash Drive" &&
-				parentInfo.Model != "Disk 2.0" {
-				displayName = fmt.Sprintf("%s (%s)", parentInfo.Model, volName)
+			if displayName == "" && parentInfo.Model != "" {
+				displayName = parentInfo.Model
 			}
 			serialNum = parentInfo.SerialNumber
 			vendorId = parentInfo.VendorId
