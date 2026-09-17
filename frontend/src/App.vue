@@ -1571,7 +1571,7 @@ async function checkQemu() {
     // Browser demo mode: Mock installed hypervisors (QEMU, UTM, VirtualBox)
     hypervisorList.value = [
       { type: 'qemu', name: 'QEMU', installed: true, path: '/usr/local/bin/qemu-system-x86_64', version: 'QEMU 8.2', priority: 1, canBootRaw: true },
-      { type: 'utm', name: 'UTM Virtual Machine', installed: true, path: '/Applications/UTM.app', version: 'UTM 4.4', priority: 2, canBootRaw: true },
+      { type: 'utm', name: 'UTM', installed: true, path: '/Applications/UTM.app', version: 'UTM 4.4', priority: 2, canBootRaw: true },
       { type: 'virtualbox', name: 'Oracle VM VirtualBox', installed: true, path: '/usr/local/bin/VBoxManage', version: 'VirtualBox 7.0', priority: 7, canBootRaw: true }
     ];
     selectedVMType.value = 'qemu';

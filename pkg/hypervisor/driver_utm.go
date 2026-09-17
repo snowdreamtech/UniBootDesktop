@@ -20,7 +20,7 @@ func (d *UTMDriver) Type() HypervisorType {
 }
 
 func (d *UTMDriver) Name() string {
-	return "UTM Virtual Machine"
+	return "UTM"
 }
 
 func (d *UTMDriver) Priority() int {
@@ -44,7 +44,7 @@ func (d *UTMDriver) Detect() *VMStatus {
 	if path, err := exec.LookPath("utmctl"); err == nil {
 		return &VMStatus{
 			Type:       TypeUTM,
-			Name:       "UTM Virtual Machine",
+			Name:       "UTM",
 			Installed:  true,
 			Path:       path,
 			Version:    "UTM CLI (utmctl)",
@@ -58,7 +58,7 @@ func (d *UTMDriver) Detect() *VMStatus {
 	if info, err := os.Stat(appPath); err == nil && info.IsDir() {
 		return &VMStatus{
 			Type:       TypeUTM,
-			Name:       "UTM Virtual Machine",
+			Name:       "UTM",
 			Installed:  true,
 			Path:       appPath,
 			Version:    "UTM App (/Applications/UTM.app)",
