@@ -52,6 +52,7 @@ func (a *App) startup(ctx context.Context) {
 	logger.SetWailsContext(ctx)
 	logger.Info("UniGoDesktop Wails GUI runtime started successfully")
 	disk.StartHotplugMonitor(ctx, func() {
+		logger.Info("Removable disk change detected, refreshing drive list")
 		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
 	})
 }
@@ -73,8 +74,15 @@ func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
 
 // EjectDisk safely unmounts and ejects the target removable storage disk.
 func (a *App) EjectDisk(targetDisk string) error {
+	logger.Info("Requesting safe ejection for disk", "disk", targetDisk)
 	disk.InvalidateDiskCache()
-	return disk.EjectDisk(targetDisk)
+	err := disk.EjectDisk(targetDisk)
+	if err != nil {
+		logger.Error("Failed to eject target disk", "disk", targetDisk, "error", err)
+		return err
+	}
+	logger.Info("Target disk safely ejected", "disk", targetDisk)
+	return nil
 }
 
 // SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
