@@ -135,8 +135,11 @@ func (d *VMwareDriver) Launch(ctx context.Context, diskPath string, bootMode str
 
 func launchVMwareVM(status *VMStatus, targetPath string, bootMode string) error {
 	tmpDir := filepath.Join(os.TempDir(), "uniboot_vmware")
+	_ = os.RemoveAll(tmpDir)
 	_ = os.MkdirAll(tmpDir, 0755)
-	vmdkPath := filepath.Join(tmpDir, "uniboot_raw.vmdk")
+
+	vmdkBase := filepath.Join(tmpDir, "uniboot_raw")
+	vmdkPath := vmdkBase + ".vmdk"
 	vmxPath := filepath.Join(tmpDir, "UniBootPreview.vmx")
 
 	fwSetting := "efi"
@@ -144,28 +147,51 @@ func launchVMwareVM(status *VMStatus, targetPath string, bootMode string) error 
 		fwSetting = "bios"
 	}
 
-	rawDiskContent := fmt.Sprintf(`# Disk DescriptorFile
+	// 1. On macOS, use official vmware-rawdiskCreator if available
+	rawCreator := "/Applications/VMware Fusion.app/Contents/Library/vmware-rawdiskCreator"
+	if runtime.GOOS == "darwin" {
+		if _, err := os.Stat(rawCreator); err == nil {
+			diskDev := targetPath
+			if strings.HasPrefix(diskDev, "/dev/rdisk") {
+				diskDev = strings.Replace(diskDev, "/dev/rdisk", "/dev/disk", 1)
+			}
+			if idx := strings.Index(diskDev, "s"); idx != -1 && strings.HasPrefix(diskDev, "/dev/disk") {
+				diskDev = diskDev[:idx]
+			}
+
+			logger.Info("Creating native VMware raw disk VMDK via vmware-rawdiskCreator", "diskDev", diskDev, "vmdkPath", vmdkPath)
+			cmd := exec.Command(rawCreator, "create", diskDev, "fullDevice", vmdkBase, "ide")
+			if err := cmd.Run(); err != nil {
+				logger.Warn("vmware-rawdiskCreator returned error, using fallback descriptor", "error", err)
+			}
+		}
+	}
+
+	// Fallback to manual descriptor if creator didn't generate file
+	if _, err := os.Stat(vmdkPath); err != nil {
+		rawDiskContent := fmt.Sprintf(`# Disk DescriptorFile
 version=1
 encoding="UTF-8"
 CID=fffffffe
 parentCID=ffffffff
-isNativeSnapshot="no"
 createType="fullDevice"
 
 # Extent description
 RW 20000000 FLAT "%s" 0
 
 # The Disk Data Base 
-DDB
-ddb.adapterType = "lsilogic"
+#DDB
+ddb.adapterType = "ide"
 ddb.geometry.cylinders = "1024"
 ddb.geometry.heads = "255"
 ddb.geometry.sectors = "63"
 ddb.longContentID = "1234567890"
-ddb.virtualHWVersion = "18"
+ddb.virtualHWVersion = "14"
 `, targetPath)
-	_ = os.WriteFile(vmdkPath, []byte(rawDiskContent), 0644)
+		_ = os.WriteFile(vmdkPath, []byte(rawDiskContent), 0644)
+	}
 
+	// 2. Generate clean VMX configuration
 	vmxContent := fmt.Sprintf(`.encoding = "UTF-8"
 config.version = "8"
 virtualHW.version = "18"
@@ -173,15 +199,14 @@ pciBridge0.present = "TRUE"
 mks.enable3d = "TRUE"
 memory = "2048"
 firmware = "%s"
-sata0.present = "TRUE"
-sata0:0.present = "TRUE"
-sata0:0.fileName = "%s"
-sata0:0.deviceType = "rawDisk"
+ide0:0.present = "TRUE"
+ide0:0.fileName = "uniboot_raw.vmdk"
 displayName = "UniBoot Boot Preview"
 guestOS = "other-64"
-`, fwSetting, vmdkPath)
+`, fwSetting)
 	_ = os.WriteFile(vmxPath, []byte(vmxContent), 0644)
 
+	// 3. Launch VMware Fusion
 	var cmd *exec.Cmd
 	if runtime.GOOS == "darwin" {
 		cmd = exec.Command("open", "-W", "-a", "VMware Fusion", vmxPath)

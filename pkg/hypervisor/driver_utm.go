@@ -89,8 +89,6 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 		return nil
 	}
 
-	logger.Info("Executing UTM preview test instance", "disk", diskPath, "utmPath", status.Path, "bootMode", bootMode)
-
 	targetPath := ResolveRawDiskDevice(diskPath)
 	if targetPath == "" {
 		targetPath = diskPath
@@ -98,16 +96,64 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	unmountTargetDisk(targetPath)
 	ensureDiskPermissions(targetPath)
 
-	if path, err := exec.LookPath("utmctl"); err == nil {
-		cmd := exec.Command(path, "list")
-		output, err := cmd.Output()
-		if err == nil && len(output) > 0 {
-			logger.Info("UTM CLI detected, listing UTM VMs", "output", string(output))
-		}
+	// If system has qemu-system-x86_64 / qemu-system-aarch64 installed, leverage QEMU backend directly
+	qemuDrv := &QEMUDriver{}
+	if qemuStatus := qemuDrv.Detect(); qemuStatus.Installed {
+		logger.Info("UTM selected, delegating execution to embedded/system QEMU engine", "disk", targetPath, "bootMode", bootMode)
+		return qemuDrv.Launch(ctx, diskPath, bootMode)
 	}
 
-	// Open UTM Application with raw disk parameter or bundle
-	cmd := exec.Command("open", "-W", "-a", "UTM")
+	// Fallback: Generate native .utm bundle with raw disk mapping and launch via UTM app
+	tmpDir := "/tmp/uniboot_utm"
+	_ = os.RemoveAll(tmpDir)
+	_ = os.MkdirAll(tmpDir, 0755)
+
+	utmBundle := "/tmp/uniboot_utm/UniBootPreview.utm"
+	_ = os.MkdirAll(utmBundle, 0755)
+
+	plistContent := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ConfigurationVersion</key>
+	<integer>4</integer>
+	<key>Information</key>
+	<dict>
+		<key>Icon</key>
+		<string>disk</string>
+		<key>Name</key>
+		<string>UniBoot Preview</string>
+	</dict>
+	<key>System</key>
+	<dict>
+		<key>Architecture</key>
+		<string>x86_64</string>
+		<key>CPUCount</key>
+		<integer>2</integer>
+		<key>MemorySize</key>
+		<integer>2048</integer>
+		<key>Target</key>
+		<string>q35</string>
+	</dict>
+	<key>Drives</key>
+	<array>
+		<dict>
+			<key>DriveType</key>
+			<string>Disk</string>
+			<key>Interface</key>
+			<string>USB</string>
+			<key>ImagePath</key>
+			<string>%s</string>
+		</dict>
+	</array>
+</dict>
+</plist>
+`, targetPath)
+
+	_ = os.WriteFile(utmBundle+"/config.plist", []byte(plistContent), 0644)
+
+	logger.Info("Opening UTM application with native raw disk bundle", "bundle", utmBundle, "targetPath", targetPath)
+	cmd := exec.Command("open", "-W", "-a", "UTM", utmBundle)
 	if err := cmd.Start(); err != nil {
 		return fmt.Errorf("failed to open UTM application: %w", err)
 	}
