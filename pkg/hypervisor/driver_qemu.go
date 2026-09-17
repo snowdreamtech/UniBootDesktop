@@ -233,6 +233,29 @@ func ensureDiskPermissions(targetPath string) {
 	}
 }
 
+// getOrCreateVarsFile finds or generates an EFI VARS file for QEMU dual pflash drives.
+func getOrCreateVarsFile() string {
+	varsCandidates := []string{
+		"/opt/local/share/qemu/edk2-i386-vars.fd",
+		"/opt/homebrew/share/qemu/edk2-i386-vars.fd",
+		"/usr/share/OVMF/OVMF_VARS.fd",
+		"/usr/share/ovmf/OVMF_VARS.fd",
+		"/usr/share/edk2/ovmf/OVMF_VARS.fd",
+		`C:\Program Files\qemu\share\edk2-i386-vars.fd`,
+	}
+	for _, p := range varsCandidates {
+		if info, err := os.Stat(p); err == nil && !info.IsDir() {
+			return p
+		}
+	}
+	tmpVars := filepath.Join(os.TempDir(), "uniboot_vars.fd")
+	if _, err := os.Stat(tmpVars); err != nil {
+		buf := make([]byte, 540*1024)
+		_ = os.WriteFile(tmpVars, buf, 0644)
+	}
+	return tmpVars
+}
+
 func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode string) error {
 	status := d.Detect()
 	if !status.Installed {
@@ -271,17 +294,17 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode strin
 		}
 	}
 
-	if bootMode == BootModeUEFI {
-		if ovmfFw == "" {
-			return fmt.Errorf("UEFI firmware (OVMF/edk2) not found on system! Please install edk2-ovmf or switch to BIOS mode.")
-		}
-		args = append(args, "-drive", fmt.Sprintf("if=pflash,format=raw,readonly=on,file=%s", ovmfFw))
-	} else if bootMode == BootModeBIOS {
+	if (bootMode == BootModeUEFI || bootMode == BootModeAuto) && ovmfFw != "" {
+		varsFw := getOrCreateVarsFile()
+		logger.Info("Booting QEMU in UEFI mode with dual pflash firmware", "codeFw", ovmfFw, "varsFw", varsFw)
+		args = append(args,
+			"-drive", fmt.Sprintf("if=pflash,format=raw,readonly=on,file=%s", ovmfFw),
+			"-drive", fmt.Sprintf("if=pflash,format=raw,file=%s", varsFw),
+		)
+	} else if bootMode == BootModeUEFI && ovmfFw == "" {
+		return fmt.Errorf("UEFI firmware (OVMF/edk2) not found on system! Please install edk2-ovmf or switch to BIOS mode.")
+	} else {
 		logger.Info("Booting QEMU in Legacy BIOS mode (SeaBIOS)")
-	} else { // Auto mode
-		if ovmfFw != "" {
-			args = append(args, "-drive", fmt.Sprintf("if=pflash,format=raw,readonly=on,file=%s", ovmfFw))
-		}
 	}
 
 	args = append(args, "-drive", fmt.Sprintf("file=%s,format=raw", targetPath))
