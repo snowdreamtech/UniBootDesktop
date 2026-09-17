@@ -17,7 +17,7 @@ type RecommendedAction string
 
 const (
 	ActionRetry    RecommendedAction = "retry"    // Retry deployment (temporary error, device intact)
-	ActionRemount  RecommendedAction = "remount"  // Remount volume / reconnect USB device
+	ActionRemount  RecommendedAction = "remount"  // Remount volume / reconnect disk device
 	ActionReformat RecommendedAction = "reformat" // Reformat partition table / file system
 )
 
@@ -44,7 +44,7 @@ type InstallDiagnostics struct {
 	ErrorCause        string            `json:"errorCause"`        // Detailed error cause message
 	IsFormatted       bool              `json:"isFormatted"`       // Indicates if target disk was formatted
 	WrittenFiles      []string          `json:"writtenFiles"`      // List of files written prior to failure
-	SafeToUnplug      bool              `json:"safeToUnplug"`      // Indicates if it is safe to unplug USB drive
+	SafeToUnplug      bool              `json:"safeToUnplug"`      // Indicates if it is safe to unplug disk drive
 	RecommendedAction RecommendedAction `json:"recommendedAction"` // Recommended next action ("retry", "remount", "reformat")
 	ReportSummary     string            `json:"reportSummary"`     // One-time formatted diagnostic text report
 }
@@ -219,7 +219,7 @@ func (t *DeployTracker) AddWrittenFiles(files []string) {
 	}
 }
 
-// SetSafeToUnplug updates whether the target USB drive can safely be unplugged.
+// SetSafeToUnplug updates whether the target disk drive can safely be unplugged.
 func (t *DeployTracker) SetSafeToUnplug(safe bool) {
 	t.mu.Lock()
 	defer t.mu.Unlock()

@@ -213,10 +213,10 @@ func ResolveRawDiskDevice(diskPath string) string {
 	return diskPath
 }
 
-// LaunchTest executes a non-blocking QEMU preview test instance on the target USB drive safely across macOS, Windows and Linux.
+// LaunchTest executes a non-blocking QEMU preview test instance on the target disk drive safely across macOS, Windows and Linux.
 func LaunchTest(ctx context.Context, diskPath string) error {
 	if diskPath == "" {
-		return fmt.Errorf("please select target USB drive first")
+		return fmt.Errorf("please select target disk drive first")
 	}
 
 	// Dry-run mode for tests or simulation

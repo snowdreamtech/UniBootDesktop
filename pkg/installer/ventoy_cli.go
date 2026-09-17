@@ -170,7 +170,7 @@ func extractVentoyVersion(text string) string {
 	return ""
 }
 
-// FormatDiskWithVentoyCli uses the verified official Ventoy CLI binary to format and partition a blank USB drive.
+// FormatDiskWithVentoyCli uses the verified official Ventoy CLI binary to format and partition a blank disk drive.
 func FormatDiskWithVentoyCli(ctx context.Context, ventoyPath string, targetDisk string, fsType string) (string, error) {
 	return FormatDiskWithVentoyCliWithConfig(ctx, ventoyPath, targetDisk, fsType, nil)
 }

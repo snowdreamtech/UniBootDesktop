@@ -31,7 +31,7 @@ type AppConfig struct {
 	VentoyReserveSpace   int    `json:"ventoyReserveSpace" toml:"ventoyReserveSpace"`     // Reserved space at end of disk (MB)
 	VentoyWin11Bypass    bool   `json:"ventoyWin11Bypass" toml:"ventoyWin11Bypass"`       // Auto inject Win11 TPM/CPU bypass patch
 	VentoyMenuTimeout    int    `json:"ventoyMenuTimeout" toml:"ventoyMenuTimeout"`       // Auto boot timeout (seconds)
-	AutoEjectAfterDeploy bool   `json:"autoEjectAfterDeploy" toml:"autoEjectAfterDeploy"` // Automatically safely eject USB drives after successful deployment
+	AutoEjectAfterDeploy bool   `json:"autoEjectAfterDeploy" toml:"autoEjectAfterDeploy"` // Automatically safely eject target disks after successful deployment
 }
 
 // GetDefaultConfig returns the default application configuration.

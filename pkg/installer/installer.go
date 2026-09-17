@@ -16,7 +16,7 @@ import (
 	"github.com/snowdreamtech/unigodesktop/pkg/firmware"
 )
 
-// DeployResult contains the output metadata of a USB deployment run.
+// DeployResult contains the output metadata of a disk deployment run.
 type DeployResult struct {
 	Success     bool                `json:"success"`
 	Mode        string              `json:"mode"`
@@ -117,7 +117,7 @@ func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 	} else {
 		val := ValidateVentoyCli(ventoyPath)
 		if !val.Valid {
-			errVentoy := fmt.Errorf("cannot create Hybrid Mode: target USB drive is clean and no valid Ventoy directory detected. Please configure Ventoy directory in Settings first (%s)", val.Message)
+			errVentoy := fmt.Errorf("cannot create Hybrid Mode: target disk drive is clean and no valid Ventoy directory detected. Please configure Ventoy directory in Settings first (%s)", val.Message)
 			diag := tracker.BuildDiagnostics(errVentoy)
 			return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errVentoy.Error(), Diagnostics: diag}, errVentoy
 		}
@@ -191,17 +191,17 @@ func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 	}, nil
 }
 
-// DeployModeABatch executes Mode A on multiple target USB drives with specified file system.
+// DeployModeABatch executes Mode A on multiple target disk drives with specified file system.
 func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
 	return DeployModeABatchWithIso(ctx, targetDisks, fsType, nil, nil)
 }
 
-// DeployModeABatchWithIso executes Mode A on multiple target USB drives with optional ISO files and progress reporting.
+// DeployModeABatchWithIso executes Mode A on multiple target disk drives with optional ISO files and progress reporting.
 func DeployModeABatchWithIso(ctx context.Context, targetDisks []string, fsType string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
 	return DeployModeABatchWithVentoyAndIso(ctx, targetDisks, fsType, "", isoPaths, progressCb)
 }
 
-// DeployModeABatchWithVentoyAndIso executes Mode A on multiple target USB drives with customizable Ventoy CLI path, ISO files, and progress reporting.
+// DeployModeABatchWithVentoyAndIso executes Mode A on multiple target disk drives with customizable Ventoy CLI path, ISO files, and progress reporting.
 func DeployModeABatchWithVentoyAndIso(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
 	return deployModeABatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, nil)
 }
@@ -373,7 +373,7 @@ func deployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 	}, nil
 }
 
-// DeployModeBBatch executes Mode B on multiple target USB drives concurrently/sequentially with customizable file system.
+// DeployModeBBatch executes Mode B on multiple target disk drives concurrently/sequentially with customizable file system.
 func DeployModeBBatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
 	return deployModeBBatchWithExpectedDisks(ctx, targetDisks, fsType, nil)
 }

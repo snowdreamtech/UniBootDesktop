@@ -71,7 +71,7 @@ func IsIgnoredVolume(name string) bool {
 	return false
 }
 
-// DiskInfo represents metadata about an available disk/USB drive.
+// DiskInfo represents metadata about an available disk drive.
 type DiskInfo struct {
 	Device            string `json:"device"`            // Device path (e.g., /dev/disk2, E:)
 	Name              string `json:"name"`              // Friendly label / vendor model
@@ -79,7 +79,7 @@ type DiskInfo struct {
 	Formatted         string `json:"formatted"`         // Human readable size string
 	FreeSpace         uint64 `json:"freeSpace"`         // Free available space in bytes
 	FreeFormatted     string `json:"freeFormatted"`     // Human readable free space string
-	IsRemovable       bool   `json:"isRemovable"`       // Removable USB flag
+	IsRemovable       bool   `json:"isRemovable"`       // Removable disk flag
 	IsSystem          bool   `json:"isSystem"`          // System disk safety flag
 	UsbVersion        string `json:"usbVersion"`        // Protocol version (USB 2.0, USB 3.0, USB 3.1, USB 3.2, USB4)
 	UsbSpeed          string `json:"usbSpeed"`          // Physical bus speed (480 Mb/s, 5 Gb/s, 10 Gb/s, 20 Gb/s)

@@ -55,12 +55,12 @@ func (a *App) startup(ctx context.Context) {
 	})
 }
 
-// GetDiskList returns all removable USB drives safely filtered.
+// GetDiskList returns all removable disks safely filtered.
 func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
 	return disk.GetRemovableDisks()
 }
 
-// EjectDisk safely unmounts and ejects the target removable USB storage drive.
+// EjectDisk safely unmounts and ejects the target removable storage disk.
 func (a *App) EjectDisk(targetDisk string) error {
 	disk.InvalidateDiskCache()
 	return disk.EjectDisk(targetDisk)
@@ -162,7 +162,7 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 	return installer.ValidateVentoyCli(ventoyPath)
 }
 
-// DeployModeABatch triggers Mode A deployment for multiple target USB drives with customizable file system and optional ISO files.
+// DeployModeABatch triggers Mode A deployment for multiple target disk drives with customizable file system and optional ISO files.
 func (a *App) DeployModeABatch(targetDisks []string, fsType string, isoPaths []string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
 	cfg, _ := config.Load()
 	ventoyPath := ""
@@ -184,7 +184,7 @@ func (a *App) DeployModeB(targetDisk string, fsType string, expected disk.DiskIn
 	return res, err
 }
 
-// DeployModeBBatch triggers Mode B deployment for multiple target USB drives with customizable file system.
+// DeployModeBBatch triggers Mode B deployment for multiple target disk drives with customizable file system.
 func (a *App) DeployModeBBatch(targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
 	return installer.DeployModeBBatchWithExpectedDisks(a.ctx, targetDisks, fsType, expected)
 }
@@ -194,7 +194,7 @@ func (a *App) CheckQEMU() *qemu.QEMUStatus {
 	return qemu.Detect()
 }
 
-// LaunchQEMU triggers a QEMU virtual machine test instance for the target USB drive.
+// LaunchQEMU triggers a QEMU virtual machine test instance for the target disk drive.
 func (a *App) LaunchQEMU(targetDisk string) error {
 	return qemu.LaunchTest(a.ctx, targetDisk)
 }
