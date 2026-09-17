@@ -110,17 +110,26 @@ func (d *VirtualBoxDriver) Launch(ctx context.Context, diskPath string) error {
 	}
 	ensureDiskPermissions(targetPath)
 
+	vboxManage, _ := exec.LookPath("VBoxManage")
+	if vboxManage == "" && runtime.GOOS == "darwin" {
+		if info, err := os.Stat("/Applications/VirtualBox.app/Contents/MacOS/VBoxManage"); err == nil && !info.IsDir() {
+			vboxManage = "/Applications/VirtualBox.app/Contents/MacOS/VBoxManage"
+		} else if info, err := os.Stat("/usr/local/bin/VBoxManage"); err == nil && !info.IsDir() {
+			vboxManage = "/usr/local/bin/VBoxManage"
+		}
+	}
+
+	if vboxManage != "" {
+		if err := launchVirtualBoxVM(vboxManage, targetPath); err == nil {
+			return nil
+		}
+	}
+
 	if runtime.GOOS == "darwin" {
 		cmd := exec.Command("open", "-a", "VirtualBox")
 		if err := cmd.Run(); err != nil {
 			return fmt.Errorf("failed to open VirtualBox application: %w", err)
 		}
-		return nil
-	}
-
-	if path, err := exec.LookPath("VBoxManage"); err == nil {
-		cmd := exec.Command(path, "list", "vms")
-		_ = cmd.Run()
 		return nil
 	}
 
@@ -130,4 +139,32 @@ func (d *VirtualBoxDriver) Launch(ctx context.Context, diskPath string) error {
 	}
 
 	return nil
+}
+
+func launchVirtualBoxVM(vboxManage string, targetPath string) error {
+	tmpDir := filepath.Join(os.TempDir(), "uniboot_vbox")
+	_ = os.MkdirAll(tmpDir, 0755)
+	vmdkPath := filepath.Join(tmpDir, "uniboot_raw.vmdk")
+	_ = os.Remove(vmdkPath)
+
+	createCmd := exec.Command(vboxManage, "internalcommands", "createrawvmdk", "-filename", vmdkPath, "-rawdisk", targetPath)
+	if err := createCmd.Run(); err != nil {
+		logger.Warn("VBoxManage createrawvmdk failed, falling back to GUI app launch", "error", err)
+		return err
+	}
+
+	vmName := "UniBoot_Preview"
+	_ = exec.Command(vboxManage, "unregistervm", vmName, "--delete").Run()
+
+	if err := exec.Command(vboxManage, "createvm", "--name", vmName, "--ostype", "Other_64", "--register").Run(); err != nil {
+		logger.Warn("VBoxManage createvm failed", "error", err)
+		return err
+	}
+
+	_ = exec.Command(vboxManage, "storagectl", vmName, "--name", "SATA", "--add", "sata", "--controller", "IntelAhci").Run()
+	_ = exec.Command(vboxManage, "storageattach", vmName, "--storagectl", "SATA", "--port", "0", "--device", "0", "--type", "hdd", "--medium", vmdkPath).Run()
+	_ = exec.Command(vboxManage, "modifyvm", vmName, "--firmware", "efi", "--memory", "2048").Run()
+
+	startCmd := exec.Command(vboxManage, "startvm", vmName)
+	return startCmd.Run()
 }

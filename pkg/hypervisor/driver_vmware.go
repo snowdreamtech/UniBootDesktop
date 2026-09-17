@@ -112,17 +112,15 @@ func (d *VMwareDriver) Launch(ctx context.Context, diskPath string) error {
 	}
 	ensureDiskPermissions(targetPath)
 
+	if err := launchVMwareVM(status, targetPath); err == nil {
+		return nil
+	}
+
 	if runtime.GOOS == "darwin" {
 		cmd := exec.Command("open", "-a", "VMware Fusion")
 		if err := cmd.Run(); err != nil {
 			return fmt.Errorf("failed to launch VMware Fusion: %w", err)
 		}
-		return nil
-	}
-
-	if strings.HasSuffix(status.Path, "vmrun") || strings.HasSuffix(status.Path, "vmrun.exe") {
-		cmd := exec.Command(status.Path, "list")
-		_ = cmd.Run()
 		return nil
 	}
 
@@ -132,4 +130,60 @@ func (d *VMwareDriver) Launch(ctx context.Context, diskPath string) error {
 	}
 
 	return nil
+}
+
+func launchVMwareVM(status *VMStatus, targetPath string) error {
+	tmpDir := filepath.Join(os.TempDir(), "uniboot_vmware")
+	_ = os.MkdirAll(tmpDir, 0755)
+	vmdkPath := filepath.Join(tmpDir, "uniboot_raw.vmdk")
+	vmxPath := filepath.Join(tmpDir, "UniBootPreview.vmx")
+
+	rawDiskContent := fmt.Sprintf(`# Disk DescriptorFile
+version=1
+encoding="UTF-8"
+CID=fffffffe
+parentCID=ffffffff
+isNativeSnapshot="no"
+createType="fullDevice"
+
+# Extent description
+RW 20000000 FLAT "%s" 0
+
+# The Disk Data Base 
+DDB
+ddb.adapterType = "lsilogic"
+ddb.geometry.cylinders = "1024"
+ddb.geometry.heads = "255"
+ddb.geometry.sectors = "63"
+ddb.longContentID = "1234567890"
+ddb.virtualHWVersion = "18"
+`, targetPath)
+	_ = os.WriteFile(vmdkPath, []byte(rawDiskContent), 0644)
+
+	vmxContent := fmt.Sprintf(`.encoding = "UTF-8"
+config.version = "8"
+virtualHW.version = "18"
+pciBridge0.present = "TRUE"
+mks.enable3d = "TRUE"
+memory = "2048"
+firmware = "efi"
+sata0.present = "TRUE"
+sata0:0.present = "TRUE"
+sata0:0.fileName = "%s"
+sata0:0.deviceType = "rawDisk"
+displayName = "UniBoot Boot Preview"
+guestOS = "other-64"
+`, vmdkPath)
+	_ = os.WriteFile(vmxPath, []byte(vmxContent), 0644)
+
+	if runtime.GOOS == "darwin" {
+		cmd := exec.Command("open", "-a", "VMware Fusion", vmxPath)
+		return cmd.Run()
+	} else if strings.HasSuffix(status.Path, "vmrun") || strings.HasSuffix(status.Path, "vmrun.exe") {
+		cmd := exec.Command(status.Path, "-T", "ws", "start", vmxPath, "gui")
+		return cmd.Run()
+	}
+
+	cmd := exec.Command(status.Path, vmxPath)
+	return cmd.Start()
 }
