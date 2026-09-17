@@ -944,17 +944,7 @@ const isMacOs = computed(() => navigator.userAgent.includes('Mac') || navigator.
 
 function checkIsExistingBootDisk(d: DiskInfo): boolean {
   if (!d) return false;
-  if (d.isRealVentoy || d.isModeB) return true;
-  const name = (d.name || '').toUpperCase();
-  const status = (d.bootStatus || '').toUpperCase();
-  const rawStatus = d.bootStatus || '';
-  if (name.includes('VENTOY') || status.includes('VENTOY') || name.includes('UNIBOOT') || status.includes('UNIBOOT')) {
-    return true;
-  }
-  if (status.includes('MODE A') || status.includes('MODE B') || status.includes('HYBRID') || status.includes('CLOUD') || rawStatus.includes('模式 A') || rawStatus.includes('模式 B') || rawStatus.includes('混合模式') || rawStatus.includes('云端模式')) {
-    return true;
-  }
-  return false;
+  return Boolean(d.isRealVentoy || d.isModeB);
 }
 
 const isSelectedVentoyDisk = computed(() => {

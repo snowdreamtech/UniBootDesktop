@@ -184,34 +184,26 @@ func InferControllerVendor(vendorID string, productID string, vendor string) str
 // DetectBootStatus evaluates the boot status text based on partition scheme, volume label, and Ventoy/Mode B flags.
 func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isModeB bool) string {
 	if isRealVentoy {
-		return "Ventoy Mode A (Full Hybrid Disk)"
+		return "Ventoy (Ventoy 混合引导盘)"
 	}
 	if isModeB {
-		return "UniBoot Mode B (1-Sec Cloud Install Disk)"
-	}
-	upperVol := strings.ToUpper(volName)
-	if strings.Contains(upperVol, "VENTOY") || strings.Contains(upperVol, "VTOYEFI") {
-		return "Ventoy Mode A (Full Hybrid Disk)"
-	}
-	if strings.Contains(upperVol, "UNIBOOT") {
-		return "UniBoot Mode B (1-Sec Cloud Install Disk)"
+		return "UniBoot (1秒极速云引导盘)"
 	}
 	if strings.Contains(strings.ToUpper(partitionScheme), "GPT") {
-		return "GPT / EFI Standard System Bootloader"
+		return "GPT / EFI 标准系统引导盘"
 	}
 	if strings.Contains(strings.ToUpper(partitionScheme), "MBR") {
-		return "MBR Master Boot Record"
+		return "MBR 主引导记录盘"
 	}
-	return "Data Storage Drive (No bootloader detected)"
+	return "数据存储盘 (未检测到引导包)"
 }
 
-// IsVentoyDisk determines if a given disk device path or mount path is already a Ventoy/UniBoot drive.
+// IsVentoyDisk determines if a given disk device path or mount path is already a Ventoy drive.
 func IsVentoyDisk(targetDisk string) bool {
-	upper := strings.ToUpper(targetDisk)
-	if strings.Contains(upper, "VENTOY") || strings.Contains(upper, "VTOYEFI") {
-		return true
+	if targetDisk == "" {
+		return false
 	}
-	// Check if target directory contains ventoy folder
+	// Direct directory check if targetDisk is a mount point
 	if info, err := os.Stat(filepath.Join(targetDisk, "ventoy")); err == nil && info.IsDir() {
 		return true
 	}
@@ -231,23 +223,23 @@ func IsVentoyDisk(targetDisk string) bool {
 					strOut := string(out)
 					volName := extractPlistValue(strOut, "VolumeName")
 					volNameUpper := strings.ToUpper(volName)
-					if strings.Contains(volNameUpper, "VENTOY") || strings.Contains(volNameUpper, "VTOYEFI") {
-						return true
-					}
 					mountPoint := extractPlistValue(strOut, "MountPoint")
+
+					if strings.Contains(volNameUpper, "VENTOY") || strings.Contains(volNameUpper, "VTOYEFI") {
+						if mountPoint != "" {
+							if info, statErr := os.Stat(filepath.Join(mountPoint, "ventoy")); statErr == nil && info.IsDir() {
+								return true
+							}
+							if infoEfi, statEfi := os.Stat(filepath.Join(mountPoint, "EFI")); statEfi == nil && infoEfi.IsDir() {
+								return true
+							}
+						}
+					}
 					if mountPoint != "" {
 						if info, statErr := os.Stat(filepath.Join(mountPoint, "ventoy")); statErr == nil && info.IsDir() {
 							return true
 						}
 					}
-				}
-			}
-		}
-
-		for _, mount := range []string{"/Volumes/Ventoy", "/Volumes/VENTOY", "/Volumes/VTOYEFI"} {
-			if info, err := os.Stat(mount); err == nil && info.IsDir() {
-				if infoV, errV := os.Stat(filepath.Join(mount, "ventoy")); errV == nil && infoV.IsDir() {
-					return true
 				}
 			}
 		}
@@ -257,6 +249,9 @@ func IsVentoyDisk(targetDisk string) bool {
 
 // IsModeBDisk checks if a target disk is currently formatted in Mode B (Cloud Pure mode, having iPXE boot.ipxe in ESP but no Ventoy MBR).
 func IsModeBDisk(targetDisk string) bool {
+	if targetDisk == "" {
+		return false
+	}
 	if runtime.GOOS == "darwin" {
 		diskNode := filepath.Base(targetDisk)
 		if strings.HasPrefix(diskNode, "disk") {
@@ -270,10 +265,12 @@ func IsModeBDisk(targetDisk string) bool {
 				mountPoint := extractPlistValue(strOut, "MountPoint")
 				if mountPoint != "" {
 					bootIpxe := filepath.Join(mountPoint, "boot.ipxe")
+					unibootIpxe := filepath.Join(mountPoint, "ipxe", "uniboot.ipxe")
 					ventoyDir := filepath.Join(mountPoint, "ventoy")
 					_, errBoot := os.Stat(bootIpxe)
+					_, errUni := os.Stat(unibootIpxe)
 					_, errVentoy := os.Stat(ventoyDir)
-					if errBoot == nil && os.IsNotExist(errVentoy) {
+					if (errBoot == nil || errUni == nil) && os.IsNotExist(errVentoy) {
 						return true
 					}
 				}

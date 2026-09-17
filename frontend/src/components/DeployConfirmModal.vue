@@ -175,17 +175,7 @@ const emit = defineEmits(["close", "confirm"]);
 
 function checkIsExistingBootDisk(disk: any): boolean {
   if (!disk) return false;
-  if (disk.isRealVentoy || disk.isModeB) return true;
-  const name = (disk.name || "").toUpperCase();
-  const status = (disk.bootStatus || "").toUpperCase();
-  const rawStatus = disk.bootStatus || "";
-  if (name.includes("VENTOY") || status.includes("VENTOY") || name.includes("UNIBOOT") || status.includes("UNIBOOT")) {
-    return true;
-  }
-  if (status.includes("MODE A") || status.includes("MODE B") || status.includes("HYBRID") || status.includes("CLOUD") || rawStatus.includes("模式 A") || rawStatus.includes("模式 B") || rawStatus.includes("混合模式") || rawStatus.includes("云端模式")) {
-    return true;
-  }
-  return false;
+  return Boolean(disk.isRealVentoy || disk.isModeB);
 }
 
 const ventoyDisks = computed(() => {
