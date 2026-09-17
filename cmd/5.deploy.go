@@ -37,17 +37,17 @@ Modes:
   B - 1-Sec Cloud Disk (macOS-native friendly iPXE cloud network boot)
 
 Examples:
-  # Deploy Mode A to a single disk drive with exFAT filesystem
-  unigodesktop deploy --disk /dev/disk2 --mode A --fs exfat -y
+  # Deploy Hybrid Mode to a single disk drive with exFAT filesystem
+  unigodesktop deploy --disk /dev/disk2 --mode Hybrid --fs exfat -y
 
-  # Deploy Mode A with ISO image auto-copy
+  # Deploy Hybrid Mode with ISO image auto-copy
   unigodesktop deploy --disk /dev/disk2 -i ~/Downloads/Ubuntu.iso -y
 
-  # Batch Deploy Mode B (1-Sec Cloud) to multiple disk drives in parallel
-  unigodesktop deploy --disks /dev/disk2,/dev/disk3 --mode B -y
+  # Batch Deploy Cloud Mode (1-Sec Cloud) to multiple disk drives in parallel
+  unigodesktop deploy --disks /dev/disk2,/dev/disk3 --mode Cloud -y
 
   # Deploy to ALL detected removable disk drives
-  unigodesktop deploy --all-usb --mode A -y`,
+  unigodesktop deploy --all-usb --mode Hybrid -y`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// 1. Gather target disks
 		var targetDisks []string
@@ -182,7 +182,7 @@ func init() {
 	deployCmd.Flags().StringVarP(&deployDisk, "disk", "d", "", "target disk device (e.g., /dev/disk2 or PhysicalDrive1)")
 	deployCmd.Flags().StringVar(&deployDisks, "disks", "", "comma-separated target disks for batch parallel deployment")
 	deployCmd.Flags().BoolVar(&deployAllUsb, "all-usb", false, "automatically deploy to ALL detected removable disk drives")
-	deployCmd.Flags().StringVarP(&deployMode, "mode", "m", "A", "deployment mode: 'A' (Ventoy MultiBoot) or 'B' (1-Sec Cloud iPXE)")
+	deployCmd.Flags().StringVarP(&deployMode, "mode", "m", "A", "deployment mode: 'Hybrid' (Ventoy MultiBoot Pro) or 'Cloud' (1-Sec Cloud iPXE)")
 	deployCmd.Flags().StringVarP(&deployFs, "fs", "f", "exFAT", "partition filesystem type: exFAT, FAT32, NTFS, or ext4")
 	deployCmd.Flags().StringSliceVarP(&deployIsoPaths, "iso", "i", nil, "source ISO/image file paths to automatically copy")
 	deployCmd.Flags().StringVar(&deployVentoyPath, "ventoy-path", "", "custom path to Ventoy CLI binary")

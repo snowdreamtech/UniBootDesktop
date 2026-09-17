@@ -174,7 +174,7 @@
           {{ t('deploy.desc_hybrid') }}
         </p>
 
-        <!-- Filesystem Selection for Mode A & Mode B (Hidden when upgrading an existing Ventoy/UniBoot drive) -->
+        <!-- Filesystem Selection for Hybrid Mode & Cloud Mode (Hidden when upgrading an existing Ventoy/UniBoot drive) -->
         <div v-if="!isNonDestructive" class="fs-selector">
           <label class="fs-label">{{ t('settings.default_fs') }}</label>
           <CustomSelect
@@ -188,7 +188,7 @@
           />
         </div>
 
-        <!-- Ventoy CLI Pre-flight Requirement Notice Banner (Mode A) -->
+        <!-- Ventoy CLI Pre-flight Requirement Notice Banner (Hybrid Mode) -->
         <div v-if="activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid" class="ventoy-warning-card">
           <span class="warning-card-icon">⚠️</span>
           <div class="warning-card-body">
@@ -213,7 +213,7 @@
           </div>
         </div>
 
-        <!-- Local ISO/IMG Image Source Selection Card (Mode A) -->
+        <!-- Local ISO/IMG Image Source Selection Card (Hybrid Mode) -->
         <div v-if="activeMode === 'hybrid'" class="iso-card">
           <div class="iso-card-header">
             <div class="iso-title-group">

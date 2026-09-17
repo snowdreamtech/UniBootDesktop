@@ -374,7 +374,7 @@ func ExtractFirmwareToDir(targetDir string) error {
 	return nil
 }
 
-// ExtractFirmwareModeA extracts Mode A assets (ipxe/ & iso/) directly to the main data partition (Partition 1),
+// ExtractFirmwareHybridMode extracts Hybrid Mode assets (ipxe/ & iso/) directly to the main data partition (Partition 1),
 // without redundantly polluting the data partition with EFI/BOOT/ files (handled by Ventoy Partition 2).
 func ExtractFirmwareModeA(dataMountDir string) error {
 	if dataMountDir == "" {
@@ -432,18 +432,18 @@ func CleanDirectoryContents(dirPath string) error {
 	return nil
 }
 
-// ExtractFirmwareModeB extracts Mode B assets (EFI/BOOT/ & root scripts & background image) directly to ESP partition (Partition 2),
+// ExtractFirmwareCloudMode extracts Cloud Mode assets (EFI/BOOT/ & root scripts & background image) directly to ESP partition (Partition 2),
 // providing 100% native iPXE cloud boot matching 1:1 Ventoy theme design.
 func ExtractFirmwareModeB(efiMountDir string) error {
 	if efiMountDir == "" {
 		return fmt.Errorf("EFI mount directory cannot be empty")
 	}
 
-	// Wipe all stale files/directories inside ESP partition before extracting fresh Mode B firmware
+	// Wipe all stale files/directories inside ESP partition before extracting fresh Cloud Mode firmware
 	_ = CleanDirectoryContents(efiMountDir)
 
 	for _, mapping := range StandardFirmwareMappings {
-		// Mode B executes directly from ESP partition (64MB) and does NOT need 18.5MB UniBoot.iso
+		// Cloud Mode executes directly from ESP partition (64MB) and does NOT need 18.5MB UniBoot.iso
 		if mapping.ReleaseName == "UniBoot.iso" || (mapping.IsReserved && strings.HasSuffix(mapping.ReleaseName, ".iso")) {
 			continue
 		}
@@ -453,7 +453,7 @@ func ExtractFirmwareModeB(efiMountDir string) error {
 			return fmt.Errorf("failed to load firmware asset %s: %w", mapping.ReleaseName, err)
 		}
 
-		// Mode B writes EFI/BOOT/ BOOTX64.EFI, BOOTAA64.EFI, boot.ipxe, uniboot.ipxe, background.png to ESP partition
+		// Cloud Mode writes EFI/BOOT/ BOOTX64.EFI, BOOTAA64.EFI, boot.ipxe, uniboot.ipxe, background.png to ESP partition
 		destPath := filepath.Join(efiMountDir, filepath.FromSlash(mapping.TargetPath))
 		if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
 			return fmt.Errorf("failed to create directory for %s: %w", destPath, err)

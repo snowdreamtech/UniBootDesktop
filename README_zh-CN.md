@@ -15,8 +15,8 @@
 ## 🌟 核心特性
 
 - **双引导制作引擎 (Dual Boot Engines)**：
-  - **Mode A (Ventoy MultiBoot 混合模式)**：基于 Ventoy 核心协议，零损伤保留磁盘剩余空间，支持无限放入 ISO/WIM/VHD/IMG 镜像。
-  - **Mode B (1-Sec Cloud 极速一秒云盘模式)**：macOS 友好原生方案，纯 iPXE 网络引导全架构固件（支持 x86_64, UEFI, Legacy MBR, ARM64, RISC-V 64）。
+  - **Hybrid Mode (Ventoy MultiBoot 混合模式)**：基于 Ventoy 核心协议，零损伤保留磁盘剩余空间，支持无限放入 ISO/WIM/VHD/IMG 镜像。
+  - **Cloud Mode (1-Sec Cloud 极速一秒云盘模式)**：macOS 友好原生方案，纯 iPXE 网络引导全架构固件（支持 x86_64, UEFI, Legacy MBR, ARM64, RISC-V 64）。
 - **QEMU 可视化虚拟机测试 (VM Simulator)**：
   - 界面与命令行内置 QEMU 模拟验证模块，可在桌面端一键无需重启电脑直接测试启动盘装载效果。
 - **USB 硬件深层检测 (Hardware Inspector)**：
@@ -40,14 +40,14 @@ UniBoot 具备**桌面 GUI + Cobra CLI 100% 功能完全对齐**的双模运行�
 # 1. 打印磁盘硬件规格与存储巡检 (支持 --json)
 unigodesktop df --usb
 
-# 2. 部署 Mode A (Ventoy) 到单个磁盘并自动拷贝 ISO
-unigodesktop deploy --disk /dev/disk2 --mode A --fs exfat -i ~/Downloads/Ubuntu.iso -y
+# 2. 部署 Hybrid Mode (Ventoy) 到单个磁盘并自动拷贝 ISO
+unigodesktop deploy --disk /dev/disk2 --mode Hybrid --fs exfat -i ~/Downloads/Ubuntu.iso -y
 
 # 3. 高并发批量并行部署多块磁盘 (Batch Mode)
-unigodesktop deploy --disks /dev/disk2,/dev/disk3,/dev/disk4 --mode B -y
+unigodesktop deploy --disks /dev/disk2,/dev/disk3,/dev/disk4 --mode Cloud -y
 
 # 4. 自动全量扫描并部署所有接入的可移动磁盘
-unigodesktop deploy --all-usb --mode A -y
+unigodesktop deploy --all-usb --mode Hybrid -y
 
 # 5. 命令行启动 QEMU 虚拟机测试目标磁盘
 unigodesktop qemu --disk /dev/disk2 -m 4096

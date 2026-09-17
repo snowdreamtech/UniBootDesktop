@@ -191,17 +191,17 @@ func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 	}, nil
 }
 
-// DeployModeABatch executes Mode A on multiple target disk drives with specified file system.
+// DeployHybridModeBatch executes Hybrid Mode on multiple target disk drives with specified file system.
 func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
 	return DeployModeABatchWithIso(ctx, targetDisks, fsType, nil, nil)
 }
 
-// DeployModeABatchWithIso executes Mode A on multiple target disk drives with optional ISO files and progress reporting.
+// DeployHybridModeBatchWithIso executes Hybrid Mode on multiple target disk drives with optional ISO files and progress reporting.
 func DeployModeABatchWithIso(ctx context.Context, targetDisks []string, fsType string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
 	return DeployModeABatchWithVentoyAndIso(ctx, targetDisks, fsType, "", isoPaths, progressCb)
 }
 
-// DeployModeABatchWithVentoyAndIso executes Mode A on multiple target disk drives with customizable Ventoy CLI path, ISO files, and progress reporting.
+// DeployHybridModeBatchWithVentoyAndIso executes Hybrid Mode on multiple target disk drives with customizable Ventoy CLI path, ISO files, and progress reporting.
 func DeployModeABatchWithVentoyAndIso(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
 	return deployModeABatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, nil)
 }
@@ -373,7 +373,7 @@ func deployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 	}, nil
 }
 
-// DeployModeBBatch executes Mode B on multiple target disk drives concurrently/sequentially with customizable file system.
+// DeployCloudModeBatch executes Cloud Mode on multiple target disk drives concurrently/sequentially with customizable file system.
 func DeployModeBBatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
 	return deployModeBBatchWithExpectedDisks(ctx, targetDisks, fsType, nil)
 }

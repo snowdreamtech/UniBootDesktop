@@ -100,7 +100,7 @@ type DiskInfo struct {
 	IsFakeUsb3        bool   `json:"isFakeUsb3"`        // Warning flag for fake USB 3.0 (USB 2.0 PHY disguised as 3.0)
 	ProtocolCode      string `json:"protocolCode"`      // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
 	IsRealVentoy      bool   `json:"isRealVentoy"`      // True ONLY if drive contains Ventoy MBR Sector 0 signature
-	IsModeB           bool   `json:"isModeB"`           // True if drive is formatted in Mode B (iPXE ESP Cloud Pure)
+	IsModeB           bool   `json:"isModeB"`           // True if drive is formatted in Cloud Mode (iPXE ESP Cloud Pure)
 	IsGenericBoot     bool   `json:"isGenericBoot"`     // True if drive contains generic 3rd-party bootloader (Rufus/PE/ISO)
 	MountPoint        string `json:"mountPoint"`        // Mount point or volume path (e.g. /Volumes/UNTITLED, E:\)
 }
@@ -183,7 +183,7 @@ func InferControllerVendor(vendorID string, productID string, vendor string) str
 	return "Standard Controller"
 }
 
-// DetectBootStatus evaluates the boot status text based on partition scheme, volume label, Ventoy/Mode B, and generic boot flags.
+// DetectBootStatus evaluates the boot status text based on partition scheme, volume label, Ventoy/Cloud Mode, and generic boot flags.
 func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isModeB bool, isGenericBoot bool) string {
 	if isRealVentoy {
 		return "Ventoy / UniBoot (混合模式)"

@@ -15,8 +15,8 @@
 ## 🌟 Key Features
 
 - **Dual Boot Engines**:
-  - **Mode A (Ventoy MultiBoot Hybrid Pro)**: Powered by Ventoy core protocol. Non-destructive in-place upgrades preserving user space with unlimited ISO/WIM/VHD/IMG placement.
-  - **Mode B (1-Sec Cloud Disk)**: macOS-native friendly iPXE cloud network boot with all-architecture firmware support (x86_64, UEFI, Legacy MBR, ARM64, RISC-V 64).
+  - **Hybrid Mode (Ventoy MultiBoot Pro)**: Powered by Ventoy core protocol. Non-destructive in-place upgrades preserving user space with unlimited ISO/WIM/VHD/IMG placement.
+  - **Cloud Mode (1-Sec Cloud Disk)**: macOS-native friendly iPXE cloud network boot with all-architecture firmware support (x86_64, UEFI, Legacy MBR, ARM64, RISC-V 64).
 - **QEMU Simulator VM Test**:
   - Embedded QEMU simulator test module in both GUI and CLI. Verify bootable disks instantly without rebooting your computer.
 - **Disk Hardware Inspector**:
@@ -38,14 +38,14 @@ UniBoot features a **Dual-Mode Engine** where 100% of GUI features are accessibl
 # 1. Inspect disks and hardware specs (supports --json)
 unigodesktop df --usb
 
-# 2. Deploy Mode A (Ventoy) to a single disk with ISO copy
-unigodesktop deploy --disk /dev/disk2 --mode A --fs exfat -i ~/Downloads/Ubuntu.iso -y
+# 2. Deploy Hybrid Mode (Ventoy) to a single disk with ISO copy
+unigodesktop deploy --disk /dev/disk2 --mode Hybrid --fs exfat -i ~/Downloads/Ubuntu.iso -y
 
 # 3. High-concurrency batch parallel deployment for multiple disks
-unigodesktop deploy --disks /dev/disk2,/dev/disk3,/dev/disk4 --mode B -y
+unigodesktop deploy --disks /dev/disk2,/dev/disk3,/dev/disk4 --mode Cloud -y
 
 # 4. Automatically deploy to ALL detected removable disks
-unigodesktop deploy --all-usb --mode A -y
+unigodesktop deploy --all-usb --mode Hybrid -y
 
 # 5. Launch QEMU simulator to test target disk from CLI
 unigodesktop qemu --disk /dev/disk2 -m 4096
