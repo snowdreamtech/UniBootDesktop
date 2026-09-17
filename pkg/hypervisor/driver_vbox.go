@@ -170,7 +170,7 @@ func launchVirtualBoxVM(vboxManage string, targetPath string, bootMode string) e
 	memMB := GetRecommendedVMMemoryMB()
 	vcpus := GetRecommendedVCPUs()
 	_ = exec.Command(vboxManage, "storagectl", vmName, "--name", "SATA", "--add", "sata", "--controller", "IntelAhci").Run()
-	_ = exec.Command(vboxManage, "storageattach", vmName, "--storagectl", "SATA", "--port", "0", "--device", "0", "--type", "hdd", "--medium", vmdkPath).Run()
+	_ = exec.Command(vboxManage, "storageattach", vmName, "--storagectl", "SATA", "--port", "0", "--device", "0", "--type", "hdd", "--medium", vmdkPath, "--mtype", "immutable").Run()
 	_ = exec.Command(vboxManage, "modifyvm", vmName, "--firmware", fwSetting, "--cpus", fmt.Sprintf("%d", vcpus), "--memory", fmt.Sprintf("%d", memMB)).Run()
 
 	startCmd := exec.Command(vboxManage, "startvm", vmName)
