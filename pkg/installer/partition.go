@@ -346,6 +346,9 @@ func ResolveMountPoint(targetDisk string) (string, error) {
 // ResolveMountPointWithLabel resolves the active mount point for a specified volume label on the system.
 func ResolveMountPointWithLabel(targetDisk string, label string) (string, error) {
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
+		if strings.Contains(targetDisk, "fail") {
+			return "", fmt.Errorf("simulated mount resolution failure for disk %s", targetDisk)
+		}
 		return os.TempDir(), nil
 	}
 
@@ -379,6 +382,9 @@ func ResolveMountPointWithLabel(targetDisk string, label string) (string, error)
 // MountAndResolveEFIPartition resolves or automatically mounts Partition 2 (VTOYEFI / ESP) for existing Ventoy drives.
 func MountAndResolveEFIPartition(targetDisk string) (string, error) {
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
+		if strings.Contains(targetDisk, "fail") {
+			return "", fmt.Errorf("simulated EFI mount resolution failure for disk %s", targetDisk)
+		}
 		return os.TempDir(), nil
 	}
 
