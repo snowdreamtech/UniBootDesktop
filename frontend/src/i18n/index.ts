@@ -121,6 +121,11 @@ export async function setLocale(locale: string) {
   currentLocale.value = targetLocale;
   localStorage.setItem('unigo_locale', locale);
   updateDocumentDir();
+
+  const app = (window as any)?.go?.main?.App;
+  if (app && typeof app.LogAction === 'function') {
+    app.LogAction('INFO', 'Application display language changed', targetLocale);
+  }
 }
 
 export const setLanguage = setLocale;
