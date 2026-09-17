@@ -340,8 +340,8 @@
       </section>
 
       <!-- Embedded Log Center Card (主页面日志中心卡片) -->
-      <transition name="toast-fade">
-        <section v-if="isLogCardVisible" class="glass-card log-section-card">
+      <transition name="card-fade">
+        <section v-show="isLogCardVisible" class="glass-card log-section-card">
           <div class="log-section-header">
             <div class="log-title-group">
               <h2>📜 {{ t('log.title') }}</h2>
@@ -1777,7 +1777,19 @@ h1 {
   gap: 1.75rem;
 }
 
-/* Embedded Log Center Card */
+/* Embedded Log Center Card & Smooth Transition */
+.card-fade-enter-active,
+.card-fade-leave-active {
+  transition: opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.card-fade-enter-from,
+.card-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
 .log-section-card {
   grid-column: 1 / -1;
   display: flex;
