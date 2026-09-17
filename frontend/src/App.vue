@@ -342,6 +342,7 @@
       <!-- Embedded Log Center Card (主页面日志中心卡片) -->
       <transition name="card-fade">
         <section v-show="isLogCardVisible" class="glass-card log-section-card">
+          <!-- Row 1: Title & Top Control Buttons (Right to Left: Close, Clear, Export, Copy, Auto-scroll) -->
           <div class="log-section-header">
             <div class="log-title-group">
               <h2>📜 {{ t('log.title') }}</h2>
@@ -349,18 +350,6 @@
             </div>
 
             <div class="log-section-controls">
-              <div class="filter-tabs-sm">
-                <button 
-                  v-for="level in logLevels" 
-                  :key="level.key"
-                  class="btn-tab-sm"
-                  :class="{ active: currentEmbeddedLogFilter === level.key }"
-                  @click="currentEmbeddedLogFilter = level.key"
-                >
-                  {{ level.label }}
-                </button>
-              </div>
-
               <label class="auto-scroll-label-sm">
                 <input type="checkbox" v-model="embeddedAutoScroll" />
                 {{ t('log.auto_scroll') }}
@@ -375,6 +364,21 @@
                 @click="toggleLogCard"
               >
                 ✕
+              </button>
+            </div>
+          </div>
+
+          <!-- Row 2: Filter Tabs (Sitting directly above the terminal window) -->
+          <div class="log-sub-header">
+            <div class="filter-tabs-sm">
+              <button 
+                v-for="level in logLevels" 
+                :key="level.key"
+                class="btn-tab-sm"
+                :class="{ active: currentEmbeddedLogFilter === level.key }"
+                @click="currentEmbeddedLogFilter = level.key"
+              >
+                {{ level.label }}
               </button>
             </div>
           </div>
@@ -1807,9 +1811,15 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   flex-wrap: wrap;
   gap: 0.75rem;
+}
+
+.log-sub-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
 }
 
 .log-title-group {
