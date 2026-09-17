@@ -15,6 +15,7 @@ import (
 	"github.com/snowdreamtech/unigodesktop/pkg/config"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 	"github.com/snowdreamtech/unigodesktop/pkg/firmware"
+	"github.com/snowdreamtech/unigodesktop/pkg/hypervisor"
 	"github.com/snowdreamtech/unigodesktop/pkg/installer"
 	"github.com/snowdreamtech/unigodesktop/pkg/qemu"
 	"github.com/snowdreamtech/unigodesktop/pkg/updater"
@@ -242,20 +243,53 @@ func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected
 	return installer.DeployCloudModeBatchWithExpectedDisks(a.ctx, targetDisks, fsType, expected)
 }
 
-// CheckQEMU returns QEMU detection metadata.
+// CheckQEMU returns QEMU detection metadata for backward compatibility.
 func (a *App) CheckQEMU() *qemu.QEMUStatus {
+	best := hypervisor.GetManager().DetectBest()
+	if best != nil && best.Installed {
+		return &qemu.QEMUStatus{
+			Installed: true,
+			Path:      best.Path,
+			Version:   best.Version,
+		}
+	}
 	return qemu.Detect()
 }
 
-// LaunchQEMU triggers a QEMU virtual machine test instance for the target disk drive.
+// DetectHypervisors returns status of all installed virtual machine engines.
+func (a *App) DetectHypervisors() []*hypervisor.VMStatus {
+	return hypervisor.GetManager().DetectAll()
+}
+
+// DetectBestHypervisor returns the highest priority available virtual machine status.
+func (a *App) DetectBestHypervisor() *hypervisor.VMStatus {
+	return hypervisor.GetManager().DetectBest()
+}
+
+// LaunchQEMU triggers virtual machine test instance using highest priority available hypervisor (QEMU, UTM, VMware, VirtualBox).
 func (a *App) LaunchQEMU(targetDisk string) error {
-	logger.Info("Requesting QEMU preview test launch", "disk", targetDisk)
-	err := qemu.LaunchTest(a.ctx, targetDisk)
+	logger.Info("Requesting hypervisor preview test launch", "disk", targetDisk)
+	err := hypervisor.GetManager().LaunchBest(a.ctx, targetDisk)
 	if err != nil {
-		logger.Error("Failed to launch QEMU preview test", "disk", targetDisk, "error", err)
+		logger.Error("Failed to launch hypervisor preview test", "disk", targetDisk, "error", err)
 		return err
 	}
-	logger.Info("QEMU preview test launched successfully", "disk", targetDisk)
+	logger.Info("Hypervisor preview test launched successfully", "disk", targetDisk)
+	return nil
+}
+
+// LaunchVM launches a specified or best available virtual machine.
+func (a *App) LaunchVM(targetDisk string, vmType string) error {
+	if vmType == "" || vmType == "auto" {
+		return a.LaunchQEMU(targetDisk)
+	}
+	logger.Info("Requesting specified hypervisor preview test launch", "disk", targetDisk, "vmType", vmType)
+	err := hypervisor.GetManager().LaunchSpecified(a.ctx, targetDisk, hypervisor.HypervisorType(vmType))
+	if err != nil {
+		logger.Error("Failed to launch specified hypervisor", "disk", targetDisk, "vmType", vmType, "error", err)
+		return err
+	}
+	logger.Info("Specified hypervisor test launched successfully", "disk", targetDisk, "vmType", vmType)
 	return nil
 }
 
