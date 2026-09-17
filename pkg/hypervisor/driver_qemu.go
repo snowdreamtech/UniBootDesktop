@@ -312,7 +312,7 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode strin
 		logger.Info("Booting QEMU in Legacy BIOS mode (SeaBIOS)")
 	}
 
-	args = append(args, "-drive", fmt.Sprintf("file=%s,format=raw", targetPath))
+	args = append(args, "-drive", fmt.Sprintf("file=%s,format=raw,file.locking=off", targetPath))
 
 	runQEMU := func() error {
 		cmd := exec.Command(status.Path, args...)

@@ -194,16 +194,14 @@ func unmountTargetDisk(targetPath string) {
 		cmd := exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode))
 		_ = cmd.Run()
 
-		// Poll up to 2.5s for macOS kernel/diskarbitrationd lock release to prevent "Resource busy"
-		deadline := time.Now().Add(2500 * time.Millisecond)
+		// Poll up to 3s for macOS diskarbitrationd to finish unmounting all partitions on diskNode
+		deadline := time.Now().Add(3000 * time.Millisecond)
 		for time.Now().Before(deadline) {
-			time.Sleep(150 * time.Millisecond)
-			if f, err := os.OpenFile(targetPath, os.O_RDWR, 0); err == nil {
-				_ = f.Close()
+			if !isDiskMounted(diskNode) {
 				break
-			} else if strings.Contains(err.Error(), "busy") {
-				_ = exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode)).Run()
 			}
+			time.Sleep(150 * time.Millisecond)
+			_ = exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode)).Run()
 		}
 	} else if runtime.GOOS == "linux" {
 		cmd := exec.Command("udisksctl", "unmount", "-b", targetPath)
@@ -240,4 +238,26 @@ func remountTargetDisk(targetPath string) {
 		psCmd := fmt.Sprintf(`Get-Volume | Where-DriveLetter | Where-Object { $_.Path -like "*%s*" } | Mount-Volume`, targetPath)
 		_ = exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd).Run()
 	}
+}
+
+// isDiskMounted checks if a macOS disk or any of its partitions are currently mounted.
+func isDiskMounted(diskNode string) bool {
+	if runtime.GOOS != "darwin" {
+		return false
+	}
+	nodesToTest := []string{diskNode}
+	for i := 1; i <= 8; i++ {
+		nodesToTest = append(nodesToTest, fmt.Sprintf("%ss%d", diskNode, i))
+	}
+	for _, node := range nodesToTest {
+		cmd := exec.Command("diskutil", "info", fmt.Sprintf("/dev/%s", node))
+		out, err := cmd.Output()
+		if err == nil {
+			str := string(out)
+			if strings.Contains(str, "Mounted:                   Yes") || strings.Contains(str, "Mounted: Yes") || strings.Contains(str, "Mount Point:") {
+				return true
+			}
+		}
+	}
+	return false
 }
