@@ -750,4 +750,15 @@ completions/
 manpages/
 unigo
 frontend/package.json.md5
+
+# =============================================================================
+# Wails v2 Framework & Generated Bindings (DO NOT COMMIT)
+# =============================================================================
+wailsjs/
+**/wailsjs/
 frontend/wailsjs/
+wails.log
+wails*.log
+wails.json.bak
+build/bin/
+
