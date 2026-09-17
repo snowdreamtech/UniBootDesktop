@@ -904,7 +904,7 @@ interface VMStatus {
 
 const hypervisorList = ref<VMStatus[]>([]);
 const selectedVMType = ref<string>('qemu');
-const selectedBootMode = ref<string>('uefi');
+const selectedBootMode = ref<string>('auto');
 const qemuStatus = ref({ installed: false, path: '', version: '' });
 const isLaunchingQemu = ref(false);
 const ventoyStatus = ref({ valid: true, version: '', message: '', executablePath: '' });
