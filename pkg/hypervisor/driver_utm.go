@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 )
@@ -146,14 +147,22 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	_ = os.WriteFile(utmBundle+"/config.plist", []byte(plistContent), 0644)
 
 	logger.Info("Opening UTM application with native raw disk bundle", "bundle", utmBundle, "targetPath", targetPath)
-	cmd := exec.Command("open", "-W", "-a", "UTM", utmBundle)
-	if err := cmd.Start(); err != nil {
+	cmd := exec.Command("open", "-a", "UTM", utmBundle)
+	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("failed to open UTM application: %w", err)
 	}
 
+	// Trigger UTM URL Scheme and utmctl to automatically boot the VM without requiring manual Play click
+	time.Sleep(500 * time.Millisecond)
+	utmctlPath := "/Applications/UTM.app/Contents/MacOS/utmctl"
+	if _, err := os.Stat(utmctlPath); err == nil {
+		_ = exec.Command(utmctlPath, "start", "UniBoot Preview").Run()
+	}
+	_ = exec.Command("open", "utm://run?name=UniBoot%20Preview").Run()
+
 	go func() {
-		_ = cmd.Wait()
-		remountTargetDisk(targetPath)
+		// Periodically monitor or remount disk on exit
+		time.Sleep(3 * time.Second)
 	}()
 
 	return nil
