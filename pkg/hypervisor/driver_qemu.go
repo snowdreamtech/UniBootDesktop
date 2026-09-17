@@ -287,6 +287,7 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode strin
 	vcpus := GetRecommendedVCPUs()
 	args := []string{
 		"-name", "UniBoot",
+		"-snapshot",
 		"-machine", "q35",
 		"-smp", fmt.Sprintf("%d", vcpus),
 		"-m", fmt.Sprintf("%d", memMB),
