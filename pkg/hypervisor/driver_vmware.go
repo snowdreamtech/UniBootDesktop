@@ -110,8 +110,8 @@ func (d *VMwareDriver) Launch(ctx context.Context, diskPath string, bootMode str
 	if targetPath == "" {
 		targetPath = diskPath
 	}
-	unmountTargetDisk(targetPath)
 	ensureDiskPermissions(targetPath)
+	unmountTargetDisk(targetPath)
 
 	if err := launchVMwareVM(status, targetPath, bootMode); err == nil {
 		return nil

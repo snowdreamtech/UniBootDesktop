@@ -278,8 +278,8 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode strin
 	}
 	logger.Info("Executing QEMU preview simulation test", "disk", targetPath, "qemuPath", status.Path, "bootMode", bootMode)
 
-	unmountTargetDisk(targetPath)
 	ensureDiskPermissions(targetPath)
+	unmountTargetDisk(targetPath)
 
 	ovmfFw := DetectOVMF()
 

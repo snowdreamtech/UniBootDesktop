@@ -201,8 +201,6 @@ func unmountTargetDisk(targetPath string) {
 			if f, err := os.OpenFile(targetPath, os.O_RDWR, 0); err == nil {
 				_ = f.Close()
 				break
-			} else if os.IsPermission(err) {
-				break
 			} else if strings.Contains(err.Error(), "busy") {
 				_ = exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode)).Run()
 			}

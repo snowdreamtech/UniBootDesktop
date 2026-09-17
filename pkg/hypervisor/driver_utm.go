@@ -93,8 +93,8 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	if targetPath == "" {
 		targetPath = diskPath
 	}
-	unmountTargetDisk(targetPath)
 	ensureDiskPermissions(targetPath)
+	unmountTargetDisk(targetPath)
 
 	// If system has qemu-system-x86_64 / qemu-system-aarch64 installed, leverage QEMU backend directly
 	qemuDrv := &QEMUDriver{}
