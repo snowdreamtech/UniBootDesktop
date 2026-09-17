@@ -262,6 +262,15 @@ func isDiskMounted(diskNode string) bool {
 	return false
 }
 
+// GetRecommendedVCPUs dynamically determines optimal VM CPU core count based on host hardware.
+func GetRecommendedVCPUs() int {
+	cpus := runtime.NumCPU()
+	if cpus <= 2 {
+		return 1
+	}
+	return 2
+}
+
 // GetRecommendedVMMemoryMB dynamically determines optimal VM RAM (in MB)
 // based on host system's total physical memory to prevent host OOM on 4GB RAM machines.
 func GetRecommendedVMMemoryMB() int {

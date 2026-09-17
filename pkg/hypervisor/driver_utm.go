@@ -117,6 +117,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	_ = os.MkdirAll(utmBundle, 0755)
 
 	memMB := GetRecommendedVMMemoryMB()
+	vcpus := GetRecommendedVCPUs()
 
 	plistContent := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -136,7 +137,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 		<key>Architecture</key>
 		<string>x86_64</string>
 		<key>CPUCount</key>
-		<integer>2</integer>
+		<integer>%d</integer>
 		<key>MemorySize</key>
 		<integer>%d</integer>
 		<key>Target</key>
@@ -155,7 +156,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	</array>
 </dict>
 </plist>
-`, memMB, targetPath)
+`, vcpus, memMB, targetPath)
 
 	_ = os.WriteFile(utmBundle+"/config.plist", []byte(plistContent), 0644)
 
