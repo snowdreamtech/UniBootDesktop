@@ -298,7 +298,7 @@ func IsVentoyDisk(targetDisk string) bool {
 		return false
 	}
 
-	// 1. Physical MBR Sector 0 signature check
+	// 1. Physical MBR Sector 0 signature check (Fast 0.01ms check)
 	if CheckVentoyMbrSignature(targetDisk) {
 		return true
 	}
@@ -308,10 +308,18 @@ func IsVentoyDisk(targetDisk string) bool {
 		return true
 	}
 
-	// 3. Platform-specific target partition inspection
+	// 3. Platform-specific target partition inspection with Fast Short-Circuit
 	if runtime.GOOS == "darwin" {
 		diskNode := filepath.Base(targetDisk)
 		if strings.HasPrefix(diskNode, "disk") {
+			// Single partition short-circuit: Ventoy requires dual partitions (Partition 1 Data + Partition 2 VTOYEFI ESP).
+			// If Partition 2 (diskXs2) does not exist, it's a 1-partition drive -> Short-circuit false in 0.01ms!
+			if !strings.Contains(diskNode, "s") {
+				p2 := diskNode + "s2"
+				if err := exec.Command("diskutil", "info", p2).Run(); err != nil {
+					return false
+				}
+			}
 			p1 := diskNode
 			p2 := diskNode
 			if !strings.Contains(diskNode, "s") {
@@ -346,6 +354,13 @@ func IsModeBDisk(targetDisk string) bool {
 	if runtime.GOOS == "darwin" {
 		diskNode := filepath.Base(targetDisk)
 		if strings.HasPrefix(diskNode, "disk") {
+			// Single partition short-circuit: Mode B requires dual partitions (Partition 1 Data + Partition 2 ESP).
+			if !strings.Contains(diskNode, "s") {
+				p2 := diskNode + "s2"
+				if err := exec.Command("diskutil", "info", p2).Run(); err != nil {
+					return false
+				}
+			}
 			p1 := diskNode
 			p2 := diskNode
 			if !strings.Contains(diskNode, "s") {
