@@ -10,7 +10,7 @@
           <template v-else>ℹ️</template>
         </span>
         <span class="toast-text">{{ toastMessage }}</span>
-        <button class="toast-close" @click="toastMessage = ''">✕</button>
+        <button class="toast-close" @click="dismissToast">✕</button>
       </div>
     </transition>
 
@@ -357,7 +357,7 @@
 
               <button class="btn-text-sm" @click="handleCopyEmbeddedLogs">📋 {{ t('log.copy') }}</button>
               <button class="btn-text-sm" @click="handleExportEmbeddedLogs">📥 {{ t('log.export') }}</button>
-              <button class="btn-text-danger-sm" @click="runtimeLogs = []">🗑️ {{ t('log.clear') }}</button>
+              <button class="btn-text-danger-sm" @click="handleClearEmbeddedLogs">🗑️ {{ t('log.clear') }}</button>
               <button 
                 class="btn-text-sm btn-close-log" 
                 :title="t('common.close')" 
@@ -661,6 +661,7 @@ const filteredEmbeddedLogs = computed(() => {
 });
 
 function handleCopyEmbeddedLogs() {
+  logUserAction('INFO', 'User copied embedded logs to clipboard');
   if (filteredEmbeddedLogs.value.length === 0) {
     showToast(t('log.empty'), 'info');
     return;
@@ -673,6 +674,7 @@ function handleCopyEmbeddedLogs() {
 }
 
 async function handleExportEmbeddedLogs() {
+  logUserAction('INFO', 'User exported embedded logs');
   if (filteredEmbeddedLogs.value.length === 0) {
     showToast(t('log.empty'), 'info');
     return;
@@ -706,6 +708,21 @@ async function handleExportEmbeddedLogs() {
   }
 }
 
+function handleClearEmbeddedLogs() {
+  logUserAction('INFO', 'User cleared embedded log viewer');
+  runtimeLogs.value = [];
+}
+
+function dismissToast() {
+  toastMessage.value = '';
+  logUserAction('DEBUG', 'User dismissed toast notification');
+}
+
+function dismissDeploySuccessBanner() {
+  deploySuccessBanner.value.visible = false;
+  logUserAction('DEBUG', 'User dismissed deployment success banner');
+}
+
 function scrollToEmbeddedTerminalBottom() {
   if (embeddedAutoScroll.value && embeddedTerminalRef.value) {
     nextTick(() => {
@@ -724,6 +741,20 @@ function logUserAction(level: string, message: string, details: string = '') {
 
 watch(() => runtimeLogs.value.length, () => {
   scrollToEmbeddedTerminalBottom();
+});
+
+watch(currentEmbeddedLogFilter, (val) => {
+  logUserAction('DEBUG', 'User switched log filter tab in embedded log viewer', val);
+});
+
+watch(isLogCardVisible, (val) => {
+  logUserAction('INFO', 'User toggled log card visibility', val ? 'expanded' : 'collapsed');
+});
+
+watch(isAboutOpen, (val) => {
+  if (val) {
+    logUserAction('INFO', 'User opened About modal');
+  }
 });
 
 watch(activeMode, (newMode) => {
@@ -781,10 +812,12 @@ function openDiagnosticsModal(diag: InstallDiagnosticsData | null, msg: string) 
 }
 
 function handleCopyReport() {
+  logUserAction('INFO', 'User copied diagnostics report to clipboard');
   showToast(t('diag.toast_copied'), 'info');
 }
 
 function handleRetryDeploy() {
+  logUserAction('INFO', 'User clicked retry deployment from diagnostics modal');
   isDiagnosticsOpen.value = false;
   openDeployConfirm();
 }
@@ -1138,6 +1171,7 @@ async function handleBatchEjectDisks() {
 function openIconPicker(disk: DiskInfo) {
   targetPickerDisk.value = disk;
   isPickerOpen.value = true;
+  logUserAction('INFO', 'User opened custom icon picker modal', disk.name || disk.device);
 }
 
 function onIconSelected(type: DiskIconType) {
@@ -1320,10 +1354,13 @@ function onDiskSelect(disk: DiskInfo) {
 
 function onDiskToggle(disk: DiskInfo) {
   const newSet = new Set(selectedDevices.value);
-  if (newSet.has(disk.device)) {
+  const wasSelected = newSet.has(disk.device);
+  if (wasSelected) {
     newSet.delete(disk.device);
+    logUserAction('INFO', 'User unchecked disk drive in batch selection mode', `${disk.name || disk.device}`);
   } else {
     newSet.add(disk.device);
+    logUserAction('INFO', 'User checked disk drive in batch selection mode', `${disk.name || disk.device} (${disk.formatted})`);
   }
   selectedDevices.value = newSet;
 }

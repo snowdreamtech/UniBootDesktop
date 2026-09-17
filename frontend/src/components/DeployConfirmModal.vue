@@ -243,7 +243,15 @@ const confirmBtnText = computed(() => {
   }
 });
 
+const logUserAction = (level: string, message: string, details: string = '') => {
+  const app = (window as any)?.go?.main?.App;
+  if (app && typeof app.LogAction === 'function') {
+    app.LogAction(level, message, details);
+  }
+};
+
 function close() {
+  logUserAction('INFO', 'User closed deployment confirmation modal');
   emit("close");
 }
 

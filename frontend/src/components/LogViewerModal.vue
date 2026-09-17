@@ -151,23 +151,41 @@ function scrollToBottom() {
   }
 }
 
+const logUserAction = (level: string, message: string, details: string = '') => {
+  const app = (window as any)?.go?.main?.App;
+  if (app && typeof app.LogAction === 'function') {
+    app.LogAction(level, message, details);
+  }
+};
+
+watch(currentFilter, (val) => {
+  logUserAction('DEBUG', 'User switched log level filter tab in full Log Viewer modal', val);
+});
+
+watch(autoScroll, (val) => {
+  logUserAction('DEBUG', 'User toggled auto-scroll in full Log Viewer modal', val ? 'enabled' : 'disabled');
+});
+
 watch(() => props.logs.length, () => {
   scrollToBottom();
 });
 
 watch(() => props.isOpen, (newVal) => {
   if (newVal) {
+    logUserAction('INFO', 'User opened full Log Viewer modal');
     scrollToBottom();
   }
 });
 
 function copyAllLogs() {
+  logUserAction('INFO', 'User copied logs from full Log Viewer modal');
   const text = filteredLogs.value.map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message} ${l.details || ''}`).join('\n');
   navigator.clipboard.writeText(text);
   alert(t('log.copied_toast'));
 }
 
 function exportLogFile() {
+  logUserAction('INFO', 'User exported logs from full Log Viewer modal');
   const text = filteredLogs.value.map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message} ${l.details || ''}`).join('\n');
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);

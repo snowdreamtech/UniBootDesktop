@@ -227,7 +227,15 @@ function formatPower(val?: string): string {
   return str;
 }
 
+const logUserAction = (level: string, message: string, details: string = '') => {
+  const app = (window as any)?.go?.main?.App;
+  if (app && typeof app.LogAction === 'function') {
+    app.LogAction(level, message, details);
+  }
+};
+
 function closeModal() {
+  logUserAction('INFO', 'User closed USB hardware inspector modal');
   emit('close');
 }
 </script>
