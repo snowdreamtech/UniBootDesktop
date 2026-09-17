@@ -2373,13 +2373,14 @@ h1 {
 .deploy-success-banner {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  padding: 1rem;
-  margin-top: 0.75rem;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
-  border: 1px solid rgba(16, 185, 129, 0.4);
+  gap: 0.85rem;
+  padding: 1rem 1.15rem;
+  margin-top: 0.85rem;
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+  border: 1.5px solid #10b981;
   border-radius: 12px;
-  animation: bannerFadeIn 0.35s ease;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: bannerFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes bannerFadeIn {
@@ -2388,9 +2389,10 @@ h1 {
 }
 
 .deploy-success-icon {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   line-height: 1;
   flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .deploy-success-content {
@@ -2399,16 +2401,18 @@ h1 {
 }
 
 .deploy-success-title {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #6ee7b7;
-  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.3rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .deploy-success-desc {
-  font-size: 0.78rem;
-  color: rgba(255,255,255,0.7);
-  line-height: 1.4;
+  font-size: 0.82rem;
+  color: #ecfdf5;
+  line-height: 1.45;
+  font-weight: 500;
 }
 
 .deploy-success-actions {
@@ -2416,42 +2420,43 @@ h1 {
   flex-direction: column;
   gap: 0.4rem;
   flex-shrink: 0;
+  align-items: flex-end;
 }
 
 .btn-eject-success {
-  padding: 0.45rem 0.85rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  border: none;
+  padding: 0.5rem 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
   cursor: pointer;
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #fff;
-  transition: all 0.2s ease;
+  color: #ffffff;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
 }
 
 .btn-eject-success:hover {
   background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.55);
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.45);
   transform: translateY(-1px);
 }
 
 .btn-dismiss {
-  padding: 0.3rem 0.6rem;
-  font-size: 0.75rem;
-  border: 1px solid rgba(255,255,255,0.15);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+  border: none;
   border-radius: 6px;
   cursor: pointer;
-  background: transparent;
-  color: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.15);
+  color: #a7f3d0;
   transition: all 0.15s ease;
 }
 
 .btn-dismiss:hover {
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.8);
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
 }
 
 .qemu-box {
