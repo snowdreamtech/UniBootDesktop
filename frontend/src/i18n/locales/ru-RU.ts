@@ -338,7 +338,7 @@ export const ruRu: TranslationDict = {
   "header.subtitle": "Создание загрузочного диска и тест QEMU",
   "about.title": "О программе UniGoDesktop",
   "about.gitTag": "Тег релиза Git",
-  "about.commitHash": "Commit Hash",
+  "about.commitHash": "Хеш коммита",
   "about.buildTime": "Время сборки",
   "about.environment": "Среда окружения",
   "about.copied": "Диагностика скопирована",
@@ -383,6 +383,6 @@ export const ruRu: TranslationDict = {
   "dialog.logFilesFilter": "Файлы журналов (*.log)",
   "dialog.textFilesFilter": "Текстовые файлы (*.txt)",
   "dialog.allFilesFilter": "Все файлы (*.*)",
-  "dialog.selectIsoTitle": "Выбор файлов системных образов (*.iso, *.wim, *.img и др.)",
+  "dialog.selectIsoTitle": "Выберите файлы образов системы (*.iso, *.wim, *.img и т.д.)",
   "dialog.ventoyFilter": "Исходные образы Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };
