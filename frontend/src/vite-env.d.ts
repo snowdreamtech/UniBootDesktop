@@ -54,6 +54,9 @@ declare global {
           DeployCloudModeBatch(targetDisks: string[], fsType?: string, expected?: DiskInfo[]): Promise<any[]>;
           CheckQEMU(): Promise<any>;
           LaunchQEMU(targetDisk: string): Promise<void>;
+          DetectHypervisors?(): Promise<any[]>;
+          DetectBestHypervisor?(): Promise<any>;
+          LaunchVM?(targetDisk: string, vmType?: string): Promise<void>;
           CheckUpdate(): Promise<any>;
           GetConfig(): Promise<any>;
           SaveConfig(cfg: any): Promise<any>;

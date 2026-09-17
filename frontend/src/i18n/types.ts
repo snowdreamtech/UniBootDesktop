@@ -172,6 +172,10 @@ export interface TranslationDict {
   "deploy.confirm_auto_eject_no": string;
   "deploy.alert_fail": string;
   "qemu.title": string;
+  "qemu.box_title": string;
+  "qemu.detected_single": string;
+  "qemu.select_vm_label": string;
+  "qemu.startSuccess_vm": string;
   "qemu.installed": string;
   "qemu.not_installed": string;
   "qemu.target": string;
