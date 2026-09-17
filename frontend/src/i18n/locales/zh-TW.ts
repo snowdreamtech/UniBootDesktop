@@ -264,7 +264,7 @@ export const zhTw: TranslationDict = {
   "ventoy_alert.close": "關閉",
   "ventoy_alert.default_title": "無法建立混合模式磁碟",
   "ventoy_alert.banner_title": "💡 缺失前置條件與指引",
-  "inspector.title": "USB 硬體檢測與分析報告",
+  "inspector.title": "USB 硬體檢測與分析",
   "inspector.subtitle": "物理層協議、傳輸速率與硬件檢測",
   "inspector.device": "裝置節點：",
   "inspector.vendor": "廠商 / 品牌：",

@@ -264,7 +264,7 @@ export const faIr: TranslationDict = {
   "ventoy_alert.close": "بستن",
   "ventoy_alert.default_title": "نمی‌توان دیسک حالت ترکیبی ایجاد کرد",
   "ventoy_alert.banner_title": "💡 فاقد پیش نیاز و راهنمایی",
-  "inspector.title": "گزارش بازرس سخت افزار USB",
+  "inspector.title": "بازرسی و تحلیل سخت‌افزار USB",
   "inspector.subtitle": "تحلیل لایه فیزیکی، سرعت انتقال و سخت‌افزار",
   "inspector.device": "گره دستگاه:",
   "inspector.vendor": "فروشنده / برند:",

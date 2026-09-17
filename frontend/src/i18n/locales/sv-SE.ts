@@ -264,7 +264,7 @@ export const svSe: TranslationDict = {
   "ventoy_alert.close": "Stäng",
   "ventoy_alert.default_title": "Kan inte skapa hybrid-läge disk",
   "ventoy_alert.banner_title": "💡 Saknade förkunskaper & vägledning",
-  "inspector.title": "USB-maskinvaruinspektör",
+  "inspector.title": "USB-maskinvaruinspektion och -analys",
   "inspector.subtitle": "Fysiskt skikt, överföringshastighet och hårdvaruanalys",
   "inspector.device": "Enhetsnod:",
   "inspector.vendor": "Säljare/märke:",

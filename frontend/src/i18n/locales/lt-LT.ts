@@ -264,7 +264,7 @@ export const ltLt: TranslationDict = {
   "ventoy_alert.close": "Uždaryti",
   "ventoy_alert.default_title": "Negalima sukurti hibridinio režimo disko",
   "ventoy_alert.banner_title": "💡 Trūksta išankstinių sąlygų ir nurodymų",
-  "inspector.title": "USB aparatūros inspektoriaus ataskaita",
+  "inspector.title": "USB aparatinės įrangos patikra ir analizė",
   "inspector.subtitle": "Fizinio sluoksnio, perdavimo greičio ir aparatinės įrangos analizė",
   "inspector.device": "Įrenginio mazgas:",
   "inspector.vendor": "Pardavėjas / prekės ženklas:",

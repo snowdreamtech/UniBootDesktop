@@ -264,7 +264,7 @@ export const trTr: TranslationDict = {
   "ventoy_alert.close": "Kapat",
   "ventoy_alert.default_title": "Hibrit modu diski oluşturulamıyor",
   "ventoy_alert.banner_title": "💡 Eksik Ön Koşullar ve Yönergeler",
-  "inspector.title": "USB Donanım İnceleme ve Analiz Raporu",
+  "inspector.title": "USB Donanım İnceleme ve Analizi",
   "inspector.subtitle": "PHY Protokolü, Hız & Donanım Analizi",
   "inspector.device": "Cihaz Düğümü:",
   "inspector.vendor": "Üretici / Marka:",

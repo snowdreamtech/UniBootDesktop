@@ -264,7 +264,7 @@ export const thTh: TranslationDict = {
   "ventoy_alert.close": "ปิด",
   "ventoy_alert.default_title": "ไม่สามารถสร้างดิสก์โหมดไฮบริดได้",
   "ventoy_alert.banner_title": "💡 ขาดข้อกำหนดเบื้องต้นและคำแนะนำ",
-  "inspector.title": "รายงานตัวตรวจสอบฮาร์ดแวร์ USB",
+  "inspector.title": "การตรวจสอบและวิเคราะห์ฮาร์ดแวร์ USB",
   "inspector.subtitle": "โปรโตคอล PHY, ความเร็ว & การวิเคราะห์ฮาร์ดแวร์",
   "inspector.device": "โหนดอุปกรณ์:",
   "inspector.vendor": "ผู้จัดจำหน่าย / แบรนด์:",

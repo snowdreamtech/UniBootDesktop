@@ -264,7 +264,7 @@ export const ukUa: TranslationDict = {
   "ventoy_alert.close": "Закрити",
   "ventoy_alert.default_title": "Неможливо створити диск гібридного режиму",
   "ventoy_alert.banner_title": "💡 Відсутні попередні умови та вказівки",
-  "inspector.title": "Звіт інспектора обладнання USB",
+  "inspector.title": "Інспекція та аналіз обладнання USB",
   "inspector.subtitle": "PHY Протокол, Швидкість & Аналіз обладнання",
   "inspector.device": "Вузол пристрою:",
   "inspector.vendor": "Постачальник / Бренд:",

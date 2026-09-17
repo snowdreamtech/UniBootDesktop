@@ -264,7 +264,7 @@ export const zhCn: TranslationDict = {
   "ventoy_alert.close": "关闭",
   "ventoy_alert.default_title": "无法创建混合模式磁盘",
   "ventoy_alert.banner_title": "💡 缺失前置条件与指引",
-  "inspector.title": "USB 硬件检测与分析报告",
+  "inspector.title": "USB 硬件检测与分析",
   "inspector.subtitle": "物理层协议、传输速率与硬件检测",
   "inspector.device": "设备节点：",
   "inspector.vendor": "厂商 / 品牌：",

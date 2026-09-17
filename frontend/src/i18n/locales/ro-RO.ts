@@ -264,7 +264,7 @@ export const roRo: TranslationDict = {
   "ventoy_alert.close": "Închide",
   "ventoy_alert.default_title": "Nu se poate crea discul în modul hibrid",
   "ventoy_alert.banner_title": "💡 Lipsesc cerințe preliminare și îndrumări",
-  "inspector.title": "Raport inspector hardware USB",
+  "inspector.title": "Inspecție și analiză hardware USB",
   "inspector.subtitle": "Analiză strat fizic, viteză de transfer și hardware",
   "inspector.device": "Nod dispozitiv:",
   "inspector.vendor": "Furnizor/Marcă:",

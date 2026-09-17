@@ -264,7 +264,7 @@ export const srLatn: TranslationDict = {
   "ventoy_alert.close": "Затвори",
   "ventoy_alert.default_title": "Nije moguće napraviti disk u hibridnom načinu",
   "ventoy_alert.banner_title": "💡 Недостају предуслови и упутства",
-  "inspector.title": "Извештај инспектора УСБ хардвера",
+  "inspector.title": "Инспекција и анализа УСБ хардвера",
   "inspector.subtitle": "Analiza fizičkog sloja, brzine prenosa i hardvera",
   "inspector.device": "Чвор уређаја:",
   "inspector.vendor": "Продавац/Бренд:",

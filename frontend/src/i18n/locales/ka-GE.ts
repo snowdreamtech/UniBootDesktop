@@ -264,7 +264,7 @@ export const kaGe: TranslationDict = {
   "ventoy_alert.close": "დახურვა",
   "ventoy_alert.default_title": "ჰიბრიდული რეჟიმის დისკის შექმნა შეუძლებელია",
   "ventoy_alert.banner_title": "💡 აკლია წინარეკვიზიტები და მითითებები",
-  "inspector.title": "USB აპარატურის ინსპექტორის ანგარიში",
+  "inspector.title": "USB აპარატურის ინსპექტირება და անալիզի",
   "inspector.subtitle": "ფიზიკური შრის, გადაცემის სიჩქარისა და აპარატურული ანალიზი",
   "inspector.device": "მოწყობილობის კვანძი:",
   "inspector.vendor": "გამყიდველი / ბრენდი:",

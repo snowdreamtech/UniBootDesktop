@@ -264,7 +264,7 @@ export const csCz: TranslationDict = {
   "ventoy_alert.close": "Zavřít",
   "ventoy_alert.default_title": "Nelze vytvořit disk hybridního režimu",
   "ventoy_alert.banner_title": "💡 Chybějící předpoklady a pokyny",
-  "inspector.title": "Inspektor USB hardwaru",
+  "inspector.title": "Inspece a analýza USB hardwaru",
   "inspector.subtitle": "Analýza fyzické vrstvy, rychlosti přenosu a hardwaru",
   "inspector.device": "Uzel zařízení:",
   "inspector.vendor": "Prodejce / Značka:",

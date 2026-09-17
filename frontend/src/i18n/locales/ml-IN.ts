@@ -264,7 +264,7 @@ export const mlIn: TranslationDict = {
   "ventoy_alert.close": "അടയ്ക്കുക",
   "ventoy_alert.default_title": "ഹൈബ്രിഡ് മോഡ് ഡിസ്ക് ഉണ്ടാക്കാൻ കഴിഞ്ഞില്ല",
   "ventoy_alert.banner_title": "💡 മുൻകരുതലുകളും മാർഗ്ഗനിർദ്ദേശങ്ങളും നഷ്‌ടമായി",
-  "inspector.title": "USB ഹാർഡ്‌വെയർ ഇൻസ്പെക്ടർ റിപ്പോർട്ട്",
+  "inspector.title": "USB ഹാർഡ്‌വെയർ ഇൻസ്പെക്ഷനും വിശകലനവും",
   "inspector.subtitle": "ഫിസിക്കൽ ലെയർ, ട്രാൻസ്ഫർ സ്പീഡ്, ഹാർഡ്‌വെയർ വിശകലനം",
   "inspector.device": "ഉപകരണ നോഡ്:",
   "inspector.vendor": "വെണ്ടർ / ബ്രാൻഡ്:",

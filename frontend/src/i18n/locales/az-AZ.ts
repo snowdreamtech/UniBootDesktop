@@ -264,7 +264,7 @@ export const azAz: TranslationDict = {
   "ventoy_alert.close": "Bağlayın",
   "ventoy_alert.default_title": "Hibrid rejim diski yaradıla bilmir",
   "ventoy_alert.banner_title": "💡 Çatışmayan İlkin Tələblər və Rəhbərlik",
-  "inspector.title": "USB Hardware Müfəttişinin Hesabatı",
+  "inspector.title": "USB Təchizat İnspektorluq və Analizi",
   "inspector.subtitle": "Fiziki təbəqə, ötürmə sürəti və aparat analizi",
   "inspector.device": "Cihaz qovşağı:",
   "inspector.vendor": "Satıcı / Brend:",

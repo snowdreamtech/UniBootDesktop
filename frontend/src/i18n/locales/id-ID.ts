@@ -264,7 +264,7 @@ export const idId: TranslationDict = {
   "ventoy_alert.close": "Tutup",
   "ventoy_alert.default_title": "Tidak dapat membuat disk mode hibrid",
   "ventoy_alert.banner_title": "💡 Prasyarat & Panduan Tidak Ada",
-  "inspector.title": "Laporan Inspektur Perangkat Keras USB",
+  "inspector.title": "Inspeksi & Analisis Perangkat Keras USB",
   "inspector.subtitle": "Lapisan Fisik, Kecepatan Transfer & Analisis Perangkat Keras",
   "inspector.device": "Node Perangkat:",
   "inspector.vendor": "Penjual / Merek:",

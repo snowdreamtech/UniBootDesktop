@@ -264,7 +264,7 @@ export const mkMk: TranslationDict = {
   "ventoy_alert.close": "Затвори",
   "ventoy_alert.default_title": "Не може да се создаде диск во хибриден режим",
   "ventoy_alert.banner_title": "💡 Недостасуваат предуслови и упатства",
-  "inspector.title": "Извештај од USB хардверски инспектор",
+  "inspector.title": "Инспекција и анализа на USB хардвер",
   "inspector.subtitle": "Анализа на физички слој, брзина на пренос и хардвер",
   "inspector.device": "Јазол на уредот:",
   "inspector.vendor": "Добавувач / Бренд:",

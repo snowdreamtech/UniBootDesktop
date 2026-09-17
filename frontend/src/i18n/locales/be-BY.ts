@@ -264,7 +264,7 @@ export const beBy: TranslationDict = {
   "ventoy_alert.close": "Блізка",
   "ventoy_alert.default_title": "Немагчыма стварыць дыск гібрыднага рэжыму",
   "ventoy_alert.banner_title": "💡 Адсутнічаюць перадумовы і рэкамендацыі",
-  "inspector.title": "Справаздача інспектара абсталявання USB",
+  "inspector.title": "Інспекцыя і аналіз абсталявання USB",
   "inspector.subtitle": "Аналіз фізічнага ўзроўню, хуткасці перадачы і апаратуры",
   "inspector.device": "Вузел прылады:",
   "inspector.vendor": "Пастаўшчык/брэнд:",

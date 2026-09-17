@@ -264,7 +264,7 @@ export const skSk: TranslationDict = {
   "ventoy_alert.close": "Zavrieť",
   "ventoy_alert.default_title": "Hybridný disk sa nedá vytvoriť",
   "ventoy_alert.banner_title": "💡 Chýbajúce predpoklady a pokyny",
-  "inspector.title": "Správa USB Hardware Inspector",
+  "inspector.title": "Inšpekcia a analýza hardvéru USB",
   "inspector.subtitle": "Analýza fyzickej vrstvy, rýchlosti prenosu a hardvéru",
   "inspector.device": "Uzol zariadenia:",
   "inspector.vendor": "Predajca / Značka:",

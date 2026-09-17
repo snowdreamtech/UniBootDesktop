@@ -264,7 +264,7 @@ export const heIl: TranslationDict = {
   "ventoy_alert.close": "סגור",
   "ventoy_alert.default_title": "לא ניתן ליצור דיסק במצב היברידי",
   "ventoy_alert.banner_title": "💡 חסרים דרישות מוקדמות והדרכה",
-  "inspector.title": "דוח מפקח חומרת USB",
+  "inspector.title": "בדיקה וניתוח חומרת USB",
   "inspector.subtitle": "ניתוח שכבה פיזית, מהירות העברה וחומרה",
   "inspector.device": "צומת מכשיר:",
   "inspector.vendor": "ספק / מותג:",

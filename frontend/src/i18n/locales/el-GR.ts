@@ -264,7 +264,7 @@ export const elGr: TranslationDict = {
   "ventoy_alert.close": "Κλείσιμο",
   "ventoy_alert.default_title": "Δεν είναι δυνατή η δημιουργία δίσκου υβριδικής λειτουργίας",
   "ventoy_alert.banner_title": "💡 Λείπουν προαπαιτούμενα και καθοδήγηση",
-  "inspector.title": "Αναφορά επιθεωρητή υλικού USB",
+  "inspector.title": "Επιθεώρηση & Ανάλυση Υλικού USB",
   "inspector.subtitle": "Ανάλυση φυσικού στρώματος, ταχύτητας μεταφοράς και υλικού",
   "inspector.device": "Κόμβος συσκευής:",
   "inspector.vendor": "Πωλητής / Μάρκα:",

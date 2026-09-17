@@ -264,7 +264,7 @@ export const enUs: TranslationDict = {
   "ventoy_alert.close": "Close",
   "ventoy_alert.default_title": "Cannot Create Hybrid Mode Disk",
   "ventoy_alert.banner_title": "💡 Missing Pre-requisites & Guidance",
-  "inspector.title": "USB Hardware Inspector Report",
+  "inspector.title": "USB Hardware Inspector",
   "inspector.subtitle": "PHY Protocol, Speed & Hardware Analysis",
   "inspector.device": "Device Node:",
   "inspector.vendor": "Vendor / Brand:",

@@ -264,7 +264,7 @@ export const ruRu: TranslationDict = {
   "ventoy_alert.close": "Закрыть",
   "ventoy_alert.default_title": "Невозможно создать диск в гибридном режиме",
   "ventoy_alert.banner_title": "💡 Отсутствующие требования и инструкции",
-  "inspector.title": "Отчет об инспекции и анализе USB-оборудования",
+  "inspector.title": "Инспекция и анализ USB-оборудования",
   "inspector.subtitle": "PHY Протокол, скорость & Анализ оборудования",
   "inspector.device": "Узел устройства:",
   "inspector.vendor": "Производитель / Бренд:",

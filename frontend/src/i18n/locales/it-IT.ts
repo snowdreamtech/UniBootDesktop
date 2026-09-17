@@ -264,7 +264,7 @@ export const itIt: TranslationDict = {
   "ventoy_alert.close": "Chiudi",
   "ventoy_alert.default_title": "Impossibile creare il disco in modalità ibrida",
   "ventoy_alert.banner_title": "💡 Prerequisiti Mancanti e Istruzioni",
-  "inspector.title": "Rapporto Ispezione e Analisi Hardware USB",
+  "inspector.title": "Ispezione e Analisi Hardware USB",
   "inspector.subtitle": "Protocollo PHY, Velocità & Analisi hardware",
   "inspector.device": "Nodo Dispositivo:",
   "inspector.vendor": "Produttore / Marca:",

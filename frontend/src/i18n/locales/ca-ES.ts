@@ -264,7 +264,7 @@ export const caEs: TranslationDict = {
   "ventoy_alert.close": "Tancar",
   "ventoy_alert.default_title": "No es pot crear el disc en mode híbrid",
   "ventoy_alert.banner_title": "💡 Falten prerequisits i orientació",
-  "inspector.title": "Informe de l'inspector de maquinari USB",
+  "inspector.title": "Inspecció i anàlisi de maquinari USB",
   "inspector.subtitle": "Anàlisi de capa física, velocitat de transferència i maquinari",
   "inspector.device": "Node del dispositiu:",
   "inspector.vendor": "Proveïdor/Marca:",

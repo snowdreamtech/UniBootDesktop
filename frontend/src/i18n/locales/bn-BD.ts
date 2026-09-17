@@ -264,7 +264,7 @@ export const bnBd: TranslationDict = {
   "ventoy_alert.close": "বন্ধ",
   "ventoy_alert.default_title": "হাইব্রিড মোড ডিস্ক তৈরি করা যাচ্ছে না",
   "ventoy_alert.banner_title": "💡 পূর্ব-প্রয়োজনীয়তা এবং নির্দেশিকা অনুপস্থিত",
-  "inspector.title": "ইউএসবি হার্ডওয়্যার ইন্সপেক্টর রিপোর্ট",
+  "inspector.title": "ইউএসবি হার্ডওয়্যার ইন্সপেক্টর",
   "inspector.subtitle": "ফিজিক্যাল লেয়ার, ট্রান্সফার স্পিড এবং হার্ডওয়্যার বিশ্লেষণ",
   "inspector.device": "ডিভাইস নোড:",
   "inspector.vendor": "বিক্রেতা / ব্র্যান্ড:",

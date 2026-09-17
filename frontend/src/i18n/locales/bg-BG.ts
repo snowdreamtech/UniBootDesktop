@@ -264,7 +264,7 @@ export const bgBg: TranslationDict = {
   "ventoy_alert.close": "затвори",
   "ventoy_alert.default_title": "Не може да се създаде диск в хибриден режим",
   "ventoy_alert.banner_title": "💡 Липсват предварителни условия и насоки",
-  "inspector.title": "Доклад от USB хардуерен инспектор",
+  "inspector.title": "Инспекция и анализ на USB хардуер",
   "inspector.subtitle": "Анализ на физическия слой, скоростта на трансфер и хардуера",
   "inspector.device": "Възел на устройството:",
   "inspector.vendor": "Доставчик/Марка:",

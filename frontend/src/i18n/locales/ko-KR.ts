@@ -264,7 +264,7 @@ export const koKr: TranslationDict = {
   "ventoy_alert.close": "닫기",
   "ventoy_alert.default_title": "하이브리드 모드 디스크를 만들 수 없습니다",
   "ventoy_alert.banner_title": "💡 필요한 전제 조건 및 안내",
-  "inspector.title": "USB 하드웨어 검사 및 분석 보고서",
+  "inspector.title": "USB 하드웨어 검사 및 분석",
   "inspector.subtitle": "PHY 프로토콜, 속도 & 하드웨어 분석",
   "inspector.device": "장치 노드:",
   "inspector.vendor": "제조사 / 브랜드:",

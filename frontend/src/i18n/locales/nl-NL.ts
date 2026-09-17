@@ -264,7 +264,7 @@ export const nlNl: TranslationDict = {
   "ventoy_alert.close": "Sluiten",
   "ventoy_alert.default_title": "Hybride modus schijf kan niet worden aangemaakt",
   "ventoy_alert.banner_title": "💡 Ontbrekende vereisten en begeleiding",
-  "inspector.title": "USB-hardware-inspecteurrapport",
+  "inspector.title": "USB-hardware-inspectie en -analyse",
   "inspector.subtitle": "Fysieke laag, overdrachtssnelheid en hardware-analyse",
   "inspector.device": "Apparaatknooppunt:",
   "inspector.vendor": "Verkoper / Merk:",

@@ -264,7 +264,7 @@ export const noNo: TranslationDict = {
   "ventoy_alert.close": "Lukk",
   "ventoy_alert.default_title": "Kan ikke opprette hybridmodus-disk",
   "ventoy_alert.banner_title": "💡 Manglende forutsetninger og veiledning",
-  "inspector.title": "USB-maskinvareinspektør",
+  "inspector.title": "USB-maskinvareinspeksjon og -analyse",
   "inspector.subtitle": "Fysisk lag, overføringshastighet og maskinvareanalyse",
   "inspector.device": "Enhetsnode:",
   "inspector.vendor": "Leverandør/merke:",

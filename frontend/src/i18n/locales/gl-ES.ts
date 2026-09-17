@@ -264,7 +264,7 @@ export const glEs: TranslationDict = {
   "ventoy_alert.close": "Pechar",
   "ventoy_alert.default_title": "Non se pode crear o disco en modo híbrido",
   "ventoy_alert.banner_title": "💡 Faltan requisitos previos e orientación",
-  "inspector.title": "Informe do inspector de hardware USB",
+  "inspector.title": "Inspección e análise de hardware USB",
   "inspector.subtitle": "Análise de capa física, velocidade de transferencia e hardware",
   "inspector.device": "Nodo do dispositivo:",
   "inspector.vendor": "Vendedor/Marca:",

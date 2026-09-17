@@ -264,7 +264,7 @@ export const hiIn: TranslationDict = {
   "ventoy_alert.close": "बंद करें",
   "ventoy_alert.default_title": "हाइब्रिड मोड डिस्क नहीं बनाई जा सकती",
   "ventoy_alert.banner_title": "💡 पूर्व-आवश्यकताएँ और मार्गदर्शन अनुपलब्ध",
-  "inspector.title": "यूएसबी हार्डवेयर इंस्पेक्टर रिपोर्ट",
+  "inspector.title": "यूएसबी हार्डवेयर निरीक्षण और विश्लेषण",
   "inspector.subtitle": "भौतिक परत, स्थानांतरण गति और हार्डवेयर विश्लेषण",
   "inspector.device": "डिवाइस नोड:",
   "inspector.vendor": "विक्रेता/ब्रांड:",

@@ -264,7 +264,7 @@ export const ocFr: TranslationDict = {
   "ventoy_alert.close": "Barrar",
   "ventoy_alert.default_title": "Impossible de crear lo disc en mode hibrid",
   "ventoy_alert.banner_title": "💡 Prerequisits e orientacions mancantas",
-  "inspector.title": "Rapòrt de l'inspector de maquinari USB",
+  "inspector.title": "Inspeccion e analisi de maquinari USB",
   "inspector.subtitle": "Analisi de jaça fisica, velocitat de transferiment e material",
   "inspector.device": "Node de periferic:",
   "inspector.vendor": "Vendeire / Marca:",

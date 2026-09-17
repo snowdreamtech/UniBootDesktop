@@ -264,7 +264,7 @@ export const arSa: TranslationDict = {
   "ventoy_alert.close": "إغلاق",
   "ventoy_alert.default_title": "لا يمكن إنشاء قرص الوضع الهجين",
   "ventoy_alert.banner_title": "💡 المتطلبات الأساسية والتعليمات المفقودة",
-  "inspector.title": "تقرير فحص وتحليل أجهزة USB",
+  "inspector.title": "فحص وتحليل أجهزة USB",
   "inspector.subtitle": "بروتوكول PHY، السرعة وتحليل الأجهزة",
   "inspector.device": "عقدة الجهاز:",
   "inspector.vendor": "المصنع / العلامة التجارية:",

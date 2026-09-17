@@ -264,7 +264,7 @@ export const urPk: TranslationDict = {
   "ventoy_alert.close": "بند",
   "ventoy_alert.default_title": "ہائبرڈ موڈ ڈسک نہیں بنائی جا سکتی",
   "ventoy_alert.banner_title": "💡 پیشگی ضروریات اور رہنمائی غائب ہے۔",
-  "inspector.title": "USB ہارڈویئر انسپکٹر رپورٹ",
+  "inspector.title": "USB ہارڈویئر کا معائنہ اور تجزیہ",
   "inspector.subtitle": "فزیکل لیئر، ٹرانسفر اسپیڈ اور ہارڈویئر تجزیہ",
   "inspector.device": "ڈیوائس نوڈ:",
   "inspector.vendor": "وینڈر / برانڈ:",

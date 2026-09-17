@@ -264,7 +264,7 @@ export const jaJp: TranslationDict = {
   "ventoy_alert.close": "閉じる",
   "ventoy_alert.default_title": "ハイブリッドモードのディスクを作成できません",
   "ventoy_alert.banner_title": "💡 必要な前提条件とガイド",
-  "inspector.title": "USB ハードウェア検出 & 分析レポート",
+  "inspector.title": "USB ハードウェア検出 & 分析",
   "inspector.subtitle": "PHYプロトコル、速度 & ハードウェア分析",
   "inspector.device": "デバイスノード：",
   "inspector.vendor": "ベンダー / ブランド：",

@@ -264,7 +264,7 @@ export const viVn: TranslationDict = {
   "ventoy_alert.close": "Đóng",
   "ventoy_alert.default_title": "Không thể tạo đĩa chế độ hỗn hợp",
   "ventoy_alert.banner_title": "💡 Thiếu điều kiện tiên quyết & Hướng dẫn",
-  "inspector.title": "Báo cáo kiểm tra & phân tích phần cứng USB",
+  "inspector.title": "Kiểm tra & phân tích phần cứng USB",
   "inspector.subtitle": "Giao thức PHY, Tốc độ & Phân tích phần cứng",
   "inspector.device": "Nút thiết bị:",
   "inspector.vendor": "Nhà sản xuất / Thương hiệu:",

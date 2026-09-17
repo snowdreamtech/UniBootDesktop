@@ -264,7 +264,7 @@ export const plPl: TranslationDict = {
   "ventoy_alert.close": "Zamknij",
   "ventoy_alert.default_title": "Nie można utworzyć dysku w trybie hybrydowym",
   "ventoy_alert.banner_title": "💡 Brakujące wymagania wstępne i instrukcje",
-  "inspector.title": "Raport z inspekcji i analizy sprzętu USB",
+  "inspector.title": "Inspekcja i analiza sprzętu USB",
   "inspector.subtitle": "Analiza warstwy fizycznej, prędkości transferu i sprzętu",
   "inspector.device": "Węzeł urządzenia:",
   "inspector.vendor": "Producent / Marka:",

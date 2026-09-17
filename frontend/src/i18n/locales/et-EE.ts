@@ -264,7 +264,7 @@ export const etEe: TranslationDict = {
   "ventoy_alert.close": "Sule",
   "ventoy_alert.default_title": "Hübriidse režiimi ketast ei saa luua",
   "ventoy_alert.banner_title": "💡 Puuduvad eeltingimused ja juhised",
-  "inspector.title": "USB-riistvarainspektori aruanne",
+  "inspector.title": "USB-riistvara kontroll ja analüüs",
   "inspector.subtitle": "Füüsikalise kihi, edastuskiiruse ja raudvara analüüs",
   "inspector.device": "Seadme sõlm:",
   "inspector.vendor": "Müüja/kaubamärk:",

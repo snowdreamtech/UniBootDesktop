@@ -264,7 +264,7 @@ export const taIn: TranslationDict = {
   "ventoy_alert.close": "மூடு",
   "ventoy_alert.default_title": "ஹைப்ரிட் மோட் டிஸ்க் உருவாக்க முடியவில்லை",
   "ventoy_alert.banner_title": "💡 முன்தேவைகள் & வழிகாட்டுதல் விடுபட்டுள்ளது",
-  "inspector.title": "USB ஹார்டுவேர் இன்ஸ்பெக்டர் அறிக்கை",
+  "inspector.title": "USB ஹார்டுவேர் ஆய்வு மற்றும் பகுப்பாய்வு",
   "inspector.subtitle": "பௌதிக அடுக்கு, பரிமாற்ற வேகம் & வன்பொருள் பகுப்பாய்வு",
   "inspector.device": "சாதன முனை:",
   "inspector.vendor": "விற்பனையாளர் / பிராண்ட்:",

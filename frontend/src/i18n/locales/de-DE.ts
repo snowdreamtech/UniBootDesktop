@@ -264,7 +264,7 @@ export const deDe: TranslationDict = {
   "ventoy_alert.close": "Schließen",
   "ventoy_alert.default_title": "Hybrid-Modus-Disk kann nicht erstellt werden",
   "ventoy_alert.banner_title": "💡 Fehlende Voraussetzungen & Anleitung",
-  "inspector.title": "USB-Hardware-Inspektions- & Analysebericht",
+  "inspector.title": "USB-Hardware-Inspektion & Analyse",
   "inspector.subtitle": "PHY-Protokoll, Geschwindigkeit & Hardwareanalyse",
   "inspector.device": "Geräteknoten:",
   "inspector.vendor": "Hersteller / Marke:",

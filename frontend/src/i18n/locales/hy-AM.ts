@@ -264,7 +264,7 @@ export const hyAm: TranslationDict = {
   "ventoy_alert.close": "Փակել",
   "ventoy_alert.default_title": "Հիբրիդ ռեժիմի սկավառակ հնարավոր չէ ստեղծել",
   "ventoy_alert.banner_title": "💡 Բացակայում են նախադրյալները և ուղեցույցները",
-  "inspector.title": "USB ապարատային տեսուչի հաշվետվություն",
+  "inspector.title": "USB ապարատային ստուգում և վերլուծություն",
   "inspector.subtitle": "Ֆիզիկական շերտի, փոխանցման արագության և ապարատային վերլուծություն",
   "inspector.device": "Սարքի հանգույց.",
   "inspector.vendor": "Վաճառող / Ապրանքանիշ:",

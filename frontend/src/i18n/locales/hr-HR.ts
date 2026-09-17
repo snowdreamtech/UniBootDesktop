@@ -264,7 +264,7 @@ export const hrHr: TranslationDict = {
   "ventoy_alert.close": "Zatvori",
   "ventoy_alert.default_title": "Nije moguće stvoriti disk u hibridnom načinu",
   "ventoy_alert.banner_title": "💡 Nedostaju preduvjeti i smjernice",
-  "inspector.title": "Izvješće inspektora USB hardvera",
+  "inspector.title": "Inspekcija i analiza USB hardvera",
   "inspector.subtitle": "Analiza fizičkog sloja, brzine prijenosa i hardvera",
   "inspector.device": "Čvor uređaja:",
   "inspector.vendor": "Dobavljač/brend:",

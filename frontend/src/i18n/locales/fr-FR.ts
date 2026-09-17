@@ -264,7 +264,7 @@ export const frFr: TranslationDict = {
   "ventoy_alert.close": "Fermer",
   "ventoy_alert.default_title": "Impossible de créer le disque en mode hybride",
   "ventoy_alert.banner_title": "💡 Prérequis manquants & Instructions",
-  "inspector.title": "Rapport d'inspection & d'analyse matérielle USB",
+  "inspector.title": "Inspection & analyse matérielle USB",
   "inspector.subtitle": "Protocole PHY, Vitesse & Analyse matérielle",
   "inspector.device": "Nœud de périphérique :",
   "inspector.vendor": "Fabricant / Marque :",

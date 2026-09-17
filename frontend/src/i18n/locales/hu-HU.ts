@@ -264,7 +264,7 @@ export const huHu: TranslationDict = {
   "ventoy_alert.close": "Bezárás",
   "ventoy_alert.default_title": "Hibrid módú lemez nem hozható létre",
   "ventoy_alert.banner_title": "💡 Hiányzó előfeltételek és útmutatás",
-  "inspector.title": "USB hardvervizsgáló",
+  "inspector.title": "USB-hardver vizsgálat és elemzés",
   "inspector.subtitle": "Fizikai réteg, átviteli sebesség és hardveranalízis",
   "inspector.device": "Eszköz csomópont:",
   "inspector.vendor": "Eladó/márka:",

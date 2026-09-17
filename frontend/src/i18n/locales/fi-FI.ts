@@ -264,7 +264,7 @@ export const fiFi: TranslationDict = {
   "ventoy_alert.close": "Sulje",
   "ventoy_alert.default_title": "Hybriditilan levyä ei voida luoda",
   "ventoy_alert.banner_title": "💡 Esitiedot ja opastus puuttuu",
-  "inspector.title": "USB-laitteistotarkastajan raportti",
+  "inspector.title": "USB-laitteiston tarkastus ja analyysi",
   "inspector.subtitle": "Fyysinen kerros, siirtonopeus ja laitteistoanalyysi",
   "inspector.device": "Laitteen solmu:",
   "inspector.vendor": "Myyjä / merkki:",

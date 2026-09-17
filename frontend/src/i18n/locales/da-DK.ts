@@ -264,7 +264,7 @@ export const daDk: TranslationDict = {
   "ventoy_alert.close": "Luk",
   "ventoy_alert.default_title": "Kan ikke oprette hybrid-tilstand disk",
   "ventoy_alert.banner_title": "💡 Manglende forudsætninger og vejledning",
-  "inspector.title": "USB-hardwareinspektør",
+  "inspector.title": "USB-hardwareinspektion og -analyse",
   "inspector.subtitle": "Fysisk lag, overførselshastighed og hardwareanalyse",
   "inspector.device": "Enhedsnode:",
   "inspector.vendor": "Leverandør/mærke:",

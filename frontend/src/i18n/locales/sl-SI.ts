@@ -264,7 +264,7 @@ export const slSi: TranslationDict = {
   "ventoy_alert.close": "Zapri",
   "ventoy_alert.default_title": "Ne morem ustvariti diska v hibridnem načinu",
   "ventoy_alert.banner_title": "💡 Manjkajoči predpogoji in navodila",
-  "inspector.title": "Poročilo inšpektorja strojne opreme USB",
+  "inspector.title": "Pregled in analiza strojne opreme USB",
   "inspector.subtitle": "Analiza fizične plasti, hitrosti prenosa in strojne opreme",
   "inspector.device": "Vozlišče naprave:",
   "inspector.vendor": "Prodajalec/blagovna znamka:",

@@ -264,7 +264,7 @@ export const esEs: TranslationDict = {
   "ventoy_alert.close": "Cerrar",
   "ventoy_alert.default_title": "No se puede crear el disco en modo híbrido",
   "ventoy_alert.banner_title": "💡 Requisitos previos faltantes e instrucciones",
-  "inspector.title": "Informe de inspección y análisis de hardware USB",
+  "inspector.title": "Inspección y análisis de hardware USB",
   "inspector.subtitle": "Protocolo PHY, Velocidad & Análisis de hardware",
   "inspector.device": "Nodo de dispositivo:",
   "inspector.vendor": "Fabricante / Marca:",
