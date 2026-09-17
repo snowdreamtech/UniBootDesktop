@@ -136,7 +136,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 		<key>CPUCount</key>
 		<integer>2</integer>
 		<key>MemorySize</key>
-		<integer>2048</integer>
+		<integer>4096</integer>
 		<key>Target</key>
 		<string>q35</string>
 	</dict>

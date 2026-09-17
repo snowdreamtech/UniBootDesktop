@@ -286,7 +286,8 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode strin
 	args := []string{
 		"-name", "UniBoot",
 		"-machine", "q35",
-		"-m", "2048",
+		"-smp", "2",
+		"-m", "4096",
 		"-device", "virtio-vga,xres=1280,yres=800",
 		"-netdev", "user,id=net0",
 		"-device", "e1000,netdev=net0",
