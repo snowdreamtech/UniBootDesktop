@@ -114,6 +114,7 @@ export const zhTw: TranslationDict = {
   "log.export": "匯出日誌",
   "log.clear": "清空",
   "log.copied_toast": "日誌內容已成功複製到剪貼簿！",
+  "log.exported_toast": "日誌已成功匯出至檔案！",
   "log.level_all": "全部",
   "log.level_info": "資訊",
   "log.level_warn": "警告",

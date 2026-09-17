@@ -114,6 +114,7 @@ export const fiFi: TranslationDict = {
   "log.export": "Export Log",
   "log.clear": "Clear",
   "log.copied_toast": "Log content copied to clipboard!",
+  "log.exported_toast": "Log exported to file successfully!",
   "log.level_all": "ALL",
   "log.level_info": "INFO",
   "log.level_warn": "WARN",

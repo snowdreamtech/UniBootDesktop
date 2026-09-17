@@ -114,6 +114,7 @@ export const koKr: TranslationDict = {
   "log.export": "Export Log",
   "log.clear": "Clear",
   "log.copied_toast": "Log content copied to clipboard!",
+  "log.exported_toast": "Log exported to file successfully!",
   "log.level_all": "전체",
   "log.level_info": "정보",
   "log.level_warn": "경고",

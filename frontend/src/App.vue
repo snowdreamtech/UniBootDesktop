@@ -680,7 +680,7 @@ async function handleExportEmbeddedLogs() {
     try {
       const filePath = await (window.go.main.App as any).ExportLogs(text);
       if (filePath) {
-        showToast(t('log.copied_toast'), 'success');
+        showToast(t('log.exported_toast'), 'success');
       }
     } catch (e) {
       console.error('Failed to export logs:', e);
@@ -694,7 +694,7 @@ async function handleExportEmbeddedLogs() {
     a.download = `unigodesktop-log-${new Date().toISOString().slice(0, 10)}.log`;
     a.click();
     URL.revokeObjectURL(url);
-    showToast(t('log.copied_toast'), 'success');
+    showToast(t('log.exported_toast'), 'success');
   }
 }
 

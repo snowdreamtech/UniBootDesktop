@@ -111,6 +111,7 @@ export interface TranslationDict {
   "log.export": string;
   "log.clear": string;
   "log.copied_toast": string;
+  "log.exported_toast": string;
   "log.level_all": string;
   "log.level_info": string;
   "log.level_warn": string;
