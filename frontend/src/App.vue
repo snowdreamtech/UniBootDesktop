@@ -951,7 +951,7 @@ function checkIsExistingBootDisk(d: DiskInfo): boolean {
   if (name.includes('VENTOY') || status.includes('VENTOY') || name.includes('UNIBOOT') || status.includes('UNIBOOT')) {
     return true;
   }
-  if (status.includes('MODE A') || status.includes('MODE B') || rawStatus.includes('模式 A') || rawStatus.includes('模式 B')) {
+  if (status.includes('MODE A') || status.includes('MODE B') || status.includes('HYBRID') || status.includes('CLOUD') || rawStatus.includes('模式 A') || rawStatus.includes('模式 B') || rawStatus.includes('混合模式') || rawStatus.includes('云端模式')) {
     return true;
   }
   return false;

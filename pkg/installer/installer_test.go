@@ -22,7 +22,7 @@ func TestDeployModeA(t *testing.T) {
 	require.NoError(t, err)
 	assert.True(t, res.Success)
 	assert.Equal(t, "dummy_usb_disk", res.Target)
-	assert.Contains(t, res.Message, "Hybrid Pro Mode A")
+	assert.Contains(t, res.Message, "Hybrid Mode")
 
 	_, err = DeployModeA(ctx, "/", "exFAT")
 	assert.Error(t, err)
@@ -38,7 +38,7 @@ func TestDeployModeB(t *testing.T) {
 	require.NoError(t, err)
 	assert.True(t, res.Success)
 	assert.Equal(t, "dummy_usb_disk", res.Target)
-	assert.Contains(t, res.Message, "Mode B")
+	assert.Contains(t, res.Message, "Cloud Mode")
 
 	_, err = DeployModeB(ctx, "/", "exFAT")
 	assert.Error(t, err)

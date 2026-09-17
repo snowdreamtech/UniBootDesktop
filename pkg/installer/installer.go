@@ -81,7 +81,7 @@ func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 	if fsType == "" {
 		fsType = "exFAT"
 	}
-	modeLabel := fmt.Sprintf("Mode A (Hybrid Pro - %s)", fsType)
+	modeLabel := fmt.Sprintf("Hybrid Mode (%s)", fsType)
 	tracker := NewDeployTracker(targetDisk, modeLabel, expected)
 
 	// Step 1: Target Disk & Snapshot Validation
@@ -117,7 +117,7 @@ func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 	} else {
 		val := ValidateVentoyCli(ventoyPath)
 		if !val.Valid {
-			errVentoy := fmt.Errorf("cannot create Mode A (Hybrid Mode): target USB drive is clean and no valid Ventoy directory detected. Please configure Ventoy directory in Settings first (%s)", val.Message)
+			errVentoy := fmt.Errorf("cannot create Hybrid Mode: target USB drive is clean and no valid Ventoy directory detected. Please configure Ventoy directory in Settings first (%s)", val.Message)
 			diag := tracker.BuildDiagnostics(errVentoy)
 			return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errVentoy.Error(), Diagnostics: diag}, errVentoy
 		}
@@ -127,7 +127,7 @@ func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 		}
 	}
 	if err != nil {
-		errPrep := fmt.Errorf("preparing disk for Mode A failed: %w", err)
+		errPrep := fmt.Errorf("preparing disk for Hybrid Mode failed: %w", err)
 		diag := tracker.BuildDiagnostics(errPrep)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errPrep.Error(), Diagnostics: diag}, errPrep
 	}
@@ -175,9 +175,9 @@ func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 	tracker.SetStage("更新卷标", StepUpdateLabel, ActionRetry)
 	mountPoint = UpdateVolumeLabel(targetDisk, mountPoint, "UNIBOOT")
 
-	msg := fmt.Sprintf("Successfully deployed Hybrid Pro Mode A (%s/UNIBOOT) to %s (mount: %s)", fsType, targetDisk, mountPoint)
+	msg := fmt.Sprintf("Successfully deployed Hybrid Mode (%s/UNIBOOT) to %s (mount: %s)", fsType, targetDisk, mountPoint)
 	if isExistingVentoy {
-		msg = fmt.Sprintf("Successfully upgraded existing Ventoy drive to UniBoot Hybrid Pro Mode A at %s (ISO data preserved)", targetDisk)
+		msg = fmt.Sprintf("Successfully upgraded existing Ventoy drive to UniBoot Hybrid Mode at %s (ISO data preserved)", targetDisk)
 	}
 	if len(isoPaths) > 0 {
 		msg += fmt.Sprintf(" (%d ISO/IMG file(s) copied)", len(isoPaths))
@@ -244,10 +244,10 @@ func deployModeABatchWithExpectedDisks(ctx context.Context, targetDisks []string
 			if res != nil && res.Diagnostics != nil {
 				results = append(results, res)
 			} else {
-				tracker := NewDeployTracker(d, fmt.Sprintf("Mode A (Hybrid Pro - %s)", fsType), snapshotPtr)
+				tracker := NewDeployTracker(d, fmt.Sprintf("Hybrid Mode (%s)", fsType), snapshotPtr)
 				results = append(results, &DeployResult{
 					Success:     false,
-					Mode:        fmt.Sprintf("Mode A (Hybrid Pro - %s)", fsType),
+					Mode:        fmt.Sprintf("Hybrid Mode (%s)", fsType),
 					Target:      d,
 					Message:     err.Error(),
 					Diagnostics: tracker.BuildDiagnostics(err),
@@ -298,7 +298,7 @@ func deployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 	if fsType == "" {
 		fsType = "exFAT"
 	}
-	modeLabel := fmt.Sprintf("Mode B (Cloud Pure - %s)", fsType)
+	modeLabel := fmt.Sprintf("Cloud Mode (%s)", fsType)
 	tracker := NewDeployTracker(targetDisk, modeLabel, expected)
 
 	// Step 1: Target Disk & Snapshot Validation
@@ -331,7 +331,7 @@ func deployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 	} else {
 		_, errFormat := FormatDiskModeB(ctx, targetDisk)
 		if errFormat != nil {
-			errFmt := fmt.Errorf("formatting dual partitions for Mode B failed: %w", errFormat)
+			errFmt := fmt.Errorf("formatting dual partitions for Cloud Mode failed: %w", errFormat)
 			diag := tracker.BuildDiagnostics(errFmt)
 			return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errFmt.Error(), Diagnostics: diag}, errFmt
 		}
@@ -342,7 +342,7 @@ func deployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 		}
 	}
 	if err != nil {
-		errPrep := fmt.Errorf("preparing EFI partition for Mode B failed: %w", err)
+		errPrep := fmt.Errorf("preparing EFI partition for Cloud Mode failed: %w", err)
 		diag := tracker.BuildDiagnostics(errPrep)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errPrep.Error(), Diagnostics: diag}, errPrep
 	}
@@ -360,9 +360,9 @@ func deployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 		filepath.Join(efiMountPoint, "ipxe"),
 	})
 
-	msg := fmt.Sprintf("Successfully deployed Cloud Pure Mode B to ESP EFI Partition (%s)", efiMountPoint)
+	msg := fmt.Sprintf("Successfully deployed Cloud Mode to ESP EFI Partition (%s)", efiMountPoint)
 	if isExistingVentoy {
-		msg = fmt.Sprintf("Successfully converted Ventoy drive to Mode B iPXE Cloud Boot by flashing EFI partition at %s (Main Data Partition untouched, ISO data preserved!)", efiMountPoint)
+		msg = fmt.Sprintf("Successfully converted Ventoy drive to Cloud Mode iPXE Cloud Boot by flashing EFI partition at %s (Main Data Partition untouched, ISO data preserved!)", efiMountPoint)
 	}
 
 	return &DeployResult{
@@ -415,10 +415,10 @@ func deployModeBBatchWithExpectedDisks(ctx context.Context, targetDisks []string
 			if res != nil && res.Diagnostics != nil {
 				results = append(results, res)
 			} else {
-				tracker := NewDeployTracker(d, fmt.Sprintf("Mode B (Cloud Pure - %s)", fsType), snapshot)
+				tracker := NewDeployTracker(d, fmt.Sprintf("Cloud Mode (%s)", fsType), snapshot)
 				results = append(results, &DeployResult{
 					Success:     false,
-					Mode:        fmt.Sprintf("Mode B (Cloud Pure - %s)", fsType),
+					Mode:        fmt.Sprintf("Cloud Mode (%s)", fsType),
 					Target:      d,
 					Message:     err.Error(),
 					Diagnostics: tracker.BuildDiagnostics(err),

@@ -17,7 +17,7 @@ func TestInstallDiagnosticsFormatReport(t *testing.T) {
 		TaskID:            "deploy-20260917-010500-1234",
 		Target:            "/dev/disk2",
 		DeviceSummary:     "SanDisk Ultra 16GB",
-		Mode:              "Mode A (Hybrid Pro - exFAT)",
+		Mode:              "Hybrid Mode (exFAT)",
 		FailedStage:       "解压固件资源",
 		FailedStepCode:    StepExtractFirmware,
 		ErrorCause:        "writing /Volumes/UNIBOOT/EFI/BOOT/BOOTX64.EFI: i/o error",
@@ -46,7 +46,7 @@ func TestDeployTrackerPhases(t *testing.T) {
 		Formatted: "32 GB",
 	}
 
-	tracker := NewDeployTracker("/dev/disk3", "Mode A (Hybrid Pro - exFAT)", expected)
+	tracker := NewDeployTracker("/dev/disk3", "Hybrid Mode (exFAT)", expected)
 	assert.Equal(t, "/dev/disk3", tracker.Target)
 	assert.Contains(t, tracker.DeviceSummary, "Kingston DataTraveler")
 	assert.True(t, tracker.SafeToUnplug)
