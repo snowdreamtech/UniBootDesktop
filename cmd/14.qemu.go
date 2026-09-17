@@ -20,14 +20,14 @@ var (
 
 var qemuCmd = &cobra.Command{
 	Use:   "qemu",
-	Short: "Launch QEMU virtual machine to test target USB bootable drive",
-	Long: `Launch an isolated QEMU simulator virtual machine window to test the bootability of a USB drive or ISO image without rebooting your computer.
+	Short: "Launch QEMU virtual machine to test target bootable disk drive",
+	Long: `Launch an isolated QEMU simulator virtual machine window to test the bootability of a disk drive or ISO image without rebooting your computer.
 
 Examples:
-  # Test USB drive /dev/disk2 in QEMU
+  # Test disk drive /dev/disk2 in QEMU
   unigodesktop qemu --disk /dev/disk2
 
-  # Test USB drive with 4GB RAM
+  # Test disk drive with 4GB RAM
   unigodesktop qemu -d /dev/disk2 -m 4096`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		target := strings.TrimSpace(qemuDisk)
@@ -61,7 +61,7 @@ Examples:
 }
 
 func init() {
-	qemuCmd.Flags().StringVarP(&qemuDisk, "disk", "d", "", "target USB drive device or ISO image path")
+	qemuCmd.Flags().StringVarP(&qemuDisk, "disk", "d", "", "target disk device or ISO image path")
 	qemuCmd.Flags().StringVarP(&qemuMem, "mem", "m", "2048", "allocated memory in MB for virtual machine")
 
 	rootCmd.AddCommand(qemuCmd)

@@ -23,10 +23,10 @@ var (
 
 var dfCmd = &cobra.Command{
 	Use:   "df",
-	Short: "Display USB drives and UniBoot directory disk usage",
-	Long:  `Display information about removable USB storage devices and data directory disk usage.`,
+	Short: "Display removable disk drives and UniBoot directory storage usage",
+	Long:  `Display information about removable storage disk devices and data directory storage usage.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		// 1. If --usb flag or default run, display USB drive inspector table
+		// 1. If --usb flag or default run, display disk drive inspector table
 		if dfUsb || !cmd.Flags().Changed("human-readable") {
 			disks, err := disk.GetRemovableDisks()
 			if err == nil && len(disks) > 0 {
@@ -36,7 +36,7 @@ var dfCmd = &cobra.Command{
 					return nil
 				}
 
-				pterm.DefaultHeader.WithFullWidth().Println("🔌 REMOVABLE USB DRIVES & HARDWARE SPECS")
+				pterm.DefaultHeader.WithFullWidth().Println("🔌 REMOVABLE DISK DRIVES & HARDWARE SPECS")
 				tableData := pterm.TableData{
 					{"Device", "Name / Model", "Capacity", "FileSystem", "Partition", "USB Protocol & Speed"},
 				}
@@ -125,5 +125,5 @@ func init() {
 		rootCmd.AddCommand(dfCmd)
 	}
 	dfCmd.Flags().BoolVarP(&dfHumanReadable, "human-readable", "h", true, "print sizes in human readable format (e.g., 1023M, 14.8G)")
-	dfCmd.Flags().BoolVarP(&dfUsb, "usb", "u", false, "display removable USB drives and hardware specifications")
+	dfCmd.Flags().BoolVarP(&dfUsb, "usb", "u", false, "display removable disk drives and hardware specifications")
 }

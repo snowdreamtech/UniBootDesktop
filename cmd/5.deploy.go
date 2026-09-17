@@ -29,24 +29,24 @@ var (
 
 var deployCmd = &cobra.Command{
 	Use:   "deploy",
-	Short: "Deploy UniBoot bootable engine to target USB drive(s)",
-	Long: `Deploy UniBoot bootable firmware and ISO images to one or multiple USB drives.
+	Short: "Deploy UniBoot bootable engine to target disk drive(s)",
+	Long: `Deploy UniBoot bootable firmware and ISO images to one or multiple disk drives.
 
 Modes:
   A - Ventoy MultiBoot Hybrid Pro (Default: supports ISO/WIM/VHD multi-boot)
   B - 1-Sec Cloud Disk (macOS-native friendly iPXE cloud network boot)
 
 Examples:
-  # Deploy Mode A to a single USB drive with exFAT filesystem
+  # Deploy Mode A to a single disk drive with exFAT filesystem
   unigodesktop deploy --disk /dev/disk2 --mode A --fs exfat -y
 
   # Deploy Mode A with ISO image auto-copy
   unigodesktop deploy --disk /dev/disk2 -i ~/Downloads/Ubuntu.iso -y
 
-  # Batch Deploy Mode B (1-Sec Cloud) to multiple USB drives in parallel
+  # Batch Deploy Mode B (1-Sec Cloud) to multiple disk drives in parallel
   unigodesktop deploy --disks /dev/disk2,/dev/disk3 --mode B -y
 
-  # Deploy to ALL detected removable USB drives
+  # Deploy to ALL detected removable disk drives
   unigodesktop deploy --all-usb --mode A -y`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// 1. Gather target disks
@@ -61,7 +61,7 @@ Examples:
 				targetDisks = append(targetDisks, d.Device)
 			}
 			if len(targetDisks) == 0 {
-				pterm.Warning.Println("No removable USB drives detected for --all-usb deployment.")
+				pterm.Warning.Println("No removable disk drives detected for --all-usb deployment.")
 				return nil
 			}
 		} else if deployDisks != "" {
@@ -90,8 +90,8 @@ Examples:
 
 		// 3. Prompt for confirmation if --yes is false
 		if !yes {
-			pterm.DefaultHeader.WithFullWidth().Println("⚠️  DANGER ZONE: USB FORMAT CONFIRMATION")
-			pterm.Warning.Println("Target USB drive(s) WILL BE FORMATTED. All existing data will be permanently erased!")
+			pterm.DefaultHeader.WithFullWidth().Println("⚠️  DANGER ZONE: DISK FORMAT CONFIRMATION")
+			pterm.Warning.Println("Target disk drive(s) WILL BE FORMATTED. All existing data will be permanently erased!")
 			pterm.Println(fmt.Sprintf("Target Disk(s) : %s", strings.Join(targetDisks, ", ")))
 			pterm.Println(fmt.Sprintf("Deployment Mode: Mode %s (%s)", modeUpper, map[string]string{"A": "Ventoy MultiBoot", "B": "1-Sec Cloud iPXE"}[modeUpper]))
 			pterm.Println(fmt.Sprintf("Filesystem     : %s", deployFs))
@@ -116,7 +116,7 @@ Examples:
 		results := make([]*installer.DeployResult, len(targetDisks))
 		errs := make([]error, len(targetDisks))
 
-		pb, _ := pterm.DefaultProgressbar.WithTotal(len(targetDisks)).WithTitle("Deploying USB Drives").Start()
+		pb, _ := pterm.DefaultProgressbar.WithTotal(len(targetDisks)).WithTitle("Deploying Target Disks").Start()
 
 		for i, dev := range targetDisks {
 			wg.Add(1)
@@ -179,9 +179,9 @@ Examples:
 }
 
 func init() {
-	deployCmd.Flags().StringVarP(&deployDisk, "disk", "d", "", "target USB disk device (e.g., /dev/disk2 or PhysicalDrive1)")
-	deployCmd.Flags().StringVar(&deployDisks, "disks", "", "comma-separated target USB disks for batch parallel deployment")
-	deployCmd.Flags().BoolVar(&deployAllUsb, "all-usb", false, "automatically deploy to ALL detected removable USB drives")
+	deployCmd.Flags().StringVarP(&deployDisk, "disk", "d", "", "target disk device (e.g., /dev/disk2 or PhysicalDrive1)")
+	deployCmd.Flags().StringVar(&deployDisks, "disks", "", "comma-separated target disks for batch parallel deployment")
+	deployCmd.Flags().BoolVar(&deployAllUsb, "all-usb", false, "automatically deploy to ALL detected removable disk drives")
 	deployCmd.Flags().StringVarP(&deployMode, "mode", "m", "A", "deployment mode: 'A' (Ventoy MultiBoot) or 'B' (1-Sec Cloud iPXE)")
 	deployCmd.Flags().StringVarP(&deployFs, "fs", "f", "exFAT", "partition filesystem type: exFAT, FAT32, NTFS, or ext4")
 	deployCmd.Flags().StringSliceVarP(&deployIsoPaths, "iso", "i", nil, "source ISO/image file paths to automatically copy")
