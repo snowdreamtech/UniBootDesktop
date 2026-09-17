@@ -58,7 +58,7 @@ export const thTh: TranslationDict = {
   "settings.netTestSuccess": "✅ เชื่อมต่อ GitHub แล้ว (โปรโตคอล HTTP/2 • เวลาแฝง 42ms • {target})",
   "settings.directModeNotice": "💡 โหมดตรง (ปิดใช้งานพร็อกซี)",
   "settings.proxyHostRequired": "❌ โปรดป้อนที่อยู่โฮสต์ของพร็อกซีเซิร์ฟเวอร์ก่อน",
-  "settings.proxyTestSuccess": "✅ {โปรโตคอล} เชื่อมต่อพร็อกซีแล้ว ({host}:{port})",
+  "settings.proxyTestSuccess": "✅ {protocol} Proxy Connected ({host}:{port})",
   "settings.syncSuccessAlert": "🎉 ดาวน์โหลดเฟิร์มแวร์และสคริปต์ Cloud UniBoot {tag} และแคชสำเร็จแล้ว!",
   "settings.syncSuccessShortAlert": "🎉 ซิงค์เฟิร์มแวร์หลัก Cloud UniBoot สำเร็จแล้ว!",
   "settings.syncFailedAlert": "❌ Firmware Sync ล้มเหลว: {error}",
