@@ -283,11 +283,12 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode strin
 
 	ovmfFw := DetectOVMF()
 
+	memMB := GetRecommendedVMMemoryMB()
 	args := []string{
 		"-name", "UniBoot",
 		"-machine", "q35",
 		"-smp", "2",
-		"-m", "4096",
+		"-m", fmt.Sprintf("%d", memMB),
 		"-device", "virtio-vga,xres=1280,yres=800",
 		"-netdev", "user,id=net0",
 		"-device", "e1000,netdev=net0",

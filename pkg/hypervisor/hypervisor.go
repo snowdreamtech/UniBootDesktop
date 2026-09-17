@@ -261,3 +261,66 @@ func isDiskMounted(diskNode string) bool {
 	}
 	return false
 }
+
+// GetRecommendedVMMemoryMB dynamically determines optimal VM RAM (in MB)
+// based on host system's total physical memory to prevent host OOM on 4GB RAM machines.
+func GetRecommendedVMMemoryMB() int {
+	totalRAMBytes := getHostTotalRAMBytes()
+	if totalRAMBytes == 0 {
+		return 2048 // Safe default fallback
+	}
+
+	totalMB := int(totalRAMBytes / (1024 * 1024))
+	// If host has 4.5GB RAM or less (e.g. 4GB physical RAM), allocate 2048MB (2GB) to VM
+	if totalMB <= 4608 {
+		logger.Info("Host RAM <= 4GB detected, allocating 2048MB RAM to VM preview", "hostRAMMB", totalMB)
+		return 2048
+	}
+	// On hosts with > 4.5GB RAM (8GB/16GB/32GB+), allocate 4096MB (4GB) for smooth preview
+	logger.Info("Host RAM > 4GB detected, allocating 4096MB RAM to VM preview", "hostRAMMB", totalMB)
+	return 4096
+}
+
+func getHostTotalRAMBytes() uint64 {
+	switch runtime.GOOS {
+	case "darwin":
+		out, err := exec.Command("sysctl", "-n", "hw.memsize").Output()
+		if err == nil {
+			var bytes uint64
+			if _, err := fmt.Sscanf(strings.TrimSpace(string(out)), "%d", &bytes); err == nil {
+				return bytes
+			}
+		}
+	case "linux":
+		data, err := os.ReadFile("/proc/meminfo")
+		if err == nil {
+			lines := strings.Split(string(data), "\n")
+			for _, line := range lines {
+				if strings.HasPrefix(line, "MemTotal:") {
+					fields := strings.Fields(line)
+					if len(fields) >= 2 {
+						var kb uint64
+						if _, err := fmt.Sscanf(fields[1], "%d", &kb); err == nil {
+							return kb * 1024
+						}
+					}
+				}
+			}
+		}
+	case "windows":
+		out, err := exec.Command("wmic", "computersystem", "get", "TotalPhysicalMemory").Output()
+		if err == nil {
+			lines := strings.Split(string(out), "\n")
+			for _, line := range lines {
+				line = strings.TrimSpace(line)
+				if line != "" && !strings.Contains(line, "TotalPhysicalMemory") {
+					var bytes uint64
+					if _, err := fmt.Sscanf(line, "%d", &bytes); err == nil {
+						return bytes
+					}
+				}
+			}
+		}
+	}
+	return 0
+}

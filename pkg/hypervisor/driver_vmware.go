@@ -202,6 +202,8 @@ ddb.virtualHWVersion = "14"
 		_ = os.WriteFile(vmdkPath, []byte(rawDiskContent), 0644)
 	}
 
+	memMB := GetRecommendedVMMemoryMB()
+
 	// 2. Generate clean VMX configuration
 	vmxContent := fmt.Sprintf(`.encoding = "UTF-8"
 config.version = "8"
@@ -209,7 +211,7 @@ virtualHW.version = "18"
 pciBridge0.present = "TRUE"
 mks.enable3d = "TRUE"
 numvcpus = "2"
-memsize = "4096"
+memsize = "%d"
 firmware = "%s"
 nvram = "UniBoot.nvram"
 floppy0.present = "FALSE"
@@ -222,7 +224,7 @@ ethernet0.connectionType = "nat"
 ethernet0.addressType = "generated"
 displayName = "UniBoot"
 guestOS = "other-64"
-`, fwSetting)
+`, memMB, fwSetting)
 	_ = os.WriteFile(vmxPath, []byte(vmxContent), 0644)
 
 	// 3. Launch VMware Fusion
