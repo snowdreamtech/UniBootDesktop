@@ -59,11 +59,15 @@ func WriteVentoyConfigWithAppConfig(mountDir string, appCfg *config.AppConfig) e
 	}
 
 	controls := []map[string]interface{}{
-		{"VTOY_DEFAULT_IMAGE": "/iso/UniBoot.iso"},
 		{"VTOY_MENU_LANGUAGE": "zh_CN"},
 		{"VTOY_FILE_FLT_EFI": "1"},
 		{"VTOY_FILT_DOT_UNDERSCORE_FILE": "1"},
 		{"VTOY_SORT_CASE_SENSITIVE": "0"},
+	}
+
+	defaultIso := filepath.Join(mountDir, "iso", "UniBoot.iso")
+	if _, err := os.Stat(defaultIso); err == nil {
+		controls = append(controls, map[string]interface{}{"VTOY_DEFAULT_IMAGE": "/iso/UniBoot.iso"})
 	}
 
 	if appCfg.VentoyWin11Bypass {
