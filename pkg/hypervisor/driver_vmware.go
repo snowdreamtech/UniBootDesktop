@@ -147,19 +147,20 @@ func launchVMwareVM(status *VMStatus, targetPath string, bootMode string) error 
 		fwSetting = "bios"
 	}
 
+	diskDev := targetPath
+	if strings.HasPrefix(diskDev, "/dev/rdisk") {
+		diskDev = strings.Replace(diskDev, "/dev/rdisk", "/dev/disk", 1)
+	}
+	if idx := strings.Index(diskDev, "s"); idx != -1 && strings.HasPrefix(diskDev, "/dev/disk") {
+		diskDev = diskDev[:idx]
+	}
+
 	// 1. On macOS, use official vmware-rawdiskCreator if available
 	rawCreator := "/Applications/VMware Fusion.app/Contents/Library/vmware-rawdiskCreator"
 	if runtime.GOOS == "darwin" {
 		if _, err := os.Stat(rawCreator); err == nil {
-			diskDev := targetPath
-			if strings.HasPrefix(diskDev, "/dev/rdisk") {
-				diskDev = strings.Replace(diskDev, "/dev/rdisk", "/dev/disk", 1)
-			}
-			if idx := strings.Index(diskDev, "s"); idx != -1 && strings.HasPrefix(diskDev, "/dev/disk") {
-				diskDev = diskDev[:idx]
-			}
-
 			logger.Info("Creating native VMware raw disk VMDK via vmware-rawdiskCreator", "diskDev", diskDev, "vmdkPath", vmdkPath)
+			_ = os.Remove(vmdkPath)
 			cmd := exec.Command(rawCreator, "create", diskDev, "fullDevice", vmdkBase, "ide")
 			if err := cmd.Run(); err != nil {
 				logger.Warn("vmware-rawdiskCreator returned error, using fallback descriptor", "error", err)
@@ -167,11 +168,12 @@ func launchVMwareVM(status *VMStatus, targetPath string, bootMode string) error 
 		}
 	}
 
-	// Fallback to manual descriptor if creator didn't generate file
-	if _, err := os.Stat(vmdkPath); err != nil {
-		diskDev := targetPath
-		if strings.HasPrefix(diskDev, "/dev/rdisk") {
-			diskDev = strings.Replace(diskDev, "/dev/rdisk", "/dev/disk", 1)
+	// 2. Fallback to manual descriptor if creator didn't generate valid file
+	if info, err := os.Stat(vmdkPath); err != nil || info.Size() == 0 {
+		sectors := getDiskSectorCount(diskDev)
+		cylinders := sectors / (255 * 63)
+		if cylinders == 0 {
+			cylinders = 1024
 		}
 		rawDiskContent := fmt.Sprintf(`# Disk DescriptorFile
 version=1
@@ -181,17 +183,17 @@ parentCID=ffffffff
 createType="fullDevice"
 
 # Extent description
-RW 20000000 FLAT "%s" 0
+RW %d FLAT "%s" 0
 
 # The Disk Data Base 
 #DDB
 ddb.adapterType = "ide"
-ddb.geometry.cylinders = "1024"
+ddb.geometry.cylinders = "%d"
 ddb.geometry.heads = "255"
 ddb.geometry.sectors = "63"
 ddb.longContentID = "1234567890"
 ddb.virtualHWVersion = "14"
-`, diskDev)
+`, sectors, diskDev, cylinders)
 		_ = os.WriteFile(vmdkPath, []byte(rawDiskContent), 0644)
 	}
 
@@ -232,4 +234,31 @@ guestOS = "other-64"
 	}()
 
 	return nil
+}
+
+func getDiskSectorCount(diskDev string) int64 {
+	if runtime.GOOS == "darwin" {
+		cmd := exec.Command("diskutil", "info", "-plist", diskDev)
+		output, err := cmd.Output()
+		if err == nil {
+			plistStr := string(output)
+			keyPattern := "<key>TotalSize</key>"
+			if idx := strings.Index(plistStr, keyPattern); idx != -1 {
+				rest := plistStr[idx+len(keyPattern):]
+				startInt := strings.Index(rest, "<integer>")
+				endInt := strings.Index(rest, "</integer>")
+				if startInt != -1 && endInt != -1 && startInt < endInt {
+					valStr := rest[startInt+len("<integer>"):endInt]
+					var size int64
+					if _, fmtErr := fmt.Sscanf(strings.TrimSpace(valStr), "%d", &size); fmtErr == nil && size > 0 {
+						return size / 512
+					}
+				}
+			}
+		}
+	}
+	if info, err := os.Stat(diskDev); err == nil && info.Size() > 0 {
+		return info.Size() / 512
+	}
+	return 15728640 // Default fallback ~8GB
 }
