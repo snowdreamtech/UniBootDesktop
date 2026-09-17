@@ -30,7 +30,7 @@ declare global {
     protocolCode?: string;
     isRealVentoy?: boolean;
     isVentoy?: boolean;
-    isModeB?: boolean;
+    isCloudMode?: boolean;
     isGenericBoot?: boolean;
     mountPoint?: string;
   }
@@ -47,10 +47,10 @@ declare global {
         App?: {
           GetDiskList(): Promise<any[]>;
           SelectIsoFiles(title?: string, ventoyFilter?: string, allFilter?: string): Promise<string[]>;
-          DeployModeA(targetDisk: string, fsType?: string, isoPaths?: string[], expected?: DiskInfo): Promise<any>;
-          DeployModeABatch(targetDisks: string[], fsType?: string, isoPaths?: string[], expected?: DiskInfo[]): Promise<any[]>;
-          DeployModeB(targetDisk: string, fsType?: string, expected?: DiskInfo): Promise<any>;
-          DeployModeBBatch(targetDisks: string[], fsType?: string, expected?: DiskInfo[]): Promise<any[]>;
+          DeployHybridMode(targetDisk: string, fsType?: string, isoPaths?: string[], expected?: DiskInfo): Promise<any>;
+          DeployHybridModeBatch(targetDisks: string[], fsType?: string, isoPaths?: string[], expected?: DiskInfo[]): Promise<any[]>;
+          DeployCloudMode(targetDisk: string, fsType?: string, expected?: DiskInfo): Promise<any>;
+          DeployCloudModeBatch(targetDisks: string[], fsType?: string, expected?: DiskInfo[]): Promise<any[]>;
           CheckQEMU(): Promise<any>;
           LaunchQEMU(targetDisk: string): Promise<void>;
           CheckUpdate(): Promise<any>;

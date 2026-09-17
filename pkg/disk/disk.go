@@ -100,7 +100,7 @@ type DiskInfo struct {
 	IsFakeUsb3        bool   `json:"isFakeUsb3"`        // Warning flag for fake USB 3.0 (USB 2.0 PHY disguised as 3.0)
 	ProtocolCode      string `json:"protocolCode"`      // Styling code: "usb2", "usb3_0", "usb3_1", "usb3_2", "usb4"
 	IsRealVentoy      bool   `json:"isRealVentoy"`      // True ONLY if drive contains Ventoy MBR Sector 0 signature
-	IsModeB           bool   `json:"isModeB"`           // True if drive is formatted in Cloud Mode (iPXE ESP Cloud Pure)
+	IsCloudMode           bool   `json:"isCloudMode"`           // True if drive is formatted in Cloud Mode (iPXE ESP Cloud Pure)
 	IsGenericBoot     bool   `json:"isGenericBoot"`     // True if drive contains generic 3rd-party bootloader (Rufus/PE/ISO)
 	MountPoint        string `json:"mountPoint"`        // Mount point or volume path (e.g. /Volumes/UNTITLED, E:\)
 }
@@ -184,11 +184,11 @@ func InferControllerVendor(vendorID string, productID string, vendor string) str
 }
 
 // DetectBootStatus evaluates the boot status text based on partition scheme, volume label, Ventoy/Cloud Mode, and generic boot flags.
-func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isModeB bool, isGenericBoot bool) string {
+func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isCloudMode bool, isGenericBoot bool) string {
 	if isRealVentoy {
 		return "Ventoy / UniBoot (混合模式)"
 	}
-	if isModeB {
+	if isCloudMode {
 		return "UniBoot (1秒极速云引导盘)"
 	}
 	if isGenericBoot {
@@ -1007,17 +1007,17 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			devNode = "/dev/" + parentDisk
 		}
 
-		isModeB := IsModeBDisk(devNode)
+		isCloudMode := IsModeBDisk(devNode)
 		isRealVentoy := false
-		if !isModeB {
+		if !isCloudMode {
 			isRealVentoy = IsVentoyDisk(devNode)
 		}
 		isGenericBoot := false
-		if !isModeB && !isRealVentoy {
+		if !isCloudMode && !isRealVentoy {
 			isGenericBoot = IsGenericBootDisk(devNode)
 		}
 
-		bootStatusStr := DetectBootStatus(volName, partitionScheme, isRealVentoy, isModeB, isGenericBoot)
+		bootStatusStr := DetectBootStatus(volName, partitionScheme, isRealVentoy, isCloudMode, isGenericBoot)
 		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
 
 		disks = append(disks, DiskInfo{
@@ -1048,7 +1048,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      isRealVentoy,
-			IsModeB:           isModeB,
+			IsCloudMode:           isCloudMode,
 			IsGenericBoot:     isGenericBoot,
 			MountPoint:        volPath,
 		})
@@ -1237,7 +1237,7 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      IsRealVentoyDisk(mountPath),
-			IsModeB:           IsModeBDisk(mountPath),
+			IsCloudMode:           IsModeBDisk(mountPath),
 			IsGenericBoot:     IsGenericBootDisk(mountPath),
 			MountPoint:        mountPath,
 		})
@@ -1321,7 +1321,7 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      IsRealVentoyDisk(driveLetter),
-			IsModeB:           IsModeBDisk(driveLetter),
+			IsCloudMode:           IsModeBDisk(driveLetter),
 			IsGenericBoot:     IsGenericBootDisk(driveLetter),
 			MountPoint:        driveLetter,
 		})

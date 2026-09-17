@@ -169,7 +169,7 @@ interface DiskInfo {
   protocolCode?: string;
   isVentoy?: boolean;
   isRealVentoy?: boolean;
-  isModeB?: boolean;
+  isCloudMode?: boolean;
   isGenericBoot?: boolean;
 }
 
@@ -200,7 +200,7 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
                    vidUpper.includes('0X1E3D') || vidUpper.includes('0X0BDA') || vidUpper.includes('0X05E3');
 
   const isVentoyName = nameUpper.includes('VENTOY') || nameUpper.includes('UNIBOOT');
-  if (props.disk.isRealVentoy || props.disk.isModeB || props.disk.isGenericBoot || props.disk.isVentoy || isVentoyName) {
+  if (props.disk.isRealVentoy || props.disk.isCloudMode || props.disk.isGenericBoot || props.disk.isVentoy || isVentoyName) {
     return 'boot';
   }
   if (isReader) {
@@ -244,7 +244,7 @@ const bootTooltip = computed(() => {
     if (props.disk.isRealVentoy) {
       return t('disk.tooltip_uniboot_hybrid');
     }
-    if (props.disk.isModeB) {
+    if (props.disk.isCloudMode) {
       return t('disk.tooltip_uniboot_cloud');
     }
     return t('disk.tooltip_third_party_boot');

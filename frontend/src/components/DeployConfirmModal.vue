@@ -175,7 +175,7 @@ const emit = defineEmits(["close", "confirm"]);
 
 function checkIsExistingBootDisk(disk: any): boolean {
   if (!disk) return false;
-  return Boolean(disk.isRealVentoy || disk.isModeB);
+  return Boolean(disk.isRealVentoy || disk.isCloudMode);
 }
 
 const ventoyDisks = computed(() => {

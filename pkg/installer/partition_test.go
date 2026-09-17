@@ -16,7 +16,7 @@ func TestFormatDiskModeB_SafetyValidation(t *testing.T) {
 	// Test safety block against system drive
 	systemDrives := []string{"/", "/dev/sda", "C:", "/dev/nvme0n1"}
 	for _, drive := range systemDrives {
-		_, err := FormatDiskModeB(ctx, drive)
+		_, err := FormatDiskCloudMode(ctx, drive)
 		if err == nil {
 			t.Errorf("Expected safety validation error for system drive %s, got nil", drive)
 		}
@@ -28,9 +28,9 @@ func TestFormatDiskModeB_DryRun(t *testing.T) {
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
-	mountPoint, err := FormatDiskModeB(ctx, "dummy_usb_disk")
+	mountPoint, err := FormatDiskCloudMode(ctx, "dummy_usb_disk")
 	if err != nil {
-		t.Fatalf("FormatDiskModeB dry-run failed: %v", err)
+		t.Fatalf("FormatDiskCloudMode dry-run failed: %v", err)
 	}
 
 	if mountPoint == "" {
@@ -61,9 +61,9 @@ func TestFormatDiskModeB_ExtractionIntegration(t *testing.T) {
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
-	mountPoint, err := FormatDiskModeB(ctx, "test_usb_disk")
+	mountPoint, err := FormatDiskCloudMode(ctx, "test_usb_disk")
 	if err != nil {
-		t.Fatalf("FormatDiskModeB failed: %v", err)
+		t.Fatalf("FormatDiskCloudMode failed: %v", err)
 	}
 
 	// Verify that target directory exists and can be written to
@@ -78,7 +78,7 @@ func TestFormatDiskModeA_SafetyValidation(t *testing.T) {
 
 	systemDrives := []string{"/", "/dev/sda", "C:", "/dev/nvme0n1"}
 	for _, drive := range systemDrives {
-		_, err := FormatDiskModeA(ctx, drive, "exFAT")
+		_, err := FormatDiskHybridMode(ctx, drive, "exFAT")
 		if err == nil {
 			t.Errorf("Expected safety validation error for system drive %s in Mode A, got nil", drive)
 		}
@@ -90,9 +90,9 @@ func TestFormatDiskModeA_DryRun(t *testing.T) {
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
-	mountPoint, err := FormatDiskModeA(ctx, "dummy_usb_disk", "exFAT")
+	mountPoint, err := FormatDiskHybridMode(ctx, "dummy_usb_disk", "exFAT")
 	if err != nil {
-		t.Fatalf("FormatDiskModeA dry-run failed: %v", err)
+		t.Fatalf("FormatDiskHybridMode dry-run failed: %v", err)
 	}
 
 	if mountPoint == "" {

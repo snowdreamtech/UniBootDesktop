@@ -376,7 +376,7 @@ func ExtractFirmwareToDir(targetDir string) error {
 
 // ExtractFirmwareHybridMode extracts Hybrid Mode assets (ipxe/ & iso/) directly to the main data partition (Partition 1),
 // without redundantly polluting the data partition with EFI/BOOT/ files (handled by Ventoy Partition 2).
-func ExtractFirmwareModeA(dataMountDir string) error {
+func ExtractFirmwareHybridMode(dataMountDir string) error {
 	if dataMountDir == "" {
 		return fmt.Errorf("data mount directory cannot be empty")
 	}
@@ -434,7 +434,7 @@ func CleanDirectoryContents(dirPath string) error {
 
 // ExtractFirmwareCloudMode extracts Cloud Mode assets (EFI/BOOT/ & root scripts & background image) directly to ESP partition (Partition 2),
 // providing 100% native iPXE cloud boot matching 1:1 Ventoy theme design.
-func ExtractFirmwareModeB(efiMountDir string) error {
+func ExtractFirmwareCloudMode(efiMountDir string) error {
 	if efiMountDir == "" {
 		return fmt.Errorf("EFI mount directory cannot be empty")
 	}

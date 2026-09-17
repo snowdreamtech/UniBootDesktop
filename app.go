@@ -140,8 +140,8 @@ func (a *App) ExportLogs(content string, title string, logFilter string, textFil
 	return filePath, nil
 }
 
-// DeployModeA triggers Mode A (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system and optional ISO files.
-func (a *App) DeployModeA(targetDisk string, fsType string, isoPaths []string, expected disk.DiskInfo) (*installer.DeployResult, error) {
+// DeployHybridMode triggers Mode A (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system and optional ISO files.
+func (a *App) DeployHybridMode(targetDisk string, fsType string, isoPaths []string, expected disk.DiskInfo) (*installer.DeployResult, error) {
 	cfg, _ := config.Load()
 	ventoyPath := ""
 	if cfg != nil {
@@ -150,7 +150,7 @@ func (a *App) DeployModeA(targetDisk string, fsType string, isoPaths []string, e
 	progressCb := func(p installer.IsoCopyProgress) {
 		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
 	}
-	res, err := installer.DeployModeAWithExpectedDisk(a.ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, expected)
+	res, err := installer.DeployHybridModeWithExpectedDisk(a.ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, expected)
 	if err != nil && res != nil {
 		return res, nil
 	}
@@ -162,8 +162,8 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 	return installer.ValidateVentoyCli(ventoyPath)
 }
 
-// DeployModeABatch triggers Mode A deployment for multiple target disk drives with customizable file system and optional ISO files.
-func (a *App) DeployModeABatch(targetDisks []string, fsType string, isoPaths []string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
+// DeployHybridModeBatch triggers Mode A deployment for multiple target disk drives with customizable file system and optional ISO files.
+func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPaths []string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
 	cfg, _ := config.Load()
 	ventoyPath := ""
 	if cfg != nil {
@@ -172,21 +172,21 @@ func (a *App) DeployModeABatch(targetDisks []string, fsType string, isoPaths []s
 	progressCb := func(p installer.IsoCopyProgress) {
 		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
 	}
-	return installer.DeployModeABatchWithExpectedDisks(a.ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected)
+	return installer.DeployHybridModeBatchWithExpectedDisks(a.ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected)
 }
 
-// DeployModeB triggers Mode B (Cloud Pure Mode) with customizable file system.
-func (a *App) DeployModeB(targetDisk string, fsType string, expected disk.DiskInfo) (*installer.DeployResult, error) {
-	res, err := installer.DeployModeBWithExpectedDisk(a.ctx, targetDisk, fsType, expected)
+// DeployCloudMode triggers Mode B (Cloud Pure Mode) with customizable file system.
+func (a *App) DeployCloudMode(targetDisk string, fsType string, expected disk.DiskInfo) (*installer.DeployResult, error) {
+	res, err := installer.DeployCloudModeWithExpectedDisk(a.ctx, targetDisk, fsType, expected)
 	if err != nil && res != nil {
 		return res, nil
 	}
 	return res, err
 }
 
-// DeployModeBBatch triggers Mode B deployment for multiple target disk drives with customizable file system.
-func (a *App) DeployModeBBatch(targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
-	return installer.DeployModeBBatchWithExpectedDisks(a.ctx, targetDisks, fsType, expected)
+// DeployCloudModeBatch triggers Mode B deployment for multiple target disk drives with customizable file system.
+func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
+	return installer.DeployCloudModeBatchWithExpectedDisks(a.ctx, targetDisks, fsType, expected)
 }
 
 // CheckQEMU returns QEMU detection metadata.

@@ -113,7 +113,7 @@ func TestExtractFirmwareToDir(t *testing.T) {
 	}
 }
 
-func TestExtractFirmwareModeA(t *testing.T) {
+func TestExtractFirmwareHybridMode(t *testing.T) {
 	envMutex.Lock()
 	defer envMutex.Unlock()
 	baseDir := t.TempDir()
@@ -124,8 +124,8 @@ func TestExtractFirmwareModeA(t *testing.T) {
 	tmpDir := filepath.Join(baseDir, "dest")
 	_ = os.MkdirAll(tmpDir, 0755)
 
-	if err := ExtractFirmwareModeA(tmpDir); err != nil {
-		t.Fatalf("ExtractFirmwareModeA failed: %v", err)
+	if err := ExtractFirmwareHybridMode(tmpDir); err != nil {
+		t.Fatalf("ExtractFirmwareHybridMode failed: %v", err)
 	}
 
 	expectedFiles := []string{
@@ -143,7 +143,7 @@ func TestExtractFirmwareModeA(t *testing.T) {
 	}
 }
 
-func TestExtractFirmwareModeB(t *testing.T) {
+func TestExtractFirmwareCloudMode(t *testing.T) {
 	envMutex.Lock()
 	defer envMutex.Unlock()
 	baseDir := t.TempDir()
@@ -154,8 +154,8 @@ func TestExtractFirmwareModeB(t *testing.T) {
 	tmpDir := filepath.Join(baseDir, "dest")
 	_ = os.MkdirAll(tmpDir, 0755)
 
-	if err := ExtractFirmwareModeB(tmpDir); err != nil {
-		t.Fatalf("ExtractFirmwareModeB failed: %v", err)
+	if err := ExtractFirmwareCloudMode(tmpDir); err != nil {
+		t.Fatalf("ExtractFirmwareCloudMode failed: %v", err)
 	}
 
 	expectedFiles := []string{

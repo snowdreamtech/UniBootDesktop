@@ -131,9 +131,9 @@ Examples:
 				var err error
 
 				if modeUpper == "A" {
-					res, err = installer.DeployModeAWithIsoAndVentoyPath(ctx, target, deployFs, deployVentoyPath, deployIsoPaths, progressCallback)
+					res, err = installer.DeployHybridModeWithIsoAndVentoyPath(ctx, target, deployFs, deployVentoyPath, deployIsoPaths, progressCallback)
 				} else {
-					res, err = installer.DeployModeB(ctx, target, deployFs)
+					res, err = installer.DeployCloudMode(ctx, target, deployFs)
 				}
 
 				results[idx] = res

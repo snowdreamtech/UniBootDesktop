@@ -185,7 +185,7 @@ func FormatDiskWithVentoyCliWithConfig(ctx context.Context, ventoyPath string, t
 	}
 
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
-		return FormatDiskModeA(ctx, targetDisk, fsType)
+		return FormatDiskHybridMode(ctx, targetDisk, fsType)
 	}
 
 	val := ValidateVentoyCli(ventoyPath)

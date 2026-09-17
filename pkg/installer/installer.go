@@ -56,28 +56,28 @@ func validateLiveTargetDiskSnapshot(targetDisk string, expected *disk.DiskInfo) 
 	return fmt.Errorf("final target disk validation failed: target disk is no longer present as a removable disk: %s", targetDisk)
 }
 
-// DeployModeA executes Mode A: Hybrid Pro Mode (Ventoy + UniBoot theme + iPXE network extension) with customizable file system.
+// DeployHybridMode executes Mode A: Hybrid Pro Mode (Ventoy + UniBoot theme + iPXE network extension) with customizable file system.
 // Performs non-destructive in-place upgrade on existing Ventoy drives, or fresh partition initialization on blank drives.
-func DeployModeA(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
-	return DeployModeAWithIsoAndVentoyPath(ctx, targetDisk, fsType, "", nil, nil)
+func DeployHybridMode(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
+	return DeployHybridModeWithIsoAndVentoyPath(ctx, targetDisk, fsType, "", nil, nil)
 }
 
-// DeployModeAWithVentoyPath executes Mode A with an optional user-configured Ventoy CLI executable path.
-func DeployModeAWithVentoyPath(ctx context.Context, targetDisk string, fsType string, ventoyPath string) (*DeployResult, error) {
-	return DeployModeAWithIsoAndVentoyPath(ctx, targetDisk, fsType, ventoyPath, nil, nil)
+// DeployHybridModeWithVentoyPath executes Mode A with an optional user-configured Ventoy CLI executable path.
+func DeployHybridModeWithVentoyPath(ctx context.Context, targetDisk string, fsType string, ventoyPath string) (*DeployResult, error) {
+	return DeployHybridModeWithIsoAndVentoyPath(ctx, targetDisk, fsType, ventoyPath, nil, nil)
 }
 
-// DeployModeAWithIsoAndVentoyPath executes Mode A with customizable Ventoy CLI path, ISO file paths, and progress callback.
-func DeployModeAWithIsoAndVentoyPath(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) (*DeployResult, error) {
-	return deployModeAWithExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, nil)
+// DeployHybridModeWithIsoAndVentoyPath executes Mode A with customizable Ventoy CLI path, ISO file paths, and progress callback.
+func DeployHybridModeWithIsoAndVentoyPath(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) (*DeployResult, error) {
+	return deployHybridModeWithExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, nil)
 }
 
-// DeployModeAWithExpectedDisk deploys Mode A after confirming the target still matches the selected disk snapshot.
-func DeployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected disk.DiskInfo) (*DeployResult, error) {
-	return deployModeAWithExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, &expected)
+// DeployHybridModeWithExpectedDisk deploys Mode A after confirming the target still matches the selected disk snapshot.
+func DeployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected disk.DiskInfo) (*DeployResult, error) {
+	return deployHybridModeWithExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, &expected)
 }
 
-func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected *disk.DiskInfo) (*DeployResult, error) {
+func deployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected *disk.DiskInfo) (*DeployResult, error) {
 	if fsType == "" {
 		fsType = "exFAT"
 	}
@@ -112,7 +112,7 @@ func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 			mountPoint, err = ResolveMountPointWithLabel(targetDisk, "VENTOY")
 		}
 		if err != nil {
-			mountPoint, err = FormatDiskModeA(ctx, targetDisk, fsType)
+			mountPoint, err = FormatDiskHybridMode(ctx, targetDisk, fsType)
 		}
 	} else {
 		val := ValidateVentoyCli(ventoyPath)
@@ -135,7 +135,7 @@ func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 
 	// Step 3: Extract Firmware Assets
 	tracker.SetStage("解压固件资源", StepExtractFirmware, ActionReformat)
-	if err := firmware.ExtractFirmwareModeA(mountPoint); err != nil {
+	if err := firmware.ExtractFirmwareHybridMode(mountPoint); err != nil {
 		errExtract := fmt.Errorf("extracting firmware assets failed: %w", err)
 		diag := tracker.BuildDiagnostics(errExtract)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errExtract.Error(), Diagnostics: diag}, errExtract
@@ -192,26 +192,26 @@ func deployModeAWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 }
 
 // DeployHybridModeBatch executes Hybrid Mode on multiple target disk drives with specified file system.
-func DeployModeABatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
-	return DeployModeABatchWithIso(ctx, targetDisks, fsType, nil, nil)
+func DeployHybridModeBatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
+	return DeployHybridModeBatchWithIso(ctx, targetDisks, fsType, nil, nil)
 }
 
 // DeployHybridModeBatchWithIso executes Hybrid Mode on multiple target disk drives with optional ISO files and progress reporting.
-func DeployModeABatchWithIso(ctx context.Context, targetDisks []string, fsType string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
-	return DeployModeABatchWithVentoyAndIso(ctx, targetDisks, fsType, "", isoPaths, progressCb)
+func DeployHybridModeBatchWithIso(ctx context.Context, targetDisks []string, fsType string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
+	return DeployHybridModeBatchWithVentoyAndIso(ctx, targetDisks, fsType, "", isoPaths, progressCb)
 }
 
 // DeployHybridModeBatchWithVentoyAndIso executes Hybrid Mode on multiple target disk drives with customizable Ventoy CLI path, ISO files, and progress reporting.
-func DeployModeABatchWithVentoyAndIso(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
-	return deployModeABatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, nil)
+func DeployHybridModeBatchWithVentoyAndIso(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
+	return deployHybridModeBatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, nil)
 }
 
-// DeployModeABatchWithExpectedDisks deploys Mode A only after all selected disk snapshots pass final validation.
-func DeployModeABatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected []disk.DiskInfo) ([]*DeployResult, error) {
-	return deployModeABatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected)
+// DeployHybridModeBatchWithExpectedDisks deploys Mode A only after all selected disk snapshots pass final validation.
+func DeployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected []disk.DiskInfo) ([]*DeployResult, error) {
+	return deployHybridModeBatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected)
 }
 
-func deployModeABatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected []disk.DiskInfo) ([]*DeployResult, error) {
+func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected []disk.DiskInfo) ([]*DeployResult, error) {
 	if len(targetDisks) == 0 {
 		return nil, fmt.Errorf("no target disks specified for batch deployment")
 	}
@@ -239,7 +239,7 @@ func deployModeABatchWithExpectedDisks(ctx context.Context, targetDisks []string
 			snapshot = expected[index]
 		}
 		snapshotPtr := snapshotPointer(snapshot, len(expected) > 0)
-		res, err := deployModeAWithExpectedDisk(ctx, d, fsType, ventoyPath, isoPaths, progressCb, snapshotPtr)
+		res, err := deployHybridModeWithExpectedDisk(ctx, d, fsType, ventoyPath, isoPaths, progressCb, snapshotPtr)
 		if err != nil {
 			if res != nil && res.Diagnostics != nil {
 				results = append(results, res)
@@ -283,18 +283,18 @@ func CleanMbrBootstrapCode(targetDisk string) error {
 	return cmd.Run()
 }
 
-// DeployModeB executes Mode B: Cloud Pure Mode (1-sec native format & multi-arch iPXE firmware) with customizable file system.
+// DeployCloudMode executes Mode B: Cloud Pure Mode (1-sec native format & multi-arch iPXE firmware) with customizable file system.
 // For existing Ventoy drives, it non-destructively flashes ONLY Partition 2 (VTOYEFI / ESP), keeping Partition 1 (Data) untouched!
-func DeployModeB(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
-	return deployModeBWithExpectedDisk(ctx, targetDisk, fsType, nil)
+func DeployCloudMode(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
+	return deployCloudModeWithExpectedDisk(ctx, targetDisk, fsType, nil)
 }
 
-// DeployModeBWithExpectedDisk deploys Mode B after confirming the target still matches the selected disk snapshot.
-func DeployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected disk.DiskInfo) (*DeployResult, error) {
-	return deployModeBWithExpectedDisk(ctx, targetDisk, fsType, &expected)
+// DeployCloudModeWithExpectedDisk deploys Mode B after confirming the target still matches the selected disk snapshot.
+func DeployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected disk.DiskInfo) (*DeployResult, error) {
+	return deployCloudModeWithExpectedDisk(ctx, targetDisk, fsType, &expected)
 }
 
-func deployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected *disk.DiskInfo) (*DeployResult, error) {
+func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected *disk.DiskInfo) (*DeployResult, error) {
 	if fsType == "" {
 		fsType = "exFAT"
 	}
@@ -329,7 +329,7 @@ func deployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 			return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errMount.Error(), Diagnostics: diag}, errMount
 		}
 	} else {
-		_, errFormat := FormatDiskModeB(ctx, targetDisk)
+		_, errFormat := FormatDiskCloudMode(ctx, targetDisk)
 		if errFormat != nil {
 			errFmt := fmt.Errorf("formatting dual partitions for Cloud Mode failed: %w", errFormat)
 			diag := tracker.BuildDiagnostics(errFmt)
@@ -350,7 +350,7 @@ func deployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 
 	// Step 3: Extract Firmware Assets to ESP Partition
 	tracker.SetStage("解压ESP固件资源", StepExtractFirmware, ActionReformat)
-	if err := firmware.ExtractFirmwareModeB(efiMountPoint); err != nil {
+	if err := firmware.ExtractFirmwareCloudMode(efiMountPoint); err != nil {
 		errExtract := fmt.Errorf("extracting firmware assets to EFI partition failed: %w", err)
 		diag := tracker.BuildDiagnostics(errExtract)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errExtract.Error(), Diagnostics: diag}, errExtract
@@ -374,16 +374,16 @@ func deployModeBWithExpectedDisk(ctx context.Context, targetDisk string, fsType 
 }
 
 // DeployCloudModeBatch executes Cloud Mode on multiple target disk drives concurrently/sequentially with customizable file system.
-func DeployModeBBatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
-	return deployModeBBatchWithExpectedDisks(ctx, targetDisks, fsType, nil)
+func DeployCloudModeBatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
+	return deployCloudModeBatchWithExpectedDisks(ctx, targetDisks, fsType, nil)
 }
 
-// DeployModeBBatchWithExpectedDisks deploys Mode B only after all selected disk snapshots pass final validation.
-func DeployModeBBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*DeployResult, error) {
-	return deployModeBBatchWithExpectedDisks(ctx, targetDisks, fsType, expected)
+// DeployCloudModeBatchWithExpectedDisks deploys Mode B only after all selected disk snapshots pass final validation.
+func DeployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*DeployResult, error) {
+	return deployCloudModeBatchWithExpectedDisks(ctx, targetDisks, fsType, expected)
 }
 
-func deployModeBBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*DeployResult, error) {
+func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*DeployResult, error) {
 	if len(targetDisks) == 0 {
 		return nil, fmt.Errorf("no target disks specified for batch deployment")
 	}
@@ -410,7 +410,7 @@ func deployModeBBatchWithExpectedDisks(ctx context.Context, targetDisks []string
 		if len(expected) > 0 {
 			snapshot = &expected[index]
 		}
-		res, err := deployModeBWithExpectedDisk(ctx, d, fsType, snapshot)
+		res, err := deployCloudModeWithExpectedDisk(ctx, d, fsType, snapshot)
 		if err != nil {
 			if res != nil && res.Diagnostics != nil {
 				results = append(results, res)

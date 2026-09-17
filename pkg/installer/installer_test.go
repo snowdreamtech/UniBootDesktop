@@ -12,79 +12,79 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestDeployModeA(t *testing.T) {
+func TestDeployHybridMode(t *testing.T) {
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
 	ctx := context.Background()
 
-	res, err := DeployModeA(ctx, "dummy_usb_disk", "exFAT")
+	res, err := DeployHybridMode(ctx, "dummy_usb_disk", "exFAT")
 	require.NoError(t, err)
 	assert.True(t, res.Success)
 	assert.Equal(t, "dummy_usb_disk", res.Target)
 	assert.Contains(t, res.Message, "Hybrid Mode")
 
-	_, err = DeployModeA(ctx, "/", "exFAT")
+	_, err = DeployHybridMode(ctx, "/", "exFAT")
 	assert.Error(t, err)
 }
 
-func TestDeployModeB(t *testing.T) {
+func TestDeployCloudMode(t *testing.T) {
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
 	ctx := context.Background()
 
-	res, err := DeployModeB(ctx, "dummy_usb_disk", "exFAT")
+	res, err := DeployCloudMode(ctx, "dummy_usb_disk", "exFAT")
 	require.NoError(t, err)
 	assert.True(t, res.Success)
 	assert.Equal(t, "dummy_usb_disk", res.Target)
 	assert.Contains(t, res.Message, "Cloud Mode")
 
-	_, err = DeployModeB(ctx, "/", "exFAT")
+	_, err = DeployCloudMode(ctx, "/", "exFAT")
 	assert.Error(t, err)
 }
 
-func TestDeployModeABatch(t *testing.T) {
+func TestDeployHybridModeBatch(t *testing.T) {
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
 	ctx := context.Background()
 
 	// Empty list
-	_, err := DeployModeABatch(ctx, []string{}, "exFAT")
+	_, err := DeployHybridModeBatch(ctx, []string{}, "exFAT")
 	assert.Error(t, err)
 
 	// Valid targets
-	results, err := DeployModeABatch(ctx, []string{"dummy_usb_1", "dummy_usb_2"}, "exFAT")
+	results, err := DeployHybridModeBatch(ctx, []string{"dummy_usb_1", "dummy_usb_2"}, "exFAT")
 	require.NoError(t, err)
 	assert.Len(t, results, 2)
 	assert.True(t, results[0].Success)
 	assert.True(t, results[1].Success)
 
 	// System drive included -> validation error
-	_, err = DeployModeABatch(ctx, []string{"dummy_usb_1", "/"}, "exFAT")
+	_, err = DeployHybridModeBatch(ctx, []string{"dummy_usb_1", "/"}, "exFAT")
 	assert.Error(t, err)
 }
 
-func TestDeployModeBBatch(t *testing.T) {
+func TestDeployCloudModeBatch(t *testing.T) {
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
 	ctx := context.Background()
 
 	// Empty list
-	_, err := DeployModeBBatch(ctx, []string{}, "exFAT")
+	_, err := DeployCloudModeBatch(ctx, []string{}, "exFAT")
 	assert.Error(t, err)
 
 	// Valid targets
-	results, err := DeployModeBBatch(ctx, []string{"dummy_usb_1", "dummy_usb_2"}, "exFAT")
+	results, err := DeployCloudModeBatch(ctx, []string{"dummy_usb_1", "dummy_usb_2"}, "exFAT")
 	require.NoError(t, err)
 	assert.Len(t, results, 2)
 	assert.True(t, results[0].Success)
 	assert.True(t, results[1].Success)
 
 	// System drive included -> validation error
-	_, err = DeployModeBBatch(ctx, []string{"dummy_usb_1", "/"}, "exFAT")
+	_, err = DeployCloudModeBatch(ctx, []string{"dummy_usb_1", "/"}, "exFAT")
 	assert.Error(t, err)
 }
 
@@ -94,7 +94,7 @@ func TestDeployModeABatchPartialFailure(t *testing.T) {
 
 	ctx := context.Background()
 
-	results, err := DeployModeABatchWithVentoyAndIso(ctx, []string{"dummy_usb_1", "dummy_usb_fail"}, "exFAT", "", nil, nil)
+	results, err := DeployHybridModeBatchWithVentoyAndIso(ctx, []string{"dummy_usb_1", "dummy_usb_fail"}, "exFAT", "", nil, nil)
 	require.NoError(t, err)
 	assert.Len(t, results, 2)
 	assert.True(t, results[0].Success)
@@ -108,7 +108,7 @@ func TestDeployModeBBatchPartialFailure(t *testing.T) {
 
 	ctx := context.Background()
 
-	results, err := DeployModeBBatch(ctx, []string{"dummy_usb_1", "dummy_usb_fail"}, "exFAT")
+	results, err := DeployCloudModeBatch(ctx, []string{"dummy_usb_1", "dummy_usb_fail"}, "exFAT")
 	require.NoError(t, err)
 	assert.Len(t, results, 2)
 	assert.True(t, results[0].Success)

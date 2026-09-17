@@ -569,7 +569,7 @@ interface DiskInfo {
   protocolCode?: string;
   isVentoy?: boolean;
   isRealVentoy?: boolean;
-  isModeB?: boolean;
+  isCloudMode?: boolean;
   isGenericBoot?: boolean;
   mountPoint?: string;
 }
@@ -1130,7 +1130,7 @@ function checkIsExistingBootDisk(d: DiskInfo): boolean {
   if (!d) return false;
   const nameUpper = (d.name || '').toUpperCase();
   const isVentoyName = nameUpper.includes('VENTOY') || nameUpper.includes('UNIBOOT');
-  return Boolean(d.isRealVentoy || d.isModeB || d.isVentoy || isVentoyName);
+  return Boolean(d.isRealVentoy || d.isCloudMode || d.isVentoy || isVentoyName);
 }
 
 const isSelectedVentoyDisk = computed(() => {
@@ -1427,9 +1427,9 @@ async function startDeployment() {
         if (!expected) throw new Error(t('deploy.toast_target_changed'));
         let res: any;
         if (activeMode.value === 'cloud') {
-          res = await window.go.main.App.DeployModeB(targets[0], selectedFsType.value, expected);
+          res = await window.go.main.App.DeployCloudMode(targets[0], selectedFsType.value, expected);
         } else {
-          res = await window.go.main.App.DeployModeA(targets[0], selectedFsType.value, isoPaths, expected);
+          res = await window.go.main.App.DeployHybridMode(targets[0], selectedFsType.value, isoPaths, expected);
         }
         if (res) {
           success = res.success;
@@ -1444,9 +1444,9 @@ async function startDeployment() {
         }
         let resList: any[];
         if (activeMode.value === 'cloud') {
-          resList = await window.go.main.App.DeployModeBBatch(targets, selectedFsType.value, pendingTargetSnapshots.value);
+          resList = await window.go.main.App.DeployCloudModeBatch(targets, selectedFsType.value, pendingTargetSnapshots.value);
         } else {
-          resList = await window.go.main.App.DeployModeABatch(targets, selectedFsType.value, isoPaths, pendingTargetSnapshots.value);
+          resList = await window.go.main.App.DeployHybridModeBatch(targets, selectedFsType.value, isoPaths, pendingTargetSnapshots.value);
         }
         if (resList && resList.length > 0) {
           const failed = resList.filter(r => !r.success);

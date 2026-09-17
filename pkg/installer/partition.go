@@ -20,10 +20,10 @@ var (
 	execCommand = exec.Command
 )
 
-// FormatDiskModeB formats the target physical disk to FAT32 with MBR partition table
+// FormatDiskCloudMode formats the target physical disk to FAT32 with MBR partition table
 // and volume label "UNIBOOT" for Mode B (1-sec Cloud Pure Mode).
 // Returns the resolved volume mount point (e.g. /Volumes/UNIBOOT, E:\, /mnt/UNIBOOT).
-func FormatDiskModeB(ctx context.Context, targetDisk string) (string, error) {
+func FormatDiskCloudMode(ctx context.Context, targetDisk string) (string, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return "", fmt.Errorf("disk validation failed: %w", err)
 	}
@@ -172,10 +172,10 @@ func formatDiskLinux(ctx context.Context, targetDisk string) (string, error) {
 	return mountPoint, nil
 }
 
-// FormatDiskModeA formats the target physical disk for Mode A (Hybrid Pro Mode - Ventoy + UniBoot)
+// FormatDiskHybridMode formats the target physical disk for Mode A (Hybrid Pro Mode - Ventoy + UniBoot)
 // with the specified file system (exFAT, NTFS, FAT32, ext4) and volume label "UNIBOOT".
 // Returns the resolved volume mount point (e.g. /Volumes/UNIBOOT, E:\, /mnt/UNIBOOT).
-func FormatDiskModeA(ctx context.Context, targetDisk string, fsType string) (string, error) {
+func FormatDiskHybridMode(ctx context.Context, targetDisk string, fsType string) (string, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
 		return "", fmt.Errorf("disk validation failed: %w", err)
 	}
