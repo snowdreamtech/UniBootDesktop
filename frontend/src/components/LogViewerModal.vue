@@ -45,10 +45,10 @@
             class="log-row"
             :class="log.level.toLowerCase()"
           >
-            <span class="log-time">{{ formatLogTime(log.timestamp) }}</span>
-            <span class="log-level-badge" :class="log.level.toLowerCase()">[{{ log.level }}]</span>
-            <span class="log-msg">{{ log.message }}</span>
-            <span v-if="log.details" class="log-details">{{ log.details }}</span>
+            <span class="log-time"><bdi>{{ formatLogTime(log.timestamp) }}</bdi></span>
+            <span class="log-level-badge" :class="log.level.toLowerCase()"><bdi>[{{ log.level }}]</bdi></span>
+            <span class="log-msg"><bdi>{{ log.message }}</bdi></span>
+            <span v-if="log.details" class="log-details"><bdi>{{ log.details }}</bdi></span>
           </div>
         </div>
       </div>
@@ -261,30 +261,22 @@ function exportLogFile() {
   overflow-y: auto;
   overflow-x: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  direction: ltr !important;
-  text-align: left !important;
-  unicode-bidi: isolate;
 }
 
 .terminal-window .empty-logs {
   color: #64748b;
   text-align: center;
   padding: 4rem 0;
-  direction: ltr !important;
 }
 
 .terminal-window .log-row {
   display: flex;
-  flex-direction: row !important;
   align-items: flex-start;
-  justify-content: flex-start !important;
   gap: 1rem;
   padding: 0.35rem 0;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
   box-sizing: border-box;
   width: 100%;
-  direction: ltr !important;
-  text-align: left !important;
 }
 
 .terminal-window .log-time {
@@ -299,9 +291,6 @@ function exportLogFile() {
   line-height: 22px;
   display: inline-flex;
   align-items: center;
-  direction: ltr !important;
-  text-align: left !important;
-  unicode-bidi: embed;
 }
 
 .terminal-window .log-level-badge {
@@ -321,8 +310,6 @@ function exportLogFile() {
   justify-content: center;
   letter-spacing: 0.5px;
   margin-top: 1px;
-  direction: ltr !important;
-  unicode-bidi: embed;
 }
 
 .terminal-window .log-level-badge.info {
@@ -358,9 +345,6 @@ function exportLogFile() {
   white-space: pre-wrap;
   word-break: break-word;
   overflow-wrap: anywhere;
-  direction: ltr !important;
-  text-align: left !important;
-  unicode-bidi: embed;
 }
 
 .terminal-window .log-row.info .log-msg { color: #f1f5f9; }

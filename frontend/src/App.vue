@@ -393,10 +393,10 @@
               class="log-row"
               :class="log.level.toLowerCase()"
             >
-              <span class="log-time">{{ formatLogTime(log.timestamp) }}</span>
-              <span class="log-level-badge" :class="log.level.toLowerCase()">[{{ log.level }}]</span>
-              <span class="log-msg">{{ log.message }}</span>
-              <span v-if="log.details" class="log-details">{{ log.details }}</span>
+              <span class="log-time"><bdi>{{ formatLogTime(log.timestamp) }}</bdi></span>
+              <span class="log-level-badge" :class="log.level.toLowerCase()"><bdi>[{{ log.level }}]</bdi></span>
+              <span class="log-msg"><bdi>{{ log.message }}</bdi></span>
+              <span v-if="log.details" class="log-details"><bdi>{{ log.details }}</bdi></span>
             </div>
           </div>
         </section>
@@ -1978,9 +1978,6 @@ h1 {
   font-size: 0.82rem;
   line-height: 1.6;
   flex: 1;
-  direction: ltr !important;
-  text-align: left !important;
-  unicode-bidi: isolate;
 }
 
 .embedded-terminal-window .empty-logs {
@@ -1988,21 +1985,16 @@ h1 {
   text-align: center;
   padding: 5rem 0;
   font-style: italic;
-  direction: ltr !important;
 }
 
 .embedded-terminal-window .log-row {
   display: flex;
-  flex-direction: row !important;
   align-items: flex-start;
-  justify-content: flex-start !important;
   gap: 1rem;
   padding: 0.35rem 0;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
   box-sizing: border-box;
   width: 100%;
-  direction: ltr !important;
-  text-align: left !important;
 }
 
 .embedded-terminal-window .log-time {
@@ -2017,9 +2009,6 @@ h1 {
   line-height: 22px;
   display: inline-flex;
   align-items: center;
-  direction: ltr !important;
-  text-align: left !important;
-  unicode-bidi: embed;
 }
 
 .embedded-terminal-window .log-level-badge {
@@ -2039,8 +2028,6 @@ h1 {
   justify-content: center;
   letter-spacing: 0.5px;
   margin-top: 1px;
-  direction: ltr !important;
-  unicode-bidi: embed;
 }
 
 .embedded-terminal-window .log-level-badge.info {
@@ -2076,9 +2063,6 @@ h1 {
   white-space: pre-wrap;
   word-break: break-word;
   overflow-wrap: anywhere;
-  direction: ltr !important;
-  text-align: left !important;
-  unicode-bidi: embed;
 }
 
 .embedded-terminal-window .log-row.info .log-msg {
