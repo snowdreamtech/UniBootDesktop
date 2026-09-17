@@ -171,7 +171,7 @@ export const etEe: TranslationDict = {
   "qemu.tip_ready": "Klõpsake QEMU VM käivitamiseks, et kontrollida USB alglaadurit praegusel töölaual",
   "qemu.toast_select_first": "⚠️ Klõpsake vasakpoolsest paneelist esmalt siht-USB-draivi valimiseks!",
   "qemu.toast_not_installed": "❌ QEMU emulaatorit ei leitud! Installige QEMU (brew install qemu või port install qemu)",
-  "settings.title": "Seaded ja süsteemikonfiguratsioonid",
+  "settings.title": "Eelistused",
   "settings.subtitle": "Globaalsed eelistused, võrgupuhverserver ja püsivara maatriks",
   "settings.realtime_save": "Reaalajas salvestatud",
   "settings.tab_general": "Üldsätted",

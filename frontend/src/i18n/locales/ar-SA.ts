@@ -171,7 +171,7 @@ export const arSa: TranslationDict = {
   "qemu.tip_ready": "انقر لتشغيل جهاز QEMU الافتراضي والتحقق من إقلاع USB",
   "qemu.toast_select_first": "⚠️ يرجى تحديد محرك أقراص USB المستهدف من اللوحة اليسرى أولاً!",
   "qemu.toast_not_installed": "❌ لم يتم العثور على محاكي QEMU! يرجى تثبيت QEMU أولاً",
-  "settings.title": "الإعدادات وتكوبنات النظام",
+  "settings.title": "التفضيلات",
   "settings.subtitle": "التفضيلات العامة، وكيل الشبكة والبرامج الثابتة",
   "settings.realtime_save": "تم الحفظ في الوقت الفعلي",
   "settings.tab_general": "الإعدادات العامة",

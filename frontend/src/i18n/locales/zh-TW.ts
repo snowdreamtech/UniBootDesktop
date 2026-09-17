@@ -171,7 +171,7 @@ export const zhTw: TranslationDict = {
   "qemu.tip_ready": "點擊在當前桌面拉起 QEMU 虛擬機校驗隨身碟引導",
   "qemu.toast_select_first": "⚠️ 請先在左側磁碟列表中點擊選擇要測試的目標隨身碟！",
   "qemu.toast_not_installed": "❌ 未檢測到 QEMU 模擬器！請先安裝 QEMU (brew install qemu 或 port install qemu)",
-  "settings.title": "偏好設定與系統參數配置",
+  "settings.title": "偏好設定",
   "settings.subtitle": "全域偏好設定、網路代理與韌體配置",
   "settings.realtime_save": "修改已實時生效",
   "settings.tab_general": "常規基礎設定",

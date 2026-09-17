@@ -171,7 +171,7 @@ export const trTr: TranslationDict = {
   "qemu.tip_ready": "USB önyüklemesini doğrulamak için QEMU VM'sini başlatmak üzere tıklayın",
   "qemu.toast_select_first": "⚠️ Lütfen önce sol panelden bir hedef USB sürücüsü seçin!",
   "qemu.toast_not_installed": "❌ QEMU emülatörü bulunamadı! Lütfen önce QEMU'yu yükleyin",
-  "settings.title": "Ayarlar ve Sistem Yapılandırmaları",
+  "settings.title": "Tercihler",
   "settings.subtitle": "Genel Tercihler, Ağ Vekil Sunucusu ve Ürün Yazılımı",
   "settings.realtime_save": "Gerçek Zamanlı Kaydedildi",
   "settings.tab_general": "Genel Ayarlar",

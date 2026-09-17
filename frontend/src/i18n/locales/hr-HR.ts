@@ -171,7 +171,7 @@ export const hrHr: TranslationDict = {
   "qemu.tip_ready": "Kliknite za pokretanje QEMU VM za provjeru USB pokretačkog programa na trenutnoj radnoj površini",
   "qemu.toast_select_first": "⚠️ Kliknite kako biste prvo odabrali ciljni USB pogon s lijeve ploče!",
   "qemu.toast_not_installed": "❌ QEMU emulator nije pronađen! Instalirajte QEMU (brew install qemu ili port install qemu)",
-  "settings.title": "Postavke i konfiguracije sustava",
+  "settings.title": "Postavke",
   "settings.subtitle": "Globalne postavke, mrežni proxy i matrica firmvera",
   "settings.realtime_save": "Spremljeno u stvarnom vremenu",
   "settings.tab_general": "Opće postavke",

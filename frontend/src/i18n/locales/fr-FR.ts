@@ -171,7 +171,7 @@ export const frFr: TranslationDict = {
   "qemu.tip_ready": "Cliquer pour lancer la VM QEMU et vérifier l'amorçage USB",
   "qemu.toast_select_first": "⚠️ Veuillez d'abord sélectionner un disque USB cible dans le panneau gauche !",
   "qemu.toast_not_installed": "❌ Émulateur QEMU introuvable ! Veuillez installer QEMU d'abord",
-  "settings.title": "Paramètres & Configurations système",
+  "settings.title": "Préférences",
   "settings.subtitle": "Préférences globales, proxy réseau & micrologiciel",
   "settings.realtime_save": "Enregistré en temps réel",
   "settings.tab_general": "Paramètres généraux",

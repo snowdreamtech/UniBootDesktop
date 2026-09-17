@@ -171,7 +171,7 @@ export const itIt: TranslationDict = {
   "qemu.tip_ready": "Clicca per avviare la VM QEMU e verificare l'avvio USB",
   "qemu.toast_select_first": "⚠️ Selezionare prima un'unità USB dal pannello di sinistra!",
   "qemu.toast_not_installed": "❌ Emulatore QEMU non trovato! Installare prima QEMU",
-  "settings.title": "Impostazioni e Configurazioni di Sistema",
+  "settings.title": "Preferenze",
   "settings.subtitle": "Preferenze Globali, Proxy di Rete e Firmware",
   "settings.realtime_save": "Salvato in Tempo Reale",
   "settings.tab_general": "Impostazioni Generali",

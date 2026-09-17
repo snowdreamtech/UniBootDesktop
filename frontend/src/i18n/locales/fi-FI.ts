@@ -171,7 +171,7 @@ export const fiFi: TranslationDict = {
   "qemu.tip_ready": "Napsauta käynnistääksesi QEMU VM vahvistaaksesi USB-käynnistyslataimen nykyisellä työpöydällä",
   "qemu.toast_select_first": "⚠️ Napsauta ensin valitaksesi kohde-USB-aseman vasemmasta paneelista!",
   "qemu.toast_not_installed": "❌ QEMU-emulaattoria ei löydy! Asenna QEMU (brew install qemu tai port install qemu)",
-  "settings.title": "Asetukset ja järjestelmämääritykset",
+  "settings.title": "Asetukset",
   "settings.subtitle": "Yleiset asetukset, verkkovälityspalvelin ja laiteohjelmistomatriisi",
   "settings.realtime_save": "Reaaliaikainen tallennettu",
   "settings.tab_general": "Yleiset asetukset",

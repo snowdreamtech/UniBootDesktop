@@ -171,7 +171,7 @@ export const beBy: TranslationDict = {
   "qemu.tip_ready": "Націсніце, каб запусціць QEMU VM, каб праверыць USB-загрузчык на бягучым працоўным стале",
   "qemu.toast_select_first": "⚠️ Націсніце, каб спачатку выбраць мэтавы USB-назапашвальнік з левай панэлі!",
   "qemu.toast_not_installed": "❌ Эмулятар QEMU не знойдзены! Усталюйце, калі ласка, QEMU (усталяваць qemu ў рэжыме brew або ўсталяваць qemu праз порт)",
-  "settings.title": "Налады і канфігурацыі сістэмы",
+  "settings.title": "Налады",
   "settings.subtitle": "Глабальныя налады, сеткавы проксі і матрыца прашыўкі",
   "settings.realtime_save": "Захавана ў рэжыме рэальнага часу",
   "settings.tab_general": "Агульныя налады",

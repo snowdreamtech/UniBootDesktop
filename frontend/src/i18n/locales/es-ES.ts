@@ -171,7 +171,7 @@ export const esEs: TranslationDict = {
   "qemu.tip_ready": "Haga clic para iniciar la VM QEMU y verificar el arranque USB",
   "qemu.toast_select_first": "⚠️ Por favor seleccione primero una unidad USB objetivo en el panel izquierdo!",
   "qemu.toast_not_installed": "❌ ¡Emulador QEMU no encontrado! Por favor instale QEMU primero",
-  "settings.title": "Ajustes y configuraciones del sistema",
+  "settings.title": "Preferencias",
   "settings.subtitle": "Preferencias globales, proxy de red y firmware",
   "settings.realtime_save": "Guardado en tiempo real",
   "settings.tab_general": "Ajustes generales",

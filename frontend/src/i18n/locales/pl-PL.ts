@@ -171,7 +171,7 @@ export const plPl: TranslationDict = {
   "qemu.tip_ready": "Kliknij, aby uruchomić maszynę QEMU i zweryfikować rozruch USB",
   "qemu.toast_select_first": "⚠️ Najpierw wybierz docelowy dysk USB z lewego panelu!",
   "qemu.toast_not_installed": "❌ Nie znaleziono emulatora QEMU! Zainstaluj najpierw QEMU",
-  "settings.title": "Ustawienia i konfiguracja systemu",
+  "settings.title": "Ustawienia",
   "settings.subtitle": "Globalne preferencje, proxy sieciowe i oprogramowanie układowe",
   "settings.realtime_save": "Zapisano w czasie rzeczywistym",
   "settings.tab_general": "Ustawienia ogólne",

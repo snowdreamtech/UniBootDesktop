@@ -171,7 +171,7 @@ export const heIl: TranslationDict = {
   "qemu.tip_ready": "לחץ כדי להפעיל את QEMU VM כדי לאמת את טוען האתחול USB בשולחן העבודה הנוכחי",
   "qemu.toast_select_first": "⚠️ אנא לחץ תחילה כדי לבחור כונן USB יעד מהחלונית השמאלית!",
   "qemu.toast_not_installed": "❌ אמולטור QEMU לא נמצא! נא להתקין QEMU (התקנת qemu לחלוט או qemu להתקין יציאה)",
-  "settings.title": "הגדרות ותצורות מערכת",
+  "settings.title": "העדפות",
   "settings.subtitle": "העדפות גלובליות, פרוקסי רשת ומטריצת קושחה",
   "settings.realtime_save": "נשמר בזמן אמת",
   "settings.tab_general": "הגדרות כלליות",

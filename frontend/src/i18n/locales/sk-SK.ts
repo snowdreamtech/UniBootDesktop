@@ -171,7 +171,7 @@ export const skSk: TranslationDict = {
   "qemu.tip_ready": "Kliknutím spustíte QEMU VM na overenie zavádzača USB na aktuálnej pracovnej ploche",
   "qemu.toast_select_first": "⚠️ Najprv kliknutím vyberte cieľovú jednotku USB z ľavého panela!",
   "qemu.toast_not_installed": "❌ Emulátor QEMU sa nenašiel! Nainštalujte si prosím QEMU (brew install qemu alebo port install qemu)",
-  "settings.title": "Nastavenia a konfigurácie systému",
+  "settings.title": "Nastavenia",
   "settings.subtitle": "Globálne preferencie, Network Proxy & Firmware Matrix",
   "settings.realtime_save": "Uložené v reálnom čase",
   "settings.tab_general": "Všeobecné nastavenia",

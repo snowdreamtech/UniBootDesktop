@@ -171,7 +171,7 @@ export const idId: TranslationDict = {
   "qemu.tip_ready": "Klik untuk meluncurkan QEMU VM untuk memverifikasi bootloader USB di desktop saat ini",
   "qemu.toast_select_first": "⚠️ Silakan klik untuk memilih drive USB target dari panel kiri terlebih dahulu!",
   "qemu.toast_not_installed": "❌ Emulator QEMU tidak ditemukan! Silakan instal QEMU (brew install qemu atau port install qemu)",
-  "settings.title": "Pengaturan & Konfigurasi Sistem",
+  "settings.title": "Preferensi",
   "settings.subtitle": "Preferensi Global, Proksi Jaringan & Matriks Firmware",
   "settings.realtime_save": "Tersimpan Waktu Nyata",
   "settings.tab_general": "Pengaturan Umum",

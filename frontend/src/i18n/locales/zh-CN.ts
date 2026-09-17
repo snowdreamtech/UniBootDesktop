@@ -171,7 +171,7 @@ export const zhCn: TranslationDict = {
   "qemu.tip_ready": "点击在当前桌面拉起 QEMU 虚拟机校验 U 盘引导",
   "qemu.toast_select_first": "⚠️ 请先在左侧磁盘列表中点击选择要测试的目标 U 盘！",
   "qemu.toast_not_installed": "❌ 未检测到 QEMU 模拟器！请先安装 QEMU (brew install qemu 或 port install qemu)",
-  "settings.title": "偏好设置与系统参数配置",
+  "settings.title": "偏好设置",
   "settings.subtitle": "全局偏好设置、网络代理与固件配置",
   "settings.realtime_save": "修改已实时生效",
   "settings.tab_general": "常规基础设置",

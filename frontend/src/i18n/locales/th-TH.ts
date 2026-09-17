@@ -171,7 +171,7 @@ export const thTh: TranslationDict = {
   "qemu.tip_ready": "คลิกเพื่อเปิด QEMU VM เพื่อตรวจสอบ USB bootloader บนเดสก์ท็อปปัจจุบัน",
   "qemu.toast_select_first": "⚠️ กรุณาคลิกเพื่อเลือกไดรฟ์ USB เป้าหมายจากแผงด้านซ้ายก่อน!",
   "qemu.toast_not_installed": "❌ ไม่พบโปรแกรมจำลอง QEMU! กรุณาติดตั้ง QEMU (ชงติดตั้ง qemu หรือพอร์ตติดตั้ง qemu)",
-  "settings.title": "การตั้งค่าและการกำหนดค่าระบบ",
+  "settings.title": "การตั้งค่า",
   "settings.subtitle": "การตั้งค่าส่วนกลาง พร็อกซีเครือข่าย และเมทริกซ์เฟิร์มแวร์",
   "settings.realtime_save": "บันทึกเรียลไทม์แล้ว",
   "settings.tab_general": "การตั้งค่าทั่วไป",

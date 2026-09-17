@@ -171,7 +171,7 @@ export const kaGe: TranslationDict = {
   "qemu.tip_ready": "დააწკაპუნეთ QEMU VM-ის გასაშვებად, რათა გადაამოწმოთ USB ჩამტვირთველი მიმდინარე სამუშაო მაგიდაზე",
   "qemu.toast_select_first": "⚠️ გთხოვთ, დააწკაპუნოთ, რათა აირჩიოთ სამიზნე USB დისკი მარცხენა პანელიდან!",
   "qemu.toast_not_installed": "❌ QEMU ემულატორი ვერ მოიძებნა! გთხოვთ დააინსტალიროთ QEMU (დააყენეთ qemu ან პორტის დააინსტალირეთ qemu)",
-  "settings.title": "პარამეტრები და სისტემის კონფიგურაციები",
+  "settings.title": "პარამეტრები",
   "settings.subtitle": "გლობალური პრეფერენციები, ქსელის პროქსი და პროგრამული უზრუნველყოფის მატრიცა",
   "settings.realtime_save": "რეალურ დროში შენახულია",
   "settings.tab_general": "ზოგადი პარამეტრები",

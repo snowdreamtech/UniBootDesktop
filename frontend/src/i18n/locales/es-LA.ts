@@ -171,7 +171,7 @@ export const esLa: TranslationDict = {
   "qemu.tip_ready": "Haga clic para iniciar QEMU VM y verificar el cargador de arranque USB en el escritorio actual",
   "qemu.toast_select_first": "⚠️ ¡Primero haga clic para seleccionar una unidad USB de destino desde el panel izquierdo!",
   "qemu.toast_not_installed": "❌ ¡No se encontró el emulador QEMU! Instale QEMU (brew install qemu o port install qemu)",
-  "settings.title": "Ajustes y configuraciones del sistema",
+  "settings.title": "Preferencias",
   "settings.subtitle": "Preferencias globales, proxy de red y matriz de firmware",
   "settings.realtime_save": "Guardado en tiempo real",
   "settings.tab_general": "Configuraciones generales",

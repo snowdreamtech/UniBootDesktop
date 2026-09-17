@@ -171,7 +171,7 @@ export const taIn: TranslationDict = {
   "qemu.tip_ready": "தற்போதைய டெஸ்க்டாப்பில் USB பூட்லோடரைச் சரிபார்க்க QEMU VM ஐத் தொடங்க கிளிக் செய்யவும்",
   "qemu.toast_select_first": "⚠️ முதலில் இடது பேனலில் இருந்து இலக்கு USB டிரைவைத் தேர்ந்தெடுக்க கிளிக் செய்யவும்!",
   "qemu.toast_not_installed": "❌ QEMU எமுலேட்டர் கிடைக்கவில்லை! QEMU ஐ நிறுவவும் (புரூ நிறுவ qemu அல்லது port install qemu)",
-  "settings.title": "அமைப்புகள் & கணினி கட்டமைப்புகள்",
+  "settings.title": "விருப்பங்கள்",
   "settings.subtitle": "உலகளாவிய விருப்பத்தேர்வுகள், நெட்வொர்க் ப்ராக்ஸி & ஃபார்ம்வேர் மேட்ரிக்ஸ்",
   "settings.realtime_save": "நிகழ்நேரம் சேமிக்கப்பட்டது",
   "settings.tab_general": "பொது அமைப்புகள்",

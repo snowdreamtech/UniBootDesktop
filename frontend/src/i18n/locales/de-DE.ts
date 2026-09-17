@@ -171,7 +171,7 @@ export const deDe: TranslationDict = {
   "qemu.tip_ready": "Klicken, um QEMU-VM zu starten und USB-Boot zu überprüfen",
   "qemu.toast_select_first": "⚠️ Bitte zuerst ein Ziel-USB-Laufwerk aus der linken Liste auswählen!",
   "qemu.toast_not_installed": "❌ QEMU-Emulator nicht gefunden! Bitte zuerst QEMU installieren",
-  "settings.title": "Einstellungen & Systemkonfiguration",
+  "settings.title": "Einstellungen",
   "settings.subtitle": "Globale Einstellungen, Netzwerk-Proxy & Firmware",
   "settings.realtime_save": "Echtzeit gespeichert",
   "settings.tab_general": "Allgemeine Einstellungen",

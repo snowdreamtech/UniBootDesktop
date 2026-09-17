@@ -171,7 +171,7 @@ export const koKr: TranslationDict = {
   "qemu.tip_ready": "클릭하여 QEMU 가상 머신을 실행하고 부팅을 검증하세요",
   "qemu.toast_select_first": "⚠️ 왼쪽 목록에서 테스트할 대상 USB 드라이브를 먼저 선택하세요!",
   "qemu.toast_not_installed": "❌ QEMU 에뮬레이터를 찾을 수 없습니다! QEMU를 먼저 설치하세요",
-  "settings.title": "환경 설정 및 시스템 구성",
+  "settings.title": "환경 설정",
   "settings.subtitle": "글로벌 환경 설정, 네트워크 프록시 및 펌웨어",
   "settings.realtime_save": "실시간 저장됨",
   "settings.tab_general": "일반 설정",

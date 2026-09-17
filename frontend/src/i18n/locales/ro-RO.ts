@@ -171,7 +171,7 @@ export const roRo: TranslationDict = {
   "qemu.tip_ready": "Faceți clic pentru a lansa QEMU VM pentru a verifica bootloader-ul USB pe desktopul curent",
   "qemu.toast_select_first": "⚠️ Faceți clic mai întâi pentru a selecta o unitate USB țintă din panoul din stânga!",
   "qemu.toast_not_installed": "❌ Emulatorul QEMU nu a fost găsit! Vă rugăm să instalați QEMU (brew install qemu sau port install qemu)",
-  "settings.title": "Setări și configurații de sistem",
+  "settings.title": "Preferințe",
   "settings.subtitle": "Preferințe globale, proxy de rețea și matrice de firmware",
   "settings.realtime_save": "Salvat în timp real",
   "settings.tab_general": "Setări generale",

@@ -171,7 +171,7 @@ export const hiIn: TranslationDict = {
   "qemu.tip_ready": "वर्तमान डेस्कटॉप पर USB बूटलोडर को सत्यापित करने के लिए QEMU VM लॉन्च करने के लिए क्लिक करें",
   "qemu.toast_select_first": "⚠️ कृपया पहले बाएं पैनल से एक लक्ष्य यूएसबी ड्राइव का चयन करने के लिए क्लिक करें!",
   "qemu.toast_not_installed": "❌ QEMU एम्यूलेटर नहीं मिला! कृपया QEMU इंस्टॉल करें (ब्रू इंस्टॉल qemu या पोर्ट इंस्टॉल qemu)",
-  "settings.title": "सेटिंग्स और सिस्टम कॉन्फ़िगरेशन",
+  "settings.title": "प्राथमिकताएं",
   "settings.subtitle": "वैश्विक प्राथमिकताएँ, नेटवर्क प्रॉक्सी और फ़र्मवेयर मैट्रिक्स",
   "settings.realtime_save": "रीयलटाइम सहेजा गया",
   "settings.tab_general": "सामान्य सेटिंग्स",

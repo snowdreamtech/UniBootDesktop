@@ -171,7 +171,7 @@ export const bnBd: TranslationDict = {
   "qemu.tip_ready": "বর্তমান ডেস্কটপে USB বুটলোডার যাচাই করতে QEMU VM চালু করতে ক্লিক করুন",
   "qemu.toast_select_first": "⚠️ প্রথমে বাম প্যানেল থেকে একটি টার্গেট USB ড্রাইভ নির্বাচন করতে ক্লিক করুন!",
   "qemu.toast_not_installed": "❌ QEMU এমুলেটর পাওয়া যায়নি! অনুগ্রহ করে কিউইএমইউ ইনস্টল করুন (ব্রু ইন্সটল কিমু বা পোর্ট ইন্সটল কিউমু)",
-  "settings.title": "সেটিংস এবং সিস্টেম কনফিগারেশন",
+  "settings.title": "পছন্দসমূহ",
   "settings.subtitle": "গ্লোবাল প্রেফারেন্স, নেটওয়ার্ক প্রক্সি এবং ফার্মওয়্যার ম্যাট্রিক্স",
   "settings.realtime_save": "রিয়েলটাইম সংরক্ষিত",
   "settings.tab_general": "সাধারণ সেটিংস",

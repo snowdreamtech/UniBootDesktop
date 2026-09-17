@@ -171,7 +171,7 @@ export const ruRu: TranslationDict = {
   "qemu.tip_ready": "Нажмите, чтобы запустить виртуальную машину QEMU и проверить загрузку USB",
   "qemu.toast_select_first": "⚠️ Пожалуйста, сначала выберите целевой USB-диск в левой панели!",
   "qemu.toast_not_installed": "❌ Эмулятор QEMU не найден! Пожалуйста, сначала установите QEMU",
-  "settings.title": "Настройки и конфигурация системы",
+  "settings.title": "Настройки",
   "settings.subtitle": "Глобальные настройки, прокси-сервер и прошивки",
   "settings.realtime_save": "Сохранено в реальном времени",
   "settings.tab_general": "Общие настройки",

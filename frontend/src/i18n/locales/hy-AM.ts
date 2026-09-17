@@ -171,7 +171,7 @@ export const hyAm: TranslationDict = {
   "qemu.tip_ready": "Սեղմեք՝ QEMU VM-ն գործարկելու համար՝ ընթացիկ աշխատասեղանի վրա USB բեռնիչը ստուգելու համար",
   "qemu.toast_select_first": "⚠️ Խնդրում ենք սեղմել՝ ձախ վահանակից նախ նպատակային USB կրիչ ընտրելու համար:",
   "qemu.toast_not_installed": "❌ QEMU էմուլյատորը չի գտնվել: Խնդրում ենք տեղադրել QEMU (brew install qemu կամ port install qemu)",
-  "settings.title": "Կարգավորումներ և համակարգի կոնֆիգուրացիաներ",
+  "settings.title": "Նախապատվություններ",
   "settings.subtitle": "Համաշխարհային նախապատվություններ, ցանցի վստահված անձի և որոնվածի մատրիցա",
   "settings.realtime_save": "Իրական ժամանակում պահված է",
   "settings.tab_general": "Ընդհանուր կարգավորումներ",

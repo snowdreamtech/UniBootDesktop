@@ -171,7 +171,7 @@ export const enUs: TranslationDict = {
   "qemu.tip_ready": "Click to launch QEMU VM to verify USB bootloader on current desktop",
   "qemu.toast_select_first": "⚠️ Please click to select a target USB drive from the left panel first!",
   "qemu.toast_not_installed": "❌ QEMU emulator not found! Please install QEMU (brew install qemu or port install qemu)",
-  "settings.title": "Settings & System Configurations",
+  "settings.title": "Preferences",
   "settings.subtitle": "Global Preferences, Network Proxy & Firmware Matrix",
   "settings.realtime_save": "Realtime Saved",
   "settings.tab_general": "General Settings",

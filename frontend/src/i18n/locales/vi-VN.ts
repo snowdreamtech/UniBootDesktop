@@ -171,7 +171,7 @@ export const viVn: TranslationDict = {
   "qemu.tip_ready": "Nhấp để khởi chạy máy ảo QEMU và kiểm tra khởi động USB",
   "qemu.toast_select_first": "⚠️ Vui lòng chọn ổ USB mục tiêu từ danh sách bên trái trước!",
   "qemu.toast_not_installed": "❌ Không tìm thấy trình giả lập QEMU! Vui lòng cài đặt QEMU trước",
-  "settings.title": "Cài đặt & Cấu hình hệ thống",
+  "settings.title": "Tùy chọn",
   "settings.subtitle": "Tùy chọn toàn cục, Proxy mạng & Firmware",
   "settings.realtime_save": "Đã lưu theo thời gian thực",
   "settings.tab_general": "Cài đặt chung",

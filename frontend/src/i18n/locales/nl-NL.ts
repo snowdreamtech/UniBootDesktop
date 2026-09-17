@@ -171,7 +171,7 @@ export const nlNl: TranslationDict = {
   "qemu.tip_ready": "Klik om QEMU VM te starten om de USB-bootloader op het huidige bureaublad te verifiëren",
   "qemu.toast_select_first": "⚠️ Klik eerst om een doel-USB-station in het linkerpaneel te selecteren!",
   "qemu.toast_not_installed": "❌ QEMU-emulator niet gevonden! Installeer QEMU (brew install qemu of port install qemu)",
-  "settings.title": "Instellingen en systeemconfiguraties",
+  "settings.title": "Voorkeuren",
   "settings.subtitle": "Algemene voorkeuren, netwerkproxy en firmwarematrix",
   "settings.realtime_save": "Realtime opgeslagen",
   "settings.tab_general": "Algemene instellingen",

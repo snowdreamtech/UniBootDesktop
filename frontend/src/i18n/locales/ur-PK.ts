@@ -171,7 +171,7 @@ export const urPk: TranslationDict = {
   "qemu.tip_ready": "موجودہ ڈیسک ٹاپ پر USB بوٹ لوڈر کی تصدیق کرنے کے لیے QEMU VM لانچ کرنے کے لیے کلک کریں۔",
   "qemu.toast_select_first": "⚠️ براہ کرم پہلے بائیں پینل سے ٹارگٹ USB ڈرائیو منتخب کرنے کے لیے کلک کریں!",
   "qemu.toast_not_installed": "❌ QEMU ایمولیٹر نہیں ملا! براہ کرم QEMU انسٹال کریں (brew install qemu یا port install qemu)",
-  "settings.title": "سیٹنگز اور سسٹم کنفیگریشنز",
+  "settings.title": "ترجیحات",
   "settings.subtitle": "عالمی ترجیحات، نیٹ ورک پراکسی اور فرم ویئر میٹرکس",
   "settings.realtime_save": "ریئل ٹائم محفوظ کیا گیا۔",
   "settings.tab_general": "عمومی ترتیبات",

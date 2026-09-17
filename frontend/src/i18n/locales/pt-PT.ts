@@ -171,7 +171,7 @@ export const ptPt: TranslationDict = {
   "qemu.tip_ready": "Clique para iniciar o QEMU VM para verificar o bootloader USB na área de trabalho atual",
   "qemu.toast_select_first": "⚠️ Clique primeiro para selecionar uma unidade USB de destino no painel esquerdo!",
   "qemu.toast_not_installed": "❌ Emulador QEMU não encontrado! Instale o QEMU (brew install qemu ou port install qemu)",
-  "settings.title": "Configurações e configurações do sistema",
+  "settings.title": "Preferências",
   "settings.subtitle": "Preferências globais, proxy de rede e matriz de firmware",
   "settings.realtime_save": "Salvo em tempo real",
   "settings.tab_general": "Configurações Gerais",

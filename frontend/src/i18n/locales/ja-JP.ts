@@ -171,7 +171,7 @@ export const jaJp: TranslationDict = {
   "qemu.tip_ready": "クリックして QEMU VM を起動し、USB ブート検証を実行",
   "qemu.toast_select_first": "⚠️ 左パネルのリストからテスト対象の USB ドライブを選択してください！",
   "qemu.toast_not_installed": "❌ QEMU エミュレータが検出されません。事前にインストールしてください",
-  "settings.title": "環境設定 & システム設定",
+  "settings.title": "環境設定",
   "settings.subtitle": "グローバル環境設定、ネットワークプロキシ & ファームウェア",
   "settings.realtime_save": "リアルタイム保存済み",
   "settings.tab_general": "一般設定",

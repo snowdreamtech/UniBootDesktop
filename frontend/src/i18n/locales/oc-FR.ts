@@ -171,7 +171,7 @@ export const ocFr: TranslationDict = {
   "qemu.tip_ready": "Clicatz per lançar QEMU VM per verificar lo cargaire d'arrenjament USB sul burèu actual",
   "qemu.toast_select_first": "⚠️ Mercés de clicar per seleccionar una unitat USB cibla del panèl esquèrra d'en primièr!",
   "qemu.toast_not_installed": "❌ L'emulator QEMU pas trobat ! Mercés de installar QEMU (brew install qemu o port install qemu)",
-  "settings.title": "Paramètres e configuracions del sistèma",
+  "settings.title": "Preferéncias",
   "settings.subtitle": "Preferéncias globalas, proxy de ret e matriça de micrologicial",
   "settings.realtime_save": "Enregistrat en temps real",
   "settings.tab_general": "Paramètres generals",

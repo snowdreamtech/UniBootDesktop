@@ -171,7 +171,7 @@ export const ltLt: TranslationDict = {
   "qemu.tip_ready": "Spustelėkite, kad paleistumėte QEMU VM, kad patikrintumėte USB įkrovos programą dabartiniame darbalaukyje",
   "qemu.toast_select_first": "⚠️ Pirmiausia spustelėkite, kad pasirinktumėte tikslinį USB diską kairiajame skydelyje!",
   "qemu.toast_not_installed": "❌ QEMU emuliatorius nerastas! Įdiekite QEMU (brew install qemu arba port install qemu)",
-  "settings.title": "Nustatymai ir sistemos konfigūracijos",
+  "settings.title": "Nustatymai",
   "settings.subtitle": "Pasaulinės nuostatos, tinklo tarpinis serveris ir programinės įrangos matrica",
   "settings.realtime_save": "Išsaugota realiuoju laiku",
   "settings.tab_general": "Bendrieji nustatymai",

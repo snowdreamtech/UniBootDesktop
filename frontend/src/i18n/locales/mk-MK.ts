@@ -171,7 +171,7 @@ export const mkMk: TranslationDict = {
   "qemu.tip_ready": "Кликнете за да стартувате QEMU VM за да го потврдите USB-подигачот на тековната работна површина",
   "qemu.toast_select_first": "⚠️ Ве молиме кликнете за да изберете целен USB-диск од левиот панел прво!",
   "qemu.toast_not_installed": "❌ Емулаторот QEMU не е пронајден! Ве молиме инсталирајте QEMU (инсталирајте qemu или приклучете инсталирајте qemu)",
-  "settings.title": "Поставки и системски конфигурации",
+  "settings.title": "Поставки",
   "settings.subtitle": "Глобални параметри, мрежен прокси и матрица на фирмверот",
   "settings.realtime_save": "Зачувано во реално време",
   "settings.tab_general": "Општи поставки",

@@ -171,7 +171,7 @@ export const ukUa: TranslationDict = {
   "qemu.tip_ready": "Натисніть, щоб запустити QEMU VM, щоб перевірити USB-завантажувач на поточному робочому столі",
   "qemu.toast_select_first": "⚠️ Натисніть, щоб спочатку вибрати цільовий USB-накопичувач на лівій панелі!",
   "qemu.toast_not_installed": "❌ Емулятор QEMU не знайдено! Будь ласка, встановіть QEMU (brew install qemu або port install qemu)",
-  "settings.title": "Параметри та конфігурації системи",
+  "settings.title": "Налаштування",
   "settings.subtitle": "Глобальні параметри, мережевий проксі та матриця прошивки",
   "settings.realtime_save": "Збережено в реальному часі",
   "settings.tab_general": "Загальні налаштування",

@@ -171,7 +171,7 @@ export const slSi: TranslationDict = {
   "qemu.tip_ready": "Kliknite za zagon QEMU VM, da preverite zagonski nalagalnik USB na trenutnem namizju",
   "qemu.toast_select_first": "⚠️ Kliknite, da najprej izberete ciljni pogon USB na levi plošči!",
   "qemu.toast_not_installed": "❌ Emulator QEMU ni bil najden! Prosimo, namestite QEMU (brew install qemu ali port install qemu)",
-  "settings.title": "Nastavitve in sistemske konfiguracije",
+  "settings.title": "Nastavitve",
   "settings.subtitle": "Globalne nastavitve, omrežni posrednik in matrika vdelane programske opreme",
   "settings.realtime_save": "Shranjeno v realnem času",
   "settings.tab_general": "Splošne nastavitve",

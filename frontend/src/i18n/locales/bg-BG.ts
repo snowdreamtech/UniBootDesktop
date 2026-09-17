@@ -171,7 +171,7 @@ export const bgBg: TranslationDict = {
   "qemu.tip_ready": "Щракнете, за да стартирате QEMU VM, за да проверите USB буутлоудъра на текущия работен плот",
   "qemu.toast_select_first": "⚠️ Моля, щракнете, за да изберете първо целево USB устройство от левия панел!",
   "qemu.toast_not_installed": "❌ QEMU емулаторът не е намерен! Моля, инсталирайте QEMU (brew install qemu или port install qemu)",
-  "settings.title": "Настройки и системни конфигурации",
+  "settings.title": "Настройки",
   "settings.subtitle": "Глобални предпочитания, мрежов прокси и матрица на фърмуера",
   "settings.realtime_save": "Запазено в реално време",
   "settings.tab_general": "Общи настройки",

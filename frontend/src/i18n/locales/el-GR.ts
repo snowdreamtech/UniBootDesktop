@@ -171,7 +171,7 @@ export const elGr: TranslationDict = {
   "qemu.tip_ready": "Κάντε κλικ για εκκίνηση του QEMU VM για επαλήθευση του USB bootloader στην τρέχουσα επιφάνεια εργασίας",
   "qemu.toast_select_first": "⚠️ Κάντε κλικ για να επιλέξετε πρώτα μια μονάδα USB-στόχου από τον αριστερό πίνακα!",
   "qemu.toast_not_installed": "❌ Ο εξομοιωτής QEMU δεν βρέθηκε! Εγκαταστήστε το QEMU (brew install qemu ή port install qemu)",
-  "settings.title": "Ρυθμίσεις & Διαμορφώσεις Συστήματος",
+  "settings.title": "Ρυθμίσεις",
   "settings.subtitle": "Καθολικές προτιμήσεις, διακομιστή μεσολάβησης δικτύου και μήτρα υλικολογισμικού",
   "settings.realtime_save": "Αποθηκεύτηκε σε πραγματικό χρόνο",
   "settings.tab_general": "Γενικές Ρυθμίσεις",

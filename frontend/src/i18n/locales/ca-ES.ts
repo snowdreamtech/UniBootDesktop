@@ -171,7 +171,7 @@ export const caEs: TranslationDict = {
   "qemu.tip_ready": "Feu clic per iniciar QEMU VM per verificar el carregador d'arrencada USB a l'escriptori actual",
   "qemu.toast_select_first": "⚠️ Feu clic primer per seleccionar una unitat USB de destinació al tauler esquerre!",
   "qemu.toast_not_installed": "❌ No s'ha trobat l'emulador QEMU! Instal·leu QEMU (brew install qemu o port install qemu)",
-  "settings.title": "Configuracions i configuracions del sistema",
+  "settings.title": "Preferències",
   "settings.subtitle": "Preferències globals, servidor intermediari de xarxa i matriu de firmware",
   "settings.realtime_save": "Desat en temps real",
   "settings.tab_general": "Configuració general",

@@ -171,7 +171,7 @@ export const faIr: TranslationDict = {
   "qemu.tip_ready": "کلیک کنید تا QEMU VM راه اندازی شود تا بوت لودر USB را در دسکتاپ فعلی تأیید کنید",
   "qemu.toast_select_first": "لطفا برای انتخاب یک درایو USB مورد نظر از پانل سمت چپ ابتدا کلیک کنید!",
   "qemu.toast_not_installed": "❌ شبیه ساز QEMU پیدا نشد! لطفا QEMU را نصب کنید (brew install qemu یا port install qemu)",
-  "settings.title": "تنظیمات و پیکربندی سیستم",
+  "settings.title": "ترجیحات",
   "settings.subtitle": "تنظیمات جهانی، پروکسی شبکه و ماتریس سفت‌افزار",
   "settings.realtime_save": "بیدرنگ ذخیره شد",
   "settings.tab_general": "تنظیمات عمومی",

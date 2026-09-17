@@ -171,7 +171,7 @@ export const azAz: TranslationDict = {
   "qemu.tip_ready": "Cari iş masasında USB yükləyicisini yoxlamaq üçün QEMU VM-ni işə salmaq üçün klikləyin",
   "qemu.toast_select_first": "⚠️ Əvvəlcə sol paneldən hədəf USB sürücüsünü seçmək üçün klikləyin!",
   "qemu.toast_not_installed": "❌ QEMU emulyatoru tapılmadı! Lütfən, QEMU quraşdırın (qemu qurun və ya port quraşdırın)",
-  "settings.title": "Parametrlər və Sistem Konfiqurasiyaları",
+  "settings.title": "Üstünlüklər",
   "settings.subtitle": "Qlobal Tercihlər, Şəbəkə Proksi və Firmware Matrisi",
   "settings.realtime_save": "Real vaxtda Saxlandı",
   "settings.tab_general": "Ümumi Parametrlər",
