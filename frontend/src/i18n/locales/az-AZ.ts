@@ -379,4 +379,10 @@ export const azAz: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Yenilənmə paketinin yüklənməsi tamamlandı! Tətbiq etmək üçün tətbiqi yenidən başladın.",
   "about.onlineUpdateFailed": "Onlayn yenilənmə uğursuz oldu: {error}",
   "common.close": "Bağla",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

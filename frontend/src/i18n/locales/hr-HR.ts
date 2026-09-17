@@ -379,4 +379,10 @@ export const hrHr: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Preuzimanje ažuriranja završeno! Ponovno pokrenite aplikaciju za primjenu.",
   "about.onlineUpdateFailed": "Mrežno ažuriranje nije uspjelo: {error}",
   "common.close": "Zatvori",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

@@ -379,4 +379,10 @@ export const caEs: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Descàrrega d'actualització completada! Reinicieu l'aplicació per aplicar-la.",
   "about.onlineUpdateFailed": "L'actualització en línia ha fallat: {error}",
   "common.close": "Tancar",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

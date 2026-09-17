@@ -379,4 +379,10 @@ export const faIr: TranslationDict = {
   "about.updateCompleteRestart": "🎉 دانلود به‌روزرسانی کامل شد! برای اعمال، برنامه را دوباره راه‌اندازی کنید.",
   "about.onlineUpdateFailed": "به‌روزرسانی آنلاین ناموفق بود: {error}",
   "common.close": "بستن",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

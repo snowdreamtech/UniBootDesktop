@@ -379,4 +379,10 @@ export const slSi: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Prenos posodobitve končan! Ponovno zazenite aplikacijo za uveljavitev.",
   "about.onlineUpdateFailed": "Spletna posodobitev ni uspela: {error}",
   "common.close": "Zapri",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

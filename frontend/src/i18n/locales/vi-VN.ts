@@ -379,4 +379,10 @@ export const viVn: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Tải xuống cập nhật hoàn tất! Vui lòng khởi động lại ứng dụng.",
   "about.onlineUpdateFailed": "Cập nhật trực tuyến thất bại: {error}",
   "common.close": "Đóng",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

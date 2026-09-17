@@ -379,4 +379,10 @@ export const nbNo: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Nedlasting av oppdatering fullført! Start appen på nytt for å ta i bruk.",
   "about.onlineUpdateFailed": "Online oppdatering mislyktes: {error}",
   "common.close": "Lukk",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

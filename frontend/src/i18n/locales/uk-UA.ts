@@ -379,4 +379,10 @@ export const ukUa: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Завантаження оновлення завершено! Перезапустіть програму.",
   "about.onlineUpdateFailed": "Помилка онлайн-оновлення: {error}",
   "common.close": "Закрити",
+  "dialog.exportTitle": "Експорт файлу журналу",
+  "dialog.logFilesFilter": "Файли журналів (*.log)",
+  "dialog.textFilesFilter": "Текстові файли (*.txt)",
+  "dialog.allFilesFilter": "Усі файли (*.*)",
+  "dialog.selectIsoTitle": "Вибір файлів системних образів (*.iso, *.wim, *.img тощо)",
+  "dialog.ventoyFilter": "Вихідні образи Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

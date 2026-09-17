@@ -379,4 +379,10 @@ export const jaJp: TranslationDict = {
   "about.updateCompleteRestart": "🎉 アップデートのダウンロード完了！アプリを再起動してください。",
   "about.onlineUpdateFailed": "オンラインアップデート失敗: {error}",
   "common.close": "閉じる",
+  "dialog.exportTitle": "ログファイルをエクスポート",
+  "dialog.logFilesFilter": "ログファイル (*.log)",
+  "dialog.textFilesFilter": "テキストファイル (*.txt)",
+  "dialog.allFilesFilter": "すべてのファイル (*.*)",
+  "dialog.selectIsoTitle": "システムイメージファイルを選択 (*.iso, *.wim, *.img など)",
+  "dialog.ventoyFilter": "Ventoy ソースイメージ (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

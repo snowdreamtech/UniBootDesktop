@@ -379,4 +379,10 @@ export const ruRu: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Загрузка обновления завершена! Перезапустите приложение.",
   "about.onlineUpdateFailed": "Ошибка онлайн-обновления: {error}",
   "common.close": "Закрыть",
+  "dialog.exportTitle": "Экспорт файла журнала",
+  "dialog.logFilesFilter": "Файлы журналов (*.log)",
+  "dialog.textFilesFilter": "Текстовые файлы (*.txt)",
+  "dialog.allFilesFilter": "Все файлы (*.*)",
+  "dialog.selectIsoTitle": "Выбор файлов системных образов (*.iso, *.wim, *.img и др.)",
+  "dialog.ventoyFilter": "Исходные образы Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

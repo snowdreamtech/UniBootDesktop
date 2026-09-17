@@ -379,4 +379,10 @@ export const esEs: TranslationDict = {
   "about.updateCompleteRestart": "🎉 ¡Descarga completa! Reinicia la aplicación para aplicar.",
   "about.onlineUpdateFailed": "Error en la actualización en línea: {error}",
   "common.close": "Cerrar",
+  "dialog.exportTitle": "Exportar archivo de registro",
+  "dialog.logFilesFilter": "Archivos de registro (*.log)",
+  "dialog.textFilesFilter": "Archivos de texto (*.txt)",
+  "dialog.allFilesFilter": "Todos los archivos (*.*)",
+  "dialog.selectIsoTitle": "Seleccionar archivos de imagen del sistema (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Imágenes de origen Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

@@ -379,4 +379,10 @@ export const nlNl: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Downloaden van update voltooid! Herstart de app om toe te passen.",
   "about.onlineUpdateFailed": "Online update mislukt: {error}",
   "common.close": "Sluiten",
+  "dialog.exportTitle": "Logboekbestand exporteren",
+  "dialog.logFilesFilter": "Logboekbestanden (*.log)",
+  "dialog.textFilesFilter": "Tekstbestanden (*.txt)",
+  "dialog.allFilesFilter": "Alle bestanden (*.*)",
+  "dialog.selectIsoTitle": "Systeemkopiebestanden selecteren (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy bronbestanden (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

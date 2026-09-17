@@ -379,4 +379,10 @@ export const hiIn: TranslationDict = {
   "about.updateCompleteRestart": "🎉 अपडेट डाउनलोड पूरा हुआ! लागू करने के लिए ऐप पुनः प्रारंभ करें।",
   "about.onlineUpdateFailed": "ऑनलाइन अपडेट विफल रहा: {error}",
   "common.close": "बंद करें",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

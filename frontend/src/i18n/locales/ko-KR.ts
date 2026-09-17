@@ -379,4 +379,10 @@ export const koKr: TranslationDict = {
   "about.updateCompleteRestart": "🎉 업데이트 다운로드 완료! 앱을 재시작하세요.",
   "about.onlineUpdateFailed": "온라인 업데이트 실패: {error}",
   "common.close": "닫기",
+  "dialog.exportTitle": "로그 파일 내보내기",
+  "dialog.logFilesFilter": "로그 파일 (*.log)",
+  "dialog.textFilesFilter": "텍스트 파일 (*.txt)",
+  "dialog.allFilesFilter": "모든 파일 (*.*)",
+  "dialog.selectIsoTitle": "시스템 이미지 파일 선택 (*.iso, *.wim, *.img 등)",
+  "dialog.ventoyFilter": "Ventoy 부팅 이미지 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

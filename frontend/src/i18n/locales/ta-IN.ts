@@ -379,4 +379,10 @@ export const taIn: TranslationDict = {
   "about.updateCompleteRestart": "🎉 புதுப்பிப்பு பதிவிறக்கம் முடிந்தது! செயல்படுத்த பயன்பாட்டை மீண்டும் தொடங்கவும்.",
   "about.onlineUpdateFailed": "ஆன்லைன் புதுப்பிப்பு தோல்வியடைந்தது: {error}",
   "common.close": "மூடு",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

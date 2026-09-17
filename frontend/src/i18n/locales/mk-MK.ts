@@ -379,4 +379,10 @@ export const mkMk: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Преземањето на ажурирањето е завршено! Рестартирајте ја апликацијата за примена.",
   "about.onlineUpdateFailed": "Мрежното ажурирање не успеа: {error}",
   "common.close": "Затвори",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

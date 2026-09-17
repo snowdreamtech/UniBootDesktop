@@ -379,4 +379,10 @@ export const elGr: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Η λήψη της ενημέρωσης ολοκληρώθηκε! Επανεκκινήστε την εφαρμογή για εφαρμογή.",
   "about.onlineUpdateFailed": "Η online ενημέρωση απέτυχε: {error}",
   "common.close": "Κλείσιμο",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

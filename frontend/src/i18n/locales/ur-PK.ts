@@ -379,4 +379,10 @@ export const urPk: TranslationDict = {
   "about.updateCompleteRestart": "🎉 اپ ڈیٹ ڈاؤن لوڈ مکمل! نافذ کرنے کے لیے ایپ دوبارہ شروع کریں۔",
   "about.onlineUpdateFailed": "آن لائن اپ ڈیٹ ناکام رہا: {error}",
   "common.close": "بند کریں",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

@@ -379,4 +379,10 @@ export const itIt: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Download dell'aggiornamento completato! Riavvia l'app.",
   "about.onlineUpdateFailed": "Aggiornamento online fallito: {error}",
   "common.close": "Chiudi",
+  "dialog.exportTitle": "Esporta file di registro",
+  "dialog.logFilesFilter": "File di registro (*.log)",
+  "dialog.textFilesFilter": "File di testo (*.txt)",
+  "dialog.allFilesFilter": "Tutti i file (*.*)",
+  "dialog.selectIsoTitle": "Seleziona file immagine di sistema (*.iso, *.wim, *.img, ecc.)",
+  "dialog.ventoyFilter": "Immagini sorgente Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

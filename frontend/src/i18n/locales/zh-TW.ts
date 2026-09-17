@@ -379,4 +379,10 @@ export const zhTw: TranslationDict = {
   "about.updateCompleteRestart": "🎉 升級包下載完成！請重啟應用生效。",
   "about.onlineUpdateFailed": "線上升級失敗: {error}",
   "common.close": "關閉",
+  "dialog.exportTitle": "匯出日誌檔案",
+  "dialog.logFilesFilter": "日誌檔案 (*.log)",
+  "dialog.textFilesFilter": "文字檔案 (*.txt)",
+  "dialog.allFilesFilter": "所有檔案 (*.*)",
+  "dialog.selectIsoTitle": "選擇系統映像檔 (*.iso, *.wim, *.img 等)",
+  "dialog.ventoyFilter": "Ventoy 引導映像源 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

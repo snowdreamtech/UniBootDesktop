@@ -379,4 +379,10 @@ export const deDe: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Update-Download abgeschlossen! Bitte App neu starten.",
   "about.onlineUpdateFailed": "Online-Update fehlgeschlagen: {error}",
   "common.close": "Schließen",
+  "dialog.exportTitle": "Protokolldatei exportieren",
+  "dialog.logFilesFilter": "Protokolldateien (*.log)",
+  "dialog.textFilesFilter": "Textdateien (*.txt)",
+  "dialog.allFilesFilter": "Alle Dateien (*.*)",
+  "dialog.selectIsoTitle": "System-Image-Dateien auswählen (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy-Quelldateien (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

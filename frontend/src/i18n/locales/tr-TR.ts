@@ -379,4 +379,10 @@ export const trTr: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Güncelleme indirmesi tamamlandı! Uygulamayı yeniden başlatın.",
   "about.onlineUpdateFailed": "Çevrim içi güncelleme başarısız: {error}",
   "common.close": "Kapat",
+  "dialog.exportTitle": "Günlük Dosyasını Dışa Aktar",
+  "dialog.logFilesFilter": "Günlük Dosyaları (*.log)",
+  "dialog.textFilesFilter": "Metin Dosyaları (*.txt)",
+  "dialog.allFilesFilter": "Tüm Dosyalar (*.*)",
+  "dialog.selectIsoTitle": "Sistem İmaj Dosyalarını Seç (*.iso, *.wim, *.img vb.)",
+  "dialog.ventoyFilter": "Ventoy Kaynak İmajları (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

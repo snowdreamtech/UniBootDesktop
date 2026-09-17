@@ -379,4 +379,10 @@ export const ptPt: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Download da atualização concluído! Reinicie a aplicação.",
   "about.onlineUpdateFailed": "Atualização online falhou: {error}",
   "common.close": "Fechar",
+  "dialog.exportTitle": "Exportar arquivo de log",
+  "dialog.logFilesFilter": "Arquivos de log (*.log)",
+  "dialog.textFilesFilter": "Arquivos de texto (*.txt)",
+  "dialog.allFilesFilter": "Todos os arquivos (*.*)",
+  "dialog.selectIsoTitle": "Selecionar arquivos de imagem do sistema (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Imagens de origem Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

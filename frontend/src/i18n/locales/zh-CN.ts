@@ -379,4 +379,10 @@ export const zhCn: TranslationDict = {
   "about.updateCompleteRestart": "🎉 升级包下载完成！请重启应用生效。",
   "about.onlineUpdateFailed": "在线升级失败: {error}",
   "common.close": "关闭",
+  "dialog.exportTitle": "导出日志文件",
+  "dialog.logFilesFilter": "日志文件 (*.log)",
+  "dialog.textFilesFilter": "文本文件 (*.txt)",
+  "dialog.allFilesFilter": "所有文件 (*.*)",
+  "dialog.selectIsoTitle": "选择系统镜像源文件 (*.iso, *.wim, *.img 等)",
+  "dialog.ventoyFilter": "Ventoy 引导镜像源 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

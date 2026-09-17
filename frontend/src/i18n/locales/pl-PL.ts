@@ -379,4 +379,10 @@ export const plPl: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Pobieranie aktualizacji zakończone! Zrestartuj aplikację, aby zastosować.",
   "about.onlineUpdateFailed": "Aktualizacja online nie powiodła się: {error}",
   "common.close": "Zamknij",
+  "dialog.exportTitle": "Eksportuj plik dziennika",
+  "dialog.logFilesFilter": "Pliki dziennika (*.log)",
+  "dialog.textFilesFilter": "Pliki tekstowe (*.txt)",
+  "dialog.allFilesFilter": "Wszystkie pliki (*.*)",
+  "dialog.selectIsoTitle": "Wybierz pliki obrazu systemu (*.iso, *.wim, *.img itp.)",
+  "dialog.ventoyFilter": "Obrazy źródłowe Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

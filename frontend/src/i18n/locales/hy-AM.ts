@@ -379,4 +379,10 @@ export const hyAm: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Թարմացման բեռնումն ավարտվեց: Վերագործարկեք ծրագիրը կիրառելու համար:",
   "about.onlineUpdateFailed": "Օնլայն թարմացումը ձախողվեց․ {error}",
   "common.close": "Փակել",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

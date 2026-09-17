@@ -379,4 +379,10 @@ export const beBy: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Спампоўка абнаўлення завершана! Перезапусціце праграму для прымянення.",
   "about.onlineUpdateFailed": "Анлайн-абнаўленне не ўдалася: {error}",
   "common.close": "Зачыніць",
+  "dialog.exportTitle": "Экспорт файла журнала",
+  "dialog.logFilesFilter": "Файлы журналов (*.log)",
+  "dialog.textFilesFilter": "Текстовые файлы (*.txt)",
+  "dialog.allFilesFilter": "Все файлы (*.*)",
+  "dialog.selectIsoTitle": "Выбор файлов системных образов (*.iso, *.wim, *.img и др.)",
+  "dialog.ventoyFilter": "Исходные образы Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

@@ -379,4 +379,10 @@ export const heIl: TranslationDict = {
   "about.updateCompleteRestart": "🎉 הורדת העדכון הושלמה! הפעל מחדש את האפליקציה כדי להחיל.",
   "about.onlineUpdateFailed": "העדכון המקוון נכשל: {error}",
   "common.close": "סגור",
+  "dialog.exportTitle": "Export Log File",
+  "dialog.logFilesFilter": "Log Files (*.log)",
+  "dialog.textFilesFilter": "Text Files (*.txt)",
+  "dialog.allFilesFilter": "All Files (*.*)",
+  "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

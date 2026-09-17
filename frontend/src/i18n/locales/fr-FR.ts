@@ -379,4 +379,10 @@ export const frFr: TranslationDict = {
   "about.updateCompleteRestart": "🎉 Téléchargement de la mise à jour terminé ! Veuillez redémarrer l'application.",
   "about.onlineUpdateFailed": "Échec de la mise à jour en ligne : {error}",
   "common.close": "Fermer",
+  "dialog.exportTitle": "Exporter le fichier journal",
+  "dialog.logFilesFilter": "Fichiers journaux (*.log)",
+  "dialog.textFilesFilter": "Fichiers texte (*.txt)",
+  "dialog.allFilesFilter": "Tous les fichiers (*.*)",
+  "dialog.selectIsoTitle": "Sélectionner les fichiers d'image système (*.iso, *.wim, *.img, etc.)",
+  "dialog.ventoyFilter": "Images source Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
 };

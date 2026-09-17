@@ -682,7 +682,13 @@ async function handleExportEmbeddedLogs() {
     .join('\n');
 
   try {
-    const filePath = await ExportLogs(text);
+    const filePath = await (ExportLogs as any)(
+      text,
+      t('dialog.exportTitle'),
+      t('dialog.logFilesFilter'),
+      t('dialog.textFilesFilter'),
+      t('dialog.allFilesFilter')
+    );
     if (filePath) {
       showToast(t('log.exported_path_toast', { path: filePath }), 'success');
     }
@@ -811,7 +817,11 @@ const isoCopyStatus = ref<string>('');
 async function handleSelectIsoFiles() {
   if (window.go && window.go.main && window.go.main.App && window.go.main.App.SelectIsoFiles) {
     try {
-      const paths: string[] = await window.go.main.App.SelectIsoFiles();
+      const paths: string[] = await window.go.main.App.SelectIsoFiles(
+        t('dialog.selectIsoTitle'),
+        t('dialog.ventoyFilter'),
+        t('dialog.allFilesFilter')
+      );
       if (paths && paths.length > 0) {
         let added = 0;
         for (const p of paths) {

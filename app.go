@@ -67,16 +67,30 @@ func (a *App) EjectDisk(targetDisk string) error {
 }
 
 // SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
-func (a *App) SelectIsoFiles() ([]string, error) {
+func (a *App) SelectIsoFiles(opts ...string) ([]string, error) {
+	title := "Select System Image Files (*.iso, *.wim, *.img, *.vhd, etc.)"
+	ventoyFilter := "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)"
+	allFilter := "All Files (*.*)"
+
+	if len(opts) > 0 && opts[0] != "" {
+		title = opts[0]
+	}
+	if len(opts) > 1 && opts[1] != "" {
+		ventoyFilter = opts[1]
+	}
+	if len(opts) > 2 && opts[2] != "" {
+		allFilter = opts[2]
+	}
+
 	return wailsRuntime.OpenMultipleFilesDialog(a.ctx, wailsRuntime.OpenDialogOptions{
-		Title: "Select System Image Files (*.iso, *.wim, *.img, *.vhd, etc.)",
+		Title: title,
 		Filters: []wailsRuntime.FileFilter{
 			{
-				DisplayName: "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+				DisplayName: ventoyFilter,
 				Pattern:     "*.iso;*.wim;*.img;*.vhd;*.vhdx;*.vti;*.efi;*.bin;*.xz;*.gz;*.raw",
 			},
 			{
-				DisplayName: "All Files (*.*)",
+				DisplayName: allFilter,
 				Pattern:     "*.*",
 			},
 		},
@@ -84,22 +98,40 @@ func (a *App) SelectIsoFiles() ([]string, error) {
 }
 
 // ExportLogs opens a native save file dialog to export log content to a file (.log or .txt).
-func (a *App) ExportLogs(content string) (string, error) {
+func (a *App) ExportLogs(content string, opts ...string) (string, error) {
+	title := "Export Log File"
+	logFilter := "Log Files (*.log)"
+	textFilter := "Text Files (*.txt)"
+	allFilter := "All Files (*.*)"
+
+	if len(opts) > 0 && opts[0] != "" {
+		title = opts[0]
+	}
+	if len(opts) > 1 && opts[1] != "" {
+		logFilter = opts[1]
+	}
+	if len(opts) > 2 && opts[2] != "" {
+		textFilter = opts[2]
+	}
+	if len(opts) > 3 && opts[3] != "" {
+		allFilter = opts[3]
+	}
+
 	defaultFilename := fmt.Sprintf("unigodesktop-log-%s.log", time.Now().Format("2006-01-02-150405"))
 	filePath, err := wailsRuntime.SaveFileDialog(a.ctx, wailsRuntime.SaveDialogOptions{
-		Title:           "Export Log File",
+		Title:           title,
 		DefaultFilename: defaultFilename,
 		Filters: []wailsRuntime.FileFilter{
 			{
-				DisplayName: "Log Files (*.log)",
+				DisplayName: logFilter,
 				Pattern:     "*.log",
 			},
 			{
-				DisplayName: "Text Files (*.txt)",
+				DisplayName: textFilter,
 				Pattern:     "*.txt",
 			},
 			{
-				DisplayName: "All Files (*.*)",
+				DisplayName: allFilter,
 				Pattern:     "*.*",
 			},
 		},
