@@ -111,7 +111,7 @@ export const nbNo: TranslationDict = {
   "log.empty": "No log entries recorded",
   "log.auto_scroll": "Auto-scroll to bottom",
   "log.copy": "Copy",
-  "log.export": "Export Log",
+  "log.export": "Export",
   "log.clear": "Clear",
   "log.copied_toast": "Log content copied to clipboard!",
   "log.exported_toast": "Log exported to file successfully!",

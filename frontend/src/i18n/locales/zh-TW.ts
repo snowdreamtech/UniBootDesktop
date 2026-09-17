@@ -111,7 +111,7 @@ export const zhTw: TranslationDict = {
   "log.empty": "暫無日誌記錄",
   "log.auto_scroll": "自動滾動到底部",
   "log.copy": "複製",
-  "log.export": "匯出日誌",
+  "log.export": "匯出",
   "log.clear": "清空",
   "log.copied_toast": "日誌內容已成功複製到剪貼簿！",
   "log.exported_toast": "日誌已成功匯出至檔案！",

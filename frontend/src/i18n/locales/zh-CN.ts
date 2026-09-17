@@ -111,7 +111,7 @@ export const zhCn: TranslationDict = {
   "log.empty": "暂无日志记录",
   "log.auto_scroll": "自动滚动到底部",
   "log.copy": "复制",
-  "log.export": "导出日志",
+  "log.export": "导出",
   "log.clear": "清空",
   "log.copied_toast": "日志内容已成功复制到剪贴板！",
   "log.exported_toast": "日志已成功导出到文件！",
