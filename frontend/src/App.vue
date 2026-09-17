@@ -1895,13 +1895,30 @@ h1 {
 .auto-scroll-label-sm {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
   font-size: 0.78rem;
-  color: var(--text-color, #e2e8f0);
+  font-weight: 600;
+  color: #f1f5f9;
   cursor: pointer;
   user-select: none;
-  font-weight: 500;
-  margin: 0 0.2rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: all 0.2s ease;
+}
+
+.auto-scroll-label-sm input[type="checkbox"] {
+  accent-color: #00e5ff;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.auto-scroll-label-sm:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(0, 229, 255, 0.4);
+  color: #ffffff;
 }
 
 .embedded-terminal-window {
@@ -3055,6 +3072,24 @@ h1 {
 }
 
 [data-theme="light"] .btn-text-sm:hover {
+  background: #f0f9ff;
+  border-color: #0284c7;
+  color: #0284c7;
+}
+
+[data-theme="light"] .auto-scroll-label-sm {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .auto-scroll-label-sm input[type="checkbox"] {
+  accent-color: #0284c7;
+}
+
+[data-theme="light"] .auto-scroll-label-sm:hover {
   background: #f0f9ff;
   border-color: #0284c7;
   color: #0284c7;
