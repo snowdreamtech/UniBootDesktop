@@ -141,3 +141,37 @@ func TestInit_DiscardWriter(t *testing.T) {
 	slog.Info("discarded info")
 	slog.Error("discarded error")
 }
+
+func TestSanitizeArgs(t *testing.T) {
+	args := []any{
+		"ProxyPassword", "super_secret_123",
+		"ProxyUser", "admin",
+		"token", "xyz_888",
+		"key", "my_api_key_value",
+		"apiKey", "ak_99999",
+		"private_key", "pem_secret",
+		"url", "http://admin:pass123@proxy.example.com",
+		"header", "Bearer eyJhbGciOi...",
+		"query", "api_key=secret_val&param=1",
+	}
+	clean := sanitizeArgs(args...)
+
+	assert.Equal(t, "ProxyPassword", clean[0])
+	assert.Equal(t, "******", clean[1])
+	assert.Equal(t, "ProxyUser", clean[2])
+	assert.Equal(t, "admin", clean[3])
+	assert.Equal(t, "token", clean[4])
+	assert.Equal(t, "******", clean[5])
+	assert.Equal(t, "key", clean[6])
+	assert.Equal(t, "******", clean[7])
+	assert.Equal(t, "apiKey", clean[8])
+	assert.Equal(t, "******", clean[9])
+	assert.Equal(t, "private_key", clean[10])
+	assert.Equal(t, "******", clean[11])
+	assert.Equal(t, "url", clean[12])
+	assert.Equal(t, "http://admin:******@proxy.example.com", clean[13])
+	assert.Equal(t, "header", clean[14])
+	assert.Equal(t, "Bearer ******", clean[15])
+	assert.Equal(t, "query", clean[16])
+	assert.Equal(t, "api_key=******&param=1", clean[17])
+}
