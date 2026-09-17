@@ -105,7 +105,7 @@ export const thTh: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "ไดรฟ์บู้ต UniBoot คลาวด์ (โหมดคลาวด์ รองรับการอัปเดตแบบไม่สูญเสียข้อมูล)",
   "disk.tooltip_third_party_boot": "ไดรฟ์บู้ตของบุคคลที่สาม (มีโครงสร้าง Rufus/PE/ISO ต้องฟอร์แมตใหม่)",
   "log.title": "ศูนย์บันทึก",
-  "log.live": "LIVE",
+  "log.live": "เรียลไทม์",
   "log.search_placeholder": "ค้นหาบันทึก...",
   "log.empty": "ไม่มีบันทึกข้อมูล",
   "log.auto_scroll": "เลื่อนลงด้านล่างโดยอัตโนมัติ",

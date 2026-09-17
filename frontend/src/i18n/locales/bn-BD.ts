@@ -105,7 +105,7 @@ export const bnBd: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "UniBoot ক্লাউড বুট ড্রাইভ (ক্লাউড মোড, নন-ডিস্ট্রাক্টিভ আপডেট সমর্থিত)",
   "disk.tooltip_third_party_boot": "তৃতীয় পক্ষের বুট কাঠামো সনাক্ত করা হয়েছে",
   "log.title": "লগ কেন্দ্র",
-  "log.live": "লাইভ ইভেন্ট লগ",
+  "log.live": "লাইভ",
   "log.search_placeholder": "লগে খুঁজুন...",
   "log.empty": "কোনো লগ এন্ট্রি রেকর্ড করা হয়নি",
   "log.auto_scroll": "স্বয়ংক্রিয়ভাবে নিচে স্ক্রোল করুন",

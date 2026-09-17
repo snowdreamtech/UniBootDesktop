@@ -105,7 +105,7 @@ export const nlNl: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "UniBoot Cloud opstartschijf (Cloudmodus, niet-destructieve update)",
   "disk.tooltip_third_party_boot": "Opstartstructuur van derden gedetecteerd",
   "log.title": "Logcentrum",
-  "log.live": "Live gebeurtenissenlogboek",
+  "log.live": "Reaalajas",
   "log.search_placeholder": "Zoek in logboeken...",
   "log.empty": "Geen logboekitems opgenomen",
   "log.auto_scroll": "Automatisch naar beneden scrollen",

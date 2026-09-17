@@ -105,7 +105,7 @@ export const koKr: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "UniBoot 클라우드 부트 드라이브 (데이터 보존 업데이트 지원)",
   "disk.tooltip_third_party_boot": "서드파티 부팅 드라이브 (Rufus/PE/ISO 구조 포함, 새 포맷 필요)",
   "log.title": "로그 센터",
-  "log.live": "LIVE",
+  "log.live": "실시간",
   "log.search_placeholder": "로그 항목 검색...",
   "log.empty": "기록된 로그가 없습니다",
   "log.auto_scroll": "하단으로 자동 스크롤",

@@ -105,7 +105,7 @@ export const deDe: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "UniBoot Cloud-Bootlaufwerk (Cloud-Modus, zerstörungsfreie Aktualisierung)",
   "disk.tooltip_third_party_boot": "Drittanbieter-Bootlaufwerk (Enthält Rufus/PE/ISO-Struktur, Neuformatierung erforderlich)",
   "log.title": "Log-Center",
-  "log.live": "LIVE",
+  "log.live": "Echtzeit",
   "log.search_placeholder": "Protokolle durchsuchen...",
   "log.empty": "Keine Protokolleinträge vorhanden",
   "log.auto_scroll": "Automatisch nach unten scrollen",

@@ -105,7 +105,7 @@ export const itIt: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "Unità di avvio Cloud UniBoot (Modalità Cloud, aggiornamento non distruttivo)",
   "disk.tooltip_third_party_boot": "Drive di avvio di terze parti (Contiene struttura Rufus/PE/ISO, formattazione richiesta)",
   "log.title": "Centro Log",
-  "log.live": "LIVE",
+  "log.live": "In tempo reale",
   "log.search_placeholder": "Cerca nei log...",
   "log.empty": "Nessun log registrato",
   "log.auto_scroll": "Scorrimento automatico in basso",

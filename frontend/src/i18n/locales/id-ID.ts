@@ -105,7 +105,7 @@ export const idId: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "Drive Boot Cloud UniBoot (Mode Cloud, mendukung pembaruan tanpa hapus data)",
   "disk.tooltip_third_party_boot": "Struktur boot pihak ketiga terdeteksi",
   "log.title": "Pusat Log",
-  "log.live": "Log Acara Langsung",
+  "log.live": "Langsung",
   "log.search_placeholder": "Cari log...",
   "log.empty": "Tidak ada catatan log",
   "log.auto_scroll": "Gulir otomatis ke bawah",

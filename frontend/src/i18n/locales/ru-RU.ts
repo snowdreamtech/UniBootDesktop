@@ -105,7 +105,7 @@ export const ruRu: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "Облачный загрузочный диск UniBoot (Обновление без удаления данных)",
   "disk.tooltip_third_party_boot": "Сторонний загрузочный диск (Содержит структуру Rufus/PE/ISO, требуется форматирование)",
   "log.title": "Журнал событий",
-  "log.live": "LIVE",
+  "log.live": "В реальном времени",
   "log.search_placeholder": "Поиск в логах...",
   "log.empty": "Записи логов отсутствуют",
   "log.auto_scroll": "Автопрокрутка вниз",

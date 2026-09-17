@@ -105,7 +105,7 @@ export const heIl: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "כונן אתחול ענן של UniBoot (מצב ענן, תומך בעדכון ללא איבוד נתונים)",
   "disk.tooltip_third_party_boot": "זוהה מבנה אתחול של צד שלישי",
   "log.title": "מרכז לוגים",
-  "log.live": "יומן אירועים בזמן אמת",
+  "log.live": "בזמן אמת",
   "log.search_placeholder": "חפש ביומנים...",
   "log.empty": "אין רשומות ביומן",
   "log.auto_scroll": "גלילה אוטומטית למטה",

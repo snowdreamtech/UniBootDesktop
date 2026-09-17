@@ -105,7 +105,7 @@ export const frFr: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "Lecteur d'amorçage UniBoot Cloud (Mode Cloud, mise à jour non destructrice)",
   "disk.tooltip_third_party_boot": "Lecteur de démarrage tiers (Contient une structure Rufus/PE/ISO, formatage requis)",
   "log.title": "Centre de journaux",
-  "log.live": "LIVE",
+  "log.live": "En direct",
   "log.search_placeholder": "Rechercher dans les journaux...",
   "log.empty": "Aucun journal enregistré",
   "log.auto_scroll": "Défilement automatique vers le bas",

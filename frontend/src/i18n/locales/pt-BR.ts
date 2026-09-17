@@ -105,7 +105,7 @@ export const ptBr: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "Unidade de inicialização UniBoot Nuvem (Modo Nuvem, atualização não destrutiva)",
   "disk.tooltip_third_party_boot": "Drive de boot de terceiros (Contém estrutura Rufus/PE/ISO, formatação necessária)",
   "log.title": "Centro de Logs",
-  "log.live": "LIVE",
+  "log.live": "Em tempo real",
   "log.search_placeholder": "Pesquisar nos registros...",
   "log.empty": "Nenhum registro gravado",
   "log.auto_scroll": "Rolar automaticamente para o fundo",

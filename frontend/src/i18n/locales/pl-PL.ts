@@ -105,7 +105,7 @@ export const plPl: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "Dysk rozruchowy UniBoot Cloud (Tryb chmury, aktualizacja bez utraty danych)",
   "disk.tooltip_third_party_boot": "Wykryto strukturę rozruchową firmy trzeciej",
   "log.title": "Centrum logów",
-  "log.live": "Dziennik zdarzeń na żywo",
+  "log.live": "Na żywo",
   "log.search_placeholder": "Szukaj w logach...",
   "log.empty": "Brak wpisów w logu",
   "log.auto_scroll": "Automatyczne przewijanie w dół",

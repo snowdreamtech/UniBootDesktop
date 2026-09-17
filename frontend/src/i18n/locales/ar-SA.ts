@@ -105,7 +105,7 @@ export const arSa: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "محرك تمهيد UniBoot سحابي (وضع السحابة، دعم التحديث غير المدمر)",
   "disk.tooltip_third_party_boot": "محرك تمهيد تابع لجهة خارجية (يحتوي على هيكل Rufus/PE/ISO، التهيئة مطلوبة)",
   "log.title": "مركز السجلات",
-  "log.live": "LIVE",
+  "log.live": "مباشر",
   "log.search_placeholder": "البحث في السجلات...",
   "log.empty": "لا توجد سجلات مسجلة",
   "log.auto_scroll": "تمرير تلقائي إلى الأسفل",

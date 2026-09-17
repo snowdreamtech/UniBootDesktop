@@ -105,7 +105,7 @@ export const jaJp: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "UniGo / UniBoot クラウドブートドライブ (データ保持更新対応)",
   "disk.tooltip_third_party_boot": "サードパーティブートドライブ (Rufus/PE/ISO構造を含む、新規作成にはフォーマットが必要)",
   "log.title": "ログセンター",
-  "log.live": "LIVE",
+  "log.live": "リアルタイム",
   "log.search_placeholder": "ログエントリを検索...",
   "log.empty": "ログ記録がありません",
   "log.auto_scroll": "最下部へ自動スクロール",

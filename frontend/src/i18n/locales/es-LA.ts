@@ -105,7 +105,7 @@ export const esLa: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "Unidad de arranque UniBoot Nube (Modo Nube, actualización sin pérdida de datos)",
   "disk.tooltip_third_party_boot": "Disco de arranque de terceros (Contiene estructura Rufus/PE/ISO, formateo requerido)",
   "log.title": "Centro de registros",
-  "log.live": "LIVE",
+  "log.live": "En vivo",
   "log.search_placeholder": "Buscar en los registros...",
   "log.empty": "No hay registros grabados",
   "log.auto_scroll": "Desplazamiento automático hacia abajo",

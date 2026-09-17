@@ -105,7 +105,7 @@ export const hiIn: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "UniBoot क्लाउड बूट ड्राइव (क्लाउड मोड, गैर-विनाशकारी अपडेट समर्थित)",
   "disk.tooltip_third_party_boot": "तृतीय-पक्ष बूट संरचना का पता चला",
   "log.title": "लॉग केंद्र",
-  "log.live": "लाइव इवेंट लॉग",
+  "log.live": "लाइव",
   "log.search_placeholder": "लॉग खोजें...",
   "log.empty": "कोई लॉग दर्ज नहीं है",
   "log.auto_scroll": "स्वचालित रूप से नीचे स्क्रॉल करें",

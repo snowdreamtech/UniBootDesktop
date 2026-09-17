@@ -105,7 +105,7 @@ export const trTr: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "UniBoot Bulut Önyükleme Sürücüsü (Bulut Modu, Veri kayıpsız güncelleme)",
   "disk.tooltip_third_party_boot": "Üçüncü taraf önyükleme sürücüsü (Rufus/PE/ISO yapısı içerir, biçimlendirme gerekli)",
   "log.title": "Günlük Merkezi",
-  "log.live": "LIVE",
+  "log.live": "Canlı",
   "log.search_placeholder": "Günlüklerde ara...",
   "log.empty": "Kayıtlı günlük yok",
   "log.auto_scroll": "Otomatik aşağı kaydır",

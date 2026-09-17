@@ -105,7 +105,7 @@ export const viVn: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "Ổ khởi động UniBoot Đám mây (Chế độ đám mây, hỗ trợ cập nhật an toàn)",
   "disk.tooltip_third_party_boot": "Ổ khởi động bên thứ ba (Chứa cấu trúc Rufus/PE/ISO, cần định dạng mới)",
   "log.title": "Trung tâm nhật ký",
-  "log.live": "LIVE",
+  "log.live": "Trực tiếp",
   "log.search_placeholder": "Tìm kiếm nhật ký...",
   "log.empty": "Không có nhật ký nào",
   "log.auto_scroll": "Tự động cuộn xuống dưới",

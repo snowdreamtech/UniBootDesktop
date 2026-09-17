@@ -105,7 +105,7 @@ export const ukUa: TranslationDict = {
   "disk.tooltip_uniboot_cloud": "Хмарний завантажувальний диск UniBoot (Хмарний режим, оновлення без втрати даних)",
   "disk.tooltip_third_party_boot": "Сторонній завантажувальний диск (Містить структуру Rufus/PE/ISO, потрібне форматування)",
   "log.title": "Центр журналів",
-  "log.live": "LIVE",
+  "log.live": "В реальному часі",
   "log.search_placeholder": "Пошук у логах...",
   "log.empty": "Записи логів відсутні",
   "log.auto_scroll": "Автопрокрутка вниз",
