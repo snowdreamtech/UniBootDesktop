@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestFormatDiskModeB_SafetyValidation(t *testing.T) {
+func TestFormatDiskCloudMode_SafetyValidation(t *testing.T) {
 	ctx := context.Background()
 
 	// Test safety block against system drive
@@ -23,7 +23,7 @@ func TestFormatDiskModeB_SafetyValidation(t *testing.T) {
 	}
 }
 
-func TestFormatDiskModeB_DryRun(t *testing.T) {
+func TestFormatDiskCloudMode_DryRun(t *testing.T) {
 	ctx := context.Background()
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
@@ -56,7 +56,7 @@ func TestResolveMountPoint_DryRun(t *testing.T) {
 	}
 }
 
-func TestFormatDiskModeB_ExtractionIntegration(t *testing.T) {
+func TestFormatDiskCloudMode_ExtractionIntegration(t *testing.T) {
 	ctx := context.Background()
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
@@ -73,19 +73,19 @@ func TestFormatDiskModeB_ExtractionIntegration(t *testing.T) {
 	}
 }
 
-func TestFormatDiskModeA_SafetyValidation(t *testing.T) {
+func TestFormatDiskHybridMode_SafetyValidation(t *testing.T) {
 	ctx := context.Background()
 
 	systemDrives := []string{"/", "/dev/sda", "C:", "/dev/nvme0n1"}
 	for _, drive := range systemDrives {
 		_, err := FormatDiskHybridMode(ctx, drive, "exFAT")
 		if err == nil {
-			t.Errorf("Expected safety validation error for system drive %s in Mode A, got nil", drive)
+			t.Errorf("Expected safety validation error for system drive %s in Hybrid Mode, got nil", drive)
 		}
 	}
 }
 
-func TestFormatDiskModeA_DryRun(t *testing.T) {
+func TestFormatDiskHybridMode_DryRun(t *testing.T) {
 	ctx := context.Background()
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
@@ -96,7 +96,7 @@ func TestFormatDiskModeA_DryRun(t *testing.T) {
 	}
 
 	if mountPoint == "" {
-		t.Fatalf("Expected non-empty mount point in dry-run mode for Mode A")
+		t.Fatalf("Expected non-empty mount point in dry-run mode for Hybrid Mode")
 	}
 
 	info, err := os.Stat(mountPoint)

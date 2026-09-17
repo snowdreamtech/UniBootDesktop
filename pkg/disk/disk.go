@@ -375,9 +375,9 @@ func IsVentoyDisk(targetDisk string) bool {
 	return false
 }
 
-// IsModeBDisk checks if a target disk is currently formatted in UniBoot Cloud mode (iPXE boot firmware in ESP, no Ventoy engine).
+// IsCloudModeDisk checks if a target disk is currently formatted in UniBoot Cloud mode (iPXE boot firmware in ESP, no Ventoy engine).
 // Strictly checks physical iPXE files. NEVER relies on volume names alone.
-func IsModeBDisk(targetDisk string) bool {
+func IsCloudModeDisk(targetDisk string) bool {
 	if targetDisk == "" {
 		return false
 	}
@@ -410,7 +410,7 @@ func IsModeBDisk(targetDisk string) bool {
 
 // IsRealVentoyDisk checks if a target disk is an active Ventoy drive containing Ventoy's MBR bootloader and configuration.
 func IsRealVentoyDisk(targetDisk string) bool {
-	if IsModeBDisk(targetDisk) {
+	if IsCloudModeDisk(targetDisk) {
 		return false
 	}
 	return IsVentoyDisk(targetDisk)
@@ -442,7 +442,7 @@ func HasGenericBootFiles(mountPoint string) bool {
 	return false
 }
 
-// IsGenericBootDisk checks if a target disk is a 3rd-party boot disk (Rufus, PE, ISO) that is NOT a Ventoy or Mode B drive.
+// IsGenericBootDisk checks if a target disk is a 3rd-party boot disk (Rufus, PE, ISO) that is NOT a Ventoy or Cloud Mode drive.
 func IsGenericBootDisk(targetDisk string) bool {
 	if targetDisk == "" {
 		return false
@@ -1007,7 +1007,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			devNode = "/dev/" + parentDisk
 		}
 
-		isCloudMode := IsModeBDisk(devNode)
+		isCloudMode := IsCloudModeDisk(devNode)
 		isRealVentoy := false
 		if !isCloudMode {
 			isRealVentoy = IsVentoyDisk(devNode)
@@ -1232,12 +1232,12 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      "500 mA",
 			SectorSize:        "512 Bytes (512n/512e)",
 			TransportProtocol: "BOT (Bulk-Only Transport)",
-			BootStatus:        DetectBootStatus(label, partitionScheme, IsRealVentoyDisk(mountPath), IsModeBDisk(mountPath), IsGenericBootDisk(mountPath)),
+			BootStatus:        DetectBootStatus(label, partitionScheme, IsRealVentoyDisk(mountPath), IsCloudModeDisk(mountPath), IsGenericBootDisk(mountPath)),
 			ControllerVendor:  InferControllerVendor("", "", vendor),
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      IsRealVentoyDisk(mountPath),
-			IsCloudMode:           IsModeBDisk(mountPath),
+			IsCloudMode:           IsCloudModeDisk(mountPath),
 			IsGenericBoot:     IsGenericBootDisk(mountPath),
 			MountPoint:        mountPath,
 		})
@@ -1316,12 +1316,12 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      "500 mA",
 			SectorSize:        "512 Bytes (512n/512e)",
 			TransportProtocol: "BOT (Bulk-Only Transport)",
-			BootStatus:        DetectBootStatus(displayName, "GPT / MBR", IsRealVentoyDisk(driveLetter), IsModeBDisk(driveLetter), IsGenericBootDisk(driveLetter)),
+			BootStatus:        DetectBootStatus(displayName, "GPT / MBR", IsRealVentoyDisk(driveLetter), IsCloudModeDisk(driveLetter), IsGenericBootDisk(driveLetter)),
 			ControllerVendor:  InferControllerVendor("", "", "Generic"),
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      IsRealVentoyDisk(driveLetter),
-			IsCloudMode:           IsModeBDisk(driveLetter),
+			IsCloudMode:           IsCloudModeDisk(driveLetter),
 			IsGenericBoot:     IsGenericBootDisk(driveLetter),
 			MountPoint:        driveLetter,
 		})

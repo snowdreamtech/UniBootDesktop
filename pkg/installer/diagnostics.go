@@ -38,7 +38,7 @@ type InstallDiagnostics struct {
 	TaskID            string            `json:"taskId"`            // Unique deployment task ID
 	Target            string            `json:"target"`            // Target disk device path (e.g. /dev/disk2)
 	DeviceSummary     string            `json:"deviceSummary"`     // Target device metadata summary
-	Mode              string            `json:"mode"`              // Target deployment mode (Mode A / Mode B)
+	Mode              string            `json:"mode"`              // Target deployment mode (Hybrid Mode / Cloud Mode)
 	FailedStage       string            `json:"failedStage"`       // Human-readable stage title
 	FailedStepCode    StepCode          `json:"failedStepCode"`    // Step identifier code
 	ErrorCause        string            `json:"errorCause"`        // Detailed error cause message

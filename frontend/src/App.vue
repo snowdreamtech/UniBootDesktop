@@ -2300,7 +2300,7 @@ h1 {
   font-weight: 700;
 }
 
-.warn-modeb-notice {
+.warn-cloudmode-notice {
   display: flex;
   align-items: flex-start;
   gap: 0.8rem;
@@ -2944,7 +2944,7 @@ h1 {
   color: #0284c7;
 }
 
-[data-theme="light"] .warn-modeb-notice {
+[data-theme="light"] .warn-cloudmode-notice {
   background: #fffbeb;
   border-color: #fde68a;
 }

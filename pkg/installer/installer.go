@@ -56,23 +56,23 @@ func validateLiveTargetDiskSnapshot(targetDisk string, expected *disk.DiskInfo) 
 	return fmt.Errorf("final target disk validation failed: target disk is no longer present as a removable disk: %s", targetDisk)
 }
 
-// DeployHybridMode executes Mode A: Hybrid Pro Mode (Ventoy + UniBoot theme + iPXE network extension) with customizable file system.
+// DeployHybridMode executes Hybrid Mode: Hybrid Pro Mode (Ventoy + UniBoot theme + iPXE network extension) with customizable file system.
 // Performs non-destructive in-place upgrade on existing Ventoy drives, or fresh partition initialization on blank drives.
 func DeployHybridMode(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
 	return DeployHybridModeWithIsoAndVentoyPath(ctx, targetDisk, fsType, "", nil, nil)
 }
 
-// DeployHybridModeWithVentoyPath executes Mode A with an optional user-configured Ventoy CLI executable path.
+// DeployHybridModeWithVentoyPath executes Hybrid Mode with an optional user-configured Ventoy CLI executable path.
 func DeployHybridModeWithVentoyPath(ctx context.Context, targetDisk string, fsType string, ventoyPath string) (*DeployResult, error) {
 	return DeployHybridModeWithIsoAndVentoyPath(ctx, targetDisk, fsType, ventoyPath, nil, nil)
 }
 
-// DeployHybridModeWithIsoAndVentoyPath executes Mode A with customizable Ventoy CLI path, ISO file paths, and progress callback.
+// DeployHybridModeWithIsoAndVentoyPath executes Hybrid Mode with customizable Ventoy CLI path, ISO file paths, and progress callback.
 func DeployHybridModeWithIsoAndVentoyPath(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) (*DeployResult, error) {
 	return deployHybridModeWithExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, nil)
 }
 
-// DeployHybridModeWithExpectedDisk deploys Mode A after confirming the target still matches the selected disk snapshot.
+// DeployHybridModeWithExpectedDisk deploys Hybrid Mode after confirming the target still matches the selected disk snapshot.
 func DeployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected disk.DiskInfo) (*DeployResult, error) {
 	return deployHybridModeWithExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, &expected)
 }
@@ -206,7 +206,7 @@ func DeployHybridModeBatchWithVentoyAndIso(ctx context.Context, targetDisks []st
 	return deployHybridModeBatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, nil)
 }
 
-// DeployHybridModeBatchWithExpectedDisks deploys Mode A only after all selected disk snapshots pass final validation.
+// DeployHybridModeBatchWithExpectedDisks deploys Hybrid Mode only after all selected disk snapshots pass final validation.
 func DeployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected []disk.DiskInfo) ([]*DeployResult, error) {
 	return deployHybridModeBatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected)
 }
@@ -262,7 +262,7 @@ func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []s
 
 // CleanMbrBootstrapCode zero-fills bytes 0..445 of Sector 0 on targetDisk,
 // preserving bytes 446-511 (Partition Table & MBR Signature) 100% intact.
-// This neutralizes stale Ventoy MBR hooks when converting Mode A to Mode B, preventing Legacy BIOS boot crashes.
+// This neutralizes stale Ventoy MBR hooks when converting Hybrid Mode to Cloud Mode, preventing Legacy BIOS boot crashes.
 func CleanMbrBootstrapCode(targetDisk string) error {
 	diskNode := filepath.Base(targetDisk)
 	if idx := strings.Index(diskNode, "s"); idx > 0 {
@@ -283,13 +283,13 @@ func CleanMbrBootstrapCode(targetDisk string) error {
 	return cmd.Run()
 }
 
-// DeployCloudMode executes Mode B: Cloud Pure Mode (1-sec native format & multi-arch iPXE firmware) with customizable file system.
+// DeployCloudMode executes Cloud Mode: Cloud Pure Mode (1-sec native format & multi-arch iPXE firmware) with customizable file system.
 // For existing Ventoy drives, it non-destructively flashes ONLY Partition 2 (VTOYEFI / ESP), keeping Partition 1 (Data) untouched!
 func DeployCloudMode(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
 	return deployCloudModeWithExpectedDisk(ctx, targetDisk, fsType, nil)
 }
 
-// DeployCloudModeWithExpectedDisk deploys Mode B after confirming the target still matches the selected disk snapshot.
+// DeployCloudModeWithExpectedDisk deploys Cloud Mode after confirming the target still matches the selected disk snapshot.
 func DeployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected disk.DiskInfo) (*DeployResult, error) {
 	return deployCloudModeWithExpectedDisk(ctx, targetDisk, fsType, &expected)
 }
@@ -378,7 +378,7 @@ func DeployCloudModeBatch(ctx context.Context, targetDisks []string, fsType stri
 	return deployCloudModeBatchWithExpectedDisks(ctx, targetDisks, fsType, nil)
 }
 
-// DeployCloudModeBatchWithExpectedDisks deploys Mode B only after all selected disk snapshots pass final validation.
+// DeployCloudModeBatchWithExpectedDisks deploys Cloud Mode only after all selected disk snapshots pass final validation.
 func DeployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*DeployResult, error) {
 	return deployCloudModeBatchWithExpectedDisks(ctx, targetDisks, fsType, expected)
 }

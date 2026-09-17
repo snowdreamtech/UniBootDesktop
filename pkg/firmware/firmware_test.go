@@ -138,7 +138,7 @@ func TestExtractFirmwareHybridMode(t *testing.T) {
 	for _, f := range expectedFiles {
 		fullPath := filepath.Join(tmpDir, filepath.FromSlash(f))
 		if _, err := os.Stat(fullPath); os.IsNotExist(err) {
-			t.Errorf("Mode A expected extracted file missing: %s", fullPath)
+			t.Errorf("Hybrid Mode expected extracted file missing: %s", fullPath)
 		}
 	}
 }
@@ -169,14 +169,14 @@ func TestExtractFirmwareCloudMode(t *testing.T) {
 	for _, f := range expectedFiles {
 		fullPath := filepath.Join(tmpDir, filepath.FromSlash(f))
 		if _, err := os.Stat(fullPath); os.IsNotExist(err) {
-			t.Errorf("Mode B expected extracted file missing: %s", fullPath)
+			t.Errorf("Cloud Mode expected extracted file missing: %s", fullPath)
 		}
 	}
 
-	// Mode B MUST NOT contain UniBoot.iso (saving ESP partition space)
+	// Cloud Mode MUST NOT contain UniBoot.iso (saving ESP partition space)
 	isoPath := filepath.Join(tmpDir, "iso", "UniBoot.iso")
 	if _, err := os.Stat(isoPath); !os.IsNotExist(err) {
-		t.Errorf("Mode B should NOT extract UniBoot.iso into ESP partition")
+		t.Errorf("Cloud Mode should NOT extract UniBoot.iso into ESP partition")
 	}
 }
 

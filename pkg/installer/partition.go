@@ -21,7 +21,7 @@ var (
 )
 
 // FormatDiskCloudMode formats the target physical disk to FAT32 with MBR partition table
-// and volume label "UNIBOOT" for Mode B (1-sec Cloud Pure Mode).
+// and volume label "UNIBOOT" for Cloud Mode (1-sec Cloud Pure Mode).
 // Returns the resolved volume mount point (e.g. /Volumes/UNIBOOT, E:\, /mnt/UNIBOOT).
 func FormatDiskCloudMode(ctx context.Context, targetDisk string) (string, error) {
 	if err := disk.ValidateTargetDisk(targetDisk); err != nil {
@@ -172,7 +172,7 @@ func formatDiskLinux(ctx context.Context, targetDisk string) (string, error) {
 	return mountPoint, nil
 }
 
-// FormatDiskHybridMode formats the target physical disk for Mode A (Hybrid Pro Mode - Ventoy + UniBoot)
+// FormatDiskHybridMode formats the target physical disk for Hybrid Mode (Hybrid Pro Mode - Ventoy + UniBoot)
 // with the specified file system (exFAT, NTFS, FAT32, ext4) and volume label "UNIBOOT".
 // Returns the resolved volume mount point (e.g. /Volumes/UNIBOOT, E:\, /mnt/UNIBOOT).
 func FormatDiskHybridMode(ctx context.Context, targetDisk string, fsType string) (string, error) {
@@ -187,28 +187,28 @@ func FormatDiskHybridMode(ctx context.Context, targetDisk string, fsType string)
 	// Dry-run mode for tests or safe simulation
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
 		if strings.Contains(targetDisk, "fail") {
-			return "", fmt.Errorf("simulated Mode A formatting failure for disk %s", targetDisk)
+			return "", fmt.Errorf("simulated Hybrid Mode formatting failure for disk %s", targetDisk)
 		}
-		tempMount, err := os.MkdirTemp("", "uniboot-dryrun-modea-*")
+		tempMount, err := os.MkdirTemp("", "uniboot-dryrun-hybridmode-*")
 		if err != nil {
-			return "", fmt.Errorf("failed to create dry-run mount point for Mode A: %w", err)
+			return "", fmt.Errorf("failed to create dry-run mount point for Hybrid Mode: %w", err)
 		}
 		return tempMount, nil
 	}
 
 	switch runtime.GOOS {
 	case "darwin":
-		return formatDiskModeAMacOS(ctx, targetDisk, fsType)
+		return formatDiskHybridModeMacOS(ctx, targetDisk, fsType)
 	case "windows":
-		return formatDiskModeAWindows(ctx, targetDisk, fsType)
+		return formatDiskHybridModeWindows(ctx, targetDisk, fsType)
 	case "linux":
-		return formatDiskModeALinux(ctx, targetDisk, fsType)
+		return formatDiskHybridModeLinux(ctx, targetDisk, fsType)
 	default:
 		return "", fmt.Errorf("unsupported operating system: %s", runtime.GOOS)
 	}
 }
 
-func formatDiskModeAMacOS(ctx context.Context, targetDisk string, fsType string) (string, error) {
+func formatDiskHybridModeMacOS(ctx context.Context, targetDisk string, fsType string) (string, error) {
 	diskNode := filepath.Base(targetDisk)
 	fsFormat := strings.ToUpper(fsType)
 	if fsFormat == "EXFAT" {
@@ -221,7 +221,7 @@ func formatDiskModeAMacOS(ctx context.Context, targetDisk string, fsType string)
 	cmd := execCommand("diskutil", "partitionDisk", diskNode, "2", "MBRFormat", fsFormat, "UNIBOOT", "R", "FAT32", "VTOYEFI", "64M")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return "", fmt.Errorf("diskutil partitionDisk for Mode A failed (%v): %s", err, string(output))
+		return "", fmt.Errorf("diskutil partitionDisk for Hybrid Mode failed (%v): %s", err, string(output))
 	}
 
 	// Mount Partition 2 (VTOYEFI) explicitly on macOS so dual partitions are visible in Finder/system
@@ -236,7 +236,7 @@ func formatDiskModeAMacOS(ctx context.Context, targetDisk string, fsType string)
 	return ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
 }
 
-func formatDiskModeAWindows(ctx context.Context, targetDisk string, fsType string) (string, error) {
+func formatDiskHybridModeWindows(ctx context.Context, targetDisk string, fsType string) (string, error) {
 	diskIndex := targetDisk
 	diskIndex = strings.TrimPrefix(diskIndex, `\\.\PhysicalDrive`)
 	diskIndex = strings.TrimPrefix(diskIndex, `disk`)
@@ -255,7 +255,7 @@ func formatDiskModeAWindows(ctx context.Context, targetDisk string, fsType strin
 		diskIndex,
 		fsFormat,
 	)
-	tmpFile, err := os.CreateTemp("", "diskpart-modea-*.txt")
+	tmpFile, err := os.CreateTemp("", "diskpart-hybridmode-*.txt")
 	if err != nil {
 		return "", fmt.Errorf("failed to create diskpart script: %w", err)
 	}
@@ -270,13 +270,13 @@ func formatDiskModeAWindows(ctx context.Context, targetDisk string, fsType strin
 	cmd := execCommand("diskpart", "/s", tmpFile.Name())
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return "", fmt.Errorf("diskpart for Mode A failed (%v): %s", err, string(output))
+		return "", fmt.Errorf("diskpart for Hybrid Mode failed (%v): %s", err, string(output))
 	}
 
 	return ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
 }
 
-func formatDiskModeALinux(ctx context.Context, targetDisk string, fsType string) (string, error) {
+func formatDiskHybridModeLinux(ctx context.Context, targetDisk string, fsType string) (string, error) {
 	cmd := execCommand("parted", "-s", targetDisk, "mklabel", "msdos")
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return "", fmt.Errorf("parted mklabel failed (%v): %s", err, string(output))

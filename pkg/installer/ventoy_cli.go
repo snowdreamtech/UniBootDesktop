@@ -52,7 +52,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:   false,
 			Version: "",
-			Message: fmt.Sprintf("❌ Ventoy directory not configured: Fresh Mode A deployment requires local Ventoy CLI executable for %s.", runtime.GOOS),
+			Message: fmt.Sprintf("❌ Ventoy directory not configured: Fresh Hybrid Mode deployment requires local Ventoy CLI executable for %s.", runtime.GOOS),
 		}
 	}
 

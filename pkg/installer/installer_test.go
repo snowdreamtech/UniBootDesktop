@@ -88,7 +88,7 @@ func TestDeployCloudModeBatch(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func TestDeployModeABatchPartialFailure(t *testing.T) {
+func TestDeployHybridModeBatchPartialFailure(t *testing.T) {
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
@@ -102,7 +102,7 @@ func TestDeployModeABatchPartialFailure(t *testing.T) {
 	assert.NotNil(t, results[1].Diagnostics)
 }
 
-func TestDeployModeBBatchPartialFailure(t *testing.T) {
+func TestDeployCloudModeBatchPartialFailure(t *testing.T) {
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 

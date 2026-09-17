@@ -140,7 +140,7 @@ func (a *App) ExportLogs(content string, title string, logFilter string, textFil
 	return filePath, nil
 }
 
-// DeployHybridMode triggers Mode A (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system and optional ISO files.
+// DeployHybridMode triggers Hybrid Mode (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system and optional ISO files.
 func (a *App) DeployHybridMode(targetDisk string, fsType string, isoPaths []string, expected disk.DiskInfo) (*installer.DeployResult, error) {
 	cfg, _ := config.Load()
 	ventoyPath := ""
@@ -162,7 +162,7 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 	return installer.ValidateVentoyCli(ventoyPath)
 }
 
-// DeployHybridModeBatch triggers Mode A deployment for multiple target disk drives with customizable file system and optional ISO files.
+// DeployHybridModeBatch triggers Hybrid Mode deployment for multiple target disk drives with customizable file system and optional ISO files.
 func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPaths []string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
 	cfg, _ := config.Load()
 	ventoyPath := ""
@@ -175,7 +175,7 @@ func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPath
 	return installer.DeployHybridModeBatchWithExpectedDisks(a.ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected)
 }
 
-// DeployCloudMode triggers Mode B (Cloud Pure Mode) with customizable file system.
+// DeployCloudMode triggers Cloud Mode (Cloud Pure Mode) with customizable file system.
 func (a *App) DeployCloudMode(targetDisk string, fsType string, expected disk.DiskInfo) (*installer.DeployResult, error) {
 	res, err := installer.DeployCloudModeWithExpectedDisk(a.ctx, targetDisk, fsType, expected)
 	if err != nil && res != nil {
@@ -184,7 +184,7 @@ func (a *App) DeployCloudMode(targetDisk string, fsType string, expected disk.Di
 	return res, err
 }
 
-// DeployCloudModeBatch triggers Mode B deployment for multiple target disk drives with customizable file system.
+// DeployCloudModeBatch triggers Cloud Mode deployment for multiple target disk drives with customizable file system.
 func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
 	return installer.DeployCloudModeBatchWithExpectedDisks(a.ctx, targetDisks, fsType, expected)
 }
