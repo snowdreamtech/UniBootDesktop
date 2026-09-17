@@ -96,14 +96,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	ensureDiskPermissions(targetPath)
 	unmountTargetDisk(targetPath)
 
-	// If system has qemu-system-x86_64 / qemu-system-aarch64 installed, leverage QEMU backend directly
-	qemuDrv := &QEMUDriver{}
-	if qemuStatus := qemuDrv.Detect(); qemuStatus.Installed {
-		logger.Info("UTM selected, delegating execution to embedded/system QEMU engine", "disk", targetPath, "bootMode", bootMode)
-		return qemuDrv.Launch(ctx, diskPath, bootMode)
-	}
-
-	// Fallback: Generate native .utm bundle with raw disk mapping and launch via UTM app
+	// Generate native .utm bundle with raw disk mapping and launch via UTM app
 	tmpDir := "/tmp/uniboot_utm"
 	_ = os.RemoveAll(tmpDir)
 	_ = os.MkdirAll(tmpDir, 0755)
