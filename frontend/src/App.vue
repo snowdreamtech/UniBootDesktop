@@ -291,6 +291,7 @@
                 </div>
               </div>
               <div class="deploy-success-actions">
+                <button class="btn-dismiss" @click="dismissDeploySuccessBanner" :title="t('common.close')">✕</button>
                 <button
                   v-if="!deploySuccessBanner.autoEjected"
                   id="btn-safely-eject-after-deploy"
@@ -299,7 +300,6 @@
                 >
                   ⏏️ {{ t('deploy.safely_eject_btn') }}
                 </button>
-                <button class="btn-dismiss" @click="dismissDeploySuccessBanner">✕</button>
               </div>
             </div>
           </transition>
