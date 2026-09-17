@@ -299,7 +299,7 @@
                 >
                   ⏏️ {{ t('deploy.safely_eject_btn') }}
                 </button>
-                <button class="btn-dismiss" @click="deploySuccessBanner.visible = false">✕</button>
+                <button class="btn-dismiss" @click="dismissDeploySuccessBanner">✕</button>
               </div>
             </div>
           </transition>
