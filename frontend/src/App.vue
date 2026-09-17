@@ -667,7 +667,7 @@ function handleCopyEmbeddedLogs() {
   showToast(t('log.copied_toast'), 'success');
 }
 
-function handleExportEmbeddedLogs() {
+async function handleExportEmbeddedLogs() {
   if (filteredEmbeddedLogs.value.length === 0) {
     showToast(t('log.empty'), 'info');
     return;
@@ -675,13 +675,27 @@ function handleExportEmbeddedLogs() {
   const text = filteredEmbeddedLogs.value
     .map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message}${l.details ? ' - ' + l.details : ''}`)
     .join('\n');
-  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `unigodesktop-log-${new Date().toISOString().slice(0, 10)}.log`;
-  a.click();
-  URL.revokeObjectURL(url);
+
+  if (window.go && window.go.main && window.go.main.App && (window.go.main.App as any).ExportLogs) {
+    try {
+      const filePath = await (window.go.main.App as any).ExportLogs(text);
+      if (filePath) {
+        showToast(t('log.copied_toast'), 'success');
+      }
+    } catch (e) {
+      console.error('Failed to export logs:', e);
+    }
+  } else {
+    // Fallback for browser dev mode
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `unigodesktop-log-${new Date().toISOString().slice(0, 10)}.log`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(t('log.copied_toast'), 'success');
+  }
 }
 
 function scrollToEmbeddedTerminalBottom() {

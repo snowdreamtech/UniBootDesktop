@@ -81,6 +81,39 @@ func (a *App) SelectIsoFiles() ([]string, error) {
 	})
 }
 
+// ExportLogs opens a native save file dialog to export log content to a file (.log or .txt).
+func (a *App) ExportLogs(content string) (string, error) {
+	defaultFilename := fmt.Sprintf("unigodesktop-log-%s.log", time.Now().Format("2006-01-02-150405"))
+	filePath, err := wailsRuntime.SaveFileDialog(a.ctx, wailsRuntime.SaveDialogOptions{
+		Title:           "Export Log File",
+		DefaultFilename: defaultFilename,
+		Filters: []wailsRuntime.FileFilter{
+			{
+				DisplayName: "Log Files (*.log)",
+				Pattern:     "*.log",
+			},
+			{
+				DisplayName: "Text Files (*.txt)",
+				Pattern:     "*.txt",
+			},
+			{
+				DisplayName: "All Files (*.*)",
+				Pattern:     "*.*",
+			},
+		},
+	})
+	if err != nil {
+		return "", fmt.Errorf("open save file dialog: %w", err)
+	}
+	if filePath == "" {
+		return "", nil // User cancelled
+	}
+	if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
+		return "", fmt.Errorf("write log file: %w", err)
+	}
+	return filePath, nil
+}
+
 // DeployModeA triggers Mode A (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system and optional ISO files.
 func (a *App) DeployModeA(targetDisk string, fsType string, isoPaths []string, expected disk.DiskInfo) (*installer.DeployResult, error) {
 	cfg, _ := config.Load()
