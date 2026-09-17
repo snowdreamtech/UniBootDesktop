@@ -510,8 +510,10 @@ interface DiskInfo {
   controllerVendor?: string;
   isFakeUsb3?: boolean;
   protocolCode?: string;
+  isVentoy?: boolean;
   isRealVentoy?: boolean;
   isModeB?: boolean;
+  isGenericBoot?: boolean;
   mountPoint?: string;
 }
 

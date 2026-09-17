@@ -41,7 +41,7 @@
           </div>
           <div 
             v-for="log in filteredLogs" 
-            :key="log.id || log.timestamp"
+            :key="log.id || String(log.timestamp)"
             class="log-row"
             :class="log.level.toLowerCase()"
           >

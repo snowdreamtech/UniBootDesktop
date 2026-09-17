@@ -31,6 +31,7 @@ declare global {
     isRealVentoy?: boolean;
     isVentoy?: boolean;
     isModeB?: boolean;
+    isGenericBoot?: boolean;
     mountPoint?: string;
   }
 
