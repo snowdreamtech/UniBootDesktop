@@ -18,6 +18,7 @@ type HypervisorType string
 const (
 	TypeQEMU       HypervisorType = "qemu"
 	TypeUTM        HypervisorType = "utm"
+	TypeKVM        HypervisorType = "kvm"
 	TypeParallels  HypervisorType = "parallels"
 	TypeVMware     HypervisorType = "vmware"
 	TypeHyperV     HypervisorType = "hyperv"
@@ -61,9 +62,10 @@ func GetManager() *Manager {
 		defaultManager = &Manager{
 			drivers: make([]Driver, 0),
 		}
-		// Register default drivers in order of priority: QEMU -> UTM -> Parallels -> VMware -> Hyper-V -> VirtualBox
+		// Register default drivers in order of priority: QEMU -> UTM -> KVM -> Parallels -> VMware -> Hyper-V -> VirtualBox
 		defaultManager.Register(&QEMUDriver{})
 		defaultManager.Register(&UTMDriver{})
+		defaultManager.Register(&KVMDriver{})
 		defaultManager.Register(&ParallelsDriver{})
 		defaultManager.Register(&VMwareDriver{})
 		defaultManager.Register(&HyperVDriver{})

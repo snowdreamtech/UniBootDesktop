@@ -15,11 +15,11 @@ func TestHypervisorManager_DetectAll(t *testing.T) {
 	}
 
 	statuses := mgr.DetectAll()
-	if len(statuses) < 6 {
-		t.Fatalf("expected at least 6 registered drivers, got %d", len(statuses))
+	if len(statuses) < 7 {
+		t.Fatalf("expected at least 7 registered drivers, got %d", len(statuses))
 	}
 
-	var foundQemu, foundHyperV, foundParallels bool
+	var foundQemu, foundHyperV, foundParallels, foundKVM bool
 	for _, st := range statuses {
 		if st.Type == TypeQEMU {
 			foundQemu = true
@@ -30,9 +30,12 @@ func TestHypervisorManager_DetectAll(t *testing.T) {
 		if st.Type == TypeParallels {
 			foundParallels = true
 		}
+		if st.Type == TypeKVM {
+			foundKVM = true
+		}
 	}
-	if !foundQemu || !foundHyperV || !foundParallels {
-		t.Errorf("expected QEMU, Hyper-V, and Parallels driver status in DetectAll results")
+	if !foundQemu || !foundHyperV || !foundParallels || !foundKVM {
+		t.Errorf("expected QEMU, Hyper-V, Parallels, and KVM driver status in DetectAll results")
 	}
 }
 
