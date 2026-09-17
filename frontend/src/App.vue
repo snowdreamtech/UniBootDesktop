@@ -282,7 +282,7 @@
 
           <!-- Deploy success banner with Safely Eject button -->
           <transition name="toast-fade">
-            <div v-if="deploySuccessBanner.visible" class="deploy-success-banner">
+            <div v-if="showDeploySuccessBanner" class="deploy-success-banner">
               <div class="deploy-success-icon">🎉</div>
               <div class="deploy-success-content">
                 <div class="deploy-success-title">{{ t('deploy.success_banner_title') }}</div>
@@ -719,6 +719,7 @@ function dismissToast() {
 }
 
 function dismissDeploySuccessBanner() {
+  deploySuccessBanner.value.dismissed = true;
   deploySuccessBanner.value.visible = false;
   logUserAction('DEBUG', 'User dismissed deployment success banner');
 }
@@ -758,7 +759,6 @@ watch(isAboutOpen, (val) => {
 });
 
 watch(activeMode, (newMode) => {
-  deploySuccessBanner.value.visible = false;
   logUserAction('INFO', 'User switched deployment mode', newMode);
 });
 
@@ -767,7 +767,6 @@ watch(selectedFsType, (newFs) => {
 });
 
 watch(selectionMode, (newMode) => {
-  deploySuccessBanner.value.visible = false;
   logUserAction('INFO', 'User switched disk selection mode', newMode);
 });
 
@@ -836,7 +835,31 @@ const pendingTargetSnapshots = ref<DiskInfo[]>([]);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
 const autoEjectAfterDeploy = ref(false);
-const deploySuccessBanner = ref<{ visible: boolean; msg: string; targets: string[]; autoEjected?: boolean }>({ visible: false, msg: '', targets: [], autoEjected: false });
+interface DeployBannerState {
+  visible: boolean;
+  msg: string;
+  targets: string[];
+  autoEjected?: boolean;
+  mode?: 'cloud' | 'hybrid';
+  dismissed?: boolean;
+}
+
+const deploySuccessBanner = ref<DeployBannerState>({
+  visible: false,
+  msg: '',
+  targets: [],
+  autoEjected: false,
+  dismissed: false,
+});
+
+const showDeploySuccessBanner = computed(() => {
+  const b = deploySuccessBanner.value;
+  return Boolean(
+    b.visible &&
+    !b.dismissed &&
+    b.mode === activeMode.value
+  );
+});
 const qemuStatus = ref({ installed: false, path: '', version: '' });
 const isLaunchingQemu = ref(false);
 const ventoyStatus = ref({ valid: true, version: '', message: '', executablePath: '' });
@@ -1116,6 +1139,7 @@ async function handleEjectDisk(disk: DiskInfo) {
       await window.go.main.App.EjectDisk(disk.device);
     }
     if (deploySuccessBanner.value.targets.includes(disk.device)) {
+      deploySuccessBanner.value.dismissed = true;
       deploySuccessBanner.value.visible = false;
     }
     showToast(t('disk.toast_ejected_success', { device: disk.device, name: disk.name || disk.device }), 'success');
@@ -1127,6 +1151,7 @@ async function handleEjectDisk(disk: DiskInfo) {
 
 async function handleSafelyEjectAfterDeploy() {
   const targets = deploySuccessBanner.value.targets;
+  deploySuccessBanner.value.dismissed = true;
   deploySuccessBanner.value.visible = false;
   let ejectedCount = 0;
   for (const dev of targets) {
@@ -1580,7 +1605,9 @@ async function startDeployment() {
         visible: true,
         msg: resultMsg,
         targets: [...targets],
-        autoEjected: autoEjectedCount > 0
+        autoEjected: autoEjectedCount > 0,
+        mode: activeMode.value,
+        dismissed: false
       };
 
       if (autoEjectedCount > 0) {
