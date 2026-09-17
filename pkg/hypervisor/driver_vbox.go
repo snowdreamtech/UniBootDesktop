@@ -154,7 +154,7 @@ func launchVirtualBoxVM(vboxManage string, targetPath string, bootMode string) e
 		return err
 	}
 
-	vmName := "UniBoot_Preview"
+	vmName := "UniBoot"
 	_ = exec.Command(vboxManage, "unregistervm", vmName, "--delete").Run()
 
 	if err := exec.Command(vboxManage, "createvm", "--name", vmName, "--ostype", "Other_64", "--register").Run(); err != nil {

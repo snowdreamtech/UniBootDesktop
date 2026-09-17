@@ -113,7 +113,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	_ = os.RemoveAll(tmpDir)
 	_ = os.MkdirAll(tmpDir, 0755)
 
-	utmBundle := "/tmp/uniboot_utm/UniBootPreview.utm"
+	utmBundle := "/tmp/uniboot_utm/UniBoot.utm"
 	_ = os.MkdirAll(utmBundle, 0755)
 
 	plistContent := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
@@ -127,7 +127,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 		<key>Icon</key>
 		<string>disk</string>
 		<key>Name</key>
-		<string>UniBoot Preview</string>
+		<string>UniBoot</string>
 	</dict>
 	<key>System</key>
 	<dict>

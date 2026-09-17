@@ -140,7 +140,7 @@ func launchVMwareVM(status *VMStatus, targetPath string, bootMode string) error 
 
 	vmdkBase := filepath.Join(tmpDir, "uniboot_raw")
 	vmdkPath := vmdkBase + ".vmdk"
-	vmxPath := filepath.Join(tmpDir, "UniBootPreview.vmx")
+	vmxPath := filepath.Join(tmpDir, "UniBoot.vmx")
 
 	fwSetting := "efi"
 	if bootMode == BootModeBIOS {
@@ -190,7 +190,7 @@ createType="fullDevice"
 # Extent description
 RW %d FLAT "%s" 0
 
-# The Disk Data Base 
+# The Disk Data Base
 #DDB
 ddb.adapterType = "ide"
 ddb.geometry.cylinders = "%d"
@@ -210,7 +210,7 @@ pciBridge0.present = "TRUE"
 mks.enable3d = "TRUE"
 memsize = "2048"
 firmware = "%s"
-nvram = "UniBootPreview.nvram"
+nvram = "UniBoot.nvram"
 floppy0.present = "FALSE"
 sata0.present = "TRUE"
 sata0:0.present = "TRUE"
@@ -219,7 +219,7 @@ ethernet0.present = "TRUE"
 ethernet0.virtualDev = "e1000"
 ethernet0.connectionType = "nat"
 ethernet0.addressType = "generated"
-displayName = "UniBoot Boot Preview"
+displayName = "UniBoot"
 guestOS = "other-64"
 `, fwSetting)
 	_ = os.WriteFile(vmxPath, []byte(vmxContent), 0644)

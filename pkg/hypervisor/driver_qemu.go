@@ -284,6 +284,7 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode strin
 	ovmfFw := DetectOVMF()
 
 	args := []string{
+		"-name", "UniBoot",
 		"-machine", "q35",
 		"-m", "2048",
 		"-device", "virtio-vga,xres=1280,yres=800",
