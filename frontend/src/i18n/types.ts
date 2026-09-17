@@ -303,6 +303,11 @@ export interface TranslationDict {
   "inspector.val_ro": string;
   "inspector.lbl_boot_status": string;
   "inspector.val_data_disk": string;
+  "inspector.val_boot_hybrid": string;
+  "inspector.val_boot_cloud": string;
+  "inspector.val_boot_thirdparty": string;
+  "inspector.val_boot_gpt_data": string;
+  "inspector.val_boot_mbr_data": string;
   "inspector.lbl_smart": string;
   "inspector.val_smart_good": string;
   "inspector.lbl_bus_power": string;
