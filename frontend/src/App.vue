@@ -1752,6 +1752,7 @@ h1 {
   border-radius: 16px;
   backdrop-filter: blur(16px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  min-height: 500px;
 }
 
 .log-section-header {
@@ -1871,13 +1872,112 @@ h1 {
   background: rgba(10, 15, 28, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
-  padding: 0.85rem 1rem;
-  height: 220px;
-  max-height: 260px;
+  padding: 1rem 1.15rem;
+  min-height: 440px;
+  max-height: 560px;
   overflow-y: auto;
+  overflow-x: hidden;
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
-  font-size: 0.8rem;
-  line-height: 1.5;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.embedded-terminal-window .empty-logs {
+  color: var(--text-muted, #64748b);
+  text-align: center;
+  padding: 5rem 0;
+  font-style: italic;
+}
+
+.embedded-terminal-window .log-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.embedded-terminal-window .log-time {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 105px;
+}
+
+.embedded-terminal-window .log-level-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.12rem 0.55rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 62px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.embedded-terminal-window .log-level-badge.info {
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.embedded-terminal-window .log-level-badge.warn {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.embedded-terminal-window .log-level-badge.error {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.embedded-terminal-window .log-level-badge.debug {
+  background: rgba(168, 85, 247, 0.18);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.embedded-terminal-window .log-msg {
+  color: #e2e8f0;
+  flex: 1;
+  min-width: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.embedded-terminal-window .log-row.info .log-msg {
+  color: #f1f5f9;
+}
+
+.embedded-terminal-window .log-row.warn .log-msg {
+  color: #fde047;
+}
+
+.embedded-terminal-window .log-row.error .log-msg {
+  color: #fca5a5;
+}
+
+.embedded-terminal-window .log-row.debug .log-msg {
+  color: #c084fc;
+}
+
+.embedded-terminal-window .log-details {
+  color: #94a3b8;
+  font-size: 0.78rem;
+  margin-left: 0.5rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .embedded-terminal-window::-webkit-scrollbar {
@@ -2932,26 +3032,26 @@ h1 {
 }
 
 [data-theme="light"] .embedded-terminal-window .log-level-badge.info {
-  background: #e0f2fe;
-  color: #0284c7;
-  border: 1px solid #bae6fd;
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
 }
 
 [data-theme="light"] .embedded-terminal-window .log-level-badge.warn {
-  background: #fef3c7;
-  color: #d97706;
+  background: #fffbeb;
+  color: #b45309;
   border: 1px solid #fde68a;
 }
 
 [data-theme="light"] .embedded-terminal-window .log-level-badge.error {
-  background: #fee2e2;
-  color: #dc2626;
+  background: #fef2f2;
+  color: #b91c1c;
   border: 1px solid #fca5a5;
 }
 
 [data-theme="light"] .embedded-terminal-window .log-level-badge.debug {
   background: #f3e8ff;
-  color: #7e22ce;
+  color: #6b21a8;
   border: 1px solid #e9d5ff;
 }
 </style>
