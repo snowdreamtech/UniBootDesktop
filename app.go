@@ -69,7 +69,13 @@ func (a *App) ClearLogs() {
 
 // GetDiskList returns all removable disks safely filtered.
 func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
-	return disk.GetRemovableDisks()
+	disks, err := disk.GetRemovableDisks()
+	if err != nil {
+		logger.Error("Failed to scan removable storage drives", "error", err)
+		return nil, err
+	}
+	logger.Info(fmt.Sprintf("Scanned removable storage drives, found %d device(s)", len(disks)))
+	return disks, nil
 }
 
 // EjectDisk safely unmounts and ejects the target removable storage disk.
@@ -252,10 +258,11 @@ func (a *App) GetConfig() (*config.AppConfig, error) {
 
 // SaveConfig updates and saves application settings.
 func (a *App) SaveConfig(cfg *config.AppConfig) error {
-	logger.Info("Saving updated application settings")
 	if cfg == nil {
+		logger.Info("Resetting application settings to default")
 		return config.GetDefaultConfig().Save()
 	}
+	logger.Info("Saving updated application preferences", "language", cfg.Language, "theme", cfg.Theme, "autoEject", cfg.AutoEjectAfterDeploy, "proxy", cfg.GithubProxy)
 	if cfg.ProxyPassword != "" {
 		if err := config.SaveProxyPassword(cfg.ProxyPassword); err != nil {
 			logger.Error("Failed to save proxy password", "error", err)
@@ -268,7 +275,7 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		logger.Error("Failed to save application config", "error", err)
 		return err
 	}
-	logger.Info("Application settings saved successfully")
+	logger.Info("Application preferences saved successfully")
 	return nil
 }
 
