@@ -17,7 +17,6 @@ export const zhCn: TranslationDict = {
   "menu.minimize": "最小化",
   "menu.zoom": "缩放",
   "menu.help": "帮助",
-
   "lang.zhCN": "简体中文",
   "lang.zhTW": "繁體中文",
   "lang.jaJP": "日本語",
