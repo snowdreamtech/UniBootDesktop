@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
@@ -161,8 +162,32 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	_ = exec.Command("open", "utm://run?name=UniBoot%20Preview").Run()
 
 	go func() {
-		// Periodically monitor or remount disk on exit
-		time.Sleep(3 * time.Second)
+		utmctlPath := "/Applications/UTM.app/Contents/MacOS/utmctl"
+		ticker := time.NewTicker(1500 * time.Millisecond)
+		defer ticker.Stop()
+
+		timeout := time.After(1 * time.Hour)
+		started := false
+
+		for {
+			select {
+			case <-timeout:
+				remountTargetDisk(targetPath)
+				return
+			case <-ticker.C:
+				if _, err := os.Stat(utmctlPath); err == nil {
+					out, err := exec.Command(utmctlPath, "status", "UniBoot Preview").Output()
+					statusStr := strings.ToLower(string(out))
+					if err == nil && (strings.Contains(statusStr, "started") || strings.Contains(statusStr, "running")) {
+						started = true
+					} else if started && (!strings.Contains(statusStr, "started") || err != nil) {
+						// VM was running and has now stopped or UTM exited!
+						remountTargetDisk(targetPath)
+						return
+					}
+				}
+			}
+		}
 	}()
 
 	return nil
