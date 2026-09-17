@@ -5,6 +5,7 @@ package disk
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -151,4 +152,18 @@ func TestGetRemovableDisks(t *testing.T) {
 	disks, err := GetRemovableDisks()
 	assert.NoError(t, err)
 	assert.NotNil(t, disks)
+}
+
+func TestGetRemovableDisksCaching(t *testing.T) {
+	// First call warms up cache
+	_, _ = GetRemovableDisks()
+
+	// Second call must hit cache instantaneously (< 10ms)
+	start := time.Now()
+	disks, err := GetRemovableDisks()
+	elapsed := time.Since(start)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, disks)
+	assert.Less(t, elapsed, 10*time.Millisecond, "Cached GetRemovableDisks took too long: %v", elapsed)
 }

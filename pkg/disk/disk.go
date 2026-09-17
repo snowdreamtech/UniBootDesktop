@@ -325,9 +325,8 @@ func IsVentoyDisk(targetDisk string) bool {
 			p2 := baseDisk + "s2"
 
 			// Inspect Partition 2 (VTOYEFI / UNIBOOTEFI ESP Partition)
-			outP2, errP2 := exec.Command("diskutil", "info", "-plist", p2).Output()
-			if errP2 == nil {
-				strP2 := string(outP2)
+			strP2 := getDarwinDiskutilInfo(p2)
+			if strP2 != "" {
 				volNameP2 := strings.ToUpper(extractPlistValue(strP2, "VolumeName"))
 				mountP2 := extractPlistValue(strP2, "MountPoint")
 
@@ -340,9 +339,8 @@ func IsVentoyDisk(targetDisk string) bool {
 			}
 
 			// Inspect Partition 1 (Ventoy / UniBoot Data Partition)
-			outP1, errP1 := exec.Command("diskutil", "info", "-plist", p1).Output()
-			if errP1 == nil {
-				strP1 := string(outP1)
+			strP1 := getDarwinDiskutilInfo(p1)
+			if strP1 != "" {
 				volNameP1 := strings.ToUpper(extractPlistValue(strP1, "VolumeName"))
 				mountP1 := extractPlistValue(strP1, "MountPoint")
 
@@ -350,7 +348,7 @@ func IsVentoyDisk(targetDisk string) bool {
 					return true
 				}
 
-				if (strings.Contains(volNameP1, "VENTOY") || strings.Contains(volNameP1, "UNIBOOT")) && errP2 == nil {
+				if (strings.Contains(volNameP1, "VENTOY") || strings.Contains(volNameP1, "UNIBOOT")) && strP2 != "" {
 					return true
 				}
 			}
@@ -386,13 +384,6 @@ func IsModeBDisk(targetDisk string) bool {
 	if runtime.GOOS == "darwin" {
 		diskNode := filepath.Base(targetDisk)
 		if strings.HasPrefix(diskNode, "disk") {
-			// Single partition short-circuit: Mode B requires dual partitions (Partition 1 Data + Partition 2 ESP).
-			if !strings.Contains(diskNode, "s") {
-				p2 := diskNode + "s2"
-				if err := exec.Command("diskutil", "info", p2).Run(); err != nil {
-					return false
-				}
-			}
 			p1 := diskNode
 			p2 := diskNode
 			if !strings.Contains(diskNode, "s") {
@@ -400,9 +391,9 @@ func IsModeBDisk(targetDisk string) bool {
 				p2 = diskNode + "s2"
 			}
 			for _, p := range []string{p1, p2} {
-				out, err := exec.Command("diskutil", "info", "-plist", p).Output()
-				if err == nil {
-					mountPoint := extractPlistValue(string(out), "MountPoint")
+				str := getDarwinDiskutilInfo(p)
+				if str != "" {
+					mountPoint := extractPlistValue(str, "MountPoint")
 					if HasUniBootCloudFiles(mountPoint) && !HasVentoyEngineFiles(mountPoint) {
 						return true
 					}
@@ -456,10 +447,6 @@ func IsGenericBootDisk(targetDisk string) bool {
 	if targetDisk == "" {
 		return false
 	}
-	if IsRealVentoyDisk(targetDisk) || IsModeBDisk(targetDisk) {
-		return false
-	}
-
 	if HasGenericBootFiles(targetDisk) {
 		return true
 	}
@@ -472,9 +459,9 @@ func IsGenericBootDisk(targetDisk string) bool {
 				partitions = []string{diskNode + "s1", diskNode + "s2"}
 			}
 			for _, p := range partitions {
-				out, err := exec.Command("diskutil", "info", "-plist", p).Output()
-				if err == nil {
-					mountPoint := extractPlistValue(string(out), "MountPoint")
+				str := getDarwinDiskutilInfo(p)
+				if str != "" {
+					mountPoint := extractPlistValue(str, "MountPoint")
 					if HasGenericBootFiles(mountPoint) {
 						return true
 					}
@@ -534,13 +521,60 @@ var (
 	diskCacheMutex sync.Mutex
 	diskCacheList  []DiskInfo
 	diskCacheTime  time.Time
+
+	darwinDiskutilCacheMutex sync.Mutex
+	darwinDiskutilCacheMap   = make(map[string]string)
+	darwinDiskutilCacheTime  time.Time
 )
+
+func getDarwinDiskutilInfo(node string) string {
+	node = strings.TrimSpace(node)
+	if node == "" {
+		return ""
+	}
+
+	darwinDiskutilCacheMutex.Lock()
+	defer darwinDiskutilCacheMutex.Unlock()
+
+	if time.Since(darwinDiskutilCacheTime) > 5*time.Second {
+		darwinDiskutilCacheMap = make(map[string]string)
+		darwinDiskutilCacheTime = time.Now()
+	}
+
+	if info, ok := darwinDiskutilCacheMap[node]; ok {
+		return info
+	}
+
+	cmd := execCommand("diskutil", "info", "-plist", node)
+	out, err := cmd.Output()
+	if err != nil {
+		darwinDiskutilCacheMap[node] = ""
+		return ""
+	}
+
+	infoStr := string(out)
+	darwinDiskutilCacheMap[node] = infoStr
+	return infoStr
+}
+
+func invalidateDarwinDiskutilCache() {
+	darwinDiskutilCacheMutex.Lock()
+	darwinDiskutilCacheMap = make(map[string]string)
+	darwinDiskutilCacheTime = time.Time{}
+	darwinDiskutilCacheMutex.Unlock()
+}
 
 // InvalidateDiskCache clears the memory disk cache to force an immediate fresh hardware scan.
 func InvalidateDiskCache() {
 	diskCacheMutex.Lock()
 	diskCacheList = nil
 	diskCacheMutex.Unlock()
+
+	darwinUSBCacheMutex.Lock()
+	darwinUSBCacheMap = nil
+	darwinUSBCacheMutex.Unlock()
+
+	invalidateDarwinDiskutilCache()
 }
 
 // StartHotplugMonitor listens for OS drive mount/unmount events lightweightly and triggers onChange.
@@ -609,7 +643,7 @@ func getVolumeSnapshot() string {
 // GetRemovableDisks lists removable USB drives safely while protecting system drives.
 func GetRemovableDisks() ([]DiskInfo, error) {
 	diskCacheMutex.Lock()
-	if diskCacheList != nil && time.Since(diskCacheTime) < 3*time.Second {
+	if diskCacheList != nil && time.Since(diskCacheTime) < 5*time.Second {
 		cached := make([]DiskInfo, len(diskCacheList))
 		copy(cached, diskCacheList)
 		diskCacheMutex.Unlock()
@@ -772,8 +806,8 @@ func getCachedDarwinUSBMap() map[string]*darwinUSBInfo {
 	darwinUSBCacheMutex.Lock()
 	defer darwinUSBCacheMutex.Unlock()
 
-	// Cache hardware profile details for 6 seconds to prevent system_profiler CPU spikes
-	if darwinUSBCacheMap != nil && time.Since(darwinUSBCacheTime) < 6*time.Second {
+	// Cache hardware profile details for 30 seconds to prevent system_profiler CPU spikes
+	if darwinUSBCacheMap != nil && time.Since(darwinUSBCacheTime) < 30*time.Second {
 		return darwinUSBCacheMap
 	}
 
@@ -797,7 +831,7 @@ func getCachedDarwinUSBMap() map[string]*darwinUSBInfo {
 func getDarwinDisks() ([]DiskInfo, error) {
 	disks := make([]DiskInfo, 0)
 
-	// Step 1: Probe system_profiler for rich hardware details (cached for 6s to eliminate CPU spikes)
+	// Step 1: Probe system_profiler for rich hardware details (cached for 30s to eliminate CPU spikes)
 	usbMap := getCachedDarwinUSBMap()
 
 	// Step 2: Scan /Volumes for mounted removable drives
@@ -815,8 +849,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		volName := entry.Name()
 
 		// Probe diskutil info for exact volume & whole disk node details
-		infoCmd := execCommand("diskutil", "info", "-plist", volPath)
-		infoOut, infoErr := infoCmd.Output()
+		infoStr := getDarwinDiskutilInfo(volPath)
 
 		var totalSize uint64
 		var freeSpace uint64
@@ -829,8 +862,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		var sectorBytes uint64
 		var writable bool = true
 
-		if infoErr == nil {
-			infoStr := string(infoOut)
+		if infoStr != "" {
 			if strings.Contains(infoStr, "<key>BusProtocol</key>") {
 				busProto = extractPlistValue(infoStr, "BusProtocol")
 			}
@@ -877,10 +909,8 @@ func getDarwinDisks() ([]DiskInfo, error) {
 
 		// Probe whole disk info for total raw byte size and partition map type
 		if parentDisk != "" {
-			parentCmd := execCommand("diskutil", "info", "-plist", parentDisk)
-			parentOut, parentErr := parentCmd.Output()
-			if parentErr == nil {
-				parentStr := string(parentOut)
+			parentStr := getDarwinDiskutilInfo(parentDisk)
+			if parentStr != "" {
 				pSize := extractPlistUint(parentStr, "TotalSize")
 				if pSize > 0 {
 					totalSize = pSize
@@ -977,9 +1007,16 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			devNode = "/dev/" + parentDisk
 		}
 
-		isRealVentoy := IsRealVentoyDisk(devNode)
 		isModeB := IsModeBDisk(devNode)
-		isGenericBoot := IsGenericBootDisk(devNode)
+		isRealVentoy := false
+		if !isModeB {
+			isRealVentoy = IsVentoyDisk(devNode)
+		}
+		isGenericBoot := false
+		if !isModeB && !isRealVentoy {
+			isGenericBoot = IsGenericBootDisk(devNode)
+		}
+
 		bootStatusStr := DetectBootStatus(volName, partitionScheme, isRealVentoy, isModeB, isGenericBoot)
 		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
 
