@@ -226,7 +226,15 @@ const close = () => {
   emit('close');
 };
 
+const logUserAction = (level: string, message: string, details: string = '') => {
+  const app = (window as any)?.go?.main?.App;
+  if (app && typeof app.LogAction === 'function') {
+    app.LogAction(level, message, details);
+  }
+};
+
 const openUrl = (url: string) => {
+  logUserAction('INFO', 'User opened external link in browser', url);
   try {
     const wailsRuntime = (window as any)?.runtime;
     const wailsApp = (window as any)?.go?.main?.App;
@@ -244,6 +252,7 @@ const openUrl = (url: string) => {
 };
 
 const copySystemInfo = async () => {
+  logUserAction('INFO', 'User copied system diagnostic info to clipboard');
   const diagnosticText = `--- UniGoDesktop Diagnostic Info ---
 Version: ${displayVersion.value} (${displayGitTag.value})
 Commit: ${displayCommitHash.value}
@@ -274,6 +283,7 @@ License: ${appInfo.value.license || 'N/A'}
 };
 
 const handleCheckUpdate = async () => {
+  logUserAction('INFO', 'User manually checked for software updates in About modal');
   checking.value = true;
   updateMessage.value = '';
   try {

@@ -711,7 +711,15 @@ async function checkUniBootRelease() {
   }
 }
 
+const logUserAction = (level: string, message: string, details: string = '') => {
+  const app = (window as any)?.go?.main?.App;
+  if (app && typeof app.LogAction === 'function') {
+    app.LogAction(level, message, details);
+  }
+};
+
 async function testConnection() {
+  logUserAction('INFO', 'User tested GitHub proxy connection');
   isTestingNet.value = true;
   netTestResult.value = '';
   const finalProxy = getFinalProxyUrl();
@@ -725,6 +733,7 @@ async function testConnection() {
 }
 
 async function testNetworkProxy() {
+  logUserAction('INFO', 'User tested system network proxy connection', `${proxyProtocol.value}://${proxyHost.value}:${proxyPort.value}`);
   if (proxyProtocol.value === 'direct') {
     proxyTestResult.value = t('settings.directModeNotice');
     proxyTestSuccess.value = true;
@@ -746,6 +755,7 @@ async function testNetworkProxy() {
 }
 
 async function syncFirmware() {
+  logUserAction('INFO', 'User initiated UniBoot firmware synchronization');
   isSyncing.value = true;
   syncProgress.value = 15;
 
