@@ -349,13 +349,13 @@
           <div class="log-section-controls">
             <div class="filter-tabs-sm">
               <button 
-                v-for="level in ['ALL', 'INFO', 'WARN', 'ERROR', 'DEBUG']" 
-                :key="level"
+                v-for="level in logLevels" 
+                :key="level.key"
                 class="btn-tab-sm"
-                :class="{ active: currentEmbeddedLogFilter === level }"
-                @click="currentEmbeddedLogFilter = level"
+                :class="{ active: currentEmbeddedLogFilter === level.key }"
+                @click="currentEmbeddedLogFilter = level.key"
               >
-                {{ level }}
+                {{ level.label }}
               </button>
             </div>
 
@@ -607,6 +607,14 @@ const isLogViewerOpen = ref(false);
 const runtimeLogs = ref<LogItem[]>([]);
 const currentEmbeddedLogFilter = ref<string>('ALL');
 const embeddedTerminalRef = ref<HTMLDivElement | null>(null);
+
+const logLevels = computed(() => [
+  { key: 'ALL', label: t('log.level_all') },
+  { key: 'INFO', label: t('log.level_info') },
+  { key: 'WARN', label: t('log.level_warn') },
+  { key: 'ERROR', label: t('log.level_error') },
+  { key: 'DEBUG', label: t('log.level_debug') }
+]);
 
 function formatLogTime(ts: string | Date): string {
   if (!ts) return '';
@@ -1818,33 +1826,45 @@ h1 {
 }
 
 .btn-text-sm {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-color, #e2e8f0);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--text-color, #f1f5f9);
   font-size: 0.78rem;
-  padding: 0.3rem 0.6rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .btn-text-sm:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
 }
 
 .btn-text-danger-sm {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
   color: #f87171;
   font-size: 0.78rem;
-  padding: 0.3rem 0.6rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .btn-text-danger-sm:hover {
-  background: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #ef4444;
 }
 
 .embedded-terminal-window {
@@ -2810,5 +2830,128 @@ h1 {
   background: #e0f2fe;
   color: #0284c7;
   font-weight: 700;
+}
+
+/* Light Mode Overrides for Embedded Log Center Card & Buttons */
+[data-theme="light"] .log-section-card {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="light"] .log-title-group h2 {
+  color: #0f172a;
+}
+
+[data-theme="light"] .filter-tabs-sm {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .btn-tab-sm {
+  color: #475569;
+  font-weight: 600;
+}
+
+[data-theme="light"] .btn-tab-sm:hover {
+  color: #0f172a;
+  background: #e2e8f0;
+}
+
+[data-theme="light"] .btn-tab-sm.active {
+  background: #0284c7;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+[data-theme="light"] .btn-text-sm {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .btn-text-sm:hover {
+  background: #f0f9ff;
+  border-color: #0284c7;
+  color: #0284c7;
+}
+
+[data-theme="light"] .btn-text-danger-sm {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.08);
+}
+
+[data-theme="light"] .btn-text-danger-sm:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #b91c1c;
+}
+
+/* Light Mode Terminal Window & Log Row Colors */
+[data-theme="light"] .embedded-terminal-window {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .embedded-terminal-window .empty-logs {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .embedded-terminal-window .log-row {
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="light"] .embedded-terminal-window .log-time {
+  color: #64748b;
+}
+
+[data-theme="light"] .embedded-terminal-window .log-msg {
+  color: #0f172a;
+}
+
+[data-theme="light"] .embedded-terminal-window .log-row.info .log-msg {
+  color: #0f172a;
+}
+
+[data-theme="light"] .embedded-terminal-window .log-row.warn .log-msg {
+  color: #b45309;
+}
+
+[data-theme="light"] .embedded-terminal-window .log-row.error .log-msg {
+  color: #dc2626;
+}
+
+[data-theme="light"] .embedded-terminal-window .log-row.debug .log-msg {
+  color: #7e22ce;
+}
+
+[data-theme="light"] .embedded-terminal-window .log-level-badge.info {
+  background: #e0f2fe;
+  color: #0284c7;
+  border: 1px solid #bae6fd;
+}
+
+[data-theme="light"] .embedded-terminal-window .log-level-badge.warn {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+[data-theme="light"] .embedded-terminal-window .log-level-badge.error {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+[data-theme="light"] .embedded-terminal-window .log-level-badge.debug {
+  background: #f3e8ff;
+  color: #7e22ce;
+  border: 1px solid #e9d5ff;
 }
 </style>

@@ -14,13 +14,13 @@
         <div class="log-controls">
           <div class="filter-tabs">
             <button 
-              v-for="level in ['ALL', 'INFO', 'WARN', 'ERROR', 'DEBUG']" 
-              :key="level"
+              v-for="level in logLevels" 
+              :key="level.key"
               class="btn-tab"
-              :class="{ active: currentFilter === level, [level.toLowerCase()]: true }"
-              @click="currentFilter = level"
+              :class="{ active: currentFilter === level.key, [level.key.toLowerCase()]: true }"
+              @click="currentFilter = level.key"
             >
-              {{ level }} ({{ getLevelCount(level) }})
+              {{ level.label }} ({{ getLevelCount(level.key) }})
             </button>
           </div>
 
@@ -102,6 +102,14 @@ const currentFilter = ref('ALL');
 const searchQuery = ref('');
 const autoScroll = ref(true);
 const terminalRef = ref<HTMLDivElement | null>(null);
+
+const logLevels = computed(() => [
+  { key: 'ALL', label: t('log.level_all') },
+  { key: 'INFO', label: t('log.level_info') },
+  { key: 'WARN', label: t('log.level_warn') },
+  { key: 'ERROR', label: t('log.level_error') },
+  { key: 'DEBUG', label: t('log.level_debug') }
+]);
 
 function getLevelCount(level: string): number {
   if (level === 'ALL') return props.logs.length;
@@ -303,5 +311,104 @@ function exportLogFile() {
 .footer-actions {
   display: flex;
   gap: 0.5rem;
+}
+
+/* Light Mode Overrides for LogViewerModal */
+[data-theme="light"] .log-modal {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 16px 48px rgba(15, 23, 42, 0.2);
+}
+
+[data-theme="light"] .btn-tab {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
+  font-weight: 600;
+}
+
+[data-theme="light"] .btn-tab:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+[data-theme="light"] .btn-tab.active {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+[data-theme="light"] .search-input {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+[data-theme="light"] .auto-scroll-label {
+  color: #334155;
+  font-weight: 500;
+}
+
+/* Light Mode Terminal Window & Log Row Colors for Modal */
+[data-theme="light"] .terminal-window {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .terminal-window .empty-logs {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .terminal-window .log-row {
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="light"] .terminal-window .log-time {
+  color: #64748b;
+}
+
+[data-theme="light"] .terminal-window .log-msg {
+  color: #0f172a;
+}
+
+[data-theme="light"] .terminal-window .log-row.info .log-msg {
+  color: #0f172a;
+}
+
+[data-theme="light"] .terminal-window .log-row.warn .log-msg {
+  color: #b45309;
+}
+
+[data-theme="light"] .terminal-window .log-row.error .log-msg {
+  color: #dc2626;
+}
+
+[data-theme="light"] .terminal-window .log-row.debug .log-msg {
+  color: #7e22ce;
+}
+
+[data-theme="light"] .terminal-window .log-level-badge.info {
+  background: #e0f2fe;
+  color: #0284c7;
+  border: 1px solid #bae6fd;
+}
+
+[data-theme="light"] .terminal-window .log-level-badge.warn {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+[data-theme="light"] .terminal-window .log-level-badge.error {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+[data-theme="light"] .terminal-window .log-level-badge.debug {
+  background: #f3e8ff;
+  color: #7e22ce;
+  border: 1px solid #e9d5ff;
 }
 </style>
