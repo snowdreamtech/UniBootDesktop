@@ -68,6 +68,15 @@
         </div>
 
         <button 
+          class="settings-icon-btn log-toggle-btn" 
+          :class="{ active: isLogCardVisible }"
+          :title="t('log.title')"
+          @click="toggleLogCard"
+        >
+          📋
+        </button>
+
+        <button 
           class="settings-icon-btn" 
           :title="t('settings.title')"
           @click="openSettings('general')"
@@ -331,54 +340,63 @@
       </section>
 
       <!-- Embedded Log Center Card (主页面日志中心卡片) -->
-      <section class="glass-card log-section-card">
-        <div class="log-section-header">
-          <div class="log-title-group">
-            <h2>📋 {{ t('log.title') }}</h2>
-            <span class="badge live-badge">● {{ t('log.live') }}</span>
-          </div>
-
-          <div class="log-section-controls">
-            <div class="filter-tabs-sm">
-              <button 
-                v-for="level in logLevels" 
-                :key="level.key"
-                class="btn-tab-sm"
-                :class="{ active: currentEmbeddedLogFilter === level.key }"
-                @click="currentEmbeddedLogFilter = level.key"
-              >
-                {{ level.label }}
-              </button>
+      <transition name="toast-fade">
+        <section v-if="isLogCardVisible" class="glass-card log-section-card">
+          <div class="log-section-header">
+            <div class="log-title-group">
+              <h2>📋 {{ t('log.title') }}</h2>
+              <span class="badge live-badge">● {{ t('log.live') }}</span>
             </div>
 
-            <label class="auto-scroll-label-sm">
-              <input type="checkbox" v-model="embeddedAutoScroll" />
-              {{ t('log.auto_scroll') }}
-            </label>
+            <div class="log-section-controls">
+              <div class="filter-tabs-sm">
+                <button 
+                  v-for="level in logLevels" 
+                  :key="level.key"
+                  class="btn-tab-sm"
+                  :class="{ active: currentEmbeddedLogFilter === level.key }"
+                  @click="currentEmbeddedLogFilter = level.key"
+                >
+                  {{ level.label }}
+                </button>
+              </div>
 
-            <button class="btn-text-sm" @click="handleCopyEmbeddedLogs">📋 {{ t('log.copy') }}</button>
-            <button class="btn-text-sm" @click="handleExportEmbeddedLogs">📥 {{ t('log.export') }}</button>
-            <button class="btn-text-danger-sm" @click="runtimeLogs = []">🗑️ {{ t('log.clear') }}</button>
-          </div>
-        </div>
+              <label class="auto-scroll-label-sm">
+                <input type="checkbox" v-model="embeddedAutoScroll" />
+                {{ t('log.auto_scroll') }}
+              </label>
 
-        <div class="embedded-terminal-window" ref="embeddedTerminalRef">
-          <div v-if="filteredEmbeddedLogs.length === 0" class="empty-logs">
-            {{ t('log.empty') }}
+              <button class="btn-text-sm" @click="handleCopyEmbeddedLogs">📋 {{ t('log.copy') }}</button>
+              <button class="btn-text-sm" @click="handleExportEmbeddedLogs">📥 {{ t('log.export') }}</button>
+              <button class="btn-text-danger-sm" @click="runtimeLogs = []">🗑️ {{ t('log.clear') }}</button>
+              <button 
+                class="btn-text-sm btn-close-log" 
+                :title="t('common.close')" 
+                @click="toggleLogCard"
+              >
+                ✕
+              </button>
+            </div>
           </div>
-          <div 
-            v-for="log in filteredEmbeddedLogs" 
-            :key="log.id || String(log.timestamp)"
-            class="log-row"
-            :class="log.level.toLowerCase()"
-          >
-            <span class="log-time">{{ formatLogTime(log.timestamp) }}</span>
-            <span class="log-level-badge" :class="log.level.toLowerCase()">[{{ log.level }}]</span>
-            <span class="log-msg">{{ log.message }}</span>
-            <span v-if="log.details" class="log-details">{{ log.details }}</span>
+
+          <div class="embedded-terminal-window" ref="embeddedTerminalRef">
+            <div v-if="filteredEmbeddedLogs.length === 0" class="empty-logs">
+              {{ t('log.empty') }}
+            </div>
+            <div 
+              v-for="log in filteredEmbeddedLogs" 
+              :key="log.id || String(log.timestamp)"
+              class="log-row"
+              :class="log.level.toLowerCase()"
+            >
+              <span class="log-time">{{ formatLogTime(log.timestamp) }}</span>
+              <span class="log-level-badge" :class="log.level.toLowerCase()">[{{ log.level }}]</span>
+              <span class="log-msg">{{ log.message }}</span>
+              <span v-if="log.details" class="log-details">{{ log.details }}</span>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </transition>
     </main>
 
     <!-- Icon Picker Modal -->
@@ -593,6 +611,14 @@ const isDeployConfirmOpen = ref(false);
 const isSettingsOpen = ref(false);
 const isAboutOpen = ref(false);
 const runtimeLogs = ref<LogItem[]>([]);
+
+const savedLogCardVisible = localStorage.getItem('unigodesktop_log_card_visible');
+const isLogCardVisible = ref(savedLogCardVisible !== null ? savedLogCardVisible === 'true' : true);
+
+function toggleLogCard() {
+  isLogCardVisible.value = !isLogCardVisible.value;
+  localStorage.setItem('unigodesktop_log_card_visible', String(isLogCardVisible.value));
+}
 
 const savedAutoScroll = localStorage.getItem('unigodesktop_embedded_log_autoscroll');
 const embeddedAutoScroll = ref(savedAutoScroll !== null ? savedAutoScroll === 'true' : true);
@@ -2473,6 +2499,39 @@ h1 {
 .settings-icon-btn:hover {
   background: rgba(0, 229, 255, 0.12);
   transform: rotate(30deg);
+}
+
+.settings-icon-btn.log-toggle-btn:hover {
+  transform: none;
+}
+
+.settings-icon-btn.log-toggle-btn.active {
+  background: rgba(0, 229, 255, 0.18);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+}
+
+[data-theme="light"] .settings-icon-btn.log-toggle-btn.active {
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
+}
+
+.btn-close-log {
+  color: var(--text-muted, #94a3b8);
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.2s ease;
+  margin-left: 0.25rem;
+}
+
+.btn-close-log:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
 }
 
 .target-highlight {
