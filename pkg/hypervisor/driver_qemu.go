@@ -233,14 +233,14 @@ func ensureDiskPermissions(targetPath string) {
 	}
 }
 
-func (d *QEMUDriver) Launch(ctx context.Context, diskPath string) error {
+func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode string) error {
 	status := d.Detect()
 	if !status.Installed {
 		return fmt.Errorf("QEMU simulator not detected! Please install QEMU first (e.g. via brew install qemu).")
 	}
 
 	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
-		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run QEMU launch complete", "diskPath", diskPath)
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run QEMU launch complete", "diskPath", diskPath, "bootMode", bootMode)
 		return nil
 	}
 
@@ -248,7 +248,7 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string) error {
 	if targetPath == "" {
 		targetPath = diskPath
 	}
-	logger.Info("Executing QEMU preview simulation test", "disk", targetPath, "qemuPath", status.Path)
+	logger.Info("Executing QEMU preview simulation test", "disk", targetPath, "qemuPath", status.Path, "bootMode", bootMode)
 
 	unmountTargetDisk(targetPath)
 	ensureDiskPermissions(targetPath)
@@ -271,8 +271,17 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string) error {
 		}
 	}
 
-	if ovmfFw != "" {
+	if bootMode == BootModeUEFI {
+		if ovmfFw == "" {
+			return fmt.Errorf("UEFI firmware (OVMF/edk2) not found on system! Please install edk2-ovmf or switch to BIOS mode.")
+		}
 		args = append(args, "-drive", fmt.Sprintf("if=pflash,format=raw,readonly=on,file=%s", ovmfFw))
+	} else if bootMode == BootModeBIOS {
+		logger.Info("Booting QEMU in Legacy BIOS mode (SeaBIOS)")
+	} else { // Auto mode
+		if ovmfFw != "" {
+			args = append(args, "-drive", fmt.Sprintf("if=pflash,format=raw,readonly=on,file=%s", ovmfFw))
+		}
 	}
 
 	args = append(args, "-drive", fmt.Sprintf("file=%s,format=raw", targetPath))

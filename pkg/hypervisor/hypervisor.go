@@ -40,13 +40,19 @@ type VMStatus struct {
 	CanBootRaw bool           `json:"canBootRaw"`
 }
 
+const (
+	BootModeAuto = "auto"
+	BootModeUEFI = "uefi"
+	BootModeBIOS = "bios"
+)
+
 // Driver defines the standard interface for hypervisor implementations.
 type Driver interface {
 	Type() HypervisorType
 	Name() string
 	Priority() int
 	Detect() *VMStatus
-	Launch(ctx context.Context, targetDisk string) error
+	Launch(ctx context.Context, targetDisk string, bootMode string) error
 }
 
 // Manager orchestrates hypervisor detection and priority fallback.
@@ -132,21 +138,21 @@ func (m *Manager) DetectBest() *VMStatus {
 }
 
 // LaunchBest launches the first available hypervisor according to priority chain.
-func (m *Manager) LaunchBest(ctx context.Context, targetDisk string) error {
+func (m *Manager) LaunchBest(ctx context.Context, targetDisk string, bootMode string) error {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
 	for _, drv := range m.drivers {
 		status := drv.Detect()
 		if status != nil && status.Installed {
-			logger.Info("Selected best available hypervisor for preview launch", "hypervisor", drv.Name(), "disk", targetDisk)
-			return drv.Launch(ctx, targetDisk)
+			logger.Info("Selected best available hypervisor for preview launch", "hypervisor", drv.Name(), "disk", targetDisk, "bootMode", bootMode)
+			return drv.Launch(ctx, targetDisk, bootMode)
 		}
 	}
 
 	// Fallback check for dry-run
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" {
-		logger.Info("Dry-run hypervisor simulation test executed", "disk", targetDisk)
+		logger.Info("Dry-run hypervisor simulation test executed", "disk", targetDisk, "bootMode", bootMode)
 		return nil
 	}
 
@@ -154,7 +160,7 @@ func (m *Manager) LaunchBest(ctx context.Context, targetDisk string) error {
 }
 
 // LaunchSpecified launches a specific hypervisor driver by type.
-func (m *Manager) LaunchSpecified(ctx context.Context, targetDisk string, hType HypervisorType) error {
+func (m *Manager) LaunchSpecified(ctx context.Context, targetDisk string, hType HypervisorType, bootMode string) error {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
@@ -164,8 +170,8 @@ func (m *Manager) LaunchSpecified(ctx context.Context, targetDisk string, hType 
 			if status == nil || !status.Installed {
 				return fmt.Errorf("requested hypervisor '%s' is not installed", drv.Name())
 			}
-			logger.Info("Launching specified hypervisor", "hypervisor", drv.Name(), "disk", targetDisk)
-			return drv.Launch(ctx, targetDisk)
+			logger.Info("Launching specified hypervisor", "hypervisor", drv.Name(), "disk", targetDisk, "bootMode", bootMode)
+			return drv.Launch(ctx, targetDisk, bootMode)
 		}
 	}
 

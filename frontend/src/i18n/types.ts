@@ -175,6 +175,10 @@ export interface TranslationDict {
   "vm.box_title": string;
   "vm.detected_single": string;
   "vm.select_vm_label": string;
+  "vm.boot_mode_label": string;
+  "vm.boot_mode_uefi": string;
+  "vm.boot_mode_bios": string;
+  "vm.boot_mode_auto": string;
   "vm.startSuccess_vm": string;
   "vm.installed": string;
   "vm.not_installed": string;

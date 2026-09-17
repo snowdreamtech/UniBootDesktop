@@ -56,7 +56,7 @@ declare global {
           LaunchQEMU(targetDisk: string): Promise<void>;
           DetectHypervisors?(): Promise<any[]>;
           DetectBestHypervisor?(): Promise<any>;
-          LaunchVM?(targetDisk: string, vmType?: string): Promise<void>;
+          LaunchVM?(targetDisk: string, vmType?: string, bootMode?: string): Promise<void>;
           CheckUpdate(): Promise<any>;
           GetConfig(): Promise<any>;
           SaveConfig(cfg: any): Promise<any>;

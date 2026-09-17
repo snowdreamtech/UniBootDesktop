@@ -91,18 +91,18 @@ func (d *VirtualBoxDriver) Detect() *VMStatus {
 	}
 }
 
-func (d *VirtualBoxDriver) Launch(ctx context.Context, diskPath string) error {
+func (d *VirtualBoxDriver) Launch(ctx context.Context, diskPath string, bootMode string) error {
 	status := d.Detect()
 	if !status.Installed {
 		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
 	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
-		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run VirtualBox launch complete", "diskPath", diskPath)
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run VirtualBox launch complete", "diskPath", diskPath, "bootMode", bootMode)
 		return nil
 	}
 
-	logger.Info("Executing VirtualBox preview test instance", "disk", diskPath, "vboxPath", status.Path)
+	logger.Info("Executing VirtualBox preview test instance", "disk", diskPath, "vboxPath", status.Path, "bootMode", bootMode)
 
 	targetPath := ResolveRawDiskDevice(diskPath)
 	if targetPath == "" {
@@ -121,7 +121,7 @@ func (d *VirtualBoxDriver) Launch(ctx context.Context, diskPath string) error {
 	}
 
 	if vboxManage != "" {
-		if err := launchVirtualBoxVM(vboxManage, targetPath); err == nil {
+		if err := launchVirtualBoxVM(vboxManage, targetPath, bootMode); err == nil {
 			return nil
 		}
 	}
@@ -142,7 +142,7 @@ func (d *VirtualBoxDriver) Launch(ctx context.Context, diskPath string) error {
 	return nil
 }
 
-func launchVirtualBoxVM(vboxManage string, targetPath string) error {
+func launchVirtualBoxVM(vboxManage string, targetPath string, bootMode string) error {
 	tmpDir := filepath.Join(os.TempDir(), "uniboot_vbox")
 	_ = os.MkdirAll(tmpDir, 0755)
 	vmdkPath := filepath.Join(tmpDir, "uniboot_raw.vmdk")
@@ -162,9 +162,14 @@ func launchVirtualBoxVM(vboxManage string, targetPath string) error {
 		return err
 	}
 
+	fwSetting := "efi"
+	if bootMode == BootModeBIOS {
+		fwSetting = "bios"
+	}
+
 	_ = exec.Command(vboxManage, "storagectl", vmName, "--name", "SATA", "--add", "sata", "--controller", "IntelAhci").Run()
 	_ = exec.Command(vboxManage, "storageattach", vmName, "--storagectl", "SATA", "--port", "0", "--device", "0", "--type", "hdd", "--medium", vmdkPath).Run()
-	_ = exec.Command(vboxManage, "modifyvm", vmName, "--firmware", "efi", "--memory", "2048").Run()
+	_ = exec.Command(vboxManage, "modifyvm", vmName, "--firmware", fwSetting, "--memory", "2048").Run()
 
 	startCmd := exec.Command(vboxManage, "startvm", vmName)
 	if err := startCmd.Start(); err != nil {

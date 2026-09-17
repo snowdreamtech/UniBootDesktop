@@ -93,18 +93,18 @@ func (d *VMwareDriver) Detect() *VMStatus {
 	}
 }
 
-func (d *VMwareDriver) Launch(ctx context.Context, diskPath string) error {
+func (d *VMwareDriver) Launch(ctx context.Context, diskPath string, bootMode string) error {
 	status := d.Detect()
 	if !status.Installed {
 		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
 	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
-		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run VMware launch complete", "diskPath", diskPath)
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run VMware launch complete", "diskPath", diskPath, "bootMode", bootMode)
 		return nil
 	}
 
-	logger.Info("Executing VMware preview test instance", "disk", diskPath, "vmwarePath", status.Path)
+	logger.Info("Executing VMware preview test instance", "disk", diskPath, "vmwarePath", status.Path, "bootMode", bootMode)
 
 	targetPath := ResolveRawDiskDevice(diskPath)
 	if targetPath == "" {
@@ -113,7 +113,7 @@ func (d *VMwareDriver) Launch(ctx context.Context, diskPath string) error {
 	unmountTargetDisk(targetPath)
 	ensureDiskPermissions(targetPath)
 
-	if err := launchVMwareVM(status, targetPath); err == nil {
+	if err := launchVMwareVM(status, targetPath, bootMode); err == nil {
 		return nil
 	}
 
@@ -133,11 +133,16 @@ func (d *VMwareDriver) Launch(ctx context.Context, diskPath string) error {
 	return nil
 }
 
-func launchVMwareVM(status *VMStatus, targetPath string) error {
+func launchVMwareVM(status *VMStatus, targetPath string, bootMode string) error {
 	tmpDir := filepath.Join(os.TempDir(), "uniboot_vmware")
 	_ = os.MkdirAll(tmpDir, 0755)
 	vmdkPath := filepath.Join(tmpDir, "uniboot_raw.vmdk")
 	vmxPath := filepath.Join(tmpDir, "UniBootPreview.vmx")
+
+	fwSetting := "efi"
+	if bootMode == BootModeBIOS {
+		fwSetting = "bios"
+	}
 
 	rawDiskContent := fmt.Sprintf(`# Disk DescriptorFile
 version=1
@@ -167,14 +172,14 @@ virtualHW.version = "18"
 pciBridge0.present = "TRUE"
 mks.enable3d = "TRUE"
 memory = "2048"
-firmware = "efi"
+firmware = "%s"
 sata0.present = "TRUE"
 sata0:0.present = "TRUE"
 sata0:0.fileName = "%s"
 sata0:0.deviceType = "rawDisk"
 displayName = "UniBoot Boot Preview"
 guestOS = "other-64"
-`, vmdkPath)
+`, fwSetting, vmdkPath)
 	_ = os.WriteFile(vmxPath, []byte(vmxContent), 0644)
 
 	var cmd *exec.Cmd

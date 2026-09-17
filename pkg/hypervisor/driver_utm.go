@@ -78,18 +78,18 @@ func (d *UTMDriver) Detect() *VMStatus {
 	}
 }
 
-func (d *UTMDriver) Launch(ctx context.Context, diskPath string) error {
+func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string) error {
 	status := d.Detect()
 	if !status.Installed {
-		return fmt.Errorf("UTM virtual machine application not detected on macOS system")
+		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
 	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
-		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run UTM launch complete", "diskPath", diskPath)
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run UTM launch complete", "diskPath", diskPath, "bootMode", bootMode)
 		return nil
 	}
 
-	logger.Info("Executing UTM preview test instance", "disk", diskPath, "utmPath", status.Path)
+	logger.Info("Executing UTM preview test instance", "disk", diskPath, "utmPath", status.Path, "bootMode", bootMode)
 
 	targetPath := ResolveRawDiskDevice(diskPath)
 	if targetPath == "" {

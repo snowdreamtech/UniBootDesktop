@@ -83,18 +83,18 @@ func (d *HyperVDriver) Detect() *VMStatus {
 	}
 }
 
-func (d *HyperVDriver) Launch(ctx context.Context, diskPath string) error {
+func (d *HyperVDriver) Launch(ctx context.Context, diskPath string, bootMode string) error {
 	status := d.Detect()
 	if !status.Installed {
-		return fmt.Errorf("%s is not enabled or installed on host system", d.Name())
+		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
 	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
-		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run Hyper-V launch complete", "diskPath", diskPath)
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run Hyper-V launch complete", "diskPath", diskPath, "bootMode", bootMode)
 		return nil
 	}
 
-	logger.Info("Executing Hyper-V preview simulation test", "disk", diskPath, "path", status.Path)
+	logger.Info("Executing Hyper-V preview test instance", "disk", diskPath, "hypervPath", status.Path, "bootMode", bootMode)
 
 	targetPath := ResolveRawDiskDevice(diskPath)
 	if targetPath == "" {

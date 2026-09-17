@@ -314,21 +314,36 @@
               </h3>
             </div>
             
-            <!-- Single Hypervisor Badge -->
-            <span v-if="hypervisorList.length <= 1" class="badge" :class="hypervisorList.length === 1 ? 'success' : 'muted'">
-              {{ hypervisorList.length === 1 ? t('vm.detected_single', { name: hypervisorList[0].name }) : t('vm.not_installed') }}
-            </span>
+            <div class="vm-controls-group">
+              <!-- Boot Mode Selector -->
+              <div class="vm-selector-container">
+                <span class="vm-selector-label">{{ t('vm.boot_mode_label') }}</span>
+                <div class="vm-select-wrapper">
+                  <select v-model="selectedBootMode" class="vm-select boot-select">
+                    <option value="uefi">{{ t('vm.boot_mode_uefi') }}</option>
+                    <option value="bios">{{ t('vm.boot_mode_bios') }}</option>
+                    <option value="auto">{{ t('vm.boot_mode_auto') }}</option>
+                  </select>
+                  <span class="select-arrow">▾</span>
+                </div>
+              </div>
 
-            <!-- Multiple Hypervisors Selector -->
-            <div v-else class="vm-selector-container">
-              <span class="vm-selector-label">{{ t('vm.select_vm_label') }}</span>
-              <div class="vm-select-wrapper">
-                <select v-model="selectedVMType" class="vm-select">
-                  <option v-for="vm in hypervisorList" :key="vm.type" :value="vm.type">
-                    {{ vm.name }}
-                  </option>
-                </select>
-                <span class="select-arrow">▾</span>
+              <!-- Single Hypervisor Badge -->
+              <span v-if="hypervisorList.length <= 1" class="badge" :class="hypervisorList.length === 1 ? 'success' : 'muted'">
+                {{ hypervisorList.length === 1 ? t('vm.detected_single', { name: hypervisorList[0].name }) : t('vm.not_installed') }}
+              </span>
+
+              <!-- Multiple Hypervisors Selector -->
+              <div v-else class="vm-selector-container">
+                <span class="vm-selector-label">{{ t('vm.select_vm_label') }}</span>
+                <div class="vm-select-wrapper">
+                  <select v-model="selectedVMType" class="vm-select">
+                    <option v-for="vm in hypervisorList" :key="vm.type" :value="vm.type">
+                      {{ vm.name }}
+                    </option>
+                  </select>
+                  <span class="select-arrow">▾</span>
+                </div>
               </div>
             </div>
           </div>
@@ -885,6 +900,7 @@ interface VMStatus {
 
 const hypervisorList = ref<VMStatus[]>([]);
 const selectedVMType = ref<string>('qemu');
+const selectedBootMode = ref<string>('uefi');
 const qemuStatus = ref({ installed: false, path: '', version: '' });
 const isLaunchingQemu = ref(false);
 const ventoyStatus = ref({ valid: true, version: '', message: '', executablePath: '' });
@@ -1707,8 +1723,8 @@ async function launchVM() {
   try {
     if (window.go && window.go.main && window.go.main.App) {
       if (typeof window.go.main.App.LaunchVM === 'function') {
-        await window.go.main.App.LaunchVM(targetDevice, selectedVMType.value);
-        logUserAction('INFO', 'User launched hypervisor simulation test', `${vmName} (${selectedVMType.value}) on ${targetDevice}`);
+        await window.go.main.App.LaunchVM(targetDevice, selectedVMType.value, selectedBootMode.value);
+        logUserAction('INFO', 'User launched hypervisor simulation test', `${vmName} (${selectedVMType.value}, ${selectedBootMode.value}) on ${targetDevice}`);
         showToast(t('vm.startSuccess_vm', { name: vmName }), 'success');
       } else if (typeof window.go.main.App.LaunchQEMU === 'function') {
         await window.go.main.App.LaunchQEMU(targetDevice);
@@ -2699,6 +2715,12 @@ h1 {
 .badge.muted {
   background: rgba(255, 255, 255, 0.1);
   color: var(--text-muted);
+}
+
+.vm-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
 }
 
 .vm-selector-container {

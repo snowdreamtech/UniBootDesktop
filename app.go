@@ -269,7 +269,7 @@ func (a *App) DetectBestHypervisor() *hypervisor.VMStatus {
 // LaunchQEMU triggers virtual machine test instance using highest priority available hypervisor (QEMU, UTM, VMware, VirtualBox).
 func (a *App) LaunchQEMU(targetDisk string) error {
 	logger.Info("Requesting hypervisor preview test launch", "disk", targetDisk)
-	err := hypervisor.GetManager().LaunchBest(a.ctx, targetDisk)
+	err := hypervisor.GetManager().LaunchBest(a.ctx, targetDisk, hypervisor.BootModeAuto)
 	if err != nil {
 		logger.Error("Failed to launch hypervisor preview test", "disk", targetDisk, "error", err)
 		return err
@@ -278,18 +278,21 @@ func (a *App) LaunchQEMU(targetDisk string) error {
 	return nil
 }
 
-// LaunchVM launches a specified or best available virtual machine.
-func (a *App) LaunchVM(targetDisk string, vmType string) error {
-	if vmType == "" || vmType == "auto" {
-		return a.LaunchQEMU(targetDisk)
+// LaunchVM launches a specified or best available virtual machine with boot mode (uefi, bios, auto).
+func (a *App) LaunchVM(targetDisk string, vmType string, bootMode string) error {
+	if bootMode == "" {
+		bootMode = hypervisor.BootModeAuto
 	}
-	logger.Info("Requesting specified hypervisor preview test launch", "disk", targetDisk, "vmType", vmType)
-	err := hypervisor.GetManager().LaunchSpecified(a.ctx, targetDisk, hypervisor.HypervisorType(vmType))
+	if vmType == "" || vmType == "auto" {
+		return hypervisor.GetManager().LaunchBest(a.ctx, targetDisk, bootMode)
+	}
+	logger.Info("Requesting specified hypervisor preview test launch", "disk", targetDisk, "vmType", vmType, "bootMode", bootMode)
+	err := hypervisor.GetManager().LaunchSpecified(a.ctx, targetDisk, hypervisor.HypervisorType(vmType), bootMode)
 	if err != nil {
-		logger.Error("Failed to launch specified hypervisor", "disk", targetDisk, "vmType", vmType, "error", err)
+		logger.Error("Failed to launch specified hypervisor", "disk", targetDisk, "vmType", vmType, "bootMode", bootMode, "error", err)
 		return err
 	}
-	logger.Info("Specified hypervisor test launched successfully", "disk", targetDisk, "vmType", vmType)
+	logger.Info("Specified hypervisor test launched successfully", "disk", targetDisk, "vmType", vmType, "bootMode", bootMode)
 	return nil
 }
 

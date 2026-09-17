@@ -59,7 +59,7 @@ func TestHypervisorManager_LaunchBest_DryRun(t *testing.T) {
 	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
 	mgr := GetManager()
-	err := mgr.LaunchBest(nil, "dummy_disk")
+	err := mgr.LaunchBest(nil, "dummy_disk", BootModeAuto)
 	if err != nil {
 		t.Fatalf("unexpected error during dry-run launch: %v", err)
 	}
