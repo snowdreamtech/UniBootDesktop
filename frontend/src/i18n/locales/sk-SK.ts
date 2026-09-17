@@ -138,7 +138,7 @@ export const skSk: TranslationDict = {
   "deploy.desc_hybrid": "Lokálny engine Ventoy CLI • Nastavenie hybridného oddielu Ventoy s lokálnou správou ISO.",
   "deploy.target_device": "Cieľové zariadenie:",
   "deploy.batch_target": "Vybrané jednotky USB (počet: {count})",
-  "deploy.start_create": "Spustiť nasadenie",
+  "deploy.start_create": "🚀 Vytvoriť bootovací disk",
   "deploy.tip_batch_update_all": "Hromadná aktualizácia bez straty dát: Všetkých {count} vybraných USB diskov bude aktualizovaných na mieste",
   "deploy.tip_batch_mixed": "Hromadné zmiešané nasadenie: {bootCount} diskov aktualizácia bez straty dát, {blankCount} diskov nové formátovanie",
   "deploy.start_update": "🛡️ In-place Upgrade (Data Safe)",

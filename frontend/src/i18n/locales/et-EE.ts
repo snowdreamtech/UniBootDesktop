@@ -138,7 +138,7 @@ export const etEe: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI kohalik mootor • Ventoy hübriidsektsiooni seadistamine kohaliku ISO haldusega.",
   "deploy.target_device": "Sihtseade:",
   "deploy.batch_target": "Valitud on {count} USB-draivi",
-  "deploy.start_create": "Käivitage juurutamine",
+  "deploy.start_create": "🚀 Loo alglaadimisketas",
   "deploy.tip_batch_update_all": "Hulgivärskendus ilma andmekaota: Kõik {count} valitud USB-seadet värskendatakse kohapeal",
   "deploy.tip_batch_mixed": "Segatüüpi hulgipaigaldus: {bootCount} seade(t) värskendus ilma andmekaota, {blankCount} seade(t) uus vormindamine",
   "deploy.start_update": "🛡️ Kohane versiooniuuendus (andmete turvaline)",

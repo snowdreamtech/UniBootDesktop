@@ -138,7 +138,7 @@ export const kaGe: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI ლოკალური ძრავა • Ventoy ჰიბრიდული სექციის კონფიგურაცია ლოკალური ISO მართვით.",
   "deploy.target_device": "სამიზნე მოწყობილობა:",
   "deploy.batch_target": "არჩეულია {count} USB დრაივი",
-  "deploy.start_create": "დაიწყეთ განლაგება",
+  "deploy.start_create": "🚀 ჩამტვირთავი დისკის შექმნა",
   "deploy.tip_batch_update_all": "ჯგუფური განახლება მონაცემთა დაკარგვის გარეშე: ყველა {count} არჩეული USB დისკი განახლდება ადგილზე",
   "deploy.tip_batch_mixed": "ჯგუფური შერეული განთავსება: {bootCount} დისკი განახლება დაკარგვის გარეშე, {blankCount} დისკი სრული ფორმატირება",
   "deploy.start_update": "🛡️ ადგილზე განახლება (მონაცემთა უსაფრთხო)",

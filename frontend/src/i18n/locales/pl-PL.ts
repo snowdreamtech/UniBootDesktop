@@ -138,7 +138,7 @@ export const plPl: TranslationDict = {
   "deploy.desc_hybrid": "Lokalny silnik Ventoy CLI • Konfiguracja partycji hybrydowej Ventoy z lokalnym zarządzaniem ISO.",
   "deploy.target_device": "Urządzenie docelowe:",
   "deploy.batch_target": "Wybrano {count} dysk(ów) USB",
-  "deploy.start_create": "Rozpocznij tworzenie",
+  "deploy.start_create": "🚀 Utwórz dysk rozruchowy",
   "deploy.tip_batch_update_all": "Zbiorcza aktualizacja bez utraty danych: Wszystkie {count} wybrane dyski USB zostaną zaktualizowane na miejscu",
   "deploy.tip_batch_mixed": "Wdrożenie mieszane: {bootCount} dysków zostanie zaktualizowanych, {blankCount} sformatowanych",
   "deploy.start_update": "🛡️ Aktualizacja w miejscu (Dane bezpieczne)",

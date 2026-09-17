@@ -138,7 +138,7 @@ export const bnBd: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI লোকাল ইঞ্জিন • লোকাল ISO ব্যবস্থাপনা সহ Ventoy হাইব্রিড পার্টিশন সেটআপ।",
   "deploy.target_device": "লক্ষ্য ডিভাইস:",
   "deploy.batch_target": "নির্বাচিত {count} USB ড্রাইভ(গুলি)",
-  "deploy.start_create": "স্থাপনা শুরু করুন",
+  "deploy.start_create": "🚀 বুট ডিস্ক তৈরি করুন",
   "deploy.tip_batch_update_all": "ব্যাচ তথ্য-সুরক্ষিত আপডেট: নির্বাচিত সমস্ত {count}টি USB ড্রাইভ স্বস্থানে আপডেট হবে",
   "deploy.tip_batch_mixed": "ব্যাচ মিশ্র ডিপ্লয়মেন্ট: {bootCount}টি ড্রাইভ তথ্য বজায় রেখে আপডেট, {blankCount}টি ড্রাইভ নতুন করে ফরম্যাট",
   "deploy.start_update": "🛡️ ইন-প্লেস আপগ্রেড (ডেটা নিরাপদ)",

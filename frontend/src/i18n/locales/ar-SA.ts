@@ -138,7 +138,7 @@ export const arSa: TranslationDict = {
   "deploy.desc_hybrid": "محرك محلي Ventoy CLI • إعداد مقسم هجين لـ Ventoy مع إدارة صور ISO المحلية.",
   "deploy.target_device": "الجهاز المستهدف:",
   "deploy.batch_target": "تم تحديد {count} محركات قرص USB",
-  "deploy.start_create": "بدء إنشاء القرص",
+  "deploy.start_create": "🚀 إنشاء قرص الإقلاع",
   "deploy.tip_batch_update_all": "تحديث بدون فقدان بيانات: سيتم تحديث جميع محركات قرص USB {count} المحددة في مكانها",
   "deploy.tip_batch_mixed": "نشر مختلط: تحديث {bootCount} محرك قرص في مكانه، وتهيئة {blankCount} محرك قرص جديد",
   "deploy.start_update": "🛡️ الترقية في المكان (أمان البيانات)",

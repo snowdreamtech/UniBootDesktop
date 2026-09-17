@@ -138,7 +138,7 @@ export const deDe: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI Lokale Engine • Ventoy Hybrid-Partitions-Einrichtung mit lokaler ISO-Verwaltung.",
   "deploy.target_device": "Zielgerät:",
   "deploy.batch_target": "{count} Datenträger(e) ausgewählt",
-  "deploy.start_create": "Erstellung starten",
+  "deploy.start_create": "🚀 Boot-Disk erstellen",
   "deploy.tip_batch_update_all": "Unterbrechungsfreies Gruppenupdate: Alle {count} ausgewählten Datenträgere werden direkt aktualisiert",
   "deploy.tip_batch_mixed": "Gemischte Bereitstellung: {bootCount} Datenträgere aktualisiert, {blankCount} Laufwerke neu formatiert",
   "deploy.start_update": "🛡️ In-Place-Upgrade starten (Daten sicher)",

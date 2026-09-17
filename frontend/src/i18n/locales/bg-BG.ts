@@ -138,7 +138,7 @@ export const bgBg: TranslationDict = {
   "deploy.desc_hybrid": "Локален двигател Ventoy CLI • Настройка на хибриден дял на Ventoy с локално управление на ISO.",
   "deploy.target_device": "Целево устройство:",
   "deploy.batch_target": "Избрано {count} USB устройство(а)",
-  "deploy.start_create": "Старт на внедряването",
+  "deploy.start_create": "🚀 Създаване на зареждащ диск",
   "deploy.tip_batch_update_all": "Групово обновяване без загуба на данни: всички {count} избрани USB ще бъдат обновени на място",
   "deploy.tip_batch_mixed": "Групово смесено внедряване: {bootCount} USB обновяване без загуба на данни, {blankCount} USB пълно форматиране",
   "deploy.start_update": "🛡️ Надграждане на място (безопасно за данни)",

@@ -138,7 +138,7 @@ export const daDk: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI lokal motor • Ventoy hybrid-partition opsætning med lokal ISO-styring.",
   "deploy.target_device": "Målenhed:",
   "deploy.batch_target": "Valgt {count} USB-drev",
-  "deploy.start_create": "▶ Start oprettelse",
+  "deploy.start_create": "🚀 Opret bootdisk",
   "deploy.tip_batch_update_all": "Batch-opdatering uden datatab: Alle {count} valgte USB-drev opdateres direkte",
   "deploy.tip_batch_mixed": "Blandet batch-implementering: {bootCount} drev opdatering uden datatab, {blankCount} drev ny formatering",
   "deploy.start_update": "🛡️ Opgradering på stedet (Datasikker)",

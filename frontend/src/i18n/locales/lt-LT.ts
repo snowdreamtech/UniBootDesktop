@@ -138,7 +138,7 @@ export const ltLt: TranslationDict = {
   "deploy.desc_hybrid": "„Ventoy CLI“ vietinis variklis • „Ventoy“ hibridinio skirsnio nustatymas su vietiniu ISO valdymu.",
   "deploy.target_device": "Tikslinis įrenginys:",
   "deploy.batch_target": "Pasirinkta {count} USB laikmenų",
-  "deploy.start_create": "Pradėti diegimą",
+  "deploy.start_create": "🚀 Sukurti paleidimo diską",
   "deploy.tip_batch_update_all": "Grupinis atnaujinimas be duomenų praradimo: Visos {count} pasirinktos USB laikmenos bus atnaujintos vietoje",
   "deploy.tip_batch_mixed": "Grupinis mišrus diegimas: {bootCount} laikmena(-os) atnaujinimas be praradimo, {blankCount} laikmena(-os) naujas formatavimas",
   "deploy.start_update": "🛡️ Atnaujinimas vietoje (saugus duomenis)",

@@ -138,7 +138,7 @@ export const idId: TranslationDict = {
   "deploy.desc_hybrid": "Mesin Lokal Ventoy CLI • Pengaturan partisi hibrida Ventoy dengan manajemen ISO lokal.",
   "deploy.target_device": "Perangkat Sasaran:",
   "deploy.batch_target": "{count} drive USB yang dipilih",
-  "deploy.start_create": "Mulai Penerapan",
+  "deploy.start_create": "🚀 Buat Diska Booting",
   "deploy.tip_batch_update_all": "Pembaruan massal tanpa kehilangan data: Semua {count} drive USB yang dipilih akan diperbarui di tempat",
   "deploy.tip_batch_mixed": "Penyebaran massal campuran: {bootCount} drive pembaruan tanpa kehilangan data, {blankCount} drive format ulang",
   "deploy.start_update": "🛡️ Peningkatan di Tempat (Data Aman)",

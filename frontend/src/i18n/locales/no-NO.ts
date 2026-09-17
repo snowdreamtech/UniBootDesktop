@@ -138,7 +138,7 @@ export const noNo: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI lokal motor • Ventoy hybrid partisjonsoppsett med lokal ISO-behandling.",
   "deploy.target_device": "Målenhet:",
   "deploy.batch_target": "Valgt {count} USB-stasjon(er)",
-  "deploy.start_create": "▶ Start opprettelse",
+  "deploy.start_create": "🚀 Opprett oppstartsdisk",
   "deploy.tip_batch_update_all": "Batch-oppdatering uten datatap: Alle {count} valgte USB-stasjoner oppdateres direkte",
   "deploy.tip_batch_mixed": "Blandet batch-distribusjon: {bootCount} stasjon(er) oppdatering uten datatap, {blankCount} stasjon(er) ny formatering",
   "deploy.start_update": "🛡️ Sømløs oppgradering (Datagarantert)",

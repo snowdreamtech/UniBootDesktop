@@ -138,7 +138,7 @@ export const ukUa: TranslationDict = {
   "deploy.desc_hybrid": "Локальний рушій Ventoy CLI • Налаштування гібридного розділу Ventoy із локальним керуванням ISO.",
   "deploy.target_device": "Цільовий пристрій:",
   "deploy.batch_target": "Обрано USB-дисків: {count}",
-  "deploy.start_create": "Розпочати розгортання",
+  "deploy.start_create": "🚀 Створити завантажувальний диск",
   "deploy.tip_batch_update_all": "Пакетне оновлення: Усі обрані дискі ({count}) будуть оновлені без втрати даних",
   "deploy.tip_batch_mixed": "Змішане розгортання: {bootCount} оновлюються без втрати даних, {blankCount} форматуються",
   "deploy.start_update": "🛡️ Оновлення на місці (безпека даних)",

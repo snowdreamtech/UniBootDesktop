@@ -138,7 +138,7 @@ export const svSe: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI lokal motor • Ventoy hybrid-partitionsinstallation med lokal ISO-hantering.",
   "deploy.target_device": "Målenhet:",
   "deploy.batch_target": "{count} USB-enhet(er) valda",
-  "deploy.start_create": "▶ Starta skapande",
+  "deploy.start_create": "🚀 Skapa startdisk",
   "deploy.tip_batch_update_all": "Säker uppdatering: Alla {count} valda USB-enheter uppdateras direkt (data & ISO bevaras)",
   "deploy.tip_batch_mixed": "Blandad installation: {bootCount} enheter uppdateras direkt, {blankCount} enheter formateras om",
   "deploy.start_update": "🛡️ Uppgradering på plats (Datasäker)",

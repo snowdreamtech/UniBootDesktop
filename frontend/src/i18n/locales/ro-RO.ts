@@ -138,7 +138,7 @@ export const roRo: TranslationDict = {
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configurare partiție hibridă Ventoy cu gestionare ISO locală.",
   "deploy.target_device": "Dispozitiv țintă:",
   "deploy.batch_target": "{count} unitate(ăți) USB selectată(e)",
-  "deploy.start_create": "Începeți implementarea",
+  "deploy.start_create": "🚀 Creați disc de bootare",
   "deploy.tip_batch_update_all": "Actualizare fără pierdere de date: Toate cele {count} unități selectate vor fi actualizate pe loc",
   "deploy.tip_batch_mixed": "Desfășurare mixtă: {bootCount} unități actualizate pe loc, {blankCount} unități formatate de la zero",
   "deploy.start_update": "🛡️ Upgrade la loc (sigur pentru date)",

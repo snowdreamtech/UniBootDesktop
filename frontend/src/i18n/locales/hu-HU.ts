@@ -138,7 +138,7 @@ export const huHu: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI helyi motor • Ventoy hibrid partíció beállítás helyi ISO kezeléssel.",
   "deploy.target_device": "Céleszköz:",
   "deploy.batch_target": "Kiválasztva {count} USB-meghajtó",
-  "deploy.start_create": "▶ Létrehozás indítása",
+  "deploy.start_create": "🚀 Indítólemez létrehozása",
   "deploy.tip_batch_update_all": "Kötegelt frissítés adatvesztés nélkül: Mind a(z) {count} kiválasztott USB-meghajtó helyben frissül",
   "deploy.tip_batch_mixed": "Kötegelt vegyes telepítés: {bootCount} meghajtó frissítés adatvesztés nélkül, {blankCount} meghajtó új formázás",
   "deploy.start_update": "🛡️ Helybeni frissítés (Adatbiztos)",

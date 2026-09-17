@@ -138,7 +138,7 @@ export const mlIn: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI ലോക്കൽ എഞ്ചിൻ • ലോക്കൽ ISO മാനേജ്‌മെന്റുള്ള Ventoy ഹൈബ്രിഡ് പാർട്ടിഷൻ സജ്ജീകരണം.",
   "deploy.target_device": "ടാർഗെറ്റ് ഉപകരണം:",
   "deploy.batch_target": "തിരഞ്ഞെടുത്ത {count} USB ഡ്രൈവ്(കൾ)",
-  "deploy.start_create": "വിന്യാസം ആരംഭിക്കുക",
+  "deploy.start_create": "🚀 ബൂട്ട് ഡിസ്ക് സൃഷ്ടിക്കുക",
   "deploy.tip_batch_update_all": "ഡാറ്റ നഷ്ടമില്ലാതെ ബാച്ച് അപ്‌ഡേറ്റ്: തിരഞ്ഞെടുത്ത എല്ലാ {count} USB ഡ്രൈവുകളും നിലവിലുള്ള സ്ഥലത്ത് അപ്‌ഡേറ്റ് ചെയ്യപ്പെടും",
   "deploy.tip_batch_mixed": "ബാച്ച് മിക്സഡ് ഡിപ്ലോയ്മെന്റ്: {bootCount} ഡ്രൈവുകൾ സുരക്ഷിത അപ്‌ഡേറ്റ്, {blankCount} ഡ്രൈവുകൾ പുതിയ ഫോർമാറ്റ്",
   "deploy.start_update": "🛡️ ഇൻ-പ്ലേസ് അപ്‌ഗ്രേഡ് (ഡാറ്റ സുരക്ഷിതം)",

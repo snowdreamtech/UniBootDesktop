@@ -138,7 +138,7 @@ export const fiFi: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI paikallinen moottori • Ventoy-hybridiosion asennus paikallisella ISO-hallinnalla.",
   "deploy.target_device": "Kohdelaite:",
   "deploy.batch_target": "Valittu {count} USB-asema(a)",
-  "deploy.start_create": "Aloita käyttöönotto",
+  "deploy.start_create": "🚀 Luot käynnistyslevy",
   "deploy.tip_batch_update_all": "Eräpäivitys ilman tietojen menetystä: Kaikki {count} valittua USB-asemaa päivitetään paikallaan",
   "deploy.tip_batch_mixed": "Sekamuotoinen eräasennus: {bootCount} asema(a) päivitys ilman tietojen menetystä, {blankCount} asema(a) uusi alustus",
   "deploy.start_update": "🛡️ Paikkapäivitys (tietoturvallinen)",

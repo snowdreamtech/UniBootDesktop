@@ -138,7 +138,7 @@ export const hiIn: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI स्थानीय इंजन • स्थानीय ISO प्रबंधन के साथ Ventoy हाइब्रिड विभाजन सेटअप।",
   "deploy.target_device": "लक्ष्य डिवाइस:",
   "deploy.batch_target": "{count} USB ड्राइव चुने गए",
-  "deploy.start_create": "परिनियोजन प्रारंभ करें",
+  "deploy.start_create": "🚀 बूट डिस्क बनाएं",
   "deploy.tip_batch_update_all": "बिना डेटा हानि बैच अपडेट: सभी {count} चयनित USB ड्राइव यथास्थान अपडेट होंगे",
   "deploy.tip_batch_mixed": "मिश्रित बैच परिनियोजन: {bootCount} ड्राइव सुरक्षित अपडेट, {blankCount} ड्राइव नया स्वरूपण",
   "deploy.start_update": "🛡️ इन-प्लेस अपग्रेड (डेटा सुरक्षित)",

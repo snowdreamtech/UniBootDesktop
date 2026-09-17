@@ -138,7 +138,7 @@ export const frFr: TranslationDict = {
   "deploy.desc_hybrid": "Moteur local Ventoy CLI • Configuration de partition hybride Ventoy avec gestion ISO locale.",
   "deploy.target_device": "Périphérique cible :",
   "deploy.batch_target": "{count} clé(s) USB sélectionnée(s)",
-  "deploy.start_create": "Démarrer la création",
+  "deploy.start_create": "🚀 Créer un disque de démarrage",
   "deploy.tip_batch_update_all": "Mise à jour sans perte : les {count} disques sélectionnées seront mises à jour sur place",
   "deploy.tip_batch_mixed": "Déploiement mixte : {bootCount} clé(s) mise(s) à jour sur place, {blankCount} clé(s) formatée(s)",
   "deploy.start_update": "🛡️ Mise à niveau sur place (Données sécurisées)",

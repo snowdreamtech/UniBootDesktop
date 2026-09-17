@@ -138,7 +138,7 @@ export const elGr: TranslationDict = {
   "deploy.desc_hybrid": "Τοπική μηχανή Ventoy CLI • Ρύθμιση υβριδικού διαμερίσματος Ventoy με τοπική διαχείριση ISO.",
   "deploy.target_device": "Συσκευή στόχου:",
   "deploy.batch_target": "Επιλεγμένες {count} μονάδες USB",
-  "deploy.start_create": "Ξεκινήστε την ανάπτυξη",
+  "deploy.start_create": "🚀 Δημιουργία δίσκου εκκίνησης",
   "deploy.tip_batch_update_all": "Μαζική ενημέρωση χωρίς απώλεια: Όλες οι {count} επιλεγμένες μονάδες USB θα ενημερωθούν επί τόπου",
   "deploy.tip_batch_mixed": "Μαζική μικτή ανάπτυξη: {bootCount} μονάδα(ες) ενημέρωση χωρίς απώλεια, {blankCount} μονάδα(ες) νέα διαμόρφωση",
   "deploy.start_update": "🛡️ Επιτόπια αναβάθμιση (ασφαλές δεδομένων)",

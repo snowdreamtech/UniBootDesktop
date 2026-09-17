@@ -138,7 +138,7 @@ export const hyAm: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI տեղական շարժիչ • Ventoy հիբրիդային բաժանմունքի կարգավորում ISO-ի տեղական կառավարմամբ:",
   "deploy.target_device": "Թիրախային սարք.",
   "deploy.batch_target": "Ընտրված է {count} USB կրիչ(ներ)",
-  "deploy.start_create": "Սկսեք տեղակայումը",
+  "deploy.start_create": "🚀 Ստեղծել բեռնավորման սկավառակ",
   "deploy.tip_batch_update_all": "Խմբային թարմացում առանց տվյալների կորստի. Բոլոր {count} ընտրված USB կրիչները կթարմացվեն տեղում",
   "deploy.tip_batch_mixed": "Խմբային խառը տեղադրում. {bootCount} կրիչ թարմացում առանց կորստի, {blankCount} կրիչ նոր ձևաչափում",
   "deploy.start_update": "🛡️ Տեղում թարմացում (տվյալների անվտանգություն)",

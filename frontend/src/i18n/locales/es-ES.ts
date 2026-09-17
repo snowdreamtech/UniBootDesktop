@@ -138,7 +138,7 @@ export const esEs: TranslationDict = {
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuración de partición híbrida Ventoy con gestión ISO local.",
   "deploy.target_device": "Dispositivo objetivo:",
   "deploy.batch_target": "{count} unidad(es) USB seleccionada(s)",
-  "deploy.start_create": "Iniciar creación",
+  "deploy.start_create": "🚀 Crear disco de arranque",
   "deploy.tip_batch_update_all": "Actualización sin pérdida: Las {count} unidades seleccionadas se actualizarán en el sitio (datos e ISOs conservados)",
   "deploy.tip_batch_mixed": "Despliegue mixto: {bootCount} unidades actualizadas en el sitio, {blankCount} formateadas de cero",
   "deploy.start_update": "🛡️ Actualización in situ (Datos seguros)",

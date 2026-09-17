@@ -138,7 +138,7 @@ export const thTh: TranslationDict = {
   "deploy.desc_hybrid": "เอ็นจินท้องถิ่น Ventoy CLI • การตั้งค่าพาร์ติชันไฮบริด Ventoy พร้อมการจัดการ ISO ท้องถิ่น.",
   "deploy.target_device": "อุปกรณ์เป้าหมาย:",
   "deploy.batch_target": "เลือกไดรฟ์ USB {count} รายการ",
-  "deploy.start_create": "เริ่มการปรับใช้",
+  "deploy.start_create": "🚀 สร้างดิสก์บูต",
   "deploy.tip_batch_update_all": "การอัปเดตเป็นชุดโดยไม่สูญเสียข้อมูล: ไดรฟ์ USB ทั้งหมด {count} ไดรฟ์ที่เลือกจะได้รับการอัปเดตในสถานที่",
   "deploy.tip_batch_mixed": "การปรับใช้แบบผสมเป็นชุด: {bootCount} ไดรฟ์อัปเดตโดยไม่สูญเสียข้อมูล, {blankCount} ไดรฟ์ฟอร์แมตใหม่",
   "deploy.start_update": "🛡️ อัปเกรดแบบแทนที่ (ปลอดภัยข้อมูล)",

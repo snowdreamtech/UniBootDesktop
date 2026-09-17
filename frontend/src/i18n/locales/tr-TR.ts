@@ -138,7 +138,7 @@ export const trTr: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI Yerel Motoru • Yerel ISO yönetimi ile Ventoy hibrit bölüm kurulumu.",
   "deploy.target_device": "Hedef Cihaz:",
   "deploy.batch_target": "Seçilen {count} USB Sürücü",
-  "deploy.start_create": "Oluşturmayı Başlat",
+  "deploy.start_create": "🚀 Önyükleme Diski Oluştur",
   "deploy.tip_batch_update_all": "Kayıpsız toplu güncelleme: Seçilen tüm {count} USB sürücü yerinde güncellenecektir (veri ve ISO korunur)",
   "deploy.tip_batch_mixed": "Karma dağıtım: {bootCount} sürücü yerinde güncellenir, {blankCount} sürücü sıfırdan biçimlendirilir",
   "deploy.start_update": "🛡️ Yerinde Yükseltmeyi Başlat (Veri Güvenli)",

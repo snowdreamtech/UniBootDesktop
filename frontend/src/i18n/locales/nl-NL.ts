@@ -138,7 +138,7 @@ export const nlNl: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI lokale engine • Ventoy hybride partitie-installatie met lokaal ISO-beheer.",
   "deploy.target_device": "Doelapparaat:",
   "deploy.batch_target": "{count} USB-station(s) geselecteerd",
-  "deploy.start_create": "Implementatie starten",
+  "deploy.start_create": "🚀 Opstartschijf maken",
   "deploy.tip_batch_update_all": "Update zonder gegevensverlies: Alle {count} geselecteerde stations worden direct bijgewerkt",
   "deploy.tip_batch_mixed": "Gemengde uitrol: {bootCount} stations direct bijgewerkt, {blankCount} stations opnieuw geformatteerd",
   "deploy.start_update": "🛡️ In-place upgrade (gegevenskluis)",

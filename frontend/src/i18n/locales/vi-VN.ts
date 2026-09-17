@@ -138,7 +138,7 @@ export const viVn: TranslationDict = {
   "deploy.desc_hybrid": "Động cơ cục bộ Ventoy CLI • Thiết lập phân vùng hỗn hợp Ventoy với quản lý ISO cục bộ.",
   "deploy.target_device": "Thiết bị mục tiêu:",
   "deploy.batch_target": "Đã chọn {count} ổ USB",
-  "deploy.start_create": "Bắt đầu tạo đĩa",
+  "deploy.start_create": "🚀 Tạo đĩa khởi động",
   "deploy.tip_batch_update_all": "Cập nhật hàng loạt không mất dữ liệu: Tất cả {count} ổ USB được chọn sẽ được cập nhật tại chỗ",
   "deploy.tip_batch_mixed": "Triển khai hỗn hợp hàng loạt: {bootCount} ổ cập nhật không mất dữ liệu, {blankCount} ổ định dạng lại",
   "deploy.start_update": "🛡️ Nâng cấp tại chỗ (An toàn dữ liệu)",

@@ -138,7 +138,7 @@ export const hrHr: TranslationDict = {
   "deploy.desc_hybrid": "Lokalni pogon Ventoy CLI • Postavljanje hibridne particije Ventoy s lokalnim upravljanjem ISO datotekama.",
   "deploy.target_device": "Ciljni uređaj:",
   "deploy.batch_target": "Odabrano {count} USB disk(ova)",
-  "deploy.start_create": "Započni implementaciju",
+  "deploy.start_create": "🚀 Stvori pokretački disk",
   "deploy.tip_batch_update_all": "Skupno ažuriranje bez gubitka podataka: Svi {count} odabrani USB pogoni ažurirat će se na licu mjesta",
   "deploy.tip_batch_mixed": "Mješovita skupna primjena: {bootCount} pogon(a) ažuriranje bez gubitka, {blankCount} pogon(a) novo formatiranje",
   "deploy.start_update": "🛡️ Nadogradnja na licu mjesta (sigurno za podatke)",

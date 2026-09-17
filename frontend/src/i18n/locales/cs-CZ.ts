@@ -138,7 +138,7 @@ export const csCz: TranslationDict = {
   "deploy.desc_hybrid": "Lokální engine Ventoy CLI • Nastavení hybridního oddílu Ventoy s lokální správou ISO.",
   "deploy.target_device": "Cílové zařízení:",
   "deploy.batch_target": "Vybráno {count} USB disků",
-  "deploy.start_create": "▶ Spustit vytváření",
+  "deploy.start_create": "🚀 Vytvořit bootovací disk",
   "deploy.tip_batch_update_all": "Hromadná aktualizace bez ztráty dat: Všech {count} vybraných USB disků bude aktualizováno na místě",
   "deploy.tip_batch_mixed": "Hromadné smíšené nasazení: {bootCount} disků aktualizace bez ztráty dat, {blankCount} disků nové formátování",
   "deploy.start_update": "🛡️ Aktualizace na místě (Bezpečná pro data)",

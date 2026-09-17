@@ -138,7 +138,7 @@ export const srCyrl: TranslationDict = {
   "deploy.desc_hybrid": "Локални мотор Ventoy CLI • Постављање хибридне партиције Ventoy са локалним управљањем ISO датотекама.",
   "deploy.target_device": "Циљни уређај:",
   "deploy.batch_target": "Изабрано {count} USB уређаја",
-  "deploy.start_create": "Старт Деплоимент",
+  "deploy.start_create": "🚀 Направи покретачки диск",
   "deploy.tip_batch_update_all": "Групно ажурирање без губитка података: Сви {count} изабрани УСБ уређаји биће ажурирани на лицу места",
   "deploy.tip_batch_mixed": "Групно мешовито распоређивање: {bootCount} уређаја ажурирање без губитка, {blankCount} уређаја ново форматирање",
   "deploy.start_update": "🛡 Надоградња на месту (безбедно за податке)",

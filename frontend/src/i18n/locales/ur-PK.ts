@@ -138,7 +138,7 @@ export const urPk: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI مقامی انجن • مقامی ISO مینجمنٹ کے ساتھ Ventoy ہائبرڈ پارٹیشن سیٹ اپ۔",
   "deploy.target_device": "ٹارگٹ ڈیوائس:",
   "deploy.batch_target": "منتخب کردہ {count} ڈسک ڈرائیو (ز)",
-  "deploy.start_create": "تعیناتی شروع کریں۔",
+  "deploy.start_create": "🚀 بوٹ ڈسک بنائیں",
   "deploy.tip_batch_update_all": "ڈیٹا کے نقصان کے بغیر بیچ اپ ڈیٹ: تمام منتخب شدہ {count} ڈسک ڈرائیوز کو اسی جگہ اپ ڈیٹ کیا جائے گا",
   "deploy.tip_batch_mixed": "بیچ مخلوط ڈیپلائمنٹ: {bootCount} ڈرائیوز محفوظ اپ ڈیٹ، {blankCount} ڈرائیوز نیا فارمیٹ",
   "deploy.start_update": "🛡️ ان پلیس اپ گریڈ (ڈیٹا سیف)",

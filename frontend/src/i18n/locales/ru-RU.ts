@@ -138,7 +138,7 @@ export const ruRu: TranslationDict = {
   "deploy.desc_hybrid": "Локальный движок Ventoy CLI • Настройка гибридного раздела Ventoy с локальным управлением ISO.",
   "deploy.target_device": "Целевое устройство:",
   "deploy.batch_target": "Выбрано дисков: {count}",
-  "deploy.start_create": "Начать создание",
+  "deploy.start_create": "🚀 Создать загрузочный диск",
   "deploy.tip_batch_update_all": "Пакетное обновление: Все выбранные накопители ({count}) будут обновлены без потери данных",
   "deploy.tip_batch_mixed": "Смешанное развертывание: {bootCount} обновляются без потери данных, {blankCount} форматируются",
   "deploy.start_update": "🛡️ Обновление на месте (Без потери данных)",

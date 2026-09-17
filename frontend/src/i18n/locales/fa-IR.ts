@@ -138,7 +138,7 @@ export const faIr: TranslationDict = {
   "deploy.desc_hybrid": "موتور محلی Ventoy CLI • پیکربندی پارتیشن هیبریدی Ventoy با مدیریت ISO محلی.",
   "deploy.target_device": "دستگاه هدف:",
   "deploy.batch_target": "{count} درایو(های) USB انتخاب شده",
-  "deploy.start_create": "استقرار را شروع کنید",
+  "deploy.start_create": "🚀 ساخت دیسک بوت",
   "deploy.tip_batch_update_all": "به‌روزرسانی گروهی بدون از دست رفتن داده: تمامی {count} درایو دیسک انتخاب‌شده در محل به‌روزرسانی می‌شوند",
   "deploy.tip_batch_mixed": "استقرار ترکیبی گروهی: {bootCount} درایو به‌روزرسانی بدون از دست رفتن داده، {blankCount} درایو فرمت کامل",
   "deploy.start_update": "🛡️ ارتقاء در محل (ایمن داده)",

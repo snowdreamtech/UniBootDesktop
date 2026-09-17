@@ -138,7 +138,7 @@ export const itIt: TranslationDict = {
   "deploy.desc_hybrid": "Motore locale Ventoy CLI • Configurazione partizione ibrida Ventoy con gestione ISO locale.",
   "deploy.target_device": "Dispositivo di Destinazione:",
   "deploy.batch_target": "{count} disco selezionata/e",
-  "deploy.start_create": "Avvia Creazione",
+  "deploy.start_create": "🚀 Crea disco di avvio",
   "deploy.tip_batch_update_all": "Aggiornamento in batch senza perdita: Tutte le {count} chiavette selezionate verranno aggiornate sul posto (dati e ISO conservati)",
   "deploy.tip_batch_mixed": "Distribuzione mista in batch: {bootCount} chiavetta/e aggiornamento senza perdita di dati, {blankCount} chiavetta/e formattazione completa",
   "deploy.start_update": "🛡️ Aggiornamento sul Posto (Dati Sicuri)",

@@ -138,7 +138,7 @@ export const ocFr: TranslationDict = {
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuracion de particion hibrida Ventoy amb gestion ISO locala.",
   "deploy.target_device": "Dispositiu cibla:",
   "deploy.batch_target": "{count} clau(s) USB seleccionada(s)",
-  "deploy.start_create": "Començar lo desplegament",
+  "deploy.start_create": "🚀 Crear un disc de darrancament",
   "deploy.tip_batch_update_all": "Mesa a jorn sens pèrda en lòt : Totas las {count} claus seleccionadas seràn mesas a jorn al luòc",
   "deploy.tip_batch_mixed": "Desplaçament mixte en lòt : {bootCount} clau(s) mesa a jorn sens pèrda, {blankCount} clau(s) formatatge complet",
   "deploy.start_update": "🛡️ Mesa a jorn en plaça (Data Safe)",

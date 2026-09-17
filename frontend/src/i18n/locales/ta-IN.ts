@@ -138,7 +138,7 @@ export const taIn: TranslationDict = {
   "deploy.desc_hybrid": "Ventoy CLI உள்ளூர் எஞ்சின் • உள்ளூர் ISO மேலாண்மையுடன் கூடிய Ventoy கலப்பின பிரிவு அமைவு.",
   "deploy.target_device": "இலக்கு சாதனம்:",
   "deploy.batch_target": "தேர்ந்தெடுக்கப்பட்ட {count} USB டிரைவ்(கள்)",
-  "deploy.start_create": "வரிசைப்படுத்தலைத் தொடங்கவும்",
+  "deploy.start_create": "🚀 பூட் டிஸ்க் உருவாக்கவும்",
   "deploy.tip_batch_update_all": "தரவு இழப்பின்றி தொகுதி புதுப்பித்தல்: தேர்ந்தெடுக்கப்பட்ட அனைத்து {count} USB இயக்கிகளும் உடனடியாகப் புதுப்பிக்கப்படும்",
   "deploy.tip_batch_mixed": "கலப்பு தொகுதி வரிசைப்படுத்தல்: {bootCount} இயக்கிகள் பாதுகாப்பான புதுப்பித்தல், {blankCount} இயக்கிகள் புதிய வடிவமைப்பு",
   "deploy.start_update": "🛡️ இன்-ப்ளேஸ் அப்கிரேட் (டேட்டா சேஃப்)",

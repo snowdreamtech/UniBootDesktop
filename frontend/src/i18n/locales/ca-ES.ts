@@ -138,7 +138,7 @@ export const caEs: TranslationDict = {
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuració de partició híbrida Ventoy amb gestió ISO local.",
   "deploy.target_device": "Dispositiu objectiu:",
   "deploy.batch_target": "S'han seleccionat {count} unitats USB",
-  "deploy.start_create": "Inicia el desplegament",
+  "deploy.start_create": "🚀 Crear disc d'arrencada",
   "deploy.tip_batch_update_all": "Actualització en lot sense pèrdua: Totes les {count} unitats seleccionades s'actualitzaran al lloc",
   "deploy.tip_batch_mixed": "Desplegament mixt en lot: {bootCount} unitat(s) actualització sense pèrdua, {blankCount} unitat(s) formatat complet",
   "deploy.start_update": "🛡️ Actualització in situ (Seguretat de dades)",
