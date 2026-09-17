@@ -46,7 +46,7 @@ declare global {
       main?: {
         App?: {
           GetDiskList(): Promise<any[]>;
-          SelectIsoFiles(): Promise<string[]>;
+          SelectIsoFiles(title?: string, ventoyFilter?: string, allFilter?: string): Promise<string[]>;
           DeployModeA(targetDisk: string, fsType?: string, isoPaths?: string[], expected?: DiskInfo): Promise<any>;
           DeployModeABatch(targetDisks: string[], fsType?: string, isoPaths?: string[], expected?: DiskInfo[]): Promise<any[]>;
           DeployModeB(targetDisk: string, fsType?: string, expected?: DiskInfo): Promise<any>;

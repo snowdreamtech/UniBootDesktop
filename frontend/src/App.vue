@@ -484,7 +484,7 @@ import AboutModal from './components/AboutModal.vue';
 import type { LogItem } from './components/LogViewerModal.vue';
 import CustomSelect from './components/CustomSelect.vue';
 import { t, currentLang, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
-import { ExportLogs } from '../wailsjs/go/main/App';
+import { ExportLogs, SelectIsoFiles } from '../wailsjs/go/main/App';
 
 const isLangMenuOpen = ref(false);
 const langDropdownRef = ref<HTMLElement | null>(null);
@@ -815,9 +815,9 @@ const selectedIsoFiles = ref<IsoFileItem[]>([]);
 const isoCopyStatus = ref<string>('');
 
 async function handleSelectIsoFiles() {
-  if (window.go && window.go.main && window.go.main.App && window.go.main.App.SelectIsoFiles) {
+  if (typeof SelectIsoFiles === 'function') {
     try {
-      const paths: string[] = await window.go.main.App.SelectIsoFiles(
+      const paths: string[] = await SelectIsoFiles(
         t('dialog.selectIsoTitle'),
         t('dialog.ventoyFilter'),
         t('dialog.allFilesFilter')
