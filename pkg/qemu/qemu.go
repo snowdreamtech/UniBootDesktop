@@ -214,6 +214,37 @@ func ResolveRawDiskDevice(diskPath string) string {
 	return diskPath
 }
 
+// ensureDiskPermissions ensures the current GUI user has read/write permissions on the target raw disk node.
+func ensureDiskPermissions(targetPath string) {
+	if targetPath == "" {
+		return
+	}
+	f, err := os.OpenFile(targetPath, os.O_RDWR, 0)
+	if err == nil {
+		_ = f.Close()
+		return
+	}
+
+	if runtime.GOOS == "darwin" {
+		diskNode := strings.TrimPrefix(targetPath, "/dev/rdisk")
+		diskNode = strings.TrimPrefix(diskNode, "/dev/disk")
+		if !strings.HasPrefix(diskNode, "disk") {
+			diskNode = "disk" + diskNode
+		}
+		rawNode := "r" + diskNode
+
+		logger.Info("Elevating disk node permissions for QEMU GUI session via osascript", "diskNode", diskNode)
+		script := fmt.Sprintf(`do shell script "chmod 666 /dev/%s /dev/%s" with administrator privileges`, rawNode, diskNode)
+		cmd := exec.Command("osascript", "-e", script)
+		if err := cmd.Run(); err != nil {
+			logger.Warn("Failed to elevate disk node permissions via osascript", "error", err)
+		}
+	} else if runtime.GOOS == "linux" {
+		cmd := exec.Command("pkexec", "chmod", "666", targetPath)
+		_ = cmd.Run()
+	}
+}
+
 // LaunchTest executes a non-blocking QEMU preview test instance on the target disk drive safely across macOS, Windows and Linux.
 func LaunchTest(ctx context.Context, diskPath string) error {
 	if diskPath == "" {
@@ -248,12 +279,15 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		// 1. Force unmount target disk volumes to release macOS disk arbitration lock
 		unmountCmd := exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode))
 		_ = unmountCmd.Run()
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(300 * time.Millisecond)
 	} else if runtime.GOOS == "linux" {
 		// Try udisksctl unmount for Linux volume partitions
 		unmountCmd := exec.Command("udisksctl", "unmount", "-b", diskPath)
 		_ = unmountCmd.Run()
 	}
+
+	// Ensure target disk node has read/write permissions for current user GUI process
+	ensureDiskPermissions(targetPath)
 
 	ovmfFw := DetectOVMF()
 
@@ -294,7 +328,7 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		return fmt.Errorf("failed to start QEMU process: %w", err)
 	}
 
-	// Wait briefly (400ms) to catch immediate startup failures (e.g. permission denied)
+	// Wait up to 800ms to catch startup errors (e.g. missing files or invalid args)
 	done := make(chan error, 1)
 	go func() {
 		done <- cmd.Wait()
@@ -305,25 +339,12 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		if err != nil {
 			errOutput := strings.TrimSpace(stderr.String())
 			if errOutput != "" {
-				// If permission is denied on macOS, fallback to executing via osascript with administrator privileges
-				if runtime.GOOS == "darwin" && strings.Contains(errOutput, "Permission denied") {
-					var scriptArgs []string
-					scriptArgs = append(scriptArgs, fmt.Sprintf("'%s'", status.Path))
-					for _, a := range args {
-						scriptArgs = append(scriptArgs, fmt.Sprintf("'%s'", a))
-					}
-					script := fmt.Sprintf(`do shell script "%s >/dev/null 2>&1 &" with administrator privileges`, strings.Join(scriptArgs, " "))
-					adminCmd := exec.Command("osascript", "-e", script)
-					if adminErr := adminCmd.Run(); adminErr == nil {
-						return nil
-					}
-				}
 				return fmt.Errorf("QEMU launch message: %s", errOutput)
 			}
 			return fmt.Errorf("QEMU exited unexpectedly: %w", err)
 		}
 		return nil
-	case <-time.After(400 * time.Millisecond):
+	case <-time.After(800 * time.Millisecond):
 		return nil
 	}
 }
