@@ -73,7 +73,7 @@
           :title="t('log.title')"
           @click="toggleLogCard"
         >
-          📋
+          📜
         </button>
 
         <button 
@@ -344,7 +344,7 @@
         <section v-if="isLogCardVisible" class="glass-card log-section-card">
           <div class="log-section-header">
             <div class="log-title-group">
-              <h2>📋 {{ t('log.title') }}</h2>
+              <h2>📜 {{ t('log.title') }}</h2>
               <span class="badge live-badge">● {{ t('log.live') }}</span>
             </div>
 
