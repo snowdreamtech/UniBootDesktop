@@ -371,11 +371,11 @@ async function handleExportEmbeddedLogs() {
 function handleClearEmbeddedLogs() {
   logUserAction('INFO', 'User cleared embedded log viewer');
   runtimeLogs.value = [];
-  // Also clear the backend in-memory log buffer so cleared logs do not
+  // Clear the backend in-memory log buffer so cleared logs do not
   // reappear after the app restarts or the UI is refreshed.
-  if (window.go && window.go.main && window.go.main.App && typeof window.go.main.App.ClearLogs === 'function') {
-    window.go.main.App.ClearLogs();
-  }
+  ClearLogs().catch((err: any) => {
+    console.error('Failed to clear backend log buffer:', err);
+  });
 }
 
 function dismissToast() {
@@ -1046,7 +1046,7 @@ const isScanningDisks = ref(false);
 async function refreshDisks() {
   if (isScanningDisks.value) return;
   isScanningDisks.value = true;
-  
+
   const previousSelectedDevice = selectedDisk.value?.device;
   // 1. Immediately clear the disk list and selection for instant UI feedback
   diskList.value = [];
