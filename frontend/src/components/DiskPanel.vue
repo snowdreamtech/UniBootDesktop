@@ -116,6 +116,14 @@ export interface DiskInfo {
   sectorSize?: string;
   transportProtocol?: string;
   bootStatus?: string;
+  controllerVendor?: string;
+  isFakeUsb3?: boolean;
+  protocolCode?: string;
+  isVentoy?: boolean;
+  isRealVentoy?: boolean;
+  isCloudMode?: boolean;
+  isGenericBoot?: boolean;
+  mountPoint?: string;
 }
 
 const props = defineProps<{

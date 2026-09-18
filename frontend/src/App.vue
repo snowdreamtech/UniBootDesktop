@@ -176,6 +176,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import AppHeader from './components/AppHeader.vue';
 import DiskPanel from './components/DiskPanel.vue';
+import type { DiskInfo } from './components/DiskPanel.vue';
 import DeployPanel from './components/DeployPanel.vue';
 import LogPanel from './components/LogPanel.vue';
 import IconPickerModal, { DiskIconType } from './components/IconPickerModal.vue';
@@ -215,39 +216,6 @@ async function saveLangToConfig(langVal: string) {
 
 
 
-interface DiskInfo {
-  device: string;
-  name: string;
-  size: number;
-  formatted: string;
-  freeSpace?: number;
-  freeFormatted?: string;
-  isRemovable: boolean;
-  isSystem: boolean;
-  usbVersion?: string;
-  usbSpeed?: string;
-  vendor?: string;
-  fileSystem?: string;
-  partitionScheme?: string;
-  writable?: boolean;
-  serialNumber?: string;
-  vendorId?: string;
-  productId?: string;
-  smartStatus?: string;
-  busPower?: string;
-  busPowerUsed?: string;
-  sectorSize?: string;
-  transportProtocol?: string;
-  bootStatus?: string;
-  controllerVendor?: string;
-  isFakeUsb3?: boolean;
-  protocolCode?: string;
-  isVentoy?: boolean;
-  isRealVentoy?: boolean;
-  isCloudMode?: boolean;
-  isGenericBoot?: boolean;
-  mountPoint?: string;
-}
 
 const activeMode = ref<'cloud' | 'hybrid'>('cloud');
 const selectionMode = ref<'single' | 'batch'>('single');
