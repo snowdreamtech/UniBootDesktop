@@ -27,8 +27,20 @@
       </div>
 
       <div v-if="selectionMode === 'batch'" class="batch-actions">
-        <button class="btn-text" @click="emit('select-all')">{{ t('disk.select_all') }}</button>
-        <button class="btn-text" @click="emit('deselect-all')">{{ t('disk.clear_select') }}</button>
+        <button 
+          class="btn-text" 
+          :disabled="diskList.length === 0 || selectedDevices.size === diskList.length" 
+          @click="emit('select-all')"
+        >
+          {{ t('disk.select_all') }}
+        </button>
+        <button 
+          class="btn-text" 
+          :disabled="selectedDevices.size === 0" 
+          @click="emit('deselect-all')"
+        >
+          {{ t('disk.clear_select') }}
+        </button>
         <button 
           class="btn-eject" 
           :disabled="selectedDevices.size === 0" 
@@ -214,8 +226,15 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   cursor: pointer;
 }
 
-.btn-text:hover {
+.btn-text:hover:not(:disabled) {
   text-decoration: underline;
+}
+
+.btn-text:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+  text-decoration: none;
 }
 
 .btn-eject {
