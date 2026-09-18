@@ -11,6 +11,7 @@ import (
 
 	"github.com/snowdreamtech/unigodesktop/cmd"
 	"github.com/snowdreamtech/unigodesktop/internal/i18n"
+	"github.com/snowdreamtech/unigodesktop/pkg/config"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/menu"
 	"github.com/wailsapp/wails/v2/pkg/menu/keys"
@@ -30,10 +31,17 @@ func RunWails() error {
 
 	appMenu := BuildAppMenu(app, "auto")
 
+	// Determine Mac native appearance from saved user theme preference so the
+	// native title bar matches the WebView content theme on first launch.
+	macAppearance := mac.NSAppearanceNameDarkAqua
+	if cfg, err := config.Load(); err == nil && cfg != nil && cfg.Theme == "light" {
+		macAppearance = mac.NSAppearanceNameAqua
+	}
+
 	return wails.Run(&options.App{
-		Title:  "UniGoDesktop",
-		Width:  1180,
-		Height: 820,
+		Title:    "UniGoDesktop",
+		Width:    1180,
+		Height:   820,
 		MinWidth: 1024,
 		MinHeight: 728,
 		Menu:   appMenu,
@@ -62,7 +70,7 @@ func RunWails() error {
 				HideTitleBar:               false,
 				FullSizeContent:            false,
 			},
-			Appearance:           mac.NSAppearanceNameDarkAqua,
+			Appearance:           macAppearance,
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{
