@@ -1,6 +1,6 @@
 <template>
   <transition name="card-fade">
-    <section v-show="isVisible" class="glass-card log-section-card">
+    <section v-if="isVisible" class="glass-card log-section-card">
       <!-- Row 1: Title & Top Control Buttons -->
       <div class="log-section-header">
         <div class="log-title-group">
