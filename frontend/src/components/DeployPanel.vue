@@ -140,7 +140,7 @@
             <div class="hash-code-row">
               <span class="hash-algo-badge">{{ currentChecksumAlgo.toUpperCase() }}</span>
               <code class="hash-code" :title="calculatedHash">{{ calculatedHash }}</code>
-              <button class="copy-hash-btn" :title="t('checksum.copy_hash')" @click="copyHashToClipboard">
+              <button class="copy-hash-btn" :class="{ copied: isHashCopied }" :title="t('checksum.copy_hash')" @click="copyHashToClipboard">
                 {{ isHashCopied ? '✓' : '📋' }}
               </button>
             </div>
@@ -983,15 +983,29 @@ function getFileIcon(filename: string): string {
   border: 1px solid var(--card-border);
   color: var(--text-main);
   border-radius: 4px;
-  padding: 0.2rem 0.45rem;
+  padding: 0;
   font-size: 0.75rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  min-width: 32px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 .copy-hash-btn:hover {
   background: var(--btn-sec-hover-bg);
   color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+}
+
+.copy-hash-btn.copied {
+  background: rgba(16, 185, 129, 0.18);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.4);
 }
 
 .hash-compare-row {
