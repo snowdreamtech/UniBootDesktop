@@ -58,6 +58,12 @@ func (a *App) startup(ctx context.Context) {
 	})
 }
 
+// shutdown is called automatically when the Wails application is closing.
+func (a *App) shutdown(ctx context.Context) {
+	logger.Info("UniGoDesktop Wails GUI runtime shutting down, performing hypervisor disk cleanup")
+	hypervisor.GetManager().CleanupAllUnmountedDisks()
+}
+
 // GetRecentLogs returns recent log entries from the memory buffer.
 func (a *App) GetRecentLogs() []logger.LogEntry {
 	return logger.GetRecentLogs()

@@ -178,11 +178,40 @@ func (m *Manager) LaunchSpecified(ctx context.Context, targetDisk string, hType 
 	return fmt.Errorf("unknown hypervisor type '%s'", hType)
 }
 
+var unmountedDisksTracker sync.Map
+
+// TrackDiskUnmounted registers a disk path as currently unmounted for VM preview.
+func TrackDiskUnmounted(targetPath string) {
+	if targetPath != "" {
+		unmountedDisksTracker.Store(targetPath, true)
+	}
+}
+
+// TrackDiskRemounted unregisters a disk path after VM exit remount.
+func TrackDiskRemounted(targetPath string) {
+	if targetPath != "" {
+		unmountedDisksTracker.Delete(targetPath)
+	}
+}
+
+// CleanupAllUnmountedDisks ensures all target disks unmounted by hypervisors are safely remounted back to host OS.
+func (m *Manager) CleanupAllUnmountedDisks() {
+	unmountedDisksTracker.Range(func(key, value any) bool {
+		if path, ok := key.(string); ok {
+			logger.Info("Emergency cleanup: remounting target disk back to host OS", "targetPath", path)
+			remountTargetDisk(path)
+			unmountedDisksTracker.Delete(key)
+		}
+		return true
+	})
+}
+
 // unmountTargetDisk safely unmounts disk partitions across macOS, Linux, and Windows before hypervisor launch.
 func unmountTargetDisk(targetPath string) {
 	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" {
 		return
 	}
+	TrackDiskUnmounted(targetPath)
 	logger.Info("Safely unmounting target disk partitions before VM launch", "targetPath", targetPath)
 
 	if runtime.GOOS == "darwin" {
@@ -221,6 +250,7 @@ func remountTargetDisk(targetPath string) {
 	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" {
 		return
 	}
+	defer TrackDiskRemounted(targetPath)
 	logger.Info("Remounting target disk partitions back to host OS after VM exit", "targetPath", targetPath)
 
 	if runtime.GOOS == "darwin" {
