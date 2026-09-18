@@ -4,11 +4,13 @@
 package installer
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 // IsoCopyProgress holds real-time progress details for copying system images to U-disk.
@@ -19,6 +21,9 @@ type IsoCopyProgress struct {
 	CopiedBytes   int64   `json:"copiedBytes"`
 	FileSizeBytes int64   `json:"fileSizeBytes"`
 	Progress      float64 `json:"progress"` // 0.0 to 100.0
+	SpeedMBps     float64 `json:"speedMBps"`
+	ElapsedSec    int64   `json:"elapsedSec"`
+	EtaSec        int64   `json:"etaSec"`
 }
 
 // CopyIsoProgressCallback defines the function signature for reporting ISO copy progress.
@@ -26,6 +31,11 @@ type CopyIsoProgressCallback func(progress IsoCopyProgress)
 
 // CopyIsoFilesToDisk copies selected local ISO/IMG files into <mountPoint>/iso/ directory on target drive.
 func CopyIsoFilesToDisk(mountPoint string, isoPaths []string, progressCb CopyIsoProgressCallback) error {
+	return CopyIsoFilesToDiskWithContext(context.Background(), mountPoint, isoPaths, progressCb)
+}
+
+// CopyIsoFilesToDiskWithContext copies selected local ISO/IMG files with cancellation context support and live speed/ETA tracking.
+func CopyIsoFilesToDiskWithContext(ctx context.Context, mountPoint string, isoPaths []string, progressCb CopyIsoProgressCallback) error {
 	if len(isoPaths) == 0 {
 		return nil
 	}
@@ -42,6 +52,12 @@ func CopyIsoFilesToDisk(mountPoint string, isoPaths []string, progressCb CopyIso
 	buffer := make([]byte, 1024*1024) // 1MB buffer for high throughput U-disk write
 
 	for idx, srcPath := range isoPaths {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		default:
+		}
+
 		info, err := os.Stat(srcPath)
 		if err != nil {
 			return fmt.Errorf("failed to stat source image file %s: %w", srcPath, err)
@@ -69,8 +85,18 @@ func CopyIsoFilesToDisk(mountPoint string, isoPaths []string, progressCb CopyIso
 
 		totalSize := info.Size()
 		var copiedTotal int64
+		startTime := time.Now()
 
 		for {
+			select {
+			case <-ctx.Done():
+				srcFile.Close()
+				destFile.Close()
+				os.Remove(destPath)
+				return ctx.Err()
+			default:
+			}
+
 			n, readErr := srcFile.Read(buffer)
 			if n > 0 {
 				written, writeErr := destFile.Write(buffer[:n])
@@ -83,6 +109,19 @@ func CopyIsoFilesToDisk(mountPoint string, isoPaths []string, progressCb CopyIso
 
 				if progressCb != nil && totalSize > 0 {
 					pct := (float64(copiedTotal) / float64(totalSize)) * 100.0
+					elapsedDuration := time.Since(startTime)
+					elapsedSec := int64(elapsedDuration.Seconds())
+					
+					speedMBps := 0.0
+					etaSec := int64(0)
+					if elapsedDuration.Seconds() > 0.1 {
+						speedMBps = (float64(copiedTotal) / (1024 * 1024)) / elapsedDuration.Seconds()
+						if speedMBps > 0 {
+							remainingBytes := totalSize - copiedTotal
+							etaSec = int64((float64(remainingBytes) / (1024 * 1024)) / speedMBps)
+						}
+					}
+
 					progressCb(IsoCopyProgress{
 						CurrentFile:   fileName,
 						FileIndex:     idx + 1,
@@ -90,6 +129,9 @@ func CopyIsoFilesToDisk(mountPoint string, isoPaths []string, progressCb CopyIso
 						CopiedBytes:   copiedTotal,
 						FileSizeBytes: totalSize,
 						Progress:      pct,
+						SpeedMBps:     speedMBps,
+						ElapsedSec:    elapsedSec,
+						EtaSec:        etaSec,
 					})
 				}
 			}
