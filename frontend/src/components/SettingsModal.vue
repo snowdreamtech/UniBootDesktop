@@ -955,8 +955,9 @@ onMounted(() => {
 }
 
 .modal-body {
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem 1.5rem 6rem 1.5rem;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   display: flex;
   flex-direction: column;
   flex: 1;
