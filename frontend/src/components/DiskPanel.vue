@@ -69,7 +69,7 @@
       :disabled="isScanningDisks"
       @click="emit('refresh-disks')"
     >
-      <span class="refresh-icon" :class="{ spinning: isScanningDisks }">🔄</span>
+      <span class="refresh-icon">🔄</span>
       <span>{{ isScanningDisks ? t('disk.scanning') : t('disk.rescan') }}</span>
     </button>
   </section>
@@ -268,8 +268,7 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   to { transform: rotate(360deg); }
 }
 
-.spin-icon,
-.refresh-icon.spinning {
+.spin-icon {
   display: inline-block;
   animation: spin 0.8s linear infinite;
 }
