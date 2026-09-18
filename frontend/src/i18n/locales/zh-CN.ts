@@ -409,6 +409,9 @@ export const zhCn: TranslationDict = {
   "checksum.match_success": "✅ Hash 校验匹配一致",
   "checksum.match_mismatch": "❌ Hash 不相符，镜像可能已损坏",
   "checksum.target_iso_label": "校验对象",
+  "checksum.recommended": "(推荐)",
+  "checksum.status_selected": "已选中",
+  "checksum.status_verify": "校验",
   "progress.speed": "写入速度",
   "progress.eta": "预计剩余"
 };

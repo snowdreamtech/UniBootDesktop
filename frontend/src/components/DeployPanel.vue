@@ -89,7 +89,7 @@
                 :title="t('checksum.calc_btn')"
                 @click.stop="selectIsoForChecksum(index)"
               >
-                🔒 {{ selectedChecksumIsoIndex === index ? '已选中' : '校验' }}
+                🔒 {{ selectedChecksumIsoIndex === index ? t('checksum.status_selected') : t('checksum.status_verify') }}
               </button>
               <button class="iso-remove-btn" title="Remove" @click.stop="emit('remove-iso', index)">✕</button>
             </div>
@@ -122,7 +122,7 @@
             <span class="checksum-title">🔒 Hash {{ t('checksum.algo_label') }}</span>
             <div class="algo-selector">
               <select v-model="selectedAlgo" class="algo-select">
-                <option value="sha256">SHA-256 (推荐)</option>
+                <option value="sha256">SHA-256 {{ t('checksum.recommended') }}</option>
                 <option value="md5">MD5</option>
                 <option value="sha1">SHA-1</option>
                 <option value="sha384">SHA-384</option>

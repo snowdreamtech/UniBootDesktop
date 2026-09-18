@@ -409,6 +409,9 @@ export const enUs: TranslationDict = {
   "checksum.match_success": "✅ Hash Checksum Matched",
   "checksum.match_mismatch": "❌ Hash Mismatch! File may be corrupt",
   "checksum.target_iso_label": "Target Image",
+  "checksum.recommended": "(Recommended)",
+  "checksum.status_selected": "Selected",
+  "checksum.status_verify": "Verify",
   "progress.speed": "Write Speed",
   "progress.eta": "ETA"
 };

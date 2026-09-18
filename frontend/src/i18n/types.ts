@@ -408,6 +408,9 @@ export interface TranslationDict {
   "checksum.match_success": string;
   "checksum.match_mismatch": string;
   "checksum.target_iso_label": string;
+  "checksum.recommended": string;
+  "checksum.status_selected": string;
+  "checksum.status_verify": string;
   "progress.speed": string;
   "progress.eta": string;
 }
