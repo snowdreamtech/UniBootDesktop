@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"sync"
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/env"
@@ -40,12 +41,41 @@ type AppInfo struct {
 
 // App struct manages Wails GUI lifecycle and frontend bound APIs.
 type App struct {
-	ctx context.Context
+	ctx              context.Context
+	deployCancelFunc context.CancelFunc
+	cancelMutex      sync.Mutex
 }
 
 // NewApp creates a new App application struct.
 func NewApp() *App {
 	return &App{}
+}
+
+func (a *App) initDeployContext() context.Context {
+	a.cancelMutex.Lock()
+	defer a.cancelMutex.Unlock()
+	ctx, cancel := context.WithCancel(a.ctx)
+	a.deployCancelFunc = cancel
+	return ctx
+}
+
+func (a *App) clearDeployContext() {
+	a.cancelMutex.Lock()
+	defer a.cancelMutex.Unlock()
+	a.deployCancelFunc = nil
+}
+
+// CancelDeployment cancels any active in-flight deployment task.
+func (a *App) CancelDeployment() bool {
+	a.cancelMutex.Lock()
+	defer a.cancelMutex.Unlock()
+	if a.deployCancelFunc != nil {
+		logger.Info("User requested active deployment cancellation")
+		a.deployCancelFunc()
+		a.deployCancelFunc = nil
+		return true
+	}
+	return false
 }
 
 // startup is called when the Wails application starts up.
@@ -212,6 +242,9 @@ func (a *App) ExportLogs(content string, title string, logFilter string, textFil
 // DeployHybridMode triggers Hybrid Mode (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system and optional ISO files.
 func (a *App) DeployHybridMode(targetDisk string, fsType string, isoPaths []string, expected disk.DiskInfo) (*installer.DeployResult, error) {
 	logger.Info("User confirmed Hybrid Mode boot disk creation", "disk", targetDisk, "fs", fsType, "isoCount", len(isoPaths))
+	deployCtx := a.initDeployContext()
+	defer a.clearDeployContext()
+
 	cfg, _ := config.Load()
 	ventoyPath := ""
 	if cfg != nil {
@@ -220,7 +253,7 @@ func (a *App) DeployHybridMode(targetDisk string, fsType string, isoPaths []stri
 	progressCb := func(p installer.IsoCopyProgress) {
 		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
 	}
-	res, err := installer.DeployHybridModeWithExpectedDisk(a.ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, expected)
+	res, err := installer.DeployHybridModeWithExpectedDisk(deployCtx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, expected)
 	if err != nil && res != nil {
 		return res, nil
 	}
@@ -235,6 +268,9 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 // DeployHybridModeBatch triggers Hybrid Mode deployment for multiple target disk drives with customizable file system and optional ISO files.
 func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPaths []string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
 	logger.Info("User confirmed batch Hybrid Mode boot disk creation", "diskCount", len(targetDisks), "fs", fsType)
+	deployCtx := a.initDeployContext()
+	defer a.clearDeployContext()
+
 	cfg, _ := config.Load()
 	ventoyPath := ""
 	if cfg != nil {
@@ -243,13 +279,16 @@ func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPath
 	progressCb := func(p installer.IsoCopyProgress) {
 		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
 	}
-	return installer.DeployHybridModeBatchWithExpectedDisks(a.ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected)
+	return installer.DeployHybridModeBatchWithExpectedDisks(deployCtx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected)
 }
 
 // DeployCloudMode triggers Cloud Mode (Cloud Pure Mode) with customizable file system.
 func (a *App) DeployCloudMode(targetDisk string, fsType string, expected disk.DiskInfo) (*installer.DeployResult, error) {
 	logger.Info("User confirmed Cloud Mode boot disk creation", "disk", targetDisk, "fs", fsType)
-	res, err := installer.DeployCloudModeWithExpectedDisk(a.ctx, targetDisk, fsType, expected)
+	deployCtx := a.initDeployContext()
+	defer a.clearDeployContext()
+
+	res, err := installer.DeployCloudModeWithExpectedDisk(deployCtx, targetDisk, fsType, expected)
 	if err != nil && res != nil {
 		return res, nil
 	}
@@ -259,7 +298,10 @@ func (a *App) DeployCloudMode(targetDisk string, fsType string, expected disk.Di
 // DeployCloudModeBatch triggers Cloud Mode deployment for multiple target disk drives with customizable file system.
 func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
 	logger.Info("User confirmed batch Cloud Mode boot disk creation", "diskCount", len(targetDisks), "fs", fsType)
-	return installer.DeployCloudModeBatchWithExpectedDisks(a.ctx, targetDisks, fsType, expected)
+	deployCtx := a.initDeployContext()
+	defer a.clearDeployContext()
+
+	return installer.DeployCloudModeBatchWithExpectedDisks(deployCtx, targetDisks, fsType, expected)
 }
 
 // CheckQEMU returns QEMU detection metadata for backward compatibility.
