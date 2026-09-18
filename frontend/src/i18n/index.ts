@@ -41,7 +41,6 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'sr-Latn', name: 'Srpski', nativeName: 'Srpski' },
   { code: 'sr-Cyrl', name: 'Српски', nativeName: 'Српски' },
   { code: 'th-TH', name: 'ไทย', nativeName: 'ไทย' },
-  { code: 'no-NO', name: 'Norsk', nativeName: 'Norsk' },
   { code: 'lt-LT', name: 'Lietuvių', nativeName: 'Lietuvių' },
   { code: 'mk-MK', name: 'Македонски', nativeName: 'Македонски' },
   { code: 'he-IL', name: 'עברית', nativeName: 'עברית' },
