@@ -198,6 +198,10 @@ export interface TranslationDict {
   "vm.tip_ready": string;
   "vm.toast_select_first": string;
   "vm.toast_not_installed": string;
+  "vm.cfg_cpu": string;
+  "vm.cfg_ram": string;
+  "vm.cfg_accel": string;
+  "vm.cfg_secure_boot": string;
   "settings.title": string;
   "settings.subtitle": string;
   "settings.realtime_save": string;
