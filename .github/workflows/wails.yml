@@ -129,6 +129,21 @@ jobs:
             -platform "${TARGET}" \
             -ldflags "-s -w -X '${PKG}.GitTag=${TAG}' -X '${PKG}.CommitHash=${COMMIT}' -X '${PKG}.CommitHashFull=${COMMIT_FULL}' -X '${PKG}.BuildTime=${DATE}' -X '${PKG}.ProjectName=unigodesktop'"
 
+      - name: Codesign macOS App Bundle
+        if: runner.os == 'macOS' && secrets.APPLE_CERTIFICATE != ''
+        shell: bash
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASS: ${{ secrets.APPLE_CERTIFICATE_PASS }}
+          APPLE_IDENTITY: ${{ secrets.APPLE_IDENTITY }}
+        run: |
+          set -euo pipefail
+          APP_PATH="build/bin/UniGoDesktop.app"
+          if [ -d "$APP_PATH" ]; then
+            echo "Signing macOS App Bundle..."
+            codesign --force --deep --options runtime --sign "${APPLE_IDENTITY}" "$APP_PATH"
+          fi
+
       - name: Create macOS DMG
         if: runner.os == 'macOS'
         shell: bash
