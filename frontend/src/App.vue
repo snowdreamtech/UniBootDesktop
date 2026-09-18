@@ -1164,13 +1164,16 @@ async function startDeployment() {
   }
 
   isDeploying.value = true;
-  deployProgress.value = 15;
+  deployProgress.value = 5;
 
-  const progressTimer = setInterval(() => {
-    if (deployProgress.value < 85) {
-      deployProgress.value += 15;
-    }
-  }, 150);
+  // For Cloud Mode, listen to the real stage-progress events emitted by the backend.
+  // For Hybrid Mode, iso-copy-progress events are already handled globally in onMounted.
+  let unsubCloudProgress: (() => void) | null = null;
+  if (activeMode.value === 'cloud' && window.runtime && window.runtime.EventsOn) {
+    unsubCloudProgress = window.runtime.EventsOn('cloud-deploy-progress', (progress: number) => {
+      deployProgress.value = progress;
+    });
+  }
 
   let success = true;
   let resultMsg = '';
@@ -1229,8 +1232,12 @@ async function startDeployment() {
     success = false;
     resultMsg = e?.message || String(e);
   } finally {
-    clearInterval(progressTimer);
+    if (unsubCloudProgress) {
+      unsubCloudProgress();
+      unsubCloudProgress = null;
+    }
   }
+
 
   if (success) {
     deployProgress.value = 100;

@@ -288,7 +288,13 @@ func (a *App) DeployCloudMode(targetDisk string, fsType string, expected disk.Di
 	deployCtx := a.initDeployContext()
 	defer a.clearDeployContext()
 
+	// Emit stage-based progress events so the frontend can show real progress
+	// instead of a fake interval timer.
+	wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", 10) // started: validating disk
 	res, err := installer.DeployCloudModeWithExpectedDisk(deployCtx, targetDisk, fsType, expected)
+	if err == nil {
+		wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", 100) // complete
+	}
 	if err != nil && res != nil {
 		return res, nil
 	}
@@ -301,7 +307,12 @@ func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected
 	deployCtx := a.initDeployContext()
 	defer a.clearDeployContext()
 
-	return installer.DeployCloudModeBatchWithExpectedDisks(deployCtx, targetDisks, fsType, expected)
+	wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", 10) // started
+	results, err := installer.DeployCloudModeBatchWithExpectedDisks(deployCtx, targetDisks, fsType, expected)
+	if err == nil {
+		wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", 100) // complete
+	}
+	return results, err
 }
 
 // CheckQEMU returns QEMU detection metadata for backward compatibility.
