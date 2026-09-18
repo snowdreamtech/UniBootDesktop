@@ -121,7 +121,17 @@
                 class="hash-compare-input" 
                 :placeholder="t('checksum.compare_placeholder')" 
               />
-              <div v-if="expectedHashInput.trim()" class="match-badge" :class="isHashMatching ? 'match' : 'mismatch'">
+              <button class="import-sums-btn" title="加载 SHA256SUMS / CHECKSUM.txt 文件" @click="triggerSumsFilePick">
+                📄 导入 .sums
+              </button>
+              <input 
+                type="file" 
+                ref="sumsFileInputRef" 
+                style="display: none;" 
+                accept=".txt,.sums,.sha256sums,.md5sums,.checksum,*" 
+                @change="handleSumsFileSelected" 
+              />
+              <div v-if="parsedExpectedHash" class="match-badge" :class="isHashMatching ? 'match' : 'mismatch'">
                 {{ isHashMatching ? t('checksum.match_success') : t('checksum.match_mismatch') }}
               </div>
             </div>
@@ -314,11 +324,61 @@ const calculatedHash = ref('');
 const currentChecksumAlgo = ref('sha256');
 const expectedHashInput = ref('');
 const isHashCopied = ref(false);
+const sumsFileInputRef = ref<HTMLInputElement | null>(null);
+
+function parseExpectedHashString(rawInput: string, currentFileName: string): string {
+  if (!rawInput) return '';
+  const trimmed = rawInput.trim();
+  
+  // If it's a multi-line checksum file content (e.g. SHA256SUMS file)
+  if (trimmed.includes('\n')) {
+    const lines = trimmed.split('\n');
+    for (const line of lines) {
+      const lineTrimmed = line.trim();
+      if (!lineTrimmed || lineTrimmed.startsWith('#')) continue;
+      // Line format: "hash_string  filename" or "hash_string *filename"
+      if (currentFileName && lineTrimmed.toLowerCase().includes(currentFileName.toLowerCase())) {
+        const parts = lineTrimmed.split(/\s+/);
+        if (parts.length >= 1) return parts[0].toLowerCase();
+      }
+    }
+  }
+  
+  // Single line or direct hash string
+  const parts = trimmed.split(/\s+/);
+  return parts[0].toLowerCase();
+}
+
+const parsedExpectedHash = computed(() => {
+  const currentFileName = props.selectedIsoFiles.length > 0 ? props.selectedIsoFiles[0].name : '';
+  return parseExpectedHashString(expectedHashInput.value, currentFileName);
+});
 
 const isHashMatching = computed(() => {
-  if (!expectedHashInput.value || !calculatedHash.value) return false;
-  return expectedHashInput.value.trim().toLowerCase() === calculatedHash.value.trim().toLowerCase();
+  if (!parsedExpectedHash.value || !calculatedHash.value) return false;
+  return parsedExpectedHash.value === calculatedHash.value.trim().toLowerCase();
 });
+
+function triggerSumsFilePick() {
+  if (sumsFileInputRef.value) {
+    sumsFileInputRef.value.value = '';
+    sumsFileInputRef.value.click();
+  }
+}
+
+function handleSumsFileSelected(event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (!target.files || target.files.length === 0) return;
+  const file = target.files[0];
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const text = e.target?.result as string;
+    if (text) {
+      expectedHashInput.value = text;
+    }
+  };
+  reader.readAsText(file);
+}
 
 async function handleCalculateChecksum() {
   if (props.selectedIsoFiles.length === 0 || isCalculatingHash.value) return;
@@ -816,6 +876,25 @@ function getFileIcon(filename: string): string {
   border: 1px solid var(--card-border);
   background: var(--input-bg);
   color: var(--text-main);
+}
+
+.import-sums-btn {
+  background: var(--btn-sec-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.import-sums-btn:hover {
+  background: var(--btn-sec-hover-bg);
+  color: var(--accent-cyan);
+  border-color: var(--btn-sec-hover-border);
 }
 
 .match-badge {
