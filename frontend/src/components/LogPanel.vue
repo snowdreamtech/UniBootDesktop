@@ -352,31 +352,33 @@ function formatLogTime(ts: string | Date | number): string {
 }
 
 [data-theme="light"] .btn-tab-sm.active {
-  background: #0284c7;
+  background: linear-gradient(135deg, #0396e6 0%, #0284c7 45%, #2563eb 100%);
   color: #ffffff;
   font-weight: 700;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 2px 8px rgba(2, 132, 199, 0.3);
 }
 
 [data-theme="light"] .btn-text-sm {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 60%, #f1f5f9 100%);
+  border: 1px solid rgba(15, 23, 42, 0.12);
   color: #0f172a;
   font-weight: 600;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 [data-theme="light"] .btn-text-sm:hover {
-  background: #f0f9ff;
-  border-color: #0284c7;
+  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-color: rgba(2, 132, 199, 0.35);
   color: #0284c7;
+  box-shadow: inset 0 1px 0 #ffffff, 0 3px 8px rgba(2, 132, 199, 0.15);
 }
 
 [data-theme="light"] .auto-scroll-label-sm {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 60%, #f1f5f9 100%);
+  border: 1px solid rgba(15, 23, 42, 0.12);
   color: #0f172a;
   font-weight: 600;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 [data-theme="light"] .auto-scroll-label-sm input[type="checkbox"] {
@@ -384,23 +386,25 @@ function formatLogTime(ts: string | Date | number): string {
 }
 
 [data-theme="light"] .auto-scroll-label-sm:hover {
-  background: #f0f9ff;
-  border-color: #0284c7;
+  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-color: rgba(2, 132, 199, 0.35);
   color: #0284c7;
+  box-shadow: inset 0 1px 0 #ffffff, 0 3px 8px rgba(2, 132, 199, 0.15);
 }
 
 [data-theme="light"] .btn-text-danger-sm {
-  background: #fef2f2;
-  border: 1px solid #fca5a5;
+  background: linear-gradient(180deg, #ffffff 0%, #fff5f5 60%, #fef2f2 100%);
+  border: 1px solid rgba(239, 68, 68, 0.25);
   color: #dc2626;
   font-weight: 600;
-  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.08);
+  box-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(239, 68, 68, 0.08);
 }
 
 [data-theme="light"] .btn-text-danger-sm:hover {
-  background: #fee2e2;
-  border-color: #ef4444;
+  background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: rgba(239, 68, 68, 0.45);
   color: #b91c1c;
+  box-shadow: inset 0 1px 0 #ffffff, 0 3px 8px rgba(239, 68, 68, 0.15);
 }
 
 [data-theme="light"] .embedded-terminal-window {
