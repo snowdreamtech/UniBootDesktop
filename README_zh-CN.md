@@ -17,16 +17,18 @@
 - **双引导制作引擎 (Dual Boot Engines)**：
   - **Hybrid Mode (Ventoy MultiBoot 混合模式)**：基于 Ventoy 核心协议，零损伤保留磁盘剩余空间，支持无限放入 ISO/WIM/VHD/IMG 镜像。
   - **Cloud Mode (1-Sec Cloud 极速一秒云盘模式)**：macOS 友好原生方案，纯 iPXE 网络引导全架构固件（支持 x86_64, UEFI, Legacy MBR, ARM64, RISC-V 64）。
-- **QEMU 可视化虚拟机测试 (VM Simulator)**：
-  - 界面与命令行内置 QEMU 模拟验证模块，可在桌面端一键无需重启电脑直接测试启动盘装载效果。
-- **USB 硬件深层检测 (Hardware Inspector)**：
-  - 具备 480 Mb/s 物理总线速率检测、SMART 健康度、分区表架构 (GPT/MBR) 与文件系统类型展示。
-- **53 种语言全量母语原生国际化 (53 Native Locales)**：
-  - 100% 齐平 Ventoy 官方 53 种语言，每一个语言包的 256 个 UI 键值全量母语原生翻译（0 英文残留），支持阿拉伯语/希伯来语/波斯语/乌尔都语 **RTL (右至左) 自动布局翻转**。
+- **实时传输速率、ETA 倒计时与中途取消 (Live Speed, ETA & Cancellation)**：
+  - 动态计算写入速度（MB/s）与剩余时间（ETA），支持随时在前端中断/取消部署 (`Context.WithCancel`) 并安全释放临时资源。
+- **ISO 镜像 Hash 校验与防误擦除安全防护 (Checksum & Safety Guard)**：
+  - ISO 镜像写入前后自动进行 SHA256 完整性校验。内置系统主盘不可突破的白名单拦截与目标盘独占锁机制，严防误擦除。
+- **QEMU 可视化虚拟机高级测试 (Hypervisor VM Simulator)**：
+  - 界面与命令行内置 QEMU 模拟验证模块，支持自定义配置 **CPU 核心数 (1~8核)、内存 (1GB~8GB)、硬件加速 (`⚡ HVF/KVM/WHPX`)** 及 **SecureBoot 仿真**，可在桌面端一键免重启测试启动盘。
+- **智能日志控制台与全选按钮状态机 (Smart Log & Batch Selection)**：
+  - 日志中心采用最新日志置顶逆序展示，全选/取消全选按钮具备智能禁用与全选状态机。
+- **51 种语言全量母语原生国际化 (51 Native Locales)**：
+  - 齐平 Ventoy 官方 51 种语言，每一个语言包的 423 个 UI 键值 100% 全量母语原生翻译（0 英文残留），支持阿拉伯语/希伯来语/波斯语/乌尔都语 **RTL (右至左) 自动布局翻转**。
 - **单盘 & 多磁盘高并发批量部署 (Batch Multi-Disk Flashing)**：
   - CLI 命令行支持单盘部署、高并发多磁盘批量并行刷盘 (`--disks`) 及全设备自动刷盘 (`--all-usb`)。
-- **13 项嵌入式固件与 ISO 矩阵 (Embedded Firmware Matrix)**：
-  - Go `embed.FS` 静态嵌入 13 项全局引导固件，支持 GitHub 镜像加速增量云端自动同步。
 
 ---
 
@@ -49,7 +51,7 @@ unigodesktop deploy --disks /dev/disk2,/dev/disk3,/dev/disk4 --mode Cloud -y
 # 4. 自动全量扫描并部署所有接入的可移动磁盘
 unigodesktop deploy --all-usb --mode Hybrid -y
 
-# 5. 命令行启动 QEMU 虚拟机测试目标磁盘
+# 5. 命令行启动 QEMU 虚拟机测试目标磁盘 (自定义 CPU/内存)
 unigodesktop qemu --disk /dev/disk2 -m 4096
 
 # 6. 检查与设置全局 GitHub 镜像加速代理
@@ -66,6 +68,19 @@ unigodesktop doctor
 # 9. 生成 Zsh / Bash 命令行自动补全
 unigodesktop completion zsh > ~/.zsh/completion/_unigodesktop
 ```
+
+---
+
+## 🍏 macOS 打开提示说明 (Gatekeeper Tip)
+
+在未签名或使用未公证的 macOS 版本时，首次打开可能会出现系统提示：“*无法打开 UniGoDesktop，因为无法确认开发者的身份*”。
+
+您可以通过以下方式正常打开：
+1. **右键打开**：右键点击应用图标，选择“**打开**”，并在弹出框中点击“**打开**”。
+2. **终端移除隔离属性**：
+   ```bash
+   sudo xattr -cr /Applications/UniGoDesktop.app
+   ```
 
 ---
 

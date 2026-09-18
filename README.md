@@ -17,16 +17,18 @@
 - **Dual Boot Engines**:
   - **Hybrid Mode (Ventoy MultiBoot Pro)**: Powered by Ventoy core protocol. Non-destructive in-place upgrades preserving user space with unlimited ISO/WIM/VHD/IMG placement.
   - **Cloud Mode (1-Sec Cloud Disk)**: macOS-native friendly iPXE cloud network boot with all-architecture firmware support (x86_64, UEFI, Legacy MBR, ARM64, RISC-V 64).
-- **QEMU Simulator VM Test**:
-  - Embedded QEMU simulator test module in both GUI and CLI. Verify bootable disks instantly without rebooting your computer.
-- **Disk Hardware Inspector**:
-  - Displays 480 Mb/s physical bus speed, SMART health, partition scheme (GPT/MBR), and filesystem type.
-- **53 Native Locales (100% Ventoy Parity)**:
-  - 100% translated across 256 UI keys with ZERO English fallbacks. Includes RTL (Right-to-Left) auto-layout flipping for Arabic, Hebrew, Persian, and Urdu.
+- **Live Transfer Speed (MB/s), ETA & Cancellation Context**:
+  - Dynamic live transfer speed counter (MB/s) and estimated time remaining (ETA). Supports in-flight deployment cancellation (`Context.WithCancel`) at any time.
+- **ISO SHA256 Checksum Verification & Physical Disk Guard**:
+  - Automatic pre/post ISO SHA256 integrity verification. Hardened system disk whitelist and target disk exclusive locking to prevent accidental erasure.
+- **QEMU Simulator VM Test & Advanced Tuning**:
+  - Embedded QEMU simulator test module in both GUI and CLI. Customize **CPU Cores (1~8), RAM (1GB~8GB), Hardware Acceleration (`⚡ HVF/KVM/WHPX`)**, and **SecureBoot simulation**.
+- **Inverted Modern Log Viewer & Smart Batch Selector**:
+  - Inverted log console displaying newest logs on top. Smart batch button state machine for Select All / Deselect All actions.
+- **51 Native Locales (100% Ventoy Parity)**:
+  - 100% translated across 423 UI keys with ZERO English fallbacks. Includes RTL (Right-to-Left) auto-layout flipping for Arabic, Hebrew, Persian, and Urdu.
 - **Single & Batch Multi-Disk Parallel Deployment**:
   - Powerful CLI supporting single disk deployment, concurrent multi-disk batch deployment (`--disks`), and auto-all disk deployment (`--all-usb`).
-- **13 Embedded Firmware Matrix**:
-  - Statically embedded Go `embed.FS` firmware matrix with automated GitHub cloud mirror synchronization.
 
 ---
 
@@ -47,7 +49,7 @@ unigodesktop deploy --disks /dev/disk2,/dev/disk3,/dev/disk4 --mode Cloud -y
 # 4. Automatically deploy to ALL detected removable disks
 unigodesktop deploy --all-usb --mode Hybrid -y
 
-# 5. Launch QEMU simulator to test target disk from CLI
+# 5. Launch QEMU simulator to test target disk from CLI (custom RAM/CPU)
 unigodesktop qemu --disk /dev/disk2 -m 4096
 
 # 6. Configure GitHub cloud mirror speed acceleration
@@ -64,6 +66,18 @@ unigodesktop doctor
 # 9. Generate shell completion scripts
 unigodesktop completion zsh > ~/.zsh/completion/_unigodesktop
 ```
+
+---
+
+## 🍏 macOS Security Notice (Gatekeeper Tip)
+
+If opening the application triggers the macOS Gatekeeper message *"UniGoDesktop cannot be opened because the developer cannot be verified"*:
+
+1. **Right-Click Open**: Right-click `UniGoDesktop.app` in Finder, choose **Open**, and click **Open** in the confirmation dialog.
+2. **Terminal Quarantine Removal**:
+   ```bash
+   sudo xattr -cr /Applications/UniGoDesktop.app
+   ```
 
 ---
 
