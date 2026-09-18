@@ -870,9 +870,10 @@ function openIconPicker(disk: DiskInfo) {
 
 function onIconSelected(type: DiskIconType) {
   if (targetPickerDisk.value) {
+    // Use the fingerprint (serial-number-based) as the single source of truth
+    // so the icon survives hot-plug events where the device path may change.
     const fp = getDiskFingerprint(targetPickerDisk.value);
     customIcons.value[fp] = type;
-    customIcons.value[targetPickerDisk.value.device] = type;
     saveCustomIcons(customIcons.value);
     logUserAction('INFO', 'User updated custom disk icon', `${targetPickerDisk.value.name || targetPickerDisk.value.device} -> ${type}`);
   }
@@ -882,7 +883,6 @@ function onIconReset() {
   if (targetPickerDisk.value) {
     const fp = getDiskFingerprint(targetPickerDisk.value);
     delete customIcons.value[fp];
-    delete customIcons.value[targetPickerDisk.value.device];
     saveCustomIcons(customIcons.value);
     logUserAction('INFO', 'User reset custom disk icon to default', targetPickerDisk.value.name || targetPickerDisk.value.device);
   }

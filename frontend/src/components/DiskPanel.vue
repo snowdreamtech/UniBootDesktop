@@ -140,8 +140,18 @@ const emit = defineEmits<{
   (e: 'refresh-disks'): void;
 }>();
 
+function getDiskFingerprint(disk: DiskInfo): string {
+  if (disk.serialNumber && disk.serialNumber.trim() !== '') {
+    return `sn:${disk.serialNumber.trim()}`;
+  }
+  return `dev:${disk.name}_${disk.size}`;
+}
+
 function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
-  return props.customIcons[disk.device];
+  // Prefer fingerprint key (serial-number-based, survives hot-plug path changes).
+  // Fall back to device path for backward compatibility with pre-existing data.
+  const fp = getDiskFingerprint(disk);
+  return props.customIcons[fp] ?? props.customIcons[disk.device];
 }
 </script>
 
