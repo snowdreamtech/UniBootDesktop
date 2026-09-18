@@ -403,7 +403,7 @@ export const bnBd: TranslationDict = {
   "checksum.algo_label": "অ্যালগরিদম",
   "checksum.copy_hash": "হ্যাশ অনুলিপি করুন",
   "checksum.copied": "হ্যাশ ক্লিপবোর্ডে অনুলিপি করা হয়েছে",
-  "checksum.compare_placeholder": "যাচাই করতে অফিসিয়াল เช็คซัม পেস্ট করুন...",
+  "checksum.compare_placeholder": "যাচাই করতে অফিসিয়াল চেকসাম পেস্ট করুন...",
   "checksum.match_success": "✅ হ্যাশ চেকসাম মিলেছে",
   "checksum.match_mismatch": "❌ হ্যাশ মেলেনি! ফাইলটি ক্ষতিগ্রস্ত হতে পারে",
   "checksum.target_iso_label": "টার্গেট ইমেজ",
