@@ -277,6 +277,9 @@ const diskTagLabel = computed(() => {
   padding: 0.8rem 1rem;
   cursor: pointer;
   margin-bottom: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   transition: all 0.2s ease;
 }
@@ -295,7 +298,7 @@ const diskTagLabel = computed(() => {
 
 .disk-card.selected {
   border-color: var(--accent-cyan);
-  background: rgba(0, 229, 255, 0.08);
+  background: var(--accent-cyan-glow);
 }
 
 .disk-icon-wrapper {
@@ -311,8 +314,8 @@ const diskTagLabel = computed(() => {
 }
 
 .disk-icon-wrapper.boot {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  background: var(--badge-boot-bg);
+  color: var(--badge-boot-text);
 }
 
 .disk-icon-wrapper.ssd {
@@ -390,6 +393,7 @@ const diskTagLabel = computed(() => {
 .disk-name {
   font-weight: 600;
   font-size: 1rem;
+  color: var(--text-main);
 }
 
 .fake-badge {
@@ -422,12 +426,13 @@ const diskTagLabel = computed(() => {
   font-size: 0.725rem;
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--input-bg);
+  color: var(--text-muted);
   white-space: nowrap;
 }
 
 .speed-tag.usb2 {
-  color: #cbd5e1;
+  color: var(--text-muted);
 }
 
 .speed-tag.usb3_0 {
@@ -450,9 +455,9 @@ const diskTagLabel = computed(() => {
 }
 
 .btn-inspect {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-muted);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--btn-sec-bg);
+  color: var(--btn-sec-text);
+  border: 1px solid var(--btn-sec-border);
   border-radius: 6px;
   padding: 0.2rem 0.5rem;
   font-size: 0.75rem;
@@ -461,15 +466,15 @@ const diskTagLabel = computed(() => {
 }
 
 .btn-inspect:hover {
-  background: rgba(0, 229, 255, 0.15);
-  color: var(--accent-cyan);
-  border-color: rgba(0, 229, 255, 0.3);
+  background: var(--btn-sec-hover-bg);
+  color: var(--btn-sec-hover-text);
+  border-color: var(--btn-sec-hover-border);
 }
 
 .btn-eject {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-muted);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--btn-sec-bg);
+  color: var(--btn-sec-text);
+  border: 1px solid var(--btn-sec-border);
   border-radius: 6px;
   padding: 0.2rem 0.5rem;
   font-size: 0.75rem;
@@ -494,8 +499,8 @@ const diskTagLabel = computed(() => {
 }
 
 .disk-badge.boot {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  background: var(--badge-boot-bg);
+  color: var(--badge-boot-text);
 }
 
 .disk-badge.ssd {
@@ -535,7 +540,7 @@ const diskTagLabel = computed(() => {
 
 .disk-badge.usb2 {
   background: rgba(148, 163, 184, 0.15);
-  color: #cbd5e1;
+  color: var(--text-muted);
 }
 
 .disk-badge.usb3_1 {

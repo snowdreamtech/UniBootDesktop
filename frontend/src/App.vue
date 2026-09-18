@@ -14,427 +14,88 @@
       </div>
     </transition>
 
-    <!-- Header -->
-    <header class="app-header">
-      <div class="brand">
-        <span class="logo">🚀</span>
-        <div>
-          <h1>{{ t('app.title') }}</h1>
-          <span class="sub-brand">{{ t('app.subtitle') }}</span>
-        </div>
-      </div>
-      <div class="mode-tabs">
-        <button 
-          class="tab-btn" 
-          :class="{ active: activeMode === 'cloud' }"
-          @click="selectMode('cloud')"
-        >
-          ⚡ {{ t('mode.cloud') }}
-        </button>
-        <button 
-          class="tab-btn" 
-          :class="{ active: activeMode === 'hybrid' }"
-          @click="selectMode('hybrid')"
-        >
-          🛠️ {{ t('mode.hybrid') }}
-        </button>
-
-        <!-- Header Quick Language Switcher Dropdown -->
-        <div class="lang-selector-header" ref="langDropdownRef">
-          <button 
-            class="lang-pill-btn" 
-            :title="t('settings.language')"
-            @click.stop="toggleLangMenu"
-          >
-            <span class="lang-icon">🌐</span>
-            <span class="lang-label">{{ currentLangLabel }}</span>
-            <span class="dropdown-caret">▾</span>
-          </button>
-
-          <transition name="dropdown-fade">
-            <div v-if="isLangMenuOpen" class="lang-dropdown-menu" @click.stop>
-              <button 
-                v-for="opt in langOptions" 
-                :key="opt.value"
-                class="lang-option"
-                :class="{ active: currentLang === opt.value }"
-                @click="selectLanguage(opt.value)"
-              >
-                <span class="opt-text">{{ opt.label }}</span>
-                <span v-if="currentLang === opt.value" class="opt-check">✓</span>
-              </button>
-            </div>
-          </transition>
-        </div>
-
-        <button 
-          class="settings-icon-btn log-toggle-btn" 
-          :class="{ active: isLogCardVisible }"
-          :title="t('log.title')"
-          @click="toggleLogCard"
-        >
-          📜
-        </button>
-
-        <button 
-          class="settings-icon-btn" 
-          :title="t('settings.title')"
-          @click="openSettings('general')"
-        >
-          ⚙️
-        </button>
-
-        <button 
-          class="settings-icon-btn" 
-          :title="t('about.title')"
-          @click="isAboutOpen = true"
-        >
-          ℹ️
-        </button>
-      </div>
-    </header>
+    <!-- Header Component -->
+    <AppHeader
+      :activeMode="activeMode"
+      :isLogCardVisible="isLogCardVisible"
+      :currentLang="currentLang"
+      @select-mode="selectMode"
+      @toggle-log="toggleLogCard"
+      @open-settings="tab => openSettings(tab as any)"
+      @open-about="isAboutOpen = true"
+      @select-lang="selectLanguage"
+    />
 
     <!-- Main Grid -->
     <main class="content-grid">
-      <!-- Left: Disk Selection -->
-      <section class="glass-card section-card">
-        <div class="section-header-row">
-          <div>
-            <h2>{{ t('disk.select_title') }}</h2>
-            <p class="section-desc">{{ t('disk.select_desc') }}</p>
-          </div>
-        </div>
+      <!-- Left: Disk Selection Panel Component -->
+      <DiskPanel
+        :diskList="diskList"
+        :selectionMode="selectionMode"
+        :selectedDisk="selectedDisk"
+        :selectedDevices="selectedDevices"
+        :isScanningDisks="isScanningDisks"
+        :customIcons="customIcons"
+        @set-selection-mode="setSelectionMode"
+        @select-all="selectAllDisks"
+        @deselect-all="deselectAllDisks"
+        @batch-eject="handleBatchEjectDisks"
+        @select-disk="onDiskSelect"
+        @toggle-disk="onDiskToggle"
+        @pick-icon="openIconPicker"
+        @inspect-disk="openInspector"
+        @eject-disk="handleEjectDisk"
+        @refresh-disks="refreshDisks"
+      />
 
-        <!-- Mode & Selection controls -->
-        <div class="selection-controls">
-          <div class="selection-mode-toggle">
-            <button 
-              class="sub-tab-btn" 
-              :class="{ active: selectionMode === 'single' }" 
-              @click="setSelectionMode('single')"
-            >
-              {{ t('disk.single_mode') }}
-            </button>
-            <button 
-              class="sub-tab-btn" 
-              :class="{ active: selectionMode === 'batch' }" 
-              @click="setSelectionMode('batch')"
-            >
-              {{ t('disk.batch_mode') }}
-            </button>
-          </div>
+      <!-- Right: Deployment & Testing Panel Component -->
+      <DeployPanel
+        :activeMode="activeMode"
+        :selectionMode="selectionMode"
+        :selectedDisk="selectedDisk"
+        :selectedDevices="selectedDevices"
+        :diskList="diskList"
+        v-model:selectedFsType="selectedFsType"
+        :isNonDestructive="isNonDestructive"
+        :isMacOs="isMacOs"
+        :ventoyStatus="ventoyStatus"
+        :selectedIsoFiles="selectedIsoFiles"
+        :isDeploying="isDeploying"
+        :deployProgress="deployProgress"
+        :deployBtnText="deployBtnText"
+        :deployDisabledReason="deployDisabledReason"
+        :showDeploySuccessBanner="showDeploySuccessBanner"
+        :deploySuccessBanner="deploySuccessBanner"
+        :hypervisorList="hypervisorList"
+        v-model:selectedBootMode="selectedBootMode"
+        v-model:selectedVMType="selectedVMType"
+        :isVmDisabled="isVmDisabled"
+        :vmDisabledReason="vmDisabledReason"
+        :isLaunchingQemu="isLaunchingQemu"
+        :activeVmTargetName="activeVmTargetName"
+        :activeVmTargetDevice="activeVmTargetDevice"
+        @open-settings-ventoy="openSettings('ventoy')"
+        @select-iso="handleSelectIsoFiles"
+        @remove-iso="removeIsoFile"
+        @clear-iso="clearIsoFiles"
+        @deploy-click="handleDeployBtnClick"
+        @dismiss-success-banner="dismissDeploySuccessBanner"
+        @safely-eject-success="handleSafelyEjectAfterDeploy"
+        @launch-vm="launchVM"
+      />
 
-          <div v-if="selectionMode === 'batch'" class="batch-actions">
-            <button class="btn-text" @click="selectAllDisks">{{ t('disk.select_all') }}</button>
-            <button class="btn-text" @click="deselectAllDisks">{{ t('disk.clear_select') }}</button>
-            <button 
-              class="btn-eject" 
-              :disabled="selectedDevices.size === 0" 
-              :title="t('disk.batch_eject')" 
-              @click="handleBatchEjectDisks"
-            >
-              ⏏️ {{ t('disk.batch_eject') }}
-            </button>
-            <span class="selection-count">{{ t('disk.selected_count', { count: selectedDevices.size, total: diskList.length }) }}</span>
-          </div>
-        </div>
-
-        <div class="disk-list">
-          <DiskCard
-            v-for="disk in diskList"
-            :key="disk.device"
-            :disk="disk"
-            :isBatchMode="selectionMode === 'batch'"
-            :isSelected="selectionMode === 'single' ? selectedDisk?.device === disk.device : selectedDevices.has(disk.device)"
-            :customIcon="getCustomIcon(disk)"
-            @select="onDiskSelect(disk)"
-            @toggle="onDiskToggle(disk)"
-            @pick-icon="openIconPicker(disk)"
-            @inspect="openInspector(disk)"
-            @eject="handleEjectDisk(disk)"
-          />
-          <div v-if="diskList.length === 0" class="empty-state">
-            <span v-if="isScanningDisks">🔍 {{ t('disk.scanning') }}</span>
-            <span v-else>⚠️ {{ t('disk.empty_list') }}</span>
-          </div>
-        </div>
-
-        <button class="btn-secondary refresh-btn" @click="refreshDisks">
-          🔄 {{ t('disk.rescan') }}
-        </button>
-      </section>
-
-      <!-- Right: Deployment & Testing Panel -->
-      <section class="glass-card section-card">
-        <h2>{{ t('deploy.title') }}</h2>
-        <p class="section-desc" v-if="activeMode === 'cloud'">
-          {{ t('deploy.desc_cloud') }}
-        </p>
-        <p class="section-desc" v-else>
-          {{ t('deploy.desc_hybrid') }}
-        </p>
-
-        <!-- Filesystem Selection for Hybrid Mode & Cloud Mode (Hidden when upgrading an existing Ventoy/UniBoot drive) -->
-        <div v-if="!isNonDestructive" class="fs-selector">
-          <label class="fs-label">{{ t('settings.default_fs') }}</label>
-          <CustomSelect
-            v-model="selectedFsType"
-            :options="[
-              { value: 'exFAT', label: t('fs.exfat') },
-              { value: 'NTFS', label: t('fs.ntfs') },
-              { value: 'FAT32', label: t('fs.fat32') },
-              { value: 'ext4', label: t('fs.ext4') }
-            ]"
-          />
-        </div>
-
-        <!-- Ventoy CLI Pre-flight Requirement Notice Banner (Hybrid Mode) -->
-        <div v-if="activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid" class="ventoy-warning-card">
-          <span class="warning-card-icon">⚠️</span>
-          <div class="warning-card-body">
-            <div class="warning-card-title">{{ isMacOs ? t('deploy.macos_alert_title') : t('deploy.no_ventoy_title') }}</div>
-            <div class="warning-card-message">{{ isMacOs ? t('deploy.macos_alert_desc') : t('deploy.no_ventoy_desc') }}</div>
-          </div>
-          <button class="btn-secondary btn-sm" @click="openSettings('ventoy')">
-            ⚙️ {{ t('settings.title') }}
-          </button>
-        </div>
-
-        <!-- Safe Mode Notice Banner when upgrading an existing Ventoy/UniBoot drive -->
-        <div v-if="isNonDestructive" class="safe-mode-notice">
-          <span class="safe-notice-icon">🛡️</span>
-          <div class="safe-notice-content">
-            <div class="safe-notice-title">
-              {{ activeMode === 'cloud' ? t('safe.title_cloud') : t('safe.title_hybrid') }}
-            </div>
-            <div class="safe-notice-desc">
-              {{ activeMode === 'cloud' ? t('safe.desc_cloud') : t('safe.desc_hybrid') }}
-            </div>
-          </div>
-        </div>
-
-        <!-- Local ISO/IMG Image Source Selection Card (Hybrid Mode) -->
-        <div v-if="activeMode === 'hybrid'" class="iso-card">
-          <div class="iso-card-header">
-            <div class="iso-title-group">
-              <h3>
-                {{ t('iso.title') }}
-                <span class="optional-badge">{{ t('common.optional') }}</span>
-              </h3>
-              <span class="iso-subtitle">{{ t('iso.desc') }}</span>
-            </div>
-            <button class="btn-secondary add-iso-btn" @click="handleSelectIsoFiles">
-              {{ t('iso.add_btn') }}
-            </button>
-          </div>
-
-          <div class="iso-list-container">
-            <div v-if="selectedIsoFiles.length === 0" class="iso-empty-state" @click="handleSelectIsoFiles">
-              <span class="empty-icon">📥</span>
-              <div class="empty-text">{{ t('iso.empty_title') }}</div>
-              <div class="empty-subtext">{{ t('iso.empty_sub') }}</div>
-            </div>
-
-            <div v-else class="iso-file-list">
-              <div v-for="(file, index) in selectedIsoFiles" :key="index" class="iso-file-item">
-                <span class="iso-file-icon">{{ getFileIcon(file.name) }}</span>
-                <div class="iso-file-info">
-                  <div class="iso-file-name" :title="file.path">{{ file.name }}</div>
-                  <div class="iso-file-path">{{ file.path }}</div>
-                </div>
-                <button class="iso-remove-btn" title="Remove" @click="removeIsoFile(index)">✕</button>
-              </div>
-            </div>
-
-            <div v-if="selectedIsoFiles.length > 0" class="iso-footer">
-              <span class="iso-count-summary">{{ t('iso.summary', { count: selectedIsoFiles.length }) }}</span>
-              <button class="btn-text-danger" @click="clearIsoFiles">{{ t('iso.clear') }}</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="deploy-box">
-          <div class="selected-target">
-            <span>{{ t('deploy.target_device') }}</span>
-            <strong v-if="selectionMode === 'single'">
-              {{ selectedDisk ? selectedDisk.name + ' (' + selectedDisk.device + ')' : t('disk.no_disk') }}
-            </strong>
-            <strong v-else>
-              {{ selectedDevices.size > 0 ? t('deploy.batch_target', { count: selectedDevices.size }) : t('disk.no_disk') }}
-            </strong>
-          </div>
-
-          <ProgressBar 
-            v-if="isDeploying" 
-            :label="t('deploy.writing')" 
-            :progress="deployProgress" 
-          />
-
-          <button 
-            class="btn-primary deploy-btn" 
-            :class="{ 'safe-btn': isNonDestructive, 'danger-disabled': activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid }"
-            :disabled="isDeploying"
-            :title="deployDisabledReason"
-            @click="handleDeployBtnClick"
-          >
-            {{ deployBtnText }}
-          </button>
-
-          <!-- Deploy success banner with Safely Eject button -->
-          <div v-if="showDeploySuccessBanner" class="deploy-success-banner">
-            <div class="deploy-success-icon">🎉</div>
-            <div class="deploy-success-content">
-              <div class="deploy-success-title">{{ t('deploy.success_banner_title') }}</div>
-              <div class="deploy-success-desc">
-                {{ deploySuccessBanner.autoEjected ? t('deploy.toast_auto_ejected', { count: deploySuccessBanner.targets.length }) : t('deploy.success_banner_desc') }}
-              </div>
-            </div>
-            <div class="deploy-success-actions">
-              <button class="btn-dismiss" @click="dismissDeploySuccessBanner" :title="t('common.close')">✕</button>
-              <button
-                v-if="!deploySuccessBanner.autoEjected"
-                id="btn-safely-eject-after-deploy"
-                class="btn-eject-success"
-                @click="handleSafelyEjectAfterDeploy"
-              >
-                ⏏️ {{ t('deploy.safely_eject_btn') }}
-              </button>
-            </div>
-          </div>
-        </div>
-
-
-        <!-- Hypervisor Simulation Test Card -->
-        <div class="vm-box">
-          <div class="vm-header">
-            <div class="vm-title-group">
-              <h3>
-                {{ t('vm.box_title') }}
-                <span class="optional-badge">{{ t('common.optional') }}</span>
-              </h3>
-            </div>
-          </div>
-
-          <!-- VM Options Bar -->
-          <div class="vm-options-bar">
-            <!-- Boot Mode Selector -->
-            <div class="vm-selector-container">
-              <span class="vm-selector-label">{{ t('vm.boot_mode_label') }}</span>
-              <div class="vm-select-wrapper">
-                <select v-model="selectedBootMode" class="vm-select boot-select">
-                  <option value="uefi">{{ t('vm.boot_mode_uefi') }}</option>
-                  <option value="bios">{{ t('vm.boot_mode_bios') }}</option>
-                  <option value="auto">{{ t('vm.boot_mode_auto') }}</option>
-                </select>
-                <span class="select-arrow">▾</span>
-              </div>
-            </div>
-
-            <!-- Single Hypervisor Badge -->
-            <div v-if="hypervisorList.length <= 1" class="vm-selector-container">
-              <span class="vm-selector-label">{{ t('vm.select_vm_label') }}</span>
-              <span class="badge" :class="hypervisorList.length === 1 ? 'success' : 'muted'">
-                {{ hypervisorList.length === 1 ? hypervisorList[0].name : t('vm.not_installed') }}
-              </span>
-            </div>
-
-            <!-- Multiple Hypervisors Selector -->
-            <div v-else class="vm-selector-container">
-              <span class="vm-selector-label">{{ t('vm.select_vm_label') }}</span>
-              <div class="vm-select-wrapper">
-                <select v-model="selectedVMType" class="vm-select">
-                  <option v-for="vm in hypervisorList" :key="vm.type" :value="vm.type">
-                    {{ vm.name }}
-                  </option>
-                </select>
-                <span class="select-arrow">▾</span>
-              </div>
-            </div>
-          </div>
-          <p class="vm-desc">
-            {{ t('vm.target') }} 
-            <strong v-if="activeVmTargetDevice" class="target-highlight">
-              {{ activeVmTargetName }} ({{ activeVmTargetDevice }})
-            </strong>
-            <span v-else class="target-warn">
-              {{ t('vm.no_disk_warn') }}
-            </span>
-          </p>
-          <button 
-            class="btn-secondary" 
-            :disabled="isVmDisabled" 
-            :title="vmDisabledReason"
-            @click="launchVM"
-          >
-            {{ isLaunchingQemu ? t('vm.launching') : t('vm.run_test') }}
-          </button>
-        </div>
-      </section>
-
-      <!-- Embedded Log Center Card (主页面日志中心卡片) -->
-      <transition name="card-fade">
-        <section v-show="isLogCardVisible" class="glass-card log-section-card">
-          <!-- Row 1: Title & Top Control Buttons (Right to Left: Close, Clear, Export, Copy, Auto-scroll) -->
-          <div class="log-section-header">
-            <div class="log-title-group">
-              <h2>📜 {{ t('log.title') }}</h2>
-              <span class="badge live-badge">● {{ t('log.live') }}</span>
-            </div>
-
-            <div class="log-section-controls">
-              <label class="auto-scroll-label-sm">
-                <input type="checkbox" v-model="embeddedAutoScroll" />
-                {{ t('log.auto_scroll') }}
-              </label>
-
-              <button class="btn-text-sm" @click="handleCopyEmbeddedLogs">📋 {{ t('log.copy') }}</button>
-              <button class="btn-text-sm" @click="handleExportEmbeddedLogs">📥 {{ t('log.export') }}</button>
-              <button class="btn-text-danger-sm" @click="handleClearEmbeddedLogs">🗑️ {{ t('log.clear') }}</button>
-              <button 
-                class="btn-text-sm btn-close-log" 
-                :title="t('common.close')" 
-                @click="toggleLogCard"
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-
-          <!-- Row 2: Filter Tabs (Sitting directly above the terminal window) -->
-          <div class="log-sub-header">
-            <div class="filter-tabs-sm">
-              <button 
-                v-for="level in logLevels" 
-                :key="level.key"
-                class="btn-tab-sm"
-                :class="{ active: currentEmbeddedLogFilter === level.key }"
-                @click="currentEmbeddedLogFilter = level.key"
-              >
-                {{ level.label }}
-              </button>
-            </div>
-          </div>
-
-          <div class="embedded-terminal-window" ref="embeddedTerminalRef">
-            <div v-if="filteredEmbeddedLogs.length === 0" class="empty-logs">
-              {{ t('log.empty') }}
-            </div>
-            <div 
-              v-for="log in filteredEmbeddedLogs" 
-              :key="log.id || String(log.timestamp)"
-              class="log-row"
-              :class="log.level.toLowerCase()"
-            >
-              <span class="log-time"><bdi>{{ formatLogTime(log.timestamp) }}</bdi></span>
-              <span class="log-level-badge" :class="log.level.toLowerCase()"><bdi>[{{ log.level }}]</bdi></span>
-              <div class="log-content">
-                <span class="log-msg"><bdi>{{ log.message }}</bdi></span>
-                <span v-if="log.details" class="log-details"><bdi>{{ log.details }}</bdi></span>
-              </div>
-            </div>
-          </div>
-        </section>
-      </transition>
+      <!-- Embedded Log Center Component -->
+      <LogPanel
+        :isVisible="isLogCardVisible"
+        v-model:autoScroll="embeddedAutoScroll"
+        v-model:currentLogFilter="currentEmbeddedLogFilter"
+        :filteredLogs="filteredEmbeddedLogs"
+        :logLevels="logLevels"
+        @copy-logs="handleCopyEmbeddedLogs"
+        @export-logs="handleExportEmbeddedLogs"
+        @clear-logs="handleClearEmbeddedLogs"
+        @close-log="toggleLogCard"
+      />
     </main>
 
     <!-- Icon Picker Modal -->
@@ -505,9 +166,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
-import DiskCard from './components/DiskCard.vue';
-import ProgressBar from './components/ProgressBar.vue';
+import { ref, computed, onMounted, watch, nextTick } from 'vue';
+import AppHeader from './components/AppHeader.vue';
+import DiskPanel from './components/DiskPanel.vue';
+import DeployPanel from './components/DeployPanel.vue';
+import LogPanel from './components/LogPanel.vue';
 import IconPickerModal, { DiskIconType } from './components/IconPickerModal.vue';
 import UsbInspectorModal from './components/UsbInspectorModal.vue';
 import DeployConfirmModal from './components/DeployConfirmModal.vue';
@@ -516,36 +179,11 @@ import VentoyAlertModal from './components/VentoyAlertModal.vue';
 import DiagnosticsModal, { InstallDiagnosticsData } from './components/DiagnosticsModal.vue';
 import AboutModal from './components/AboutModal.vue';
 import type { LogItem } from './components/LogViewerModal.vue';
-import CustomSelect from './components/CustomSelect.vue';
-import { t, currentLang, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
+import { t, currentLang, setLanguage } from './i18n';
 import { ExportLogs, SelectIsoFiles, GetRecentLogs } from '../wailsjs/go/main/App';
-
-const isLangMenuOpen = ref(false);
-const langDropdownRef = ref<HTMLElement | null>(null);
-
-const langOptions = computed(() => [
-  { value: 'auto', label: '🌐 ' + t('common.autoDetect') },
-  ...SUPPORTED_LANGUAGES.map(item => ({
-    value: item.code,
-    label: item.nativeName
-  }))
-]);
-
-const currentLangLabel = computed(() => {
-  if (currentLang.value === 'auto') {
-    return '🌐 ' + t('common.langAuto');
-  }
-  const opt = langOptions.value.find(o => o.value === currentLang.value);
-  return opt ? opt.label : t('common.lang');
-});
-
-function toggleLangMenu() {
-  isLangMenuOpen.value = !isLangMenuOpen.value;
-}
 
 function selectLanguage(langVal: string) {
   setLanguage(langVal);
-  isLangMenuOpen.value = false;
   saveLangToConfig(langVal);
   if (window.go && window.go.main && window.go.main.App && window.go.main.App.ReloadAppMenu) {
     window.go.main.App.ReloadAppMenu(langVal).catch((err: any) => {
@@ -568,11 +206,7 @@ async function saveLangToConfig(langVal: string) {
   }
 }
 
-function handleGlobalClick(event: MouseEvent) {
-  if (langDropdownRef.value && !langDropdownRef.value.contains(event.target as Node)) {
-    isLangMenuOpen.value = false;
-  }
-}
+
 
 interface DiskInfo {
   device: string;
@@ -999,26 +633,7 @@ function clearIsoFiles() {
   logUserAction('INFO', 'User cleared all ISO source files from selection list');
 }
 
-function getFileIcon(filename: string) {
-  const ext = filename.split('.').pop()?.toLowerCase();
-  switch (ext) {
-    case 'iso':
-      return '💿';
-    case 'wim':
-    case 'img':
-    case 'raw':
-      return '📦';
-    case 'vhd':
-    case 'vhdx':
-    case 'vti':
-      return '💾';
-    case 'efi':
-    case 'bin':
-      return '⚡';
-    default:
-      return '📄';
-  }
-}
+
 
 const toastMessage = ref('');
 const toastType = ref<'info' | 'warning' | 'error' | 'success'>('info');
@@ -1169,10 +784,7 @@ function openDeployConfirm() {
   isDeployConfirmOpen.value = true;
 }
 
-function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
-  const fp = getDiskFingerprint(disk);
-  return customIcons.value[fp] || customIcons.value[disk.device];
-}
+
 
 function openInspector(disk: DiskInfo) {
   targetInspectorDisk.value = disk;
@@ -1757,7 +1369,6 @@ onMounted(() => {
   refreshDisks();
   checkQemu();
   checkVentoyStatus();
-  window.addEventListener('click', handleGlobalClick);
 
   GetRecentLogs().then((logs: any[]) => {
     if (logs && logs.length > 0) {
@@ -1821,9 +1432,7 @@ onMounted(() => {
   }
 });
 
-onUnmounted(() => {
-  window.removeEventListener('click', handleGlobalClick);
-});
+
 </script>
 
 <style scoped>
