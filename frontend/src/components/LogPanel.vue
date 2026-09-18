@@ -10,10 +10,10 @@
 
         <div class="log-section-controls">
           <label class="auto-scroll-label-sm">
-            <input 
-              type="checkbox" 
-              :checked="autoScroll" 
-              @change="e => emit('update:autoScroll', (e.target as HTMLInputElement).checked)" 
+            <input
+              type="checkbox"
+              :checked="autoScroll"
+              @change="e => emit('update:autoScroll', (e.target as HTMLInputElement).checked)"
             />
             {{ t('log.auto_scroll') }}
           </label>
@@ -21,9 +21,9 @@
           <button class="btn-text-sm" @click="emit('copy-logs')">📋 {{ t('log.copy') }}</button>
           <button class="btn-text-sm" @click="emit('export-logs')">📥 {{ t('log.export') }}</button>
           <button class="btn-text-danger-sm" @click="emit('clear-logs')">🗑️ {{ t('log.clear') }}</button>
-          <button 
-            class="btn-text-sm btn-close-log" 
-            :title="t('common.close')" 
+          <button
+            class="btn-text-sm btn-close-log"
+            :title="t('common.close')"
             @click="emit('close-log')"
           >
             ✕
@@ -34,8 +34,8 @@
       <!-- Row 2: Filter Tabs -->
       <div class="log-sub-header">
         <div class="filter-tabs-sm">
-          <button 
-            v-for="level in logLevels" 
+          <button
+            v-for="level in logLevels"
             :key="level.key"
             class="btn-tab-sm"
             :class="{ active: currentLogFilter === level.key }"
@@ -50,8 +50,8 @@
         <div v-if="filteredLogs.length === 0" class="empty-logs">
           {{ t('log.empty') }}
         </div>
-        <div 
-          v-for="log in filteredLogs" 
+        <div
+          v-for="log in filteredLogs"
           :key="log.id || String(log.timestamp)"
           class="log-row"
           :class="log.level.toLowerCase()"
@@ -72,6 +72,7 @@
 import { ref, watch, nextTick, onMounted } from 'vue';
 import type { LogItem } from './LogViewerModal.vue';
 import { t } from '../i18n';
+import { formatLogTime } from '../utils/logFormatter';
 
 const props = defineProps<{
   isVisible: boolean;
@@ -129,13 +130,6 @@ watch(() => props.currentLogFilter, () => {
 onMounted(() => {
   scrollToBottom();
 });
-
-function formatLogTime(ts: string | Date | number): string {
-  if (!ts) return '';
-  const d = new Date(ts);
-  if (isNaN(d.getTime())) return String(ts);
-  return d.toTimeString().split(' ')[0] + '.' + String(d.getMilliseconds()).padStart(3, '0');
-}
 </script>
 
 <style scoped>

@@ -13,8 +13,8 @@
         <!-- Log Filter & Search Bar -->
         <div class="log-controls">
           <div class="filter-tabs">
-            <button 
-              v-for="level in logLevels" 
+            <button
+              v-for="level in logLevels"
               :key="level.key"
               class="btn-tab"
               :class="{ active: currentFilter === level.key, [level.key.toLowerCase()]: true }"
@@ -25,9 +25,9 @@
           </div>
 
           <div class="search-box">
-            <input 
-              type="text" 
-              v-model="searchQuery" 
+            <input
+              type="text"
+              v-model="searchQuery"
               :placeholder="t('log.search_placeholder')"
               class="search-input"
             />
@@ -39,8 +39,8 @@
           <div v-if="filteredLogs.length === 0" class="empty-logs">
             {{ t('log.empty') }}
           </div>
-          <div 
-            v-for="log in filteredLogs" 
+          <div
+            v-for="log in filteredLogs"
             :key="log.id || String(log.timestamp)"
             class="log-row"
             :class="log.level.toLowerCase()"
@@ -84,6 +84,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick } from 'vue';
 import { t } from '../i18n';
+import { formatLogTime, formatLogsToText } from '../utils/logFormatter';
 
 export interface LogItem {
   id?: number;
@@ -127,21 +128,12 @@ const filteredLogs = computed(() => {
   return props.logs.filter(log => {
     const matchesLevel = currentFilter.value === 'ALL' || (log.level || '').toUpperCase() === currentFilter.value;
     const query = searchQuery.value.trim().toLowerCase();
-    const matchesQuery = !query || 
-      log.message.toLowerCase().includes(query) || 
+    const matchesQuery = !query ||
+      log.message.toLowerCase().includes(query) ||
       (log.details && log.details.toLowerCase().includes(query));
     return matchesLevel && matchesQuery;
   });
 });
-
-function formatLogTime(ts: string | Date): string {
-  const date = new Date(ts);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const seconds = date.getSeconds().toString().padStart(2, '0');
-  const ms = date.getMilliseconds().toString().padStart(3, '0');
-  return `${hours}:${minutes}:${seconds}.${ms}`;
-}
 
 function scrollToBottom() {
   if (autoScroll.value && terminalRef.value) {
@@ -181,14 +173,14 @@ watch(() => props.isOpen, (newVal) => {
 
 function copyAllLogs() {
   logUserAction('INFO', 'User copied logs from full Log Viewer modal');
-  const text = filteredLogs.value.map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message} ${l.details || ''}`).join('\n');
+  const text = formatLogsToText(filteredLogs.value);
   navigator.clipboard.writeText(text);
   alert(t('log.copied_toast'));
 }
 
 function exportLogFile() {
   logUserAction('INFO', 'User exported logs from full Log Viewer modal');
-  const text = filteredLogs.value.map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message} ${l.details || ''}`).join('\n');
+  const text = formatLogsToText(filteredLogs.value);
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');

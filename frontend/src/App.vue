@@ -188,6 +188,7 @@ import DiagnosticsModal, { InstallDiagnosticsData } from './components/Diagnosti
 import AboutModal from './components/AboutModal.vue';
 import type { LogItem } from './components/LogViewerModal.vue';
 import { t, currentLang, setLanguage } from './i18n';
+import { formatLogsToText } from './utils/logFormatter';
 import {
   ExportLogs,
   SelectIsoFiles,
@@ -300,29 +301,12 @@ const logLevels = computed(() => [
   { key: 'DEBUG', label: t('log.level_debug') }
 ]);
 
-function formatLogTime(ts: string | Date): string {
-  if (!ts) return '';
-  const date = new Date(ts);
-  if (isNaN(date.getTime())) return String(ts);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const seconds = date.getSeconds().toString().padStart(2, '0');
-  const ms = date.getMilliseconds().toString().padStart(3, '0');
-  return `${hours}:${minutes}:${seconds}.${ms}`;
-}
-
 const filteredEmbeddedLogs = computed(() => {
   return runtimeLogs.value.filter(log => {
     if (currentEmbeddedLogFilter.value === 'ALL') return true;
     return (log.level || '').toUpperCase() === currentEmbeddedLogFilter.value;
   });
 });
-
-function formatLogsToText(logs: typeof filteredEmbeddedLogs.value): string {
-  return logs
-    .map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message}${l.details ? ' - ' + l.details : ''}`)
-    .join('\n');
-}
 
 function handleCopyEmbeddedLogs() {
   logUserAction('INFO', 'User copied embedded logs to clipboard');
