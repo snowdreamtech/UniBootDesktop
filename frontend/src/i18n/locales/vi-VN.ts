@@ -199,10 +199,10 @@ export const viVn: TranslationDict = {
   "vm.tip_ready": "Nhấp để khởi chạy máy ảo QEMU và kiểm tra khởi động USB",
   "vm.toast_select_first": "Vui lòng chọn ổ USB mục tiêu từ danh sách bên trái trước!",
   "vm.toast_not_installed": "Không tìm thấy trình giả lập QEMU! Vui lòng cài đặt QEMU trước",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Mô phỏng SecureBoot",
+  "vm.cfg_accel": "Tăng tốc phần cứng",
+  "vm.cfg_ram": "Phân bổ RAM",
+  "vm.cfg_cpu": "Số lõi CPU",
   "settings.title": "Tùy chọn",
   "settings.subtitle": "Tùy chọn toàn cục, Proxy mạng & Firmware",
   "settings.realtime_save": "Đã lưu theo thời gian thực",
@@ -424,4 +424,6 @@ export const viVn: TranslationDict = {
   "progress.eta": "Thời gian còn lại dự kiến",
   "checksum.import_file": "Nhập tệp kiểm tra",
   "checksum.import_file_title": "Nhập và phân tích tệp SHA256SUMS / CHECKSUM chính thức",
+  "vm.cfg_core_singular": "Lõi",
+  "vm.cfg_core_plural": "Lõi"
 };

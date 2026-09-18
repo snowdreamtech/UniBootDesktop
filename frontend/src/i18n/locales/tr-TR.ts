@@ -199,10 +199,10 @@ export const trTr: TranslationDict = {
   "vm.tip_ready": "USB önyüklemesini doğrulamak için QEMU VM'sini başlatmak üzere tıklayın",
   "vm.toast_select_first": "Lütfen önce sol panelden bir hedef USB sürücüsü seçin!",
   "vm.toast_not_installed": "QEMU emülatörü bulunamadı! Lütfen önce QEMU'yu yükleyin",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot Simülasyonu",
+  "vm.cfg_accel": "Donanım Hızlandırma",
+  "vm.cfg_ram": "RAM Tahsisi",
+  "vm.cfg_cpu": "CPU Çekirdekleri",
   "settings.title": "Tercihler",
   "settings.subtitle": "Genel Tercihler, Ağ Vekil Sunucusu ve Ürün Yazılımı",
   "settings.realtime_save": "Gerçek Zamanlı Kaydedildi",
@@ -424,4 +424,6 @@ export const trTr: TranslationDict = {
   "progress.eta": "Tahmini Kalan Süre",
   "checksum.import_file": "Checksum Dosyasını İçe Aktar",
   "checksum.import_file_title": "Resmi SHA256SUMS / CHECKSUM dosyasını içe aktarın ve çözümleyin",
+  "vm.cfg_core_singular": "Çekirdek",
+  "vm.cfg_core_plural": "Çekirdek"
 };

@@ -199,10 +199,10 @@ export const itIt: TranslationDict = {
   "vm.tip_ready": "Clicca per avviare la VM QEMU e verificare l'avvio USB",
   "vm.toast_select_first": "Selezionare prima un'disco dal pannello di sinistra!",
   "vm.toast_not_installed": "Emulatore QEMU non trovato! Installare prima QEMU",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Simulazione SecureBoot",
+  "vm.cfg_accel": "Accelerazione hardware",
+  "vm.cfg_ram": "Allocazione RAM",
+  "vm.cfg_cpu": "Core CPU",
   "settings.title": "Preferenze",
   "settings.subtitle": "Preferenze Globali, Proxy di Rete e Firmware",
   "settings.realtime_save": "Salvato in Tempo Reale",
@@ -424,4 +424,6 @@ export const itIt: TranslationDict = {
   "progress.eta": "Tempo stimato",
   "checksum.import_file": "Importa file Checksum",
   "checksum.import_file_title": "Importa e analizza il file ufficiale SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Core",
+  "vm.cfg_core_plural": "Core"
 };

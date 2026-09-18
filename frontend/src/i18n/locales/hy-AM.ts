@@ -199,10 +199,10 @@ export const hyAm: TranslationDict = {
   "vm.tip_ready": "Սեղմեք՝ QEMU VM-ն գործարկելու համար՝ ընթացիկ աշխատասեղանի վրա USB բեռնիչը ստուգելու համար",
   "vm.toast_select_first": "Խնդրում ենք սեղմել՝ ձախ վահանակից նախ նպատակային USB կրիչ ընտրելու համար:",
   "vm.toast_not_installed": "QEMU էմուլյատորը չի գտնվել: Խնդրում ենք տեղադրել QEMU (brew install qemu կամ port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot սիմուլյացիա",
+  "vm.cfg_accel": "Սարքաշարային արագացում",
+  "vm.cfg_ram": "RAM հատկացում",
+  "vm.cfg_cpu": "CPU միջուկներ",
   "settings.title": "Նախապատվություններ",
   "settings.subtitle": "Համաշխարհային նախապատվություններ, ցանցի վստահված անձի և որոնվածի մատրիցա",
   "settings.realtime_save": "Իրական ժամանակում պահված է",
@@ -424,4 +424,6 @@ export const hyAm: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Ներմուծել ստուգման ֆայլ",
   "checksum.import_file_title": "Ներմուծել և վերլուծել պաշտոնական SHA256SUMS / CHECKSUM ֆայլը",
+  "vm.cfg_core_singular": "Միջուկ",
+  "vm.cfg_core_plural": "Միջուկներ"
 };

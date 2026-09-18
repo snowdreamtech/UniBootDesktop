@@ -199,10 +199,10 @@ export const fiFi: TranslationDict = {
   "vm.tip_ready": "Napsauta käynnistääksesi QEMU VM vahvistaaksesi USB-käynnistyslataimen nykyisellä työpöydällä",
   "vm.toast_select_first": "Napsauta ensin valitaksesi kohde-USB-aseman vasemmasta paneelista!",
   "vm.toast_not_installed": "QEMU-emulaattoria ei löydy! Asenna QEMU (brew install qemu tai port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot-simulaatio",
+  "vm.cfg_accel": "Laitteistokiihdytys",
+  "vm.cfg_ram": "RAM-muistin varaus",
+  "vm.cfg_cpu": "CPU-ytimet",
   "settings.title": "Asetukset",
   "settings.subtitle": "Yleiset asetukset, verkkovälityspalvelin ja laiteohjelmistomatriisi",
   "settings.realtime_save": "Reaaliaikainen tallennettu",
@@ -424,4 +424,6 @@ export const fiFi: TranslationDict = {
   "progress.eta": "Arvioitu jäljellä oleva aika",
   "checksum.import_file": "Tuo tarkistussummatiedosto",
   "checksum.import_file_title": "Tuo ja jäsennä virallinen SHA256SUMS / CHECKSUM -tiedosto",
+  "vm.cfg_core_singular": "Ydin",
+  "vm.cfg_core_plural": "Ydintä"
 };

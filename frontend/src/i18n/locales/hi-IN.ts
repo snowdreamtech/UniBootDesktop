@@ -199,10 +199,10 @@ export const hiIn: TranslationDict = {
   "vm.tip_ready": "वर्तमान डेस्कटॉप पर USB बूटलोडर को सत्यापित करने के लिए QEMU VM लॉन्च करने के लिए क्लिक करें",
   "vm.toast_select_first": "कृपया पहले बाएं पैनल से एक लक्ष्य यूएसबी ड्राइव का चयन करने के लिए क्लिक करें!",
   "vm.toast_not_installed": "QEMU एम्यूलेटर नहीं मिला! कृपया QEMU इंस्टॉल करें (ब्रू इंस्टॉल qemu या पोर्ट इंस्टॉल qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot अनुकरण",
+  "vm.cfg_accel": "हार्डवेयर त्वरण",
+  "vm.cfg_ram": "रैम आवंटन",
+  "vm.cfg_cpu": "सीपीयू कोर",
   "settings.title": "प्राथमिकताएं",
   "settings.subtitle": "वैश्विक प्राथमिकताएँ, नेटवर्क प्रॉक्सी और फ़र्मवेयर मैट्रिक्स",
   "settings.realtime_save": "रीयलटाइम सहेजा गया",
@@ -424,4 +424,6 @@ export const hiIn: TranslationDict = {
   "progress.eta": "अनुमानित शेष समय",
   "checksum.import_file": "चेकसम फ़ाइल इंपोर्ट करें",
   "checksum.import_file_title": "आधिकारिक SHA256SUMS / CHECKSUM फ़ाइल इंपोर्ट और पार्स करें",
+  "vm.cfg_core_singular": "कोर",
+  "vm.cfg_core_plural": "कोर"
 };

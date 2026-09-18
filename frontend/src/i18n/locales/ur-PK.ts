@@ -199,10 +199,10 @@ export const urPk: TranslationDict = {
   "vm.tip_ready": "موجودہ ڈیسک ٹاپ پر ڈسک بوٹ لوڈر کی تصدیق کرنے کے لیے QEMU VM لانچ کرنے کے لیے کلک کریں۔",
   "vm.toast_select_first": "براہ کرم پہلے بائیں پینل سے ٹارگٹ ڈسک ڈرائیو منتخب کرنے کے لیے کلک کریں!",
   "vm.toast_not_installed": "QEMU ایمولیٹر نہیں ملا! براہ کرم QEMU انسٹال کریں (brew install qemu یا port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot کی نقالی",
+  "vm.cfg_accel": "ہارڈ ویئر ایکسلریشن",
+  "vm.cfg_ram": "ریم کی تخصیص",
+  "vm.cfg_cpu": "سی پی یو کورز",
   "settings.title": "ترجیحات",
   "settings.subtitle": "عالمی ترجیحات، نیٹ ورک پراکسی اور فرم ویئر میٹرکس",
   "settings.realtime_save": "ریئل ٹائم محفوظ کیا گیا۔",
@@ -424,4 +424,6 @@ export const urPk: TranslationDict = {
   "progress.eta": "تخمینہ شدہ باقی وقت",
   "checksum.import_file": "چیک سم فائل امپورٹ کریں",
   "checksum.import_file_title": "آفیشل SHA256SUMS / CHECKSUM فائل امپورٹ اور پارس کریں",
+  "vm.cfg_core_singular": "کور",
+  "vm.cfg_core_plural": "کورز"
 };

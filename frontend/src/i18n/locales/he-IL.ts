@@ -199,10 +199,10 @@ export const heIl: TranslationDict = {
   "vm.tip_ready": "לחץ כדי להפעיל את QEMU VM כדי לאמת את טוען האתחול USB בשולחן העבודה הנוכחי",
   "vm.toast_select_first": "אנא לחץ תחילה כדי לבחור כונן דיסק יעד מהחלונית השמאלית!",
   "vm.toast_not_installed": "אמולטור QEMU לא נמצא! נא להתקין QEMU (התקנת qemu לחלוט או qemu להתקין יציאה)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "הדמיית SecureBoot",
+  "vm.cfg_accel": "האצת חומרה",
+  "vm.cfg_ram": "הקצאת זיכרון",
+  "vm.cfg_cpu": "ליבות מעבד",
   "settings.title": "העדפות",
   "settings.subtitle": "העדפות גלובליות, פרוקסי רשת ומטריצת קושחה",
   "settings.realtime_save": "נשמר בזמן אמת",
@@ -424,4 +424,6 @@ export const heIl: TranslationDict = {
   "progress.eta": "זמן נותר משוער",
   "checksum.import_file": "ייבא קובץ אימות",
   "checksum.import_file_title": "ייבא ונתח קובץ SHA256SUMS / CHECKSUM רשמי",
+  "vm.cfg_core_singular": "ליבה",
+  "vm.cfg_core_plural": "ליבות"
 };

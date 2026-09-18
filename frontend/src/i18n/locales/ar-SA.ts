@@ -199,10 +199,10 @@ export const arSa: TranslationDict = {
   "vm.tip_ready": "انقر لتشغيل جهاز QEMU الافتراضي والتحقق من إقلاع USB",
   "vm.toast_select_first": "يرجى تحديد محرك أقراص USB المستهدف من اللوحة اليسرى أولاً!",
   "vm.toast_not_installed": "لم يتم العثور على محاكي QEMU! يرجى تثبيت QEMU أولاً",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "محاكاة SecureBoot",
+  "vm.cfg_accel": "التسريع العتادي",
+  "vm.cfg_ram": "تخصيص الذاكرة",
+  "vm.cfg_cpu": "أنوية المعالج",
   "settings.title": "التفضيلات",
   "settings.subtitle": "التفضيلات العامة، وكيل الشبكة والبرامج الثابتة",
   "settings.realtime_save": "تم الحفظ في الوقت الفعلي",
@@ -424,4 +424,6 @@ export const arSa: TranslationDict = {
   "progress.eta": "الوقت المتبقي",
   "checksum.import_file": "استيراد ملف التحقق",
   "checksum.import_file_title": "استيراد وتحليل ملف SHA256SUMS / CHECKSUM الرسمي",
+  "vm.cfg_core_singular": "نواة",
+  "vm.cfg_core_plural": "أنوية"
 };

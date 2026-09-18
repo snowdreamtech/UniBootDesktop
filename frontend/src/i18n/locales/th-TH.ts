@@ -199,10 +199,10 @@ export const thTh: TranslationDict = {
   "vm.tip_ready": "คลิกเพื่อเปิด QEMU VM เพื่อตรวจสอบ USB bootloader บนเดสก์ท็อปปัจจุบัน",
   "vm.toast_select_first": "กรุณาคลิกเพื่อเลือกไดรฟ์ USB เป้าหมายจากแผงด้านซ้ายก่อน!",
   "vm.toast_not_installed": "ไม่พบโปรแกรมจำลอง QEMU! กรุณาติดตั้ง QEMU (ชงติดตั้ง qemu หรือพอร์ตติดตั้ง qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "การจำลอง SecureBoot",
+  "vm.cfg_accel": "การเร่งความเร็วด้วยฮาร์ดแวร์",
+  "vm.cfg_ram": "หน่วยความจำ (RAM)",
+  "vm.cfg_cpu": "คอร์ CPU",
   "settings.title": "การตั้งค่า",
   "settings.subtitle": "การตั้งค่าส่วนกลาง พร็อกซีเครือข่าย และเมทริกซ์เฟิร์มแวร์",
   "settings.realtime_save": "บันทึกเรียลไทม์แล้ว",
@@ -424,4 +424,6 @@ export const thTh: TranslationDict = {
   "progress.eta": "เวลาที่เหลือโดยประมาณ",
   "checksum.import_file": "นำเข้าไฟล์ตรวจสอบ",
   "checksum.import_file_title": "นำเข้าและวิเคราะห์ไฟล์ SHA256SUMS / CHECKSUM อย่างเป็นทางการ",
+  "vm.cfg_core_singular": "คอร์",
+  "vm.cfg_core_plural": "คอร์"
 };

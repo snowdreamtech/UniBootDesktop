@@ -199,10 +199,10 @@ export const mlIn: TranslationDict = {
   "vm.tip_ready": "നിലവിലെ ഡെസ്ക്ടോപ്പിൽ USB ബൂട്ട്ലോഡർ പരിശോധിക്കാൻ QEMU VM സമാരംഭിക്കുന്നതിന് ക്ലിക്കുചെയ്യുക",
   "vm.toast_select_first": "ആദ്യം ഇടത് പാനലിൽ നിന്ന് ഒരു ടാർഗെറ്റ് USB ഡ്രൈവ് തിരഞ്ഞെടുക്കാൻ ക്ലിക്ക് ചെയ്യുക!",
   "vm.toast_not_installed": "QEMU എമുലേറ്റർ കണ്ടെത്തിയില്ല! ദയവായി QEMU ഇൻസ്റ്റാൾ ചെയ്യുക (ബ്രൂ ഇൻസ്റ്റാൾ qemu അല്ലെങ്കിൽ പോർട്ട് ഇൻസ്റ്റാൾ qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot സിമുലേഷൻ",
+  "vm.cfg_accel": "ഹാർഡ്‌വെയർ ആക്സിലറേഷൻ",
+  "vm.cfg_ram": "റാം വിഹിതം",
+  "vm.cfg_cpu": "സിപിയു കോറുകൾ",
   "settings.title": "முൻഗണനകൾ",
   "settings.subtitle": "ആഗോള മുൻഗണനകൾ, നെറ്റ്‌വർക്ക് പ്രോക്സി & ഫേംവെയർ മാട്രിക്സ്",
   "settings.realtime_save": "തത്സമയം സംരക്ഷിച്ചു",
@@ -424,4 +424,6 @@ export const mlIn: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "പരിശോധനാ ഫയൽ ഇറക്കുമതി ചെയ്യുക",
   "checksum.import_file_title": "ഔദ്യോഗിക SHA256SUMS / CHECKSUM ഫയൽ ഇറക്കുമതി ചെയ്ത് വിശകലനം ചെയ്യുക",
+  "vm.cfg_core_singular": "കോർ",
+  "vm.cfg_core_plural": "കോറുകൾ"
 };

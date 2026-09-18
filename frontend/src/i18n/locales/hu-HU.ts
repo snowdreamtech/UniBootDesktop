@@ -199,10 +199,10 @@ export const huHu: TranslationDict = {
   "vm.tip_ready": "Kattintson a QEMU VM elindításához az USB rendszerbetöltő ellenőrzéséhez az aktuális asztalon",
   "vm.toast_select_first": "Kérjük, kattintson először a cél USB-meghajtó kiválasztásához a bal oldali panelen!",
   "vm.toast_not_installed": "A QEMU emulátor nem található! Kérjük, telepítse a QEMU-t (brew install qemu vagy port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot szimuláció",
+  "vm.cfg_accel": "Hardveres gyorsítás",
+  "vm.cfg_ram": "RAM alokáció",
+  "vm.cfg_cpu": "CPU magok",
   "settings.title": "Beállítások",
   "settings.subtitle": "Globális beállítások, hálózati proxy és firmware mátrix",
   "settings.realtime_save": "Valós idejű mentés",
@@ -424,4 +424,6 @@ export const huHu: TranslationDict = {
   "progress.eta": "Becsült hátralévő idő",
   "checksum.import_file": "Ellenőrzőfájl importálása",
   "checksum.import_file_title": "Hivatalos SHA256SUMS / CHECKSUM fájl importálása és feldolgozása",
+  "vm.cfg_core_singular": "Mag",
+  "vm.cfg_core_plural": "Magok"
 };

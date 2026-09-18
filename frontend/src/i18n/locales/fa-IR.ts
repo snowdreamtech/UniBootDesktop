@@ -199,10 +199,10 @@ export const faIr: TranslationDict = {
   "vm.tip_ready": "کلیک کنید تا QEMU VM راه اندازی شود تا بوت لودر USB را در دسکتاپ فعلی تأیید کنید",
   "vm.toast_select_first": "لطفا برای انتخاب یک درایو دیسک مورد نظر از پانل سمت چپ ابتدا کلیک کنید!",
   "vm.toast_not_installed": "شبیه ساز QEMU پیدا نشد! لطفا QEMU را نصب کنید (brew install qemu یا port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "شبیه‌سازی SecureBoot",
+  "vm.cfg_accel": "شتاب‌دهنده سخت‌افزاری",
+  "vm.cfg_ram": "تخصیص حافظه",
+  "vm.cfg_cpu": "هسته‌های پردازنده",
   "settings.title": "ترجیحات",
   "settings.subtitle": "تنظیمات جهانی، پروکسی شبکه و ماتریس سفت‌افزار",
   "settings.realtime_save": "بیدرنگ ذخیره شد",
@@ -424,4 +424,6 @@ export const faIr: TranslationDict = {
   "progress.eta": "زمان باقی‌مانده تخمینی",
   "checksum.import_file": "وارد کردن فایل چک‌سام",
   "checksum.import_file_title": "وارد کردن و تجزیه فایل رسمی SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "هسته",
+  "vm.cfg_core_plural": "هسته‌ها"
 };

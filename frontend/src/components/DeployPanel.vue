@@ -300,10 +300,10 @@
               @change="e => emit('update:vmCpuCores', Number((e.target as HTMLSelectElement).value))" 
               class="vm-select sm"
             >
-              <option :value="1">1 Core</option>
-              <option :value="2">2 Cores</option>
-              <option :value="4">4 Cores</option>
-              <option :value="8">8 Cores</option>
+              <option :value="1">1 {{ t('vm.cfg_core_singular') }}</option>
+              <option :value="2">2 {{ t('vm.cfg_core_plural') }}</option>
+              <option :value="4">4 {{ t('vm.cfg_core_plural') }}</option>
+              <option :value="8">8 {{ t('vm.cfg_core_plural') }}</option>
             </select>
             <span class="select-arrow">▾</span>
           </div>

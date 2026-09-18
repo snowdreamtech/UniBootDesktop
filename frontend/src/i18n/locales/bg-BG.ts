@@ -199,10 +199,10 @@ export const bgBg: TranslationDict = {
   "vm.tip_ready": "Щракнете, за да стартирате QEMU VM, за да проверите USB буутлоудъра на текущия работен плот",
   "vm.toast_select_first": "Моля, щракнете, за да изберете първо целево USB устройство от левия панел!",
   "vm.toast_not_installed": "QEMU емулаторът не е намерен! Моля, инсталирайте QEMU (brew install qemu или port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Симулация на SecureBoot",
+  "vm.cfg_accel": "Хардуерно ускорение",
+  "vm.cfg_ram": "Разпределение на RAM",
+  "vm.cfg_cpu": "Процесорни ядра",
   "settings.title": "Настройки",
   "settings.subtitle": "Глобални предпочитания, мрежов прокси и матрица на фърмуера",
   "settings.realtime_save": "Запазено в реално време",
@@ -424,4 +424,6 @@ export const bgBg: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Импортиране на файл с контролна сума",
   "checksum.import_file_title": "Импортиране и разчитане на официален SHA256SUMS / CHECKSUM файл",
+  "vm.cfg_core_singular": "Ядро",
+  "vm.cfg_core_plural": "Ядра"
 };

@@ -423,5 +423,7 @@ export const enUs: TranslationDict = {
   "checksum.status_verify": "Verify",
     "checksum.card_title": "🔒 Image Hash Verification",
 "progress.speed": "Write Speed",
-  "progress.eta": "ETA"
+  "progress.eta": "ETA",
+  "vm.cfg_core_singular": "Core",
+  "vm.cfg_core_plural": "Cores"
 };

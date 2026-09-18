@@ -199,10 +199,10 @@ export const ptBr: TranslationDict = {
   "vm.tip_ready": "Clique para iniciar a VM QEMU e verificar o boot do USB",
   "vm.toast_select_first": "Por favor, selecione primeiro uma disco no painel esquerdo!",
   "vm.toast_not_installed": "Emulador QEMU não encontrado! Por favor, instale o QEMU primeiro",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Simulação SecureBoot",
+  "vm.cfg_accel": "Aceleração de hardware",
+  "vm.cfg_ram": "Alocação de RAM",
+  "vm.cfg_cpu": "Núcleos de CPU",
   "settings.title": "Preferências",
   "settings.subtitle": "Preferências Globais, Proxy de Rede e Firmware",
   "settings.realtime_save": "Salvo em Tempo Real",
@@ -424,4 +424,6 @@ export const ptBr: TranslationDict = {
   "progress.eta": "Tempo restante estimado",
   "checksum.import_file": "Importar arquivo de Checksum",
   "checksum.import_file_title": "Importar e analisar arquivo oficial SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Núcleo",
+  "vm.cfg_core_plural": "Núcleos"
 };

@@ -199,10 +199,10 @@ export const jaJp: TranslationDict = {
   "vm.tip_ready": "クリックして QEMU VM を起動し、USB ブート検証を実行",
   "vm.toast_select_first": "左パネルのリストからテスト対象の ディスクを選択してください！",
   "vm.toast_not_installed": "QEMU エミュレータが検出されません。事前にインストールしてください",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot シミュレーション",
+  "vm.cfg_accel": "ハードウェアアクセラレーション",
+  "vm.cfg_ram": "メモリ容量",
+  "vm.cfg_cpu": "CPU コア数",
   "settings.title": "環境設定",
   "settings.subtitle": "グローバル環境設定、ネットワークプロキシ & ファームウェア",
   "settings.realtime_save": "リアルタイム保存済み",
@@ -424,4 +424,6 @@ export const jaJp: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "チェックサムファイルをインポート",
   "checksum.import_file_title": "公式の SHA256SUMS / CHECKSUM ファイルをインポートして解析",
+  "vm.cfg_core_singular": "コア",
+  "vm.cfg_core_plural": "コア"
 };

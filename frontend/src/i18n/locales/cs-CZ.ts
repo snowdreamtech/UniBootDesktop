@@ -199,10 +199,10 @@ export const csCz: TranslationDict = {
   "vm.tip_ready": "Kliknutím spustíte QEMU VM pro ověření zavaděče USB na aktuální ploše",
   "vm.toast_select_first": "Nejprve kliknutím vyberte cílovou jednotku USB z levého panelu!",
   "vm.toast_not_installed": "Emulátor QEMU nebyl nalezen! Nainstalujte prosím QEMU (brew install qemu nebo port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Simulace SecureBoot",
+  "vm.cfg_accel": "Hardwarová akcelerace",
+  "vm.cfg_ram": "Alokace RAM",
+  "vm.cfg_cpu": "Jádra CPU",
   "settings.title": "Nastavení",
   "settings.subtitle": "Globální preference, Network Proxy & Firmware Matrix",
   "settings.realtime_save": "Uloženo v reálném čase",
@@ -424,4 +424,6 @@ export const csCz: TranslationDict = {
   "progress.eta": "Odhadovaný zbývající čas",
   "checksum.import_file": "Importovat soubor kontrolního součtu",
   "checksum.import_file_title": "Importovat a analyzovat oficiální soubor SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Jádro",
+  "vm.cfg_core_plural": "Jádra"
 };

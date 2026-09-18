@@ -199,10 +199,10 @@ export const nlNl: TranslationDict = {
   "vm.tip_ready": "Klik om QEMU VM te starten om de USB-bootloader op het huidige bureaublad te verifiëren",
   "vm.toast_select_first": "Klik eerst om een doel-USB-station in het linkerpaneel te selecteren!",
   "vm.toast_not_installed": "QEMU-emulator niet gevonden! Installeer QEMU (brew install qemu of port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot-simulatie",
+  "vm.cfg_accel": "Hardwareversnelling",
+  "vm.cfg_ram": "RAM-toewijzing",
+  "vm.cfg_cpu": "CPU-cores",
   "settings.title": "Voorkeuren",
   "settings.subtitle": "Algemene voorkeuren, netwerkproxy en firmwarematrix",
   "settings.realtime_save": "Realtime opgeslagen",
@@ -424,4 +424,6 @@ export const nlNl: TranslationDict = {
   "progress.eta": "Geschatte resterende tijd",
   "checksum.import_file": "Checksum-bestand importeren",
   "checksum.import_file_title": "Importeer en verwerk officieel SHA256SUMS / CHECKSUM-bestand",
+  "vm.cfg_core_singular": "Core",
+  "vm.cfg_core_plural": "Cores"
 };

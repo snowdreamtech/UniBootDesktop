@@ -199,10 +199,10 @@ export const ltLt: TranslationDict = {
   "vm.tip_ready": "Spustelėkite, kad paleistumėte QEMU VM, kad patikrintumėte USB įkrovos programą dabartiniame darbalaukyje",
   "vm.toast_select_first": "Pirmiausia spustelėkite, kad pasirinktumėte tikslinį USB diską kairiajame skydelyje!",
   "vm.toast_not_installed": "QEMU emuliatorius nerastas! Įdiekite QEMU (brew install qemu arba port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot simuliacija",
+  "vm.cfg_accel": "Aparatinis pagreitinimas",
+  "vm.cfg_ram": "RAM priskyrimas",
+  "vm.cfg_cpu": "CPU branduoliai",
   "settings.title": "Nustatymai",
   "settings.subtitle": "Pasaulinės nuostatos, tinklo tarpinis serveris ir programinės įrangos matrica",
   "settings.realtime_save": "Išsaugota realiuoju laiku",
@@ -424,4 +424,6 @@ export const ltLt: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Importuoti patikros failą",
   "checksum.import_file_title": "Importuoti ir išanalizuoti oficialų SHA256SUMS / CHECKSUM failą",
+  "vm.cfg_core_singular": "Branduolys",
+  "vm.cfg_core_plural": "Branduoliai"
 };

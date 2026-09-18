@@ -199,10 +199,10 @@ export const elGr: TranslationDict = {
   "vm.tip_ready": "Κάντε κλικ για εκκίνηση του QEMU VM για επαλήθευση του USB bootloader στην τρέχουσα επιφάνεια εργασίας",
   "vm.toast_select_first": "Κάντε κλικ για να επιλέξετε πρώτα μια μονάδα USB-στόχου από τον αριστερό πίνακα!",
   "vm.toast_not_installed": "Ο εξομοιωτής QEMU δεν βρέθηκε! Εγκαταστήστε το QEMU (brew install qemu ή port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Προσομοίωση SecureBoot",
+  "vm.cfg_accel": "Επιτάχυνση υλικού",
+  "vm.cfg_ram": "Εκχώρηση RAM",
+  "vm.cfg_cpu": "Πυρήνες CPU",
   "settings.title": "Ρυθμίσεις",
   "settings.subtitle": "Καθολικές προτιμήσεις, διακομιστή μεσολάβησης δικτύου και μήτρα υλικολογισμικού",
   "settings.realtime_save": "Αποθηκεύτηκε σε πραγματικό χρόνο",
@@ -424,4 +424,6 @@ export const elGr: TranslationDict = {
   "progress.eta": "Εκτιμώμενος υπολειπόμενος χρόνος",
   "checksum.import_file": "Εισαγωγή αρχείου Checksum",
   "checksum.import_file_title": "Εισαγωγή και ανάλυση επίσημου αρχείου SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Πυρήνας",
+  "vm.cfg_core_plural": "Πυρήνες"
 };

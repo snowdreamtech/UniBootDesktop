@@ -199,10 +199,10 @@ export const roRo: TranslationDict = {
   "vm.tip_ready": "Faceți clic pentru a lansa QEMU VM pentru a verifica bootloader-ul USB pe desktopul curent",
   "vm.toast_select_first": "Faceți clic mai întâi pentru a selecta o unitate USB țintă din panoul din stânga!",
   "vm.toast_not_installed": "Emulatorul QEMU nu a fost găsit! Vă rugăm să instalați QEMU (brew install qemu sau port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Simulare SecureBoot",
+  "vm.cfg_accel": "Accelerare hardware",
+  "vm.cfg_ram": "Alocare RAM",
+  "vm.cfg_cpu": "Nuclee CPU",
   "settings.title": "Preferințe",
   "settings.subtitle": "Preferințe globale, proxy de rețea și matrice de firmware",
   "settings.realtime_save": "Salvat în timp real",
@@ -424,4 +424,6 @@ export const roRo: TranslationDict = {
   "progress.eta": "Timp rămas estimat",
   "checksum.import_file": "Importă fișier Checksum",
   "checksum.import_file_title": "Importă și analizează fișierul oficial SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Nucleu",
+  "vm.cfg_core_plural": "Nuclee"
 };

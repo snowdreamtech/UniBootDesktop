@@ -199,10 +199,10 @@ export const ruRu: TranslationDict = {
   "vm.tip_ready": "Нажмите, чтобы запустить виртуальную машину QEMU и проверить загрузку USB",
   "vm.toast_select_first": "Пожалуйста, сначала выберите целевой диск в левой панели!",
   "vm.toast_not_installed": "Эмулятор QEMU не найден! Пожалуйста, сначала установите QEMU",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Симуляция SecureBoot",
+  "vm.cfg_accel": "Аппаратное ускорение",
+  "vm.cfg_ram": "Выделение ОЗУ",
+  "vm.cfg_cpu": "Ядра ЦП",
   "settings.title": "Настройки",
   "settings.subtitle": "Глобальные настройки, прокси-сервер и прошивки",
   "settings.realtime_save": "Сохранено в реальном времени",
@@ -424,4 +424,6 @@ export const ruRu: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Импортировать файл контрольной суммы",
   "checksum.import_file_title": "Импорт и разбор официального файла SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Ядро",
+  "vm.cfg_core_plural": "Ядра"
 };

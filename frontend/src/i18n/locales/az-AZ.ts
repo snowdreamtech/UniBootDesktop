@@ -199,10 +199,10 @@ export const azAz: TranslationDict = {
   "vm.tip_ready": "Cari iş masasında USB yükləyicisini yoxlamaq üçün QEMU VM-ni işə salmaq üçün klikləyin",
   "vm.toast_select_first": "Əvvəlcə sol paneldən hədəf USB sürücüsünü seçmək üçün klikləyin!",
   "vm.toast_not_installed": "QEMU emulyatoru tapılmadı! Lütfən, QEMU quraşdırın (qemu qurun və ya port quraşdırın)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot Simulyasiyası",
+  "vm.cfg_accel": "Avadanlıq Təcililiyi",
+  "vm.cfg_ram": "RAM Ayrılması",
+  "vm.cfg_cpu": "CPU Nüvələri",
   "settings.title": "Üstünlüklər",
   "settings.subtitle": "Qlobal Tercihlər, Şəbəkə Proksi və Firmware Matrisi",
   "settings.realtime_save": "Real vaxtda Saxlandı",
@@ -424,4 +424,6 @@ export const azAz: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Yoxlama faylını idxal et",
   "checksum.import_file_title": "Rəsmi SHA256SUMS / CHECKSUM faylını idxal və təhlil et",
+  "vm.cfg_core_singular": "Nüvə",
+  "vm.cfg_core_plural": "Nüvələri"
 };

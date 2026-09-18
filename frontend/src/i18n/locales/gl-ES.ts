@@ -199,10 +199,10 @@ export const glEs: TranslationDict = {
   "vm.tip_ready": "Fai clic para iniciar QEMU VM para verificar o cargador de arranque USB no escritorio actual",
   "vm.toast_select_first": "Fai primeiro clic para seleccionar unha unidade USB de destino no panel esquerdo.",
   "vm.toast_not_installed": "Non se atopou o emulador QEMU! Instale QEMU (brew install qemu ou port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Simulación de SecureBoot",
+  "vm.cfg_accel": "Aceleración de hardware",
+  "vm.cfg_ram": "Alocación de RAM",
+  "vm.cfg_cpu": "Núcleos de CPU",
   "settings.title": "Preferencias",
   "settings.subtitle": "Preferencias globais, proxy de rede e matriz de firmware",
   "settings.realtime_save": "Gardado en tempo real",
@@ -424,4 +424,6 @@ export const glEs: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Importar ficheiro de Checksum",
   "checksum.import_file_title": "Importar e analizar ficheiro oficial SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Núcleo",
+  "vm.cfg_core_plural": "Núcleos"
 };

@@ -199,10 +199,10 @@ export const svSe: TranslationDict = {
   "vm.tip_ready": "Klicka för att starta QEMU VM för att verifiera USB-starthanteraren på nuvarande skrivbord",
   "vm.toast_select_first": "Klicka först för att välja en USB-enhet från den vänstra panelen!",
   "vm.toast_not_installed": "QEMU-emulatorn hittades inte! Installera QEMU (brygginstallera qemu eller portinstallera qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot-simulering",
+  "vm.cfg_accel": "Hårdvaruacceleration",
+  "vm.cfg_ram": "RAM-allokering",
+  "vm.cfg_cpu": "CPU-kärnor",
   "settings.title": "Inställningar",
   "settings.subtitle": "Globala inställningar, nätverksproxy och firmware-matris",
   "settings.realtime_save": "Realtid sparad",
@@ -424,4 +424,6 @@ export const svSe: TranslationDict = {
   "progress.eta": "Beräknad återstående tid",
   "checksum.import_file": "Importera kontrollsummafil",
   "checksum.import_file_title": "Importera och analysera officiell SHA256SUMS / CHECKSUM-fil",
+  "vm.cfg_core_singular": "Kärna",
+  "vm.cfg_core_plural": "Kärnor"
 };

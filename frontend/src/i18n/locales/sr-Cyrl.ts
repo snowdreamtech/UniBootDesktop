@@ -199,10 +199,10 @@ export const srCyrl: TranslationDict = {
   "vm.tip_ready": "Кликните да бисте покренули КЕМУ ВМ да бисте потврдили УСБ покретач на тренутној радној површини",
   "vm.toast_select_first": "Кликните да прво изаберете циљни УСБ диск са леве табле!",
   "vm.toast_not_installed": "КЕМУ емулатор није пронађен! Молимо инсталирајте КЕМУ (брев инсталл кему или порт инсталл кему)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Симулација SecureBoot-а",
+  "vm.cfg_accel": "Хардверско убрзање",
+  "vm.cfg_ram": "Алокација RAM-а",
+  "vm.cfg_cpu": "Процесорска језгра",
   "settings.title": "Подешавања",
   "settings.subtitle": "Глобалне поставке, мрежни прокси и матрица фирмвера",
   "settings.realtime_save": "Реалтиме Савед",
@@ -424,4 +424,6 @@ export const srCyrl: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Увези датотеку провере",
   "checksum.import_file_title": "Увези и анализирај званичну SHA256SUMS / CHECKSUM датотеку",
+  "vm.cfg_core_singular": "Језгро",
+  "vm.cfg_core_plural": "Језгра"
 };

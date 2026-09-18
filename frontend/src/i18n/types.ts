@@ -202,6 +202,8 @@ export interface TranslationDict {
   "vm.cfg_ram": string;
   "vm.cfg_accel": string;
   "vm.cfg_secure_boot": string;
+  "vm.cfg_core_singular": string;
+  "vm.cfg_core_plural": string;
   "settings.title": string;
   "settings.subtitle": string;
   "settings.realtime_save": string;

@@ -199,10 +199,10 @@ export const frFr: TranslationDict = {
   "vm.tip_ready": "Cliquer pour lancer la VM QEMU et vérifier l'amorçage USB",
   "vm.toast_select_first": "Veuillez d'abord sélectionner un disque USB cible dans le panneau gauche !",
   "vm.toast_not_installed": "Émulateur QEMU introuvable ! Veuillez installer QEMU d'abord",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Simulation SecureBoot",
+  "vm.cfg_accel": "Accélération matérielle",
+  "vm.cfg_ram": "Allocation RAM",
+  "vm.cfg_cpu": "Cœurs CPU",
   "settings.title": "Préférences",
   "settings.subtitle": "Préférences globales, proxy réseau & micrologiciel",
   "settings.realtime_save": "Enregistré en temps réel",
@@ -424,4 +424,6 @@ export const frFr: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Importer le fichier de somme de contrôle",
   "checksum.import_file_title": "Importer et analyser le fichier officiel SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Cœur",
+  "vm.cfg_core_plural": "Cœurs"
 };

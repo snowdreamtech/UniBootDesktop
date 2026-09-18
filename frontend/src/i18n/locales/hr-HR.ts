@@ -199,10 +199,10 @@ export const hrHr: TranslationDict = {
   "vm.tip_ready": "Kliknite za pokretanje QEMU VM za provjeru USB pokretačkog programa na trenutnoj radnoj površini",
   "vm.toast_select_first": "Kliknite kako biste prvo odabrali ciljni USB pogon s lijeve ploče!",
   "vm.toast_not_installed": "QEMU emulator nije pronađen! Instalirajte QEMU (brew install qemu ili port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Simulacija SecureBoot-a",
+  "vm.cfg_accel": "Hardversko ubrzanje",
+  "vm.cfg_ram": "Alokacija RAM-a",
+  "vm.cfg_cpu": "Procesorska jezgra",
   "settings.title": "Postavke",
   "settings.subtitle": "Globalne postavke, mrežni proxy i matrica firmvera",
   "settings.realtime_save": "Spremljeno u stvarnom vremenu",
@@ -424,4 +424,6 @@ export const hrHr: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Uvezi datoteku provjere",
   "checksum.import_file_title": "Uvezi i analiziraj službenu SHA256SUMS / CHECKSUM datoteku",
+  "vm.cfg_core_singular": "Jezgra",
+  "vm.cfg_core_plural": "Jezgre"
 };

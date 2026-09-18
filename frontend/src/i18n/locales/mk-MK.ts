@@ -199,10 +199,10 @@ export const mkMk: TranslationDict = {
   "vm.tip_ready": "Кликнете за да стартувате QEMU VM за да го потврдите USB-подигачот на тековната работна површина",
   "vm.toast_select_first": "Ве молиме кликнете за да изберете целен USB-диск од левиот панел прво!",
   "vm.toast_not_installed": "Емулаторот QEMU не е пронајден! Ве молиме инсталирајте QEMU (инсталирајте qemu или приклучете инсталирајте qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Симулација на SecureBoot",
+  "vm.cfg_accel": "Хардверско забрзување",
+  "vm.cfg_ram": "Распределба на RAM",
+  "vm.cfg_cpu": "Процесорски ядра",
   "settings.title": "Поставки",
   "settings.subtitle": "Глобални параметри, мрежен прокси и матрица на фирмверот",
   "settings.realtime_save": "Зачувано во реално време",
@@ -424,4 +424,6 @@ export const mkMk: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Увези датотека за верификација",
   "checksum.import_file_title": "Увези и анализирај официјална SHA256SUMS / CHECKSUM датотека",
+  "vm.cfg_core_singular": "Ядро",
+  "vm.cfg_core_plural": "Ядра"
 };

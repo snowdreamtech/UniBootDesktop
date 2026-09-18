@@ -199,10 +199,10 @@ export const kaGe: TranslationDict = {
   "vm.tip_ready": "დააწკაპუნეთ QEMU VM-ის გასაშვებად, რათა გადაამოწმოთ USB ჩამტვირთველი მიმდინარე სამუშაო მაგიდაზე",
   "vm.toast_select_first": "გთხოვთ, დააწკაპუნოთ, რათა აირჩიოთ სამიზნე USB დისკი მარცხენა პანელიდან!",
   "vm.toast_not_installed": "QEMU ემულატორი ვერ მოიძებნა! გთხოვთ დააინსტალიროთ QEMU (დააყენეთ qemu ან პორტის დააინსტალირეთ qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot სიმულაცია",
+  "vm.cfg_accel": "აპარატურული აჩქარება",
+  "vm.cfg_ram": "RAM გამოყოფა",
+  "vm.cfg_cpu": "CPU ბირთვები",
   "settings.title": "პარამეტრები",
   "settings.subtitle": "გლობალური პრეფერენციები, ქსელის პროქსი და პროგრამული უზრუნველყოფის მატრიცა",
   "settings.realtime_save": "რეალურ დროში შენახულია",
@@ -424,4 +424,6 @@ export const kaGe: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "შემოწმების ფაილის იმპორტი",
   "checksum.import_file_title": "ოფიციალური SHA256SUMS / CHECKSUM ფაილის იმპორტი და ანალიზი",
+  "vm.cfg_core_singular": "ბირთვი",
+  "vm.cfg_core_plural": "ბირთვები"
 };

@@ -199,10 +199,10 @@ export const ocFr: TranslationDict = {
   "vm.tip_ready": "Clicatz per lançar QEMU VM per verificar lo cargaire d'arrenjament USB sul burèu actual",
   "vm.toast_select_first": "Mercés de clicar per seleccionar una unitat USB cibla del panèl esquèrra d'en primièr!",
   "vm.toast_not_installed": "L'emulator QEMU pas trobat ! Mercés de installar QEMU (brew install qemu o port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Simulation SecureBoot",
+  "vm.cfg_accel": "Accélération matérielle",
+  "vm.cfg_ram": "Allocation RAM",
+  "vm.cfg_cpu": "Cœurs CPU",
   "settings.title": "Preferéncias",
   "settings.subtitle": "Preferéncias globalas, proxy de ret e matriça de micrologicial",
   "settings.realtime_save": "Enregistrat en temps real",
@@ -424,4 +424,6 @@ export const ocFr: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Importar lo fichièr de som de contròle",
   "checksum.import_file_title": "Importar e analisar lo fichièr oficial SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Cœur",
+  "vm.cfg_core_plural": "Cœurs"
 };

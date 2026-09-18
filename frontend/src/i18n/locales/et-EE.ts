@@ -199,10 +199,10 @@ export const etEe: TranslationDict = {
   "vm.tip_ready": "Klõpsake QEMU VM käivitamiseks, et kontrollida USB alglaadurit praegusel töölaual",
   "vm.toast_select_first": "Klõpsake vasakpoolsest paneelist esmalt siht-USB-draivi valimiseks!",
   "vm.toast_not_installed": "QEMU emulaatorit ei leitud! Installige QEMU (brew install qemu või port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot simulatsioon",
+  "vm.cfg_accel": "Riistvara kiirendus",
+  "vm.cfg_ram": "RAM eraldamine",
+  "vm.cfg_cpu": "CPU tuumad",
   "settings.title": "Eelistused",
   "settings.subtitle": "Globaalsed eelistused, võrgupuhverserver ja püsivara maatriks",
   "settings.realtime_save": "Reaalajas salvestatud",
@@ -424,4 +424,6 @@ export const etEe: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Impordi kontrollsumma fail",
   "checksum.import_file_title": "Impordi ja analüüsi ametlik SHA256SUMS / CHECKSUM fail",
+  "vm.cfg_core_singular": "Tuum",
+  "vm.cfg_core_plural": "Tuumad"
 };

@@ -200,9 +200,9 @@ export const zhTw: TranslationDict = {
   "vm.toast_select_first": "請先在左側磁碟列表中點擊選擇要測試的目標磁碟！",
   "vm.toast_not_installed": "未檢測到 QEMU 模擬器！請先安裝 QEMU (brew install qemu 或 port install qemu)",
   "vm.cfg_secure_boot": "SecureBoot 模擬",
-  "vm.cfg_accel": "硬體加速 (HVF/KVM)",
+  "vm.cfg_accel": "硬體加速",
   "vm.cfg_ram": "記憶體大小",
-  "vm.cfg_cpu": "CPU 核心",
+  "vm.cfg_cpu": "CPU 核心數",
   "settings.title": "偏好設定",
   "settings.subtitle": "全域偏好設定、網路代理與韌體配置",
   "settings.realtime_save": "修改已實時生效",
@@ -424,4 +424,6 @@ export const zhTw: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "匯入校驗檔案",
   "checksum.import_file_title": "匯入並剖析官方 SHA256SUMS / CHECKSUM 校驗檔案",
+  "vm.cfg_core_singular": "核",
+  "vm.cfg_core_plural": "核"
 };

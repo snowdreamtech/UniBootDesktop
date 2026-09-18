@@ -200,8 +200,8 @@ export const zhCn: TranslationDict = {
   "vm.toast_select_first": "请先在左侧磁盘列表中点击选择要测试的目标磁盘！",
   "vm.toast_not_installed": "未检测到 QEMU 模拟器！请先安装 QEMU (brew install qemu 或 port install qemu)",
   "vm.cfg_secure_boot": "SecureBoot 仿真",
-  "vm.cfg_accel": "硬件加速 (HVF/KVM)",
-  "vm.cfg_ram": "内存大小",
+  "vm.cfg_accel": "硬件加速",
+  "vm.cfg_ram": "内存分配",
   "vm.cfg_cpu": "CPU 核心",
   "settings.title": "偏好设置",
   "settings.subtitle": "全局偏好设置、网络代理与固件配置",
@@ -423,5 +423,7 @@ export const zhCn: TranslationDict = {
   "checksum.status_verify": "校验",
     "checksum.card_title": "🔒 镜像 Hash 校验",
 "progress.speed": "写入速度",
-  "progress.eta": "预计剩余"
+  "progress.eta": "预计剩余",
+  "vm.cfg_core_singular": "核",
+  "vm.cfg_core_plural": "核"
 };

@@ -199,10 +199,10 @@ export const koKr: TranslationDict = {
   "vm.tip_ready": "클릭하여 QEMU 가상 머신을 실행하고 부팅을 검증하세요",
   "vm.toast_select_first": "왼쪽 목록에서 테스트할 대상 디스크를 먼저 선택하세요!",
   "vm.toast_not_installed": "QEMU 에뮬레이터를 찾을 수 없습니다! QEMU를 먼저 설치하세요",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot 시뮬레이션",
+  "vm.cfg_accel": "하드웨어 가속",
+  "vm.cfg_ram": "메모리 할당",
+  "vm.cfg_cpu": "CPU 코어",
   "settings.title": "환경 설정",
   "settings.subtitle": "글로벌 환경 설정, 네트워크 프록시 및 펌웨어",
   "settings.realtime_save": "실시간 저장됨",
@@ -424,4 +424,6 @@ export const koKr: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "체크섬 파일 가져오기",
   "checksum.import_file_title": "공식 SHA256SUMS / CHECKSUM 파일 가져오기 및 분석",
+  "vm.cfg_core_singular": "코어",
+  "vm.cfg_core_plural": "코어"
 };

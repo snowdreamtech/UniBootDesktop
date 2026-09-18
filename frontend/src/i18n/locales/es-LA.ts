@@ -199,10 +199,10 @@ export const esLa: TranslationDict = {
   "vm.tip_ready": "Haga clic para iniciar QEMU VM y verificar el cargador de arranque de disco en el escritorio actual",
   "vm.toast_select_first": "¡Primero haga clic para seleccionar una disco de destino desde el panel izquierdo!",
   "vm.toast_not_installed": "¡No se encontró el emulador QEMU! Instale QEMU (brew install qemu o port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Simulación de SecureBoot",
+  "vm.cfg_accel": "Aceleración por hardware",
+  "vm.cfg_ram": "Asignación de RAM",
+  "vm.cfg_cpu": "Núcleos de CPU",
   "settings.title": "Preferencias",
   "settings.subtitle": "Preferencias globales, proxy de red y matriz de firmware",
   "settings.realtime_save": "Guardado en tiempo real",
@@ -424,4 +424,6 @@ export const esLa: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Importar archivo de Checksum",
   "checksum.import_file_title": "Importar y analizar archivo oficial SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Núcleo",
+  "vm.cfg_core_plural": "Núcleos"
 };

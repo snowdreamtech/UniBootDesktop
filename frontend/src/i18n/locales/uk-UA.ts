@@ -199,10 +199,10 @@ export const ukUa: TranslationDict = {
   "vm.tip_ready": "Натисніть, щоб запустити QEMU VM, щоб перевірити USB-завантажувач на поточному робочому столі",
   "vm.toast_select_first": "Натисніть, щоб спочатку вибрати цільовий USB-диск на лівій панелі!",
   "vm.toast_not_installed": "Емулятор QEMU не знайдено! Будь ласка, встановіть QEMU (brew install qemu або port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Симуляція SecureBoot",
+  "vm.cfg_accel": "Апаратне прискорення",
+  "vm.cfg_ram": "Виділення ОЗП",
+  "vm.cfg_cpu": "Ядра ЦП",
   "settings.title": "Налаштування",
   "settings.subtitle": "Глобальні параметри, мережевий проксі та матриця прошивки",
   "settings.realtime_save": "Збережено в реальному часі",
@@ -424,4 +424,6 @@ export const ukUa: TranslationDict = {
   "progress.eta": "Очікуваний залишок часу",
   "checksum.import_file": "Імпортувати файл контрольної суми",
   "checksum.import_file_title": "Імпорт та аналіз офіційного файлу SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Ядро",
+  "vm.cfg_core_plural": "Ядра"
 };

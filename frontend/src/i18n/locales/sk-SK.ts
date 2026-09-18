@@ -199,10 +199,10 @@ export const skSk: TranslationDict = {
   "vm.tip_ready": "Kliknutím spustíte QEMU VM na overenie zavádzača USB na aktuálnej pracovnej ploche",
   "vm.toast_select_first": "Najprv kliknutím vyberte cieľovú jednotku USB z ľavého panela!",
   "vm.toast_not_installed": "Emulátor QEMU sa nenašiel! Nainštalujte si prosím QEMU (brew install qemu alebo port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Simulácia SecureBoot",
+  "vm.cfg_accel": "Hardvérová akcelerácia",
+  "vm.cfg_ram": "Alokácia RAM",
+  "vm.cfg_cpu": "Jadrá CPU",
   "settings.title": "Nastavenia",
   "settings.subtitle": "Globálne preferencie, Network Proxy & Firmware Matrix",
   "settings.realtime_save": "Uložené v reálnom čase",
@@ -424,4 +424,6 @@ export const skSk: TranslationDict = {
   "progress.eta": "Odhadovaný zostávajúci čas",
   "checksum.import_file": "Importovať súbor kontrolného súčtu",
   "checksum.import_file_title": "Importovať a analyzovať oficiálny súbor SHA256SUMS / CHECKSUM",
+  "vm.cfg_core_singular": "Jadro",
+  "vm.cfg_core_plural": "Jadrá"
 };

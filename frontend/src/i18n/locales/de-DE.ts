@@ -199,10 +199,10 @@ export const deDe: TranslationDict = {
   "vm.tip_ready": "Klicken, um QEMU-VM zu starten und Laufwerks-Boot zu überprüfen",
   "vm.toast_select_first": "Bitte zuerst ein Ziel-Datenträger aus der linken Liste auswählen!",
   "vm.toast_not_installed": "QEMU-Emulator nicht gefunden! Bitte zuerst QEMU installieren",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot-Simulation",
+  "vm.cfg_accel": "Hardware-Beschleunigung",
+  "vm.cfg_ram": "RAM-Zuweisung",
+  "vm.cfg_cpu": "CPU-Kerne",
   "settings.title": "Einstellungen",
   "settings.subtitle": "Globale Einstellungen, Netzwerk-Proxy & Firmware",
   "settings.realtime_save": "Echtzeit gespeichert",
@@ -424,4 +424,6 @@ export const deDe: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Prüfsummendatei importieren",
   "checksum.import_file_title": "Offizielle SHA256SUMS / CHECKSUM-Datei importieren und parsen",
+  "vm.cfg_core_singular": "Kern",
+  "vm.cfg_core_plural": "Kerne"
 };

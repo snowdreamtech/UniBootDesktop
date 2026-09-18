@@ -199,10 +199,10 @@ export const daDk: TranslationDict = {
   "vm.tip_ready": "Klik for at starte QEMU VM for at bekræfte USB bootloader på det aktuelle skrivebord",
   "vm.toast_select_first": "Klik venligst for at vælge et USB-måldrev fra venstre panel først!",
   "vm.toast_not_installed": "QEMU-emulator blev ikke fundet! Installer venligst QEMU (bryginstaller qemu eller portinstaller qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot-simulering",
+  "vm.cfg_accel": "Hardwareacceleration",
+  "vm.cfg_ram": "RAM-tildeling",
+  "vm.cfg_cpu": "CPU-kerner",
   "settings.title": "Indstillinger",
   "settings.subtitle": "Globale præferencer, netværksproxy og firmwarematrix",
   "settings.realtime_save": "Realtid gemt",
@@ -424,4 +424,6 @@ export const daDk: TranslationDict = {
   "progress.eta": "Forventet resterende tid",
   "checksum.import_file": "Importer kontrolsumfil",
   "checksum.import_file_title": "Importer og analyser officiel SHA256SUMS / CHECKSUM fil",
+  "vm.cfg_core_singular": "Kerne",
+  "vm.cfg_core_plural": "Kerner"
 };

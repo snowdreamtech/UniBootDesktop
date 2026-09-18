@@ -199,10 +199,10 @@ export const slSi: TranslationDict = {
   "vm.tip_ready": "Kliknite za zagon QEMU VM, da preverite zagonski nalagalnik USB na trenutnem namizju",
   "vm.toast_select_first": "Kliknite, da najprej izberete ciljni pogon USB na levi plošči!",
   "vm.toast_not_installed": "Emulator QEMU ni bil najden! Prosimo, namestite QEMU (brew install qemu ali port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "Simulacija SecureBoot",
+  "vm.cfg_accel": "Strojno pospeševanje",
+  "vm.cfg_ram": "Dodelitev RAM-a",
+  "vm.cfg_cpu": "Procesorska jedra",
   "settings.title": "Nastavitve",
   "settings.subtitle": "Globalne nastavitve, omrežni posrednik in matrika vdelane programske opreme",
   "settings.realtime_save": "Shranjeno v realnem času",
@@ -424,4 +424,6 @@ export const slSi: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "Uvozi datoteko s kontrolno vsoto",
   "checksum.import_file_title": "Uvozi in analiziraj uradno SHA256SUMS / CHECKSUM datoteko",
+  "vm.cfg_core_singular": "Jedro",
+  "vm.cfg_core_plural": "Jedra"
 };

@@ -199,10 +199,10 @@ export const taIn: TranslationDict = {
   "vm.tip_ready": "தற்போதைய டெஸ்க்டாப்பில் USB பூட்லோடரைச் சரிபார்க்க QEMU VM ஐத் தொடங்க கிளிக் செய்யவும்",
   "vm.toast_select_first": "முதலில் இடது பேனலில் இருந்து இலக்கு USB டிரைவைத் தேர்ந்தெடுக்க கிளிக் செய்யவும்!",
   "vm.toast_not_installed": "QEMU எமுலேட்டர் கிடைக்கவில்லை! QEMU ஐ நிறுவவும் (புரூ நிறுவ qemu அல்லது port install qemu)",
-  "vm.cfg_secure_boot": "SecureBoot Simulation",
-  "vm.cfg_accel": "Hardware Acceleration",
-  "vm.cfg_ram": "RAM Allocation",
-  "vm.cfg_cpu": "CPU Cores",
+  "vm.cfg_secure_boot": "SecureBoot போலி",
+  "vm.cfg_accel": "வன்பொருள் முடுக்கம்",
+  "vm.cfg_ram": "ரேம் ஒதுக்கீடு",
+  "vm.cfg_cpu": "சிபியு கோர்கள்",
   "settings.title": "விருப்பங்கள்",
   "settings.subtitle": "உலகளாவிய விருப்பத்தேர்வுகள், நெட்வொர்க் ப்ராக்ஸி & ஃபார்ம்வேர் மேட்ரிக்ஸ்",
   "settings.realtime_save": "நிகழ்நேரம் சேமிக்கப்பட்டது",
@@ -424,4 +424,6 @@ export const taIn: TranslationDict = {
   "progress.eta": "ETA",
   "checksum.import_file": "சரிபார்ப்பு கோப்பை இறக்குமதி செய்",
   "checksum.import_file_title": "அதிகாரப்பூர்வ SHA256SUMS / CHECKSUM கோப்பை இறக்குமதி செய்து பகுப்பாய்வு செய்",
+  "vm.cfg_core_singular": "கோர்",
+  "vm.cfg_core_plural": "கோர்கள்"
 };
