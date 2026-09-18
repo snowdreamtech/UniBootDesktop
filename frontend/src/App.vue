@@ -109,7 +109,7 @@
     <IconPickerModal
       :isOpen="isPickerOpen"
       :diskName="targetPickerDisk?.name || targetPickerDisk?.device || ''"
-      :currentIcon="targetPickerDisk ? customIcons[targetPickerDisk.device] : undefined"
+      :currentIcon="targetPickerDisk ? (customIcons[getDiskFingerprint(targetPickerDisk)] || customIcons[targetPickerDisk.device]) : undefined"
       @close="isPickerOpen = false"
       @select-icon="onIconSelected"
       @reset-icon="onIconReset"
