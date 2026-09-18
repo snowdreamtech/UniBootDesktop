@@ -56,13 +56,21 @@
         @eject="emit('eject-disk', disk)"
       />
       <div v-if="diskList.length === 0" class="empty-state">
-        <span v-if="isScanningDisks">🔍 {{ t('disk.scanning') }}</span>
+        <div v-if="isScanningDisks" class="scanning-state">
+          <span class="spin-icon">🔄</span>
+          <span>{{ t('disk.scanning') }}</span>
+        </div>
         <span v-else>⚠️ {{ t('disk.empty_list') }}</span>
       </div>
     </div>
 
-    <button class="btn-secondary refresh-btn" @click="emit('refresh-disks')">
-      🔄 {{ t('disk.rescan') }}
+    <button 
+      class="btn-secondary refresh-btn" 
+      :disabled="isScanningDisks"
+      @click="emit('refresh-disks')"
+    >
+      <span class="refresh-icon" :class="{ spinning: isScanningDisks }">🔄</span>
+      <span>{{ isScanningDisks ? t('disk.scanning') : t('disk.rescan') }}</span>
     </button>
   </section>
 </template>
@@ -253,6 +261,25 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   border-radius: 12px;
   color: var(--text-muted);
   font-size: 0.85rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin-icon,
+.refresh-icon.spinning {
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+}
+
+.scanning-state {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent-cyan);
+  font-weight: 600;
 }
 
 .refresh-btn {

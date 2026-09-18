@@ -1056,44 +1056,27 @@ function onDiskToggle(disk: DiskInfo) {
 
 const isScanningDisks = ref(false);
 
-function isEqualDiskList(a: DiskInfo[], b: DiskInfo[]): boolean {
-  if (!a || !b) return a === b;
-  if (a.length !== b.length) return false;
-  for (let i = 0; i < a.length; i++) {
-    if (
-      a[i].device !== b[i].device ||
-      a[i].name !== b[i].name ||
-      a[i].formatted !== b[i].formatted ||
-      a[i].freeFormatted !== b[i].freeFormatted ||
-      a[i].bootStatus !== b[i].bootStatus ||
-      a[i].mountPoint !== b[i].mountPoint
-    ) {
-      return false;
-    }
-  }
-  return true;
-}
-
 // Wails JS binding fallbacks / mock data for standalone preview
 async function refreshDisks() {
   if (isScanningDisks.value) return;
   isScanningDisks.value = true;
+  
+  const previousSelectedDevice = selectedDisk.value?.device;
+  // 1. Immediately clear the disk list and selection for instant UI feedback
+  diskList.value = [];
+  selectedDisk.value = null;
+  selectedDevices.value.clear();
+
   try {
     if (window.go && window.go.main && window.go.main.App) {
       try {
         const fetched = (await window.go.main.App.GetDiskList()) || [];
-        if (!isEqualDiskList(diskList.value, fetched)) {
-          diskList.value = fetched;
-          if (selectedDisk.value) {
-            const stillExists = diskList.value.find(d => d.device === selectedDisk.value?.device);
-            if (stillExists) {
-              selectedDisk.value = stillExists;
-            } else {
-              selectedDisk.value = diskList.value.length > 0 ? diskList.value[0] : null;
-            }
-          } else if (diskList.value.length > 0) {
-            selectedDisk.value = diskList.value[0];
-          }
+        diskList.value = fetched;
+        if (previousSelectedDevice) {
+          const stillExists = diskList.value.find(d => d.device === previousSelectedDevice);
+          selectedDisk.value = stillExists || (diskList.value.length > 0 ? diskList.value[0] : null);
+        } else if (diskList.value.length > 0) {
+          selectedDisk.value = diskList.value[0];
         }
       } catch (e) {
         console.error(e);
@@ -1102,6 +1085,7 @@ async function refreshDisks() {
       }
     } else {
       // Fallback mock for browser preview demonstrating genuine vs fake USB 3.0
+      await new Promise(resolve => setTimeout(resolve, 450));
       diskList.value = [
         {
           device: '/dev/disk2',
@@ -1143,7 +1127,12 @@ async function refreshDisks() {
           protocolCode: 'usb3_1'
         }
       ];
-      if (!selectedDisk.value) selectedDisk.value = diskList.value[0];
+      if (previousSelectedDevice) {
+        const stillExists = diskList.value.find(d => d.device === previousSelectedDevice);
+        selectedDisk.value = stillExists || (diskList.value.length > 0 ? diskList.value[0] : null);
+      } else if (diskList.value.length > 0) {
+        selectedDisk.value = diskList.value[0];
+      }
     }
   } finally {
     isScanningDisks.value = false;
