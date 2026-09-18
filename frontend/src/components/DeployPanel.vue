@@ -206,12 +206,12 @@
         </span>
       </p>
       <button 
-        class="btn-secondary vm-launch-btn" 
+        class="vm-launch-btn" 
         :disabled="isVmDisabled" 
         :title="vmDisabledReason"
         @click="emit('launch-vm')"
       >
-        ► {{ isLaunchingQemu ? t('vm.launching') : t('vm.run_test') }}
+        {{ isLaunchingQemu ? t('vm.launching') : t('vm.run_test') }}
       </button>
     </div>
   </section>
@@ -802,6 +802,49 @@ function getFileIcon(filename: string): string {
 
 .target-warn {
   color: #fbbf24;
+}
+
+.vm-launch-btn {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #00f0ff 0%, #0077ff 100%);
+  color: #070a12;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 4px 16px rgba(0, 229, 255, 0.35);
+}
+
+.vm-launch-btn:hover:not(:disabled) {
+  transform: translateY(-1.5px);
+  background: linear-gradient(135deg, #38f9ff 0%, #1a8cff 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 6px 22px rgba(0, 229, 255, 0.5);
+}
+
+.vm-launch-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+[data-theme="light"] .vm-launch-btn {
+  background: linear-gradient(135deg, #0396e6 0%, #0284c7 45%, #2563eb 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 4px 16px rgba(2, 132, 199, 0.35);
+}
+
+[data-theme="light"] .vm-launch-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 45%, #1d4ed8 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 6px 20px rgba(2, 132, 199, 0.45);
 }
 
 .btn-secondary {
