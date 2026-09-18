@@ -10,16 +10,16 @@
     <!-- Mode & Selection controls -->
     <div class="selection-controls">
       <div class="selection-mode-toggle">
-        <button 
-          class="sub-tab-btn" 
-          :class="{ active: selectionMode === 'single' }" 
+        <button
+          class="sub-tab-btn"
+          :class="{ active: selectionMode === 'single' }"
           @click="emit('set-selection-mode', 'single')"
         >
           {{ t('disk.single_mode') }}
         </button>
-        <button 
-          class="sub-tab-btn" 
-          :class="{ active: selectionMode === 'batch' }" 
+        <button
+          class="sub-tab-btn"
+          :class="{ active: selectionMode === 'batch' }"
           @click="emit('set-selection-mode', 'batch')"
         >
           {{ t('disk.batch_mode') }}
@@ -27,24 +27,24 @@
       </div>
 
       <div v-if="selectionMode === 'batch'" class="batch-actions">
-        <button 
-          class="btn-text" 
-          :disabled="diskList.length === 0 || selectedDevices.size === diskList.length" 
+        <button
+          class="btn-text"
+          :disabled="diskList.length === 0 || selectedDevices.size === diskList.length"
           @click="emit('select-all')"
         >
           {{ t('disk.select_all') }}
         </button>
-        <button 
-          class="btn-text" 
-          :disabled="selectedDevices.size === 0" 
+        <button
+          class="btn-text"
+          :disabled="selectedDevices.size === 0"
           @click="emit('deselect-all')"
         >
           {{ t('disk.clear_select') }}
         </button>
-        <button 
-          class="btn-eject" 
-          :disabled="selectedDevices.size === 0" 
-          :title="t('disk.batch_eject')" 
+        <button
+          class="btn-eject"
+          :disabled="selectedDevices.size === 0"
+          :title="t('disk.batch_eject')"
           @click="emit('batch-eject')"
         >
           ⏏️ {{ t('disk.batch_eject') }}
@@ -76,8 +76,8 @@
       </div>
     </div>
 
-    <button 
-      class="btn-secondary refresh-btn" 
+    <button
+      class="btn-secondary refresh-btn"
       :disabled="isScanningDisks"
       @click="emit('refresh-disks')"
     >
@@ -91,40 +91,9 @@
 import DiskCard from './DiskCard.vue';
 import type { DiskIconType } from './IconPickerModal.vue';
 import { t } from '../i18n';
+import type { disk } from '../../wailsjs/go/models';
 
-export interface DiskInfo {
-  device: string;
-  name: string;
-  size: number;
-  formatted: string;
-  freeSpace?: number;
-  freeFormatted?: string;
-  isRemovable: boolean;
-  isSystem: boolean;
-  usbVersion?: string;
-  usbSpeed?: string;
-  vendor?: string;
-  fileSystem?: string;
-  partitionScheme?: string;
-  writable?: boolean;
-  serialNumber?: string;
-  vendorId?: string;
-  productId?: string;
-  smartStatus?: string;
-  busPower?: string;
-  busPowerUsed?: string;
-  sectorSize?: string;
-  transportProtocol?: string;
-  bootStatus?: string;
-  controllerVendor?: string;
-  isFakeUsb3?: boolean;
-  protocolCode?: string;
-  isVentoy?: boolean;
-  isRealVentoy?: boolean;
-  isCloudMode?: boolean;
-  isGenericBoot?: boolean;
-  mountPoint?: string;
-}
+export type DiskInfo = disk.DiskInfo;
 
 const props = defineProps<{
   diskList: DiskInfo[];

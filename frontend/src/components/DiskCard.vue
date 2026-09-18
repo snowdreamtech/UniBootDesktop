@@ -1,22 +1,22 @@
 <template>
-  <div 
-    class="glass-card disk-card" 
+  <div
+    class="glass-card disk-card"
     :class="{ selected: isSelected }"
     @click="$emit('select', disk)"
   >
     <div class="disk-checkbox-container" v-if="isBatchMode">
-      <input 
-        type="checkbox" 
-        class="disk-checkbox" 
+      <input
+        type="checkbox"
+        class="disk-checkbox"
         :checked="isSelected"
-        @click.stop="$emit('toggle', disk)" 
+        @click.stop="$emit('toggle', disk)"
       />
     </div>
-    
+
     <!-- Dynamic SVG Disk Icon -->
-    <div 
-      class="disk-icon-wrapper" 
-      :class="diskType" 
+    <div
+      class="disk-icon-wrapper"
+      :class="diskType"
       :title="t('disk.change_icon')"
       @click.stop="$emit('pick-icon', disk)"
     >
@@ -130,16 +130,16 @@
 
     <div class="disk-tags">
       <span class="disk-badge" :class="diskType" :title="bootTooltip">{{ diskTagLabel }}</span>
-      <button 
-        class="btn-inspect" 
-        :title="t('disk.hw_inspect')" 
+      <button
+        class="btn-inspect"
+        :title="t('disk.hw_inspect')"
         @click.stop="$emit('inspect', disk)"
       >
         ℹ️ {{ t('disk.details') }}
       </button>
-      <button 
-        class="btn-eject" 
-        :title="t('disk.eject')" 
+      <button
+        class="btn-eject"
+        :title="t('disk.eject')"
         @click.stop="$emit('eject', disk)"
       >
         ⏏️ {{ t('disk.eject') }}
@@ -151,27 +151,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { t, formatDiskCapacity } from '../i18n';
+import type { disk } from '../../wailsjs/go/models';
 
-interface DiskInfo {
-  device: string;
-  name: string;
-  size: number;
-  formatted: string;
-  isRemovable: boolean;
-  isSystem: boolean;
-  usbVersion?: string;
-  usbSpeed?: string;
-  vendor?: string;
-  vendorId?: string;
-  productId?: string;
-  controllerVendor?: string;
-  isFakeUsb3?: boolean;
-  protocolCode?: string;
-  isVentoy?: boolean;
-  isRealVentoy?: boolean;
-  isCloudMode?: boolean;
-  isGenericBoot?: boolean;
-}
+type DiskInfo = disk.DiskInfo;
 
 const props = withDefaults(defineProps<{
   disk: DiskInfo;
@@ -616,7 +598,7 @@ const diskTagLabel = computed(() => {
   color: #0284c7;
 }
 
-[data-theme="light"] .speed-tag.usb3_1, 
+[data-theme="light"] .speed-tag.usb3_1,
 [data-theme="light"] .speed-tag.usb3_2 {
   color: #7c3aed;
 }

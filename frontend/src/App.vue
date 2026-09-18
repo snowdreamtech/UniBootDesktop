@@ -188,29 +188,42 @@ import DiagnosticsModal, { InstallDiagnosticsData } from './components/Diagnosti
 import AboutModal from './components/AboutModal.vue';
 import type { LogItem } from './components/LogViewerModal.vue';
 import { t, currentLang, setLanguage } from './i18n';
-import { ExportLogs, SelectIsoFiles, GetRecentLogs } from '../wailsjs/go/main/App';
+import {
+  ExportLogs,
+  SelectIsoFiles,
+  GetRecentLogs,
+  ClearLogs,
+  GetDiskList,
+  EjectDisk,
+  GetConfig,
+  SaveConfig,
+  ReloadAppMenu,
+  ValidateVentoyCli,
+  CheckQEMU,
+  DetectHypervisors,
+  DeployCloudMode,
+  DeployCloudModeBatch,
+  DeployHybridMode,
+  DeployHybridModeBatch,
+} from '../wailsjs/go/main/App';
 
 function selectLanguage(langVal: string) {
   setLanguage(langVal);
   saveLangToConfig(langVal);
-  if (window.go && window.go.main && window.go.main.App && window.go.main.App.ReloadAppMenu) {
-    window.go.main.App.ReloadAppMenu(langVal).catch((err: any) => {
-      console.warn('Failed to reload app menu:', err);
-    });
-  }
+  ReloadAppMenu(langVal).catch((err: any) => {
+    console.warn('Failed to reload app menu:', err);
+  });
 }
 
 async function saveLangToConfig(langVal: string) {
-  if (window.go && window.go.main && window.go.main.App && window.go.main.App.GetConfig && window.go.main.App.SaveConfig) {
-    try {
-      const cfg = await window.go.main.App.GetConfig();
-      if (cfg) {
-        cfg.language = langVal;
-        await window.go.main.App.SaveConfig(cfg);
-      }
-    } catch (e) {
-      console.error('Failed to save language config:', e);
+  try {
+    const cfg = await GetConfig();
+    if (cfg) {
+      cfg.language = langVal;
+      await SaveConfig(cfg);
     }
+  } catch (e) {
+    console.error('Failed to save language config:', e);
   }
 }
 

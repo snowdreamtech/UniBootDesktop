@@ -145,22 +145,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { t, formatDiskCapacity } from "../i18n";
+import type { disk } from "../../wailsjs/go/models";
 
-interface DiskInfo {
-  device: string;
-  name: string;
-  size: number;
-  formatted: string;
-  fileSystem?: string;
-  bootStatus?: string;
-  partitionScheme?: string;
-  vendor?: string;
-  serialNumber?: string;
-  isSystem?: boolean;
-  mountPoint?: string;
-  isVentoy?: boolean;
-  isRealVentoy?: boolean;
-}
+type DiskInfo = disk.DiskInfo;
 
 const props = defineProps<{
   isOpen: boolean;

@@ -178,36 +178,9 @@
 </template>
 
 <script setup lang="ts">
-interface DiskInfo {
-  device: string;
-  name: string;
-  size: number;
-  formatted: string;
-  freeSpace?: number;
-  freeFormatted?: string;
-  isRemovable: boolean;
-  isSystem: boolean;
-  usbVersion?: string;
-  usbSpeed?: string;
-  vendor?: string;
-  fileSystem?: string;
-  partitionScheme?: string;
-  writable?: boolean;
-  serialNumber?: string;
-  vendorId?: string;
-  productId?: string;
-  smartStatus?: string;
-  busPower?: string;
-  busPowerUsed?: string;
-  sectorSize?: string;
-  transportProtocol?: string;
-  bootStatus?: string;
-  controllerVendor?: string;
-  isFakeUsb3?: boolean;
-  protocolCode?: string;
-  isVentoy?: boolean;
-  isRealVentoy?: boolean;
-}
+import type { disk } from '../../wailsjs/go/models';
+
+type DiskInfo = disk.DiskInfo;
 
 defineProps<{
   isOpen: boolean;
