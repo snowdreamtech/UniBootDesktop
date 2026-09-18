@@ -62,8 +62,8 @@ export const huHu: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 A Cloud UniBoot {tag} firmware és szkript sikeresen letöltve és gyorsítótárazva!",
   "settings.syncSuccessShortAlert": "🎉 A Cloud UniBoot mag firmware sikeresen szinkronizálva!",
   "settings.syncFailedAlert": "❌ Firmware Sync Sikertelen: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy eszközkészlet",
+  "settings.testVentoyCli": "⚡ Ventoy CLI tesztelése",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI formázási zászlók",
   "settings.ventoyPlugins": "⚡ Ventoy automatizálási bővítmények (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const huHu: TranslationDict = {
   "checksum.import_file": "Ellenőrzőfájl importálása",
   "checksum.import_file_title": "Hivatalos SHA256SUMS / CHECKSUM fájl importálása és feldolgozása",
   "vm.cfg_core_singular": "Mag",
-  "vm.cfg_core_plural": "Magok"
+  "vm.cfg_core_plural": "Magok",
+  "common.on": "BE",
+  "common.off": "KI"
 };

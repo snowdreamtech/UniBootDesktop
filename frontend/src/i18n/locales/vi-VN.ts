@@ -62,8 +62,8 @@ export const viVn: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Firmware và kịch bản khởi động UniBoot {tag} đã được tải về bộ nhớ tạm cục bộ!",
   "settings.syncSuccessShortAlert": "🎉 Đồng bộ firmware UniBoot thành công!",
   "settings.syncFailedAlert": "❌ Đồng bộ firmware thất bại: {error}",
-  "settings.ventoyToolchain": "🚀 Chuỗi công cụ chính thức Ventoy",
-  "settings.testVentoyCli": "⚡ Thử nghiệm Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Bộ công cụ Ventoy",
+  "settings.testVentoyCli": "⚡ Kiểm tra Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Tham số định dạng Ventoy CLI",
   "settings.ventoyPlugins": "⚡ Plugin tự động hóa Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const viVn: TranslationDict = {
   "checksum.import_file": "Nhập tệp kiểm tra",
   "checksum.import_file_title": "Nhập và phân tích tệp SHA256SUMS / CHECKSUM chính thức",
   "vm.cfg_core_singular": "Lõi",
-  "vm.cfg_core_plural": "Lõi"
+  "vm.cfg_core_plural": "Lõi",
+  "common.on": "BẬT",
+  "common.off": "TẮT"
 };

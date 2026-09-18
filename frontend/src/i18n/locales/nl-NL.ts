@@ -63,7 +63,7 @@ export const nlNl: TranslationDict = {
   "settings.syncSuccessShortAlert": "🎉 Cloud UniBoot-kernfirmware is succesvol gesynchroniseerd!",
   "settings.syncFailedAlert": "❌ Firmware-synchronisatie mislukt: {error}",
   "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.testVentoyCli": "⚡ Ventoy CLI testen",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI Vlaggen opmaken",
   "settings.ventoyPlugins": "⚡ Ventoy automatiseringsplugins (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const nlNl: TranslationDict = {
   "checksum.import_file": "Checksum-bestand importeren",
   "checksum.import_file_title": "Importeer en verwerk officieel SHA256SUMS / CHECKSUM-bestand",
   "vm.cfg_core_singular": "Core",
-  "vm.cfg_core_plural": "Cores"
+  "vm.cfg_core_plural": "Cores",
+  "common.on": "AAN",
+  "common.off": "UIT"
 };

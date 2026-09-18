@@ -62,8 +62,8 @@ export const urPk: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} فرم ویئر اور اسکرپٹس کو کامیابی کے ساتھ ڈاؤن لوڈ اور کیش کیا گیا!",
   "settings.syncSuccessShortAlert": "🎉 Cloud UniBoot کور فرم ویئر کامیابی کے ساتھ مطابقت پذیر ہو گیا!",
   "settings.syncFailedAlert": "❌ Firmware Sync ناکام: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy آفیشل ٹول چین",
-  "settings.testVentoyCli": "⚡ Ventoy CLI کی جانچ کریں",
+  "settings.ventoyToolchain": "🚀 Ventoy ٹول چین",
+  "settings.testVentoyCli": "⚡ Ventoy CLI ٹیسٹ کریں",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI فارمیٹنگ کے جھنڈے",
   "settings.ventoyPlugins": "⚡ Ventoy آٹومیشن پلگ انز (ventoy.json)",
   "app.title": "UniBoot ڈیسک ٹاپ",
@@ -425,5 +425,7 @@ export const urPk: TranslationDict = {
   "checksum.import_file": "چیک سم فائل امپورٹ کریں",
   "checksum.import_file_title": "آفیشل SHA256SUMS / CHECKSUM فائل امپورٹ اور پارس کریں",
   "vm.cfg_core_singular": "کور",
-  "vm.cfg_core_plural": "کورز"
+  "vm.cfg_core_plural": "کورز",
+  "common.on": "آن",
+  "common.off": "آف"
 };

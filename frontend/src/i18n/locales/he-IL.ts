@@ -62,7 +62,7 @@ export const heIl: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} קושחה וסקריפטים הורדו ונשמרו בהצלחה!",
   "settings.syncSuccessShortAlert": "🎉 קושחת הליבה של Cloud UniBoot מסונכרנת בהצלחה!",
   "settings.syncFailedAlert": "❌ Firmware Sync נכשל: {error}",
-  "settings.ventoyToolchain": "🚀 ערכת הכלים הרשמית של Ventoy",
+  "settings.ventoyToolchain": "🚀 ערכת כלי Ventoy",
   "settings.testVentoyCli": "⚡ בדיקת Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ עיצוב דגלים של Ventoy CLI",
   "settings.ventoyPlugins": "⚡ תוספי אוטומציה של Ventoy (ventoy.json)",
@@ -425,5 +425,7 @@ export const heIl: TranslationDict = {
   "checksum.import_file": "ייבא קובץ אימות",
   "checksum.import_file_title": "ייבא ונתח קובץ SHA256SUMS / CHECKSUM רשמי",
   "vm.cfg_core_singular": "ליבה",
-  "vm.cfg_core_plural": "ליבות"
+  "vm.cfg_core_plural": "ליבות",
+  "common.on": "פעיל",
+  "common.off": "כבוי"
 };

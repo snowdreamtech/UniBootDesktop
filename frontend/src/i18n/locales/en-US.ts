@@ -425,5 +425,7 @@ export const enUs: TranslationDict = {
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",
   "vm.cfg_core_singular": "Core",
-  "vm.cfg_core_plural": "Cores"
+  "vm.cfg_core_plural": "Cores",
+  "common.on": "ON",
+  "common.off": "OFF"
 };

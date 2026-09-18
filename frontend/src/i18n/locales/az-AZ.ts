@@ -62,8 +62,8 @@ export const azAz: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} proqram təminatı və skriptlər endirildi və uğurla keşləndi!",
   "settings.syncSuccessShortAlert": "🎉 Cloud UniBoot əsas proqram təminatı uğurla sinxronlaşdırıldı!",
   "settings.syncFailedAlert": "❌ Firmware Sync Uğursuz: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy Alətlər Dəsti",
+  "settings.testVentoyCli": "⚡ Ventoy CLI Yoxlayın",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI Formatlaşdırma Bayraqları",
   "settings.ventoyPlugins": "⚡ Ventoy avtomatlaşdırma qoşmaları (ventoy.json)",
   "app.title": "UniBoot Masaüstü",
@@ -425,5 +425,7 @@ export const azAz: TranslationDict = {
   "checksum.import_file": "Yoxlama faylını idxal et",
   "checksum.import_file_title": "Rəsmi SHA256SUMS / CHECKSUM faylını idxal və təhlil et",
   "vm.cfg_core_singular": "Nüvə",
-  "vm.cfg_core_plural": "Nüvələri"
+  "vm.cfg_core_plural": "Nüvələri",
+  "common.on": "AÇIQ",
+  "common.off": "BAĞLI"
 };

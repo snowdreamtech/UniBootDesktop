@@ -62,7 +62,7 @@ export const esLa: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 ¡El firmware y los scripts de Cloud UniBoot {tag} se descargaron y almacenaron en caché correctamente!",
   "settings.syncSuccessShortAlert": "🎉 ¡El firmware central de Cloud UniBoot se sincronizó correctamente!",
   "settings.syncFailedAlert": "❌ Firmware Sync Fallido: {error}",
-  "settings.ventoyToolchain": "🚀 Cadena de herramientas oficial de Ventoy",
+  "settings.ventoyToolchain": "🚀 Cadena de herramientas Ventoy",
   "settings.testVentoyCli": "⚡ Probar Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Banderas de formato CLI de Ventoy",
   "settings.ventoyPlugins": "⚡ Complementos de automatización Ventoy (ventoy.json)",
@@ -425,5 +425,7 @@ export const esLa: TranslationDict = {
   "checksum.import_file": "Importar archivo de Checksum",
   "checksum.import_file_title": "Importar y analizar archivo oficial SHA256SUMS / CHECKSUM",
   "vm.cfg_core_singular": "Núcleo",
-  "vm.cfg_core_plural": "Núcleos"
+  "vm.cfg_core_plural": "Núcleos",
+  "common.on": "ACTIVADO",
+  "common.off": "DESACTIVADO"
 };

@@ -62,8 +62,8 @@ export const csCz: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Firmware a skripty Cloud UniBoot {tag} byly úspěšně staženy a uloženy do mezipaměti!",
   "settings.syncSuccessShortAlert": "🎉 Firmware jádra Cloud UniBoot byl úspěšně synchronizován!",
   "settings.syncFailedAlert": "❌ Firmware Sync Selhalo: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Sada nástrojů Ventoy",
+  "settings.testVentoyCli": "⚡ Testovat Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Příznaky formátování Ventoy CLI",
   "settings.ventoyPlugins": "⚡ Automatizační zásuvné moduly Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const csCz: TranslationDict = {
   "checksum.import_file": "Importovat soubor kontrolního součtu",
   "checksum.import_file_title": "Importovat a analyzovat oficiální soubor SHA256SUMS / CHECKSUM",
   "vm.cfg_core_singular": "Jádro",
-  "vm.cfg_core_plural": "Jádra"
+  "vm.cfg_core_plural": "Jádra",
+  "common.on": "ZAPNUTO",
+  "common.off": "VYPNUTO"
 };

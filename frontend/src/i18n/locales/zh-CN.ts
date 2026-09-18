@@ -62,7 +62,7 @@ export const zhCn: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 云端 UniBoot {tag} 核心固件与引导脚本已成功同步下载并存入本地缓存！",
   "settings.syncSuccessShortAlert": "🎉 云端 UniBoot 核心固件已成功同步！",
   "settings.syncFailedAlert": "❌ 固件同步失败: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy 官方工具链",
+  "settings.ventoyToolchain": "🚀 Ventoy 工具链",
   "settings.testVentoyCli": "⚡ 测试 Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI 格式化参数配置",
   "settings.ventoyPlugins": "⚡ Ventoy 自动化插件配置 (ventoy.json)",
@@ -425,5 +425,7 @@ export const zhCn: TranslationDict = {
 "progress.speed": "写入速度",
   "progress.eta": "预计剩余",
   "vm.cfg_core_singular": "核",
-  "vm.cfg_core_plural": "核"
+  "vm.cfg_core_plural": "核",
+  "common.on": "开启",
+  "common.off": "关闭"
 };

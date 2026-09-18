@@ -21,6 +21,8 @@ export interface TranslationDict {
   "common.autoDetect": string;
   "common.langAuto": string;
   "common.lang": string;
+  "common.on": string;
+  "common.off": string;
   "vm.startSuccess": string;
   "vm.backendNotReady": string;
   "vm.demoModeStart": string;

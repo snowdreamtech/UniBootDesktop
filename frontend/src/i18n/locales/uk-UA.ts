@@ -62,8 +62,8 @@ export const ukUa: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Прошивку UniBoot {tag} успішно завантажено!",
   "settings.syncSuccessShortAlert": "🎉 Прошивку ядра Cloud UniBoot успішно синхронізовано!",
   "settings.syncFailedAlert": "❌ Помилка синхронізації прошивки: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Набір інструментів Ventoy",
+  "settings.testVentoyCli": "⚡ Перевірити Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Прапорці форматування CLI Ventoy",
   "settings.ventoyPlugins": "⚡ Плагіни автоматизації Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const ukUa: TranslationDict = {
   "checksum.import_file": "Імпортувати файл контрольної суми",
   "checksum.import_file_title": "Імпорт та аналіз офіційного файлу SHA256SUMS / CHECKSUM",
   "vm.cfg_core_singular": "Ядро",
-  "vm.cfg_core_plural": "Ядра"
+  "vm.cfg_core_plural": "Ядра",
+  "common.on": "УВІМК",
+  "common.off": "ВИМК"
 };

@@ -62,8 +62,8 @@ export const elGr: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Το υλικολογισμικό και τα σενάρια του Cloud UniBoot {tag} λήφθηκαν και αποθηκεύτηκαν με επιτυχία!",
   "settings.syncSuccessShortAlert": "🎉 Το υλικολογισμικό του πυρήνα του Cloud UniBoot συγχρονίστηκε με επιτυχία!",
   "settings.syncFailedAlert": "❌ Firmware Sync Αποτυχία: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Εργαλειοθήκη Ventoy",
+  "settings.testVentoyCli": "⚡ Δοκιμή Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Σημαίες μορφοποίησης Ventoy CLI",
   "settings.ventoyPlugins": "⚡ Πρόσθετα αυτοματοποίησης Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const elGr: TranslationDict = {
   "checksum.import_file": "Εισαγωγή αρχείου Checksum",
   "checksum.import_file_title": "Εισαγωγή και ανάλυση επίσημου αρχείου SHA256SUMS / CHECKSUM",
   "vm.cfg_core_singular": "Πυρήνας",
-  "vm.cfg_core_plural": "Πυρήνες"
+  "vm.cfg_core_plural": "Πυρήνες",
+  "common.on": "ΕΝΕΡΓΟ",
+  "common.off": "ΑΠΕΝΕΡΓΟ"
 };

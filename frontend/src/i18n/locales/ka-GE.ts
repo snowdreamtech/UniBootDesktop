@@ -62,8 +62,8 @@ export const kaGe: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} firmware და სკრიპტები ჩამოტვირთული და ქეშირებული წარმატებით!",
   "settings.syncSuccessShortAlert": "🎉 Cloud UniBoot core firmware სინქრონიზებულია წარმატებით!",
   "settings.syncFailedAlert": "❌ Firmware Sync შეცდომა: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy ინსტრუმენტების ნაკრები",
+  "settings.testVentoyCli": "⚡ Ventoy CLI-ს შემოწმება",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI ფორმატირების დროშები",
   "settings.ventoyPlugins": "⚡ Ventoy ავტომატიზაციის პლაგინები (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const kaGe: TranslationDict = {
   "checksum.import_file": "შემოწმების ფაილის იმპორტი",
   "checksum.import_file_title": "ოფიციალური SHA256SUMS / CHECKSUM ფაილის იმპორტი და ანალიზი",
   "vm.cfg_core_singular": "ბირთვი",
-  "vm.cfg_core_plural": "ბირთვები"
+  "vm.cfg_core_plural": "ბირთვები",
+  "common.on": "ჩართულია",
+  "common.off": "გამორთულია"
 };

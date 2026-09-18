@@ -62,8 +62,8 @@ export const faIr: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 میان‌افزار و اسکریپت‌های Cloud UniBoot {tag} با موفقیت دانلود و ذخیره شدند!",
   "settings.syncSuccessShortAlert": "🎉 سیستم عامل Cloud UniBoot با موفقیت همگام سازی شد!",
   "settings.syncFailedAlert": "❌ Firmware Sync ناموفق: {error}",
-  "settings.ventoyToolchain": "🚀 ابزار رسمی Ventoy",
-  "settings.testVentoyCli": "⚡ آزمایش Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 زنجیره ابزار Ventoy",
+  "settings.testVentoyCli": "⚡ تست Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ پرچم های قالب بندی Ventoy CLI",
   "settings.ventoyPlugins": "⚡ افزونه‌های اتوماسیون Ventoy (ventoy.json)",
   "app.title": "UniBoot دسکتاپ",
@@ -425,5 +425,7 @@ export const faIr: TranslationDict = {
   "checksum.import_file": "وارد کردن فایل چک‌سام",
   "checksum.import_file_title": "وارد کردن و تجزیه فایل رسمی SHA256SUMS / CHECKSUM",
   "vm.cfg_core_singular": "هسته",
-  "vm.cfg_core_plural": "هسته‌ها"
+  "vm.cfg_core_plural": "هسته‌ها",
+  "common.on": "روشن",
+  "common.off": "خاموش"
 };

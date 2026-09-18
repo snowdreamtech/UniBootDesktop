@@ -62,8 +62,8 @@ export const mlIn: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} ഫേംവെയറും സ്ക്രിപ്റ്റുകളും ഡൗൺലോഡ് ചെയ്യുകയും കാഷെ ചെയ്യുകയും ചെയ്തു!",
   "settings.syncSuccessShortAlert": "🎉 ക്ലൗഡ് യൂണിബൂട്ട് കോർ ഫേംവെയർ വിജയകരമായി സമന്വയിപ്പിച്ചു!",
   "settings.syncFailedAlert": "❌ Firmware Sync പരാജയപ്പെട്ടു: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy ടൂൾചെയിൻ",
+  "settings.testVentoyCli": "⚡ Ventoy CLI പരിശോധിക്കുക",
   "settings.cliFormattingFlags": "🛡️ വെൻ്റോയ് CLI ഫോർമാറ്റിംഗ് ഫ്ലാഗുകൾ",
   "settings.ventoyPlugins": "⚡ Ventoy ഓട്ടോമേഷൻ പ്ലഗിനുകൾ (ventoy.json)",
   "app.title": "UniBoot ഡെസ്ക്ടോപ്പ്",
@@ -425,5 +425,7 @@ export const mlIn: TranslationDict = {
   "checksum.import_file": "പരിശോധനാ ഫയൽ ഇറക്കുമതി ചെയ്യുക",
   "checksum.import_file_title": "ഔദ്യോഗിക SHA256SUMS / CHECKSUM ഫയൽ ഇറക്കുമതി ചെയ്ത് വിശകലനം ചെയ്യുക",
   "vm.cfg_core_singular": "കോർ",
-  "vm.cfg_core_plural": "കോറുകൾ"
+  "vm.cfg_core_plural": "കോറുകൾ",
+  "common.on": "ഓൺ",
+  "common.off": "ഓഫ്"
 };

@@ -62,8 +62,8 @@ export const bnBd: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 ক্লাউড ইউনিবুট {tag} ফার্মওয়্যার এবং স্ক্রিপ্ট সফলভাবে ডাউনলোড এবং ক্যাশে করা হয়েছে!",
   "settings.syncSuccessShortAlert": "🎉 ক্লাউড ইউনিবুট কোর ফার্মওয়্যার সফলভাবে সিঙ্ক হয়েছে!",
   "settings.syncFailedAlert": "❌ Firmware Sync ব্যর্থ: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy টুলচেইন",
+  "settings.testVentoyCli": "⚡ Ventoy CLI পরীক্ষা করুন",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI ফরম্যাটিং পতাকা",
   "settings.ventoyPlugins": "⚡ Ventoy অটোমেশন প্লাগইন (ventoy.json)",
   "app.title": "UniBoot ডেস্কটপ",
@@ -425,5 +425,7 @@ export const bnBd: TranslationDict = {
   "checksum.import_file": "চেকসাম ফাইল ইমপোর্ট করুন",
   "checksum.import_file_title": "অফিসিয়াল SHA256SUMS / CHECKSUM ফাইল ইমপোর্ট এবং পার্স করুন",
   "vm.cfg_core_singular": "কোর",
-  "vm.cfg_core_plural": "কোর"
+  "vm.cfg_core_plural": "কোর",
+  "common.on": "চালু",
+  "common.off": "বন্ধ"
 };

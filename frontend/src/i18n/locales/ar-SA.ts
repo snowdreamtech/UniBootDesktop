@@ -62,7 +62,7 @@ export const arSa: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 تم تنزيل وحفظ البرامج الثابتة لـ UniBoot {tag} بنجاح!",
   "settings.syncSuccessShortAlert": "🎉 تمت مزامنة برنامج UniBoot الثابت بنجاح!",
   "settings.syncFailedAlert": "❌ فشل مزامنة البرنامج الثابت: {error}",
-  "settings.ventoyToolchain": "🚀 سلسلة أدوات Ventoy الرسمية",
+  "settings.ventoyToolchain": "🚀 حزمة أدوات Ventoy",
   "settings.testVentoyCli": "⚡ اختبار Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ معلمات تهيئة Ventoy CLI",
   "settings.ventoyPlugins": "⚡ مكونات أتمتة Ventoy (ventoy.json)",
@@ -425,5 +425,7 @@ export const arSa: TranslationDict = {
   "checksum.import_file": "استيراد ملف التحقق",
   "checksum.import_file_title": "استيراد وتحليل ملف SHA256SUMS / CHECKSUM الرسمي",
   "vm.cfg_core_singular": "نواة",
-  "vm.cfg_core_plural": "أنوية"
+  "vm.cfg_core_plural": "أنوية",
+  "common.on": "تشغيل",
+  "common.off": "إيقاف"
 };

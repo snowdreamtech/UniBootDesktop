@@ -62,8 +62,8 @@ export const hyAm: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} որոնվածը և սցենարները հաջողությամբ ներբեռնվեցին և պահվեցին քեշում:",
   "settings.syncSuccessShortAlert": "🎉 Cloud UniBoot հիմնական որոնվածը հաջողությամբ համաժամացվեց:",
   "settings.syncFailedAlert": "❌ Firmware Sync Ձախողվեց: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy գործիքակազմ",
+  "settings.testVentoyCli": "⚡ Փորձարկել Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI ֆորմատավորող դրոշակներ",
   "settings.ventoyPlugins": "⚡ Ventoy ավտոմատացման հավելումներ (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const hyAm: TranslationDict = {
   "checksum.import_file": "Ներմուծել ստուգման ֆայլ",
   "checksum.import_file_title": "Ներմուծել և վերլուծել պաշտոնական SHA256SUMS / CHECKSUM ֆայլը",
   "vm.cfg_core_singular": "Միջուկ",
-  "vm.cfg_core_plural": "Միջուկներ"
+  "vm.cfg_core_plural": "Միջուկներ",
+  "common.on": "ՄԻԱՑՎԱԾ Է",
+  "common.off": "ԱՆՋԱՏՎԱԾ Է"
 };

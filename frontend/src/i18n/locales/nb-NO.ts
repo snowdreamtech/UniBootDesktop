@@ -62,7 +62,7 @@ export const nbNo: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag}-fastvare og skript ble lastet ned og bufret!",
   "settings.syncSuccessShortAlert": "🎉 Cloud UniBoot kjernefastvare synkronisert vellykket!",
   "settings.syncFailedAlert": "❌ Firmware Sync Mislyktes: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
+  "settings.ventoyToolchain": "🚀 Ventoy-verktøykjede",
   "settings.testVentoyCli": "⚡ Test Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI-formateringsflagg",
   "settings.ventoyPlugins": "⚡ Ventoy automatiseringsutvidelser (ventoy.json)",
@@ -425,5 +425,7 @@ export const nbNo: TranslationDict = {
   "checksum.import_file": "Importer kontrollsumfil",
   "checksum.import_file_title": "Importer og analyser offisiell SHA256SUMS / CHECKSUM-fil",
   "vm.cfg_core_singular": "Kjerne",
-  "vm.cfg_core_plural": "Kjerner"
+  "vm.cfg_core_plural": "Kjerner",
+  "common.on": "PÅ",
+  "common.off": "AV"
 };

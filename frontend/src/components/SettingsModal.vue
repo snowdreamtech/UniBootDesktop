@@ -322,11 +322,11 @@
                   <div class="radio-group horizontal">
                     <label class="radio-label">
                       <input type="radio" :value="true" v-model="ventoySecureBoot" @change="triggerAutoSave" />
-                      <span>ON (-s)</span>
+                      <span>{{ t('common.on') }} (-s)</span>
                     </label>
                     <label class="radio-label">
                       <input type="radio" :value="false" v-model="ventoySecureBoot" @change="triggerAutoSave" />
-                      <span>OFF</span>
+                      <span>{{ t('common.off') }}</span>
                     </label>
                   </div>
                 </div>
@@ -367,11 +367,11 @@
                   <div class="radio-group horizontal">
                     <label class="radio-label">
                       <input type="radio" :value="true" v-model="ventoyWin11Bypass" @change="triggerAutoSave" />
-                      <span>ON (Bypass TPM/CPU/RAM)</span>
+                      <span>{{ t('common.on') }} (Bypass TPM/CPU/RAM)</span>
                     </label>
                     <label class="radio-label">
                       <input type="radio" :value="false" v-model="ventoyWin11Bypass" @change="triggerAutoSave" />
-                      <span>OFF</span>
+                      <span>{{ t('common.off') }}</span>
                     </label>
                   </div>
                 </div>

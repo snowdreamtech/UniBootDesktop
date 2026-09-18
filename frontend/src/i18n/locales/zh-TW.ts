@@ -62,7 +62,7 @@ export const zhTw: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 云端 UniBoot {tag} 核心韌體与引导脚本已成功同步下载并存入本地快取！",
   "settings.syncSuccessShortAlert": "🎉 云端 UniBoot 核心韌體已成功同步！",
   "settings.syncFailedAlert": "❌ 韌體同步失敗: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy 官方工具鏈",
+  "settings.ventoyToolchain": "🚀 Ventoy 工具鏈",
   "settings.testVentoyCli": "⚡ 測試 Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI 格式化參數配置",
   "settings.ventoyPlugins": "⚡ Ventoy 自動化插件配置 (ventoy.json)",
@@ -425,5 +425,7 @@ export const zhTw: TranslationDict = {
   "checksum.import_file": "匯入校驗檔案",
   "checksum.import_file_title": "匯入並剖析官方 SHA256SUMS / CHECKSUM 校驗檔案",
   "vm.cfg_core_singular": "核",
-  "vm.cfg_core_plural": "核"
+  "vm.cfg_core_plural": "核",
+  "common.on": "開啟",
+  "common.off": "關閉"
 };

@@ -62,7 +62,7 @@ export const thTh: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 ดาวน์โหลดเฟิร์มแวร์และสคริปต์ Cloud UniBoot {tag} และแคชสำเร็จแล้ว!",
   "settings.syncSuccessShortAlert": "🎉 ซิงค์เฟิร์มแวร์หลัก Cloud UniBoot สำเร็จแล้ว!",
   "settings.syncFailedAlert": "❌ Firmware Sync ล้มเหลว: {error}",
-  "settings.ventoyToolchain": "🚀 ชุดเครื่องมืออย่างเป็นทางการของ Ventoy",
+  "settings.ventoyToolchain": "🚀 ชุดเครื่องมือ Ventoy",
   "settings.testVentoyCli": "⚡ ทดสอบ Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ ธงการจัดรูปแบบ Ventoy CLI",
   "settings.ventoyPlugins": "⚡ ปลั๊กอินอัตโนมัติ Ventoy (ventoy.json)",
@@ -425,5 +425,7 @@ export const thTh: TranslationDict = {
   "checksum.import_file": "นำเข้าไฟล์ตรวจสอบ",
   "checksum.import_file_title": "นำเข้าและวิเคราะห์ไฟล์ SHA256SUMS / CHECKSUM อย่างเป็นทางการ",
   "vm.cfg_core_singular": "คอร์",
-  "vm.cfg_core_plural": "คอร์"
+  "vm.cfg_core_plural": "คอร์",
+  "common.on": "เปิด",
+  "common.off": "ปิด"
 };

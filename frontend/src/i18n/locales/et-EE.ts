@@ -62,8 +62,8 @@ export const etEe: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} püsivara ja skriptid on edukalt alla laaditud ja vahemällu salvestatud!",
   "settings.syncSuccessShortAlert": "🎉 Cloud UniBooti põhipüsivara sünkrooniti edukalt!",
   "settings.syncFailedAlert": "❌ Firmware Sync Ebaõnnestus: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy tööriistakomplekt",
+  "settings.testVentoyCli": "⚡ Testi Ventoy CLI-d",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI vormindamise lipud",
   "settings.ventoyPlugins": "⚡ Ventoy automatiseerimispistikprogrammid (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const etEe: TranslationDict = {
   "checksum.import_file": "Impordi kontrollsumma fail",
   "checksum.import_file_title": "Impordi ja analüüsi ametlik SHA256SUMS / CHECKSUM fail",
   "vm.cfg_core_singular": "Tuum",
-  "vm.cfg_core_plural": "Tuumad"
+  "vm.cfg_core_plural": "Tuumad",
+  "common.on": "SEES",
+  "common.off": "VÄLJAS"
 };

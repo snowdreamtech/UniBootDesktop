@@ -62,8 +62,8 @@ export const jaJp: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 クラウド UniBoot {tag} コアファームウェアとスクリプトの同期ダウンロードが完了しました！",
   "settings.syncSuccessShortAlert": "🎉 UniBoot クラウドファームウェア同期完了！",
   "settings.syncFailedAlert": "❌ ファームウェアの同期に失敗しました: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy 公式ツールチェーン",
-  "settings.testVentoyCli": "⚡ Ventoy CLIのテスト",
+  "settings.ventoyToolchain": "🚀 Ventoy ツールチェーン",
+  "settings.testVentoyCli": "⚡ Ventoy CLI をテスト",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI フォーマットパラメータ設定",
   "settings.ventoyPlugins": "⚡ Ventoy 自動化プラグイン (ventoy.json)",
   "app.title": "UniBoot デスクトップ",
@@ -425,5 +425,7 @@ export const jaJp: TranslationDict = {
   "checksum.import_file": "チェックサムファイルをインポート",
   "checksum.import_file_title": "公式の SHA256SUMS / CHECKSUM ファイルをインポートして解析",
   "vm.cfg_core_singular": "コア",
-  "vm.cfg_core_plural": "コア"
+  "vm.cfg_core_plural": "コア",
+  "common.on": "オン",
+  "common.off": "オフ"
 };

@@ -62,8 +62,8 @@ export const plPl: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Oprogramowanie układowe UniBoot {tag} zostało pomyślnie pobrane!",
   "settings.syncSuccessShortAlert": "🎉 Oprogramowanie układowe UniBoot zostało pomyślnie zsynchronizowane!",
   "settings.syncFailedAlert": "❌ Synchronizacja oprogramowania układowego nie powiodła się: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Zestaw narzędzi Ventoy",
+  "settings.testVentoyCli": "⚡ Testuj Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Parametry formatowania Ventoy CLI",
   "settings.ventoyPlugins": "⚡ Wtyczki automatyzacji Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const plPl: TranslationDict = {
   "checksum.import_file": "Importuj plik Checksum",
   "checksum.import_file_title": "Importuj i parsuj oficjalny plik SHA256SUMS / CHECKSUM",
   "vm.cfg_core_singular": "Rdzeń",
-  "vm.cfg_core_plural": "Rdzenie"
+  "vm.cfg_core_plural": "Rdzenie",
+  "common.on": "WŁĄCZONE",
+  "common.off": "WYŁĄCZONE"
 };

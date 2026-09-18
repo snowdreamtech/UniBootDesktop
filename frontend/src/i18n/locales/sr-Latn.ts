@@ -62,8 +62,8 @@ export const srLatn: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Firmver UniBoot {tag} je uspešno preuzet!",
   "settings.syncSuccessShortAlert": "🎉 Цлоуд УниБоот цоре фирмвер је успешно синхронизован!",
   "settings.syncFailedAlert": "❌ Firmware Sync Neuspešno: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Skup alata Ventoy",
+  "settings.testVentoyCli": "⚡ Testiraj Ventoy CLI",
   "settings.cliFormattingFlags": "🛡 Вентои ЦЛИ заставице за форматирање",
   "settings.ventoyPlugins": "⚡ Ventoy dodaci za automatizaciju (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const srLatn: TranslationDict = {
   "checksum.import_file": "Uvezi datoteku provere",
   "checksum.import_file_title": "Uvezi i analiziraj zvaničnu SHA256SUMS / CHECKSUM datoteku",
   "vm.cfg_core_singular": "Jezgro",
-  "vm.cfg_core_plural": "Jezgra"
+  "vm.cfg_core_plural": "Jezgra",
+  "common.on": "UKLJUČENO",
+  "common.off": "ISKLJUČENO"
 };

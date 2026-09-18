@@ -62,8 +62,8 @@ export const slSi: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Vdelana programska oprema in skripti Cloud UniBoot {tag} so bili uspešno preneseni in predpomnjeni!",
   "settings.syncSuccessShortAlert": "🎉 Vdelana programska oprema jedra Cloud UniBoot je uspešno sinhronizirana!",
   "settings.syncFailedAlert": "❌ Firmware Sync Neuspešno: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Zbirka orodij Ventoy",
+  "settings.testVentoyCli": "⚡ Preizkusi Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Zastavice za oblikovanje Ventoy CLI",
   "settings.ventoyPlugins": "⚡ Vtičniki za avtomatizacijo Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const slSi: TranslationDict = {
   "checksum.import_file": "Uvozi datoteko s kontrolno vsoto",
   "checksum.import_file_title": "Uvozi in analiziraj uradno SHA256SUMS / CHECKSUM datoteko",
   "vm.cfg_core_singular": "Jedro",
-  "vm.cfg_core_plural": "Jedra"
+  "vm.cfg_core_plural": "Jedra",
+  "common.on": "VKLOPLJENO",
+  "common.off": "IZKLOPLJENO"
 };

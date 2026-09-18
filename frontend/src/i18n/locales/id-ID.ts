@@ -62,8 +62,8 @@ export const idId: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Firmware & skrip Cloud UniBoot {tag} berhasil diunduh dan di-cache!",
   "settings.syncSuccessShortAlert": "🎉 Firmware inti Cloud UniBoot berhasil disinkronkan!",
   "settings.syncFailedAlert": "❌ Firmware Sync Gagal: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Rangkaian Alat Ventoy",
+  "settings.testVentoyCli": "⚡ Uji Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Bendera Pemformatan Ventoy CLI",
   "settings.ventoyPlugins": "⚡ Plugin Otomatisasi Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const idId: TranslationDict = {
   "checksum.import_file": "Impor File Checksum",
   "checksum.import_file_title": "Impor dan uraikan file SHA256SUMS / CHECKSUM resmi",
   "vm.cfg_core_singular": "Inti",
-  "vm.cfg_core_plural": "Inti"
+  "vm.cfg_core_plural": "Inti",
+  "common.on": "NYALA",
+  "common.off": "MATI"
 };

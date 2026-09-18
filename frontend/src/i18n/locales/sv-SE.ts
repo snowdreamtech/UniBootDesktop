@@ -62,8 +62,8 @@ export const svSe: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} firmware har laddats ned!",
   "settings.syncSuccessShortAlert": "🎉 Cloud UniBoot core firmware synkroniserad framgångsrikt!",
   "settings.syncFailedAlert": "❌ Firmware-synkronisering misslyckades: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy-verktygskedja",
+  "settings.testVentoyCli": "⚡ Testa Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI-formateringsflaggor",
   "settings.ventoyPlugins": "⚡ Ventoy automatiseringsinsticksmoduler (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const svSe: TranslationDict = {
   "checksum.import_file": "Importera kontrollsummafil",
   "checksum.import_file_title": "Importera och analysera officiell SHA256SUMS / CHECKSUM-fil",
   "vm.cfg_core_singular": "Kärna",
-  "vm.cfg_core_plural": "Kärnor"
+  "vm.cfg_core_plural": "Kärnor",
+  "common.on": "PÅ",
+  "common.off": "AV"
 };

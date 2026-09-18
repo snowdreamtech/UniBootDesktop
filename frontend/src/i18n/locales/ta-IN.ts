@@ -62,8 +62,8 @@ export const taIn: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} ஃபார்ம்வேர் & ஸ்கிரிப்டுகள் பதிவிறக்கம் செய்யப்பட்டு வெற்றிகரமாக தேக்ககப்படுத்தப்பட்டன!",
   "settings.syncSuccessShortAlert": "🎉 கிளவுட் யூனிபூட் கோர் ஃபார்ம்வேர் வெற்றிகரமாக ஒத்திசைக்கப்பட்டது!",
   "settings.syncFailedAlert": "❌ Firmware Sync தோல்வி: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy டூல்செயின்",
+  "settings.testVentoyCli": "⚡ Ventoy CLI சோதிக்கவும்",
   "settings.cliFormattingFlags": "🛡️ வென்டோய் சிஎல்ஐ வடிவமைத்தல் கொடிகள்",
   "settings.ventoyPlugins": "⚡ Ventoy தானியங்கி செருகுநிரல்கள் (ventoy.json)",
   "app.title": "UniBoot டெஸ்க்டாப்",
@@ -425,5 +425,7 @@ export const taIn: TranslationDict = {
   "checksum.import_file": "சரிபார்ப்பு கோப்பை இறக்குமதி செய்",
   "checksum.import_file_title": "அதிகாரப்பூர்வ SHA256SUMS / CHECKSUM கோப்பை இறக்குமதி செய்து பகுப்பாய்வு செய்",
   "vm.cfg_core_singular": "கோர்",
-  "vm.cfg_core_plural": "கோர்கள்"
+  "vm.cfg_core_plural": "கோர்கள்",
+  "common.on": "இயக்கு",
+  "common.off": "நிறுத்து"
 };

@@ -62,8 +62,8 @@ export const hiIn: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 क्लाउड UniBoot {tag} फर्मवेयर सफलतापूर्वक डाउनलोड किया गया!",
   "settings.syncSuccessShortAlert": "🎉 क्लाउड यूनीबूट कोर फर्मवेयर सफलतापूर्वक सिंक हो गया!",
   "settings.syncFailedAlert": "❌ Firmware Sync विफल: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy टूलचेन",
+  "settings.testVentoyCli": "⚡ Ventoy CLI परीक्षण करें",
   "settings.cliFormattingFlags": "🛡️ वेंटॉय सीएलआई फ़ॉर्मेटिंग फ़्लैग",
   "settings.ventoyPlugins": "⚡ Ventoy स्वचालन प्लगइन्स (ventoy.json)",
   "app.title": "UniBoot डेस्कटॉप",
@@ -425,5 +425,7 @@ export const hiIn: TranslationDict = {
   "checksum.import_file": "चेकसम फ़ाइल इंपोर्ट करें",
   "checksum.import_file_title": "आधिकारिक SHA256SUMS / CHECKSUM फ़ाइल इंपोर्ट और पार्स करें",
   "vm.cfg_core_singular": "कोर",
-  "vm.cfg_core_plural": "कोर"
+  "vm.cfg_core_plural": "कोर",
+  "common.on": "चालू",
+  "common.off": "बंद"
 };

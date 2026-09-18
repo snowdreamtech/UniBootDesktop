@@ -62,8 +62,8 @@ export const ltLt: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} programinė įranga ir scenarijai sėkmingai atsisiųsta ir išsaugota talpykloje!",
   "settings.syncSuccessShortAlert": "🎉 „Cloud UniBoot“ pagrindinė programinė įranga sėkmingai sinchronizuota!",
   "settings.syncFailedAlert": "❌ Firmware Sync Nepavyko: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy įrankių rinkinys",
+  "settings.testVentoyCli": "⚡ Testuoti Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI formatavimo vėliavėlės",
   "settings.ventoyPlugins": "⚡ Ventoy automatizavimo papildiniai (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const ltLt: TranslationDict = {
   "checksum.import_file": "Importuoti patikros failą",
   "checksum.import_file_title": "Importuoti ir išanalizuoti oficialų SHA256SUMS / CHECKSUM failą",
   "vm.cfg_core_singular": "Branduolys",
-  "vm.cfg_core_plural": "Branduoliai"
+  "vm.cfg_core_plural": "Branduoliai",
+  "common.on": "ĮJUNGTA",
+  "common.off": "IŠJUNGTA"
 };

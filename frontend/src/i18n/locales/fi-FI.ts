@@ -62,8 +62,8 @@ export const fiFi: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} laiteohjelmisto ja komentosarjat ladattu ja välimuistiin tallennettu onnistuneesti!",
   "settings.syncSuccessShortAlert": "🎉 Cloud UniBoot -ytimen laiteohjelmisto synkronoitu onnistuneesti!",
   "settings.syncFailedAlert": "❌ Firmware Sync Epäonnistui: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Ventoy-työkaluketju",
+  "settings.testVentoyCli": "⚡ Testaa Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI -muotoiluliput",
   "settings.ventoyPlugins": "⚡ Ventoy automaatiolaajennukset (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const fiFi: TranslationDict = {
   "checksum.import_file": "Tuo tarkistussummatiedosto",
   "checksum.import_file_title": "Tuo ja jäsennä virallinen SHA256SUMS / CHECKSUM -tiedosto",
   "vm.cfg_core_singular": "Ydin",
-  "vm.cfg_core_plural": "Ydintä"
+  "vm.cfg_core_plural": "Ydintä",
+  "common.on": "PÄÄLLÄ",
+  "common.off": "POIS"
 };

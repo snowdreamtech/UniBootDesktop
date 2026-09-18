@@ -62,8 +62,8 @@ export const trTr: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Bulut UniBoot {tag} bellenimi başarıyla indirildi ve önbelleğe alındı!",
   "settings.syncSuccessShortAlert": "🎉 UniBoot ürün yazılımı başarıyla senkronize edildi!",
   "settings.syncFailedAlert": "❌ Bellenim senkronizasyonu başarısız: {error}",
-  "settings.ventoyToolchain": "🚀 Resmi Ventoy Araç Takımı",
-  "settings.testVentoyCli": "⚡ Ventoy CLI'yi Test Et",
+  "settings.ventoyToolchain": "🚀 Ventoy Araç Zinciri",
+  "settings.testVentoyCli": "⚡ Ventoy CLI Test Et",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI Biçimlendirme Parametreleri",
   "settings.ventoyPlugins": "⚡ Ventoy otomasyon eklentileri (ventoy.json)",
   "app.title": "UniBoot Masaüstü",
@@ -425,5 +425,7 @@ export const trTr: TranslationDict = {
   "checksum.import_file": "Checksum Dosyasını İçe Aktar",
   "checksum.import_file_title": "Resmi SHA256SUMS / CHECKSUM dosyasını içe aktarın ve çözümleyin",
   "vm.cfg_core_singular": "Çekirdek",
-  "vm.cfg_core_plural": "Çekirdek"
+  "vm.cfg_core_plural": "Çekirdek",
+  "common.on": "AÇIK",
+  "common.off": "KAPALI"
 };

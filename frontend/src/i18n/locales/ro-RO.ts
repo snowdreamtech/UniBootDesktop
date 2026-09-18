@@ -62,8 +62,8 @@ export const roRo: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Firmware-ul UniBoot {tag} a fost descărcat cu succes!",
   "settings.syncSuccessShortAlert": "🎉 Firmware-ul de bază Cloud UniBoot a fost sincronizat cu succes!",
   "settings.syncFailedAlert": "❌ Sincronizarea firmware-ului a eșuat: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Set de instrumente Ventoy",
+  "settings.testVentoyCli": "⚡ Testează Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Ventoy CLI Formating Flags",
   "settings.ventoyPlugins": "⚡ Module de automatizare Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const roRo: TranslationDict = {
   "checksum.import_file": "Importă fișier Checksum",
   "checksum.import_file_title": "Importă și analizează fișierul oficial SHA256SUMS / CHECKSUM",
   "vm.cfg_core_singular": "Nucleu",
-  "vm.cfg_core_plural": "Nuclee"
+  "vm.cfg_core_plural": "Nuclee",
+  "common.on": "PORNIT",
+  "common.off": "OPRIT"
 };

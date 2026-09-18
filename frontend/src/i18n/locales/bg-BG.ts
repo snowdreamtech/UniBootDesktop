@@ -62,8 +62,8 @@ export const bgBg: TranslationDict = {
   "settings.syncSuccessAlert": "🎉 Cloud UniBoot {tag} фърмуер и скриптове са изтеглени и кеширани успешно!",
   "settings.syncSuccessShortAlert": "🎉 Основният фърмуер на Cloud UniBoot е синхронизиран успешно!",
   "settings.syncFailedAlert": "❌ Firmware Sync Неуспешно: {error}",
-  "settings.ventoyToolchain": "🚀 Ventoy Toolchain",
-  "settings.testVentoyCli": "⚡ Test Ventoy CLI",
+  "settings.ventoyToolchain": "🚀 Набор от инструменти Ventoy",
+  "settings.testVentoyCli": "⚡ Тестване на Ventoy CLI",
   "settings.cliFormattingFlags": "🛡️ Флагове за форматиране на CLI на Ventoy",
   "settings.ventoyPlugins": "⚡ Ventoy плъгини за автоматизация (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -425,5 +425,7 @@ export const bgBg: TranslationDict = {
   "checksum.import_file": "Импортиране на файл с контролна сума",
   "checksum.import_file_title": "Импортиране и разчитане на официален SHA256SUMS / CHECKSUM файл",
   "vm.cfg_core_singular": "Ядро",
-  "vm.cfg_core_plural": "Ядра"
+  "vm.cfg_core_plural": "Ядра",
+  "common.on": "ВКЛ",
+  "common.off": "ИЗКЛ"
 };

@@ -425,5 +425,7 @@ export const caEs: TranslationDict = {
   "checksum.import_file": "Importar fitxer de Checksum",
   "checksum.import_file_title": "Importar i analitzar fitxer oficial SHA256SUMS / CHECKSUM",
   "vm.cfg_core_singular": "Core",
-  "vm.cfg_core_plural": "Cores"
+  "vm.cfg_core_plural": "Cores",
+  "common.on": "ON",
+  "common.off": "OFF"
 };
