@@ -397,6 +397,7 @@ export interface TranslationDict {
   "dialog.allFilesFilter": string;
   "dialog.selectIsoTitle": string;
   "dialog.ventoyFilter": string;
+  "checksum.card_title": string;
   "checksum.calc_btn": string;
   "checksum.calculating": string;
   "checksum.algo_label": string;

@@ -119,7 +119,7 @@
           </div>
 
           <div class="checksum-header">
-            <span class="checksum-title">🔒 Hash {{ t('checksum.algo_label') }}</span>
+            <span class="checksum-title">{{ t('checksum.card_title') }}</span>
             <div class="algo-selector">
               <select v-model="selectedAlgo" class="algo-select">
                 <option value="sha256">SHA-256 {{ t('checksum.recommended') }}</option>

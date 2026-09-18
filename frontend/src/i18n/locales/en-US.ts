@@ -398,7 +398,7 @@ export const enUs: TranslationDict = {
   "dialog.allFilesFilter": "All Files (*.*)",
   "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
   "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
-  "checksum.calc_btn": "Verify Hash",
+  "checksum.calc_btn": "Calculate Hash",
   "checksum.calculating": "Calculating Hash...",
   "checksum.algo_label": "Algorithm",
   "checksum.copy_hash": "Copy Hash",
@@ -412,6 +412,7 @@ export const enUs: TranslationDict = {
   "checksum.recommended": "(Recommended)",
   "checksum.status_selected": "Selected",
   "checksum.status_verify": "Verify",
-  "progress.speed": "Write Speed",
+    "checksum.card_title": "🔒 Image Hash Verification",
+"progress.speed": "Write Speed",
   "progress.eta": "ETA"
 };
