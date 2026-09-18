@@ -104,7 +104,7 @@ func (d *KVMDriver) Detect() *VMStatus {
 
 func (d *KVMDriver) Launch(ctx context.Context, diskPath string, bootMode string) error {
 	status := d.Detect()
-	if !status.Installed {
+	if !status.Installed && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 

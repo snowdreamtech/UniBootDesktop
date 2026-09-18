@@ -167,7 +167,7 @@ func (m *Manager) LaunchSpecified(ctx context.Context, targetDisk string, hType 
 	for _, drv := range m.drivers {
 		if drv.Type() == hType {
 			status := drv.Detect()
-			if status == nil || !status.Installed {
+			if (status == nil || !status.Installed) && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 				return fmt.Errorf("requested hypervisor '%s' is not installed", drv.Name())
 			}
 			logger.Info("Launching specified hypervisor", "hypervisor", drv.Name(), "disk", targetDisk, "bootMode", bootMode)
