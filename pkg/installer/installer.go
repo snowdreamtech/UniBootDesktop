@@ -17,6 +17,9 @@ import (
 	"github.com/snowdreamtech/unigodesktop/pkg/firmware"
 )
 
+// ProgressCallback is a function type for reporting deployment progress (0-100)
+type ProgressCallback func(progress int)
+
 // DeployResult contains the output metadata of a disk deployment run.
 type DeployResult struct {
 	Success     bool                `json:"success"`
@@ -302,15 +305,15 @@ func CleanMbrBootstrapCode(targetDisk string) error {
 // DeployCloudMode executes Cloud Mode: Cloud Pure Mode (1-sec native format & multi-arch iPXE firmware) with customizable file system.
 // For existing Ventoy drives, it non-destructively flashes ONLY Partition 2 (VTOYEFI / ESP), keeping Partition 1 (Data) untouched!
 func DeployCloudMode(ctx context.Context, targetDisk string, fsType string) (*DeployResult, error) {
-	return deployCloudModeWithExpectedDisk(ctx, targetDisk, fsType, nil)
+	return deployCloudModeWithExpectedDisk(ctx, targetDisk, fsType, nil, nil)
 }
 
 // DeployCloudModeWithExpectedDisk deploys Cloud Mode after confirming the target still matches the selected disk snapshot.
-func DeployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected disk.DiskInfo) (*DeployResult, error) {
-	return deployCloudModeWithExpectedDisk(ctx, targetDisk, fsType, &expected)
+func DeployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected disk.DiskInfo, progressCallback ProgressCallback) (*DeployResult, error) {
+	return deployCloudModeWithExpectedDisk(ctx, targetDisk, fsType, &expected, progressCallback)
 }
 
-func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected *disk.DiskInfo) (*DeployResult, error) {
+func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected *disk.DiskInfo, progressCallback ProgressCallback) (*DeployResult, error) {
 	if fsType == "" {
 		fsType = "exFAT"
 	}
@@ -318,6 +321,11 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 	tracker := NewDeployTracker(targetDisk, modeLabel, expected)
 
 	logger.Info("Starting Cloud Mode deployment...", "target", targetDisk, "fsType", fsType)
+
+	// Report initial progress
+	if progressCallback != nil {
+		progressCallback(10)
+	}
 
 	// Step 1: Target Disk & Snapshot Validation
 	tracker.SetStage("验证设备与底层盘状态", StepValidateDisk, ActionRetry)
@@ -332,6 +340,11 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 		diag := tracker.BuildDiagnostics(err)
 		logger.Error("Target disk snapshot mismatch", "target", targetDisk, "error", err)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: err.Error(), Diagnostics: diag}, err
+	}
+
+	// Step 1 completed
+	if progressCallback != nil {
+		progressCallback(30)
 	}
 
 	// Step 2: Format Disk / Prepare EFI Partition
@@ -375,6 +388,11 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 	}
 	tracker.SetFormatted(true)
 
+	// Step 2 completed
+	if progressCallback != nil {
+		progressCallback(70)
+	}
+
 	// Step 3: Extract Firmware Assets to ESP Partition
 	tracker.SetStage("解压ESP固件资源", StepExtractFirmware, ActionReformat)
 	logger.Info("[Step 3/3] Extracting iPXE multi-arch cloud boot firmware to ESP partition...", "efiMountPoint", efiMountPoint)
@@ -388,6 +406,11 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 		filepath.Join(efiMountPoint, "EFI", "BOOT"),
 		filepath.Join(efiMountPoint, "ipxe"),
 	})
+
+	// Step 3 completed
+	if progressCallback != nil {
+		progressCallback(100)
+	}
 
 	msg := fmt.Sprintf("Successfully deployed Cloud Mode to ESP EFI Partition (%s)", efiMountPoint)
 	if isExistingVentoy {
@@ -406,15 +429,15 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 
 // DeployCloudModeBatch executes Cloud Mode on multiple target disk drives concurrently/sequentially with customizable file system.
 func DeployCloudModeBatch(ctx context.Context, targetDisks []string, fsType string) ([]*DeployResult, error) {
-	return deployCloudModeBatchWithExpectedDisks(ctx, targetDisks, fsType, nil)
+	return deployCloudModeBatchWithExpectedDisks(ctx, targetDisks, fsType, nil, nil)
 }
 
 // DeployCloudModeBatchWithExpectedDisks deploys Cloud Mode only after all selected disk snapshots pass final validation.
-func DeployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*DeployResult, error) {
-	return deployCloudModeBatchWithExpectedDisks(ctx, targetDisks, fsType, expected)
+func DeployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo, progressCallback ProgressCallback) ([]*DeployResult, error) {
+	return deployCloudModeBatchWithExpectedDisks(ctx, targetDisks, fsType, expected, progressCallback)
 }
 
-func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo) ([]*DeployResult, error) {
+func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo, progressCallback ProgressCallback) ([]*DeployResult, error) {
 	if len(targetDisks) == 0 {
 		return nil, fmt.Errorf("no target disks specified for batch deployment")
 	}
@@ -436,12 +459,23 @@ func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []st
 	}
 
 	results := make([]*DeployResult, 0, len(targetDisks))
+	totalDisks := len(targetDisks)
 	for index, d := range targetDisks {
 		var snapshot *disk.DiskInfo
 		if len(expected) > 0 {
 			snapshot = &expected[index]
 		}
-		res, err := deployCloudModeWithExpectedDisk(ctx, d, fsType, snapshot)
+
+		// Calculate progress for batch operations: each disk contributes equally
+		diskProgressCallback := func(diskProgress int) {
+			if progressCallback != nil {
+				// Progress: (completed disks * 100 + current disk progress) / total disks
+				overallProgress := (index*100 + diskProgress) / totalDisks
+				progressCallback(overallProgress)
+			}
+		}
+
+		res, err := deployCloudModeWithExpectedDisk(ctx, d, fsType, snapshot, diskProgressCallback)
 		if err != nil {
 			if res != nil && res.Diagnostics != nil {
 				results = append(results, res)

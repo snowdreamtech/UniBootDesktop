@@ -288,13 +288,12 @@ func (a *App) DeployCloudMode(targetDisk string, fsType string, expected disk.Di
 	deployCtx := a.initDeployContext()
 	defer a.clearDeployContext()
 
-	// Emit stage-based progress events so the frontend can show real progress
-	// instead of a fake interval timer.
-	wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", 10) // started: validating disk
-	res, err := installer.DeployCloudModeWithExpectedDisk(deployCtx, targetDisk, fsType, expected)
-	if err == nil {
-		wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", 100) // complete
+	// Create progress callback to emit real-time progress events
+	progressCallback := func(progress int) {
+		wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", progress)
 	}
+
+	res, err := installer.DeployCloudModeWithExpectedDisk(deployCtx, targetDisk, fsType, expected, progressCallback)
 	if err != nil && res != nil {
 		return res, nil
 	}
@@ -307,11 +306,12 @@ func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected
 	deployCtx := a.initDeployContext()
 	defer a.clearDeployContext()
 
-	wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", 10) // started
-	results, err := installer.DeployCloudModeBatchWithExpectedDisks(deployCtx, targetDisks, fsType, expected)
-	if err == nil {
-		wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", 100) // complete
+	// Create progress callback for batch operations
+	progressCallback := func(progress int) {
+		wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", progress)
 	}
+
+	results, err := installer.DeployCloudModeBatchWithExpectedDisks(deployCtx, targetDisks, fsType, expected, progressCallback)
 	return results, err
 }
 
