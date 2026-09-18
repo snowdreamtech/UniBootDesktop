@@ -62,6 +62,9 @@
         :selectedIsoFiles="selectedIsoFiles"
         :isDeploying="isDeploying"
         :deployProgress="deployProgress"
+        :speedMBps="deploySpeedMBps"
+        :elapsedSec="deployElapsedSec"
+        :etaSec="deployEtaSec"
         :deployBtnText="deployBtnText"
         :deployDisabledReason="deployDisabledReason"
         :showDeploySuccessBanner="showDeploySuccessBanner"
@@ -79,6 +82,7 @@
         @remove-iso="removeIsoFile"
         @clear-iso="clearIsoFiles"
         @deploy-click="handleDeployBtnClick"
+        @cancel-deploy="handleCancelDeploy"
         @dismiss-success-banner="dismissDeploySuccessBanner"
         @safely-eject-success="handleSafelyEjectAfterDeploy"
         @launch-vm="launchVM"
@@ -487,6 +491,9 @@ const pendingTargets = ref<string[]>([]);
 const pendingTargetSnapshots = ref<DiskInfo[]>([]);
 const isDeploying = ref(false);
 const deployProgress = ref(0);
+const deploySpeedMBps = ref(0);
+const deployElapsedSec = ref(0);
+const deployEtaSec = ref(0);
 const autoEjectAfterDeploy = ref(false);
 interface DeployBannerState {
   visible: boolean;
@@ -1283,7 +1290,26 @@ async function startDeployment() {
   } else {
     isDeploying.value = false;
     deployProgress.value = 0;
+    deploySpeedMBps.value = 0;
+    deployElapsedSec.value = 0;
+    deployEtaSec.value = 0;
     openDiagnosticsModal(latestDiagnostics, resultMsg);
+  }
+}
+
+async function handleCancelDeploy() {
+  logUserAction('WARN', 'User clicked cancel deployment button');
+  const app = (window as any)?.go?.main?.App;
+  if (app && typeof app.CancelDeployment === 'function') {
+    try {
+      const cancelled = await app.CancelDeployment();
+      if (cancelled) {
+        showToast(t('deploy.toast_cancelled'), 'info');
+        logUserAction('INFO', 'Deployment task cancelled successfully');
+      }
+    } catch (e: any) {
+      console.error('Failed to cancel deployment:', e);
+    }
   }
 }
 
@@ -1387,6 +1413,9 @@ onMounted(() => {
       if (data) {
         isoCopyStatus.value = t('disk.writingImageProgress', { fileIndex: data.fileIndex, totalFiles: data.totalFiles, currentFile: data.currentFile, progress: data.progress.toFixed(1) });
         deployProgress.value = Math.min(99, Math.max(50, Math.floor(50 + data.progress / 2)));
+        if (data.speedMBps !== undefined) deploySpeedMBps.value = data.speedMBps;
+        if (data.elapsedSec !== undefined) deployElapsedSec.value = data.elapsedSec;
+        if (data.etaSec !== undefined) deployEtaSec.value = data.etaSec;
       }
     });
     window.runtime.EventsOn("disk-list-changed", () => {

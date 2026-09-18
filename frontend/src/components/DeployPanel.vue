@@ -181,13 +181,23 @@
         </strong>
       </div>
 
-      <ProgressBar 
-        v-if="isDeploying" 
-        :label="t('deploy.writing')" 
-        :progress="deployProgress" 
-      />
+      <div v-if="isDeploying" class="deploy-active-container">
+        <ProgressBar 
+          :label="t('deploy.writing')" 
+          :progress="deployProgress" 
+        />
+        <div class="deploy-stats-row">
+          <span class="stat-badge" v-if="(speedMBps || 0) > 0">⚡ {{ t('deploy.stats_speed') }}: {{ speedMBps?.toFixed(1) }} MB/s</span>
+          <span class="stat-badge" v-if="(elapsedSec || 0) > 0">⏱️ {{ t('deploy.stats_elapsed') }}: {{ formatStatsTime(elapsedSec) }}</span>
+          <span class="stat-badge" v-if="(etaSec || 0) > 0">⌛ {{ t('deploy.stats_eta') }}: {{ formatStatsTime(etaSec) }}</span>
+        </div>
+        <button class="btn-cancel-deploy" @click="emit('cancel-deploy')">
+          🛑 {{ t('deploy.btn_cancel') }}
+        </button>
+      </div>
 
       <button 
+        v-else
         class="btn-primary deploy-btn" 
         :class="{ 'safe-btn': isNonDestructive, 'danger-disabled': activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid }"
         :disabled="isDeploying"
@@ -319,6 +329,9 @@ const props = defineProps<{
   selectedIsoFiles: { name: string; path: string }[];
   isDeploying: boolean;
   deployProgress: number;
+  speedMBps?: number;
+  elapsedSec?: number;
+  etaSec?: number;
   deployBtnText: string;
   deployDisabledReason: string;
   showDeploySuccessBanner: boolean;
@@ -333,6 +346,13 @@ const props = defineProps<{
   activeVmTargetDevice: string;
 }>();
 
+function formatStatsTime(seconds?: number): string {
+  if (!seconds || seconds <= 0) return '00:00';
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
 const emit = defineEmits<{
   (e: 'update:selectedFsType', fs: string): void;
   (e: 'update:selectedBootMode', mode: string): void;
@@ -342,6 +362,7 @@ const emit = defineEmits<{
   (e: 'remove-iso', index: number): void;
   (e: 'clear-iso'): void;
   (e: 'deploy-click'): void;
+  (e: 'cancel-deploy'): void;
   (e: 'dismiss-success-banner'): void;
   (e: 'safely-eject-success'): void;
   (e: 'launch-vm'): void;
@@ -1474,5 +1495,64 @@ function getFileIcon(filename: string): string {
 
 [data-theme="light"] .target-warn {
   color: #d97706;
+}
+
+.deploy-active-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.deploy-stats-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.stat-badge {
+  background: var(--subtab-container-bg);
+  color: var(--text-main);
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+}
+
+.btn-cancel-deploy {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #f87171;
+  font-size: 0.825rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.btn-cancel-deploy:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #ef4444;
+}
+
+[data-theme="light"] .btn-cancel-deploy {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+[data-theme="light"] .btn-cancel-deploy:hover {
+  background: #fee2e2;
+  border-color: #f87171;
+  color: #b91c1c;
 }
 </style>
