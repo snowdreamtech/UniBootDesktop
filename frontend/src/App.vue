@@ -337,15 +337,19 @@ const filteredEmbeddedLogs = computed(() => {
   });
 });
 
+function formatLogsToText(logs: typeof filteredEmbeddedLogs.value): string {
+  return logs
+    .map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message}${l.details ? ' - ' + l.details : ''}`)
+    .join('\n');
+}
+
 function handleCopyEmbeddedLogs() {
   logUserAction('INFO', 'User copied embedded logs to clipboard');
   if (filteredEmbeddedLogs.value.length === 0) {
     showToast(t('log.empty'), 'info');
     return;
   }
-  const text = filteredEmbeddedLogs.value
-    .map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message}${l.details ? ' - ' + l.details : ''}`)
-    .join('\n');
+  const text = formatLogsToText(filteredEmbeddedLogs.value);
   navigator.clipboard.writeText(text);
   showToast(t('log.copied_toast'), 'success');
 }
@@ -356,9 +360,7 @@ async function handleExportEmbeddedLogs() {
     showToast(t('log.empty'), 'info');
     return;
   }
-  const text = filteredEmbeddedLogs.value
-    .map(l => `[${formatLogTime(l.timestamp)}] [${l.level}] ${l.message}${l.details ? ' - ' + l.details : ''}`)
-    .join('\n');
+  const text = formatLogsToText(filteredEmbeddedLogs.value);
 
   try {
     const filePath = await ExportLogs(
