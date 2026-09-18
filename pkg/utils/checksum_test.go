@@ -54,6 +54,33 @@ func TestCalculateFileChecksum(t *testing.T) {
 		t.Errorf("expected non-empty sha512 hash")
 	}
 
+	// Test SHA1
+	sha1Res, err := CalculateFileChecksum(ctx, testFile, "sha1")
+	if err != nil {
+		t.Fatalf("CalculateFileChecksum sha1 failed: %v", err)
+	}
+	if sha1Res.Hash == "" {
+		t.Errorf("expected non-empty sha1 hash")
+	}
+
+	// Test SHA384
+	sha384Res, err := CalculateFileChecksum(ctx, testFile, "sha384")
+	if err != nil {
+		t.Fatalf("CalculateFileChecksum sha384 failed: %v", err)
+	}
+	if sha384Res.Hash == "" {
+		t.Errorf("expected non-empty sha384 hash")
+	}
+
+	// Test CRC32
+	crcRes, err := CalculateFileChecksum(ctx, testFile, "crc32")
+	if err != nil {
+		t.Fatalf("CalculateFileChecksum crc32 failed: %v", err)
+	}
+	if crcRes.Hash == "" {
+		t.Errorf("expected non-empty crc32 hash")
+	}
+
 	// Test unsupported algorithm
 	_, err = CalculateFileChecksum(ctx, testFile, "unknown_algo")
 	if err == nil {

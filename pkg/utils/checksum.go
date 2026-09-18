@@ -6,11 +6,13 @@ package utils
 import (
 	"context"
 	"crypto/md5"
+	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
 	"encoding/hex"
 	"fmt"
 	"hash"
+	"hash/crc32"
 	"io"
 	"os"
 	"strings"
@@ -26,7 +28,7 @@ type ChecksumResult struct {
 	DurationMs int64  `json:"durationMs"`
 }
 
-// CalculateFileChecksum calculates the hash string for a file given the algorithm choice (md5, sha256, sha512).
+// CalculateFileChecksum calculates the hash string for a file given the algorithm choice (md5, sha1, sha256, sha384, sha512, crc32).
 func CalculateFileChecksum(ctx context.Context, filePath string, algo string) (*ChecksumResult, error) {
 	startTime := time.Now()
 	cleanAlgo := strings.ToLower(strings.TrimSpace(algo))
@@ -38,14 +40,23 @@ func CalculateFileChecksum(ctx context.Context, filePath string, algo string) (*
 	switch cleanAlgo {
 	case "md5":
 		hasher = md5.New()
+	case "sha1", "sha-1":
+		hasher = sha1.New()
+		cleanAlgo = "sha1"
 	case "sha256", "sha-256":
 		hasher = sha256.New()
 		cleanAlgo = "sha256"
+	case "sha384", "sha-384":
+		hasher = sha512.New384()
+		cleanAlgo = "sha384"
 	case "sha512", "sha-512":
 		hasher = sha512.New()
 		cleanAlgo = "sha512"
+	case "crc32", "crc-32":
+		hasher = crc32.NewIEEE()
+		cleanAlgo = "crc32"
 	default:
-		return nil, fmt.Errorf("unsupported checksum algorithm: %s (supported: md5, sha256, sha512)", algo)
+		return nil, fmt.Errorf("unsupported checksum algorithm: %s (supported: md5, sha1, sha256, sha384, sha512, crc32)", algo)
 	}
 
 	file, err := os.Open(filePath)

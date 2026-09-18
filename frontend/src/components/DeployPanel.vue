@@ -92,9 +92,12 @@
             <span class="checksum-title">🔒 Hash {{ t('checksum.algo_label') }}</span>
             <div class="algo-selector">
               <select v-model="selectedAlgo" class="algo-select">
-                <option value="sha256">SHA-256</option>
+                <option value="sha256">SHA-256 (推荐)</option>
                 <option value="md5">MD5</option>
+                <option value="sha1">SHA-1</option>
+                <option value="sha384">SHA-384</option>
                 <option value="sha512">SHA-512</option>
+                <option value="crc32">CRC32</option>
               </select>
             </div>
             <button class="btn-secondary calc-hash-btn" :disabled="isCalculatingHash" @click="handleCalculateChecksum">
