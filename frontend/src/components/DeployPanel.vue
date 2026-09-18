@@ -121,8 +121,8 @@
                 class="hash-compare-input" 
                 :placeholder="t('checksum.compare_placeholder')" 
               />
-              <button class="import-sums-btn" title="加载 SHA256SUMS / CHECKSUM.txt 文件" @click="triggerSumsFilePick">
-                📄 导入 .sums
+              <button class="import-sums-btn" :title="t('checksum.import_file_title')" @click="triggerSumsFilePick">
+                📄 {{ t('checksum.import_file') }}
               </button>
               <input 
                 type="file" 

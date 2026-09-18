@@ -407,5 +407,7 @@ export const svSe: TranslationDict = {
   "checksum.match_success": "✅ Hash Checksum Matched",
   "checksum.match_mismatch": "❌ Hash Mismatch",
   "progress.speed": "Write Speed",
-  "progress.eta": "ETA"
+  "progress.eta": "ETA",
+  "checksum.import_file": "Import Checksum File",
+  "checksum.import_file_title": "Import and parse official SHA256SUMS / CHECKSUM file",
 };

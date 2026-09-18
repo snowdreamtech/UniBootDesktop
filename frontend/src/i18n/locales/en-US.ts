@@ -404,6 +404,8 @@ export const enUs: TranslationDict = {
   "checksum.copy_hash": "Copy Hash",
   "checksum.copied": "Copied Hash to clipboard",
   "checksum.compare_placeholder": "Paste official Checksum to verify...",
+  "checksum.import_file": "Import Checksum File",
+  "checksum.import_file_title": "Import and parse official SHA256SUMS / CHECKSUM file",
   "checksum.match_success": "✅ Hash Checksum Matched",
   "checksum.match_mismatch": "❌ Hash Mismatch! File may be corrupt",
   "progress.speed": "Write Speed",

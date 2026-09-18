@@ -403,6 +403,8 @@ export interface TranslationDict {
   "checksum.copy_hash": string;
   "checksum.copied": string;
   "checksum.compare_placeholder": string;
+  "checksum.import_file": string;
+  "checksum.import_file_title": string;
   "checksum.match_success": string;
   "checksum.match_mismatch": string;
   "progress.speed": string;
