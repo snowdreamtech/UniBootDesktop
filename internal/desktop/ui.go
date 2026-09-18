@@ -55,17 +55,18 @@ func (r *UIRunner) Start(ctx context.Context) error {
 	r.listener = ln
 	r.port = ln.Addr().(*net.TCPAddr).Port
 
-	r.server = &http.Server{
+	srv := &http.Server{
 		Handler:      mux,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
+	r.server = srv
 	r.mu.Unlock()
 
 	logger.Info("Desktop Web Bridge Server started", "url", fmt.Sprintf("http://127.0.0.1:%d", r.port))
 
 	// Listen and serve
-	if err := r.server.Serve(ln); err != nil && err != http.ErrServerClosed {
+	if err := srv.Serve(ln); err != nil && err != http.ErrServerClosed {
 		return fmt.Errorf("desktop web server error: %w", err)
 	}
 
@@ -75,18 +76,18 @@ func (r *UIRunner) Start(ctx context.Context) error {
 // Stop cleanly terminates the embedded desktop web bridge server.
 func (r *UIRunner) Stop() error {
 	r.mu.Lock()
-	defer r.mu.Unlock()
+	srv := r.server
+	r.server = nil
+	r.mu.Unlock()
 
-	if r.server == nil {
+	if srv == nil {
 		return nil
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	err := r.server.Shutdown(ctx)
-	r.server = nil
-	return err
+	return srv.Shutdown(ctx)
 }
 
 // GetPort returns the active local port for the desktop bridge server.
