@@ -398,4 +398,14 @@ export const ocFr: TranslationDict = {
   "dialog.allFilesFilter": "Totes los fichièrs (*.*)",
   "dialog.selectIsoTitle": "Seleccionar de fichièrs d'imatge sistèma (*.iso, *.wim, *.img, etc.)",
   "dialog.ventoyFilter": "Imatges font Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "checksum.calc_btn": "Verify Hash",
+  "checksum.calculating": "Calculating Hash...",
+  "checksum.algo_label": "Algorithm",
+  "checksum.copy_hash": "Copy Hash",
+  "checksum.copied": "Copied Hash",
+  "checksum.compare_placeholder": "Paste official Checksum...",
+  "checksum.match_success": "✅ Hash Checksum Matched",
+  "checksum.match_mismatch": "❌ Hash Mismatch",
+  "progress.speed": "Write Speed",
+  "progress.eta": "ETA"
 };

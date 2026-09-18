@@ -19,6 +19,7 @@ import (
 	"github.com/snowdreamtech/unigodesktop/pkg/installer"
 	"github.com/snowdreamtech/unigodesktop/pkg/qemu"
 	"github.com/snowdreamtech/unigodesktop/pkg/updater"
+	"github.com/snowdreamtech/unigodesktop/pkg/utils"
 	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -145,6 +146,18 @@ func (a *App) SelectIsoFiles(title string, ventoyFilter string, allFilter string
 		logger.Info(fmt.Sprintf("Selected %d system image file(s)", len(paths)))
 	}
 	return paths, nil
+}
+
+// CalculateFileChecksum computes MD5, SHA256, or SHA512 hash for the specified image file.
+func (a *App) CalculateFileChecksum(filePath string, algo string) (*utils.ChecksumResult, error) {
+	logger.Info("Calculating file checksum", "filePath", filePath, "algorithm", algo)
+	res, err := utils.CalculateFileChecksum(a.ctx, filePath, algo)
+	if err != nil {
+		logger.Error("Failed to calculate file checksum", "filePath", filePath, "algorithm", algo, "error", err)
+		return nil, err
+	}
+	logger.Info("File checksum calculated successfully", "filePath", filePath, "algo", res.Algorithm, "hash", res.Hash, "durationMs", res.DurationMs)
+	return res, nil
 }
 
 // ExportLogs opens a native save file dialog to export log content to a file (.log or .txt).

@@ -398,4 +398,14 @@ export const mlIn: TranslationDict = {
   "dialog.allFilesFilter": "എല്ലാ ഫയലുകളും (*.*)",
   "dialog.selectIsoTitle": "സിസ്റ്റം ഇമേജ് ഫയലുകൾ തിരഞ്ഞെടുക്കുക (*.iso, *.wim, *.img മുതലായവ)",
   "dialog.ventoyFilter": "Ventoy ഉറവിട ഇമേജുകൾ (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "checksum.calc_btn": "Verify Hash",
+  "checksum.calculating": "Calculating Hash...",
+  "checksum.algo_label": "Algorithm",
+  "checksum.copy_hash": "Copy Hash",
+  "checksum.copied": "Copied Hash",
+  "checksum.compare_placeholder": "Paste official Checksum...",
+  "checksum.match_success": "✅ Hash Checksum Matched",
+  "checksum.match_mismatch": "❌ Hash Mismatch",
+  "progress.speed": "Write Speed",
+  "progress.eta": "ETA"
 };

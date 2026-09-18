@@ -398,4 +398,14 @@ export const zhCn: TranslationDict = {
   "dialog.allFilesFilter": "所有文件 (*.*)",
   "dialog.selectIsoTitle": "选择系统镜像文件 (*.iso, *.wim, *.img 等)",
   "dialog.ventoyFilter": "Ventoy 源镜像文件 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "checksum.calc_btn": "校验 Hash",
+  "checksum.calculating": "正在计算 Hash...",
+  "checksum.algo_label": "算法",
+  "checksum.copy_hash": "复制 Hash",
+  "checksum.copied": "已复制 Hash 到剪贴板",
+  "checksum.compare_placeholder": "粘贴官方 Checksum 进行比对验证...",
+  "checksum.match_success": "✅ Hash 校验匹配一致",
+  "checksum.match_mismatch": "❌ Hash 不相符，镜像可能已损坏",
+  "progress.speed": "写入速度",
+  "progress.eta": "预计剩余"
 };

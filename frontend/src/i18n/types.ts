@@ -397,4 +397,14 @@ export interface TranslationDict {
   "dialog.allFilesFilter": string;
   "dialog.selectIsoTitle": string;
   "dialog.ventoyFilter": string;
+  "checksum.calc_btn": string;
+  "checksum.calculating": string;
+  "checksum.algo_label": string;
+  "checksum.copy_hash": string;
+  "checksum.copied": string;
+  "checksum.compare_placeholder": string;
+  "checksum.match_success": string;
+  "checksum.match_mismatch": string;
+  "progress.speed": string;
+  "progress.eta": string;
 }

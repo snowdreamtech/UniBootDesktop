@@ -85,6 +85,45 @@
           <span class="iso-count-summary">{{ t('iso.summary', { count: selectedIsoFiles.length }) }}</span>
           <button class="btn-text-danger" @click="emit('clear-iso')">{{ t('iso.clear') }}</button>
         </div>
+
+        <!-- Checksum Verification Card -->
+        <div v-if="selectedIsoFiles.length > 0" class="checksum-container">
+          <div class="checksum-header">
+            <span class="checksum-title">🔒 Hash {{ t('checksum.algo_label') }}</span>
+            <div class="algo-selector">
+              <select v-model="selectedAlgo" class="algo-select">
+                <option value="sha256">SHA-256</option>
+                <option value="md5">MD5</option>
+                <option value="sha512">SHA-512</option>
+              </select>
+            </div>
+            <button class="btn-secondary calc-hash-btn" :disabled="isCalculatingHash" @click="handleCalculateChecksum">
+              {{ isCalculatingHash ? t('checksum.calculating') : t('checksum.calc_btn') }}
+            </button>
+          </div>
+
+          <!-- Calculated Hash Result & Compare Box -->
+          <div v-if="calculatedHash" class="checksum-result-box">
+            <div class="hash-code-row">
+              <span class="hash-algo-badge">{{ currentChecksumAlgo.toUpperCase() }}</span>
+              <code class="hash-code" :title="calculatedHash">{{ calculatedHash }}</code>
+              <button class="copy-hash-btn" :title="t('checksum.copy_hash')" @click="copyHashToClipboard">
+                {{ isHashCopied ? '✓' : '📋' }}
+              </button>
+            </div>
+            <div class="hash-compare-row">
+              <input 
+                v-model="expectedHashInput" 
+                type="text" 
+                class="hash-compare-input" 
+                :placeholder="t('checksum.compare_placeholder')" 
+              />
+              <div v-if="expectedHashInput.trim()" class="match-badge" :class="isHashMatching ? 'match' : 'mismatch'">
+                {{ isHashMatching ? t('checksum.match_success') : t('checksum.match_mismatch') }}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -218,12 +257,13 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue';
 import CustomSelect from './CustomSelect.vue';
 import ProgressBar from './ProgressBar.vue';
 import type { DiskInfo } from './DiskPanel.vue';
 import { t } from '../i18n';
 
-defineProps<{
+const props = defineProps<{
   activeMode: 'cloud' | 'hybrid';
   selectionMode: 'single' | 'batch';
   selectedDisk: DiskInfo | null;
@@ -263,6 +303,56 @@ const emit = defineEmits<{
   (e: 'safely-eject-success'): void;
   (e: 'launch-vm'): void;
 }>();
+
+// Checksum State & Logic
+const selectedAlgo = ref('sha256');
+const isCalculatingHash = ref(false);
+const calculatedHash = ref('');
+const currentChecksumAlgo = ref('sha256');
+const expectedHashInput = ref('');
+const isHashCopied = ref(false);
+
+const isHashMatching = computed(() => {
+  if (!expectedHashInput.value || !calculatedHash.value) return false;
+  return expectedHashInput.value.trim().toLowerCase() === calculatedHash.value.trim().toLowerCase();
+});
+
+async function handleCalculateChecksum() {
+  if (props.selectedIsoFiles.length === 0 || isCalculatingHash.value) return;
+  const fileToVerify = props.selectedIsoFiles[0];
+  isCalculatingHash.value = true;
+  isHashCopied.value = false;
+  try {
+    const w = window as any;
+    if (w.go && w.go.main && w.go.main.App && typeof w.go.main.App.CalculateFileChecksum === 'function') {
+      const res = await w.go.main.App.CalculateFileChecksum(fileToVerify.path, selectedAlgo.value);
+      if (res && res.hash) {
+        calculatedHash.value = res.hash;
+        currentChecksumAlgo.value = res.algorithm || selectedAlgo.value;
+      }
+    } else {
+      // Standalone preview mock hash calculation
+      await new Promise(resolve => setTimeout(resolve, 500));
+      calculatedHash.value = selectedAlgo.value === 'md5'
+        ? 'e10adc3949ba59abbe56e057f20f883e'
+        : '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824';
+      currentChecksumAlgo.value = selectedAlgo.value;
+    }
+  } catch (e) {
+    console.error('Checksum calculation error:', e);
+  } finally {
+    isCalculatingHash.value = false;
+  }
+}
+
+function copyHashToClipboard() {
+  if (!calculatedHash.value) return;
+  navigator.clipboard.writeText(calculatedHash.value);
+  isHashCopied.value = true;
+  setTimeout(() => {
+    isHashCopied.value = false;
+  }, 2000);
+}
 
 function getFileIcon(filename: string): string {
   const ext = filename.split('.').pop()?.toLowerCase();
@@ -608,6 +698,141 @@ function getFileIcon(filename: string): string {
   color: #ef4444;
   font-size: 0.78rem;
   cursor: pointer;
+}
+
+/* Checksum Verification Card Styles */
+.checksum-container {
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed var(--card-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checksum-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.checksum-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.algo-selector {
+  display: flex;
+  align-items: center;
+}
+
+.algo-select {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+  background: var(--input-bg);
+  color: var(--text-main);
+}
+
+.calc-hash-btn {
+  padding: 0.3rem 0.75rem !important;
+  font-size: 0.78rem !important;
+  border-radius: 6px !important;
+}
+
+.checksum-result-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.55rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+}
+
+.hash-code-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow: hidden;
+}
+
+.hash-algo-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-cyan);
+}
+
+.hash-code {
+  flex: 1;
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.72rem;
+  color: var(--text-main);
+  background: var(--input-bg);
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.copy-hash-btn {
+  background: var(--btn-sec-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  border-radius: 4px;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-hash-btn:hover {
+  background: var(--btn-sec-hover-bg);
+  color: var(--accent-cyan);
+}
+
+.hash-compare-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.hash-compare-input {
+  flex: 1;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+  background: var(--input-bg);
+  color: var(--text-main);
+}
+
+.match-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.match-badge.match {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.match-badge.mismatch {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .deploy-box {

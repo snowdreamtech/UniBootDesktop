@@ -398,4 +398,14 @@ export const thTh: TranslationDict = {
   "dialog.allFilesFilter": "ไฟล์ทั้งหมด (*.*)",
   "dialog.selectIsoTitle": "เลือกไฟล์อิมเมจระบบ (*.iso, *.wim, *.img ฯลฯ)",
   "dialog.ventoyFilter": "อิมเมจต้นฉบับ Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "checksum.calc_btn": "Verify Hash",
+  "checksum.calculating": "Calculating Hash...",
+  "checksum.algo_label": "Algorithm",
+  "checksum.copy_hash": "Copy Hash",
+  "checksum.copied": "Copied Hash",
+  "checksum.compare_placeholder": "Paste official Checksum...",
+  "checksum.match_success": "✅ Hash Checksum Matched",
+  "checksum.match_mismatch": "❌ Hash Mismatch",
+  "progress.speed": "Write Speed",
+  "progress.eta": "ETA"
 };

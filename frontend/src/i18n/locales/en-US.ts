@@ -398,4 +398,14 @@ export const enUs: TranslationDict = {
   "dialog.allFilesFilter": "All Files (*.*)",
   "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
   "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "checksum.calc_btn": "Verify Hash",
+  "checksum.calculating": "Calculating Hash...",
+  "checksum.algo_label": "Algorithm",
+  "checksum.copy_hash": "Copy Hash",
+  "checksum.copied": "Copied Hash to clipboard",
+  "checksum.compare_placeholder": "Paste official Checksum to verify...",
+  "checksum.match_success": "✅ Hash Checksum Matched",
+  "checksum.match_mismatch": "❌ Hash Mismatch! File may be corrupt",
+  "progress.speed": "Write Speed",
+  "progress.eta": "ETA"
 };

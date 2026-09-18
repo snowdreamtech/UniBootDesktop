@@ -398,4 +398,14 @@ export const taIn: TranslationDict = {
   "dialog.allFilesFilter": "அனைத்து கோப்புகளும் (*.*)",
   "dialog.selectIsoTitle": "இயக்க முறைமை படக் கோப்புகளைத் தேர்ந்தெடுக்கவும் (*.iso, *.wim, *.img போன்றவை)",
   "dialog.ventoyFilter": "Ventoy மூல படங்கள் (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "checksum.calc_btn": "Verify Hash",
+  "checksum.calculating": "Calculating Hash...",
+  "checksum.algo_label": "Algorithm",
+  "checksum.copy_hash": "Copy Hash",
+  "checksum.copied": "Copied Hash",
+  "checksum.compare_placeholder": "Paste official Checksum...",
+  "checksum.match_success": "✅ Hash Checksum Matched",
+  "checksum.match_mismatch": "❌ Hash Mismatch",
+  "progress.speed": "Write Speed",
+  "progress.eta": "ETA"
 };
