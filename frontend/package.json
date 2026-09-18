@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "check-i18n": "node ../scripts/check-i18n.js",
+    "build": "node ../scripts/check-i18n.js && vue-tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
