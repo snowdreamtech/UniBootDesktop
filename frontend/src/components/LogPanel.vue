@@ -69,11 +69,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch, nextTick, onMounted } from 'vue';
 import type { LogItem } from './LogViewerModal.vue';
 import { t } from '../i18n';
 
-defineProps<{
+const props = defineProps<{
   isVisible: boolean;
   autoScroll: boolean;
   currentLogFilter: string;
@@ -91,6 +91,44 @@ const emit = defineEmits<{
 }>();
 
 const embeddedTerminalRef = ref<HTMLElement | null>(null);
+
+function scrollToBottom() {
+  if (props.autoScroll && embeddedTerminalRef.value) {
+    nextTick(() => {
+      if (embeddedTerminalRef.value) {
+        embeddedTerminalRef.value.scrollTop = embeddedTerminalRef.value.scrollHeight;
+      }
+    });
+  }
+}
+
+watch(() => props.filteredLogs.length, () => {
+  scrollToBottom();
+});
+
+watch(() => props.filteredLogs, () => {
+  scrollToBottom();
+}, { deep: true });
+
+watch(() => props.autoScroll, (val) => {
+  if (val) {
+    scrollToBottom();
+  }
+});
+
+watch(() => props.isVisible, (val) => {
+  if (val) {
+    scrollToBottom();
+  }
+});
+
+watch(() => props.currentLogFilter, () => {
+  scrollToBottom();
+});
+
+onMounted(() => {
+  scrollToBottom();
+});
 
 function formatLogTime(ts: string | Date | number): string {
   if (!ts) return '';

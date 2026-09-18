@@ -166,7 +166,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import AppHeader from './components/AppHeader.vue';
 import DiskPanel from './components/DiskPanel.vue';
 import DeployPanel from './components/DeployPanel.vue';
@@ -296,7 +296,6 @@ function toggleLogCard() {
 const savedAutoScroll = localStorage.getItem('unigodesktop_embedded_log_autoscroll');
 const embeddedAutoScroll = ref(savedAutoScroll !== null ? savedAutoScroll === 'true' : true);
 const currentEmbeddedLogFilter = ref<string>('ALL');
-const embeddedTerminalRef = ref<HTMLDivElement | null>(null);
 
 watch(embeddedAutoScroll, (val) => {
   localStorage.setItem('unigodesktop_embedded_log_autoscroll', String(val));
@@ -392,25 +391,11 @@ function dismissDeploySuccessBanner() {
   logUserAction('DEBUG', 'User dismissed deployment success banner');
 }
 
-function scrollToEmbeddedTerminalBottom() {
-  if (embeddedAutoScroll.value && embeddedTerminalRef.value) {
-    nextTick(() => {
-      if (embeddedTerminalRef.value) {
-        embeddedTerminalRef.value.scrollTop = embeddedTerminalRef.value.scrollHeight;
-      }
-    });
-  }
-}
-
 function logUserAction(level: string, message: string, details: string = '') {
   if (window.go && window.go.main && window.go.main.App && (window.go.main.App as any).LogAction) {
     (window.go.main.App as any).LogAction(level, message, details);
   }
 }
-
-watch(() => runtimeLogs.value.length, () => {
-  scrollToEmbeddedTerminalBottom();
-});
 
 watch(currentEmbeddedLogFilter, (val) => {
   logUserAction('DEBUG', 'User switched log filter tab in embedded log viewer', val);
