@@ -258,24 +258,13 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
 .refresh-btn {
   width: 100%;
   padding: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 700;
   border-radius: 10px;
-  border: 1px solid var(--btn-sec-border);
-  background: var(--btn-sec-bg);
-  color: var(--btn-sec-text);
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-}
-
-.refresh-btn:hover {
-  background: var(--btn-sec-hover-bg);
-  border-color: var(--btn-sec-hover-border);
-  color: var(--btn-sec-hover-text);
 }
 
 /* Light Theme Overrides for DiskPanel */
@@ -331,19 +320,5 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   background: #f8fafc;
   border-color: #cbd5e1;
   color: #64748b;
-}
-
-[data-theme="light"] .refresh-btn {
-  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
-  border: 1px solid #cbd5e1;
-  color: #0f172a;
-  box-shadow: inset 0 1px 0 #ffffff, 0 2px 6px rgba(15, 23, 42, 0.05);
-}
-
-[data-theme="light"] .refresh-btn:hover {
-  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
-  border-color: #38bdf8;
-  color: #0284c7;
-  box-shadow: inset 0 1px 0 #ffffff, 0 4px 12px rgba(2, 132, 199, 0.15);
 }
 </style>
