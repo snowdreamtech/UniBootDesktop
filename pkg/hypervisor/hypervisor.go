@@ -46,6 +46,26 @@ const (
 	BootModeBIOS = "bios"
 )
 
+// VMConfig contains customizable hardware and virtual machine simulation options.
+type VMConfig struct {
+	CpuCores     int    `json:"cpuCores"`     // 1, 2, 4, 8 cores (Default: 2)
+	MemoryMB     int    `json:"memoryMB"`     // 1024, 2048, 4096, 8192 MB (Default: 2048)
+	BootMode     string `json:"bootMode"`     // "auto", "uefi", "bios"
+	DisplayAccel bool   `json:"displayAccel"` // Enable hardware acceleration (-accel hvf/kvm/haxm)
+	SecureBoot   bool   `json:"secureBoot"`   // SecureBoot OVMF simulation
+}
+
+// DefaultVMConfig returns standard recommended virtual machine configuration settings.
+func DefaultVMConfig() *VMConfig {
+	return &VMConfig{
+		CpuCores:     2,
+		MemoryMB:     2048,
+		BootMode:     BootModeAuto,
+		DisplayAccel: true,
+		SecureBoot:   false,
+	}
+}
+
 // Driver defines the standard interface for hypervisor implementations.
 type Driver interface {
 	Type() HypervisorType
@@ -53,6 +73,12 @@ type Driver interface {
 	Priority() int
 	Detect() *VMStatus
 	Launch(ctx context.Context, targetDisk string, bootMode string) error
+}
+
+// ConfigurableDriver extends Driver interface to accept custom VMConfig settings.
+type ConfigurableDriver interface {
+	Driver
+	LaunchWithConfig(ctx context.Context, targetDisk string, cfg VMConfig) error
 }
 
 // Manager orchestrates hypervisor detection and priority fallback.
@@ -139,20 +165,34 @@ func (m *Manager) DetectBest() *VMStatus {
 
 // LaunchBest launches the first available hypervisor according to priority chain.
 func (m *Manager) LaunchBest(ctx context.Context, targetDisk string, bootMode string) error {
+	return m.LaunchBestConfigured(ctx, targetDisk, VMConfig{
+		CpuCores:     GetRecommendedVCPUs(),
+		MemoryMB:     GetRecommendedVMMemoryMB(),
+		BootMode:     bootMode,
+		DisplayAccel: true,
+		SecureBoot:   false,
+	})
+}
+
+// LaunchBestConfigured launches the first available hypervisor with custom VMConfig options.
+func (m *Manager) LaunchBestConfigured(ctx context.Context, targetDisk string, cfg VMConfig) error {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
 	for _, drv := range m.drivers {
 		status := drv.Detect()
 		if status != nil && status.Installed {
-			logger.Info("Selected best available hypervisor for preview launch", "hypervisor", drv.Name(), "disk", targetDisk, "bootMode", bootMode)
-			return drv.Launch(ctx, targetDisk, bootMode)
+			logger.Info("Selected best available hypervisor for preview launch", "hypervisor", drv.Name(), "disk", targetDisk, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB)
+			if cDrv, ok := drv.(ConfigurableDriver); ok {
+				return cDrv.LaunchWithConfig(ctx, targetDisk, cfg)
+			}
+			return drv.Launch(ctx, targetDisk, cfg.BootMode)
 		}
 	}
 
 	// Fallback check for dry-run
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" {
-		logger.Info("Dry-run hypervisor simulation test executed", "disk", targetDisk, "bootMode", bootMode)
+		logger.Info("Dry-run hypervisor simulation test executed", "disk", targetDisk, "bootMode", cfg.BootMode)
 		return nil
 	}
 
@@ -161,6 +201,17 @@ func (m *Manager) LaunchBest(ctx context.Context, targetDisk string, bootMode st
 
 // LaunchSpecified launches a specific hypervisor driver by type.
 func (m *Manager) LaunchSpecified(ctx context.Context, targetDisk string, hType HypervisorType, bootMode string) error {
+	return m.LaunchSpecifiedConfigured(ctx, targetDisk, hType, VMConfig{
+		CpuCores:     GetRecommendedVCPUs(),
+		MemoryMB:     GetRecommendedVMMemoryMB(),
+		BootMode:     bootMode,
+		DisplayAccel: true,
+		SecureBoot:   false,
+	})
+}
+
+// LaunchSpecifiedConfigured launches a specific hypervisor driver with custom VMConfig options.
+func (m *Manager) LaunchSpecifiedConfigured(ctx context.Context, targetDisk string, hType HypervisorType, cfg VMConfig) error {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
@@ -170,8 +221,11 @@ func (m *Manager) LaunchSpecified(ctx context.Context, targetDisk string, hType 
 			if (status == nil || !status.Installed) && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 				return fmt.Errorf("requested hypervisor '%s' is not installed", drv.Name())
 			}
-			logger.Info("Launching specified hypervisor", "hypervisor", drv.Name(), "disk", targetDisk, "bootMode", bootMode)
-			return drv.Launch(ctx, targetDisk, bootMode)
+			logger.Info("Launching specified hypervisor", "hypervisor", drv.Name(), "disk", targetDisk, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB)
+			if cDrv, ok := drv.(ConfigurableDriver); ok {
+				return cDrv.LaunchWithConfig(ctx, targetDisk, cfg)
+			}
+			return drv.Launch(ctx, targetDisk, cfg.BootMode)
 		}
 	}
 

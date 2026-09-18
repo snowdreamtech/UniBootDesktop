@@ -262,13 +262,23 @@ func getOrCreateVarsFile() string {
 }
 
 func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode string) error {
+	return d.LaunchWithConfig(ctx, diskPath, VMConfig{
+		CpuCores:     GetRecommendedVCPUs(),
+		MemoryMB:     GetRecommendedVMMemoryMB(),
+		BootMode:     bootMode,
+		DisplayAccel: true,
+		SecureBoot:   false,
+	})
+}
+
+func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
 	status := d.Detect()
 	if !status.Installed {
 		return fmt.Errorf("QEMU simulator not detected! Please install QEMU first (e.g. via brew install qemu).")
 	}
 
 	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
-		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run QEMU launch complete", "diskPath", diskPath, "bootMode", bootMode)
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run QEMU launch complete", "diskPath", diskPath, "bootMode", cfg.BootMode)
 		return nil
 	}
 
@@ -276,42 +286,61 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode strin
 	if targetPath == "" {
 		targetPath = diskPath
 	}
-	logger.Info("Executing QEMU preview simulation test", "disk", targetPath, "qemuPath", status.Path, "bootMode", bootMode)
+	logger.Info("Executing QEMU preview simulation test", "disk", targetPath, "qemuPath", status.Path, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB, "accel", cfg.DisplayAccel)
 
 	ensureDiskPermissions(targetPath)
 	unmountTargetDisk(targetPath)
 
 	ovmfFw := DetectOVMF()
 
-	memMB := GetRecommendedVMMemoryMB()
-	vcpus := GetRecommendedVCPUs()
+	memMB := cfg.MemoryMB
+	if memMB <= 0 {
+		memMB = GetRecommendedVMMemoryMB()
+	}
+	vcpus := cfg.CpuCores
+	if vcpus <= 0 {
+		vcpus = GetRecommendedVCPUs()
+	}
+
 	args := []string{
 		"-name", "UniBoot",
 		"-snapshot",
 		"-machine", "q35",
 		"-smp", fmt.Sprintf("%d", vcpus),
 		"-m", fmt.Sprintf("%d", memMB),
-		"-device", "virtio-vga,xres=1280,yres=800",
-		"-netdev", "user,id=net0",
-		"-device", "e1000,netdev=net0",
 	}
 
-	if runtime.GOOS == "darwin" {
-		args = append(args, "-display", "cocoa,zoom-to-fit=on")
-	} else if runtime.GOOS == "linux" {
-		if _, err := os.Stat("/dev/kvm"); err == nil {
-			args = append(args, "-enable-kvm")
+	if cfg.DisplayAccel {
+		switch runtime.GOOS {
+		case "darwin":
+			args = append(args, "-accel", "hvf")
+		case "linux":
+			if _, err := os.Stat("/dev/kvm"); err == nil {
+				args = append(args, "-accel", "kvm")
+			}
+		case "windows":
+			args = append(args, "-accel", "whpx")
 		}
 	}
 
-	if (bootMode == BootModeUEFI || bootMode == BootModeAuto) && ovmfFw != "" {
+	args = append(args,
+		"-device", "virtio-vga,xres=1280,yres=800",
+		"-netdev", "user,id=net0",
+		"-device", "e1000,netdev=net0",
+	)
+
+	if runtime.GOOS == "darwin" {
+		args = append(args, "-display", "cocoa,zoom-to-fit=on")
+	}
+
+	if (cfg.BootMode == BootModeUEFI || cfg.BootMode == BootModeAuto) && ovmfFw != "" {
 		varsFw := getOrCreateVarsFile()
 		logger.Info("Booting QEMU in UEFI mode with dual pflash firmware", "codeFw", ovmfFw, "varsFw", varsFw)
 		args = append(args,
 			"-drive", fmt.Sprintf("if=pflash,format=raw,readonly=on,file=%s", ovmfFw),
 			"-drive", fmt.Sprintf("if=pflash,format=raw,file=%s", varsFw),
 		)
-	} else if bootMode == BootModeUEFI && ovmfFw == "" {
+	} else if cfg.BootMode == BootModeUEFI && ovmfFw == "" {
 		return fmt.Errorf("UEFI firmware (OVMF/edk2) not found on system! Please install edk2-ovmf or switch to BIOS mode.")
 	} else {
 		logger.Info("Booting QEMU in Legacy BIOS mode (SeaBIOS)")
