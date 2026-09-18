@@ -408,6 +408,7 @@ export const enUs: TranslationDict = {
   "checksum.import_file_title": "Import and parse official SHA256SUMS / CHECKSUM file",
   "checksum.match_success": "✅ Hash Checksum Matched",
   "checksum.match_mismatch": "❌ Hash Mismatch! File may be corrupt",
+  "checksum.target_iso_label": "Target Image",
   "progress.speed": "Write Speed",
   "progress.eta": "ETA"
 };

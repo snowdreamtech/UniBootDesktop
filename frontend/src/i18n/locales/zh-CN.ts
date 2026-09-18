@@ -408,6 +408,7 @@ export const zhCn: TranslationDict = {
   "checksum.import_file_title": "导入并解析官方 SHA256SUMS / CHECKSUM 校验文件",
   "checksum.match_success": "✅ Hash 校验匹配一致",
   "checksum.match_mismatch": "❌ Hash 不相符，镜像可能已损坏",
+  "checksum.target_iso_label": "校验对象",
   "progress.speed": "写入速度",
   "progress.eta": "预计剩余"
 };

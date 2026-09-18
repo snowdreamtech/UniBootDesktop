@@ -406,6 +406,7 @@ export const zhTw: TranslationDict = {
   "checksum.compare_placeholder": "Paste official Checksum...",
   "checksum.match_success": "✅ Hash Checksum Matched",
   "checksum.match_mismatch": "❌ Hash Mismatch",
+  "checksum.target_iso_label": "校驗物件",
   "progress.speed": "Write Speed",
   "progress.eta": "ETA",
   "checksum.import_file": "Import Checksum File",

@@ -71,13 +71,28 @@
         </div>
 
         <div v-else class="iso-file-list">
-          <div v-for="(file, index) in selectedIsoFiles" :key="index" class="iso-file-item">
+          <div 
+            v-for="(file, index) in selectedIsoFiles" 
+            :key="index" 
+            class="iso-file-item"
+            :class="{ 'is-checksum-target': selectedChecksumIsoIndex === index }"
+          >
             <span class="iso-file-icon">{{ getFileIcon(file.name) }}</span>
-            <div class="iso-file-info">
+            <div class="iso-file-info" @click="selectIsoForChecksum(index)">
               <div class="iso-file-name" :title="file.path">{{ file.name }}</div>
               <div class="iso-file-path">{{ file.path }}</div>
             </div>
-            <button class="iso-remove-btn" title="Remove" @click="emit('remove-iso', index)">✕</button>
+            <div class="iso-item-actions">
+              <button 
+                class="iso-check-hash-btn" 
+                :class="{ active: selectedChecksumIsoIndex === index }"
+                :title="t('checksum.calc_btn')"
+                @click.stop="selectIsoForChecksum(index)"
+              >
+                🔒 {{ selectedChecksumIsoIndex === index ? '已选中' : '校验' }}
+              </button>
+              <button class="iso-remove-btn" title="Remove" @click.stop="emit('remove-iso', index)">✕</button>
+            </div>
           </div>
         </div>
 
@@ -88,6 +103,21 @@
 
         <!-- Checksum Verification Card -->
         <div v-if="selectedIsoFiles.length > 0" class="checksum-container">
+          <!-- Target ISO Selector Bar -->
+          <div class="checksum-target-bar">
+            <span class="target-bar-label">🎯 {{ t('checksum.target_iso_label') }}:</span>
+            <div v-if="selectedIsoFiles.length > 1" class="target-iso-selector">
+              <select v-model="selectedChecksumIsoIndex" class="target-iso-select">
+                <option v-for="(file, idx) in selectedIsoFiles" :key="idx" :value="idx">
+                  {{ idx + 1 }}. {{ file.name }}
+                </option>
+              </select>
+            </div>
+            <div v-else class="target-iso-single-name" :title="selectedIsoFiles[0].path">
+              {{ selectedIsoFiles[0].name }}
+            </div>
+          </div>
+
           <div class="checksum-header">
             <span class="checksum-title">🔒 Hash {{ t('checksum.algo_label') }}</span>
             <div class="algo-selector">
@@ -270,7 +300,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import CustomSelect from './CustomSelect.vue';
 import ProgressBar from './ProgressBar.vue';
 import type { DiskInfo } from './DiskPanel.vue';
@@ -318,6 +348,7 @@ const emit = defineEmits<{
 }>();
 
 // Checksum State & Logic
+const selectedChecksumIsoIndex = ref(0);
 const selectedAlgo = ref('sha256');
 const isCalculatingHash = ref(false);
 const calculatedHash = ref('');
@@ -325,6 +356,22 @@ const currentChecksumAlgo = ref('sha256');
 const expectedHashInput = ref('');
 const isHashCopied = ref(false);
 const sumsFileInputRef = ref<HTMLInputElement | null>(null);
+
+watch(() => props.selectedIsoFiles, (newFiles: any[]) => {
+  if (selectedChecksumIsoIndex.value >= newFiles.length) {
+    selectedChecksumIsoIndex.value = 0;
+  }
+  calculatedHash.value = '';
+}, { deep: true });
+
+watch(selectedChecksumIsoIndex, () => {
+  calculatedHash.value = '';
+});
+
+function selectIsoForChecksum(index: number) {
+  selectedChecksumIsoIndex.value = index;
+  calculatedHash.value = '';
+}
 
 function parseExpectedHashString(rawInput: string, currentFileName: string): string {
   if (!rawInput) return '';
@@ -350,7 +397,8 @@ function parseExpectedHashString(rawInput: string, currentFileName: string): str
 }
 
 const parsedExpectedHash = computed(() => {
-  const currentFileName = props.selectedIsoFiles.length > 0 ? props.selectedIsoFiles[0].name : '';
+  const targetIdx = selectedChecksumIsoIndex.value < props.selectedIsoFiles.length ? selectedChecksumIsoIndex.value : 0;
+  const currentFileName = props.selectedIsoFiles.length > 0 ? props.selectedIsoFiles[targetIdx].name : '';
   return parseExpectedHashString(expectedHashInput.value, currentFileName);
 });
 
@@ -382,7 +430,8 @@ function handleSumsFileSelected(event: Event) {
 
 async function handleCalculateChecksum() {
   if (props.selectedIsoFiles.length === 0 || isCalculatingHash.value) return;
-  const fileToVerify = props.selectedIsoFiles[0];
+  const targetIdx = selectedChecksumIsoIndex.value < props.selectedIsoFiles.length ? selectedChecksumIsoIndex.value : 0;
+  const fileToVerify = props.selectedIsoFiles[targetIdx];
   isCalculatingHash.value = true;
   isHashCopied.value = false;
   try {
@@ -710,6 +759,89 @@ function getFileIcon(filename: string): string {
   border: 1px solid var(--card-border);
   border-radius: 6px;
   font-size: 0.82rem;
+  transition: all 0.2s ease;
+}
+
+.iso-file-item.is-checksum-target {
+  border-color: var(--accent-cyan, #38bdf8);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.iso-file-info {
+  flex: 1;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.iso-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.iso-check-hash-btn {
+  border: 1px solid var(--card-border);
+  background: var(--input-bg);
+  color: var(--text-muted);
+  border-radius: 4px;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.iso-check-hash-btn:hover {
+  border-color: var(--accent-cyan, #38bdf8);
+  color: var(--accent-cyan, #38bdf8);
+}
+
+.iso-check-hash-btn.active {
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--accent-cyan, #38bdf8);
+  border-color: var(--accent-cyan, #38bdf8);
+  font-weight: 600;
+}
+
+.checksum-target-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.55rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  font-size: 0.78rem;
+}
+
+.target-bar-label {
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.target-iso-selector {
+  flex: 1;
+  overflow: hidden;
+}
+
+.target-iso-select {
+  width: 100%;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.76rem;
+  border-radius: 4px;
+  border: 1px solid var(--card-border);
+  background: var(--input-bg);
+  color: var(--text-main);
+  text-overflow: ellipsis;
+}
+
+.target-iso-single-name {
+  flex: 1;
+  font-weight: 600;
+  color: var(--accent-cyan, #38bdf8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .iso-file-info {

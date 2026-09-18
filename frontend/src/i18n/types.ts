@@ -407,6 +407,7 @@ export interface TranslationDict {
   "checksum.import_file_title": string;
   "checksum.match_success": string;
   "checksum.match_mismatch": string;
+  "checksum.target_iso_label": string;
   "progress.speed": string;
   "progress.eta": string;
 }

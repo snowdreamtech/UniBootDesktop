@@ -406,6 +406,7 @@ export const mlIn: TranslationDict = {
   "checksum.compare_placeholder": "Paste official Checksum...",
   "checksum.match_success": "✅ Hash Checksum Matched",
   "checksum.match_mismatch": "❌ Hash Mismatch",
+  "checksum.target_iso_label": "Target Image",
   "progress.speed": "Write Speed",
   "progress.eta": "ETA",
   "checksum.import_file": "Import Checksum File",
