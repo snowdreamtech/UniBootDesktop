@@ -72,6 +72,9 @@
         :hypervisorList="hypervisorList"
         v-model:selectedBootMode="selectedBootMode"
         v-model:selectedVMType="selectedVMType"
+        v-model:vmCpuCores="vmCpuCores"
+        v-model:vmMemoryMB="vmMemoryMB"
+        v-model:vmDisplayAccel="vmDisplayAccel"
         :isVmDisabled="isVmDisabled"
         :vmDisabledReason="vmDisabledReason"
         :isLaunchingQemu="isLaunchingQemu"
@@ -249,6 +252,9 @@ interface DiskInfo {
 const activeMode = ref<'cloud' | 'hybrid'>('cloud');
 const selectionMode = ref<'single' | 'batch'>('single');
 const selectedFsType = ref<'exFAT' | 'NTFS' | 'FAT32' | 'ext4'>('exFAT');
+const vmCpuCores = ref<number>(2);
+const vmMemoryMB = ref<number>(2048);
+const vmDisplayAccel = ref<boolean>(true);
 const diskList = ref<DiskInfo[]>([]);
 const CUSTOM_ICONS_KEY = 'unigo_custom_icons_v1';
 
@@ -1339,13 +1345,26 @@ async function launchVM() {
   const vmName = currentVM ? currentVM.name : 'QEMU';
 
   try {
+    const vmConfig = {
+      cpuCores: vmCpuCores.value,
+      memoryMB: vmMemoryMB.value,
+      bootMode: selectedBootMode.value,
+      displayAccel: vmDisplayAccel.value,
+      secureBoot: false,
+    };
+
     if (window.go && window.go.main && window.go.main.App) {
-      if (typeof window.go.main.App.LaunchVM === 'function') {
-        await window.go.main.App.LaunchVM(targetDevice, selectedVMType.value, selectedBootMode.value);
+      const app = window.go.main.App as any;
+      if (typeof app.LaunchVMWithConfig === 'function') {
+        await app.LaunchVMWithConfig(targetDevice, selectedVMType.value, vmConfig);
+        logUserAction('INFO', 'User launched hypervisor simulation test with VMConfig', `${vmName} (${selectedVMType.value}, ${selectedBootMode.value}, ${vmCpuCores.value} cores, ${vmMemoryMB.value}MB) on ${targetDevice}`);
+        showToast(t('vm.startSuccess_vm', { name: vmName }), 'success');
+      } else if (typeof app.LaunchVM === 'function') {
+        await app.LaunchVM(targetDevice, selectedVMType.value, selectedBootMode.value);
         logUserAction('INFO', 'User launched hypervisor simulation test', `${vmName} (${selectedVMType.value}, ${selectedBootMode.value}) on ${targetDevice}`);
         showToast(t('vm.startSuccess_vm', { name: vmName }), 'success');
-      } else if (typeof window.go.main.App.LaunchQEMU === 'function') {
-        await window.go.main.App.LaunchQEMU(targetDevice);
+      } else if (typeof app.LaunchQEMU === 'function') {
+        await app.LaunchQEMU(targetDevice);
         logUserAction('INFO', 'User launched hypervisor simulation test', `QEMU on ${targetDevice}`);
         showToast(t('vm.startSuccess', { name: 'QEMU' }), 'success');
       } else {

@@ -288,6 +288,55 @@
           </div>
         </div>
       </div>
+
+      <!-- Advanced Hardware Tuning Row -->
+      <div class="vm-tuning-row">
+        <!-- CPU Cores -->
+        <div class="vm-tuning-item">
+          <span class="vm-selector-label">⚙️ {{ t('vm.cfg_cpu') }}</span>
+          <div class="vm-select-wrapper sm">
+            <select 
+              :value="vmCpuCores || 2" 
+              @change="e => emit('update:vmCpuCores', Number((e.target as HTMLSelectElement).value))" 
+              class="vm-select sm"
+            >
+              <option :value="1">1 Core</option>
+              <option :value="2">2 Cores</option>
+              <option :value="4">4 Cores</option>
+              <option :value="8">8 Cores</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <!-- RAM Allocation -->
+        <div class="vm-tuning-item">
+          <span class="vm-selector-label">💾 {{ t('vm.cfg_ram') }}</span>
+          <div class="vm-select-wrapper sm">
+            <select 
+              :value="vmMemoryMB || 2048" 
+              @change="e => emit('update:vmMemoryMB', Number((e.target as HTMLSelectElement).value))" 
+              class="vm-select sm"
+            >
+              <option :value="1024">1 GB</option>
+              <option :value="2048">2 GB</option>
+              <option :value="4096">4 GB</option>
+              <option :value="8192">8 GB</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <!-- Hardware Acceleration Toggle -->
+        <label class="vm-checkbox-label">
+          <input 
+            type="checkbox" 
+            :checked="vmDisplayAccel !== false" 
+            @change="e => emit('update:vmDisplayAccel', (e.target as HTMLInputElement).checked)" 
+          />
+          ⚡ {{ t('vm.cfg_accel') }}
+        </label>
+      </div>
       <p class="vm-desc">
         {{ t('vm.target') }} 
         <strong v-if="activeVmTargetDevice" class="target-highlight">
@@ -339,6 +388,9 @@ const props = defineProps<{
   hypervisorList: { type: string; name: string; installed: boolean }[];
   selectedBootMode: string;
   selectedVMType: string;
+  vmCpuCores?: number;
+  vmMemoryMB?: number;
+  vmDisplayAccel?: boolean;
   isVmDisabled: boolean;
   vmDisabledReason: string;
   isLaunchingQemu: boolean;
@@ -357,6 +409,9 @@ const emit = defineEmits<{
   (e: 'update:selectedFsType', fs: string): void;
   (e: 'update:selectedBootMode', mode: string): void;
   (e: 'update:selectedVMType', type: string): void;
+  (e: 'update:vmCpuCores', cores: number): void;
+  (e: 'update:vmMemoryMB', ram: number): void;
+  (e: 'update:vmDisplayAccel', accel: boolean): void;
   (e: 'open-settings-ventoy'): void;
   (e: 'select-iso'): void;
   (e: 'remove-iso', index: number): void;
@@ -1554,5 +1609,50 @@ function getFileIcon(filename: string): string {
   background: #fee2e2;
   border-color: #f87171;
   color: #b91c1c;
+}
+
+.vm-tuning-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.65rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.vm-tuning-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.vm-select-wrapper.sm {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.vm-select.sm {
+  padding: 0.25rem 1.4rem 0.25rem 0.55rem;
+  font-size: 0.78rem;
+  border-radius: 6px;
+}
+
+.vm-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  user-select: none;
+}
+
+.vm-checkbox-label input[type="checkbox"] {
+  accent-color: var(--accent-cyan);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
 }
 </style>
