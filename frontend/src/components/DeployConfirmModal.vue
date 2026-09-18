@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isOpen" class="modal-overlay" @click="close">
+  <div v-if="isOpen" class="modal-overlay" @click.self="close">
     <div class="glass-modal confirm-card" :class="{ 'safe-card': isAllVentoy, 'mixed-card': isMixed }" @click.stop>
       <div class="modal-header" :class="isAllVentoy ? 'safe-header' : isMixed ? 'mixed-header' : 'danger-header'">
         <div class="header-title">
