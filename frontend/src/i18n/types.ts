@@ -171,6 +171,11 @@ export interface TranslationDict {
   "deploy.confirm_auto_eject_yes": string;
   "deploy.confirm_auto_eject_no": string;
   "deploy.alert_fail": string;
+  "deploy.btn_cancel": string;
+  "deploy.toast_cancelled": string;
+  "deploy.stats_speed": string;
+  "deploy.stats_elapsed": string;
+  "deploy.stats_eta": string;
   "vm.title": string;
   "vm.box_title": string;
   "vm.detected_single": string;
