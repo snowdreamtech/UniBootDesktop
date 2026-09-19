@@ -11,10 +11,13 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/snowdreamtech/unigodesktop/internal/logger"
 )
 
 var (
@@ -1152,6 +1155,9 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		bootStatusStr := DetectBootStatus(volName, partitionScheme, isRealVentoy, isCloudMode, isGenericBoot)
 		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
 
+		// Detect if this is a system disk
+		isSystemDisk, _ := isSystemDiskDarwin(devNode)
+
 		disks = append(disks, DiskInfo{
 			Device:            devNode,
 			Name:              displayName,
@@ -1160,7 +1166,7 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			FreeSpace:         freeSpace,
 			FreeFormatted:     freeFormatted,
 			IsRemovable:       true,
-			IsSystem:          false,
+			IsSystem:          isSystemDisk,
 			UsbVersion:        usbVer,
 			UsbSpeed:          usbSpeed,
 			Vendor:            vendor,
@@ -1357,6 +1363,9 @@ func getLinuxDisks() ([]DiskInfo, error) {
 		isFake := CheckFakeUsb3(label, usbVer, usbSpeed)
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
+		// Detect if this is a system disk
+		isSystemDisk, _ := isSystemDiskLinux("/dev/" + dev.Name)
+
 		disks = append(disks, DiskInfo{
 			Device:            mountPath,
 			Name:              label,
@@ -1365,7 +1374,7 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			FreeSpace:         freeSpace,
 			FreeFormatted:     freeFormatted,
 			IsRemovable:       true,
-			IsSystem:          false,
+			IsSystem:          isSystemDisk,
 			UsbVersion:        usbVer,
 			UsbSpeed:          usbSpeed,
 			Vendor:            vendor,
@@ -1452,6 +1461,9 @@ func getWindowsDisks() ([]DiskInfo, error) {
 		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
+		// Detect if this is a system disk
+		isSystemDisk, _ := isSystemDiskWindows(driveLetter)
+
 		disks = append(disks, DiskInfo{
 			Device:            driveLetter,
 			Name:              displayName,
@@ -1460,7 +1472,7 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			FreeSpace:         freeSpace,
 			FreeFormatted:     freeFormatted,
 			IsRemovable:       true,
-			IsSystem:          false,
+			IsSystem:          isSystemDisk,
 			UsbVersion:        usbVer,
 			UsbSpeed:          usbSpeed,
 			Vendor:            "Generic",
@@ -1497,10 +1509,203 @@ func ValidateTargetDisk(targetDevice string) error {
 	if targetDevice == "" {
 		return fmt.Errorf("target disk device path cannot be empty")
 	}
-	if targetDevice == "/" || targetDevice == "C:" || targetDevice == "/dev/sda" || targetDevice == "/dev/nvme0n1" {
-		return fmt.Errorf("CRITICAL: Safety block triggered! %s is a system drive", targetDevice)
+
+	// Static blacklist check for common system disk paths
+	staticBlacklist := []string{"/", "C:", "/dev/sda", "/dev/nvme0n1"}
+	for _, blocked := range staticBlacklist {
+		if targetDevice == blocked {
+			return fmt.Errorf("CRITICAL: Safety block triggered! %s is a known system drive", targetDevice)
+		}
 	}
+
+	// Dynamic system disk detection
+	isSystem, err := isSystemDisk(targetDevice)
+	if err != nil {
+		// Log warning but don't fail if detection fails
+		logger.Warn("System disk detection failed, proceeding with caution", "device", targetDevice, "error", err)
+	} else if isSystem {
+		return fmt.Errorf("CRITICAL: Safety block triggered! %s is detected as an active system disk", targetDevice)
+	}
+
+	// Path format validation to prevent injection
+	if !isValidDiskPath(targetDevice) {
+		return fmt.Errorf("CRITICAL: Invalid disk path format: %s", targetDevice)
+	}
+
 	return nil
+}
+
+// isValidDiskPath validates disk path format to prevent command injection
+func isValidDiskPath(path string) bool {
+	// Check for dangerous characters
+	if strings.ContainsAny(path, ";|&`$(){}[]<>\n\r") {
+		return false
+	}
+
+	// Platform-specific validation
+	switch runtime.GOOS {
+	case "darwin":
+		// macOS: /dev/diskN or /dev/rdiskN or diskN
+		return regexp.MustCompile(`^(/dev/)?(r)?disk\d+$`).MatchString(path)
+	case "windows":
+		// Windows: C:, PhysicalDriveN, \\.\PhysicalDriveN, or diskN
+		return regexp.MustCompile(`^([A-Z]:|([\\]{2}\.[\\])?PhysicalDrive\d+|disk\d+)$`).MatchString(path)
+	case "linux":
+		// Linux: /dev/sdX, /dev/nvmeXnY, /dev/mmcblkX, /dev/vdX
+		return regexp.MustCompile(`^/dev/(sd[a-z]+|nvme\d+n\d+|mmcblk\d+|vd[a-z]+)$`).MatchString(path)
+	default:
+		return false
+	}
+}
+
+// isSystemDisk dynamically detects if a disk is a system disk
+func isSystemDisk(device string) (bool, error) {
+	switch runtime.GOOS {
+	case "darwin":
+		return isSystemDiskDarwin(device)
+	case "windows":
+		return isSystemDiskWindows(device)
+	case "linux":
+		return isSystemDiskLinux(device)
+	default:
+		return false, fmt.Errorf("unsupported platform: %s", runtime.GOOS)
+	}
+}
+
+// isSystemDiskDarwin checks if a disk is a system disk on macOS
+func isSystemDiskDarwin(device string) (bool, error) {
+	// Normalize device path
+	diskNode := NormalizeDarwinDiskNode(device)
+	if diskNode == "" {
+		return false, fmt.Errorf("invalid device path: %s", device)
+	}
+
+	cmd := execCommand("diskutil", "info", "-plist", diskNode)
+	output, err := cmd.Output()
+	if err != nil {
+		return false, fmt.Errorf("failed to get disk info: %w", err)
+	}
+
+	outputStr := string(output)
+
+	// Check for system mount points
+	systemMountPoints := []string{
+		"<string>/</string>",
+		"<string>/System</string>",
+		"<string>/Library</string>",
+		"<string>/Applications</string>",
+		"<string>/usr</string>",
+		"<string>/var</string>",
+	}
+
+	for _, mountPoint := range systemMountPoints {
+		if strings.Contains(outputStr, mountPoint) {
+			return true, nil
+		}
+	}
+
+	// Check if it's an internal disk (not removable)
+	if strings.Contains(outputStr, "<key>Internal</key>") {
+		// Look for <true/> after Internal key
+		internalIdx := strings.Index(outputStr, "<key>Internal</key>")
+		if internalIdx >= 0 {
+			afterInternal := outputStr[internalIdx:]
+			if strings.Contains(afterInternal[:200], "<true/>") {
+				return true, nil
+			}
+		}
+	}
+
+	return false, nil
+}
+
+// isSystemDiskWindows checks if a disk is a system disk on Windows
+func isSystemDiskWindows(device string) (bool, error) {
+	// Extract drive letter or disk number
+	var target string
+	if len(device) == 2 && device[1] == ':' {
+		// Drive letter format (C:)
+		target = device
+	} else {
+		// PhysicalDrive format
+		target = strings.TrimPrefix(device, `\\.\PhysicalDrive`)
+		target = strings.TrimPrefix(target, `PhysicalDrive`)
+		target = strings.TrimPrefix(target, `disk`)
+	}
+
+	// Check if drive contains Windows directory
+	if len(target) == 2 && target[1] == ':' {
+		windowsDir := filepath.Join(target+"\\", "Windows")
+		if info, err := os.Stat(windowsDir); err == nil && info.IsDir() {
+			return true, nil
+		}
+
+		// Check if it's the boot volume
+		cmd := execCommand("wmic", "volume", "where",
+			fmt.Sprintf("DriveLetter='%s'", target),
+			"get", "BootVolume")
+		if output, err := cmd.Output(); err == nil {
+			if strings.Contains(strings.ToUpper(string(output)), "TRUE") {
+				return true, nil
+			}
+		}
+	}
+
+	return false, nil
+}
+
+// isSystemDiskLinux checks if a disk is a system disk on Linux
+func isSystemDiskLinux(device string) (bool, error) {
+	// Read /proc/mounts to check for system mount points
+	data, err := os.ReadFile("/proc/mounts")
+	if err != nil {
+		return false, fmt.Errorf("failed to read /proc/mounts: %w", err)
+	}
+
+	lines := strings.Split(string(data), "\n")
+	systemMountPoints := []string{"/", "/boot", "/usr", "/var", "/lib", "/bin", "/sbin", "/etc"}
+
+	for _, line := range lines {
+		fields := strings.Fields(line)
+		if len(fields) < 2 {
+			continue
+		}
+
+		mountDevice := fields[0]
+		mountPoint := fields[1]
+
+		// Check if this line refers to our device
+		if strings.HasPrefix(mountDevice, device) {
+			for _, sysMount := range systemMountPoints {
+				if mountPoint == sysMount {
+					return true, nil
+				}
+			}
+		}
+	}
+
+	// Check if device is listed in /etc/fstab for system mounts
+	if fstabData, err := os.ReadFile("/etc/fstab"); err == nil {
+		fstabLines := strings.Split(string(fstabData), "\n")
+		for _, line := range fstabLines {
+			line = strings.TrimSpace(line)
+			if strings.HasPrefix(line, "#") || line == "" {
+				continue
+			}
+			fields := strings.Fields(line)
+			if len(fields) >= 2 {
+				if strings.Contains(fields[0], device) {
+					for _, sysMount := range systemMountPoints {
+						if fields[1] == sysMount {
+							return true, nil
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return false, nil
 }
 
 // ValidateTargetDiskSnapshot verifies that a disk still matches the identity captured before deployment.
