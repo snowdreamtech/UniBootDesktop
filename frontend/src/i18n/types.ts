@@ -425,6 +425,15 @@ export interface TranslationDict {
   "checksum.recommended": string;
   "checksum.status_selected": string;
   "checksum.status_verify": string;
+  "checksum.batch_verify_all": string;
+  "checksum.batch_verifying": string;
+  "checksum.batch_result": string;
+  "checksum.status_idle": string;
+  "checksum.status_calculating": string;
+  "checksum.status_match": string;
+  "checksum.status_mismatch": string;
+  "checksum.status_no_expected": string;
+  "checksum.cache_loaded": string;
   "progress.speed": string;
   "progress.eta": string;
 }
