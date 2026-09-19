@@ -1361,30 +1361,33 @@ async function handleCancelDeploy() {
 
 
 async function launchVM() {
+  if (isLaunchingQemu.value || isDeploying.value) {
+    return;
+  }
+  isLaunchingQemu.value = true;
+
   console.log('[UniBoot] launchVM clicked, target:', activeVmTargetDevice.value, 'vmType:', selectedVMType.value);
 
-  if (!diskList.value || diskList.value.length === 0) {
-    showToast(t('deploy.toast_no_disks'), 'warning');
-    return;
-  }
-
-  const targetDevice = activeVmTargetDevice.value;
-
-  if (!targetDevice) {
-    showToast(t('vm.toast_select_first'), 'warning');
-    return;
-  }
-
-  if (hypervisorList.value.length === 0) {
-    showToast(t('vm.toast_not_installed'), 'error');
-    return;
-  }
-
-  isLaunchingQemu.value = true;
-  const currentVM = hypervisorList.value.find(h => h.type === selectedVMType.value) || hypervisorList.value[0];
-  const vmName = currentVM ? currentVM.name : 'QEMU';
-
   try {
+    if (!diskList.value || diskList.value.length === 0) {
+      showToast(t('deploy.toast_no_disks'), 'warning');
+      return;
+    }
+
+    const targetDevice = activeVmTargetDevice.value;
+
+    if (!targetDevice) {
+      showToast(t('vm.toast_select_first'), 'warning');
+      return;
+    }
+
+    if (hypervisorList.value.length === 0) {
+      showToast(t('vm.toast_not_installed'), 'error');
+      return;
+    }
+
+    const currentVM = hypervisorList.value.find(h => h.type === selectedVMType.value) || hypervisorList.value[0];
+    const vmName = currentVM ? currentVM.name : 'QEMU';
     const vmConfig = {
       cpuCores: vmCpuCores.value,
       memoryMB: vmMemoryMB.value,

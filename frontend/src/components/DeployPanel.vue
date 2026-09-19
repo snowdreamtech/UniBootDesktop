@@ -351,7 +351,7 @@
         class="vm-launch-btn"
         :disabled="isVmDisabled"
         :title="vmDisabledReason"
-        @click="emit('launch-vm')"
+        @click="!isVmDisabled && emit('launch-vm')"
       >
         {{ isLaunchingQemu ? t('vm.launching') : t('vm.run_test') }}
       </button>
@@ -1490,6 +1490,7 @@ function getFileIcon(filename: string): string {
 .vm-launch-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+  pointer-events: none;
   box-shadow: none !important;
   transform: none !important;
 }
