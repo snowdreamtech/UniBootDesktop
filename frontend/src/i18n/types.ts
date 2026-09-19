@@ -434,6 +434,11 @@ export interface TranslationDict {
   "checksum.status_mismatch": string;
   "checksum.status_no_expected": string;
   "checksum.cache_loaded": string;
+  "checksum.tab_batch": string;
+  "checksum.tab_single": string;
+  "checksum.batch_desc": string;
+  "checksum.single_desc": string;
+  "checksum.inspect_single": string;
   "progress.speed": string;
   "progress.eta": string;
 }
