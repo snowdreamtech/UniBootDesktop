@@ -54,6 +54,10 @@ func RunWails() error {
 		Bind: []interface{}{
 			app,
 		},
+		DragAndDrop: &options.DragAndDrop{
+			EnableFileDrop:     true,
+			DisableWebViewDrop: false,
+		},
 		SingleInstanceLock: &options.SingleInstanceLock{
 			UniqueId: "d6f1a8c0-87a4-4a24-9b57-unigodesktop-single-instance",
 			OnSecondInstanceLaunch: func(secondInstanceData options.SecondInstanceData) {

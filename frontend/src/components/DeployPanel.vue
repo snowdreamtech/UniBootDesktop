@@ -50,7 +50,15 @@
     </div>
 
     <!-- Local ISO/IMG Image Source Selection Card (Hybrid Mode) -->
-    <div v-if="activeMode === 'hybrid'" class="iso-card">
+    <div
+      v-if="activeMode === 'hybrid'"
+      class="iso-card"
+      :class="{ 'is-drag-over': isDragOver }"
+      @dragenter="handleDragEnter"
+      @dragover="handleDragOver"
+      @dragleave="handleDragLeave"
+      @drop="handleDrop"
+    >
       <div class="iso-card-header">
         <div class="iso-title-group">
           <h3>
@@ -67,9 +75,20 @@
       </div>
 
       <div class="iso-list-container">
-        <div v-if="selectedIsoFiles.length === 0" class="iso-empty-state" @click="emit('select-iso')">
+        <!-- Overlay when dragging files over non-empty list -->
+        <div v-if="isDragOver && selectedIsoFiles.length > 0" class="iso-drag-overlay">
+          <span class="drag-icon">📥</span>
+          <div class="drag-text">{{ t('iso.drag_drop_tip') }}</div>
+        </div>
+
+        <div
+          v-if="selectedIsoFiles.length === 0"
+          class="iso-empty-state"
+          :class="{ 'drag-active': isDragOver }"
+          @click="emit('select-iso')"
+        >
           <span class="empty-icon">📥</span>
-          <div class="empty-text">{{ t('iso.empty_title') }}</div>
+          <div class="empty-text">{{ isDragOver ? t('iso.drag_drop_tip') : t('iso.empty_title') }}</div>
           <div class="empty-subtext">{{ t('iso.empty_sub') }}</div>
         </div>
 
@@ -538,12 +557,58 @@ const emit = defineEmits<{
   (e: 'select-iso'): void;
   (e: 'remove-iso', index: number): void;
   (e: 'clear-iso'): void;
+  (e: 'drop-iso-paths', paths: string[]): void;
   (e: 'deploy-click'): void;
   (e: 'cancel-deploy'): void;
   (e: 'dismiss-success-banner'): void;
   (e: 'safely-eject-success'): void;
   (e: 'launch-vm'): void;
 }>();
+
+// Drag & Drop State & Handlers
+const isDragOver = ref(false);
+let dragCounter = 0;
+
+function handleDragEnter(e: DragEvent) {
+  e.preventDefault();
+  dragCounter++;
+  isDragOver.value = true;
+}
+
+function handleDragOver(e: DragEvent) {
+  e.preventDefault();
+  if (e.dataTransfer) {
+    e.dataTransfer.dropEffect = 'copy';
+  }
+  isDragOver.value = true;
+}
+
+function handleDragLeave(e: DragEvent) {
+  e.preventDefault();
+  dragCounter--;
+  if (dragCounter <= 0) {
+    dragCounter = 0;
+    isDragOver.value = false;
+  }
+}
+
+function handleDrop(e: DragEvent) {
+  e.preventDefault();
+  dragCounter = 0;
+  isDragOver.value = false;
+
+  if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    const paths: string[] = [];
+    for (let i = 0; i < e.dataTransfer.files.length; i++) {
+      const file = e.dataTransfer.files[i] as any;
+      const p = file.path || file.name;
+      if (p) paths.push(p);
+    }
+    if (paths.length > 0) {
+      emit('drop-iso-paths', paths);
+    }
+  }
+}
 
 // Deploy state
 const isDeployDisabled = computed(() => {
@@ -1241,11 +1306,55 @@ function getFileIcon(filename: string): string {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 20px rgba(2, 132, 199, 0.45);
 }
 
+.iso-card {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.iso-card.is-drag-over {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.35) !important;
+}
+
 .iso-list-container {
+  position: relative;
   background: var(--input-bg);
   border: 1px solid var(--card-border);
   border-radius: 8px;
   padding: 0.75rem;
+  transition: border-color 0.2s ease;
+}
+
+.iso-drag-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.86);
+  backdrop-filter: blur(4px);
+  border: 2px dashed #38bdf8;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.iso-drag-overlay .drag-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.4rem;
+  animation: dragBounce 0.7s infinite alternate ease-in-out;
+}
+
+.iso-drag-overlay .drag-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.5px;
+}
+
+@keyframes dragBounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-5px); }
 }
 
 .iso-empty-state {
@@ -1264,15 +1373,32 @@ function getFileIcon(filename: string): string {
   background: var(--btn-sec-hover-bg);
 }
 
+.iso-empty-state.drag-active {
+  border-color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.12) !important;
+  transform: scale(1.01);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.28);
+}
+
+.iso-empty-state.drag-active .empty-icon {
+  animation: dragBounce 0.7s infinite alternate ease-in-out;
+}
+
+.iso-empty-state.drag-active .empty-text {
+  color: #38bdf8;
+}
+
 .empty-icon {
   font-size: 1.5rem;
   margin-bottom: 0.3rem;
+  transition: transform 0.2s ease;
 }
 
 .empty-text {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-main);
+  transition: color 0.2s ease;
 }
 
 .empty-subtext {
@@ -2144,6 +2270,20 @@ function getFileIcon(filename: string): string {
   border-color: #cbd5e1;
 }
 
+[data-theme="light"] .iso-card.is-drag-over {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 24px rgba(2, 132, 199, 0.3) !important;
+}
+
+[data-theme="light"] .iso-drag-overlay {
+  background: rgba(248, 250, 252, 0.9);
+  border-color: #0284c7;
+}
+
+[data-theme="light"] .iso-drag-overlay .drag-text {
+  color: #0284c7;
+}
+
 [data-theme="light"] .iso-title-group h3 {
   color: #0f172a;
 }
@@ -2155,6 +2295,16 @@ function getFileIcon(filename: string): string {
 
 [data-theme="light"] .iso-empty-state {
   border-color: #cbd5e1;
+}
+
+[data-theme="light"] .iso-empty-state.drag-active {
+  border-color: #0284c7 !important;
+  background: rgba(2, 132, 199, 0.08) !important;
+  box-shadow: 0 0 20px rgba(2, 132, 199, 0.22);
+}
+
+[data-theme="light"] .iso-empty-state.drag-active .empty-text {
+  color: #0284c7;
 }
 
 [data-theme="light"] .empty-text {

@@ -134,6 +134,8 @@ export const svSe: TranslationDict = {
   "iso.summary": "Valt {count} ISO-avbildsfil(er)",
   "iso.clear": "Rensa lista",
   "iso.remove": "Ta bort",
+  "iso.drag_drop_tip": "Släpp för att lägga till avbildningsfiler",
+  "iso.drag_unsupported": "Inga avbildningsfiler som stöds hittades (.iso, .wim, .img osv.)",
   "deploy.title": "Skapa startbar enhet och QEMU-test",
   "deploy.desc_cloud": "Ren iPXE molnstart • Ultrasnabb installation med två partitioner och multi-arch iPXE-nätverksfirmware.",
   "deploy.desc_hybrid": "Ventoy CLI lokal motor • Ventoy hybrid-partitionsinstallation med lokal ISO-hantering.",

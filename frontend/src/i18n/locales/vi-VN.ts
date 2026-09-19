@@ -134,6 +134,8 @@ export const viVn: TranslationDict = {
   "iso.summary": "Đã chọn {count} tệp nguồn tệp ảnh",
   "iso.clear": "Xóa danh sách",
   "iso.remove": "Xóa",
+  "iso.drag_drop_tip": "Thả để thêm tệp hình ảnh",
+  "iso.drag_unsupported": "Không phát hiện tệp hình ảnh được hỗ trợ (.iso, .wim, .img, v.v.)",
   "deploy.title": "Tạo ổ đĩa khởi động & Thử nghiệm QEMU",
   "deploy.desc_cloud": "Khởi động đám mây iPXE thuần túy • Thiết lập hai phân vùng siêu tốc với phần mềm mạng iPXE đa kiến trúc.",
   "deploy.desc_hybrid": "Động cơ cục bộ Ventoy CLI • Thiết lập phân vùng hỗn hợp Ventoy với quản lý ISO cục bộ.",

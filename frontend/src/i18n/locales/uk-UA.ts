@@ -134,6 +134,8 @@ export const ukUa: TranslationDict = {
   "iso.summary": "Обрано ISO-образів: {count}",
   "iso.clear": "Очистити список",
   "iso.remove": "Видалити",
+  "iso.drag_drop_tip": "Відпустіть, щоб додати файли образів",
+  "iso.drag_unsupported": "Не виявлено підтримуваних файлів образів (.iso, .wim, .img тощо)",
   "deploy.title": "Створення завантажувального диска та тест QEMU",
   "deploy.desc_cloud": "Чисте хмарне завантаження iPXE • Надшвидке налаштування двох розділів із мережевою прошивкою iPXE.",
   "deploy.desc_hybrid": "Локальний рушій Ventoy CLI • Налаштування гібридного розділу Ventoy із локальним керуванням ISO.",

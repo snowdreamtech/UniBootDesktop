@@ -134,6 +134,8 @@ export const deDe: TranslationDict = {
   "iso.summary": "{count} ISO-Imagedateien ausgewählt",
   "iso.clear": "Liste leeren",
   "iso.remove": "Entfernen",
+  "iso.drag_drop_tip": "Loslassen, um Image-Dateien hinzuzufügen",
+  "iso.drag_unsupported": "Keine unterstützten Image-Dateien erkannt (.iso, .wim, .img usw.)",
   "deploy.title": "Erstellung von bootfähigen Laufwerken & QEMU-Test",
   "deploy.desc_cloud": "Reines iPXE Cloud-Boot • Ultraschnelle Zwei-Partitions-Einrichtung mit Multi-Arch iPXE Netzwerk-Firmware.",
   "deploy.desc_hybrid": "Ventoy CLI Lokale Engine • Ventoy Hybrid-Partitions-Einrichtung mit lokaler ISO-Verwaltung.",

@@ -134,6 +134,8 @@ export const caEs: TranslationDict = {
   "iso.summary": "S'han seleccionat {count} fitxers d'origen d'imatge",
   "iso.clear": "Esborra la llista",
   "iso.remove": "Elimina",
+  "iso.drag_drop_tip": "Deixeu anar per afegir fitxers d'imatge",
+  "iso.drag_unsupported": "No s'han detectat fitxers d'imatge admesos (.iso, .wim, .img, etc.)",
   "deploy.title": "Creació de disc d'arrencada i prova QEMU",
   "deploy.desc_cloud": "Arrencada al núvol iPXE pur • Configuració ultra-ràpida de dues particions amb programari de xarxa iPXE.",
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuració de partició híbrida Ventoy amb gestió ISO local.",

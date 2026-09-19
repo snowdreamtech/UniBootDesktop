@@ -134,6 +134,8 @@ export const etEe: TranslationDict = {
   "iso.summary": "Valitud on {count} pildi lähtefaili",
   "iso.clear": "Tühjenda nimekiri",
   "iso.remove": "Eemalda",
+  "iso.drag_drop_tip": "Laske lahti tõmmisefailide lisamiseks",
+  "iso.drag_unsupported": "Toetatud tõmmisefaile ei leitud (.iso, .wim, .img jne)",
   "deploy.title": "Alglaaditava ketta loomine ja QEMU test",
   "deploy.desc_cloud": "Puhas iPXE pilvealglaadimine • Ülikiire kahe sektsiooni seadistamine mitme arhitektuuriga iPXE võrgupüsivaraga.",
   "deploy.desc_hybrid": "Ventoy CLI kohalik mootor • Ventoy hübriidsektsiooni seadistamine kohaliku ISO haldusega.",

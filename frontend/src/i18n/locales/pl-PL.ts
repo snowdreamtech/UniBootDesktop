@@ -134,6 +134,8 @@ export const plPl: TranslationDict = {
   "iso.summary": "Wybrano {count} plików obrazów ISO",
   "iso.clear": "Wyczyść listę",
   "iso.remove": "Usuń",
+  "iso.drag_drop_tip": "Upuść, aby dodać pliki obrazów",
+  "iso.drag_unsupported": "Nie wykryto obsługiwanych plików obrazów (.iso, .wim, .img itp.)",
   "deploy.title": "Tworzenie dysku rozruchowego i test QEMU",
   "deploy.desc_cloud": "Czysty rozruch iPXE z chmury • Ultraszybka konfiguracja dwupartycyjna z oprogramowaniem układowym iPXE.",
   "deploy.desc_hybrid": "Lokalny silnik Ventoy CLI • Konfiguracja partycji hybrydowej Ventoy z lokalnym zarządzaniem ISO.",

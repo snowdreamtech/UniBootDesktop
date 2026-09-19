@@ -134,6 +134,8 @@ export const koKr: TranslationDict = {
   "iso.summary": "{count}개의 ISO 이미지 파일 선택됨",
   "iso.clear": "목록 지우기",
   "iso.remove": "제거",
+  "iso.drag_drop_tip": "놓아서 이미지 파일 추가",
+  "iso.drag_unsupported": "지원되는 이미지 파일을 찾을 수 없습니다 (.iso, .wim, .img 등)",
   "deploy.title": "부팅 드라이브 제작 및 QEMU 시뮬레이션 테스트",
   "deploy.desc_cloud": "순수 iPXE 클라우드 부팅 • 다중 아키텍처 iPXE 네트워크 펌웨어가 포함된 초고속 듀얼 파티션 구성",
   "deploy.desc_hybrid": "Ventoy CLI 로컬 엔진 • 로컬 ISO 관리가 포함된 Ventoy 하이브리드 파티션 구성",

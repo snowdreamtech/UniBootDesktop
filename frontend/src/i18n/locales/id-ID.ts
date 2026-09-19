@@ -134,6 +134,8 @@ export const idId: TranslationDict = {
   "iso.summary": "{count} file sumber gambar yang dipilih",
   "iso.clear": "Hapus Daftar",
   "iso.remove": "Hapus",
+  "iso.drag_drop_tip": "Lepaskan untuk menambahkan file gambar",
+  "iso.drag_unsupported": "Format file gambar yang didukung tidak terdeteksi (.iso, .wim, .img, dll.)",
   "deploy.title": "Pembuatan Drive Bootable & Uji QEMU",
   "deploy.desc_cloud": "Boot Awan iPXE Murni • Pengaturan dua partisi ultra-cepat dengan firmware jaringan iPXE multi-arsitektur.",
   "deploy.desc_hybrid": "Mesin Lokal Ventoy CLI • Pengaturan partisi hibrida Ventoy dengan manajemen ISO lokal.",

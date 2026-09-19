@@ -134,6 +134,8 @@ export const nlNl: TranslationDict = {
   "iso.summary": "{count} ISO-bestanden geselecteerd",
   "iso.clear": "Lijst wissen",
   "iso.remove": "Verwijderen",
+  "iso.drag_drop_tip": "Loslaten om beeldbestanden toe te voegen",
+  "iso.drag_unsupported": "Geen ondersteunde beeldbestanden gedetecteerd (.iso, .wim, .img, etc.)",
   "deploy.title": "Aanmaken van opstartbare schijf & QEMU-test",
   "deploy.desc_cloud": "Puur iPXE Cloud-boot • Ultrasnelle installatie met twee partities en multi-arch iPXE-netwerkfirmware.",
   "deploy.desc_hybrid": "Ventoy CLI lokale engine • Ventoy hybride partitie-installatie met lokaal ISO-beheer.",

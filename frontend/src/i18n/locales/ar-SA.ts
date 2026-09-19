@@ -134,6 +134,8 @@ export const arSa: TranslationDict = {
   "iso.summary": "تم تحديد {count} ملف صورة ISO",
   "iso.clear": "مسح القائمة",
   "iso.remove": "إزالة",
+  "iso.drag_drop_tip": "أفلت لإضافة ملفات الصور",
+  "iso.drag_unsupported": "لم يتم العثور على ملفات صور مدعومة (.iso, .wim, .img إلخ)",
   "deploy.title": "إنشاء محرك أقراص قابل للتمهيد واختبار محاكاة QEMU",
   "deploy.desc_cloud": "تمهيد سحابي نقي عبر iPXE • إعداد فائق السرعة لمقسمين مع برامج شبكة iPXE متعددة البنيات.",
   "deploy.desc_hybrid": "محرك محلي Ventoy CLI • إعداد مقسم هجين لـ Ventoy مع إدارة صور ISO المحلية.",

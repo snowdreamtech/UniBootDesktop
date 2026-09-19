@@ -134,6 +134,8 @@ export const ptPt: TranslationDict = {
   "iso.summary": "Arquivo(s) de origem de imagem {count} selecionados",
   "iso.clear": "Limpar lista",
   "iso.remove": "Remover",
+  "iso.drag_drop_tip": "Solte para adicionar ficheiros de imagem",
+  "iso.drag_unsupported": "Nenhum ficheiro de imagem suportado detetado (.iso, .wim, .img, etc.)",
   "deploy.title": "Criação de unidade inicializável e teste QEMU",
   "deploy.desc_cloud": "Boot em nuvem iPXE puro • Configuração ultra-rápida de duas partições com firmware de rede iPXE.",
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuração de partição híbrida Ventoy com gestão ISO local.",

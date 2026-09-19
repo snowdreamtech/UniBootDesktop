@@ -134,6 +134,8 @@ export const nbNo: TranslationDict = {
   "iso.summary": "Valgt {count} kildebildefil(er)",
   "iso.clear": "Tøm liste",
   "iso.remove": "Fjern",
+  "iso.drag_drop_tip": "Slipp for å legge til bildefiler",
+  "iso.drag_unsupported": "Ingen støttede bildefiler oppdaget (.iso, .wim, .img osv.)",
   "deploy.title": "Opprettelse av oppstartbar stasjon og QEMU-test",
   "deploy.desc_cloud": "Ren iPXE skyoppstart • Ultrarask oppsett med to partisjoner og multi-arch iPXE-nettverksfastvare.",
   "deploy.desc_hybrid": "Ventoy CLI lokal motor • Ventoy hybrid partisjonsoppsett med lokal ISO-behandling.",

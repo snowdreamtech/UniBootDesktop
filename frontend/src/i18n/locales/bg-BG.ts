@@ -134,6 +134,8 @@ export const bgBg: TranslationDict = {
   "iso.summary": "Избрани {count} файл(а) източник на изображение",
   "iso.clear": "Изчистване на списъка",
   "iso.remove": "Премахни",
+  "iso.drag_drop_tip": "Пуснете за добавяне на файлове с образи",
+  "iso.drag_unsupported": "Не са открити поддържани файлове с образи (.iso, .wim, .img и др.)",
   "deploy.title": "Създаване на стартиращ диск и QEMU тест",
   "deploy.desc_cloud": "Чисто iPXE облачно зареждане • Ултрабърза настройка с два дяла и мрежов фърмуер iPXE.",
   "deploy.desc_hybrid": "Локален двигател Ventoy CLI • Настройка на хибриден дял на Ventoy с локално управление на ISO.",

@@ -134,6 +134,8 @@ export const daDk: TranslationDict = {
   "iso.summary": "Valgt {count} billedkilde-fil(er)",
   "iso.clear": "Ryd liste",
   "iso.remove": "Fjern",
+  "iso.drag_drop_tip": "Slip for at tilføje billedfiler",
+  "iso.drag_unsupported": "Ingen understøttede billedfiler fundet (.iso, .wim, .img osv.)",
   "deploy.title": "Oprettelse af bootbart drev og QEMU-test",
   "deploy.desc_cloud": "Ren iPXE Cloud-boot • Ultrahurtig opsætning af to partitioner med multi-arch iPXE-netværksfirmware.",
   "deploy.desc_hybrid": "Ventoy CLI lokal motor • Ventoy hybrid-partition opsætning med lokal ISO-styring.",

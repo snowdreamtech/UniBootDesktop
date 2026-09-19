@@ -133,6 +133,8 @@ export interface TranslationDict {
   "iso.summary": string;
   "iso.clear": string;
   "iso.remove": string;
+  "iso.drag_drop_tip": string;
+  "iso.drag_unsupported": string;
   "deploy.title": string;
   "deploy.desc_cloud": string;
   "deploy.desc_hybrid": string;

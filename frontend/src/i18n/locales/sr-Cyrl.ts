@@ -134,6 +134,8 @@ export const srCyrl: TranslationDict = {
   "iso.summary": "Изабрано {count} ISO датотека",
   "iso.clear": "Обриши листу",
   "iso.remove": "Уклони",
+  "iso.drag_drop_tip": "Отпустите да бисте додали датотеке слика",
+  "iso.drag_unsupported": "Нису открите подржане датотеке слика (.iso, .wim, .img итд.)",
   "deploy.title": "Израда покретачког погона и QEMU тест",
   "deploy.desc_cloud": "Чисто iPXE покретање из облака • Ултрабрзо постављање две партиције са мрежним iPXE фирмвером.",
   "deploy.desc_hybrid": "Локални мотор Ventoy CLI • Постављање хибридне партиције Ventoy са локалним управљањем ISO датотекама.",

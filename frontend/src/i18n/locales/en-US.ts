@@ -134,6 +134,8 @@ export const enUs: TranslationDict = {
   "iso.summary": "Selected {count} ISO image file(s)",
   "iso.clear": "Clear List",
   "iso.remove": "Remove",
+  "iso.drag_drop_tip": "Drop to add image files",
+  "iso.drag_unsupported": "No supported image files detected (.iso, .wim, .img, etc.)",
   "deploy.title": "USB Deployment & QEMU Preview",
   "deploy.desc_cloud": "Pure iPXE Cloud Boot • Dual Partition Instant Deployment",
   "deploy.desc_hybrid": "Ventoy CLI Local Engine • Hybrid Partition Deployment",

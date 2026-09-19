@@ -134,6 +134,8 @@ export const glEs: TranslationDict = {
   "iso.summary": "Seleccionáronse {count} ficheiros de orixe de imaxe",
   "iso.clear": "Limpar a lista",
   "iso.remove": "Eliminar",
+  "iso.drag_drop_tip": "Solte para engadir ficheiros de imaxe",
+  "iso.drag_unsupported": "Non se detectaron ficheiros de imaxe compatibles (.iso, .wim, .img, etc.)",
   "deploy.title": "Creación de disco de arranque e proba QEMU",
   "deploy.desc_cloud": "Arranque na nube iPXE puro • Configuración ultrarrápida de dúas particións con firmware de red iPXE.",
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuración de partición híbrida Ventoy con xestión ISO local.",

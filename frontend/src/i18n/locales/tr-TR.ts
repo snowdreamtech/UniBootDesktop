@@ -134,6 +134,8 @@ export const trTr: TranslationDict = {
   "iso.summary": "Seçilen {count} ISO imaj dosyası",
   "iso.clear": "Listeyi Temizle",
   "iso.remove": "Kaldır",
+  "iso.drag_drop_tip": "İmaj dosyalarını eklemek için bırakın",
+  "iso.drag_unsupported": "Desteklenen imaj dosyası algılanmadı (.iso, .wim, .img vb.)",
   "deploy.title": "Önyüklenebilir Sürücü Oluşturma ve QEMU Testi",
   "deploy.desc_cloud": "Saf iPXE Bulut Önyüklemesi • Çoklu mimari iPXE ağ bellenimi ile ultra hızlı çift bölüm kurulumu.",
   "deploy.desc_hybrid": "Ventoy CLI Yerel Motoru • Yerel ISO yönetimi ile Ventoy hibrit bölüm kurulumu.",

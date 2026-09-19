@@ -134,6 +134,8 @@ export const faIr: TranslationDict = {
   "iso.summary": "فایل(های) منبع تصویر {count} انتخاب شد",
   "iso.clear": "پاک کردن لیست",
   "iso.remove": "حذف",
+  "iso.drag_drop_tip": "برای افزودن فایل‌های ایمیج رها کنید",
+  "iso.drag_unsupported": "هیچ فایل ایمیج پشتیبانی‌شده‌ای شناسایی نشد (.iso, .wim, .img و غیره)",
   "deploy.title": "ساخت درایو قابل بوت و تست QEMU",
   "deploy.desc_cloud": "بوت ابری خالص iPXE • پیکربندی فوق‌العاده سریع دو پارتیشن با فریم‌ور شبکه iPXE چند معماری.",
   "deploy.desc_hybrid": "موتور محلی Ventoy CLI • پیکربندی پارتیشن هیبریدی Ventoy با مدیریت ISO محلی.",

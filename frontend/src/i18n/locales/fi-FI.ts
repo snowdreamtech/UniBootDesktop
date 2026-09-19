@@ -134,6 +134,8 @@ export const fiFi: TranslationDict = {
   "iso.summary": "Valittu {count} kuvalähdetiedosto(a)",
   "iso.clear": "Tyhjennä lista",
   "iso.remove": "Poista",
+  "iso.drag_drop_tip": "Pudota lisätäksesi levykuvatiedostoja",
+  "iso.drag_unsupported": "Tuettuja levykuvatiedostoja ei havaittu (.iso, .wim, .img jne.)",
   "deploy.title": "Käynnistettävän aseman luonti ja QEMU-testi",
   "deploy.desc_cloud": "Puhdas iPXE-pilvikäynnistys • Erittäin nopea kahden osion asennus monen arkkitehtuurin iPXE-verkkolaitteistolla.",
   "deploy.desc_hybrid": "Ventoy CLI paikallinen moottori • Ventoy-hybridiosion asennus paikallisella ISO-hallinnalla.",

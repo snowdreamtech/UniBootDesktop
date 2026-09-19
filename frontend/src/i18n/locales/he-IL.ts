@@ -134,6 +134,8 @@ export const heIl: TranslationDict = {
   "iso.summary": "נבחרו {count} קובצי מקור תמונה",
   "iso.clear": "נקה רשימה",
   "iso.remove": "הסר",
+  "iso.drag_drop_tip": "שחרר כדי להוסיף קובצי תמונה",
+  "iso.drag_unsupported": "לא זוהו קובצי תמונה נתמכים (.iso, .wim, .img וכו')",
   "deploy.title": "יצירת כונן אתחול ובדיקת QEMU",
   "deploy.desc_cloud": "אתחול ענן iPXE נקי • הגדרה אולטרה-מהירה של שתי מחיצות עם קובץ חומרה של רשת iPXE.",
   "deploy.desc_hybrid": "מנוע מקומי Ventoy CLI • הגדרת מחיצה היברידית של Ventoy עם ניהול ISO מקומי.",

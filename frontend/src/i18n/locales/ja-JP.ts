@@ -134,6 +134,8 @@ export const jaJp: TranslationDict = {
   "iso.summary": "{count} 個の ISO イメージファイルが選択されています",
   "iso.clear": "リストを消去",
   "iso.remove": "削除",
+  "iso.drag_drop_tip": "ドロップしてイメージファイルを追加",
+  "iso.drag_unsupported": "サポートされているイメージファイルが見つかりません（.iso、.wim、.imgなど）",
   "deploy.title": "起動ドライブ作成＆ QEMU シミュレーションテスト",
   "deploy.desc_cloud": "純粋な iPXE クラウドブート • マルチアーキテクチャ iPXE ネットワークファームウェアを備えた高速デュアルパーティション構築",
   "deploy.desc_hybrid": "Ventoy CLI ローカルエンジン • ローカル ISO 管理対応の Ventoy ハイブリッドパーティション構築",

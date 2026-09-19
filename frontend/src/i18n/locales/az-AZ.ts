@@ -134,6 +134,8 @@ export const azAz: TranslationDict = {
   "iso.summary": "Seçilmiş {count} şəkil mənbə fayl(ları)",
   "iso.clear": "Siyahını təmizləyin",
   "iso.remove": "Sil",
+  "iso.drag_drop_tip": "Şəkil faylları əlavə etmək üçün buraxın",
+  "iso.drag_unsupported": "Dəstəklənən şəkil faylları aşkar edilmədi (.iso, .wim, .img və s.)",
   "deploy.title": "Yüklənə bilən disk yaradılması və QEMU testi",
   "deploy.desc_cloud": "Təmiz iPXE Bulud Yükləməsi • Çox arxitekturalı iPXE şəbəkə proqramı ilə ultra sürətli iki bölməli quraşdırma.",
   "deploy.desc_hybrid": "Ventoy CLI Yerli Mühərriki • Yerli ISO idarəetməsi ilə Ventoy hibrid bölmə quraşdırması.",

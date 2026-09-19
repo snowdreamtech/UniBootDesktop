@@ -134,6 +134,8 @@ export const ruRu: TranslationDict = {
   "iso.summary": "Выбрано ISO-образов: {count}",
   "iso.clear": "Очистить список",
   "iso.remove": "Удалить",
+  "iso.drag_drop_tip": "Отпустите, чтобы добавить файлы образов",
+  "iso.drag_unsupported": "Поддерживаемые файлы образов не обнаружены (.iso, .wim, .img и др.)",
   "deploy.title": "Создание загрузочного диска и тест QEMU",
   "deploy.desc_cloud": "Чистая облачная загрузка iPXE • Сверхбыстрая настройка двух разделов с сетевой прошивкой iPXE.",
   "deploy.desc_hybrid": "Локальный движок Ventoy CLI • Настройка гибридного раздела Ventoy с локальным управлением ISO.",

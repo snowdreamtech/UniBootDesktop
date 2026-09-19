@@ -134,6 +134,8 @@ export const ocFr: TranslationDict = {
   "iso.summary": "Fichièr(s) font(s) d'imatge {count} seleccionat",
   "iso.clear": "Escafar la lista",
   "iso.remove": "Suprimir",
+  "iso.drag_drop_tip": "Depausatz per apondre de fichièrs imatge",
+  "iso.drag_unsupported": "Cap de fichièr imatge pres en carga detectat (.iso, .wim, .img, etc.)",
   "deploy.title": "Creacion de disc d'amorsatge e test QEMU",
   "deploy.desc_cloud": "Amorsatge nívol iPXE pur • Configuracion ultra-rapida de doas particions amb firmware ret iPXE.",
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuracion de particion hibrida Ventoy amb gestion ISO locala.",

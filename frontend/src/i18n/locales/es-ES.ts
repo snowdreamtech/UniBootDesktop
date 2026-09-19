@@ -134,6 +134,8 @@ export const esEs: TranslationDict = {
   "iso.summary": "Se seleccionaron {count} archivos de imagen ISO",
   "iso.clear": "Vaciar lista",
   "iso.remove": "Eliminar",
+  "iso.drag_drop_tip": "Suelte para agregar archivos de imagen",
+  "iso.drag_unsupported": "No se detectaron archivos de imagen compatibles (.iso, .wim, .img, etc.)",
   "deploy.title": "Creación de disco de arranque y prueba QEMU",
   "deploy.desc_cloud": "Arranque en la nube iPXE puro • Configuración ultrarrápida de dos particiones con firmware de red iPXE multiarquitectura.",
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuración de partición híbrida Ventoy con gestión ISO local.",

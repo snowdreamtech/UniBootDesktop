@@ -134,6 +134,8 @@ export const bnBd: TranslationDict = {
   "iso.summary": "নির্বাচিত {count} ছবির উৎস ফাইল(গুলি)",
   "iso.clear": "সাফ তালিকা",
   "iso.remove": "মুছুন",
+  "iso.drag_drop_tip": "ইমেজ ফাইল যোগ করতে ড্রপ করুন",
+  "iso.drag_unsupported": "কোনো সমর্থিত ইমেজ ফাইল পাওয়া যায়নি (.iso, .wim, .img ইত্যাদি)",
   "deploy.title": "বুটযোগ্য ড্রাইভ তৈরি এবং QEMU পরীক্ষা",
   "deploy.desc_cloud": "বিশুদ্ধ iPXE ক্লাউড বুট • মাল্টি-আর্ক iPXE নেটওয়ার্ক ফার্মওয়্যার সহ অতি-দ্রুত দ্বৈত-পার্টিশন সেটআপ।",
   "deploy.desc_hybrid": "Ventoy CLI লোকাল ইঞ্জিন • লোকাল ISO ব্যবস্থাপনা সহ Ventoy হাইব্রিড পার্টিশন সেটআপ।",

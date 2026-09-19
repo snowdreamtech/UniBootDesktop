@@ -134,6 +134,8 @@ export const skSk: TranslationDict = {
   "iso.summary": "Počet vybratých zdrojových súborov obrázkov: {count}",
   "iso.clear": "Vymazať zoznam",
   "iso.remove": "Odstrániť",
+  "iso.drag_drop_tip": "Pustením pridajte súbory obrazov",
+  "iso.drag_unsupported": "Neboli nájdené žiadne podporované súbory obrazov (.iso, .wim, .img atď.)",
   "deploy.title": "Vytvorenie bootovacieho disku a test QEMU",
   "deploy.desc_cloud": "Čistý iPXE cloudový boot • Ultrarýchle nastavenie dvoch oddielov s sieťovým firmvérom iPXE pre viacero architektúr.",
   "deploy.desc_hybrid": "Lokálny engine Ventoy CLI • Nastavenie hybridného oddielu Ventoy s lokálnou správou ISO.",

@@ -134,6 +134,8 @@ export const hiIn: TranslationDict = {
   "iso.summary": "{count} ISO इमेज फ़ाइलें चुनी गईं",
   "iso.clear": "सूची साफ़ करें",
   "iso.remove": "हटाएं",
+  "iso.drag_drop_tip": "छवि फ़ाइलें जोड़ने के लिए छोड़ें",
+  "iso.drag_unsupported": "कोई समर्थित छवि फ़ाइल नहीं मिली (.iso, .wim, .img आदि)",
   "deploy.title": "बूट करने योग्य ड्राइव निर्माण और QEMU परीक्षण",
   "deploy.desc_cloud": "शुद्ध iPXE क्लाउड बूट • मल्टी-आर्क iPXE नेटवर्क फर्मवेयर के साथ अल्ट्रा-फास्ट डुअल-पार्टीशन सेटअप।",
   "deploy.desc_hybrid": "Ventoy CLI स्थानीय इंजन • स्थानीय ISO प्रबंधन के साथ Ventoy हाइब्रिड विभाजन सेटअप।",

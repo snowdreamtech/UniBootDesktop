@@ -134,6 +134,8 @@ export const mkMk: TranslationDict = {
   "iso.summary": "Избрани {count} изворна датотека(и) на слика",
   "iso.clear": "Исчистете го списокот",
   "iso.remove": "Отстрани",
+  "iso.drag_drop_tip": "Пуштете за да додадете датотеки со слики",
+  "iso.drag_unsupported": "Не се откриени поддржани датотеки со слики (.iso, .wim, .img итн.)",
   "deploy.title": "Креирање на бутабилен диск и QEMU тест",
   "deploy.desc_cloud": "Чисто iPXE облачно покренување • Ултра-брзо поставување на две партиции со мрежен iPXE фирмвер.",
   "deploy.desc_hybrid": "Локален мотор Ventoy CLI • Поставување на хибридна партиција Ventoy со локално управување со ISO.",

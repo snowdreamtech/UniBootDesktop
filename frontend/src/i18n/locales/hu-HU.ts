@@ -134,6 +134,8 @@ export const huHu: TranslationDict = {
   "iso.summary": "Kiválasztva {count} forrás képfájl",
   "iso.clear": "Lista ürítése",
   "iso.remove": "Eltávolítás",
+  "iso.drag_drop_tip": "Húzza ide a képfájlok hozzáadásához",
+  "iso.drag_unsupported": "Nem található támogatott képfájl (.iso, .wim, .img stb.)",
   "deploy.title": "Indítólemez létrehozása és QEMU teszt",
   "deploy.desc_cloud": "Tiszta iPXE felhő indítás • Rendkívül gyors kétpartíciós beállítás többarchitektúrás iPXE hálózati belső vezérlőprogrammal.",
   "deploy.desc_hybrid": "Ventoy CLI helyi motor • Ventoy hibrid partíció beállítás helyi ISO kezeléssel.",

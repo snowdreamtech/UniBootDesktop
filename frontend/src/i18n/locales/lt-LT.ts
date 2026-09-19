@@ -134,6 +134,8 @@ export const ltLt: TranslationDict = {
   "iso.summary": "Pasirinkta {count} ISO vaizdo failų",
   "iso.clear": "Išvalyti sąrašą",
   "iso.remove": "Pašalinti",
+  "iso.drag_drop_tip": "Paleiskite, kad pridėtumėte atvaizdų failus",
+  "iso.drag_unsupported": "Nepalaikomi atvaizdų failai neaptikti (.iso, .wim, .img ir kt.)",
   "deploy.title": "Bagažinės disko kūrimas ir QEMU testas",
   "deploy.desc_cloud": "Grynasis iPXE debesų paleidimas • Itin greitas dviejų skSections nustatymas su kelių architektūrų iPXE tinklo aparatine įranga.",
   "deploy.desc_hybrid": "„Ventoy CLI“ vietinis variklis • „Ventoy“ hibridinio skirsnio nustatymas su vietiniu ISO valdymu.",

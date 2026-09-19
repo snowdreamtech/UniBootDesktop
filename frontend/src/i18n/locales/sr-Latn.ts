@@ -134,6 +134,8 @@ export const srLatn: TranslationDict = {
   "iso.summary": "Izabrano {count} ISO datoteka",
   "iso.clear": "Обриши листу",
   "iso.remove": "Ukloni",
+  "iso.drag_drop_tip": "Otpustite da biste dodali datoteke slika",
+  "iso.drag_unsupported": "Nisu otkrivene podržane datoteke slika (.iso, .wim, .img itd.)",
   "deploy.title": "Izrada pokretačkog pogona i QEMU test",
   "deploy.desc_cloud": "Čisto iPXE pokretanje iz oblaka • Ultrabrzo postavljanje dve particije sa mrežnim iPXE firmverom.",
   "deploy.desc_hybrid": "Lokalni motor Ventoy CLI • Postavljanje hibridne particije Ventoy sa lokalnim upravljanjem ISO datotekama.",

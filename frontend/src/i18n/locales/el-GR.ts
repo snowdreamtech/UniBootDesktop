@@ -134,6 +134,8 @@ export const elGr: TranslationDict = {
   "iso.summary": "Επιλεγμένα {count} αρχεία πηγής εικόνας",
   "iso.clear": "Εκκαθάριση λίστας",
   "iso.remove": "Αφαίρεση",
+  "iso.drag_drop_tip": "Αφήστε για να προσθέσετε αρχεία εικόνας",
+  "iso.drag_unsupported": "Δεν εντοπίστηκαν υποστηριζόμενα αρχεία εικόνας (.iso, .wim, .img κ.λπ.)",
   "deploy.title": "Δημιουργία εκκινήσιμου δίσκου & δοκιμή QEMU",
   "deploy.desc_cloud": "Καθαρή εκκίνηση Cloud iPXE • Εξαιρετικά γρήγορη ρύθμιση δύο διαμερισμάτων με λογισμικό δικτύου iPXE.",
   "deploy.desc_hybrid": "Τοπική μηχανή Ventoy CLI • Ρύθμιση υβριδικού διαμερίσματος Ventoy με τοπική διαχείριση ISO.",

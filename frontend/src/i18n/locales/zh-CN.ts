@@ -134,6 +134,8 @@ export const zhCn: TranslationDict = {
   "iso.summary": "已选 {count} 个系统镜像源文件",
   "iso.clear": "清空列表",
   "iso.remove": "移除",
+  "iso.drag_drop_tip": "释放以添加镜像文件",
+  "iso.drag_unsupported": "未检测到受支持的镜像文件格式（支持 .iso, .wim, .img 等）",
   "deploy.title": "启动盘制作与模拟测试",
   "deploy.desc_cloud": "纯 iPXE 云引导 • 双分区极速部署，内置多架构 iPXE 网络固件",
   "deploy.desc_hybrid": "Ventoy CLI 本地引擎 • 部署 Ventoy 混合分区，支持本地 ISO 镜像管理",

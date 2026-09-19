@@ -134,6 +134,8 @@ export const thTh: TranslationDict = {
   "iso.summary": "เลือกไฟล์ต้นฉบับรูปภาพ {count} ไฟล์",
   "iso.clear": "ล้างรายการ",
   "iso.remove": "ลบออก",
+  "iso.drag_drop_tip": "วางเพื่อเพิ่มไฟล์อิมเมจ",
+  "iso.drag_unsupported": "ไม่พบไฟล์อิมเมจที่รองรับ (.iso, .wim, .img ฯลฯ)",
   "deploy.title": "การสร้างไดรฟ์ที่บูตได้และการทดสอบ QEMU",
   "deploy.desc_cloud": "การบูตคลาวด์ iPXE บริสุทธิ์ • การตั้งค่าสองพาร์ติชันที่เร็วเป็นพิเศษพร้อมเฟิร์มแวร์เครือข่าย iPXE Multi-arch.",
   "deploy.desc_hybrid": "เอ็นจินท้องถิ่น Ventoy CLI • การตั้งค่าพาร์ติชันไฮบริด Ventoy พร้อมการจัดการ ISO ท้องถิ่น.",

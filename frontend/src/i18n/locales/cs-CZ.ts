@@ -134,6 +134,8 @@ export const csCz: TranslationDict = {
   "iso.summary": "Vybráno {count} zdrojových souborů obrazů",
   "iso.clear": "Vymazat seznam",
   "iso.remove": "Odebrat",
+  "iso.drag_drop_tip": "Přetažením přidejte soubory obrazů",
+  "iso.drag_unsupported": "Nebyly nalezeny žádné podporované soubory obrazů (.iso, .wim, .img atd.)",
   "deploy.title": "Vytvoření bootovacího disku a test QEMU",
   "deploy.desc_cloud": "Čistý iPXE cloudový boot • Ultrarychlé nastavení dvou oddílů s síťovým firmwarerem iPXE pro více architektur.",
   "deploy.desc_hybrid": "Lokální engine Ventoy CLI • Nastavení hybridního oddílu Ventoy s lokální správou ISO.",

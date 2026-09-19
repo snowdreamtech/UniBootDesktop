@@ -134,6 +134,8 @@ export const beBy: TranslationDict = {
   "iso.summary": "Абрана ISO-вобразаў: {count}",
   "iso.clear": "Ачысціць спіс",
   "iso.remove": "Выдаліць",
+  "iso.drag_drop_tip": "Адпусціце, каб дадаць файлы вобразаў",
+  "iso.drag_unsupported": "Не выяўлена падтрыманых файлаў вобразаў (.iso, .wim, .img і інш.)",
   "deploy.title": "Стварэнне загрузачнага дыска і тэст QEMU",
   "deploy.desc_cloud": "Чыстая воблачная загрузка iPXE • Надхуткае наладжванне двух раздзелаў з сеткавай прашыўкай iPXE.",
   "deploy.desc_hybrid": "Лакальны рухавік Ventoy CLI • Наладжванне гібрыднага раздзела Ventoy з лакальным кіраваннем ISO.",

@@ -40,6 +40,8 @@ declare global {
       EventsOff(eventName: string, ...additionalEvents: string[]): void;
       EventsOnce(eventName: string, callback: (data: any) => void): void;
       EventsEmit(eventName: string, ...optionalData: any[]): void;
+      OnFileDrop?(callback: (x: number, y: number, paths: string[]) => void, useDropTarget?: boolean): void;
+      OnFileDropOff?(): void;
     };
     go?: {
       main?: {

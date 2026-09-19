@@ -134,6 +134,8 @@ export const urPk: TranslationDict = {
   "iso.summary": "منتخب کردہ {count} تصویری ماخذ فائل (فائلیں)",
   "iso.clear": "فہرست صاف کریں۔",
   "iso.remove": "ہٹائیں",
+  "iso.drag_drop_tip": "امیج فائلیں شامل کرنے کے لیے چھوڑیں",
+  "iso.drag_unsupported": "کوئی معاون امیج فائل نہیں ملی (.iso, .wim, .img وغیرہ)",
   "deploy.title": "بوٹ ایبل ڈرائیو بنانا اور QEMU ٹیسٹ",
   "deploy.desc_cloud": "خالص iPXE کلاؤڈ بوٹ • ملٹی آرک iPXE نیٹ ورک فرم ویئر کے ساتھ انتہائی تیز رفتار دوہری پارٹیشن سیٹ اپ۔",
   "deploy.desc_hybrid": "Ventoy CLI مقامی انجن • مقامی ISO مینجمنٹ کے ساتھ Ventoy ہائبرڈ پارٹیشن سیٹ اپ۔",

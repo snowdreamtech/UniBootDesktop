@@ -134,6 +134,8 @@ export const frFr: TranslationDict = {
   "iso.summary": "{count} fichier(s) image ISO sélectionné(s)",
   "iso.clear": "Vider la liste",
   "iso.remove": "Supprimer",
+  "iso.drag_drop_tip": "Déposez pour ajouter des fichiers image",
+  "iso.drag_unsupported": "Aucun fichier image pris en charge détecté (.iso, .wim, .img, etc.)",
   "deploy.title": "Création de lecteur démarrable et test QEMU",
   "deploy.desc_cloud": "Démarrage Cloud iPXE Pur • Configuration ultra-rapide à deux partitions avec micrologiciel réseau iPXE multi-arch.",
   "deploy.desc_hybrid": "Moteur local Ventoy CLI • Configuration de partition hybride Ventoy avec gestion ISO locale.",

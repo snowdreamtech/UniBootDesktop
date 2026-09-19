@@ -134,6 +134,8 @@ export const slSi: TranslationDict = {
   "iso.summary": "Izbranih {count} slikovnih izvornih datotek",
   "iso.clear": "Počisti seznam",
   "iso.remove": "Odstrani",
+  "iso.drag_drop_tip": "Spustite, da dodate slikovne datoteke",
+  "iso.drag_unsupported": "Podprte slikovne datoteke niso bile zaznane (.iso, .wim, .img itd.)",
   "deploy.title": "Ustvarjanje zagonskega pogona in preizkus QEMU",
   "deploy.desc_cloud": "Čisti zagonski oblak iPXE • Ultrahitra namestitev dveh particij z omrežno vgrajeno programsko opremo iPXE.",
   "deploy.desc_hybrid": "Lokalni pogon Ventoy CLI • Namestitev hibridne particije Ventoy z lokalnim upravljanjem ISO.",

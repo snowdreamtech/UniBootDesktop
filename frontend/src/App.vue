@@ -82,6 +82,7 @@
         :activeVmTargetDevice="activeVmTargetDevice"
         @open-settings-ventoy="openSettings('ventoy')"
         @select-iso="handleSelectIsoFiles"
+        @drop-iso-paths="addIsoFilesByPaths"
         @remove-iso="removeIsoFile"
         @clear-iso="clearIsoFiles"
         @deploy-click="handleDeployBtnClick"
@@ -173,7 +174,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import AppHeader from './components/AppHeader.vue';
 import DiskPanel from './components/DiskPanel.vue';
 import type { DiskInfo } from './components/DiskPanel.vue';
@@ -538,6 +539,44 @@ interface IsoFileItem {
 const selectedIsoFiles = ref<IsoFileItem[]>([]);
 const isoCopyStatus = ref<string>('');
 
+const SUPPORTED_IMAGE_EXTS = [
+  '.iso', '.img', '.wim', '.vhd', '.vhdx', '.vti', '.efi', '.bin', '.xz', '.gz', '.raw'
+];
+
+function isSupportedImage(filePath: string): boolean {
+  const lower = (filePath || '').toLowerCase();
+  return SUPPORTED_IMAGE_EXTS.some(ext => lower.endsWith(ext));
+}
+
+function addIsoFilesByPaths(paths: string[]): number {
+  if (!paths || paths.length === 0) return 0;
+  let added = 0;
+  let invalidCount = 0;
+
+  for (const p of paths) {
+    if (!p) continue;
+    if (!isSupportedImage(p)) {
+      invalidCount++;
+      continue;
+    }
+    if (selectedIsoFiles.value.some(f => f.path === p)) {
+      continue;
+    }
+    const name = p.split(/[/\\]/).pop() || p;
+    selectedIsoFiles.value.push({ name, path: p });
+    added++;
+    logUserAction('INFO', 'Added image source file', `${name} (${p})`);
+  }
+
+  if (added > 0) {
+    showToast(t('deploy.toast_added_iso', { count: added }), 'success');
+  } else if (invalidCount > 0 && selectedIsoFiles.value.length === 0) {
+    showToast(t('iso.drag_unsupported'), 'warning');
+  }
+
+  return added;
+}
+
 async function handleSelectIsoFiles() {
   if (typeof SelectIsoFiles === 'function') {
     try {
@@ -547,17 +586,7 @@ async function handleSelectIsoFiles() {
         t('dialog.allFilesFilter')
       );
       if (paths && paths.length > 0) {
-        let added = 0;
-        for (const p of paths) {
-          if (!selectedIsoFiles.value.some(f => f.path === p)) {
-            const name = p.split(/[/\\]/).pop() || p;
-            selectedIsoFiles.value.push({ name, path: p });
-            added++;
-          }
-        }
-        if (added > 0) {
-          showToast(t('deploy.toast_added_iso', { count: added }), 'success');
-        }
+        addIsoFilesByPaths(paths);
       }
     } catch (err: any) {
       console.error('SelectIsoFiles error:', err);
@@ -1508,6 +1537,20 @@ onMounted(() => {
         el.scrollIntoView({ behavior: 'smooth' });
       }
     });
+
+    if (typeof window.runtime.OnFileDrop === 'function') {
+      window.runtime.OnFileDrop((_x: number, _y: number, paths: string[]) => {
+        if (paths && paths.length > 0) {
+          addIsoFilesByPaths(paths);
+        }
+      }, false);
+    }
+  }
+});
+
+onUnmounted(() => {
+  if (window.runtime && typeof window.runtime.OnFileDropOff === 'function') {
+    window.runtime.OnFileDropOff();
   }
 });
 

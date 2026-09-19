@@ -134,6 +134,8 @@ export const roRo: TranslationDict = {
   "iso.summary": "S-au selectat {count} fișiere imagine ISO",
   "iso.clear": "Ștergeți lista",
   "iso.remove": "Elimină",
+  "iso.drag_drop_tip": "Eliberați pentru a adăuga fișiere imagine",
+  "iso.drag_unsupported": "Nu au fost detectate fișiere imagine acceptate (.iso, .wim, .img etc.)",
   "deploy.title": "Creare disc bootabil și test QEMU",
   "deploy.desc_cloud": "Bootare Cloud iPXE pură • Configurare ultra-rapidă cu două partiții și firmware de rețea iPXE multi-arhitectură.",
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configurare partiție hibridă Ventoy cu gestionare ISO locală.",

@@ -134,6 +134,8 @@ export const itIt: TranslationDict = {
   "iso.summary": "{count} file immagine selezionato/i",
   "iso.clear": "Svuota Lista",
   "iso.remove": "Rimuovi",
+  "iso.drag_drop_tip": "Rilascia per aggiungere file immagine",
+  "iso.drag_unsupported": "Nessun file immagine supportato rilevato (.iso, .wim, .img, ecc.)",
   "deploy.title": "Creazione unità avviabile e test QEMU",
   "deploy.desc_cloud": "Avvio Cloud iPXE puro • Configurazione ultra-rapida a due partizioni con firmware di rete iPXE.",
   "deploy.desc_hybrid": "Motore locale Ventoy CLI • Configurazione partizione ibrida Ventoy con gestione ISO locale.",
