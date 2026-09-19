@@ -86,13 +86,23 @@
               <div class="iso-file-path">{{ file.path }}</div>
             </div>
             <div class="iso-item-actions">
+              <!-- Checksum Status Badge -->
+              <span
+                v-if="getIsoChecksumStatus(file.name)"
+                class="iso-status-badge"
+                :class="getIsoChecksumStatus(file.name)?.status"
+              >
+                <span class="badge-icon">{{ getIsoChecksumStatusIcon(file.name) }}</span>
+                <span>{{ getIsoChecksumStatusText(file.name) }}</span>
+              </span>
               <button
                 class="iso-check-hash-btn"
                 :class="{ active: selectedChecksumIsoIndex === index }"
                 :title="t('checksum.calc_btn')"
                 @click.stop="selectIsoForChecksum(index)"
               >
-                🔒 {{ selectedChecksumIsoIndex === index ? t('checksum.status_selected') : t('checksum.status_verify') }}
+                <span class="btn-icon">🔒</span>
+                <span>{{ selectedChecksumIsoIndex === index ? t('checksum.status_selected') : t('checksum.status_verify') }}</span>
               </button>
               <button class="iso-remove-btn" title="Remove" @click.stop="emit('remove-iso', index)">✕</button>
             </div>
@@ -133,9 +143,26 @@
                 <option value="crc32">CRC32</option>
               </select>
             </div>
-            <button class="btn-secondary calc-hash-btn" :disabled="isCalculatingHash" @click="handleCalculateChecksum">
-              {{ isCalculatingHash ? t('checksum.calculating') : t('checksum.calc_btn') }}
+            <button class="btn-secondary calc-hash-btn" :disabled="isCalculatingHash || isBatchCalculating" @click="handleCalculateChecksum">
+              <span class="btn-icon">{{ isCalculatingHash ? '⏳' : '⚡' }}</span>
+              <span>{{ isCalculatingHash ? t('checksum.calculating') : t('checksum.calc_btn') }}</span>
             </button>
+            <!-- Batch Checksum Button (visible when multiple ISOs selected) -->
+            <button
+              v-if="selectedIsoFiles.length > 1"
+              class="btn-secondary batch-calc-btn"
+              :disabled="isBatchCalculating || isCalculatingHash"
+              @click="handleBatchChecksum"
+            >
+              <span class="btn-icon">{{ isBatchCalculating ? '⏳' : '🔍' }}</span>
+              <span>{{ isBatchCalculating ? t('checksum.batch_verifying', { current: batchProgress.current, total: selectedIsoFiles.length }) : t('checksum.batch_verify_all') }}</span>
+            </button>
+          </div>
+
+          <!-- Batch Checksum Summary Banner -->
+          <div v-if="batchSummaryText" class="batch-summary-banner" :class="{ 'all-matched': isAllBatchMatched }">
+            <span class="summary-icon">{{ isAllBatchMatched ? '✅' : 'ℹ️' }}</span>
+            <span>{{ batchSummaryText }}</span>
           </div>
 
           <!-- Calculated Hash Result & Compare Box -->
@@ -455,12 +482,23 @@ const expectedHashInput = ref('');
 const isHashCopied = ref(false);
 const sumsFileInputRef = ref<HTMLInputElement | null>(null);
 
-// SHA 缓存：文件名 -> 哈希值映射
+// SHA 缓存与单个 ISO 的校验状态
 interface ChecksumCache {
   [filename: string]: string;
 }
+
+export interface IsoChecksumStatus {
+  calculated: string;
+  expected: string;
+  status: 'idle' | 'calculating' | 'match' | 'mismatch' | 'no-expected';
+  algo: string;
+}
+
 const checksumCache = ref<ChecksumCache>({});
+const isoChecksumStatuses = ref<Record<string, IsoChecksumStatus>>({});
 const loadedSumsFileCount = ref(0);
+const isBatchCalculating = ref(false);
+const batchProgress = ref({ current: 0, total: 0, matched: 0, mismatched: 0 });
 
 watch(() => props.selectedIsoFiles, (newFiles: any[]) => {
   if (selectedChecksumIsoIndex.value >= newFiles.length) {
@@ -479,17 +517,21 @@ watch(() => props.selectedIsoFiles, (newFiles: any[]) => {
 }, { deep: true });
 
 watch(selectedChecksumIsoIndex, () => {
-  calculatedHash.value = '';
-
-  // 切换文件时，自动从缓存加载期望值
   if (props.selectedIsoFiles.length > 0 && selectedChecksumIsoIndex.value < props.selectedIsoFiles.length) {
     const currentFile = props.selectedIsoFiles[selectedChecksumIsoIndex.value];
-    const cachedHash = checksumCache.value[currentFile.name];
-    if (cachedHash) {
-      expectedHashInput.value = cachedHash;
+    const status = isoChecksumStatuses.value[currentFile.name];
+    if (status && status.calculated) {
+      calculatedHash.value = status.calculated;
+      currentChecksumAlgo.value = status.algo || selectedAlgo.value;
+      expectedHashInput.value = status.expected || checksumCache.value[currentFile.name] || '';
     } else {
-      expectedHashInput.value = '';
+      calculatedHash.value = '';
+      const cachedHash = checksumCache.value[currentFile.name];
+      expectedHashInput.value = cachedHash || '';
     }
+  } else {
+    calculatedHash.value = '';
+    expectedHashInput.value = '';
   }
 });
 
@@ -608,25 +650,36 @@ async function handleSumsFileSelected(event: Event) {
 
   loadedSumsFileCount.value = totalLoaded;
 
-  // 显示加载结果
+  // 显示加载结果并同步所有 ISO 的校验状态
   if (totalLoaded > 0) {
-    const message = totalLoaded === 1
-      ? `✅ 已加载 ${totalHashes} 个文件的校验值`
-      : `✅ 已加载 ${totalLoaded} 个校验文件，共 ${totalHashes} 个文件的校验值`;
-    alert(message);
+    // 自动为当前所有文件匹配期望值
+    props.selectedIsoFiles.forEach(file => {
+      const cached = checksumCache.value[file.name];
+      if (cached) {
+        const existing = isoChecksumStatuses.value[file.name];
+        if (existing && existing.calculated) {
+          existing.expected = cached;
+          existing.status = existing.calculated.toLowerCase() === cached.toLowerCase() ? 'match' : 'mismatch';
+        } else if (!existing) {
+          isoChecksumStatuses.value[file.name] = {
+            calculated: '',
+            expected: cached,
+            status: 'idle',
+            algo: selectedAlgo.value
+          };
+        }
+      }
+    });
 
-    // 自动为当前选中的文件匹配期望值
     if (props.selectedIsoFiles.length > 0 && selectedChecksumIsoIndex.value < props.selectedIsoFiles.length) {
       const currentFile = props.selectedIsoFiles[selectedChecksumIsoIndex.value];
       const cachedHash = checksumCache.value[currentFile.name];
-      if (cachedHash) {
-        expectedHashInput.value = cachedHash;
-      } else {
-        expectedHashInput.value = '';
-      }
+      expectedHashInput.value = cachedHash || '';
     } else {
       expectedHashInput.value = '';
     }
+
+    alert(t('checksum.cache_loaded', { count: totalHashes }));
   } else {
     expectedHashInput.value = '';
     alert('⚠️ 未能从所选文件中解析出有效的校验值');
@@ -634,7 +687,7 @@ async function handleSumsFileSelected(event: Event) {
 }
 
 async function handleCalculateChecksum() {
-  if (props.selectedIsoFiles.length === 0 || isCalculatingHash.value) return;
+  if (props.selectedIsoFiles.length === 0 || isCalculatingHash.value || isBatchCalculating.value) return;
   const targetIdx = selectedChecksumIsoIndex.value < props.selectedIsoFiles.length ? selectedChecksumIsoIndex.value : 0;
   const fileToVerify = props.selectedIsoFiles[targetIdx];
   isCalculatingHash.value = true;
@@ -644,7 +697,7 @@ async function handleCalculateChecksum() {
     if (w.go && w.go.main && w.go.main.App && typeof w.go.main.App.CalculateFileChecksum === 'function') {
       const res = await w.go.main.App.CalculateFileChecksum(fileToVerify.path, selectedAlgo.value);
       if (res && res.hash) {
-        calculatedHash.value = res.hash;
+        calculatedHash.value = res.hash.toLowerCase();
         currentChecksumAlgo.value = res.algorithm || selectedAlgo.value;
       }
     } else {
@@ -655,12 +708,153 @@ async function handleCalculateChecksum() {
         : '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824';
       currentChecksumAlgo.value = selectedAlgo.value;
     }
+
+    // 同步更新单个文件的状态
+    if (calculatedHash.value) {
+      const exp = parseExpectedHashString(expectedHashInput.value, fileToVerify.name);
+      let statusType: 'match' | 'mismatch' | 'no-expected' = 'no-expected';
+      if (exp) {
+        statusType = exp.toLowerCase() === calculatedHash.value.toLowerCase() ? 'match' : 'mismatch';
+      }
+      isoChecksumStatuses.value[fileToVerify.name] = {
+        calculated: calculatedHash.value,
+        expected: exp,
+        status: statusType,
+        algo: currentChecksumAlgo.value
+      };
+    }
   } catch (e) {
     console.error('Checksum calculation error:', e);
   } finally {
     isCalculatingHash.value = false;
   }
 }
+
+async function handleBatchChecksum() {
+  if (!props.selectedIsoFiles || props.selectedIsoFiles.length === 0 || isBatchCalculating.value || isCalculatingHash.value) return;
+
+  isBatchCalculating.value = true;
+  const total = props.selectedIsoFiles.length;
+  let matched = 0;
+  let mismatched = 0;
+
+  batchProgress.value = { current: 0, total, matched: 0, mismatched: 0 };
+
+  const w = window as any;
+  for (let i = 0; i < total; i++) {
+    const file = props.selectedIsoFiles[i];
+    batchProgress.value.current = i + 1;
+
+    const expected = checksumCache.value[file.name] || '';
+    isoChecksumStatuses.value[file.name] = {
+      calculated: '',
+      expected,
+      status: 'calculating',
+      algo: selectedAlgo.value
+    };
+
+    let computedHash = '';
+    try {
+      if (w.go && w.go.main && w.go.main.App && typeof w.go.main.App.CalculateFileChecksum === 'function') {
+        const res = await w.go.main.App.CalculateFileChecksum(file.path, selectedAlgo.value);
+        if (res && res.hash) {
+          computedHash = res.hash.toLowerCase();
+        }
+      } else {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        computedHash = selectedAlgo.value === 'md5'
+          ? 'e10adc3949ba59abbe56e057f20f883e'
+          : '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824';
+      }
+    } catch (err) {
+      console.error(`Batch checksum failed for ${file.name}:`, err);
+    }
+
+    if (computedHash) {
+      const isMatch = expected && computedHash === expected.toLowerCase();
+      let statusType: 'match' | 'mismatch' | 'no-expected' = 'no-expected';
+      if (expected) {
+        if (isMatch) {
+          statusType = 'match';
+          matched++;
+        } else {
+          statusType = 'mismatch';
+          mismatched++;
+        }
+      }
+      isoChecksumStatuses.value[file.name] = {
+        calculated: computedHash,
+        expected,
+        status: statusType,
+        algo: selectedAlgo.value
+      };
+    } else {
+      isoChecksumStatuses.value[file.name] = {
+        calculated: '',
+        expected,
+        status: 'mismatch',
+        algo: selectedAlgo.value
+      };
+      mismatched++;
+    }
+
+    batchProgress.value.matched = matched;
+    batchProgress.value.mismatched = mismatched;
+
+    // 若当前项正是单文件视图当前选中的项，联动更新下方视图
+    if (i === selectedChecksumIsoIndex.value) {
+      calculatedHash.value = computedHash;
+      currentChecksumAlgo.value = selectedAlgo.value;
+      if (expected) {
+        expectedHashInput.value = expected;
+      }
+    }
+  }
+
+  isBatchCalculating.value = false;
+}
+
+function getIsoChecksumStatus(fileName: string): IsoChecksumStatus | undefined {
+  return isoChecksumStatuses.value[fileName];
+}
+
+function getIsoChecksumStatusIcon(fileName: string): string {
+  const s = isoChecksumStatuses.value[fileName];
+  if (!s) return '';
+  switch (s.status) {
+    case 'calculating': return '⏳';
+    case 'match': return '✓';
+    case 'mismatch': return '✕';
+    case 'no-expected': return '❓';
+    default: return '';
+  }
+}
+
+function getIsoChecksumStatusText(fileName: string): string {
+  const s = isoChecksumStatuses.value[fileName];
+  if (!s) return '';
+  switch (s.status) {
+    case 'calculating': return t('checksum.status_calculating');
+    case 'match': return t('checksum.status_match');
+    case 'mismatch': return t('checksum.status_mismatch');
+    case 'no-expected': return t('checksum.status_no_expected');
+    default: return t('checksum.status_idle');
+  }
+}
+
+const batchSummaryText = computed(() => {
+  if (batchProgress.value.total === 0) return '';
+  if (isBatchCalculating.value) {
+    return t('checksum.batch_verifying', { current: batchProgress.value.current, total: batchProgress.value.total });
+  }
+  return t('checksum.batch_result', { matched: batchProgress.value.matched, mismatched: batchProgress.value.mismatched });
+});
+
+const isAllBatchMatched = computed(() => {
+  return batchProgress.value.total > 0 &&
+         !isBatchCalculating.value &&
+         batchProgress.value.matched === batchProgress.value.total;
+});
 
 function copyHashToClipboard() {
   if (!calculatedHash.value) return;
@@ -1024,6 +1218,54 @@ function getFileIcon(filename: string): string {
   font-weight: 600;
 }
 
+.iso-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.iso-status-badge .badge-icon {
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+.iso-status-badge.calculating {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.iso-status-badge.match {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.iso-status-badge.mismatch {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.iso-status-badge.no-expected {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.iso-status-badge.idle {
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--text-muted);
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
 .checksum-target-bar {
   display: flex;
   align-items: center;
@@ -1159,6 +1401,40 @@ function getFileIcon(filename: string): string {
   padding: 0.3rem 0.75rem !important;
   font-size: 0.78rem !important;
   border-radius: 6px !important;
+}
+
+.batch-calc-btn {
+  padding: 0.3rem 0.75rem !important;
+  font-size: 0.78rem !important;
+  border-radius: 6px !important;
+  background: var(--btn-sec-bg);
+  border: 1px solid var(--accent-cyan, #38bdf8) !important;
+  color: var(--accent-cyan, #38bdf8) !important;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.batch-calc-btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.18) !important;
+}
+
+.batch-summary-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: var(--text-main);
+}
+
+.batch-summary-banner.all-matched {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
 }
 
 .checksum-result-box {
@@ -1703,6 +1979,59 @@ function getFileIcon(filename: string): string {
 
 [data-theme="light"] .target-warn {
   color: #d97706;
+}
+
+/* Light theme overrides for Checksum & Batch Checksum */
+[data-theme="light"] .iso-status-badge.calculating {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+
+[data-theme="light"] .iso-status-badge.match {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #86efac;
+}
+
+[data-theme="light"] .iso-status-badge.mismatch {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+[data-theme="light"] .iso-status-badge.no-expected {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+[data-theme="light"] .iso-status-badge.idle {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .batch-calc-btn {
+  background: #f0f9ff !important;
+  color: #0284c7 !important;
+  border-color: #0284c7 !important;
+}
+
+[data-theme="light"] .batch-calc-btn:hover:not(:disabled) {
+  background: #e0f2fe !important;
+}
+
+[data-theme="light"] .batch-summary-banner {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+  color: #0369a1;
+}
+
+[data-theme="light"] .batch-summary-banner.all-matched {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #15803d;
 }
 
 .deploy-active-container {
