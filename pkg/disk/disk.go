@@ -28,6 +28,8 @@ var (
 		"PREBOOT",
 		"VM",
 		"UPDATE",
+		"XCODE",
+		"INSTALLER",
 
 		// EFI & Boot Partition Names
 		"EFI",
@@ -49,6 +51,8 @@ var (
 		"EFI-",
 		"BOOT_",
 		"BOOT-",
+		"TIME MACHINE",
+		".TIMEMACHINE",
 	}
 )
 
@@ -877,6 +881,10 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		var smartStatus string
 		var sectorBytes uint64
 		var writable bool = true
+		var isVirtual bool
+		var isInternal bool
+		var isOptical bool
+		var isNetwork bool
 
 		if infoStr != "" {
 			if strings.Contains(infoStr, "<key>BusProtocol</key>") {
@@ -898,10 +906,41 @@ func getDarwinDisks() ([]DiskInfo, error) {
 				sectorBytes = extractPlistUint(infoStr, "DeviceBlockSize")
 			}
 			if strings.Contains(infoStr, "<key>RemovableMediaOrExternalDevice</key>") {
-				isRemovable = strings.Contains(infoStr, "<true/>")
+				isRemovable = strings.Contains(infoStr, "<key>RemovableMediaOrExternalDevice</key>\n\t<true/>") || strings.Contains(infoStr, "<key>RemovableMediaOrExternalDevice</key><true/>")
+			}
+			if strings.Contains(infoStr, "<key>Internal</key>") {
+				isInternal = strings.Contains(infoStr, "<key>Internal</key>\n\t<true/>") || strings.Contains(infoStr, "<key>Internal</key><true/>")
+			}
+			if strings.Contains(infoStr, "<key>OSInternalMedia</key>") {
+				if strings.Contains(infoStr, "<key>OSInternalMedia</key>\n\t<true/>") || strings.Contains(infoStr, "<key>OSInternalMedia</key><true/>") {
+					isInternal = true
+				}
+			}
+			if strings.Contains(infoStr, "<key>VirtualOrPhysical</key>") {
+				vOrP := extractPlistValue(infoStr, "VirtualOrPhysical")
+				if strings.EqualFold(vOrP, "Virtual") {
+					isVirtual = true
+				}
+			}
+			if strings.Contains(infoStr, "<key>OpticalDevice</key>") {
+				if strings.Contains(infoStr, "<key>OpticalDevice</key>\n\t<true/>") || strings.Contains(infoStr, "<key>OpticalDevice</key><true/>") {
+					isOptical = true
+				}
 			}
 			if strings.Contains(infoStr, "<key>Writable</key>") {
-				writable = strings.Contains(infoStr, "<key>Writable</key>\n\t<true/>") || strings.Contains(infoStr, "<key>Writable</key><true/>") || !strings.Contains(infoStr, "<key>Writable</key>\n\t<false/>")
+				if strings.Contains(infoStr, "<key>Writable</key>\n\t<false/>") || strings.Contains(infoStr, "<key>Writable</key><false/>") {
+					writable = false
+				}
+			}
+			if strings.Contains(infoStr, "<key>WritableMedia</key>") {
+				if strings.Contains(infoStr, "<key>WritableMedia</key>\n\t<false/>") || strings.Contains(infoStr, "<key>WritableMedia</key><false/>") {
+					writable = false
+				}
+			}
+			if strings.Contains(infoStr, "<key>WritableVolume</key>") {
+				if strings.Contains(infoStr, "<key>WritableVolume</key>\n\t<false/>") || strings.Contains(infoStr, "<key>WritableVolume</key><false/>") {
+					writable = false
+				}
 			}
 			if strings.Contains(infoStr, "<key>FilesystemUserVisibleName</key>") {
 				fileSystem = extractPlistValue(infoStr, "FilesystemUserVisibleName")
@@ -912,21 +951,60 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			if fileSystem == "" && strings.Contains(infoStr, "<key>FilesystemType</key>") {
 				fileSystem = extractPlistValue(infoStr, "FilesystemType")
 			}
+			fsLower := strings.ToLower(fileSystem)
+			if fsLower == "smbfs" || fsLower == "nfs" || fsLower == "afpfs" || fsLower == "cifs" || fsLower == "webdav" {
+				isNetwork = true
+			}
 		}
 
 		if fileSystem == "" {
 			fileSystem = "ExFAT"
 		}
 
-		// Skip non-USB / internal disks if bus protocol is available
-		if busProto != "" && busProto != "USB" && !isRemovable {
-			continue
-		}
+		var parentBusProto string
+		var parentIsVirtual bool
+		var parentIsInternal bool
+		var parentIsOptical bool
+		var parentWritable bool = true
 
 		// Probe whole disk info for total raw byte size and partition map type
 		if parentDisk != "" {
 			parentStr := getDarwinDiskutilInfo(parentDisk)
 			if parentStr != "" {
+				if strings.Contains(parentStr, "<key>BusProtocol</key>") {
+					parentBusProto = extractPlistValue(parentStr, "BusProtocol")
+				}
+				if strings.Contains(parentStr, "<key>VirtualOrPhysical</key>") {
+					if strings.EqualFold(extractPlistValue(parentStr, "VirtualOrPhysical"), "Virtual") {
+						parentIsVirtual = true
+					}
+				}
+				if strings.Contains(parentStr, "<key>Internal</key>") {
+					if strings.Contains(parentStr, "<key>Internal</key>\n\t<true/>") || strings.Contains(parentStr, "<key>Internal</key><true/>") {
+						parentIsInternal = true
+					}
+				}
+				if strings.Contains(parentStr, "<key>OpticalDevice</key>") {
+					if strings.Contains(parentStr, "<key>OpticalDevice</key>\n\t<true/>") || strings.Contains(parentStr, "<key>OpticalDevice</key><true/>") {
+						parentIsOptical = true
+					}
+				}
+				if strings.Contains(parentStr, "<key>Writable</key>") {
+					if strings.Contains(parentStr, "<key>Writable</key>\n\t<false/>") || strings.Contains(parentStr, "<key>Writable</key><false/>") {
+						parentWritable = false
+					}
+				}
+				if strings.Contains(parentStr, "<key>WritableMedia</key>") {
+					if strings.Contains(parentStr, "<key>WritableMedia</key>\n\t<false/>") || strings.Contains(parentStr, "<key>WritableMedia</key><false/>") {
+						parentWritable = false
+					}
+				}
+				if strings.Contains(parentStr, "<key>IORegistryEntryName</key>") {
+					entryName := strings.ToLower(extractPlistValue(parentStr, "IORegistryEntryName"))
+					if strings.Contains(entryName, "disk image") || strings.Contains(entryName, "virtual") || strings.Contains(entryName, "appleapfs") {
+						parentIsVirtual = true
+					}
+				}
 				pSize := extractPlistUint(parentStr, "TotalSize")
 				if pSize > 0 {
 					totalSize = pSize
@@ -946,6 +1024,44 @@ func getDarwinDisks() ([]DiskInfo, error) {
 					partitionScheme = content
 				}
 			}
+		}
+
+		// Comprehensive filter for virtual disks, read-only images, DMG, optical drives, network shares, and internal system drives
+		effectiveBus := busProto
+		if effectiveBus == "" {
+			effectiveBus = parentBusProto
+		}
+
+		// 1. Filter out virtual disk images (DMG, ISO mounts, virtual devices)
+		if strings.EqualFold(busProto, "Disk Image") || strings.EqualFold(parentBusProto, "Disk Image") ||
+			strings.Contains(strings.ToLower(busProto), "image") || strings.Contains(strings.ToLower(parentBusProto), "image") ||
+			isVirtual || parentIsVirtual {
+			continue
+		}
+
+		// 2. Filter out read-only media (boot disk flashing requires physical read/write capacity)
+		if !writable || !parentWritable {
+			continue
+		}
+
+		// 3. Filter out optical drives and discs (CD/DVD/BD)
+		if isOptical || parentIsOptical || strings.EqualFold(busProto, "ATAPI") || strings.EqualFold(parentBusProto, "ATAPI") {
+			continue
+		}
+
+		// 4. Filter out network volumes (NFS/SMB/AFP)
+		if isNetwork {
+			continue
+		}
+
+		// 5. Filter out internal system drives (macOS root, recovery, internal NVMe/APFS)
+		if isInternal || parentIsInternal {
+			continue
+		}
+
+		// 6. Must be removable physical storage (e.g. USB)
+		if effectiveBus != "" && effectiveBus != "USB" && !isRemovable {
+			continue
 		}
 
 		if smartStatus == "" {
@@ -1149,6 +1265,19 @@ func getLinuxDisks() ([]DiskInfo, error) {
 	}
 
 	for _, dev := range lsblk.BlockDevices {
+		// Filter out virtual, loop, ram, optical, and read-only devices
+		if dev.Type == "loop" || strings.HasPrefix(dev.Name, "loop") {
+			continue
+		}
+		if dev.Type == "ram" || strings.HasPrefix(dev.Name, "ram") || strings.HasPrefix(dev.Name, "zram") {
+			continue
+		}
+		if dev.Type == "rom" || strings.HasPrefix(dev.Name, "sr") || strings.HasPrefix(dev.Name, "cdrom") {
+			continue
+		}
+		if dev.Ro {
+			continue
+		}
 		if dev.Tran != "usb" && !dev.Rm {
 			continue
 		}
@@ -1274,7 +1403,7 @@ type winDiskDrive struct {
 func getWindowsDisks() ([]DiskInfo, error) {
 	var disks []DiskInfo
 	cmd := execCommand("powershell", "-NoProfile", "-Command",
-		"Get-CimInstance Win32_DiskDrive | Where-Object { $_.InterfaceType -eq 'USB' -or $_.MediaType -like '*Removable*' } | Select-Object DeviceID, Model, Size, InterfaceType, Caption | ConvertTo-Json")
+		"Get-CimInstance Win32_DiskDrive | Where-Object { ($_.InterfaceType -eq 'USB' -or ($_.MediaType -like '*Removable*' -and $_.MediaType -notlike '*Fixed*')) -and $_.Model -notmatch 'Virtual|VHD|ISO|CD-ROM|DVD' -and $_.InterfaceType -ne 'FileBackedVirtual' } | Select-Object DeviceID, Model, Size, InterfaceType, Caption | ConvertTo-Json")
 	output, err := cmd.Output()
 	if err != nil || len(output) == 0 {
 		return disks, nil
@@ -1289,6 +1418,17 @@ func getWindowsDisks() ([]DiskInfo, error) {
 	}
 
 	for i, drive := range winDrives {
+		// Secondary check to ensure virtual devices, VHD, or mounted ISOs are not displayed
+		upperModel := strings.ToUpper(drive.Model + " " + drive.Caption)
+		if strings.Contains(upperModel, "VIRTUAL") ||
+			strings.Contains(upperModel, "VHD") ||
+			strings.Contains(upperModel, "ISO") ||
+			strings.Contains(upperModel, "CD-ROM") ||
+			strings.Contains(upperModel, "DVD") ||
+			drive.InterfaceType == "FileBackedVirtual" {
+			continue
+		}
+
 		driveLetter := fmt.Sprintf("%c:", 'E'+i)
 		displayName := drive.Model
 		if displayName == "" {

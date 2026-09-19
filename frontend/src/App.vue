@@ -1037,7 +1037,21 @@ async function refreshDisks() {
   try {
     if (window.go && window.go.main && window.go.main.App) {
       try {
-        const fetched = (await window.go.main.App.GetDiskList()) || [];
+        const fetched = ((await window.go.main.App.GetDiskList()) || []).filter(d => {
+          if (!d || d.isSystem) return false;
+          if (d.writable === false) return false;
+          const nameLower = (d.name || '').toLowerCase();
+          const devLower = (d.device || '').toLowerCase();
+          if (
+            nameLower.includes('disk image') ||
+            nameLower.includes('.dmg') ||
+            nameLower.includes('virtual') ||
+            devLower.includes('loop')
+          ) {
+            return false;
+          }
+          return true;
+        });
         diskList.value = fetched;
         if (previousSelectedDevice) {
           const stillExists = diskList.value.find(d => d.device === previousSelectedDevice);
