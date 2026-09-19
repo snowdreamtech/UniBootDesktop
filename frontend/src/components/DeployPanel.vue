@@ -113,7 +113,10 @@
 
         <div v-if="selectedIsoFiles.length > 0" class="iso-footer">
           <span class="iso-count-summary">{{ t('iso.summary', { count: selectedIsoFiles.length }) }}</span>
-          <button class="btn-text-danger" @click="emit('clear-iso')">{{ t('iso.clear') }}</button>
+          <button class="btn-clear-iso" :title="t('iso.clear')" @click="emit('clear-iso')">
+            <span class="btn-icon">🗑️</span>
+            <span>{{ t('iso.clear') }}</span>
+          </button>
         </div>
 
         <!-- Checksum Verification Card -->
@@ -1470,12 +1473,30 @@ function getFileIcon(filename: string): string {
   color: var(--text-muted);
 }
 
-.btn-text-danger {
-  border: none;
-  background: transparent;
+.btn-clear-iso {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
   color: #ef4444;
-  font-size: 0.78rem;
   cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-clear-iso .btn-icon {
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+.btn-clear-iso:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  color: #f87171;
 }
 
 /* Checksum Verification Card Styles */
@@ -2244,6 +2265,18 @@ function getFileIcon(filename: string): string {
   background: #f8fafc;
   color: #64748b;
   border-color: #cbd5e1;
+}
+
+[data-theme="light"] .btn-clear-iso {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+[data-theme="light"] .btn-clear-iso:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #b91c1c;
 }
 
 [data-theme="light"] .iso-status-badge.calculating {
