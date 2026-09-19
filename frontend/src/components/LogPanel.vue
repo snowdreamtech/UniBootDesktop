@@ -175,9 +175,9 @@ onMounted(() => {
 }
 
 .live-badge {
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: var(--badge-success-bg);
+  color: var(--badge-success-text);
+  border: 1px solid var(--alert-success-border);
   font-size: 0.75rem;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
@@ -245,9 +245,9 @@ onMounted(() => {
 }
 
 .btn-text-danger-sm {
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  color: #f87171;
+  background: var(--alert-danger-bg);
+  border: 1px solid var(--alert-danger-border);
+  color: var(--alert-danger-title);
   font-size: 0.78rem;
   font-weight: 600;
   padding: 0.35rem 0.7rem;
@@ -260,9 +260,9 @@ onMounted(() => {
 }
 
 .btn-text-danger-sm:hover {
-  background: rgba(239, 68, 68, 0.25);
-  border-color: rgba(239, 68, 68, 0.5);
-  color: #ef4444;
+  background: var(--badge-danger-bg);
+  border-color: var(--danger);
+  color: var(--danger);
 }
 
 .auto-scroll-label-sm {

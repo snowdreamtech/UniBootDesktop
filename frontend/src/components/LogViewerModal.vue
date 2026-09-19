@@ -235,9 +235,9 @@ function exportLogFile() {
 }
 
 .btn-tab {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary, #9ca3af);
+  background: var(--subtab-container-bg);
+  border: 1px solid var(--card-border);
+  color: var(--subtab-btn-text);
   padding: 0.3rem 0.7rem;
   border-radius: 6px;
   font-size: 0.8rem;
@@ -246,16 +246,16 @@ function exportLogFile() {
 }
 
 .btn-tab.active {
-  background: var(--accent-cyan, #00e5ff);
-  color: #000;
-  border-color: var(--accent-cyan, #00e5ff);
+  background: var(--tab-btn-active-bg);
+  color: var(--tab-btn-active-text);
+  border-color: var(--subtab-btn-active-border);
   font-weight: 600;
 }
 
 .search-input {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
   padding: 0.35rem 0.75rem;
   border-radius: 6px;
   font-size: 0.85rem;
@@ -263,7 +263,9 @@ function exportLogFile() {
 }
 
 .terminal-window {
-  background: #0b1120;
+  background: var(--terminal-bg);
+  border: 1px solid var(--terminal-border);
+  color: var(--terminal-text);
   border-radius: 10px;
   padding: 1rem 1.15rem;
   font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;

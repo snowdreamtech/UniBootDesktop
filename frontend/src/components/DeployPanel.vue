@@ -706,8 +706,8 @@ function getFileIcon(filename: string): string {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.35);
+  background: var(--alert-success-bg);
+  border: 1px solid var(--alert-success-border);
   border-radius: 12px;
   padding: 12px 16px;
   margin-bottom: 16px;
@@ -725,7 +725,7 @@ function getFileIcon(filename: string): string {
 .safe-notice-title {
   font-weight: 600;
   font-size: 13px;
-  color: #34d399;
+  color: var(--alert-success-title);
   margin-bottom: 4px;
 }
 
@@ -736,15 +736,15 @@ function getFileIcon(filename: string): string {
 }
 
 .safe-notice-desc b {
-  color: #34d399;
+  color: var(--alert-success-title);
 }
 
 .ventoy-warning-card {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: var(--alert-danger-bg);
+  border: 1px solid var(--alert-danger-border);
   border-radius: 12px;
   padding: 12px 16px;
   margin-bottom: 16px;
@@ -764,7 +764,7 @@ function getFileIcon(filename: string): string {
 .warning-card-title {
   font-weight: 600;
   font-size: 13px;
-  color: #f87171;
+  color: var(--alert-danger-title);
   margin-bottom: 4px;
 }
 
@@ -1246,15 +1246,15 @@ function getFileIcon(filename: string): string {
 }
 
 .match-badge.match {
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: var(--badge-success-bg);
+  color: var(--badge-success-text);
+  border: 1px solid var(--alert-success-border);
 }
 
 .match-badge.mismatch {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: var(--badge-danger-bg);
+  color: var(--badge-danger-text);
+  border: 1px solid var(--alert-danger-border);
 }
 
 .deploy-box {
@@ -1298,8 +1298,8 @@ function getFileIcon(filename: string): string {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: var(--alert-success-bg);
+  border: 1px solid var(--alert-success-border);
   border-radius: 8px;
   margin-top: 0.75rem;
 }
@@ -1315,20 +1315,12 @@ function getFileIcon(filename: string): string {
 .deploy-success-title {
   font-weight: 700;
   font-size: 0.85rem;
-  color: #34d399;
-}
-
-[data-theme="light"] .deploy-success-title {
-  color: #059669;
+  color: var(--alert-success-title);
 }
 
 .deploy-success-desc {
   font-size: 0.78rem;
-  color: #6ee7b7;
-}
-
-[data-theme="light"] .deploy-success-desc {
-  color: #047857;
+  color: var(--alert-success-text);
 }
 
 .deploy-success-actions {
@@ -1348,18 +1340,12 @@ function getFileIcon(filename: string): string {
 .btn-eject-success {
   padding: 0.35rem 0.65rem;
   border-radius: 6px;
-  border: 1px solid #10b981;
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
+  border: 1px solid var(--alert-success-border);
+  background: var(--badge-success-bg);
+  color: var(--badge-success-text);
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
-}
-
-[data-theme="light"] .btn-eject-success {
-  border-color: #059669;
-  background: rgba(16, 185, 129, 0.15);
-  color: #047857;
 }
 
 .vm-box {
@@ -1709,9 +1695,9 @@ function getFileIcon(filename: string): string {
 }
 
 .btn-cancel-deploy {
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  color: #f87171;
+  background: var(--alert-danger-bg);
+  border: 1px solid var(--alert-danger-border);
+  color: var(--alert-danger-title);
   font-size: 0.825rem;
   font-weight: 700;
   padding: 0.5rem 1rem;
@@ -1726,21 +1712,9 @@ function getFileIcon(filename: string): string {
 }
 
 .btn-cancel-deploy:hover {
-  background: rgba(239, 68, 68, 0.25);
-  border-color: rgba(239, 68, 68, 0.5);
-  color: #ef4444;
-}
-
-[data-theme="light"] .btn-cancel-deploy {
-  background: #fef2f2;
-  border-color: #fca5a5;
-  color: #dc2626;
-}
-
-[data-theme="light"] .btn-cancel-deploy:hover {
-  background: #fee2e2;
-  border-color: #f87171;
-  color: #b91c1c;
+  background: var(--badge-danger-bg);
+  border-color: var(--danger);
+  color: var(--danger);
 }
 
 .vm-tuning-row {

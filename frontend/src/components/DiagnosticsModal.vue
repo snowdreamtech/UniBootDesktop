@@ -167,35 +167,35 @@ function onCopyReport() {
 <style scoped>
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
+  inset: 0;
+  background: var(--modal-backdrop);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(8px);
 }
 
 .diag-card {
+  background: var(--modal-bg);
+  border: 1px solid var(--alert-danger-border);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px var(--modal-backdrop);
   width: 90%;
   max-width: 580px;
-  background: rgba(26, 29, 36, 0.95);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: 16px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(239, 68, 68, 0.15);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .danger-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 16px 20px;
-  background: rgba(239, 68, 68, 0.1);
-  border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+  background: var(--alert-danger-bg);
+  border-bottom: 1px solid var(--alert-danger-border);
 }
 
 .header-title {
@@ -207,7 +207,7 @@ function onCopyReport() {
 .header-title h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #f87171;
+  color: var(--alert-danger-title);
   font-weight: 600;
 }
 
@@ -234,8 +234,8 @@ function onCopyReport() {
 }
 
 .alert-banner {
-  background: rgba(239, 68, 68, 0.12);
-  border-left: 4px solid #ef4444;
+  background: var(--alert-danger-bg);
+  border-left: 4px solid var(--danger);
   padding: 12px 16px;
   border-radius: 8px;
 }
@@ -245,13 +245,13 @@ function onCopyReport() {
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  color: #fca5a5;
+  color: var(--alert-danger-title);
   margin-bottom: 4px;
 }
 
 .stage-badge {
-  background: rgba(239, 68, 68, 0.25);
-  color: #f87171;
+  background: var(--badge-danger-bg);
+  color: var(--badge-danger-text);
   font-size: 0.75rem;
   padding: 2px 8px;
   border-radius: 4px;
@@ -260,7 +260,7 @@ function onCopyReport() {
 
 .banner-desc {
   font-size: 0.88rem;
-  color: #d1d5db;
+  color: var(--text-main);
   word-break: break-word;
 }
 
@@ -268,10 +268,10 @@ function onCopyReport() {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--subtab-container-bg);
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
 }
 
 .grid-item {
@@ -282,22 +282,22 @@ function onCopyReport() {
 
 .item-label {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: var(--text-muted);
 }
 
 .item-value {
   font-size: 0.9rem;
-  color: #e5e7eb;
+  color: var(--text-main);
 }
 
 .code-font {
   font-family: 'JetBrains Mono', Consolas, monospace;
 }
 
-.text-warning { color: #f59e0b; }
-.text-muted { color: #6b7280; }
-.text-success { color: #10b981; }
-.text-danger { color: #ef4444; }
+.text-warning { color: var(--warning); }
+.text-muted { color: var(--text-muted); }
+.text-success { color: var(--success); }
+.text-danger { color: var(--danger); }
 
 .recommend-card {
   padding: 14px 16px;

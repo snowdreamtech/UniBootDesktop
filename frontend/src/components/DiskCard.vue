@@ -465,13 +465,13 @@ const diskTagLabel = computed(() => {
 }
 
 .btn-eject:hover {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.3);
+  background: var(--badge-danger-bg);
+  color: var(--danger);
+  border-color: var(--alert-danger-border);
 }
 
 .disk-badge {
-  background: rgba(0, 229, 255, 0.15);
+  background: var(--accent-cyan-glow);
   color: var(--accent-cyan);
   padding: 0.25rem 0.6rem;
   border-radius: 6px;
@@ -554,36 +554,6 @@ const diskTagLabel = computed(() => {
 }
 
 /* Light Theme Overrides for DiskCard */
-[data-theme="light"] .btn-inspect {
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 60%, #f1f5f9 100%);
-  color: #0f172a;
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  font-weight: 600;
-  box-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(15, 23, 42, 0.05);
-}
-
-[data-theme="light"] .btn-inspect:hover {
-  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
-  color: #0284c7;
-  border-color: rgba(2, 132, 199, 0.35);
-  box-shadow: inset 0 1px 0 #ffffff, 0 3px 8px rgba(2, 132, 199, 0.15);
-}
-
-[data-theme="light"] .btn-eject {
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 60%, #f1f5f9 100%);
-  color: #0f172a;
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  font-weight: 600;
-  box-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(15, 23, 42, 0.05);
-}
-
-[data-theme="light"] .btn-eject:hover {
-  background: linear-gradient(180deg, #fff5f5 0%, #fef2f2 100%);
-  color: #dc2626;
-  border-color: rgba(220, 38, 38, 0.35);
-  box-shadow: inset 0 1px 0 #ffffff, 0 3px 8px rgba(220, 38, 38, 0.15);
-}
-
 [data-theme="light"] .speed-tag {
   background: #e2e8f0;
   color: #475569;
@@ -605,10 +575,5 @@ const diskTagLabel = computed(() => {
 
 [data-theme="light"] .speed-tag.usb4 {
   color: #d97706;
-}
-
-[data-theme="light"] .disk-badge.boot {
-  background: #fef3c7;
-  color: #b45309;
 }
 </style>

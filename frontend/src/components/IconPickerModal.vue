@@ -169,7 +169,7 @@ function resetToAuto() {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--modal-backdrop);
   backdrop-filter: blur(8px);
   z-index: 999;
   display: flex;
@@ -184,11 +184,11 @@ function resetToAuto() {
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  background: var(--modal-bg, rgba(13, 19, 33, 0.95));
+  background: var(--modal-bg);
   border: 1px solid var(--card-border);
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 40px var(--modal-backdrop);
   overflow: hidden;
 }
 

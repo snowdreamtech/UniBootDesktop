@@ -244,7 +244,7 @@ function closeModal() {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(7, 10, 18, 0.75);
+  background: var(--modal-backdrop);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -253,9 +253,9 @@ function closeModal() {
 }
 
 .glass-modal {
-  background: var(--modal-bg, rgba(18, 24, 38, 0.95));
-  border: 1px solid rgba(0, 229, 255, 0.25);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 229, 255, 0.1);
+  background: var(--modal-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 16px 40px var(--modal-backdrop);
   border-radius: 16px;
   width: 90%;
   max-width: 650px;
@@ -270,7 +270,7 @@ function closeModal() {
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--card-border);
 }
 
 .header-title {

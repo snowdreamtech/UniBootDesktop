@@ -91,6 +91,18 @@ body {
   --terminal-bg: rgba(10, 15, 28, 0.85);
   --terminal-border: rgba(255, 255, 255, 0.08);
   --terminal-text: #f1f5f9;
+
+  --modal-backdrop: rgba(0, 0, 0, 0.7);
+  --item-hover-bg: rgba(255, 255, 255, 0.05);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.15);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.28);
+
+  --badge-success-bg: rgba(16, 185, 129, 0.15);
+  --badge-success-text: #34d399;
+  --badge-danger-bg: rgba(239, 68, 68, 0.15);
+  --badge-danger-text: #f87171;
+  --badge-warning-bg: rgba(245, 158, 11, 0.15);
+  --badge-warning-text: #fbbf24;
 }
 
 [data-theme="light"] {
@@ -160,6 +172,18 @@ body {
   --terminal-bg: #f8fafc;
   --terminal-border: #cbd5e1;
   --terminal-text: #0f172a;
+
+  --modal-backdrop: rgba(15, 23, 42, 0.4);
+  --item-hover-bg: rgba(15, 23, 42, 0.04);
+  --scrollbar-thumb: rgba(15, 23, 42, 0.15);
+  --scrollbar-thumb-hover: rgba(15, 23, 42, 0.28);
+
+  --badge-success-bg: #dcfce7;
+  --badge-success-text: #15803d;
+  --badge-danger-bg: #fee2e2;
+  --badge-danger-text: #b91c1c;
+  --badge-warning-bg: #fef3c7;
+  --badge-warning-text: #b45309;
 }
 
 /* Global Select & Option Dropdown Light/Dark Theme Adaptations */
