@@ -1211,9 +1211,17 @@ function getFileIcon(filename: string): string {
   color: #34d399;
 }
 
+[data-theme="light"] .deploy-success-title {
+  color: #059669;
+}
+
 .deploy-success-desc {
   font-size: 0.78rem;
   color: #6ee7b7;
+}
+
+[data-theme="light"] .deploy-success-desc {
+  color: #047857;
 }
 
 .deploy-success-actions {
@@ -1239,6 +1247,12 @@ function getFileIcon(filename: string): string {
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
+}
+
+[data-theme="light"] .btn-eject-success {
+  border-color: #059669;
+  background: rgba(16, 185, 129, 0.15);
+  color: #047857;
 }
 
 .vm-box {
