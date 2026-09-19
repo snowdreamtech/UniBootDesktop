@@ -612,6 +612,13 @@ function showToast(msg: string, type: 'info' | 'warning' | 'error' | 'success' =
 function applyTheme(themeName?: string) {
   const theme = themeName === 'light' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', theme);
+  // Cache theme in localStorage so the inline script in index.html can
+  // apply it synchronously on next launch before any render, preventing flash.
+  try {
+    localStorage.setItem('unigo_theme_cache', theme);
+  } catch (e) {
+    // localStorage unavailable, ignore
+  }
 }
 
 async function loadConfig() {
