@@ -174,7 +174,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import AppHeader from './components/AppHeader.vue';
 import DiskPanel from './components/DiskPanel.vue';
 import DeployPanel from './components/DeployPanel.vue';
@@ -186,72 +185,20 @@ import SettingsModal from './components/SettingsModal.vue';
 import VentoyAlertModal from './components/VentoyAlertModal.vue';
 import DiagnosticsModal from './components/DiagnosticsModal.vue';
 import AboutModal from './components/AboutModal.vue';
-import type { LogItem } from './components/LogViewerModal.vue';
-import { t, currentLang, setLanguage } from './i18n';
-import { formatLogsToText } from './utils/logFormatter';
-import { logUserAction } from './utils/logger';
+import { t, currentLang } from './i18n';
+import { useToast } from './composables/useToast';
 import { useIsoManager } from './composables/useIsoManager';
 import { useVirtualMachine } from './composables/useVirtualMachine';
 import { useDiskSelection, getDiskFingerprint } from './composables/useDiskSelection';
 import { useDeployment } from './composables/useDeployment';
-import {
-  ExportLogs,
-  GetRecentLogs,
-  ClearLogs,
-  GetConfig,
-  SaveConfig,
-  ReloadAppMenu,
-} from '../wailsjs/go/main/App';
+import { useLogPanel } from './composables/useLogPanel';
+import { useAppSettings } from './composables/useAppSettings';
+import { useAppRuntimeEvents } from './composables/useAppRuntimeEvents';
 
-function selectLanguage(langVal: string) {
-  setLanguage(langVal);
-  saveLangToConfig(langVal);
-  ReloadAppMenu(langVal).catch((err: any) => {
-    console.warn('Failed to reload app menu:', err);
-  });
-}
+// 1. Global Toast
+const { toastMessage, toastType, showToast, dismissToast } = useToast();
 
-async function saveLangToConfig(langVal: string) {
-  try {
-    const cfg = await GetConfig();
-    if (cfg) {
-      cfg.language = langVal;
-      await SaveConfig(cfg);
-    }
-  } catch (e) {
-    console.error('Failed to save language config:', e);
-  }
-}
-
-
-
-
-const toastMessage = ref('');
-const toastType = ref<'info' | 'warning' | 'error' | 'success'>('info');
-let toastTimer: number | undefined;
-
-function showToast(msg: string, type: 'info' | 'warning' | 'error' | 'success' = 'info') {
-  const cleanMsg = msg ? msg.replace(/^[\s\uFE0F]*[⚠️❌🎉ℹ️✅🚨⚡️❗][\s\uFE0F]*/, '').trim() : '';
-  toastMessage.value = cleanMsg || msg;
-  toastType.value = type;
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = window.setTimeout(() => {
-    toastMessage.value = '';
-  }, 4000);
-}
-
-
-const settingsInitialTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
-const isSettingsOpen = ref(false);
-const isAboutOpen = ref(false);
-const currentGithubProxy = ref('');
-
-function openSettings(tab: 'general' | 'network' | 'uniboot' | 'ventoy' = 'general') {
-  settingsInitialTab.value = tab;
-  isSettingsOpen.value = true;
-  logUserAction('INFO', 'User opened settings modal', tab);
-}
-
+// 2. ISO Manager
 const {
   selectedIsoFiles,
   isoCopyStatus,
@@ -261,6 +208,7 @@ const {
   clearIsoFiles,
 } = useIsoManager(showToast);
 
+// 3. Disk Selection
 const {
   selectionMode,
   diskList,
@@ -301,6 +249,10 @@ const {
   },
 });
 
+// 4. App Settings & Theme (Declared early so openSettings callback can be passed to useDeployment)
+let openSettingsFn: (tab?: 'general' | 'network' | 'uniboot' | 'ventoy') => void;
+
+// 5. Deployment Engine
 const {
   activeMode,
   selectedFsType,
@@ -347,189 +299,10 @@ const {
   diskList,
   selectedIsoFiles,
   refreshDisks,
-  openSettings,
+  openSettings: (tab) => openSettingsFn(tab),
 });
 
-const runtimeLogs = ref<LogItem[]>([]);
-
-const savedLogCardVisible = localStorage.getItem('unigodesktop_log_card_visible');
-const isLogCardVisible = ref(savedLogCardVisible !== null ? savedLogCardVisible === 'true' : true);
-
-function toggleLogCard() {
-  isLogCardVisible.value = !isLogCardVisible.value;
-  localStorage.setItem('unigodesktop_log_card_visible', String(isLogCardVisible.value));
-}
-
-const savedAutoScroll = localStorage.getItem('unigodesktop_embedded_log_autoscroll');
-const embeddedAutoScroll = ref(savedAutoScroll !== null ? savedAutoScroll === 'true' : true);
-const currentEmbeddedLogFilter = ref<string>('ALL');
-
-watch(embeddedAutoScroll, (val) => {
-  localStorage.setItem('unigodesktop_embedded_log_autoscroll', String(val));
-});
-
-const logLevels = computed(() => [
-  { key: 'ALL', label: t('log.level_all') },
-  { key: 'INFO', label: t('log.level_info') },
-  { key: 'WARN', label: t('log.level_warn') },
-  { key: 'ERROR', label: t('log.level_error') },
-  { key: 'DEBUG', label: t('log.level_debug') }
-]);
-
-const filteredEmbeddedLogs = computed(() => {
-  return runtimeLogs.value.filter(log => {
-    if (currentEmbeddedLogFilter.value === 'ALL') return true;
-    return (log.level || '').toUpperCase() === currentEmbeddedLogFilter.value;
-  });
-});
-
-function handleCopyEmbeddedLogs() {
-  logUserAction('INFO', 'User copied embedded logs to clipboard');
-  if (filteredEmbeddedLogs.value.length === 0) {
-    showToast(t('log.empty'), 'info');
-    return;
-  }
-  const text = formatLogsToText(filteredEmbeddedLogs.value);
-  navigator.clipboard.writeText(text);
-  showToast(t('log.copied_toast'), 'success');
-}
-
-async function handleExportEmbeddedLogs() {
-  logUserAction('INFO', 'User exported embedded logs');
-  if (filteredEmbeddedLogs.value.length === 0) {
-    showToast(t('log.empty'), 'info');
-    return;
-  }
-  const text = formatLogsToText(filteredEmbeddedLogs.value);
-
-  try {
-    const filePath = await ExportLogs(
-      text,
-      t('dialog.exportTitle'),
-      t('dialog.logFilesFilter'),
-      t('dialog.textFilesFilter'),
-      t('dialog.allFilesFilter')
-    );
-    if (filePath) {
-      showToast(t('log.exported_path_toast', { path: filePath }), 'success');
-    }
-  } catch (e) {
-    console.error('Failed to export logs via native Wails dialog:', e);
-    // Fallback for web browser mode
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `unigodesktop-log-${new Date().toISOString().slice(0, 10)}.log`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast(t('log.exported_toast'), 'success');
-  }
-}
-
-function handleClearEmbeddedLogs() {
-  runtimeLogs.value = [];
-  ClearLogs().catch((err: any) => {
-    console.error('Failed to clear backend log buffer:', err);
-  });
-}
-
-function dismissToast() {
-  toastMessage.value = '';
-  logUserAction('DEBUG', 'User dismissed toast notification');
-}
-
-
-
-function applyTheme(themeName?: string) {
-  const theme = themeName === 'light' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', theme);
-  // Cache theme in localStorage so the inline script in index.html can
-  // apply it synchronously on next launch before any render, preventing flash.
-  try {
-    localStorage.setItem('unigo_theme_cache', theme);
-  } catch (e) {
-    // localStorage unavailable, ignore
-  }
-}
-
-async function loadConfig() {
-  if (window.go && window.go.main && window.go.main.App) {
-    try {
-      const cfg = await window.go.main.App.GetConfig();
-      if (cfg) {
-        if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
-        if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
-        if (cfg.language) {
-          setLanguage(cfg.language);
-          if (window.go.main.App.ReloadAppMenu) {
-            window.go.main.App.ReloadAppMenu(cfg.language).catch(() => {});
-          }
-        }
-        applyTheme(cfg.theme);
-        autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
-      }
-    } catch (e) {
-      console.error('Failed to load config:', e);
-    }
-  }
-}
-
-async function onSaveSettings(payload: any) {
-  let proxyUrl = '';
-  if (typeof payload === 'string') {
-    proxyUrl = payload;
-    currentGithubProxy.value = payload;
-  } else if (payload && typeof payload === 'object') {
-    proxyUrl = payload.githubProxy || '';
-    currentGithubProxy.value = proxyUrl;
-    if (payload.fileSystem) selectedFsType.value = payload.fileSystem as any;
-    if (payload.mode) activeMode.value = payload.mode as any;
-    if (payload.theme) applyTheme(payload.theme);
-    if (typeof payload.autoEjectAfterDeploy === 'boolean') autoEjectAfterDeploy.value = payload.autoEjectAfterDeploy;
-  }
-
-  if (window.go && window.go.main && window.go.main.App) {
-    try {
-      const configObj = typeof payload === 'object' && payload !== null ? {
-        mode: payload.mode || activeMode.value,
-        autoCheckUpdate: payload.autoCheckUpdate !== false,
-        theme: payload.theme || 'dark',
-        language: payload.language || 'auto',
-        githubProxy: proxyUrl,
-        fileSystem: payload.fileSystem || selectedFsType.value,
-        proxyProtocol: payload.proxyProtocol || 'direct',
-        proxyHost: payload.proxyHost || '',
-        proxyPort: Number(payload.proxyPort) || 0,
-        proxyUser: payload.proxyUser || '',
-        proxyPassword: payload.proxyPassword || '',
-        ventoyPath: payload.ventoyPath || '',
-        ventoySecureBoot: payload.ventoySecureBoot !== false,
-        ventoyPartitionStyle: payload.ventoyPartitionStyle || 'MBR',
-        ventoyReserveSpace: Number(payload.ventoyReserveSpace) || 0,
-        ventoyWin11Bypass: payload.ventoyWin11Bypass === true,
-        ventoyMenuTimeout: Number(payload.ventoyMenuTimeout) || 0,
-        autoEjectAfterDeploy: payload.autoEjectAfterDeploy === true,
-      } : {
-        mode: activeMode.value,
-        autoCheckUpdate: true,
-        theme: 'dark',
-        githubProxy: proxyUrl,
-        fileSystem: selectedFsType.value,
-      };
-
-      await window.go.main.App.SaveConfig(configObj as any);
-      if (configObj.language && window.go.main.App.ReloadAppMenu) {
-        await window.go.main.App.ReloadAppMenu(configObj.language);
-      }
-    } catch (e) {
-      console.error('Failed to save config:', e);
-    }
-  }
-}
-
-
-
+// 6. Virtual Machine / Hypervisor
 const {
   hypervisorList,
   selectedBootMode,
@@ -549,97 +322,60 @@ const {
   showToast,
 });
 
-
-
-
-
-
-onMounted(() => {
-  loadConfig();
-  refreshDisks();
-  checkQemu();
-  checkVentoyStatus();
-
-  GetRecentLogs().then((logs: any[]) => {
-    if (logs && logs.length > 0) {
-      runtimeLogs.value = logs.map((entry: any) => ({
-        id: entry.id,
-        timestamp: entry.timestamp,
-        level: entry.level || 'INFO',
-        message: entry.message || '',
-        details: entry.details || ''
-      }));
-    } else {
-      runtimeLogs.value = [{
-        timestamp: new Date().toISOString(),
-        level: 'INFO',
-        message: 'UniGoDesktop engine ready. Real-time log stream connected.'
-      }];
-    }
-  }).catch(() => {
-    runtimeLogs.value = [{
-      timestamp: new Date().toISOString(),
-      level: 'INFO',
-      message: 'UniGoDesktop engine ready. Real-time log stream connected.'
-    }];
-  });
-
-  if (window.runtime && window.runtime.EventsOn) {
-    window.runtime.EventsOn("log:entry", (entry: any) => {
-      if (entry) {
-        runtimeLogs.value.push({
-          id: entry.id,
-          timestamp: entry.timestamp,
-          level: entry.level || 'INFO',
-          message: entry.message || '',
-          details: entry.details || ''
-        });
-        if (runtimeLogs.value.length > 500) {
-          runtimeLogs.value.shift();
-        }
-      }
-    });
-    window.runtime.EventsOn("iso-copy-progress", (data: any) => {
-      if (data) {
-        isoCopyStatus.value = t('disk.writingImageProgress', { fileIndex: data.fileIndex, totalFiles: data.totalFiles, currentFile: data.currentFile, progress: data.progress.toFixed(1) });
-        deployProgress.value = Math.min(99, Math.max(50, Math.floor(50 + data.progress / 2)));
-        if (data.speedMBps !== undefined) deploySpeedMBps.value = data.speedMBps;
-        if (data.elapsedSec !== undefined) deployElapsedSec.value = data.elapsedSec;
-        if (data.etaSec !== undefined) deployEtaSec.value = data.etaSec;
-      }
-    });
-    window.runtime.EventsOn("disk-list-changed", () => {
-      if (!isDeploying.value) {
-        refreshDisks();
-      }
-    });
-    window.runtime.EventsOn("open-about-modal", () => {
-      isAboutOpen.value = true;
-    });
-    window.runtime.EventsOn("open-log-modal", () => {
-      const el = document.querySelector('.log-section-card');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-
-    if (typeof window.runtime.OnFileDrop === 'function') {
-      window.runtime.OnFileDrop((_x: number, _y: number, paths: string[]) => {
-        if (paths && paths.length > 0) {
-          addIsoFilesByPaths(paths);
-        }
-      }, false);
-    }
-  }
+// 7. Log Center Panel
+const {
+  isLogCardVisible,
+  embeddedAutoScroll,
+  currentEmbeddedLogFilter,
+  logLevels,
+  filteredEmbeddedLogs,
+  toggleLogCard,
+  handleCopyEmbeddedLogs,
+  handleExportEmbeddedLogs,
+  handleClearEmbeddedLogs,
+  appendLogEntry,
+  setInitialLogs,
+} = useLogPanel({
+  t,
+  showToast,
 });
 
-onUnmounted(() => {
-  if (window.runtime && typeof window.runtime.OnFileDropOff === 'function') {
-    window.runtime.OnFileDropOff();
-  }
+// 8. App Settings & Theme
+const {
+  settingsInitialTab,
+  isSettingsOpen,
+  isAboutOpen,
+  currentGithubProxy,
+  openSettings,
+  selectLanguage,
+  loadConfig,
+  onSaveSettings,
+} = useAppSettings({
+  selectedFsType,
+  activeMode,
+  autoEjectAfterDeploy,
 });
 
+openSettingsFn = openSettings;
 
+// 9. Wails Global Events & Lifecycle
+useAppRuntimeEvents({
+  t,
+  loadConfig,
+  refreshDisks,
+  checkQemu,
+  checkVentoyStatus,
+  setInitialLogs,
+  appendLogEntry,
+  isoCopyStatus,
+  deployProgress,
+  deploySpeedMBps,
+  deployElapsedSec,
+  deployEtaSec,
+  isDeploying,
+  isAboutOpen,
+  addIsoFilesByPaths,
+});
 </script>
 
 <style scoped>
