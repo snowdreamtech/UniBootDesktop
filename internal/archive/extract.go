@@ -13,6 +13,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/klauspost/compress/zstd"
 	"github.com/pierrec/lz4/v4"
@@ -167,14 +168,43 @@ func ExtractArchive(archiveData []byte, destDir string) error {
 	return nil
 }
 
+// validateExtractPath checks for path traversal attacks (Zip Slip vulnerability)
+func validateExtractPath(destDir, targetPath string) error {
+	// Clean and normalize both paths
+	cleanDest := filepath.Clean(destDir)
+	cleanTarget := filepath.Clean(targetPath)
+
+	// Ensure the target path is within destDir
+	if !strings.HasPrefix(cleanTarget, cleanDest) {
+		return fmt.Errorf("illegal path traversal: %s escapes destination %s", targetPath, destDir)
+	}
+
+	// Check for dangerous patterns
+	if strings.Contains(targetPath, "..") {
+		return fmt.Errorf("illegal path contains '..': %s", targetPath)
+	}
+
+	// Reject absolute paths in archive
+	if filepath.IsAbs(filepath.ToSlash(targetPath)) {
+		return fmt.Errorf("illegal absolute path in archive: %s", targetPath)
+	}
+
+	return nil
+}
+
 func extractZipFile(f *zip.File, destDir string) error {
-	path := filepath.Join(destDir, f.Name)
-	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+	// Validate path before extraction
+	targetPath := filepath.Join(destDir, f.Name)
+	if err := validateExtractPath(destDir, targetPath); err != nil {
+		return err
+	}
+
+	if err := os.MkdirAll(filepath.Dir(targetPath), 0755); err != nil {
 		return err
 	}
 
 	if f.FileInfo().IsDir() {
-		return os.MkdirAll(path, f.Mode())
+		return os.MkdirAll(targetPath, f.Mode())
 	}
 
 	// Handle symlinks in ZIP
@@ -188,11 +218,17 @@ func extractZipFile(f *zip.File, destDir string) error {
 		if err != nil {
 			return err
 		}
-		if err := os.Symlink(string(target), path); err != nil {
-			return fmt.Errorf("failed to create zip symlink %s: %w", path, err)
+
+		// Validate symlink target to prevent escape
+		symlinkTarget := string(target)
+		resolvedTarget := filepath.Join(filepath.Dir(targetPath), symlinkTarget)
+		if err := validateExtractPath(destDir, resolvedTarget); err != nil {
+			return fmt.Errorf("illegal symlink target: %w", err)
 		}
-		// For symlinks, Lchown is best effort
-		// os.Lchown(path, os.Getuid(), os.Getgid()) // Zip doesn't natively store UID/GID well
+
+		if err := os.Symlink(symlinkTarget, targetPath); err != nil {
+			return fmt.Errorf("failed to create zip symlink %s: %w", targetPath, err)
+		}
 		return nil
 	}
 
@@ -202,62 +238,78 @@ func extractZipFile(f *zip.File, destDir string) error {
 	}
 	defer rc.Close()
 
-	if err := writeToFile(path, rc); err != nil {
+	if err := writeToFile(targetPath, rc); err != nil {
 		return err
 	}
 
 	// Preserve permissions and modified time
-	if err := os.Chmod(path, f.Mode()); err != nil {
+	if err := os.Chmod(targetPath, f.Mode()); err != nil {
 		return fmt.Errorf("failed to chmod: %w", err)
 	}
-	if err := os.Chtimes(path, f.Modified, f.Modified); err != nil {
+	if err := os.Chtimes(targetPath, f.Modified, f.Modified); err != nil {
 		return fmt.Errorf("failed to chtimes: %w", err)
 	}
 	return nil
 }
 
 func extractTarFile(tr *tar.Reader, hdr *tar.Header, destDir string) error {
-	path := filepath.Join(destDir, hdr.Name)
+	// Validate path before extraction
+	targetPath := filepath.Join(destDir, hdr.Name)
+	if err := validateExtractPath(destDir, targetPath); err != nil {
+		return err
+	}
+
 	mode := os.FileMode(hdr.Mode)
 
-	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(targetPath), 0755); err != nil {
 		return err
 	}
 
 	switch hdr.Typeflag {
 	case tar.TypeDir:
-		if err := os.MkdirAll(path, mode); err != nil {
+		if err := os.MkdirAll(targetPath, mode); err != nil {
 			return err
 		}
 		// Best effort chown
-		os.Chown(path, hdr.Uid, hdr.Gid)
+		os.Chown(targetPath, hdr.Uid, hdr.Gid)
 		return nil
 	case tar.TypeSymlink:
-		if err := os.Symlink(hdr.Linkname, path); err != nil {
-			return fmt.Errorf("failed to create symlink %s: %w", path, err)
+		// Validate symlink target to prevent escape
+		resolvedTarget := filepath.Join(filepath.Dir(targetPath), hdr.Linkname)
+		if err := validateExtractPath(destDir, resolvedTarget); err != nil {
+			return fmt.Errorf("illegal symlink target: %w", err)
 		}
-		os.Lchown(path, hdr.Uid, hdr.Gid) // Best effort
+
+		if err := os.Symlink(hdr.Linkname, targetPath); err != nil {
+			return fmt.Errorf("failed to create symlink %s: %w", targetPath, err)
+		}
+		os.Lchown(targetPath, hdr.Uid, hdr.Gid) // Best effort
 		return nil
 	case tar.TypeLink:
+		// Validate hard link target
 		linkPath := filepath.Join(destDir, hdr.Linkname)
-		if err := os.Link(linkPath, path); err != nil {
-			return fmt.Errorf("failed to create hardlink %s: %w", path, err)
+		if err := validateExtractPath(destDir, linkPath); err != nil {
+			return fmt.Errorf("illegal hardlink target: %w", err)
+		}
+
+		if err := os.Link(linkPath, targetPath); err != nil {
+			return fmt.Errorf("failed to create hardlink %s: %w", targetPath, err)
 		}
 		return nil
 	case tar.TypeReg, tar.TypeRegA:
-		if err := writeToFile(path, tr); err != nil {
+		if err := writeToFile(targetPath, tr); err != nil {
 			return err
 		}
 
 		// Preserve permissions, times, and ownership
-		if err := os.Chmod(path, mode); err != nil {
+		if err := os.Chmod(targetPath, mode); err != nil {
 			return fmt.Errorf("failed to chmod: %w", err)
 		}
-		if err := os.Chtimes(path, hdr.AccessTime, hdr.ModTime); err != nil {
+		if err := os.Chtimes(targetPath, hdr.AccessTime, hdr.ModTime); err != nil {
 			return fmt.Errorf("failed to chtimes: %w", err)
 		}
 		// Chown is best-effort since it usually requires root
-		os.Chown(path, hdr.Uid, hdr.Gid)
+		os.Chown(targetPath, hdr.Uid, hdr.Gid)
 		return nil
 	default:
 		// Ignore other types like block, char, fifo
