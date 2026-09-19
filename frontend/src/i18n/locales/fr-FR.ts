@@ -437,6 +437,7 @@ export const frFr: TranslationDict = {
   "checksum.single_desc": "Calculer et vérifier le hachage de l'image sélectionnée",
   "checksum.inspect_single": "Voir les détails",
   "checksum.no_valid_hashes": "Impossible d'extraire des sommes de contrôle valides des fichiers sélectionnés",
+  "checksum.auto_algo_switched": "Algorithme détecté automatiquement et basculé vers {algo}",
     "checksum.card_title": "Vérification du Hash de l'image",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

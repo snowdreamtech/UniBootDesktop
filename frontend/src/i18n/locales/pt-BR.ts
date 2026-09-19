@@ -437,6 +437,7 @@ export const ptBr: TranslationDict = {
   "checksum.single_desc": "Calcular e verificar o hash da imagem selecionada",
   "checksum.inspect_single": "Ver detalhes",
   "checksum.no_valid_hashes": "Falha ao analisar checksums válidos dos arquivos selecionados",
+  "checksum.auto_algo_switched": "Algoritmo detectado automaticamente e alterado para {algo}",
     "checksum.card_title": "Verificação de Hash da Imagem",
 "progress.speed": "Velocidade de gravação",
   "progress.eta": "Tempo restante estimado",

@@ -437,6 +437,7 @@ export const urPk: TranslationDict = {
   "checksum.single_desc": "منتخب کردہ امیج کے ہیش کا الگ سے حساب لگائیں اور موازنہ کریں",
   "checksum.inspect_single": "تفصیلات دیکھیں",
   "checksum.no_valid_hashes": "منتخب کردہ فائلوں سے درست چیک سمز پارس کرنے میں ناکامی",
+  "checksum.auto_algo_switched": "الگورتھم خود بخود شناخت ہو گیا اور {algo} پر تبدیل ہو گیا",
     "checksum.card_title": "امیج ہیش کی توثیق",
 "progress.speed": "لکھنے کی رفتار",
   "progress.eta": "تخمینہ شدہ باقی وقت",

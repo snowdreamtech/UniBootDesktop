@@ -437,6 +437,7 @@ export const ukUa: TranslationDict = {
   "checksum.single_desc": "Обчислити та звірити хеш для обраного образу",
   "checksum.inspect_single": "Детальніше",
   "checksum.no_valid_hashes": "Не вдалося розпізнати дійсні контрольні суми з обраних файлів",
+  "checksum.auto_algo_switched": "Алгоритм автоматично виявлено та перемкнуто на {algo}",
     "checksum.card_title": "Перевірка хеш-суми образу",
 "progress.speed": "Швидкість запису",
   "progress.eta": "Очікуваний залишок часу",

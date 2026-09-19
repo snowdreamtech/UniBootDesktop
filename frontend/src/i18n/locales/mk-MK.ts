@@ -437,6 +437,7 @@ export const mkMk: TranslationDict = {
   "checksum.single_desc": "Пресметајте и споредете хеш за избраната слика",
   "checksum.inspect_single": "Види детали",
   "checksum.no_valid_hashes": "Не успеа читањето на валидни контролни суми од избраните датотеки",
+  "checksum.auto_algo_switched": "Алгоритмот е автоматски препознаен и префрлен на {algo}",
     "checksum.card_title": "Верификација на Хеш на слика",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

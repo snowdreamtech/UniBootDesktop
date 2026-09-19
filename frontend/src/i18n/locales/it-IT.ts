@@ -437,6 +437,7 @@ export const itIt: TranslationDict = {
   "checksum.single_desc": "Calcola e verifica l'hash per l'immagine selezionata",
   "checksum.inspect_single": "Mostra dettagli",
   "checksum.no_valid_hashes": "Impossibile analizzare checksum validi dai file selezionati",
+  "checksum.auto_algo_switched": "Algoritmo rilevato automaticamente e impostato su {algo}",
     "checksum.card_title": "Verifica Hash Immagine",
 "progress.speed": "Velocità di scrittura",
   "progress.eta": "Tempo stimato",

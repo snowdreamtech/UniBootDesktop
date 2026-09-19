@@ -437,6 +437,7 @@ export const taIn: TranslationDict = {
   "checksum.single_desc": "தேர்ந்தெடுக்கப்பட்ட படத்திற்கான ஹாஷை கணக்கிட்டு சரிபார்க்கவும்",
   "checksum.inspect_single": "விவரங்களைக் காட்டு",
   "checksum.no_valid_hashes": "தேர்ந்தெடுக்கப்பட்ட கோப்புகளிலிருந்து சரியான சரிபார்ப்புகளைப் பிரித்தெடுக்க முடியவில்லை",
+  "checksum.auto_algo_switched": "அல்காரிதம் தானாகக் கண்டறியப்பட்டு {algo} என மாற்றப்பட்டது",
     "checksum.card_title": "பட ஹாஷ் சரிபார்ப்பு",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

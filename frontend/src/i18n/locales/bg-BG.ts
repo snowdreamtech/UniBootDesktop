@@ -437,6 +437,7 @@ export const bgBg: TranslationDict = {
   "checksum.single_desc": "Изчисляване и сверяване на хеша за избрания образ",
   "checksum.inspect_single": "Виж подробности",
   "checksum.no_valid_hashes": "Неуспешно извличане на валидни контролни суми от избраните файлове",
+  "checksum.auto_algo_switched": "Алгоритъмът е автоматично разпознат и превключен на {algo}",
     "checksum.card_title": "Проверка на Хеш на изображението",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

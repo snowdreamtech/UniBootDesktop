@@ -443,6 +443,7 @@ export interface TranslationDict {
   "checksum.single_desc": string;
   "checksum.inspect_single": string;
   "checksum.no_valid_hashes": string;
+  "checksum.auto_algo_switched": string;
   "progress.speed": string;
   "progress.eta": string;
 }

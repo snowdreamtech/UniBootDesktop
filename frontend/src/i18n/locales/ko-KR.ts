@@ -437,6 +437,7 @@ export const koKr: TranslationDict = {
   "checksum.single_desc": "선택한 단일 이미지의 해시값을 개별 계산 및 대조",
   "checksum.inspect_single": "상세 보기",
   "checksum.no_valid_hashes": "선택한 파일에서 유효한 체크섬을 구문 분석하지 못했습니다",
+  "checksum.auto_algo_switched": "알고리즘을 자동으로 감지하여 {algo}(으)로 전환했습니다",
     "checksum.card_title": "이미지 해시 검증",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

@@ -437,6 +437,7 @@ export const idId: TranslationDict = {
   "checksum.single_desc": "Hitung dan cocokkan hash untuk gambar yang dipilih",
   "checksum.inspect_single": "Lihat Detail",
   "checksum.no_valid_hashes": "Gagal memproses checksum yang valid dari file yang dipilih",
+  "checksum.auto_algo_switched": "Algoritme terdeteksi secara otomatis dan beralih ke {algo}",
     "checksum.card_title": "Verifikasi Hash Gambar",
 "progress.speed": "Kecepatan Penulisan",
   "progress.eta": "Perkiraan Waktu Tersisa",

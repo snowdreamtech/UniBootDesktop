@@ -437,6 +437,7 @@ export const slSi: TranslationDict = {
   "checksum.single_desc": "Izračunajte in preverite zgoščeno vrednost za izbrani posnetek",
   "checksum.inspect_single": "Ogled podrobnosti",
   "checksum.no_valid_hashes": "Iz izbranih datotek ni bilo mogoče razčleniti veljavnih kontrolnih vsot",
+  "checksum.auto_algo_switched": "Algoritem je bil samodejno prepoznan in preklopljen na {algo}",
     "checksum.card_title": "Preverjanje Hasha slike",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

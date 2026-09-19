@@ -788,16 +788,62 @@ function readFileAsText(file: File): Promise<string> {
   });
 }
 
+// 智能推断 Hash 算法：优先通过文件名/扩展名判断，次选通过内容中 Hash 字符串长度判断
+function detectChecksumAlgorithm(fileNames: string[], hashes: string[]): string | null {
+  // 1. 优先检查文件名与扩展名
+  for (const name of fileNames) {
+    const lower = (name || '').toLowerCase();
+    if (lower.includes('sha256') || lower.endsWith('.sha256') || lower.endsWith('.sha256sum') || lower.endsWith('.sha256sums')) return 'sha256';
+    if (lower.includes('sha512') || lower.endsWith('.sha512') || lower.endsWith('.sha512sum') || lower.endsWith('.sha512sums')) return 'sha512';
+    if (lower.includes('sha384') || lower.endsWith('.sha384') || lower.endsWith('.sha384sum')) return 'sha384';
+    if (lower.includes('sha1') || lower.endsWith('.sha1') || lower.endsWith('.sha1sum')) return 'sha1';
+    if (lower.includes('md5') || lower.endsWith('.md5') || lower.endsWith('.md5sum') || lower.endsWith('.md5sums')) return 'md5';
+    if (lower.includes('crc32') || lower.endsWith('.crc') || lower.endsWith('.sfv')) return 'crc32';
+  }
+
+  // 2. 次选：根据已提取到的哈希值长度进行密码学特征推断
+  for (const h of hashes) {
+    const clean = (h || '').trim();
+    if (/^[a-fA-F0-9]{64}$/.test(clean)) return 'sha256';
+    if (/^[a-fA-F0-9]{128}$/.test(clean)) return 'sha512';
+    if (/^[a-fA-F0-9]{32}$/.test(clean)) return 'md5';
+    if (/^[a-fA-F0-9]{40}$/.test(clean)) return 'sha1';
+    if (/^[a-fA-F0-9]{96}$/.test(clean)) return 'sha384';
+    if (/^[a-fA-F0-9]{8}$/.test(clean)) return 'crc32';
+  }
+
+  return null;
+}
+
+// 格式化算法展示名称
+function formatAlgoDisplayName(algo: string): string {
+  switch (algo.toLowerCase()) {
+    case 'sha256': return 'SHA-256';
+    case 'sha512': return 'SHA-512';
+    case 'sha384': return 'SHA-384';
+    case 'sha1': return 'SHA-1';
+    case 'md5': return 'MD5';
+    case 'crc32': return 'CRC32';
+    default: return algo.toUpperCase();
+  }
+}
+
 // 监听单文件手动输入期望 Hash，实时同步到缓存与状态中，确保单文件手动修改与批量校验无缝兼容
 watch(expectedHashInput, (newVal) => {
   if (props.selectedIsoFiles.length > 0 && selectedChecksumIsoIndex.value < props.selectedIsoFiles.length) {
     const currentFile = props.selectedIsoFiles[selectedChecksumIsoIndex.value];
     const parsed = parseExpectedHashString(newVal, currentFile.name);
     if (parsed) {
+      const autoAlgo = detectChecksumAlgorithm([], [parsed]);
+      if (autoAlgo && autoAlgo !== selectedAlgo.value) {
+        selectedAlgo.value = autoAlgo;
+        currentChecksumAlgo.value = autoAlgo;
+      }
       checksumCache.value[currentFile.name] = parsed;
       const existing = isoChecksumStatuses.value[currentFile.name];
       if (existing) {
         existing.expected = parsed;
+        existing.algo = selectedAlgo.value;
         if (existing.calculated) {
           existing.status = existing.calculated.toLowerCase() === parsed.toLowerCase() ? 'match' : 'mismatch';
         }
@@ -842,6 +888,19 @@ async function handleSumsFileSelected(event: Event) {
 
   // 显示加载结果并同步所有 ISO 的校验状态
   if (totalLoaded > 0) {
+    // 自动检测校验文件对应的 Hash 算法并联动切换
+    const fileNames = files.map(f => f.name);
+    const allHashes = Object.values(checksumCache.value);
+    const detectedAlgo = detectChecksumAlgorithm(fileNames, allHashes);
+    let algoSwitchedMsg = '';
+
+    if (detectedAlgo && detectedAlgo !== selectedAlgo.value) {
+      selectedAlgo.value = detectedAlgo;
+      currentChecksumAlgo.value = detectedAlgo;
+      const displayAlgo = formatAlgoDisplayName(detectedAlgo);
+      algoSwitchedMsg = `\n${t('checksum.auto_algo_switched', { algo: displayAlgo })}`;
+    }
+
     // 自动为当前所有文件匹配期望值
     props.selectedIsoFiles.forEach(file => {
       const cached = checksumCache.value[file.name];
@@ -850,6 +909,7 @@ async function handleSumsFileSelected(event: Event) {
         if (existing && existing.calculated) {
           existing.expected = cached;
           existing.status = existing.calculated.toLowerCase() === cached.toLowerCase() ? 'match' : 'mismatch';
+          existing.algo = selectedAlgo.value;
         } else if (!existing) {
           isoChecksumStatuses.value[file.name] = {
             calculated: '',
@@ -869,7 +929,7 @@ async function handleSumsFileSelected(event: Event) {
       expectedHashInput.value = '';
     }
 
-    alert(t('checksum.cache_loaded', { count: totalHashes }));
+    alert(t('checksum.cache_loaded', { count: totalHashes }) + algoSwitchedMsg);
   } else {
     expectedHashInput.value = '';
     alert(t('checksum.no_valid_hashes'));

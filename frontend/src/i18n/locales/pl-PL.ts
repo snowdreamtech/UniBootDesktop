@@ -437,6 +437,7 @@ export const plPl: TranslationDict = {
   "checksum.single_desc": "Oblicz i porównaj skrót dla wybranego obrazu",
   "checksum.inspect_single": "Pokaż szczegóły",
   "checksum.no_valid_hashes": "Nie udało się przetworzyć prawidłowych sum kontrolnych z wybranych plików",
+  "checksum.auto_algo_switched": "Automatycznie wykryto algorytm i przełączono na {algo}",
     "checksum.card_title": "Weryfikacja Hasha Obrazu",
 "progress.speed": "Prędkość zapisu",
   "progress.eta": "Szacowany pozostały czas",

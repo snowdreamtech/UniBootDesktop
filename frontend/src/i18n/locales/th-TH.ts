@@ -437,6 +437,7 @@ export const thTh: TranslationDict = {
   "checksum.single_desc": "คำนวณและตรวจสอบแฮชสำหรับอิมเมจที่เลือก",
   "checksum.inspect_single": "ดูรายละเอียด",
   "checksum.no_valid_hashes": "ไม่สามารถแยกวิเคราะห์การตรวจสอบความถูกต้องจากไฟล์ที่เลือก",
+  "checksum.auto_algo_switched": "ตรวจพบอัลกอริทึมโดยอัตโนมัติและเปลี่ยนเป็น {algo}",
     "checksum.card_title": "ตรวจสอบ Hash ของอิมเมจ",
 "progress.speed": "ความเร็วในการเขียน",
   "progress.eta": "เวลาที่เหลือโดยประมาณ",

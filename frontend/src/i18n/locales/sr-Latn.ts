@@ -437,6 +437,7 @@ export const srLatn: TranslationDict = {
   "checksum.single_desc": "Izračunajte i proverite heš za odabrani odraz",
   "checksum.inspect_single": "Prikaži detalje",
   "checksum.no_valid_hashes": "Nije uspelo raščlanjivanje važećih kontrolnih suma iz izabranih datoteka",
+  "checksum.auto_algo_switched": "Algoritam je automatski prepoznat i prebačen na {algo}",
     "checksum.card_title": "Provera Hash-a slike",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

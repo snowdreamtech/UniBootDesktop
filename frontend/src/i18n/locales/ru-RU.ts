@@ -437,6 +437,7 @@ export const ruRu: TranslationDict = {
   "checksum.single_desc": "Расчет и проверка хеша для выбранного образа",
   "checksum.inspect_single": "Подробнее",
   "checksum.no_valid_hashes": "Не удалось извлечь контрольные суммы из выбранных файлов",
+  "checksum.auto_algo_switched": "Алгоритм автоматически определен и переключен на {algo}",
     "checksum.card_title": "Проверка хэша образа",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

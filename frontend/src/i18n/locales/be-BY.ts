@@ -437,6 +437,7 @@ export const beBy: TranslationDict = {
   "checksum.single_desc": "Разлік і праверка хэшу для абранага вобраза",
   "checksum.inspect_single": "Падрабязней",
   "checksum.no_valid_hashes": "Не ўдалося атрымаць сапраўдныя кантрольныя сумы з абраных файлаў",
+  "checksum.auto_algo_switched": "Алгарытм аўтаматычна вызначаны і пераключаны на {algo}",
     "checksum.card_title": "Праверка хэшу вобразу",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

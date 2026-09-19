@@ -437,6 +437,7 @@ export const nbNo: TranslationDict = {
   "checksum.single_desc": "Beregn og bekreft hash for det valgte avtrykket",
   "checksum.inspect_single": "Vis detaljer",
   "checksum.no_valid_hashes": "Kunne ikke analysere gyldige sjekksummer fra de valgte filene",
+  "checksum.auto_algo_switched": "Algoritme automatisk oppdaget og byttet til {algo}",
     "checksum.card_title": "Bilde Hash Verifisering",
 "progress.speed": "Skrivehastighet",
   "progress.eta": "Beregnet gjenstående tid",

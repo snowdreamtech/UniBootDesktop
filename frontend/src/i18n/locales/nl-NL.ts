@@ -437,6 +437,7 @@ export const nlNl: TranslationDict = {
   "checksum.single_desc": "Hash berekenen en verifiëren voor geselecteerde schijfkopie",
   "checksum.inspect_single": "Details bekijken",
   "checksum.no_valid_hashes": "Kon geen geldige controlesommen parsen uit de geselecteerde bestanden",
+  "checksum.auto_algo_switched": "Algoritme automatisch gedetecteerd en overgeschakeld naar {algo}",
     "checksum.card_title": "Image Hash Verificatie",
 "progress.speed": "Schrijfsnelheid",
   "progress.eta": "Geschatte resterende tijd",

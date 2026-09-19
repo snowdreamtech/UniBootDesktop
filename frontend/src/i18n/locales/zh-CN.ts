@@ -439,6 +439,7 @@ export const zhCn: TranslationDict = {
   "checksum.single_desc": "针对当前选中的单个镜像单独计算与核对 Hash 值",
   "checksum.inspect_single": "查看详情",
   "checksum.no_valid_hashes": "未能从所选文件中解析出有效的校验值",
+  "checksum.auto_algo_switched": "已自动识别并切换算法为 {algo}",
     "checksum.card_title": "镜像 Hash 校验",
 "progress.speed": "写入速度",
   "progress.eta": "预计剩余",

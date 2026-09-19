@@ -437,6 +437,7 @@ export const srCyrl: TranslationDict = {
   "checksum.single_desc": "Израчунајте и проверите хеш за одабрани одраз",
   "checksum.inspect_single": "Прикажи детаље",
   "checksum.no_valid_hashes": "Није успело рашчлањивање важећих контролних сума из изабраних датотека",
+  "checksum.auto_algo_switched": "Алгоритам је аутоматски препознат и пребачен на {algo}",
     "checksum.card_title": "Провера Хеш-а слике",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

@@ -437,6 +437,7 @@ export const caEs: TranslationDict = {
   "checksum.single_desc": "Calcula i verifica el resum de la imatge seleccionada",
   "checksum.inspect_single": "Veure detalls",
   "checksum.no_valid_hashes": "No s'han pogut analitzar sumes de verificació vàlides dels fitxers seleccionats",
+  "checksum.auto_algo_switched": "Algorisme detectat automàticament i canviat a {algo}",
     "checksum.card_title": "Verificació de Hash d'imatge",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

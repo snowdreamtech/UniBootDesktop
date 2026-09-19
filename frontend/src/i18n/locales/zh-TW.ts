@@ -437,6 +437,7 @@ export const zhTw: TranslationDict = {
   "checksum.single_desc": "針對目前選取的單個映像單獨計算與核對 Hash 值",
   "checksum.inspect_single": "檢視詳情",
   "checksum.no_valid_hashes": "未能從所選檔案中解析出有效的校驗值",
+  "checksum.auto_algo_switched": "已自動識別並切換演算法為 {algo}",
     "checksum.card_title": "鏡像 Hash 校驗",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

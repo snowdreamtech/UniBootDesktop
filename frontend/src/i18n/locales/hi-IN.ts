@@ -437,6 +437,7 @@ export const hiIn: TranslationDict = {
   "checksum.single_desc": "चयनित छवि के लिए हैश की अलग से गणना और मिलान करें",
   "checksum.inspect_single": "विवरण देखें",
   "checksum.no_valid_hashes": "चयनित फ़ाइलों से मान्य चेकसम पार्स करने में विफल",
+  "checksum.auto_algo_switched": "एल्गोरिदम स्वचालित रूप से पहचाना गया और {algo} पर स्विच किया गया",
     "checksum.card_title": "इमेज हैश सत्यापन",
 "progress.speed": "लिखने की गति",
   "progress.eta": "अनुमानित शेष समय",

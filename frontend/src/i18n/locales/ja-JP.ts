@@ -437,6 +437,7 @@ export const jaJp: TranslationDict = {
   "checksum.single_desc": "選択した単一イメージのハッシュ値を個別に計算・照合",
   "checksum.inspect_single": "詳細を表示",
   "checksum.no_valid_hashes": "選択したファイルから有効なチェックサムを解析できませんでした",
+  "checksum.auto_algo_switched": "アルゴリズムを自動検出して {algo} に切り替えました",
     "checksum.card_title": "イメージハッシュ検証",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

@@ -437,6 +437,7 @@ export const azAz: TranslationDict = {
   "checksum.single_desc": "Seçilmiş disk üçün heşi hesablayın və yoxlayın",
   "checksum.inspect_single": "Ətraflı bax",
   "checksum.no_valid_hashes": "Seçilmiş fayllardan etibarlı nəzarət cəmləri oxuna bilmədi",
+  "checksum.auto_algo_switched": "Alqoritm avtomatik müəyyən edildi və {algo} olaraq dəyişdirildi",
     "checksum.card_title": "Təsvirin Hash Yoxlanılması",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

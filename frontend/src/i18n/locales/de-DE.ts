@@ -437,6 +437,7 @@ export const deDe: TranslationDict = {
   "checksum.single_desc": "Hash für das ausgewählte Abbild einzeln berechnen und abgleichen",
   "checksum.inspect_single": "Details anzeigen",
   "checksum.no_valid_hashes": "Aus den ausgewählten Dateien konnten keine gültigen Prüfsummen gelesen werden",
+  "checksum.auto_algo_switched": "Algorithmus automatisch erkannt und auf {algo} umgestellt",
     "checksum.card_title": "Image-Hash-Überprüfung",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

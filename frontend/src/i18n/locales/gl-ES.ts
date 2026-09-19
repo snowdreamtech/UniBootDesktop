@@ -437,6 +437,7 @@ export const glEs: TranslationDict = {
   "checksum.single_desc": "Calcular e verificar o resumo da imaxe seleccionada",
   "checksum.inspect_single": "Ver detalles",
   "checksum.no_valid_hashes": "Non se puideron analizar sumas de verificación válidas dos ficheiros seleccionados",
+  "checksum.auto_algo_switched": "Algoritmo detectado automaticamente e cambiado a {algo}",
     "checksum.card_title": "Verificación de Hash de imaxe",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",
