@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <!-- Mode & Selection controls -->
+    <!-- Mode controls -->
     <div class="selection-controls">
       <div class="selection-mode-toggle">
         <button
@@ -25,33 +25,40 @@
           {{ t('disk.batch_mode') }}
         </button>
       </div>
-
-      <div v-if="selectionMode === 'batch'" class="batch-actions">
-        <button
-          class="btn-text"
-          :disabled="diskList.length === 0 || selectedDevices.size === diskList.length"
-          @click="emit('select-all')"
-        >
-          {{ t('disk.select_all') }}
-        </button>
-        <button
-          class="btn-text"
-          :disabled="selectedDevices.size === 0"
-          @click="emit('deselect-all')"
-        >
-          {{ t('disk.clear_select') }}
-        </button>
-        <button
-          class="btn-eject"
-          :disabled="selectedDevices.size === 0"
-          :title="t('disk.batch_eject')"
-          @click="emit('batch-eject')"
-        >
-          ⏏️ {{ t('disk.batch_eject') }}
-        </button>
-        <span class="selection-count">{{ t('disk.selected_count', { count: selectedDevices.size, total: diskList.length }) }}</span>
-      </div>
     </div>
+
+    <!-- Batch Actions Bar (另起一行，位于模式切换栏下方，防止窄窗口撑爆布局) -->
+    <transition name="slide-fade">
+      <div v-if="selectionMode === 'batch'" class="batch-actions-bar">
+        <div class="batch-btn-group">
+          <button
+            class="batch-btn"
+            :disabled="diskList.length === 0 || selectedDevices.size === diskList.length"
+            @click="emit('select-all')"
+          >
+            {{ t('disk.select_all') }}
+          </button>
+          <button
+            class="batch-btn"
+            :disabled="selectedDevices.size === 0"
+            @click="emit('deselect-all')"
+          >
+            {{ t('disk.clear_select') }}
+          </button>
+          <button
+            class="batch-btn btn-eject"
+            :disabled="selectedDevices.size === 0"
+            :title="t('disk.batch_eject')"
+            @click="emit('batch-eject')"
+          >
+            ⏏️ {{ t('disk.batch_eject') }}
+          </button>
+        </div>
+        <div class="selection-count-badge">
+          {{ t('disk.selected_count', { count: selectedDevices.size, total: diskList.length }) }}
+        </div>
+      </div>
+    </transition>
 
     <div class="disk-list">
       <DiskCard
@@ -198,52 +205,79 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   border-color: var(--subtab-btn-active-border);
 }
 
-.batch-actions {
+.batch-actions-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 0.5rem;
+  margin: -0.4rem 0 0.85rem 0;
+  padding: 0.45rem 0.65rem;
+  background: var(--subtab-container-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
 }
 
-.btn-text {
-  background: transparent;
-  border: none;
-  color: var(--accent-cyan);
+.batch-btn-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.batch-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  padding: 0.3rem 0.65rem;
   font-size: 0.78rem;
   font-weight: 600;
-  cursor: pointer;
-}
-
-.btn-text:hover:not(:disabled) {
-  text-decoration: underline;
-}
-
-.btn-text:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  pointer-events: none;
-  text-decoration: none;
-}
-
-.btn-eject {
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #f87171;
-  padding: 0.3rem 0.6rem;
   border-radius: 6px;
-  font-size: 0.78rem;
-  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-.btn-eject:disabled {
+.batch-btn:hover:not(:disabled) {
+  background: var(--accent-cyan);
+  color: #fff;
+  border-color: var(--accent-cyan);
+}
+
+.batch-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
-.selection-count {
+.batch-btn.btn-eject {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+}
+
+.batch-btn.btn-eject:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+}
+
+.selection-count-badge {
   font-size: 0.78rem;
+  font-weight: 600;
   color: var(--text-muted);
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
 }
 
 .disk-list {
