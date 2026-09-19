@@ -597,7 +597,10 @@ function handleDrop(e: DragEvent) {
   dragCounter = 0;
   isDragOver.value = false;
 
-  if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+  // In native Wails desktop runtime, OnFileDrop receives the system absolute paths.
+  // Only fall back to HTML5 File API in pure browser demo mode.
+  const isWailsDesktop = typeof (window as any).runtime?.OnFileDrop === 'function';
+  if (!isWailsDesktop && e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
     const paths: string[] = [];
     for (let i = 0; i < e.dataTransfer.files.length; i++) {
       const file = e.dataTransfer.files[i] as any;

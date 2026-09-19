@@ -559,10 +559,19 @@ function addIsoFilesByPaths(paths: string[]): number {
       invalidCount++;
       continue;
     }
-    if (selectedIsoFiles.value.some(f => f.path === p)) {
+    const name = p.split(/[/\\]/).pop() || p;
+    const existingIndex = selectedIsoFiles.value.findIndex(
+      f => f.path === p || f.name === name
+    );
+
+    if (existingIndex >= 0) {
+      // If the existing entry only has the filename, upgrade it to the full absolute path
+      if ((p.includes('/') || p.includes('\\')) && !selectedIsoFiles.value[existingIndex].path.includes('/') && !selectedIsoFiles.value[existingIndex].path.includes('\\')) {
+        selectedIsoFiles.value[existingIndex].path = p;
+      }
       continue;
     }
-    const name = p.split(/[/\\]/).pop() || p;
+
     selectedIsoFiles.value.push({ name, path: p });
     added++;
     logUserAction('INFO', 'Added image source file', `${name} (${p})`);
