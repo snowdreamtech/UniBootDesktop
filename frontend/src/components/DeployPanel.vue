@@ -581,8 +581,8 @@ function triggerSumsFilePick() {
   }
 }
 
-// 解析单个校验文件内容，提取所有文件名->哈希值映射
-function parseChecksumFileContent(content: string): ChecksumCache {
+// 解析校验文件内容，提取所有文件名->哈希值映射；支持纯哈希纯文本自动关联当前选中 ISO
+function parseChecksumFileContent(content: string, currentSelectedFileName?: string): ChecksumCache {
   const cache: ChecksumCache = {};
   const lines = content.split('\n');
 
@@ -590,16 +590,15 @@ function parseChecksumFileContent(content: string): ChecksumCache {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith('#')) continue;
 
-    // 支持格式：
-    // hash  filename
-    // hash *filename
-    // hash  ./path/to/filename
+    // 支持标准格式：hash  filename 或 hash *filename 或 hash  ./path/to/filename
     const match = trimmed.match(/^([a-fA-F0-9]+)\s+\*?(.+)$/);
     if (match) {
       const [, hash, filepath] = match;
-      // 提取文件名（去除路径）
       const filename = filepath.split('/').pop()?.trim() || filepath.trim();
       cache[filename] = hash.toLowerCase();
+    } else if (currentSelectedFileName && /^[a-fA-F0-9]{32,128}$/.test(trimmed)) {
+      // 兼容单文件纯哈希文件（无文件名）：自动关联给当前选中的 ISO
+      cache[currentSelectedFileName] = trimmed.toLowerCase();
     }
   }
 
@@ -620,6 +619,24 @@ function readFileAsText(file: File): Promise<string> {
   });
 }
 
+// 监听单文件手动输入期望 Hash，实时同步到缓存与状态中，确保单文件手动修改与批量校验无缝兼容
+watch(expectedHashInput, (newVal) => {
+  if (props.selectedIsoFiles.length > 0 && selectedChecksumIsoIndex.value < props.selectedIsoFiles.length) {
+    const currentFile = props.selectedIsoFiles[selectedChecksumIsoIndex.value];
+    const parsed = parseExpectedHashString(newVal, currentFile.name);
+    if (parsed) {
+      checksumCache.value[currentFile.name] = parsed;
+      const existing = isoChecksumStatuses.value[currentFile.name];
+      if (existing) {
+        existing.expected = parsed;
+        if (existing.calculated) {
+          existing.status = existing.calculated.toLowerCase() === parsed.toLowerCase() ? 'match' : 'mismatch';
+        }
+      }
+    }
+  }
+});
+
 async function handleSumsFileSelected(event: Event) {
   const target = event.target as HTMLInputElement;
   if (!target.files || target.files.length === 0) return;
@@ -628,12 +645,16 @@ async function handleSumsFileSelected(event: Event) {
   let totalLoaded = 0;
   let totalHashes = 0;
 
+  const currentFile = (props.selectedIsoFiles.length > 0 && selectedChecksumIsoIndex.value < props.selectedIsoFiles.length)
+    ? props.selectedIsoFiles[selectedChecksumIsoIndex.value]
+    : undefined;
+
   // 逐个读取所有选中的文件
   for (const file of files) {
     try {
       const text = await readFileAsText(file);
       if (text) {
-        const parsed = parseChecksumFileContent(text);
+        const parsed = parseChecksumFileContent(text, currentFile?.name);
         const hashCount = Object.keys(parsed).length;
 
         if (hashCount > 0) {
