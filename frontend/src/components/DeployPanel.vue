@@ -167,7 +167,8 @@
                 @change="handleSumsFileSelected"
               />
               <div v-if="parsedExpectedHash" class="match-badge" :class="isHashMatching ? 'match' : 'mismatch'">
-                {{ isHashMatching ? t('checksum.match_success') : t('checksum.match_mismatch') }}
+                <span class="badge-icon">{{ isHashMatching ? '✅' : '❌' }}</span>
+                <span>{{ isHashMatching ? t('checksum.match_success') : t('checksum.match_mismatch') }}</span>
               </div>
             </div>
           </div>

@@ -96,7 +96,8 @@
           <div class="spec-item">
             <span class="spec-label">{{ t('inspector.lbl_perm') }}</span>
             <span class="spec-val" :class="disk.writable !== false ? 'pass-val' : 'warn-val'">
-              {{ disk.writable !== false ? t('inspector.val_rw') : t('inspector.val_ro') }}
+              <span class="val-icon">{{ disk.writable !== false ? '✅' : '🔒' }}</span>
+              <span>{{ disk.writable !== false ? t('inspector.val_rw') : t('inspector.val_ro') }}</span>
             </span>
           </div>
 
@@ -120,7 +121,8 @@
           <div class="spec-item">
             <span class="spec-label">{{ t('inspector.lbl_smart') }}</span>
             <span class="spec-val" :class="disk.smartStatus === 'Verified' ? 'pass-val' : 'highlight'">
-              {{ disk.smartStatus === 'Verified' ? t('inspector.val_smart_good') : (disk.smartStatus || 'ℹ️ N/A') }}
+              <span class="val-icon" v-if="disk.smartStatus === 'Verified'">✅</span>
+              <span>{{ disk.smartStatus === 'Verified' ? t('inspector.val_smart_good') : (disk.smartStatus || 'ℹ️ N/A') }}</span>
             </span>
           </div>
 

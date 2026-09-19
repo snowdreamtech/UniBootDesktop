@@ -312,7 +312,8 @@
                   placeholder="/opt/ventoy or C:\ventoy-1.0.99\"
                 />
                 <button class="btn-secondary test-btn" :disabled="isValidatingVentoy" @click="checkVentoyCli">
-                  {{ isValidatingVentoy ? '...' : t('settings.testVentoyCli') }}
+                  <span class="btn-icon">⚡</span>
+                  <span>{{ isValidatingVentoy ? '...' : t('settings.testVentoyCli') }}</span>
                 </button>
               </div>
             </div>

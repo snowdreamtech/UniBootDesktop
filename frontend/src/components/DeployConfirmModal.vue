@@ -68,7 +68,7 @@
           <!-- Batch Disks Mixed Summary -->
           <div v-else-if="isMixed" class="batch-summary">
             <div class="mixed-group" v-if="ventoyDisks.length > 0">
-              <div class="group-title safe-title">{{ t("confirm.ventoy_group_title") }}</div>
+              <div class="group-title safe-title"><span class="group-icon">🛡️</span> {{ t("confirm.ventoy_group_title") }}</div>
               <div class="batch-device-list">
                 <div v-for="disk in ventoyDiskDetails" :key="disk.device" class="batch-device-detail safe-dev-tag">
                   <div class="batch-dev-header">
@@ -86,7 +86,7 @@
               </div>
             </div>
             <div class="mixed-group" v-if="blankDisks.length > 0">
-              <div class="group-title danger-title">{{ t("confirm.blank_group_title") }}</div>
+              <div class="group-title danger-title"><span class="group-icon">⚠️</span> {{ t("confirm.blank_group_title") }}</div>
               <div class="batch-device-list">
                 <div v-for="disk in blankDiskDetails" :key="disk.device" class="batch-device-detail danger-dev-tag">
                   <div class="batch-dev-header">
@@ -128,7 +128,8 @@
 
         <!-- ESP Partition Note Banner -->
         <div class="esp-note-banner">
-          {{ t("confirm.esp_partition_note") }}
+          <span class="banner-icon">⚠️</span>
+          <span>{{ t("confirm.esp_partition_note") }}</span>
         </div>
       </div>
 

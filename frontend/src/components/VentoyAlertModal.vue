@@ -11,19 +11,21 @@
 
       <div class="modal-body">
         <div class="alert-banner">
-          <div class="banner-title">{{ t('ventoy_alert.banner_title') }}</div>
+          <div class="banner-title"><span class="banner-icon">💡</span> {{ t('ventoy_alert.banner_title') }}</div>
           <div class="banner-desc">{{ message }}</div>
         </div>
 
         <div class="action-buttons-group">
           <button v-if="actionType === 'open_settings'" class="btn-primary flex-btn" @click="onAction">
-            {{ t('ventoy_alert.goto_settings') }}
+            <span class="btn-icon">⚙️</span>
+            <span>{{ t('ventoy_alert.goto_settings') }}</span>
           </button>
           <button class="btn-accent flex-btn" @click="onSwitchB">
-            {{ t('ventoy_alert.switch_b') }}
+            <span class="btn-icon">🚀</span>
+            <span>{{ t('ventoy_alert.switch_b') }}</span>
           </button>
           <button class="btn-secondary flex-btn" @click="close">
-            {{ t('ventoy_alert.close') }}
+            <span>{{ t('ventoy_alert.close') }}</span>
           </button>
         </div>
       </div>

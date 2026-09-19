@@ -40,7 +40,8 @@
           <div class="grid-item">
             <span class="item-label">{{ t('diag.safe_unplug_status') }}</span>
             <span class="item-value" :class="diagnostics.safeToUnplug ? 'text-success' : 'text-danger'">
-              {{ diagnostics.safeToUnplug ? t('diag.safe_to_unplug') : t('diag.not_safe_to_unplug') }}
+              <span class="val-icon">{{ diagnostics.safeToUnplug ? '✅' : '❌' }}</span>
+              <span>{{ diagnostics.safeToUnplug ? t('diag.safe_to_unplug') : t('diag.not_safe_to_unplug') }}</span>
             </span>
           </div>
         </div>
