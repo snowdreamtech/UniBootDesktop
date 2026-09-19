@@ -1203,6 +1203,8 @@ async function checkQemu() {
 }
 
 async function startDeployment() {
+  if (isDeploying.value) return;
+
   let targets: string[] = [];
   if (selectionMode.value === 'single') {
     if (!selectedDisk.value) return;

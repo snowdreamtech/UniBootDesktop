@@ -263,12 +263,17 @@ const logUserAction = (level: string, message: string, details: string = '') => 
   }
 };
 
+let isSubmitting = false;
+
 function close() {
+  isSubmitting = false;
   logUserAction('INFO', 'User closed deployment confirmation modal');
   emit("close");
 }
 
 function confirm() {
+  if (isSubmitting) return;
+  isSubmitting = true;
   emit("confirm");
   close();
 }
