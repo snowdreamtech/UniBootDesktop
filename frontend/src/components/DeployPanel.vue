@@ -71,9 +71,9 @@
         </div>
 
         <div v-else class="iso-file-list">
-          <div 
-            v-for="(file, index) in selectedIsoFiles" 
-            :key="index" 
+          <div
+            v-for="(file, index) in selectedIsoFiles"
+            :key="index"
             class="iso-file-item"
             :class="{ 'is-checksum-target': selectedChecksumIsoIndex === index }"
           >
@@ -83,8 +83,8 @@
               <div class="iso-file-path">{{ file.path }}</div>
             </div>
             <div class="iso-item-actions">
-              <button 
-                class="iso-check-hash-btn" 
+              <button
+                class="iso-check-hash-btn"
                 :class="{ active: selectedChecksumIsoIndex === index }"
                 :title="t('checksum.calc_btn')"
                 @click.stop="selectIsoForChecksum(index)"
@@ -145,21 +145,21 @@
               </button>
             </div>
             <div class="hash-compare-row">
-              <input 
-                v-model="expectedHashInput" 
-                type="text" 
-                class="hash-compare-input" 
-                :placeholder="t('checksum.compare_placeholder')" 
+              <input
+                v-model="expectedHashInput"
+                type="text"
+                class="hash-compare-input"
+                :placeholder="t('checksum.compare_placeholder')"
               />
               <button class="import-sums-btn" :title="t('checksum.import_file_title')" @click="triggerSumsFilePick">
                 📄 {{ t('checksum.import_file') }}
               </button>
-              <input 
-                type="file" 
-                ref="sumsFileInputRef" 
-                style="display: none;" 
-                accept=".txt,.sums,.sha256sums,.md5sums,.checksum,*" 
-                @change="handleSumsFileSelected" 
+              <input
+                type="file"
+                ref="sumsFileInputRef"
+                style="display: none;"
+                accept=".txt,.sums,.sha256sums,.md5sums,.checksum,*"
+                @change="handleSumsFileSelected"
               />
               <div v-if="parsedExpectedHash" class="match-badge" :class="isHashMatching ? 'match' : 'mismatch'">
                 {{ isHashMatching ? t('checksum.match_success') : t('checksum.match_mismatch') }}
@@ -182,9 +182,9 @@
       </div>
 
       <div v-if="isDeploying" class="deploy-active-container">
-        <ProgressBar 
-          :label="t('deploy.writing')" 
-          :progress="deployProgress" 
+        <ProgressBar
+          :label="t('deploy.writing')"
+          :progress="deployProgress"
         />
         <div class="deploy-stats-row">
           <span class="stat-badge" v-if="(speedMBps || 0) > 0">⚡ {{ t('deploy.stats_speed') }}: {{ speedMBps?.toFixed(1) }} MB/s</span>
@@ -196,9 +196,9 @@
         </button>
       </div>
 
-      <button 
+      <button
         v-else
-        class="btn-primary deploy-btn" 
+        class="btn-primary deploy-btn"
         :class="{ 'safe-btn': isNonDestructive, 'danger-disabled': activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid }"
         :disabled="isDeploying"
         :title="deployDisabledReason"
@@ -250,9 +250,9 @@
         <div class="vm-selector-container">
           <span class="vm-selector-label">{{ t('vm.boot_mode_label') }}</span>
           <div class="vm-select-wrapper">
-            <select 
-              :value="selectedBootMode" 
-              @change="e => emit('update:selectedBootMode', (e.target as HTMLSelectElement).value)" 
+            <select
+              :value="selectedBootMode"
+              @change="e => emit('update:selectedBootMode', (e.target as HTMLSelectElement).value)"
               class="vm-select boot-select"
             >
               <option value="uefi">{{ t('vm.boot_mode_uefi') }}</option>
@@ -275,9 +275,9 @@
         <div v-else class="vm-selector-container">
           <span class="vm-selector-label">{{ t('vm.select_vm_label') }}</span>
           <div class="vm-select-wrapper">
-            <select 
-              :value="selectedVMType" 
-              @change="e => emit('update:selectedVMType', (e.target as HTMLSelectElement).value)" 
+            <select
+              :value="selectedVMType"
+              @change="e => emit('update:selectedVMType', (e.target as HTMLSelectElement).value)"
               class="vm-select"
             >
               <option v-for="vm in hypervisorList" :key="vm.type" :value="vm.type">
@@ -295,9 +295,9 @@
         <div class="vm-tuning-item">
           <span class="vm-selector-label">⚙️ {{ t('vm.cfg_cpu') }}</span>
           <div class="vm-select-wrapper sm">
-            <select 
-              :value="vmCpuCores || 2" 
-              @change="e => emit('update:vmCpuCores', Number((e.target as HTMLSelectElement).value))" 
+            <select
+              :value="vmCpuCores || 2"
+              @change="e => emit('update:vmCpuCores', Number((e.target as HTMLSelectElement).value))"
               class="vm-select sm"
             >
               <option :value="1">1 {{ t('vm.cfg_core_singular') }}</option>
@@ -313,9 +313,9 @@
         <div class="vm-tuning-item">
           <span class="vm-selector-label">💾 {{ t('vm.cfg_ram') }}</span>
           <div class="vm-select-wrapper sm">
-            <select 
-              :value="vmMemoryMB || 2048" 
-              @change="e => emit('update:vmMemoryMB', Number((e.target as HTMLSelectElement).value))" 
+            <select
+              :value="vmMemoryMB || 2048"
+              @change="e => emit('update:vmMemoryMB', Number((e.target as HTMLSelectElement).value))"
               class="vm-select sm"
             >
               <option :value="1024">1 GB</option>
@@ -329,16 +329,16 @@
 
         <!-- Hardware Acceleration Toggle -->
         <label class="vm-checkbox-label">
-          <input 
-            type="checkbox" 
-            :checked="vmDisplayAccel !== false" 
-            @change="e => emit('update:vmDisplayAccel', (e.target as HTMLInputElement).checked)" 
+          <input
+            type="checkbox"
+            :checked="vmDisplayAccel !== false"
+            @change="e => emit('update:vmDisplayAccel', (e.target as HTMLInputElement).checked)"
           />
           ⚡ {{ t('vm.cfg_accel') }}
         </label>
       </div>
       <p class="vm-desc">
-        {{ t('vm.target') }} 
+        {{ t('vm.target') }}
         <strong v-if="activeVmTargetDevice" class="target-highlight">
           {{ activeVmTargetName }} ({{ activeVmTargetDevice }})
         </strong>
@@ -346,9 +346,9 @@
           {{ t('vm.no_disk_warn') }}
         </span>
       </p>
-      <button 
-        class="vm-launch-btn" 
-        :disabled="isVmDisabled" 
+      <button
+        class="vm-launch-btn"
+        :disabled="isVmDisabled"
         :title="vmDisabledReason"
         @click="emit('launch-vm')"
       >
@@ -452,7 +452,7 @@ function selectIsoForChecksum(index: number) {
 function parseExpectedHashString(rawInput: string, currentFileName: string): string {
   if (!rawInput) return '';
   const trimmed = rawInput.trim();
-  
+
   // If it's a multi-line checksum file content (e.g. SHA256SUMS file)
   if (trimmed.includes('\n')) {
     const lines = trimmed.split('\n');
@@ -466,7 +466,7 @@ function parseExpectedHashString(rawInput: string, currentFileName: string): str
       }
     }
   }
-  
+
   // Single line or direct hash string
   const parts = trimmed.split(/\s+/);
   return parts[0].toLowerCase();
@@ -498,7 +498,18 @@ function handleSumsFileSelected(event: Event) {
   reader.onload = (e) => {
     const text = e.target?.result as string;
     if (text) {
-      expectedHashInput.value = text;
+      // Parse the file content and extract only the matching SHA for current file
+      const targetIdx = selectedChecksumIsoIndex.value < props.selectedIsoFiles.length ? selectedChecksumIsoIndex.value : 0;
+      const currentFileName = props.selectedIsoFiles.length > 0 ? props.selectedIsoFiles[targetIdx].name : '';
+      const extractedHash = parseExpectedHashString(text, currentFileName);
+
+      // Only set the extracted hash, not the entire file content
+      if (extractedHash) {
+        expectedHashInput.value = extractedHash;
+      } else {
+        // If no match found, keep it empty
+        expectedHashInput.value = '';
+      }
     }
   };
   reader.readAsText(file);
