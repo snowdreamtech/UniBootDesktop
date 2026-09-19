@@ -158,7 +158,8 @@
                 type="file"
                 ref="sumsFileInputRef"
                 style="display: none;"
-                accept=".txt,.sums,.sha256sums,.md5sums,.checksum,*"
+                accept=".txt,.sums,.sha256sums,.md5sums,.sha512sums,.checksum,*"
+                multiple
                 @change="handleSumsFileSelected"
               />
               <div v-if="parsedExpectedHash" class="match-badge" :class="isHashMatching ? 'match' : 'mismatch'">
@@ -433,15 +434,42 @@ const expectedHashInput = ref('');
 const isHashCopied = ref(false);
 const sumsFileInputRef = ref<HTMLInputElement | null>(null);
 
+// SHA 缓存：文件名 -> 哈希值映射
+interface ChecksumCache {
+  [filename: string]: string;
+}
+const checksumCache = ref<ChecksumCache>({});
+const loadedSumsFileCount = ref(0);
+
 watch(() => props.selectedIsoFiles, (newFiles: any[]) => {
   if (selectedChecksumIsoIndex.value >= newFiles.length) {
     selectedChecksumIsoIndex.value = 0;
   }
   calculatedHash.value = '';
+
+  // 当选择新 ISO 时，自动从缓存中查找期望值
+  if (newFiles.length > 0 && selectedChecksumIsoIndex.value < newFiles.length) {
+    const currentFile = newFiles[selectedChecksumIsoIndex.value];
+    const cachedHash = checksumCache.value[currentFile.name];
+    if (cachedHash && !expectedHashInput.value) {
+      expectedHashInput.value = cachedHash;
+    }
+  }
 }, { deep: true });
 
 watch(selectedChecksumIsoIndex, () => {
   calculatedHash.value = '';
+
+  // 切换文件时，自动从缓存加载期望值
+  if (props.selectedIsoFiles.length > 0 && selectedChecksumIsoIndex.value < props.selectedIsoFiles.length) {
+    const currentFile = props.selectedIsoFiles[selectedChecksumIsoIndex.value];
+    const cachedHash = checksumCache.value[currentFile.name];
+    if (cachedHash) {
+      expectedHashInput.value = cachedHash;
+    } else {
+      expectedHashInput.value = '';
+    }
+  }
 });
 
 function selectIsoForChecksum(index: number) {
@@ -490,29 +518,93 @@ function triggerSumsFilePick() {
   }
 }
 
-function handleSumsFileSelected(event: Event) {
+// 解析单个校验文件内容，提取所有文件名->哈希值映射
+function parseChecksumFileContent(content: string): ChecksumCache {
+  const cache: ChecksumCache = {};
+  const lines = content.split('\n');
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+
+    // 支持格式：
+    // hash  filename
+    // hash *filename
+    // hash  ./path/to/filename
+    const match = trimmed.match(/^([a-fA-F0-9]+)\s+\*?(.+)$/);
+    if (match) {
+      const [, hash, filepath] = match;
+      // 提取文件名（去除路径）
+      const filename = filepath.split('/').pop()?.trim() || filepath.trim();
+      cache[filename] = hash.toLowerCase();
+    }
+  }
+
+  return cache;
+}
+
+// 辅助函数：读取文件为文本
+function readFileAsText(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      resolve(e.target?.result as string || '');
+    };
+    reader.onerror = () => {
+      reject(reader.error);
+    };
+    reader.readAsText(file);
+  });
+}
+
+async function handleSumsFileSelected(event: Event) {
   const target = event.target as HTMLInputElement;
   if (!target.files || target.files.length === 0) return;
-  const file = target.files[0];
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const text = e.target?.result as string;
-    if (text) {
-      // Parse the file content and extract only the matching SHA for current file
-      const targetIdx = selectedChecksumIsoIndex.value < props.selectedIsoFiles.length ? selectedChecksumIsoIndex.value : 0;
-      const currentFileName = props.selectedIsoFiles.length > 0 ? props.selectedIsoFiles[targetIdx].name : '';
-      const extractedHash = parseExpectedHashString(text, currentFileName);
 
-      // Only set the extracted hash, not the entire file content
-      if (extractedHash) {
-        expectedHashInput.value = extractedHash;
-      } else {
-        // If no match found, keep it empty
-        expectedHashInput.value = '';
+  const files = Array.from(target.files);
+  let totalLoaded = 0;
+  let totalHashes = 0;
+
+  // 逐个读取所有选中的文件
+  for (const file of files) {
+    try {
+      const text = await readFileAsText(file);
+      if (text) {
+        const parsed = parseChecksumFileContent(text);
+        const hashCount = Object.keys(parsed).length;
+
+        if (hashCount > 0) {
+          // 合并到缓存中
+          Object.assign(checksumCache.value, parsed);
+          totalLoaded++;
+          totalHashes += hashCount;
+        }
+      }
+    } catch (err) {
+      console.error(`Failed to read file ${file.name}:`, err);
+    }
+  }
+
+  loadedSumsFileCount.value = totalLoaded;
+
+  // 显示加载结果
+  if (totalLoaded > 0) {
+    const message = totalLoaded === 1
+      ? `✅ 已加载 ${totalHashes} 个文件的校验值`
+      : `✅ 已加载 ${totalLoaded} 个校验文件，共 ${totalHashes} 个文件的校验值`;
+    alert(message);
+
+    // 自动为当前选中的文件匹配期望值
+    if (props.selectedIsoFiles.length > 0 && selectedChecksumIsoIndex.value < props.selectedIsoFiles.length) {
+      const currentFile = props.selectedIsoFiles[selectedChecksumIsoIndex.value];
+      const cachedHash = checksumCache.value[currentFile.name];
+      if (cachedHash) {
+        expectedHashInput.value = cachedHash;
       }
     }
-  };
-  reader.readAsText(file);
+  } else {
+    alert('⚠️ 未能从所选文件中解析出有效的校验值');
+  }
 }
 
 async function handleCalculateChecksum() {
