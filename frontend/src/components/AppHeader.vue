@@ -13,14 +13,16 @@
         :class="{ active: activeMode === 'cloud' }"
         @click="emit('select-mode', 'cloud')"
       >
-        ⚡ {{ t('mode.cloud') }}
+        <span class="btn-icon">⚡</span>
+        <span>{{ t('mode.cloud') }}</span>
       </button>
       <button 
         class="tab-btn" 
         :class="{ active: activeMode === 'hybrid' }"
         @click="emit('select-mode', 'hybrid')"
       >
-        🛠️ {{ t('mode.hybrid') }}
+        <span class="btn-icon">🛠️</span>
+        <span>{{ t('mode.hybrid') }}</span>
       </button>
 
       <!-- Header Quick Language Switcher Dropdown -->
@@ -101,7 +103,7 @@ const isLangMenuOpen = ref(false);
 const langDropdownRef = ref<HTMLElement | null>(null);
 
 const langOptions = computed(() => [
-  { value: 'auto', label: '🌐 ' + t('common.autoDetect') },
+  { value: 'auto', label: t('common.autoDetect') },
   ...SUPPORTED_LANGUAGES.map(item => ({
     value: item.code,
     label: item.nativeName
@@ -110,7 +112,7 @@ const langOptions = computed(() => [
 
 const currentLangLabel = computed(() => {
   if (props.currentLang === 'auto') {
-    return '🌐 ' + t('common.langAuto');
+    return t('common.langAuto');
   }
   const opt = langOptions.value.find(o => o.value === props.currentLang);
   return opt ? opt.label : t('common.lang');

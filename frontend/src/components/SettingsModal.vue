@@ -56,13 +56,13 @@
         <div v-if="activeTab === 'general'" class="tab-content">
           <div class="settings-section">
             <h4 class="section-title">
-              <span>⚙️ {{ t('settings.tab_general') }}</span>
+              <span>{{ t('settings.tab_general') }}</span>
               <span class="badge info">{{ t('settings.realtime_save') }}</span>
             </h4>
 
             <div class="grid-form">
               <div class="form-group highlight-form-group">
-                <label class="form-label highlight-label">🌐 {{ t('settings.language') }}</label>
+                <label class="form-label highlight-label">{{ t('settings.language') }}</label>
                 <CustomSelect
                   v-model="appLanguage"
                   :options="languageSelectOptions"
@@ -144,7 +144,7 @@
           <!-- Section 2A: GitHub Proxy Acceleration -->
           <div class="settings-section">
             <h4 class="section-title">
-              <span>🌐 {{ t('settings.github_proxy_title') }}</span>
+              <span>{{ t('settings.github_proxy_title') }}</span>
             </h4>
 
             <div class="form-group">
@@ -159,7 +159,8 @@
 
             <div class="network-test-row">
               <button class="btn-secondary test-btn" :disabled="isTestingNet" @click="testConnection">
-                {{ isTestingNet ? t('settings.testing_net') : t('settings.test_net') }}
+                <span class="btn-icon">⚡</span>
+                <span>{{ isTestingNet ? t('settings.testing_net') : t('settings.test_net') }}</span>
               </button>
               <span v-if="netTestResult" class="test-result" :class="netTestSuccess ? 'success' : 'error'">
                 {{ netTestResult }}
@@ -170,7 +171,7 @@
           <!-- Section 2B: System Network Proxy -->
           <div class="settings-section margin-top">
             <h4 class="section-title">
-              <span>🔌 {{ t('settings.system_proxy') }}</span>
+              <span>{{ t('settings.system_proxy') }}</span>
             </h4>
 
             <div class="grid-form">
@@ -407,7 +408,7 @@ import CustomSelect from './CustomSelect.vue';
 import { setLanguage, t, SUPPORTED_LANGUAGES } from '../i18n';
 
 const languageSelectOptions = computed(() => [
-  { value: 'auto', label: '🌐 ' + t('common.autoDetect') },
+  { value: 'auto', label: t('common.autoDetect') },
   ...SUPPORTED_LANGUAGES.map(item => ({
     value: item.code,
     label: item.nativeName
