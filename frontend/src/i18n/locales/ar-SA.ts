@@ -438,6 +438,8 @@ export const arSa: TranslationDict = {
   "checksum.inspect_single": "عرض التفاصيل",
   "checksum.no_valid_hashes": "فشل تحليل قيم التحقق الصالحة من الملفات المحددة",
   "checksum.auto_algo_switched": "تم اكتشاف الخوارزمية تلقائياً والتبديل إلى {algo}",
+  "checksum.expand": "التحقق من الهاش",
+  "checksum.collapse": "طي التحقق",
     "checksum.card_title": "التحقق من تجزئة الصورة (Hash)",
 "progress.speed": "سرعة الكتابة",
   "progress.eta": "الوقت المتبقي",

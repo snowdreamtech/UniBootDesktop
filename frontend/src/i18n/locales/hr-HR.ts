@@ -438,6 +438,8 @@ export const hrHr: TranslationDict = {
   "checksum.inspect_single": "Prikaži detalje",
   "checksum.no_valid_hashes": "Nije uspjelo raščlanjivanje valjanih kontrolnih suma iz odabranih datoteka",
   "checksum.auto_algo_switched": "Algoritam je automatski prepoznat i prebačen na {algo}",
+  "checksum.expand": "Provjeri Hash",
+  "checksum.collapse": "Sažmi provjeru",
     "checksum.card_title": "Provjera Hash slikovne datoteke",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

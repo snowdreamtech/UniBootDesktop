@@ -131,15 +131,33 @@
         </div>
 
         <div v-if="selectedIsoFiles.length > 0" class="iso-footer">
-          <span class="iso-count-summary">{{ t('iso.summary', { count: selectedIsoFiles.length }) }}</span>
+          <!-- Left safe action group: summary count + toggle checksum button -->
+          <div class="iso-footer-left">
+            <span class="iso-count-summary">{{ t('iso.summary', { count: selectedIsoFiles.length }) }}</span>
+            <button
+              class="btn-toggle-checksum"
+              :class="{ active: isChecksumPanelExpanded }"
+              :title="isChecksumPanelExpanded ? t('checksum.collapse') : t('checksum.expand')"
+              @click="isChecksumPanelExpanded = !isChecksumPanelExpanded"
+            >
+              <span class="btn-icon">🔍</span>
+              <span>{{ isChecksumPanelExpanded ? t('checksum.collapse') : t('checksum.expand') }}</span>
+              <span class="caret-icon">{{ isChecksumPanelExpanded ? '▴' : '▾' }}</span>
+              <span v-if="hasAnyChecksumResult" class="checksum-mini-badge" :class="{ 'all-match': isAllBatchMatched }">
+                {{ isAllBatchMatched ? '✅' : '⚠️' }}
+              </span>
+            </button>
+          </div>
+
+          <!-- Right isolated danger action: clear list button -->
           <button class="btn-clear-iso" :title="t('iso.clear')" @click="emit('clear-iso')">
             <span class="btn-icon">🗑️</span>
             <span>{{ t('iso.clear') }}</span>
           </button>
         </div>
 
-        <!-- Checksum Verification Card -->
-        <div v-if="selectedIsoFiles.length > 0" class="checksum-container">
+        <!-- Checksum Verification Card (Expandable Drawer) -->
+        <div v-if="selectedIsoFiles.length > 0 && isChecksumPanelExpanded" class="checksum-container">
           <!-- Permanent file input for checksum sums files -->
           <input
             type="file"
@@ -654,6 +672,12 @@ const isBatchCalculating = ref(false);
 const batchProgress = ref({ current: 0, total: 0, matched: 0, mismatched: 0 });
 const cachedHashCount = computed(() => Object.keys(checksumCache.value).length);
 const checksumActiveTab = ref<'batch' | 'single'>('batch');
+const isChecksumPanelExpanded = ref(false);
+const hasAnyChecksumResult = computed(() => {
+  return Object.values(isoChecksumStatuses.value).some(
+    s => s && (s.status === 'match' || s.status === 'mismatch')
+  );
+});
 
 // 智能默认聚焦 Tab：当镜像数量从 <= 1 增加到多个时，自动聚焦「批量校验」；仅有 1 个或没有时聚焦「单个校验」
 watch(() => props.selectedIsoFiles.length, (newCount, oldCount) => {
@@ -683,6 +707,7 @@ watch(() => props.selectedIsoFiles, (newFiles: any[]) => {
 function inspectSingleIso(index: number) {
   selectedChecksumIsoIndex.value = index;
   checksumActiveTab.value = 'single';
+  isChecksumPanelExpanded.value = true;
 }
 
 watch(selectedChecksumIsoIndex, () => {
@@ -1657,9 +1682,58 @@ function getFileIcon(filename: string): string {
   border-top: 1px dashed var(--card-border);
 }
 
+.iso-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .iso-count-summary {
   font-size: 0.75rem;
   color: var(--text-muted);
+}
+
+.btn-toggle-checksum {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.65rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-toggle-checksum .btn-icon {
+  font-size: 0.72rem;
+}
+
+.btn-toggle-checksum .caret-icon {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.btn-toggle-checksum:hover {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.btn-toggle-checksum.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.checksum-mini-badge {
+  font-size: 0.68rem;
+  line-height: 1;
+  margin-left: 0.1rem;
 }
 
 .btn-clear-iso {
@@ -2389,6 +2463,24 @@ function getFileIcon(filename: string): string {
 
 [data-theme="light"] .iso-footer {
   border-top-color: #cbd5e1;
+}
+
+[data-theme="light"] .btn-toggle-checksum {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+[data-theme="light"] .btn-toggle-checksum:hover {
+  background: #e2e8f0;
+  border-color: #0284c7;
+  color: #0284c7;
+}
+
+[data-theme="light"] .btn-toggle-checksum.active {
+  background: rgba(2, 132, 199, 0.1);
+  border-color: #0284c7;
+  color: #0284c7;
 }
 
 [data-theme="light"] .vm-box {

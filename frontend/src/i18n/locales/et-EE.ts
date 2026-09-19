@@ -438,6 +438,8 @@ export const etEe: TranslationDict = {
   "checksum.inspect_single": "Vaata detaile",
   "checksum.no_valid_hashes": "Valitud failidest ei õnnestunud kehtivaid kontrollsummasid parssida",
   "checksum.auto_algo_switched": "Algoritm tuvastati automaatselt ja lülitati ümber {algo}",
+  "checksum.expand": "Kontrolli räsi",
+  "checksum.collapse": "Ahenda kontroll",
     "checksum.card_title": "Tõmmise Hashi kontrollimine",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

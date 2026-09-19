@@ -438,6 +438,8 @@ export const roRo: TranslationDict = {
   "checksum.inspect_single": "Vezi detalii",
   "checksum.no_valid_hashes": "Nu s-au putut analiza sume de control valide din fișierele selectate",
   "checksum.auto_algo_switched": "Algoritm detectat automat și comutat la {algo}",
+  "checksum.expand": "Verifică Hash",
+  "checksum.collapse": "Restrânge verificarea",
     "checksum.card_title": "Verificare Hash Imagine",
 "progress.speed": "Viteză de scriere",
   "progress.eta": "Timp rămas estimat",

@@ -438,6 +438,8 @@ export const plPl: TranslationDict = {
   "checksum.inspect_single": "Pokaż szczegóły",
   "checksum.no_valid_hashes": "Nie udało się przetworzyć prawidłowych sum kontrolnych z wybranych plików",
   "checksum.auto_algo_switched": "Automatycznie wykryto algorytm i przełączono na {algo}",
+  "checksum.expand": "Weryfikuj Hash",
+  "checksum.collapse": "Zwiń weryfikację",
     "checksum.card_title": "Weryfikacja Hasha Obrazu",
 "progress.speed": "Prędkość zapisu",
   "progress.eta": "Szacowany pozostały czas",

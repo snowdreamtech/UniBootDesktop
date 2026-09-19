@@ -438,6 +438,8 @@ export const csCz: TranslationDict = {
   "checksum.inspect_single": "Zobrazit podrobnosti",
   "checksum.no_valid_hashes": "Z vybraných souborů se nepodařilo načíst platné kontrolní součty",
   "checksum.auto_algo_switched": "Algoritmus byl automaticky rozpoznán a přepnut na {algo}",
+  "checksum.expand": "Ověřit kontrolní součet",
+  "checksum.collapse": "Sbalit ověření",
     "checksum.card_title": "Ověření Hash obrazu",
 "progress.speed": "Rychlost zápisu",
   "progress.eta": "Odhadovaný zbývající čas",

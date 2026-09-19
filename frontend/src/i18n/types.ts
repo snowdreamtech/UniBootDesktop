@@ -444,6 +444,8 @@ export interface TranslationDict {
   "checksum.inspect_single": string;
   "checksum.no_valid_hashes": string;
   "checksum.auto_algo_switched": string;
+  "checksum.expand": string;
+  "checksum.collapse": string;
   "progress.speed": string;
   "progress.eta": string;
 }

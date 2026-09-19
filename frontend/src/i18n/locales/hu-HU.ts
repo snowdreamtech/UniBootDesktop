@@ -438,6 +438,8 @@ export const huHu: TranslationDict = {
   "checksum.inspect_single": "Részletek megtekintése",
   "checksum.no_valid_hashes": "Nem sikerült érvényes ellenőrző összegeket elemezni a kijelölt fájlokból",
   "checksum.auto_algo_switched": "Az algoritmus automatikusan felismerve és átváltva erre: {algo}",
+  "checksum.expand": "Hash ellenőrzése",
+  "checksum.collapse": "Ellenőrzés összecsukása",
     "checksum.card_title": "Képfájl Hash ellenőrzése",
 "progress.speed": "Írási sebesség",
   "progress.eta": "Becsült hátralévő idő",

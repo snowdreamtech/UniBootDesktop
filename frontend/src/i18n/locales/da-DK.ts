@@ -438,6 +438,8 @@ export const daDk: TranslationDict = {
   "checksum.inspect_single": "Vis detaljer",
   "checksum.no_valid_hashes": "Kunne ikke analysere gyldige tjeksummer fra de valgte filer",
   "checksum.auto_algo_switched": "Algoritme automatisk registreret og skiftet til {algo}",
+  "checksum.expand": "Bekræft Hash",
+  "checksum.collapse": "Skjul kontrol",
     "checksum.card_title": "Image Hash Verifikation",
 "progress.speed": "Skrivehastighed",
   "progress.eta": "Forventet resterende tid",

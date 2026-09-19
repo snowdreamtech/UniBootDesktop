@@ -438,6 +438,8 @@ export const fiFi: TranslationDict = {
   "checksum.inspect_single": "Näytä tiedot",
   "checksum.no_valid_hashes": "Kelvollisia tarkistussummia ei voitu jäsentää valituista tiedostoista",
   "checksum.auto_algo_switched": "Algoritmi tunnistettiin automaattisesti ja vaihdettiin muotoon {algo}",
+  "checksum.expand": "Tarkista Hash",
+  "checksum.collapse": "Kutista tarkistus",
     "checksum.card_title": "Levynkuvan Hash-tarkistus",
 "progress.speed": "Kirjoitusnopeus",
   "progress.eta": "Arvioitu jäljellä oleva aika",

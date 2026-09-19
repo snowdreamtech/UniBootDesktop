@@ -438,6 +438,8 @@ export const frFr: TranslationDict = {
   "checksum.inspect_single": "Voir les détails",
   "checksum.no_valid_hashes": "Impossible d'extraire des sommes de contrôle valides des fichiers sélectionnés",
   "checksum.auto_algo_switched": "Algorithme détecté automatiquement et basculé vers {algo}",
+  "checksum.expand": "Vérifier le Hash",
+  "checksum.collapse": "Replier la vérification",
     "checksum.card_title": "Vérification du Hash de l'image",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

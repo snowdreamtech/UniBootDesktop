@@ -438,6 +438,8 @@ export const mlIn: TranslationDict = {
   "checksum.inspect_single": "വിശദാംശങ്ങൾ കാണുക",
   "checksum.no_valid_hashes": "തിരഞ്ഞെടുത്ത ഫയലുകളിൽ നിന്ന് സാധുവായ ചെക്ക്സമുകൾ കണ്ടെത്താനായില്ല",
   "checksum.auto_algo_switched": "അൽഗോരിതം സ്വയമേവ കണ്ടെത്തുകയും {algo} ലേക്ക് മാറുകയും ചെയ്തു",
+  "checksum.expand": "ഹാഷ് പരിശോധിക്കുക",
+  "checksum.collapse": "പരിശോധന ചുരുക്കുക",
     "checksum.card_title": "ഇമേജ് ഹാഷ് പരിശോധന",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

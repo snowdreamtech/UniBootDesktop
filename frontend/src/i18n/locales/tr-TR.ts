@@ -438,6 +438,8 @@ export const trTr: TranslationDict = {
   "checksum.inspect_single": "Ayrıntıları Gör",
   "checksum.no_valid_hashes": "Seçilen dosyalardan geçerli sağlama toplamları ayrıştırılamadı",
   "checksum.auto_algo_switched": "Algoritma otomatik olarak algılandı ve {algo} olarak değiştirildi",
+  "checksum.expand": "Hash Doğrula",
+  "checksum.collapse": "Doğrulamayı Daralt",
     "checksum.card_title": "Görüntü Hash Doğrulaması",
 "progress.speed": "Yazma Hızı",
   "progress.eta": "Tahmini Kalan Süre",

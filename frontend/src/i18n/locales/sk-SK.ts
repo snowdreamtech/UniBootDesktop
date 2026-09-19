@@ -438,6 +438,8 @@ export const skSk: TranslationDict = {
   "checksum.inspect_single": "Zobraziť podrobnosti",
   "checksum.no_valid_hashes": "Z vybraných súborov sa nepodarilo načítať platné kontrolné súčty",
   "checksum.auto_algo_switched": "Algoritmus bol automaticky rozpoznaný a prepnutý na {algo}",
+  "checksum.expand": "Overiť kontrolný súčet",
+  "checksum.collapse": "Zbaliť overenie",
     "checksum.card_title": "Overenie Hash obrazu",
 "progress.speed": "Rýchlosť zápisu",
   "progress.eta": "Odhadovaný zostávajúci čas",

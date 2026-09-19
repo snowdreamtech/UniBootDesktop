@@ -438,6 +438,8 @@ export const kaGe: TranslationDict = {
   "checksum.inspect_single": "დეტალების ნახვა",
   "checksum.no_valid_hashes": "არჩეული ფაილებიდან საკონტროლო ჯამების ამოღება ვერ მოხერხდა",
   "checksum.auto_algo_switched": "ალგორითმი ავტომატურად იქნა ამოცნობილი და გადაირთო {algo}-ზე",
+  "checksum.expand": "ჰეშის გადამოწმება",
+  "checksum.collapse": "შემოწმების ჩაკეცვა",
     "checksum.card_title": "გამოსახულების Hash შემოწმება",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

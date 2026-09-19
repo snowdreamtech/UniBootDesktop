@@ -438,6 +438,8 @@ export const ocFr: TranslationDict = {
   "checksum.inspect_single": "Veire los detalhs",
   "checksum.no_valid_hashes": "Impossible d'analisar de somas de contraròtle validas dels fichièrs seleccionats",
   "checksum.auto_algo_switched": "Algoritme detectat automaticament e basculat cap a {algo}",
+  "checksum.expand": "Verificar lo Hash",
+  "checksum.collapse": "Plegar la verificacion",
     "checksum.card_title": "Verificacion del Hash de l'imatge",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

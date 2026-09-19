@@ -438,6 +438,8 @@ export const svSe: TranslationDict = {
   "checksum.inspect_single": "Visa detaljer",
   "checksum.no_valid_hashes": "Kunde inte tolka giltiga kontrollsummor från de markerade filerna",
   "checksum.auto_algo_switched": "Algoritm upptäcktes automatiskt och ändrades till {algo}",
+  "checksum.expand": "Verifiera Hash",
+  "checksum.collapse": "Dölj verifiering",
     "checksum.card_title": "Image Hash Verifiering",
 "progress.speed": "Skrivhastighet",
   "progress.eta": "Beräknad återstående tid",

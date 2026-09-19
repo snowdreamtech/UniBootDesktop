@@ -438,6 +438,8 @@ export const ptPt: TranslationDict = {
   "checksum.inspect_single": "Ver detalhes",
   "checksum.no_valid_hashes": "Falha ao analisar checksums válidos dos ficheiros selecionados",
   "checksum.auto_algo_switched": "Algoritmo detetado automaticamente e alterado para {algo}",
+  "checksum.expand": "Verificar Hash",
+  "checksum.collapse": "Recolher verificação",
     "checksum.card_title": "Verificação de Hash da Imagem",
 "progress.speed": "Velocidade de escrita",
   "progress.eta": "Tempo restante estimado",

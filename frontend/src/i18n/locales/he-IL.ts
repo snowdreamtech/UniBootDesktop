@@ -438,6 +438,8 @@ export const heIl: TranslationDict = {
   "checksum.inspect_single": "הצג פרטים",
   "checksum.no_valid_hashes": "נכשל בניתוח סכומי ביקורת חוקיים מהקבצים שנבחרו",
   "checksum.auto_algo_switched": "האלגוריתם זוהה אוטומטית והוחלף ל-{algo}",
+  "checksum.expand": "אמת גיבוב",
+  "checksum.collapse": "כווץ אימות",
     "checksum.card_title": "אימות Hash של תמונה",
 "progress.speed": "מהירות כתיבה",
   "progress.eta": "זמן נותר משוער",

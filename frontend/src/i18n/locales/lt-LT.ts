@@ -438,6 +438,8 @@ export const ltLt: TranslationDict = {
   "checksum.inspect_single": "Rodyti detales",
   "checksum.no_valid_hashes": "Nepavyko nuskaityti galiojančių kontrolinių sumų iš pasirinktų failų",
   "checksum.auto_algo_switched": "Algoritmas automatiškai aptiktas ir perjungtas į {algo}",
+  "checksum.expand": "Tikrinti maišą",
+  "checksum.collapse": "Suskleisti patikrą",
     "checksum.card_title": "Vaizdo Hash tikrinimas",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

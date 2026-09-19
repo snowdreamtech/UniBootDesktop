@@ -438,6 +438,8 @@ export const zhTw: TranslationDict = {
   "checksum.inspect_single": "檢視詳情",
   "checksum.no_valid_hashes": "未能從所選檔案中解析出有效的校驗值",
   "checksum.auto_algo_switched": "已自動識別並切換演算法為 {algo}",
+  "checksum.expand": "校驗 Hash",
+  "checksum.collapse": "收起校驗",
     "checksum.card_title": "鏡像 Hash 校驗",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

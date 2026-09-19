@@ -438,6 +438,8 @@ export const viVn: TranslationDict = {
   "checksum.inspect_single": "Xem chi tiết",
   "checksum.no_valid_hashes": "Không thể phân tích giá trị kiểm tra hợp lệ từ các tệp đã chọn",
   "checksum.auto_algo_switched": "Đã tự động nhận diện và chuyển sang thuật toán {algo}",
+  "checksum.expand": "Xác minh Hash",
+  "checksum.collapse": "Thu gọn xác minh",
     "checksum.card_title": "Xác minh Hash của hình ảnh",
 "progress.speed": "Tốc độ ghi",
   "progress.eta": "Thời gian còn lại dự kiến",

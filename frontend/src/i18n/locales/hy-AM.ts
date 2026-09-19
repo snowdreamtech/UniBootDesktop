@@ -438,6 +438,8 @@ export const hyAm: TranslationDict = {
   "checksum.inspect_single": "Մանրամասներ",
   "checksum.no_valid_hashes": "Ընտրված ֆայլերից վավեր ստուգիչ գումարներ չհաջողվեց վերլուծել",
   "checksum.auto_algo_switched": "Ալգորիթմը ավտոմատ կերպով ճանաչվել է և փոխվել {algo}",
+  "checksum.expand": "Ստուգել հեշը",
+  "checksum.collapse": "Ծալել ստուգումը",
     "checksum.card_title": "Պատկերի Hash ստուգում",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

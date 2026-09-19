@@ -440,6 +440,8 @@ export const enUs: TranslationDict = {
   "checksum.inspect_single": "View Details",
   "checksum.no_valid_hashes": "Failed to parse valid checksums from selected file(s)",
   "checksum.auto_algo_switched": "Automatically detected and switched algorithm to {algo}",
+  "checksum.expand": "Verify Hash",
+  "checksum.collapse": "Collapse Checksum",
     "checksum.card_title": "Image Hash Verification",
 "progress.speed": "Write Speed",
   "progress.eta": "ETA",

@@ -438,6 +438,8 @@ export const faIr: TranslationDict = {
   "checksum.inspect_single": "مشاهده جزئیات",
   "checksum.no_valid_hashes": "استخراج چکسام‌های معتبر از فایل‌های انتخاب شده ناموفق بود",
   "checksum.auto_algo_switched": "الگوریتم به‌طور خودکار شناسایی و به {algo} تغییر یافت",
+  "checksum.expand": "تایید هش",
+  "checksum.collapse": "بستن اعتبارسنجی",
     "checksum.card_title": "تایید هش تصویر",
 "progress.speed": "سرعت نوشتن",
   "progress.eta": "زمان باقی‌مانده تخمینی",

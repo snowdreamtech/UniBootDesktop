@@ -438,6 +438,8 @@ export const elGr: TranslationDict = {
   "checksum.inspect_single": "Προβολή λεπτομερειών",
   "checksum.no_valid_hashes": "Αποτυχία ανάλυσης έγκυρων αθροισμάτων ελέγχου από τα επιλεγμένα αρχεία",
   "checksum.auto_algo_switched": "Ο αλγόριθμος εντοπίστηκε αυτόματα και άλλαξε σε {algo}",
+  "checksum.expand": "Επαλήθευση Hash",
+  "checksum.collapse": "Σύμπτυξη επαλήθευσης",
     "checksum.card_title": "Επαλήθευση Hash Εικόνας",
 "progress.speed": "Ταχύτητα εγγραφής",
   "progress.eta": "Εκτιμώμενος υπολειπόμενος χρόνος",

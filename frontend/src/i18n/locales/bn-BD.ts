@@ -438,6 +438,8 @@ export const bnBd: TranslationDict = {
   "checksum.inspect_single": "বিবরণ দেখুন",
   "checksum.no_valid_hashes": "নির্বাচিত ফাইল থেকে বৈধ চেকসাম পার্স করতে ব্যর্থ হয়েছে",
   "checksum.auto_algo_switched": "অ্যালগরিদম স্বয়ংক্রিয়ভাবে সনাক্ত এবং {algo}-এ স্যুইচ করা হয়েছে",
+  "checksum.expand": "হ্যাশ যাচাই করুন",
+  "checksum.collapse": "যাচাই সংকুচিত করুন",
     "checksum.card_title": "ইমেজ হ্যাশ যাচাইকরণ",
 "progress.speed": "লেখার গতি",
   "progress.eta": "আনুমানিক অবশিষ্ট সময়",
