@@ -105,7 +105,7 @@
             <span class="spec-val highlight">{{ formatBootStatus(disk.bootStatus) }}</span>
           </div>
 
-          <div class="spec-item spec-full" v-if="disk.isVentoy || disk.bootStatus">
+          <div class="spec-item spec-full" v-if="disk.isRealVentoy || disk.bootStatus">
             <span class="spec-label">{{ t('inspector.lbl_esp_partition') }}</span>
             <span class="spec-val highlight">{{ t('inspector.val_esp_partition') }}</span>
           </div>

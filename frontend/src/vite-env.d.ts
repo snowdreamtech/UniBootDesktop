@@ -29,7 +29,6 @@ declare global {
     isFakeUsb3?: boolean;
     protocolCode?: string;
     isRealVentoy?: boolean;
-    isVentoy?: boolean;
     isCloudMode?: boolean;
     isGenericBoot?: boolean;
     mountPoint?: string;

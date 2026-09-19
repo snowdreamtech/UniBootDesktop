@@ -194,18 +194,9 @@ import {
   SelectIsoFiles,
   GetRecentLogs,
   ClearLogs,
-  GetDiskList,
-  EjectDisk,
   GetConfig,
   SaveConfig,
   ReloadAppMenu,
-  ValidateVentoyCli,
-  CheckQEMU,
-  DetectHypervisors,
-  DeployCloudMode,
-  DeployCloudModeBatch,
-  DeployHybridMode,
-  DeployHybridModeBatch,
 } from '../wailsjs/go/main/App';
 
 function selectLanguage(langVal: string) {
@@ -859,7 +850,7 @@ function checkIsExistingBootDisk(d: DiskInfo): boolean {
   if (!d) return false;
   const nameUpper = (d.name || '').toUpperCase();
   const isVentoyName = nameUpper.includes('VENTOY') || nameUpper.includes('UNIBOOT');
-  return Boolean(d.isRealVentoy || d.isCloudMode || d.isVentoy || isVentoyName);
+  return Boolean(d.isRealVentoy || d.isCloudMode || d.isGenericBoot || isVentoyName);
 }
 
 const isSelectedVentoyDisk = computed(() => {
@@ -1068,7 +1059,26 @@ async function refreshDisks() {
           usbSpeed: '480 Mb/s',
           vendor: 'SanDisk (Suspected Fake)',
           isFakeUsb3: true,
-          protocolCode: 'usb2'
+          protocolCode: 'usb2',
+          freeSpace: 0,
+          freeFormatted: '0 B',
+          fileSystem: 'exFAT',
+          partitionScheme: 'GPT',
+          writable: true,
+          serialNumber: '',
+          vendorId: '',
+          productId: '',
+          smartStatus: '',
+          busPower: '',
+          busPowerUsed: '',
+          sectorSize: '',
+          transportProtocol: '',
+          bootStatus: '',
+          controllerVendor: '',
+          isRealVentoy: false,
+          isCloudMode: false,
+          isGenericBoot: false,
+          mountPoint: ''
         },
         {
           device: '/dev/disk3',
@@ -1081,7 +1091,26 @@ async function refreshDisks() {
           usbSpeed: '5 Gb/s',
           vendor: 'Kingston Technology',
           isFakeUsb3: false,
-          protocolCode: 'usb3_0'
+          protocolCode: 'usb3_0',
+          freeSpace: 0,
+          freeFormatted: '0 B',
+          fileSystem: 'exFAT',
+          partitionScheme: 'GPT',
+          writable: true,
+          serialNumber: '',
+          vendorId: '',
+          productId: '',
+          smartStatus: '',
+          busPower: '',
+          busPowerUsed: '',
+          sectorSize: '',
+          transportProtocol: '',
+          bootStatus: '',
+          controllerVendor: '',
+          isRealVentoy: false,
+          isCloudMode: false,
+          isGenericBoot: false,
+          mountPoint: ''
         },
         {
           device: '/dev/disk4',
@@ -1094,7 +1123,26 @@ async function refreshDisks() {
           usbSpeed: '10 Gb/s',
           vendor: 'Samsung Electronics',
           isFakeUsb3: false,
-          protocolCode: 'usb3_1'
+          protocolCode: 'usb3_1',
+          freeSpace: 0,
+          freeFormatted: '0 B',
+          fileSystem: 'exFAT',
+          partitionScheme: 'GPT',
+          writable: true,
+          serialNumber: '',
+          vendorId: '',
+          productId: '',
+          smartStatus: '',
+          busPower: '',
+          busPowerUsed: '',
+          sectorSize: '',
+          transportProtocol: '',
+          bootStatus: '',
+          controllerVendor: '',
+          isRealVentoy: false,
+          isCloudMode: false,
+          isGenericBoot: false,
+          mountPoint: ''
         }
       ];
       if (previousSelectedDevice) {
@@ -1167,9 +1215,14 @@ async function startDeployment() {
   // For Hybrid Mode, iso-copy-progress events are already handled globally in onMounted.
   let unsubCloudProgress: (() => void) | null = null;
   if (activeMode.value === 'cloud' && window.runtime && window.runtime.EventsOn) {
-    unsubCloudProgress = window.runtime.EventsOn('cloud-deploy-progress', (progress: number) => {
+    window.runtime.EventsOn('cloud-deploy-progress', (progress: number) => {
       deployProgress.value = progress;
     });
+    unsubCloudProgress = () => {
+      if (window.runtime && window.runtime.EventsOff) {
+        window.runtime.EventsOff('cloud-deploy-progress');
+      }
+    };
   }
 
   let success = true;

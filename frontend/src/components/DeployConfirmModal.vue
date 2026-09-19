@@ -182,7 +182,7 @@ const blankDisks = computed(() => {
   return props.targetDisks.filter((dev) => !ventoyDisks.value.includes(dev));
 });
 
-const targetDiskDetails = computed(() =>
+const targetDiskDetails = computed((): DiskInfo[] =>
   props.targetDisks.map((device) => {
     return (
       props.allDisks?.find((disk) => disk.device === device) || {
@@ -190,6 +190,32 @@ const targetDiskDetails = computed(() =>
         name: "",
         size: 0,
         formatted: "",
+        freeSpace: 0,
+        freeFormatted: "",
+        isRemovable: false,
+        isSystem: false,
+        usbVersion: "",
+        usbSpeed: "",
+        vendor: "",
+        fileSystem: "",
+        partitionScheme: "",
+        writable: false,
+        serialNumber: "",
+        vendorId: "",
+        productId: "",
+        smartStatus: "",
+        busPower: "",
+        busPowerUsed: "",
+        sectorSize: "",
+        transportProtocol: "",
+        bootStatus: "",
+        controllerVendor: "",
+        isFakeUsb3: false,
+        protocolCode: "",
+        isRealVentoy: false,
+        isCloudMode: false,
+        isGenericBoot: false,
+        mountPoint: "",
       }
     );
   })

@@ -182,7 +182,7 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
                    vidUpper.includes('0X1E3D') || vidUpper.includes('0X0BDA') || vidUpper.includes('0X05E3');
 
   const isVentoyName = nameUpper.includes('VENTOY') || nameUpper.includes('UNIBOOT');
-  if (props.disk.isRealVentoy || props.disk.isCloudMode || props.disk.isGenericBoot || props.disk.isVentoy || isVentoyName) {
+  if (props.disk.isRealVentoy || props.disk.isCloudMode || props.disk.isGenericBoot || isVentoyName) {
     return 'boot';
   }
   if (isReader) {
