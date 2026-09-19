@@ -190,9 +190,10 @@ import AboutModal from './components/AboutModal.vue';
 import type { LogItem } from './components/LogViewerModal.vue';
 import { t, currentLang, setLanguage } from './i18n';
 import { formatLogsToText } from './utils/logFormatter';
+import { logUserAction } from './utils/logger';
+import { useIsoManager } from './composables/useIsoManager';
 import {
   ExportLogs,
-  SelectIsoFiles,
   GetRecentLogs,
   ClearLogs,
   GetConfig,
@@ -221,6 +222,21 @@ async function saveLangToConfig(langVal: string) {
 }
 
 
+
+
+const toastMessage = ref('');
+const toastType = ref<'info' | 'warning' | 'error' | 'success'>('info');
+let toastTimer: number | undefined;
+
+function showToast(msg: string, type: 'info' | 'warning' | 'error' | 'success' = 'info') {
+  const cleanMsg = msg ? msg.replace(/^[\s\uFE0F]*[⚠️❌🎉ℹ️✅🚨⚡️❗][\s\uFE0F]*/, '').trim() : '';
+  toastMessage.value = cleanMsg || msg;
+  toastType.value = type;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => {
+    toastMessage.value = '';
+  }, 4000);
+}
 
 
 const activeMode = ref<'cloud' | 'hybrid'>('cloud');
@@ -360,12 +376,6 @@ function dismissDeploySuccessBanner() {
   deploySuccessBanner.value.dismissed = true;
   deploySuccessBanner.value.visible = false;
   logUserAction('DEBUG', 'User dismissed deployment success banner');
-}
-
-function logUserAction(level: string, message: string, details: string = '') {
-  if (window.go && window.go.main && window.go.main.App && (window.go.main.App as any).LogAction) {
-    (window.go.main.App as any).LogAction(level, message, details);
-  }
 }
 
 watch(currentEmbeddedLogFilter, (val) => {
@@ -531,120 +541,14 @@ async function selectMode(mode: 'cloud' | 'hybrid') {
   }
 }
 
-interface IsoFileItem {
-  name: string;
-  path: string;
-}
-
-const selectedIsoFiles = ref<IsoFileItem[]>([]);
-const isoCopyStatus = ref<string>('');
-
-const SUPPORTED_IMAGE_EXTS = [
-  '.iso', '.img', '.wim', '.vhd', '.vhdx', '.vti', '.efi', '.bin', '.xz', '.gz', '.raw'
-];
-
-function isSupportedImage(filePath: string): boolean {
-  const lower = (filePath || '').toLowerCase();
-  return SUPPORTED_IMAGE_EXTS.some(ext => lower.endsWith(ext));
-}
-
-function addIsoFilesByPaths(paths: string[]): number {
-  if (!paths || paths.length === 0) return 0;
-  let added = 0;
-  let invalidCount = 0;
-
-  for (const p of paths) {
-    if (!p) continue;
-    if (!isSupportedImage(p)) {
-      invalidCount++;
-      continue;
-    }
-    const name = p.split(/[/\\]/).pop() || p;
-    const existingIndex = selectedIsoFiles.value.findIndex(
-      f => f.path === p || f.name === name
-    );
-
-    if (existingIndex >= 0) {
-      // If the existing entry only has the filename, upgrade it to the full absolute path
-      if ((p.includes('/') || p.includes('\\')) && !selectedIsoFiles.value[existingIndex].path.includes('/') && !selectedIsoFiles.value[existingIndex].path.includes('\\')) {
-        selectedIsoFiles.value[existingIndex].path = p;
-      }
-      continue;
-    }
-
-    selectedIsoFiles.value.push({ name, path: p });
-    added++;
-    logUserAction('INFO', 'Added image source file', `${name} (${p})`);
-  }
-
-  if (added > 0) {
-    showToast(t('deploy.toast_added_iso', { count: added }), 'success');
-  } else if (invalidCount > 0 && selectedIsoFiles.value.length === 0) {
-    showToast(t('iso.drag_unsupported'), 'warning');
-  }
-
-  return added;
-}
-
-async function handleSelectIsoFiles() {
-  if (typeof SelectIsoFiles === 'function') {
-    try {
-      const paths: string[] = await SelectIsoFiles(
-        t('dialog.selectIsoTitle'),
-        t('dialog.ventoyFilter'),
-        t('dialog.allFilesFilter')
-      );
-      if (paths && paths.length > 0) {
-        addIsoFilesByPaths(paths);
-      }
-    } catch (err: any) {
-      console.error('SelectIsoFiles error:', err);
-    }
-  } else {
-    // Mock for browser demo
-    const mockFiles = [
-      { name: 'ubuntu-24.04-desktop-amd64.iso', path: '/Users/demo/Downloads/ubuntu-24.04-desktop-amd64.iso' },
-      { name: 'Windows11_23H2_Chinese_Simplified_x64.iso', path: '/Users/demo/Downloads/Windows11_23H2_Chinese_Simplified_x64.iso' }
-    ];
-    for (const m of mockFiles) {
-      if (!selectedIsoFiles.value.some(f => f.path === m.path)) {
-        selectedIsoFiles.value.push(m);
-      }
-    }
-    showToast(t('deploy.toast_added_demo_iso'), 'info');
-  }
-}
-
-function removeIsoFile(index: number) {
-  const item = selectedIsoFiles.value[index];
-  const name = item ? (typeof item === 'string' ? item : item.name || item.path) : '';
-  selectedIsoFiles.value.splice(index, 1);
-  if (name) {
-    logUserAction('INFO', 'User removed ISO source file from selection list', name);
-  }
-}
-
-function clearIsoFiles() {
-  selectedIsoFiles.value = [];
-  logUserAction('INFO', 'User cleared all ISO source files from selection list');
-}
-
-
-
-const toastMessage = ref('');
-const toastType = ref<'info' | 'warning' | 'error' | 'success'>('info');
-let toastTimer: number | undefined;
-
-function showToast(msg: string, type: 'info' | 'warning' | 'error' | 'success' = 'info') {
-  // Strip redundant leading status icons to avoid duplicating with the toast icon
-  const cleanMsg = msg ? msg.replace(/^[\s\uFE0F]*[⚠️❌🎉ℹ️✅🚨⚡️❗][\s\uFE0F]*/, '').trim() : '';
-  toastMessage.value = cleanMsg || msg;
-  toastType.value = type;
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = window.setTimeout(() => {
-    toastMessage.value = '';
-  }, 4000);
-}
+const {
+  selectedIsoFiles,
+  isoCopyStatus,
+  addIsoFilesByPaths,
+  handleSelectIsoFiles,
+  removeIsoFile,
+  clearIsoFiles,
+} = useIsoManager(showToast);
 
 function applyTheme(themeName?: string) {
   const theme = themeName === 'light' ? 'light' : 'dark';
