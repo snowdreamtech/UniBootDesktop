@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 
@@ -58,6 +59,12 @@ func formatDiskMacOS(ctx context.Context, targetDisk string) (string, error) {
 	// Normalize disk device path (e.g., /dev/disk2 -> disk2, /dev/disk2s1 -> disk2)
 	diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
 
+	// Strict validation: diskNode must match expected macOS pattern
+	matched, err := regexp.MatchString(`^(r)?disk\d+$`, diskNode)
+	if err != nil || !matched {
+		return "", fmt.Errorf("invalid macOS disk node format: %s", diskNode)
+	}
+
 	logger.Info("Unmounting existing volumes on disk...", "diskNode", diskNode)
 	_ = execCommand("diskutil", "unmountDisk", "force", diskNode).Run()
 
@@ -93,6 +100,12 @@ func formatDiskWindows(ctx context.Context, targetDisk string) (string, error) {
 	diskIndex = strings.TrimPrefix(diskIndex, `disk`)
 	diskIndex = strings.TrimPrefix(diskIndex, `Disk`)
 
+	// Strict validation: diskIndex must be numeric only
+	matched, err := regexp.MatchString(`^\d+$`, diskIndex)
+	if err != nil || !matched {
+		return "", fmt.Errorf("invalid disk index format: %s (must be numeric)", diskIndex)
+	}
+
 	// Windows dual-partition setup using diskpart:
 	// Partition 1: Primary FAT32 UNIBOOT (data)
 	// Partition 2: Primary FAT32 VTOYEFI (64MB ESP partition at end of disk)
@@ -123,6 +136,12 @@ func formatDiskWindows(ctx context.Context, targetDisk string) (string, error) {
 
 // formatDiskLinux formats disk on Linux using parted & mkfs.vfat
 func formatDiskLinux(ctx context.Context, targetDisk string) (string, error) {
+	// Strict validation: targetDisk must match expected Linux disk path pattern
+	matched, err := regexp.MatchString(`^/dev/(sd[a-z]+|nvme\d+n\d+|mmcblk\d+|vd[a-z]+)$`, targetDisk)
+	if err != nil || !matched {
+		return "", fmt.Errorf("invalid Linux disk path format: %s", targetDisk)
+	}
+
 	// 1. Create MBR partition table
 	cmd := execCommand("parted", "-s", targetDisk, "mklabel", "msdos")
 	if output, err := cmd.CombinedOutput(); err != nil {
