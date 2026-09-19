@@ -132,6 +132,7 @@ export interface TranslationDict {
   "iso.empty_sub": string;
   "iso.summary": string;
   "iso.clear": string;
+  "iso.remove": string;
   "deploy.title": string;
   "deploy.desc_cloud": string;
   "deploy.desc_hybrid": string;
@@ -439,6 +440,7 @@ export interface TranslationDict {
   "checksum.batch_desc": string;
   "checksum.single_desc": string;
   "checksum.inspect_single": string;
+  "checksum.no_valid_hashes": string;
   "progress.speed": string;
   "progress.eta": string;
 }

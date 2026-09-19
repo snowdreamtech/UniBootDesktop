@@ -106,7 +106,7 @@
                 <span class="btn-icon">🔒</span>
                 <span>{{ selectedChecksumIsoIndex === index && checksumActiveTab === 'single' ? t('checksum.status_selected') : t('checksum.status_verify') }}</span>
               </button>
-              <button class="iso-remove-btn" title="Remove" @click.stop="emit('remove-iso', index)">✕</button>
+              <button class="iso-remove-btn" :title="t('iso.remove')" @click.stop="emit('remove-iso', index)">✕</button>
             </div>
           </div>
         </div>
@@ -804,7 +804,7 @@ async function handleSumsFileSelected(event: Event) {
     alert(t('checksum.cache_loaded', { count: totalHashes }));
   } else {
     expectedHashInput.value = '';
-    alert('⚠️ 未能从所选文件中解析出有效的校验值');
+    alert(t('checksum.no_valid_hashes'));
   }
 }
 
