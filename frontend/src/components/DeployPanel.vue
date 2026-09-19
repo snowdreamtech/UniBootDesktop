@@ -158,7 +158,7 @@
                 type="file"
                 ref="sumsFileInputRef"
                 style="display: none;"
-                accept=".txt,.sums,.sha256sums,.md5sums,.sha512sums,.checksum,*"
+                accept=".txt,.sums,.checksum,.sha1,.sha1sum,.sha224,.sha256,.sha256sum,.sha256sums,.sha384,.sha512,.sha512sum,.sha512sums,.md5,.md5sum,.md5sums,*"
                 multiple
                 @change="handleSumsFileSelected"
               />
