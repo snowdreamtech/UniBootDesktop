@@ -153,7 +153,7 @@ export const fiFi: TranslationDict = {
   "deploy.tip_writing": "Kirjoitetaan käynnistyksen laiteohjelmistoa...",
   "deploy.tip_select_single": "Valitse ensin kohde-USB-asema",
   "deploy.tip_select_batch": "Tarkista kohde-USB-asemien eräkäyttöönotto",
-  "deploy.tip_macos_unsupported": "Virallinen Ventoy ei tue suoraa alustamista macOS-järjestelmässä. Käytä Ventoy CLI:tä tai valitse Pilvitila!",
+  "deploy.tip_macos_unsupported": "macOS ei tue uutta alustusta hybriditilassa (käytä pilvitilaa tai alusta ensin Win/Linuxissa)",
   "deploy.tip_need_ventoy": "Hybriditila vaatii paikallisen Ventoy CLI -työkaluston. Suosittelemme Pilvitilaa!",
   "deploy.macos_alert_title": "macOS Ventoy CLI tuoretta muotoilua ei tueta",
   "deploy.macos_alert_desc": "Virallinen Ventoy ei vielä tue alustusohjelman suorittamista macOS-järjestelmässä. Uuden [Hybridilevyn] luomiseen tarvitaan Ventoy CLI. Suosittelemme [Pilvitilaa (1s pilvikäynnistyslevy)]!",

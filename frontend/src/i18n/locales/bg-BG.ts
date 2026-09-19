@@ -153,7 +153,7 @@ export const bgBg: TranslationDict = {
   "deploy.tip_writing": "Пише се фърмуер за зареждане...",
   "deploy.tip_select_single": "Моля, първо изберете целево USB устройство",
   "deploy.tip_select_batch": "Моля, проверете целевите USB устройства за пакетно внедряване",
-  "deploy.tip_macos_unsupported": "Официалният Ventoy не поддържа директно форматиране на macOS. Използвайте Ventoy CLI или изберете Облачен режим!",
+  "deploy.tip_macos_unsupported": "macOS не поддържа първоначално форматиране в хибриден режим (използвайте облачен режим или първо инициализирайте под Win/Linux)",
   "deploy.tip_need_ventoy": "Хибридният режим изисква локални инструменти Ventoy CLI. Препоръчваме Облачен режим!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Ново форматиране не се поддържа",
   "deploy.macos_alert_desc": "Официалният Ventoy все още не поддържа стартиране на програмата за форматиране на macOS. За създаване на нов [Хибриден диск] е необходим Ventoy CLI. Препоръчва се използването на [Облачен режим (1s облачен стартиращ диск)]!",

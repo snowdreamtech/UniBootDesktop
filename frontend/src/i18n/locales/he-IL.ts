@@ -153,7 +153,7 @@ export const heIl: TranslationDict = {
   "deploy.tip_writing": "כותב קושחת אתחול...",
   "deploy.tip_select_single": "אנא בחר תחילה כונן דיסק יעד",
   "deploy.tip_select_batch": "אנא בדוק את כונני דיסק היעד לפריסה אצווה",
-  "deploy.tip_macos_unsupported": "Ventoy הרשמי אינו תומך בפרמוט ישיר ב-macOS. השתמש ב-Ventoy CLI או בחר במצב ענן!",
+  "deploy.tip_macos_unsupported": "macOS אינו תומך בפרמוט נקי במצב היברידי (השתמש במצב ענן או אתחל תחילה ב-Win/Linux)",
   "deploy.tip_need_ventoy": "מצב היברידי דורש כלים מקומיים של Ventoy CLI. אנו ממליצים על מצב ענן!",
   "deploy.macos_alert_title": "macOS Ventoy CLI פורמט טרי אינו נתמך",
   "deploy.macos_alert_desc": "Ventoy הרשמי עדיין אינו תומך בהרצת תוכנית הפרמוט ב-macOS. ליצירת [כונן היברידי] חדש נדרש Ventoy CLI. מומלץ להשתמש ב-[מצב ענן (כונן אתחול ענן ב-1 שניה)]!",

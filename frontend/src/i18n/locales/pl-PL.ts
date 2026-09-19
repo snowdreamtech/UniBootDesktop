@@ -153,7 +153,7 @@ export const plPl: TranslationDict = {
   "deploy.tip_writing": "Zapisywanie oprogramowania rozruchowego...",
   "deploy.tip_select_single": "Najpierw wybierz docelowy dysk USB",
   "deploy.tip_select_batch": "Zaznacz docelowe dyski USB do tworzenia masowego",
-  "deploy.tip_macos_unsupported": "Oficjalny Ventoy nie obsługuje bezpośredniego formatowania w systemie macOS. Użyj Ventoy CLI lub wybierz Tryb Chmurowy!",
+  "deploy.tip_macos_unsupported": "macOS nie obsługuje czystego formatowania w trybie hybrydowym (użyj trybu chmurowego lub zainicjuj najpierw w systemie Win/Linux)",
   "deploy.tip_need_ventoy": "Tryb hybrydowy wymaga lokalnych narzędzi Ventoy CLI. Zalecamy Tryb Chmurowy!",
   "deploy.macos_alert_title": "Nowe formatowanie przez CLI Ventoy nie jest obsługiwane w macOS",
   "deploy.macos_alert_desc": "Oficjalny Ventoy nie obsługuje jeszcze uruchamiania programu formatującego w macOS. Do utworzenia nowego [Dysku Hybrydowego] wymagany jest Ventoy CLI. Zalecamy użycie [Trybu Chmurowego (1-sekundowy dysk startowy z chmury)]!",

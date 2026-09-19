@@ -153,7 +153,7 @@ export const bnBd: TranslationDict = {
   "deploy.tip_writing": "বুট ফার্মওয়্যার লেখা হচ্ছে...",
   "deploy.tip_select_single": "অনুগ্রহ করে প্রথমে একটি টার্গেট USB ড্রাইভ নির্বাচন করুন৷",
   "deploy.tip_select_batch": "ব্যাচ স্থাপনার জন্য লক্ষ্য ইউএসবি ড্রাইভ চেক করুন",
-  "deploy.tip_macos_unsupported": "অফিসিয়াল Ventoy macOS-এ সরাসরি ফরম্যাটিং সমর্থন করে না। Ventoy CLI ব্যবহার করুন বা ক্লাউড মোড বেছে নিন!",
+  "deploy.tip_macos_unsupported": "macOS হাইব্রিড মোডে নতুন ফরম্যাটিং সমর্থন করে না (ক্লাউড মোড ব্যবহার করুন বা প্রথমে Win/Linux-এ ইনিশিয়ালাইজ করুন)",
   "deploy.tip_need_ventoy": "হাইব্রিড মোডের জন্য স্থানীয় Ventoy CLI প্রয়োজন। আমরা ক্লাউড মোডের সুপারিশ করি!",
   "deploy.macos_alert_title": "macOS Ventoy CLI ফ্রেশ ফরম্যাটিং অসমর্থিত৷",
   "deploy.macos_alert_desc": "অফিসিয়াল Ventoy এখনও macOS-এ ফরম্যাটিং প্রোগ্রাম চালানো সমর্থন করে না। নতুন [হাইব্রিড ড্রাইভ] তৈরির জন্য Ventoy CLI প্রয়োজন। [ক্লাউড মোড (1s ক্লাউড বুট ড্রাইভ)] ব্যবহার করার পরামর্শ দেওয়া হচ্ছে!",

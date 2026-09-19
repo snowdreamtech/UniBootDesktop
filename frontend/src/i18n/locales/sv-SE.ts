@@ -153,7 +153,7 @@ export const svSe: TranslationDict = {
   "deploy.tip_writing": "Skriver startfirmware...",
   "deploy.tip_select_single": "Vänligen välj en mål-USB-enhet först",
   "deploy.tip_select_batch": "Kontrollera mål-USB-enheter för batchdistribution",
-  "deploy.tip_macos_unsupported": "Officiell Ventoy stödjer inte direkt formatering på macOS. Använd Ventoy CLI eller välj Molnläge!",
+  "deploy.tip_macos_unsupported": "macOS stödjer inte nyformatering i hybridläge (använd molnläge eller initiera på Win/Linux först)",
   "deploy.tip_need_ventoy": "Hybridläge kräver lokala Ventoy CLI-verktyg. Vi rekommenderar Molnläge!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Fresh-formatering stöds inte",
   "deploy.macos_alert_desc": "Officiella Ventoy stödjer inte att köra formateringsprogrammet på macOS ännu. För att skapa en ny [Hybrid-disk] krävs Ventoy CLI. Det rekommenderas att använda [Molnläge (1-sekunds molnbootdisk)]!",

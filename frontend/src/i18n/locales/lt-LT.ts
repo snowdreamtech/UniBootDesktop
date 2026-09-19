@@ -153,7 +153,7 @@ export const ltLt: TranslationDict = {
   "deploy.tip_writing": "Rašoma įkrovos programinė įranga...",
   "deploy.tip_select_single": "Pirmiausia pasirinkite tikslinį USB diską",
   "deploy.tip_select_batch": "Patikrinkite, ar tiksliniai USB diskai įdiegti paketiniu būdu",
-  "deploy.tip_macos_unsupported": "Oficialus Ventoy nepalaiko tiesioginio formatavimo macOS sistemoje. Naudokite Ventoy CLI arba pasirinkite Debesų režimą!",
+  "deploy.tip_macos_unsupported": "„macOS“ nepalaiko naujo formatavimo hibridiniu režimu (naudokite debesies režimą arba pirmiausia inicijuokite „Win/Linux“)",
   "deploy.tip_need_ventoy": "Hibridiniam režimui reikalingi vietiniai Ventoy CLI įrankiai. Rekomenduojame Debesų režimą!",
   "deploy.macos_alert_title": "„macOS Ventoy CLI“ naujas formatavimas nepalaikomas",
   "deploy.macos_alert_desc": "Oficialus Ventoy dar nepalaiko formatavimo programos paleidimo macOS sistemoje. Naujam [Hibridiniam diskui] sukurti reikalingas Ventoy CLI. Rekomenduojama naudoti [Debesų režimą (1s debesų paleidimo diskas)]!",

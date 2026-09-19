@@ -153,7 +153,7 @@ export const elGr: TranslationDict = {
   "deploy.tip_writing": "Εγγραφή υλικολογισμικού εκκίνησης...",
   "deploy.tip_select_single": "Επιλέξτε πρώτα μια στοχευόμενη μονάδα USB",
   "deploy.tip_select_batch": "Ελέγξτε τις στοχευόμενες μονάδες USB για μαζική ανάπτυξη",
-  "deploy.tip_macos_unsupported": "Το επίσημο Ventoy δεν υποστηρίζει άμεση διαμόρφωση στο macOS. Χρησιμοποιήστε το Ventoy CLI ή επιλέξτε τη λειτουργία Cloud!",
+  "deploy.tip_macos_unsupported": "Το macOS δεν υποστηρίζει νέα διαμόρφωση σε υβριδική λειτουργία (χρησιμοποιήστε τη λειτουργία Cloud ή αρχικοποιήστε πρώτα σε Win/Linux)",
   "deploy.tip_need_ventoy": "Η Υβριδική λειτουργία απαιτεί το τοπικό εργαλείο Ventoy CLI. Συνιστούμε τη λειτουργία Cloud!",
   "deploy.macos_alert_title": "MacOS Ventoy CLI Fresh Formatting Δεν υποστηρίζεται",
   "deploy.macos_alert_desc": "Το επίσημο Ventoy δεν υποστηρίζει ακόμη την εκτέλεση του προγράμματος διαμόρφωσης στο macOS. Για τη δημιουργία νέου [Υβριδικού Δίσκου] απαιτείται το Ventoy CLI. Συνιστάται η χρήση της [Λειτουργίας Cloud (δίσκος εκκίνησης Cloud 1s)]!",

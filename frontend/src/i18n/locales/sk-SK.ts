@@ -153,7 +153,7 @@ export const skSk: TranslationDict = {
   "deploy.tip_writing": "Prebieha zápis bootovacieho firmvéru...",
   "deploy.tip_select_single": "Najprv vyberte cieľovú jednotku USB",
   "deploy.tip_select_batch": "Skontrolujte cieľové jednotky USB pre dávkové nasadenie",
-  "deploy.tip_macos_unsupported": "Oficiálny nástroj Ventoy nepodporuje priamu inštaláciu v systéme macOS. Pre vytvorenie hybridného disku použite Ventoy CLI alebo zvoľte Cloudový režim!",
+  "deploy.tip_macos_unsupported": "macOS nepodporuje čisté formátovanie v hybridnom režime (použite cloudový režim alebo najprv inicializujte vo Win/Linux)",
   "deploy.tip_need_ventoy": "Hybridný režim vyžaduje lokálne nástroje Ventoy CLI. Odporúčame Cloudový režim!",
   "deploy.macos_alert_title": "Nepodporované čerstvé formátovanie macOS Ventoy CLI",
   "deploy.macos_alert_desc": "Oficiálny Ventoy zatiaľ nepodporuje spustenie formátovacieho programu v systéme macOS. Pre vytvorenie nového [Hybridného disku] je potrebný Ventoy CLI. Odporúčame použiť [Cloudový režim (1s cloudový bootovací disk)]!",

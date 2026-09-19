@@ -153,7 +153,7 @@ export const faIr: TranslationDict = {
   "deploy.tip_writing": "نوشتن سیستم عامل بوت...",
   "deploy.tip_select_single": "لطفاً ابتدا درایو دیسک مورد نظر را انتخاب کنید",
   "deploy.tip_select_batch": "لطفاً درایوهای دیسک هدف را برای استقرار دسته ای بررسی کنید",
-  "deploy.tip_macos_unsupported": "نسخه رسمی Ventoy از فرمت مستقیم در macOS پشتیبانی نمی‌کند. از Ventoy CLI استفاده کنید یا حالت ابری را انتخاب نمایید!",
+  "deploy.tip_macos_unsupported": "سیستم‌عامل macOS از قالب‌بندی اولیه در حالت ترکیبی پشتیبانی نمی‌کند (از حالت ابری استفاده کنید یا ابتدا در Win/Linux راه‌اندازی نمایید)",
   "deploy.tip_need_ventoy": "حالت ترکیبی به ابزارهای محلی Ventoy CLI نیاز دارد. ما حالت ابری را پیشنهاد می‌کنیم!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Fresh Formatting پشتیبانی نمی شود",
   "deploy.macos_alert_desc": "نسخه رسمی Ventoy هنوز از اجرای برنامه فرمت در macOS پشتیبانی نمی‌کند. برای ساخت [دیسک ترکیبی] جدید به Ventoy CLI نیاز است. پیشنهاد می‌شود از [حالت ابری (دیسک بوت ابری ۱ ثانیه‌ای)] استفاده کنید!",

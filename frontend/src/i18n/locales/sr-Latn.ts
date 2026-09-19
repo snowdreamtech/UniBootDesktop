@@ -153,7 +153,7 @@ export const srLatn: TranslationDict = {
   "deploy.tip_writing": "Писање фирмвера за покретање...",
   "deploy.tip_select_single": "Прво изаберите циљни УСБ диск",
   "deploy.tip_select_batch": "Молимо проверите циљне УСБ дискове за групну примену",
-  "deploy.tip_macos_unsupported": "Zvanični Ventoy ne podržava direktno formatiranje na macOS-u. Upotrebite Ventoy CLI ili izaberite Režim u oblaku!",
+  "deploy.tip_macos_unsupported": "macOS ne podržava novo formatiranje u hibridnom režimu (koristite režim u oblaku ili prvo inicijalizujte na Win/Linux)",
   "deploy.tip_need_ventoy": "Hibridni režim zahteva lokalne Ventoy CLI alate. Preporučujemo Režim u oblaku!",
   "deploy.macos_alert_title": "мацОС Вентои ЦЛИ Свеже форматирање није подржано",
   "deploy.macos_alert_desc": "Zvanični Ventoy još ne podržava pokretanje programa za formatiranje na macOS-u. Za izradu novog [Hibridnog diska] potreban je Ventoy CLI. Preporučuje se upotreba [Režima u oblaku (1s pokretački disk u oblaku)]!",

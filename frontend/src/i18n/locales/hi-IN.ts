@@ -153,7 +153,7 @@ export const hiIn: TranslationDict = {
   "deploy.tip_writing": "बूट फ़र्मवेयर लिख रहा हूँ...",
   "deploy.tip_select_single": "कृपया पहले एक लक्ष्य USB ड्राइव चुनें",
   "deploy.tip_select_batch": "कृपया बैच परिनियोजन के लिए लक्ष्य USB ड्राइव की जाँच करें",
-  "deploy.tip_macos_unsupported": "आधिकारिक Ventoy macOS पर सीधे स्वरूपण का समर्थन नहीं करता है। Ventoy CLI का उपयोग करें या क्लाउड मोड चुनें!",
+  "deploy.tip_macos_unsupported": "macOS हाइब्रिड मोड में नए स्वरूपण का समर्थन नहीं करता है (क्लाउड मोड का उपयोग करें या पहले Win/Linux पर प्रारंभ करें)",
   "deploy.tip_need_ventoy": "हाइब्रिड मोड के लिए स्थानीय Ventoy CLI टूलसेट की आवश्यकता है। हम क्लाउड मोड की सिफारिश करते हैं!",
   "deploy.macos_alert_title": "macOS वेंटॉय CLI ताज़ा फ़ॉर्मेटिंग असमर्थित",
   "deploy.macos_alert_desc": "आधिकारिक Ventoy अभी तक macOS पर स्वरूपण कार्यक्रम चलाने का समर्थन नहीं करता है। नया [हाइब्रिड ड्राइव] बनाने के लिए Ventoy CLI आवश्यक है। [क्लाउड मोड (1s क्लाउड बूट ड्राइव)] का उपयोग करने की सिफारिश की जाती है!",

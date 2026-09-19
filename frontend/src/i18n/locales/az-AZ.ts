@@ -153,7 +153,7 @@ export const azAz: TranslationDict = {
   "deploy.tip_writing": "Yükləmə proqramı yazılır...",
   "deploy.tip_select_single": "Zəhmət olmasa əvvəlcə hədəf USB sürücüsünü seçin",
   "deploy.tip_select_batch": "Zəhmət olmasa toplu yerləşdirmə üçün hədəf USB sürücülərini yoxlayın",
-  "deploy.tip_macos_unsupported": "Rəsmi Ventoy macOS-da birbaşa formatlaşdırmanı dəstəkləmir. Ventoy CLI istifadə edin və ya Bulud rejimini seçin!",
+  "deploy.tip_macos_unsupported": "macOS Hibrid Rejimdə ilkin formatlamanı dəstəkləmir (Bulud Rejimindən istifadə edin və ya əvvəlcə Win/Linux-da başladın)",
   "deploy.tip_need_ventoy": "Hibrid rejim yerli Ventoy CLI alətlərini tələb edir. Bulud rejimini tövsiyə edirik!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Təzə Formatlaşdırma Dəstəklənmir",
   "deploy.macos_alert_desc": "Rəsmi Ventoy hələ macOS-da formatlaşdırma proqramının işləməsini dəstəkləmir. Yeni [Hibrid Disk] yaratmaq üçün Ventoy CLI tələb olunur. [Bulud rejimi (1s bulud yükləmə diski)] istifadə etmək tövsiyə olunur!",

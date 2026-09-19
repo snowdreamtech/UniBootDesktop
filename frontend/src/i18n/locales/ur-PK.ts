@@ -153,7 +153,7 @@ export const urPk: TranslationDict = {
   "deploy.tip_writing": "بوٹ فرم ویئر لکھ رہا ہے...",
   "deploy.tip_select_single": "براہ کرم پہلے ایک ہدف ڈسک ڈرائیو منتخب کریں۔",
   "deploy.tip_select_batch": "براہ کرم بیچ کی تعیناتی کے لیے ٹارگٹ ڈسک ڈرائیوز چیک کریں۔",
-  "deploy.tip_macos_unsupported": "آفیشل Ventoy macOS پر برائے راست فارمیٹنگ کی حمایت نہیں کرتا۔ Ventoy CLI استعمال کریں یا کلاؤڈ موڈ منتخب کریں!",
+  "deploy.tip_macos_unsupported": "macOS ہائبرڈ موڈ میں نئی فارمیٹنگ کی حمایت نہیں کرتا ہے (کلاؤڈ موڈ استعمال کریں یا پہلے Win/Linux پر شروع کریں)",
   "deploy.tip_need_ventoy": "ہائبرڈ موڈ کے لیے مقامی Ventoy CLI ٹولز درکار ہیں۔ ہم کلاؤڈ موڈ کی سفارش کرتے ہیں!",
   "deploy.macos_alert_title": "macOS Ventoy CLI تازہ فارمیٹنگ غیر تعاون یافتہ",
   "deploy.macos_alert_desc": "آفیشل Ventoy ابھی macOS پر فارمیٹنگ پروگرام چلانے کی حمایت نہیں کرتا۔ نئی [ہائبرڈ ڈرائیو] بنانے کے لیے Ventoy CLI ضروری ہے۔ [کلاؤڈ موڈ (1 سیکنڈ کلاؤڈ بوٹ ڈرائیو)] استعمال کرنے کی سفارش کی جاتی ہے!",

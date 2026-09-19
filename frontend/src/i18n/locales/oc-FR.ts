@@ -153,7 +153,7 @@ export const ocFr: TranslationDict = {
   "deploy.tip_writing": "Redaccion de micrologicial d'arrenjament...",
   "deploy.tip_select_single": "Seleccionatz d'en primièr una unitat USB cibla",
   "deploy.tip_select_batch": "Mercés de verificar las unitats USB ciblas pel desplegament per lots",
-  "deploy.tip_macos_unsupported": "Lo Ventoy oficial supòrta pas lo formatatge dirècte sus macOS. Utilizatz Ventoy CLI o causissètz lo Mòde Núvol !",
+  "deploy.tip_macos_unsupported": "macOS supòrta pas lo formatatge inicial en Mòde Ibrid (utilizatz lo Mòde Núvol o inicializatz sus Win/Linux d'en primièr)",
   "deploy.tip_need_ventoy": "Lo Mòde Ibrid demanda d'aisines localas Ventoy CLI. Recomandam lo Mòde Núvol !",
   "deploy.macos_alert_title": "MacOS Ventoy CLI Formatatge novèl pas suportat",
   "deploy.macos_alert_desc": "Lo Ventoy oficial supòrta pas encara l'execucion del programa de formatatge sus macOS. Per crear un novèl [Disque Ibrid] es necessari Ventoy CLI. Es recomandat d'utilizar lo [Mòde Núvol (disque d'amorsatge núvol 1s)] !",

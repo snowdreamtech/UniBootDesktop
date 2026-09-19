@@ -153,7 +153,7 @@ export const nbNo: TranslationDict = {
   "deploy.tip_writing": "Skriver oppstartsfirmware...",
   "deploy.tip_select_single": "Vennligst velg en mål-USB-stasjon først",
   "deploy.tip_select_batch": "Vennligst sjekk mål-USB-stasjoner for batch-distribusjon",
-  "deploy.tip_macos_unsupported": "Offisiell Ventoy støtter ikke direkte formatering på macOS. Bruk Ventoy CLI eller velg Skymodus!",
+  "deploy.tip_macos_unsupported": "macOS støtter ikke ny formatering i hybridmodus (bruk skymodus eller initialiser på Win/Linux først)",
   "deploy.tip_need_ventoy": "Hybridmodus krever lokalt Ventoy CLI-verktøysett. Vi anbefaler Skymodus!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Fresh-formatering støttes ikke",
   "deploy.macos_alert_desc": "Offisiell Ventoy støtter ennå ikke kjøring av formateringsprogrammet på macOS. For å opprette en ny [Hybrid-disk] kreves Ventoy CLI. Det anbefales å bruke [Skymodus (1-sekunds skyboot-disk)]!",

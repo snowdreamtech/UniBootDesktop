@@ -153,7 +153,7 @@ export const idId: TranslationDict = {
   "deploy.tip_writing": "Menulis firmware boot...",
   "deploy.tip_select_single": "Silakan pilih drive USB target terlebih dahulu",
   "deploy.tip_select_batch": "Silakan periksa drive USB target untuk penerapan batch",
-  "deploy.tip_macos_unsupported": "Ventoy resmi tidak mendukung pemformatan langsung di macOS. Gunakan Ventoy CLI atau pilih Mode Cloud!",
+  "deploy.tip_macos_unsupported": "macOS tidak mendukung pemformatan baru dalam Mode Hibrid (gunakan Mode Cloud atau inisialisasi di Win/Linux terlebih dahulu)",
   "deploy.tip_need_ventoy": "Mode Hibrida memerlukan alat Ventoy CLI lokal. Kami merekomendasikan Mode Cloud!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Pemformatan Baru Tidak Didukung",
   "deploy.macos_alert_desc": "Ventoy resmi belum mendukung penjalankan program pemformatan di macOS. Untuk membuat [Drive Hibrida] baru, diperlukan Ventoy CLI. Disarankan untuk menggunakan [Mode Cloud (drive boot cloud 1 detik)]!",

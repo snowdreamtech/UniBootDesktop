@@ -153,7 +153,7 @@ export const nlNl: TranslationDict = {
   "deploy.tip_writing": "Opstartfirmware schrijven...",
   "deploy.tip_select_single": "Selecteer eerst een doel-USB-station",
   "deploy.tip_select_batch": "Controleer de doel-USB-drives op batchimplementatie",
-  "deploy.tip_macos_unsupported": "Officiële Ventoy ondersteunt geen directe formatering op macOS. Gebruik Ventoy CLI of kies Cloudmodus!",
+  "deploy.tip_macos_unsupported": "macOS ondersteunt geen nieuwe formattering in hybride modus (gebruik Cloud-modus of initialiseer eerst op Win/Linux)",
   "deploy.tip_need_ventoy": "Hybridemodus vereist lokale Ventoy CLI-toolchain. We raden Cloudmodus aan!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Fresh-opmaak niet ondersteund",
   "deploy.macos_alert_desc": "Officiële Ventoy ondersteunt het uitvoeren van het formatteerprogramma op macOS nog niet. Voor een nieuwe [Hybride Schijf] is Ventoy CLI vereist. Het wordt aanbevolen om [Cloudmodus (1s cloud opstartschijf)] te gebruiken!",

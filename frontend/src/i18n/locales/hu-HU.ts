@@ -153,7 +153,7 @@ export const huHu: TranslationDict = {
   "deploy.tip_writing": "Boot firmware írása...",
   "deploy.tip_select_single": "Kérjük, először válassza ki a cél USB-meghajtót",
   "deploy.tip_select_batch": "Kérjük, ellenőrizze a cél USB-meghajtókat a kötegelt telepítéshez",
-  "deploy.tip_macos_unsupported": "A hivatalos Ventoy nem támogatja a közvetlen formázást macOS rendszeren. Használja a Ventoy CLI-t vagy válassza a Felhő módot!",
+  "deploy.tip_macos_unsupported": "A macOS nem támogatja a hibrid módú tiszta formázást (használja a felhő módot vagy inicializálja előbb Win/Linux rendszeren)",
   "deploy.tip_need_ventoy": "A Hibrid módhoz helyi Ventoy CLI eszközkészlet szükséges. A Felhő módot javasoljuk!",
   "deploy.macos_alert_title": "A macOS Ventoy CLI friss formázása nem támogatott",
   "deploy.macos_alert_desc": "A hivatalos Ventoy még nem támogatja a formázó program futtatását macOS rendszeren. Új [Hibrid lemez] készítéséhez Ventoy CLI szükséges. Javasoljuk a [Felhő mód (1s felhő indítólemez)] használatát!",

@@ -153,7 +153,7 @@ export const glEs: TranslationDict = {
   "deploy.tip_writing": "Escribindo firmware de arranque...",
   "deploy.tip_select_single": "Seleccione primeiro unha unidade USB de destino",
   "deploy.tip_select_batch": "Comprobe as unidades USB de destino para a implantación por lotes",
-  "deploy.tip_macos_unsupported": "O Ventoy oficial non admite a formatación directa en macOS. Use Ventoy CLI ou elixa o Modo Nube!",
+  "deploy.tip_macos_unsupported": "macOS non admite a formatación inicial no Modo Híbrido (use o Modo Nube ou inicialice primeiro en Win/Linux)",
   "deploy.tip_need_ventoy": "O Modo Híbrido require ferramentas locais de Ventoy CLI. Recomendamos o Modo Nube!",
   "deploy.macos_alert_title": "O formato fresco de macOS Ventoy CLI non é compatible",
   "deploy.macos_alert_desc": "O Ventoy oficial aínda non admite executar o programa de formatación en macOS. Para crear un novo [Disco Híbrid] requírese Ventoy CLI. Recoméndase usar o [Modo Nube (disco de arranque na nube de 1s)]!",

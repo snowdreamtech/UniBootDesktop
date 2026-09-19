@@ -153,7 +153,7 @@ export const mkMk: TranslationDict = {
   "deploy.tip_writing": "Пишување фирмвер за подигање...",
   "deploy.tip_select_single": "Прво изберете целен USB-уред",
   "deploy.tip_select_batch": "Проверете ги целните USB-дискови за сериско распоредување",
-  "deploy.tip_macos_unsupported": "Официјалниот Ventoy не поддржува директно форматирање на macOS. Употребете Ventoy CLI или изберете Режим во облак!",
+  "deploy.tip_macos_unsupported": "macOS не поддржува ново форматирање во хибриден режим (користете режим во облак или прво иницијализирајте на Win/Linux)",
   "deploy.tip_need_ventoy": "Хибридниот режим бара локални Ventoy CLI алатки. Препорачуваме Режим во облак!",
   "deploy.macos_alert_title": "Неподдржано е свежо форматирање на macOS Ventoy CLI",
   "deploy.macos_alert_desc": "Официјалниот Ventoy сè уште не поддржува активирање на програмата за форматирање на macOS. За изработка на нов [Хибриден диск] е потребен Ventoy CLI. Се препорачува употреба на [Режим во облак (1s стартен диск во облак)]!",

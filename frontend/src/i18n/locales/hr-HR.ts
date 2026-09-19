@@ -153,7 +153,7 @@ export const hrHr: TranslationDict = {
   "deploy.tip_writing": "Zapisivanje firmvera za pokretanje...",
   "deploy.tip_select_single": "Prvo odaberite ciljni USB pogon",
   "deploy.tip_select_batch": "Provjerite ciljne USB pogone za skupnu implementaciju",
-  "deploy.tip_macos_unsupported": "Službeni Ventoy ne podržava izravno formatiranje na macOS-u. Upotrijebite Ventoy CLI ili odaberite Način rada u oblaku!",
+  "deploy.tip_macos_unsupported": "macOS ne podržava novo formatiranje u hibridnom načinu (koristite način rada u oblaku ili prvo inicijalizirajte na Win/Linux)",
   "deploy.tip_need_ventoy": "Hibridni način rada zahtijeva lokalne alate Ventoy CLI. Preporučujemo Način rada u oblaku!",
   "deploy.macos_alert_title": "macOS Ventoy CLI svježe formatiranje nije podržano",
   "deploy.macos_alert_desc": "Službeni Ventoy još ne podržava pokretanje programa za formatiranje na macOS-u. Za izradu novog [Hibridnog diska] potreban je Ventoy CLI. Preporučuje se upotreba [Načina rada u oblaku (1s pokretački disk u oblaku)]!",

@@ -153,7 +153,7 @@ export const caEs: TranslationDict = {
   "deploy.tip_writing": "S'està escrivint el firmware d'arrencada...",
   "deploy.tip_select_single": "Seleccioneu primer una unitat USB de destinació",
   "deploy.tip_select_batch": "Comproveu les unitats USB de destinació per a la implementació per lots",
-  "deploy.tip_macos_unsupported": "El Ventoy oficial no admet la formatació directa a macOS. Utilitzeu Ventoy CLI o trieu el Mode Núvol!",
+  "deploy.tip_macos_unsupported": "macOS no admet el format inicial en Mode Híbrid (utilitzeu el Mode Núvol o inicialitzeu primer a Win/Linux)",
   "deploy.tip_need_ventoy": "El Mode Híbrid requereix eines locals de Ventoy CLI. Recomanem el Mode Núvol!",
   "deploy.macos_alert_title": "El format fresc de la CLI de macOS Ventoy no és compatible",
   "deploy.macos_alert_desc": "El Ventoy oficial encara no admet executar el programa de formatació a macOS. Per crear un nou [Disc Híbrid] es requereix Ventoy CLI. Es recomana utilitzar el [Mode Núvol (disc d'arrencada en el núvol d'1s)]!",

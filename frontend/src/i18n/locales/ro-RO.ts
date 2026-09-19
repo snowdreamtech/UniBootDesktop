@@ -153,7 +153,7 @@ export const roRo: TranslationDict = {
   "deploy.tip_writing": "Se scrie firmware-ul de pornire...",
   "deploy.tip_select_single": "Vă rugăm să selectați mai întâi o unitate USB țintă",
   "deploy.tip_select_batch": "Vă rugăm să verificați unitățile USB țintă pentru implementarea în lot",
-  "deploy.tip_macos_unsupported": "Ventoy oficial nu suportă formatarea directă pe macOS. Utilizați Ventoy CLI sau alegeți modul Cloud!",
+  "deploy.tip_macos_unsupported": "macOS nu acceptă formatarea inițială în modul hibrid (utilizați modul Cloud sau inițializați mai întâi pe Win/Linux)",
   "deploy.tip_need_ventoy": "Modul Hibrid necesită instrumente locale Ventoy CLI. Recomandăm modul Cloud!",
   "deploy.macos_alert_title": "Formatarea macOS Ventoy CLI Fresh neacceptată",
   "deploy.macos_alert_desc": "Ventoy oficial nu suportă încă rularea utilitarului de formatare pe macOS. Pentru a crea un [Disc Hibrid] nou este necesar Ventoy CLI. Se recomandă utilizarea [Modului Cloud (disc bootabil cloud 1s)]!",

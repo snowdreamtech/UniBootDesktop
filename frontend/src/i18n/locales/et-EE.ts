@@ -153,7 +153,7 @@ export const etEe: TranslationDict = {
   "deploy.tip_writing": "Alglaadimise püsivara kirjutamine...",
   "deploy.tip_select_single": "Valige esmalt siht-USB-draiv",
   "deploy.tip_select_batch": "Kontrollige siht-USB-draive komplekti juurutamiseks",
-  "deploy.tip_macos_unsupported": "Ametlik Ventoy ei toeta otsest vormindamist macOS-is. Kasutage Ventoy CLI-d või valige Pilverežiim!",
+  "deploy.tip_macos_unsupported": "macOS ei toeta hübriidrežiimis esmast vormindamist (kasutage pilverežiimi või lähtestage esmalt Win/Linuxis)",
   "deploy.tip_need_ventoy": "Hübriidrežiim vajab kohalikku Ventoy CLI tööriista. Soovitame Pilverežiimi!",
   "deploy.macos_alert_title": "macOS Ventoy CLI värsket vormindamist ei toetata",
   "deploy.macos_alert_desc": "Ametlik Ventoy ei toeta veel vormindamisprogrammi käivitamist macOS-is. Uue [Hübriidketta] loomiseks on vaja Ventoy CLI-d. Soovitatav on kasutada [Pilverežiimi (1s pilve käivitusketas)]!",

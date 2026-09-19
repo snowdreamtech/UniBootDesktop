@@ -153,7 +153,7 @@ export const daDk: TranslationDict = {
   "deploy.tip_writing": "Skriver boot-firmware...",
   "deploy.tip_select_single": "Vælg venligst et USB-måldrev først",
   "deploy.tip_select_batch": "Tjek venligst mål-USB-drev for batch-implementering",
-  "deploy.tip_macos_unsupported": "Officiel Ventoy understøtter ikke direkte formatering på macOS. Brug Ventoy CLI eller vælg Sky-tilstand!",
+  "deploy.tip_macos_unsupported": "macOS understøtter ikke ny formatering i hybridtilstand (brug Cloud-tilstand eller initialiser på Win/Linux først)",
   "deploy.tip_need_ventoy": "Hybrid-tilstand kræver lokalt Ventoy CLI-værktøjssæt. Vi anbefaler Sky-tilstand!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Fresh-formatering understøttes ikke",
   "deploy.macos_alert_desc": "Officiel Ventoy understøtter endnu ikke kørsel af formateringsprogrammet på macOS. For at oprette et nyt [Hybrid-drev] kræves Ventoy CLI. Det anbefales at bruge [Sky-tilstand (1-sekunds cloud-bootdrev)]!",
