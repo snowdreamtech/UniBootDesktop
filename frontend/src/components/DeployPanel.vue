@@ -600,9 +600,14 @@ async function handleSumsFileSelected(event: Event) {
       const cachedHash = checksumCache.value[currentFile.name];
       if (cachedHash) {
         expectedHashInput.value = cachedHash;
+      } else {
+        expectedHashInput.value = '';
       }
+    } else {
+      expectedHashInput.value = '';
     }
   } else {
+    expectedHashInput.value = '';
     alert('⚠️ 未能从所选文件中解析出有效的校验值');
   }
 }
@@ -792,7 +797,13 @@ function getFileIcon(filename: string): string {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
   margin-bottom: 0.75rem;
+}
+
+.iso-title-group {
+  flex: 1;
+  min-width: 0;
 }
 
 .iso-title-group h3 {
@@ -820,8 +831,12 @@ function getFileIcon(filename: string): string {
 }
 
 .add-iso-btn {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.8rem;
+  padding: 0.35rem 0.85rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: auto !important;
   border-radius: 6px;
   background: linear-gradient(180deg, rgba(0, 229, 255, 0.2) 0%, rgba(0, 229, 255, 0.08) 100%);
   border: 1px solid rgba(0, 229, 255, 0.35);
