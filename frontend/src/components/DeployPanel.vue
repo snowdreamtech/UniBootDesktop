@@ -201,7 +201,7 @@
         v-else
         class="btn-primary deploy-btn"
         :class="{ 'safe-btn': isNonDestructive, 'danger-disabled': activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid }"
-        :disabled="isDeploying"
+        :disabled="isDeployDisabled"
         :title="deployDisabledReason"
         @click="emit('deploy-click')"
       >
@@ -423,6 +423,18 @@ const emit = defineEmits<{
   (e: 'safely-eject-success'): void;
   (e: 'launch-vm'): void;
 }>();
+
+// Deploy state
+const isDeployDisabled = computed(() => {
+  if (props.isDeploying) return true;
+  if (props.selectionMode === 'single') {
+    return !props.selectedDisk;
+  }
+  if (props.selectionMode === 'batch') {
+    return !props.selectedDevices || props.selectedDevices.size === 0;
+  }
+  return false;
+});
 
 // Checksum State & Logic
 const selectedChecksumIsoIndex = ref(0);
