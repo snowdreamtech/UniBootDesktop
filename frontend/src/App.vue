@@ -598,7 +598,9 @@ const toastType = ref<'info' | 'warning' | 'error' | 'success'>('info');
 let toastTimer: number | undefined;
 
 function showToast(msg: string, type: 'info' | 'warning' | 'error' | 'success' = 'info') {
-  toastMessage.value = msg;
+  // Strip redundant leading status icons to avoid duplicating with the toast icon
+  const cleanMsg = msg ? msg.replace(/^[\s\uFE0F]*[⚠️❌🎉ℹ️✅🚨⚡️❗][\s\uFE0F]*/, '').trim() : '';
+  toastMessage.value = cleanMsg || msg;
   toastType.value = type;
   if (toastTimer) clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => {

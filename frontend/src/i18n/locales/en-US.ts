@@ -153,7 +153,7 @@ export const enUs: TranslationDict = {
   "deploy.tip_writing": "Writing boot firmware...",
   "deploy.tip_select_single": "Please select a target disk first",
   "deploy.tip_select_batch": "Please select target disks first",
-  "deploy.tip_macos_unsupported": "❌ macOS does not support Hybrid Mode fresh formatting (use Cloud Mode or initialize on Win/Linux first)",
+  "deploy.tip_macos_unsupported": "macOS does not support Hybrid Mode fresh formatting (use Cloud Mode or initialize on Win/Linux first)",
   "deploy.tip_need_ventoy": "Hybrid Mode fresh formatting requires local Ventoy CLI",
   "deploy.macos_alert_title": "macOS Ventoy CLI Formatting Limitation",
   "deploy.macos_alert_desc": "Ventoy does not support macOS formatting directly. Use Cloud Mode for native support, or initialize Ventoy on Windows/Linux first then perform in-place upgrade on macOS.",

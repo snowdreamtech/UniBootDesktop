@@ -153,7 +153,7 @@ export const ptPt: TranslationDict = {
   "deploy.tip_writing": "Gravando firmware de inicialização...",
   "deploy.tip_select_single": "Selecione primeiro uma disco de destino",
   "deploy.tip_select_batch": "Verifique as unidades de disco de destino para implantação em lote",
-  "deploy.tip_macos_unsupported": "❌ macOS não suporta formatação inicial no Modo Híbrido (use Modo Cloud ou inicialize no Win/Linux primeiro)",
+  "deploy.tip_macos_unsupported": "macOS não suporta formatação inicial no Modo Híbrido (use Modo Cloud ou inicialize no Win/Linux primeiro)",
   "deploy.tip_need_ventoy": "Formatação inicial no Modo Híbrido requer Ventoy CLI local",
   "deploy.macos_alert_title": "Formatação recente do macOS Ventoy CLI não suportada",
   "deploy.macos_alert_desc": "Ventoy não suporta formatação direta no macOS. Use o Modo Cloud para suporte nativo, ou inicialize o Ventoy no Windows/Linux primeiro, depois faça a atualização no macOS.",

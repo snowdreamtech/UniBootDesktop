@@ -153,7 +153,7 @@ export const thTh: TranslationDict = {
   "deploy.tip_writing": "กำลังเขียนเฟิร์มแวร์บูต...",
   "deploy.tip_select_single": "โปรดเลือกไดรฟ์ USB เป้าหมายก่อน",
   "deploy.tip_select_batch": "โปรดตรวจสอบไดรฟ์ USB เป้าหมายสำหรับการปรับใช้เป็นชุด",
-  "deploy.tip_macos_unsupported": "❌ macOS ไม่รองรับการฟอร์แมตใหม่ในโหมดไฮบริด (ใช้โหมดคลาวด์หรือเริ่มต้นบน Win/Linux ก่อน)",
+  "deploy.tip_macos_unsupported": "macOS ไม่รองรับการฟอร์แมตใหม่ในโหมดไฮบริด (ใช้โหมดคลาวด์หรือเริ่มต้นบน Win/Linux ก่อน)",
   "deploy.tip_need_ventoy": "การฟอร์แมตใหม่ในโหมดไฮบริดต้องใช้ Ventoy CLI ในเครื่อง",
   "deploy.macos_alert_title": "macOS Ventoy CLI ไม่รองรับการจัดรูปแบบใหม่",
   "deploy.macos_alert_desc": "Ventoy ไม่รองรับการฟอร์แมตโดยตรงบน macOS ใช้โหมดคลาวด์สำหรับการรองรับแบบดั้งเดิม หรือเริ่มต้น Ventoy บน Windows/Linux ก่อน แล้วอัปเกรดในที่บน macOS",

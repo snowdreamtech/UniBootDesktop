@@ -153,7 +153,7 @@ export const itIt: TranslationDict = {
   "deploy.tip_writing": "Scrittura firmware di avvio...",
   "deploy.tip_select_single": "Selezionare prima un'disco di destinazione",
   "deploy.tip_select_batch": "Selezionare le disco per la creazione in lotto",
-  "deploy.tip_macos_unsupported": "❌ macOS non supporta la formattazione iniziale in modalità Ibrida (usa Cloud Mode o inizializza su Win/Linux prima)",
+  "deploy.tip_macos_unsupported": "macOS non supporta la formattazione iniziale in modalità Ibrida (usa Cloud Mode o inizializza su Win/Linux prima)",
   "deploy.tip_need_ventoy": "La formattazione iniziale in modalità Ibrida richiede Ventoy CLI locale",
   "deploy.macos_alert_title": "Formattazione ex novo con CLI Ventoy non supportata su macOS",
   "deploy.macos_alert_desc": "Ventoy non supporta la formattazione diretta su macOS. Usa il modalità Cloud per supporto nativo, o inizializza Ventoy su Windows/Linux prima poi esegui l'aggiornamento in-place su macOS.",

@@ -153,7 +153,7 @@ export const deDe: TranslationDict = {
   "deploy.tip_writing": "Boot-Firmware wird geschrieben...",
   "deploy.tip_select_single": "Bitte zuerst ein Ziel-Datenträger auswählen",
   "deploy.tip_select_batch": "Bitte Ziel-Datenträgere für Batch-Erstellung auswählen",
-  "deploy.tip_macos_unsupported": "❌ macOS unterstützt keine Hybrid-Modus-Erstformatierung (Cloud-Modus verwenden oder zuerst auf Win/Linux initialisieren)",
+  "deploy.tip_macos_unsupported": "macOS unterstützt keine Hybrid-Modus-Erstformatierung (Cloud-Modus verwenden oder zuerst auf Win/Linux initialisieren)",
   "deploy.tip_need_ventoy": "Hybrid-Modus-Erstformatierung erfordert lokale Ventoy CLI",
   "deploy.macos_alert_title": "macOS Ventoy CLI Neuformatierung nicht unterstützt",
   "deploy.macos_alert_desc": "Ventoy unterstützt keine direkte Formatierung unter macOS. Verwenden Sie den Cloud-Modus für native Unterstützung oder initialisieren Sie Ventoy zunächst unter Windows/Linux und führen Sie dann eine In-Place-Aktualisierung unter macOS durch.",

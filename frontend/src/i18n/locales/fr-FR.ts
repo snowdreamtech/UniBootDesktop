@@ -153,7 +153,7 @@ export const frFr: TranslationDict = {
   "deploy.tip_writing": "Écriture du micrologiciel...",
   "deploy.tip_select_single": "Veuillez d'abord sélectionner un disque USB cible",
   "deploy.tip_select_batch": "Veuillez cocher les disques USB cibles pour la création en lot",
-  "deploy.tip_macos_unsupported": "❌ macOS ne supporte pas le formatage initial en mode hybride (utilisez Cloud Mode ou initialisez sur Win/Linux d'abord)",
+  "deploy.tip_macos_unsupported": "macOS ne supporte pas le formatage initial en mode hybride (utilisez Cloud Mode ou initialisez sur Win/Linux d'abord)",
   "deploy.tip_need_ventoy": "Le formatage initial en mode hybride nécessite Ventoy CLI local",
   "deploy.macos_alert_title": "Formatage neuf par CLI Ventoy macOS non pris en charge",
   "deploy.macos_alert_desc": "Ventoy ne prend pas en charge le formatage macOS directement. Utilisez le mode Cloud pour la prise en charge native, ou initialisez Ventoy sous Windows/Linux puis effectuez une mise à niveau en place sous macOS.",

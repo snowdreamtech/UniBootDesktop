@@ -153,7 +153,7 @@ export const koKr: TranslationDict = {
   "deploy.tip_writing": "부팅 펌웨어 작성 중...",
   "deploy.tip_select_single": "제작할 대상 디스크를 먼저 선택하세요",
   "deploy.tip_select_batch": "일괄 제작할 대상 디스크를 먼저 체크하세요",
-  "deploy.tip_macos_unsupported": "❌ macOS는 하이브리드 모드 신규 포맷을 지원하지 않습니다 (클라우드 모드 사용 또는 Win/Linux에서 초기화하세요)",
+  "deploy.tip_macos_unsupported": "macOS는 하이브리드 모드 신규 포맷을 지원하지 않습니다 (클라우드 모드 사용 또는 Win/Linux에서 초기화하세요)",
   "deploy.tip_need_ventoy": "하이브리드 모드 신규 포맷에는 로컬 Ventoy CLI가 필요합니다",
   "deploy.macos_alert_title": "macOS Ventoy CLI 신규 포맷 미지원",
   "deploy.macos_alert_desc": "Ventoy는 macOS에서 직접 포맷을 지원하지 않습니다. 기본 지원을 위해 클라우드 모드를 사용하거나, Windows/Linux에서 Ventoy를 초기화한 후 macOS에서 제자리 업그레이드를 수행하세요.",

@@ -153,7 +153,7 @@ export const trTr: TranslationDict = {
   "deploy.tip_writing": "Önyükleme ürün yazılımı yazılıyor...",
   "deploy.tip_select_single": "Lütfen önce bir hedef USB sürücüsü seçin",
   "deploy.tip_select_batch": "Lütfen toplu oluşturma için hedef USB sürücülerini işaretleyin",
-  "deploy.tip_macos_unsupported": "❌ macOS, Hibrit Mod'da ilk biçimlendirmeyi desteklemiyor (Bulut Modu kullanın veya Win/Linux'ta önce başlatın)",
+  "deploy.tip_macos_unsupported": "macOS, Hibrit Mod'da ilk biçimlendirmeyi desteklemiyor (Bulut Modu kullanın veya Win/Linux'ta önce başlatın)",
   "deploy.tip_need_ventoy": "Hibrit Mod'da ilk biçimlendirme, yerel Ventoy CLI gerektirir",
   "deploy.macos_alert_title": "macOS üzerinde Ventoy CLI Sıfırdan Biçimlendirme Desteklenmiyor",
   "deploy.macos_alert_desc": "Ventoy, macOS'ta doğrudan biçimlendirmeyi desteklemiyor. Yerel destek için Bulut Modunu kullanın veya önce Windows/Linux'ta Ventoy'u başlatın, ardından macOS'ta yerinde yükseltme yapın.",

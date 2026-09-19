@@ -153,7 +153,7 @@ export const viVn: TranslationDict = {
   "deploy.tip_writing": "Đang ghi firmware khởi động...",
   "deploy.tip_select_single": "Vui lòng chọn ổ USB mục tiêu trước",
   "deploy.tip_select_batch": "Vui lòng tích chọn các ổ USB mục tiêu để tạo hàng loạt",
-  "deploy.tip_macos_unsupported": "❌ macOS không hỗ trợ định dạng mới trong Chế độ Hỗn hợp (dùng Chế độ Đám mây hoặc khởi tạo trên Win/Linux trước)",
+  "deploy.tip_macos_unsupported": "macOS không hỗ trợ định dạng mới trong Chế độ Hỗn hợp (dùng Chế độ Đám mây hoặc khởi tạo trên Win/Linux trước)",
   "deploy.tip_need_ventoy": "Định dạng mới trong Chế độ Hỗn hợp yêu cầu Ventoy CLI cục bộ",
   "deploy.macos_alert_title": "macOS chưa hỗ trợ định dạng mới bằng Ventoy CLI",
   "deploy.macos_alert_desc": "Ventoy không hỗ trợ định dạng trực tiếp trên macOS. Dùng Chế độ Đám mây để hỗ trợ gốc, hoặc khởi tạo Ventoy trên Windows/Linux trước rồi nâng cấp tại chỗ trên macOS.",

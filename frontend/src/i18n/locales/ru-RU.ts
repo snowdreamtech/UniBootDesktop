@@ -153,7 +153,7 @@ export const ruRu: TranslationDict = {
   "deploy.tip_writing": "Запись прошивки загрузчика...",
   "deploy.tip_select_single": "Пожалуйста, сначала выберите целевой диск",
   "deploy.tip_select_batch": "Отметьте целевые диски для пакетного создания",
-  "deploy.tip_macos_unsupported": "❌ macOS не поддерживает свежее форматирование гибридного режима (используйте облачный режим или сначала инициализируйте на Win/Linux)",
+  "deploy.tip_macos_unsupported": "macOS не поддерживает свежее форматирование гибридного режима (используйте облачный режим или сначала инициализируйте на Win/Linux)",
   "deploy.tip_need_ventoy": "Свежее форматирование гибридного режима требует локальный Ventoy CLI",
   "deploy.macos_alert_title": "Новое форматирование через CLI Ventoy macOS не поддерживается",
   "deploy.macos_alert_desc": "Ventoy не поддерживает форматирование на macOS напрямую. Используйте облачный режим для нативной поддержки или сначала инициализируйте Ventoy на Windows/Linux, затем выполните обновление на macOS.",

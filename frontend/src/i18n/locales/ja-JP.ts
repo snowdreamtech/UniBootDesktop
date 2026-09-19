@@ -153,7 +153,7 @@ export const jaJp: TranslationDict = {
   "deploy.tip_writing": "ブートファームウェア書き込み中...",
   "deploy.tip_select_single": "作成対象の ディスクを選択してください",
   "deploy.tip_select_batch": "一括作成する ディスクにチェックを入れてください",
-  "deploy.tip_macos_unsupported": "❌ macOSはハイブリッドモードの新規フォーマットをサポートしていません（クラウドモードを使用するかWin/Linuxで初期化してください）",
+  "deploy.tip_macos_unsupported": "macOSはハイブリッドモードの新規フォーマットをサポートしていません（クラウドモードを使用するかWin/Linuxで初期化してください）",
   "deploy.tip_need_ventoy": "ハイブリッドモードの新規フォーマットにはローカルVentoy CLIが必要です",
   "deploy.macos_alert_title": "macOS Ventoy CLI による新規フォーマット非対応",
   "deploy.macos_alert_desc": "VentoyはmacOSでの直接フォーマットをサポートしていません。ネイティブサポートにはクラウドモードを使用するか、Windows/LinuxでVentoyを初期化してからmacOSで上書き更新してください。",

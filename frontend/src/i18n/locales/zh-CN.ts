@@ -153,7 +153,7 @@ export const zhCn: TranslationDict = {
   "deploy.tip_writing": "正在写入引导固件...",
   "deploy.tip_select_single": "请先选择要制作的目标磁盘",
   "deploy.tip_select_batch": "请先勾选要批量制作的目标磁盘",
-  "deploy.tip_macos_unsupported": "❌ macOS 暂不支持混合模式全新盘格式化 (建议选择云端模式或先在 Win/Linux 上初始化)",
+  "deploy.tip_macos_unsupported": "macOS 暂不支持混合模式全新盘格式化 (建议选择云端模式或先在 Win/Linux 上初始化)",
   "deploy.tip_need_ventoy": "制作【混合模式】全新盘需依赖 Ventoy CLI 环境",
   "deploy.macos_alert_title": "macOS 暂不支持 Ventoy CLI 全新格式化",
   "deploy.macos_alert_desc": "官方 Ventoy 暂不支持在 macOS 上直接运行格式化程序。制作【混合模式】全新盘需依赖 Ventoy CLI；建议直接选择原生支持的【云端模式 (1秒极速云引导盘)】！如需使用混合模式，请先在 Win/Linux 上完成 Ventoy 盘初始化后插入 macOS 无损升级。",

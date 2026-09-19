@@ -153,7 +153,7 @@ export const esEs: TranslationDict = {
   "deploy.tip_writing": "Escribiendo firmware de arranque...",
   "deploy.tip_select_single": "Por favor seleccione primero una disco objetivo",
   "deploy.tip_select_batch": "Por favor marque las discos para creación por lotes",
-  "deploy.tip_macos_unsupported": "❌ macOS no admite el formateo inicial en Modo Híbrido (usa Modo Nube o inicializa en Win/Linux primero)",
+  "deploy.tip_macos_unsupported": "macOS no admite el formateo inicial en Modo Híbrido (usa Modo Nube o inicializa en Win/Linux primero)",
   "deploy.tip_need_ventoy": "El formateo inicial en Modo Híbrido requiere Ventoy CLI local",
   "deploy.macos_alert_title": "Formato nuevo con CLI Ventoy de macOS no compatible",
   "deploy.macos_alert_desc": "Ventoy no admite el formateo en macOS directamente. Use el modo Nube para soporte nativo, o inicialice Ventoy en Windows/Linux primero y luego realice una actualización in situ en macOS.",

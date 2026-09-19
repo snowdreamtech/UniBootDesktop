@@ -153,7 +153,7 @@ export const ukUa: TranslationDict = {
   "deploy.tip_writing": "Запис завантажувальної мікропрограми...",
   "deploy.tip_select_single": "Спочатку виберіть цільовий USB-диск",
   "deploy.tip_select_batch": "Перевірте цільові USB-дискі для пакетного розгортання",
-  "deploy.tip_macos_unsupported": "❌ macOS не підтримує початкове форматування в гібридному режимі (використовуйте хмарний режим або спочатку ініціалізуйте на Win/Linux)",
+  "deploy.tip_macos_unsupported": "macOS не підтримує початкове форматування в гібридному режимі (використовуйте хмарний режим або спочатку ініціалізуйте на Win/Linux)",
   "deploy.tip_need_ventoy": "Початкове форматування в гібридному режимі потребує локального Ventoy CLI",
   "deploy.macos_alert_title": "Нове форматування CLI macOS Ventoy не підтримується",
   "deploy.macos_alert_desc": "Ventoy не підтримує пряме форматування на macOS. Використовуйте хмарний режим для нативної підтримки, або спочатку ініціалізуйте Ventoy на Windows/Linux, потім виконайте оновлення на macOS.",

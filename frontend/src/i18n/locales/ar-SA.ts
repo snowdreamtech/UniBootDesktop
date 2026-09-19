@@ -153,7 +153,7 @@ export const arSa: TranslationDict = {
   "deploy.tip_writing": "جاري كتابة البرنامج الثابت للإقلاع...",
   "deploy.tip_select_single": "يرجى تحديد محرك أقراص USB المستهدف أولاً",
   "deploy.tip_select_batch": "يرجى تحديد محركات أقراص USB للإنشاء الدفعي",
-  "deploy.tip_macos_unsupported": "❌ macOS لا يدعم التهيئة الأولى بالوضع الهجين (استخدم وضع السحابة أو ابدأ على Win/Linux أولاً)",
+  "deploy.tip_macos_unsupported": "macOS لا يدعم التهيئة الأولى بالوضع الهجين (استخدم وضع السحابة أو ابدأ على Win/Linux أولاً)",
   "deploy.tip_need_ventoy": "التهيئة الأولى بالوضع الهجين تتطلب Ventoy CLI محلياً",
   "deploy.macos_alert_title": "نظام macOS لا يدعم التنسيق الجديد عبر Ventoy CLI",
   "deploy.macos_alert_desc": "لا يدعم Ventoy التهيئة المباشرة على macOS. استخدم وضع السحابة للدعم الأصلي، أو ابدأ Ventoy على Windows/Linux أولاً ثم أجرِ ترقية في محلها على macOS.",
