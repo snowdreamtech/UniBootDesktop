@@ -175,7 +175,7 @@ export const viVn: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Thử nghiệm mô phỏng khởi động",
   "vm.box_title": "Thử nghiệm mô phỏng khởi động",
   "vm.detected_single": "Đã phát hiện {name}",

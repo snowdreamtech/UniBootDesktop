@@ -175,7 +175,7 @@ export const esLa: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Boot Simulation Test",
   "vm.box_title": "Boot Simulation Test",
   "vm.detected_single": "{name} Detected",

@@ -175,7 +175,7 @@ export const skSk: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Test simulácie bootovania",
   "vm.box_title": "Test simulácie bootovania",
   "vm.detected_single": "{name} zistené",

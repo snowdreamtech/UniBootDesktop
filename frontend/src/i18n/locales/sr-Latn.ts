@@ -175,7 +175,7 @@ export const srLatn: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Test simulacije pokretanja",
   "vm.box_title": "Test simulacije pokretanja",
   "vm.detected_single": "Otkriven {name}",

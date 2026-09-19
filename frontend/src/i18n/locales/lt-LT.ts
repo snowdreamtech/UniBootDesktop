@@ -175,7 +175,7 @@ export const ltLt: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Bagažinės simuliacijos testas",
   "vm.box_title": "Bagažinės simuliacijos testas",
   "vm.detected_single": "Aptikta {name}",

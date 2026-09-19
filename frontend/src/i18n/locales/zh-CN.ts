@@ -175,7 +175,7 @@ export const zhCn: TranslationDict = {
   "deploy.stats_elapsed": "已用时间",
   "deploy.stats_speed": "写入速度",
   "deploy.toast_cancelled": "⚠️ 部署操作已主动安全取消",
-  "deploy.btn_cancel": "🛑 取消部署",
+  "deploy.btn_cancel": "取消部署",
   "vm.title": "引导模拟测试",
   "vm.box_title": "引导模拟测试",
   "vm.detected_single": "已检测到 {name}",

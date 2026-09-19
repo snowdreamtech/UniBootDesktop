@@ -175,7 +175,7 @@ export const srCyrl: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Тест симулације покретања",
   "vm.box_title": "Тест симулације покретања",
   "vm.detected_single": "Откривен {name}",

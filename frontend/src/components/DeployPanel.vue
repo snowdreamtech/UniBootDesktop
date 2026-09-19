@@ -193,7 +193,8 @@
           <span class="stat-badge" v-if="(etaSec || 0) > 0">⌛ {{ t('deploy.stats_eta') }}: {{ formatStatsTime(etaSec) }}</span>
         </div>
         <button class="btn-cancel-deploy" @click="emit('cancel-deploy')">
-          🛑 {{ t('deploy.btn_cancel') }}
+          <span class="cancel-icon">🛑</span>
+          <span>{{ t('deploy.btn_cancel') }}</span>
         </button>
       </div>
 

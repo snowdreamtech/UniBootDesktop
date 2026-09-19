@@ -175,7 +175,7 @@ export const ukUa: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Тест симуляції завантаження",
   "vm.box_title": "Тест симуляції завантаження",
   "vm.detected_single": "Виявлено {name}",

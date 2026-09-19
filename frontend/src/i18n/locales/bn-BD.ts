@@ -175,7 +175,7 @@ export const bnBd: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "বুট সিমুলেশন পরীক্ষা",
   "vm.box_title": "বুট সিমুলেশন পরীক্ষা",
   "vm.detected_single": "{name} সনাক্ত হয়েছে",

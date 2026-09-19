@@ -175,7 +175,7 @@ export const beBy: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Тэст сімуляцыі загрузкі",
   "vm.box_title": "Тэст сімуляцыі загрузкі",
   "vm.detected_single": "Выяўлена {name}",

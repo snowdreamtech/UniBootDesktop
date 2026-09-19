@@ -175,7 +175,7 @@ export const mlIn: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "ബൂട്ട് സിമുലേഷൻ പരിശോധന",
   "vm.box_title": "ബൂട്ട് സിമുലേഷൻ പരിശോധന",
   "vm.detected_single": "{name} കണ്ടെത്തി",

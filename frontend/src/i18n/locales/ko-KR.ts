@@ -175,7 +175,7 @@ export const koKr: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "부팅 시뮬레이션 테스트",
   "vm.box_title": "부팅 시뮬레이션 테스트",
   "vm.detected_single": "{name} 감지됨",

@@ -175,7 +175,7 @@ export const kaGe: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Boot სიმულაციის ტესტი",
   "vm.box_title": "Boot სიმულაციის ტესტი",
   "vm.detected_single": "ნაპოვნია {name}",

@@ -175,7 +175,7 @@ export const itIt: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Test di simulazione di avvio",
   "vm.box_title": "Test di simulazione di avvio",
   "vm.detected_single": "{name} rilevato",

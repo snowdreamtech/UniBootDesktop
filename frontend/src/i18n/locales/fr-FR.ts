@@ -175,7 +175,7 @@ export const frFr: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Test de simulation de démarrage",
   "vm.box_title": "Test de simulation de démarrage",
   "vm.detected_single": "{name} détecté",

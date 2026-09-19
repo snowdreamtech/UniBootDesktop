@@ -175,7 +175,7 @@ export const trTr: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Önyükleme Simülasyon Testi",
   "vm.box_title": "Önyükleme Simülasyon Testi",
   "vm.detected_single": "{name} Algılandı",

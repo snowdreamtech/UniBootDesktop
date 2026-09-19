@@ -175,7 +175,7 @@ export const heIl: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "בדיקת סימולציית אתחול",
   "vm.box_title": "בדיקת סימולציית אתחול",
   "vm.detected_single": "זוהה {name}",

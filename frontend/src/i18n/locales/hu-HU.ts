@@ -175,7 +175,7 @@ export const huHu: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Indítási szimulációs teszt",
   "vm.box_title": "Indítási szimulációs teszt",
   "vm.detected_single": "{name} észlelve",

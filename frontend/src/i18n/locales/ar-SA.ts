@@ -175,7 +175,7 @@ export const arSa: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "اختبار محاكاة الإقلاع",
   "vm.box_title": "اختبار محاكاة الإقلاع",
   "vm.detected_single": "تم اكتشاف {name}",

@@ -175,7 +175,7 @@ export const ptBr: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Teste de Simulação de Inicialização",
   "vm.box_title": "Teste de Simulação de Inicialização",
   "vm.detected_single": "{name} Detectado",

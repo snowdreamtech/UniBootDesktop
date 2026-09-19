@@ -175,7 +175,7 @@ export const caEs: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Prova de simulació d'arrencada",
   "vm.box_title": "Prova de simulació d'arrencada",
   "vm.detected_single": "{name} detectat",

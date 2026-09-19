@@ -175,7 +175,7 @@ export const fiFi: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Käynnistyksen simulaatiotesti",
   "vm.box_title": "Käynnistyksen simulaatiotesti",
   "vm.detected_single": "{name} havaittu",

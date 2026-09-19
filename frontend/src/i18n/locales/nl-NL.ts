@@ -175,7 +175,7 @@ export const nlNl: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Opstartsimulatietest",
   "vm.box_title": "Opstartsimulatietest",
   "vm.detected_single": "{name} gedetecteerd",

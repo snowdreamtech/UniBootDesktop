@@ -175,7 +175,7 @@ export const daDk: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Boot Simuleringstest",
   "vm.box_title": "Boot Simuleringstest",
   "vm.detected_single": "{name} fundet",

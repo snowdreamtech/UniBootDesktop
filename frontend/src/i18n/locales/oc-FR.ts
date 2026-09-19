@@ -175,7 +175,7 @@ export const ocFr: TranslationDict = {
   "deploy.stats_elapsed": "Elapsed",
   "deploy.stats_speed": "Speed",
   "deploy.toast_cancelled": "⚠️ Deployment safely cancelled",
-  "deploy.btn_cancel": "🛑 Cancel Deployment",
+  "deploy.btn_cancel": "Cancel Deployment",
   "vm.title": "Tèst de simulacion d'amorsatge",
   "vm.box_title": "Tèst de simulacion d'amorsatge",
   "vm.detected_single": "{name} detectat",
