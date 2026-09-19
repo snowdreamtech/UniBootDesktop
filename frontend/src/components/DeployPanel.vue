@@ -1772,6 +1772,9 @@ function getFileIcon(filename: string): string {
 }
 
 .match-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.2rem 0.5rem;
