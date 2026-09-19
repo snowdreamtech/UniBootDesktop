@@ -31,7 +31,8 @@
         <div class="warning-card-message">{{ isMacOs ? t('deploy.macos_alert_desc') : t('deploy.no_ventoy_desc') }}</div>
       </div>
       <button class="btn-secondary btn-sm" @click="emit('open-settings-ventoy')">
-        ⚙️ {{ t('settings.title') }}
+        <span class="btn-icon">⚙️</span>
+        <span>{{ t('settings.title') }}</span>
       </button>
     </div>
 
@@ -154,7 +155,8 @@
                 :placeholder="t('checksum.compare_placeholder')"
               />
               <button class="import-sums-btn" :title="t('checksum.import_file_title')" @click="triggerSumsFilePick">
-                📄 {{ t('checksum.import_file') }}
+                <span class="btn-icon">📄</span>
+                <span>{{ t('checksum.import_file') }}</span>
               </button>
               <input
                 type="file"
@@ -229,7 +231,8 @@
             class="btn-eject-success"
             @click="emit('safely-eject-success')"
           >
-            ⏏️ {{ t('deploy.safely_eject_btn') }}
+            <span class="btn-icon">⏏️</span>
+            <span>{{ t('deploy.safely_eject_btn') }}</span>
           </button>
         </div>
       </div>
@@ -298,7 +301,7 @@
       <div class="vm-tuning-row">
         <!-- CPU Cores -->
         <div class="vm-tuning-item">
-          <span class="vm-selector-label">⚙️ {{ t('vm.cfg_cpu') }}</span>
+          <span class="vm-selector-label">{{ t('vm.cfg_cpu') }}</span>
           <div class="vm-select-wrapper sm">
             <select
               :value="vmCpuCores || 2"
@@ -316,7 +319,7 @@
 
         <!-- RAM Allocation -->
         <div class="vm-tuning-item">
-          <span class="vm-selector-label">💾 {{ t('vm.cfg_ram') }}</span>
+          <span class="vm-selector-label">{{ t('vm.cfg_ram') }}</span>
           <div class="vm-select-wrapper sm">
             <select
               :value="vmMemoryMB || 2048"
@@ -339,7 +342,7 @@
             :checked="vmDisplayAccel !== false"
             @change="e => emit('update:vmDisplayAccel', (e.target as HTMLInputElement).checked)"
           />
-          ⚡ {{ t('vm.cfg_accel') }}
+          {{ t('vm.cfg_accel') }}
         </label>
       </div>
       <p class="vm-desc">
@@ -357,7 +360,8 @@
         :title="vmDisabledReason"
         @click="!isVmDisabled && emit('launch-vm')"
       >
-        {{ isLaunchingQemu ? t('vm.launching') : t('vm.run_test') }}
+        <span class="btn-icon">{{ isLaunchingQemu ? '⏳' : '▶' }}</span>
+        <span>{{ isLaunchingQemu ? t('vm.launching') : t('vm.run_test') }}</span>
       </button>
     </div>
   </section>
