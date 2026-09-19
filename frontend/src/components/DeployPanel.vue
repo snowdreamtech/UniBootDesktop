@@ -53,13 +53,15 @@
       <div class="iso-card-header">
         <div class="iso-title-group">
           <h3>
-            {{ t('iso.title') }}
+            <span class="section-icon">💿</span>
+            <span>{{ t('iso.title') }}</span>
             <span class="optional-badge">{{ t('common.optional') }}</span>
           </h3>
           <span class="iso-subtitle">{{ t('iso.desc') }}</span>
         </div>
         <button class="btn-secondary add-iso-btn" @click="emit('select-iso')">
-          {{ t('iso.add_btn') }}
+          <span class="btn-icon">➕</span>
+          <span>{{ t('iso.add_btn') }}</span>
         </button>
       </div>
 
@@ -206,7 +208,8 @@
         :title="deployDisabledReason"
         @click="emit('deploy-click')"
       >
-        {{ deployBtnText }}
+        <span class="deploy-icon">{{ isNonDestructive ? '🛡️' : '🚀' }}</span>
+        <span>{{ deployBtnText }}</span>
       </button>
 
       <!-- Deploy success banner with Safely Eject button -->
@@ -830,12 +833,19 @@ function getFileIcon(filename: string): string {
 }
 
 .optional-badge {
-  font-size: 0.7rem;
-  background: var(--btn-sec-bg);
-  color: var(--text-muted);
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
-  font-weight: 500;
+  font-size: 0.72rem;
+  background: var(--badge-optional-bg, rgba(56, 189, 248, 0.16));
+  border: 1px solid var(--badge-optional-border, rgba(56, 189, 248, 0.35));
+  color: var(--badge-optional-text, #38bdf8);
+  padding: 0.12rem 0.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  user-select: none;
+  transition: all 0.2s ease;
 }
 
 .iso-subtitle {
@@ -1651,6 +1661,12 @@ function getFileIcon(filename: string): string {
 [data-theme="light"] .badge.muted {
   background: #f1f5f9;
   color: #64748b;
+}
+
+[data-theme="light"] .optional-badge {
+  background: #e0f2fe;
+  border-color: #bae6fd;
+  color: #0284c7;
 }
 
 [data-theme="light"] .vm-select {

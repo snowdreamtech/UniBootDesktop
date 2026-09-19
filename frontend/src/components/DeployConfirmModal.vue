@@ -14,7 +14,7 @@
       <div class="modal-body">
         <!-- Safe Info Banner for ALL Ventoy Disks -->
         <div v-if="isAllVentoy" class="safe-banner">
-          <div class="banner-title">{{ t("confirm.safe_banner_title") }}</div>
+          <div class="banner-title"><span class="banner-icon">💡</span> {{ t("confirm.safe_banner_title") }}</div>
           <div class="banner-desc">
             {{ t("confirm.safe_banner_desc") }}
           </div>
@@ -22,7 +22,7 @@
 
         <!-- Mixed Mode Info Banner for Mixed Selections -->
         <div v-else-if="isMixed" class="mixed-banner">
-          <div class="banner-title">{{ t("confirm.mixed_banner_title") }}</div>
+          <div class="banner-title"><span class="banner-icon">🛡️</span> {{ t("confirm.mixed_banner_title") }}</div>
           <div class="banner-desc">
             {{ t("confirm.mixed_banner_desc", { ventoyCount: ventoyDisks.length, blankCount: blankDisks.length }) }}
           </div>
@@ -30,7 +30,7 @@
 
         <!-- Danger Warning Alert Banner for Pure Blank Disks -->
         <div v-else class="danger-banner">
-          <div class="banner-title">{{ t("confirm.danger_banner_title") }}</div>
+          <div class="banner-title"><span class="banner-icon">💥</span> {{ t("confirm.danger_banner_title") }}</div>
           <div class="banner-desc">
             {{ t("confirm.danger_banner_desc") }}
           </div>
@@ -135,7 +135,8 @@
       <div class="modal-footer">
         <button class="btn-cancel" @click="close">{{ t("confirm.cancel_btn") }}</button>
         <button :class="isAllVentoy || isMixed ? 'btn-safe-confirm' : 'btn-danger-confirm'" @click="confirm">
-          {{ confirmBtnText }}
+          <span class="btn-icon">{{ isAllVentoy ? '🛡️' : (isMixed ? '⚡' : '🔥') }}</span>
+          <span>{{ confirmBtnText }}</span>
         </button>
       </div>
     </div>

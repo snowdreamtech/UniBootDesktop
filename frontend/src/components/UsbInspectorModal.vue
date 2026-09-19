@@ -40,7 +40,7 @@
 
         <!-- Basic Device Info Header & Grid -->
         <div class="section-divider">
-          <span>{{ t('inspector.section_basic') }}</span>
+          <span>📊 {{ t('inspector.section_basic') }}</span>
         </div>
 
         <div class="spec-grid">
@@ -113,7 +113,7 @@
 
         <!-- Hardware Details Header & Grid -->
         <div class="section-divider">
-          <span>{{ t('inspector.section_hw') }}</span>
+          <span>🛠️ {{ t('inspector.section_hw') }}</span>
         </div>
 
         <div class="spec-grid advanced-grid">

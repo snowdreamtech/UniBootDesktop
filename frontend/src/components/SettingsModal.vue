@@ -242,7 +242,8 @@
 
             <div class="network-test-row">
               <button class="btn-secondary test-btn" :disabled="isTestingProxy" @click="testNetworkProxy">
-                {{ isTestingProxy ? t('settings.testingProxy') : t('settings.testProxyConn') }}
+                <span class="btn-icon">⚡</span>
+                <span>{{ isTestingProxy ? t('settings.testingProxy') : t('settings.testProxyConn') }}</span>
               </button>
               <span v-if="proxyTestResult" class="test-result" :class="proxyTestSuccess ? 'success' : 'error'">
                 {{ proxyTestResult }}
@@ -255,6 +256,7 @@
         <div v-if="activeTab === 'uniboot'" class="tab-content">
           <div class="settings-section">
             <h4 class="section-title">
+              <span class="section-icon">📦</span>
               <span>{{ t('settings.firmwareMatrixTitle') }}</span>
             </h4>
 
@@ -271,7 +273,8 @@
               </div>
             </div>
 
-            <div class="sync-box">
+            <!-- Firmware sync action card -->
+            <div class="firmware-sync-card">
               <div class="sync-status">
                 <div class="sync-info-labels">
                   <span>{{ t('settings.localVersion') }} <strong>{{ localVersionTag }}</strong></span>
@@ -280,7 +283,8 @@
                   <span v-if="hasUniBootUpdate" class="badge warning pulse">{{ t('settings.newVersionDetected', { version: latestReleaseTag }) }}</span>
                 </div>
                 <button class="btn-primary-sm" :disabled="isSyncing" @click="syncFirmware">
-                  {{ isSyncing ? t('settings.pullingFirmware') : (hasUniBootUpdate ? t('settings.upgradeFirmwareNow', { version: latestReleaseTag }) : t('settings.checkSyncFirmware')) }}
+                  <span class="btn-icon">{{ isSyncing ? '⏳' : (hasUniBootUpdate ? '⚡' : '🔄') }}</span>
+                  <span>{{ isSyncing ? t('settings.pullingFirmware') : (hasUniBootUpdate ? t('settings.upgradeFirmwareNow', { version: latestReleaseTag }) : t('settings.checkSyncFirmware')) }}</span>
                 </button>
               </div>
               <div v-if="isSyncing" class="sync-progress">

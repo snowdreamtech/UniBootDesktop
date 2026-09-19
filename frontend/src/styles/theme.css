@@ -103,6 +103,9 @@ body {
   --badge-danger-text: #f87171;
   --badge-warning-bg: rgba(245, 158, 11, 0.15);
   --badge-warning-text: #fbbf24;
+  --badge-optional-bg: rgba(56, 189, 248, 0.16);
+  --badge-optional-border: rgba(56, 189, 248, 0.35);
+  --badge-optional-text: #38bdf8;
 }
 
 [data-theme="light"] {
@@ -184,6 +187,9 @@ body {
   --badge-danger-text: #b91c1c;
   --badge-warning-bg: #fef3c7;
   --badge-warning-text: #b45309;
+  --badge-optional-bg: #e0f2fe;
+  --badge-optional-border: #bae6fd;
+  --badge-optional-text: #0284c7;
 }
 
 /* Global Select & Option Dropdown Light/Dark Theme Adaptations */
