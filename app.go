@@ -102,7 +102,6 @@ func (a *App) GetRecentLogs() []logger.LogEntry {
 
 // ClearLogs clears the in-memory log buffer.
 func (a *App) ClearLogs() {
-	logger.Info("User cleared in-memory log history")
 	logger.ClearLogs()
 }
 

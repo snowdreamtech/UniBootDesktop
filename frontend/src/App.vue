@@ -344,10 +344,7 @@ async function handleExportEmbeddedLogs() {
 }
 
 function handleClearEmbeddedLogs() {
-  logUserAction('INFO', 'User cleared embedded log viewer');
   runtimeLogs.value = [];
-  // Clear the backend in-memory log buffer so cleared logs do not
-  // reappear after the app restarts or the UI is refreshed.
   ClearLogs().catch((err: any) => {
     console.error('Failed to clear backend log buffer:', err);
   });
