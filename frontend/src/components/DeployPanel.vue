@@ -584,18 +584,20 @@ const batchProgress = ref({ current: 0, total: 0, matched: 0, mismatched: 0 });
 const cachedHashCount = computed(() => Object.keys(checksumCache.value).length);
 const checksumActiveTab = ref<'batch' | 'single'>('batch');
 
+// 智能默认聚焦 Tab：当镜像数量从 <= 1 增加到多个时，自动聚焦「批量校验」；仅有 1 个或没有时聚焦「单个校验」
+watch(() => props.selectedIsoFiles.length, (newCount, oldCount) => {
+  if (newCount > 1 && (oldCount === undefined || oldCount <= 1)) {
+    checksumActiveTab.value = 'batch';
+  } else if (newCount <= 1) {
+    checksumActiveTab.value = 'single';
+  }
+}, { immediate: true });
+
 watch(() => props.selectedIsoFiles, (newFiles: any[]) => {
   if (selectedChecksumIsoIndex.value >= newFiles.length) {
     selectedChecksumIsoIndex.value = 0;
   }
   calculatedHash.value = '';
-
-  // 智能默认聚焦 Tab：单个 ISO 时自动切到 single，多个时切到 batch
-  if (newFiles.length <= 1) {
-    checksumActiveTab.value = 'single';
-  } else if (!checksumActiveTab.value) {
-    checksumActiveTab.value = 'batch';
-  }
 
   // 当选择新 ISO 时，自动从缓存中查找期望值
   if (newFiles.length > 0 && selectedChecksumIsoIndex.value < newFiles.length) {
@@ -605,7 +607,7 @@ watch(() => props.selectedIsoFiles, (newFiles: any[]) => {
       expectedHashInput.value = cachedHash;
     }
   }
-}, { deep: true, immediate: true });
+}, { deep: true });
 
 function inspectSingleIso(index: number) {
   selectedChecksumIsoIndex.value = index;
