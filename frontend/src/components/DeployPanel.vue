@@ -86,23 +86,25 @@
               <div class="iso-file-path">{{ file.path }}</div>
             </div>
             <div class="iso-item-actions">
-              <!-- Checksum Status Badge -->
+              <!-- Checksum Status Badge (clickable to view single details) -->
               <span
                 v-if="getIsoChecksumStatus(file.name)"
                 class="iso-status-badge"
                 :class="getIsoChecksumStatus(file.name)?.status"
+                :title="t('checksum.inspect_single')"
+                @click.stop="inspectSingleIso(index)"
               >
                 <span class="badge-icon">{{ getIsoChecksumStatusIcon(file.name) }}</span>
                 <span>{{ getIsoChecksumStatusText(file.name) }}</span>
               </span>
               <button
                 class="iso-check-hash-btn"
-                :class="{ active: selectedChecksumIsoIndex === index }"
-                :title="t('checksum.calc_btn')"
-                @click.stop="selectIsoForChecksum(index)"
+                :class="{ active: checksumActiveTab === 'single' && selectedChecksumIsoIndex === index }"
+                :title="t('checksum.inspect_single')"
+                @click.stop="inspectSingleIso(index)"
               >
                 <span class="btn-icon">🔒</span>
-                <span>{{ selectedChecksumIsoIndex === index ? t('checksum.status_selected') : t('checksum.status_verify') }}</span>
+                <span>{{ selectedChecksumIsoIndex === index && checksumActiveTab === 'single' ? t('checksum.status_selected') : t('checksum.status_verify') }}</span>
               </button>
               <button class="iso-remove-btn" title="Remove" @click.stop="emit('remove-iso', index)">✕</button>
             </div>
@@ -126,103 +128,156 @@
             @change="handleSumsFileSelected"
           />
 
-          <!-- Target ISO Selector Bar -->
-          <div class="checksum-target-bar">
-            <span class="target-bar-label">🎯 {{ t('checksum.target_iso_label') }}:</span>
-            <div v-if="selectedIsoFiles.length > 1" class="target-iso-selector">
-              <select v-model="selectedChecksumIsoIndex" class="target-iso-select">
-                <option v-for="(file, idx) in selectedIsoFiles" :key="idx" :value="idx">
-                  {{ idx + 1 }}. {{ file.name }}
-                </option>
-              </select>
-            </div>
-            <div v-else class="target-iso-single-name" :title="selectedIsoFiles[0].path">
-              {{ selectedIsoFiles[0].name }}
-            </div>
+          <!-- Checksum Sub-Tabs Navigation (Visible when multiple ISOs selected) -->
+          <div v-if="selectedIsoFiles.length > 1" class="checksum-subtabs-nav">
+            <button
+              class="sub-tab-btn"
+              :class="{ active: checksumActiveTab === 'batch' }"
+              @click="checksumActiveTab = 'batch'"
+            >
+              <span class="btn-icon">🔍</span>
+              <span>{{ t('checksum.tab_batch') }}</span>
+              <span class="tab-badge">{{ selectedIsoFiles.length }}</span>
+            </button>
+            <button
+              class="sub-tab-btn"
+              :class="{ active: checksumActiveTab === 'single' }"
+              @click="checksumActiveTab = 'single'"
+            >
+              <span class="btn-icon">⚡</span>
+              <span>{{ t('checksum.tab_single') }}</span>
+            </button>
           </div>
 
-          <div class="checksum-header">
-            <div class="checksum-header-left">
-              <span class="checksum-title">{{ t('checksum.card_title') }}</span>
-              <div class="algo-selector">
-                <select v-model="selectedAlgo" class="algo-select">
-                  <option value="sha256">SHA-256 {{ t('checksum.recommended') }}</option>
-                  <option value="md5">MD5</option>
-                  <option value="sha1">SHA-1</option>
-                  <option value="sha384">SHA-384</option>
-                  <option value="sha512">SHA-512</option>
-                  <option value="crc32">CRC32</option>
-                </select>
+          <!-- ================= TAB 1: 批量校验专属视图 ================= -->
+          <div v-if="checksumActiveTab === 'batch' && selectedIsoFiles.length > 1" class="checksum-tab-panel batch-panel">
+            <div class="checksum-header">
+              <div class="checksum-header-left">
+                <span class="checksum-title">{{ t('checksum.tab_batch') }}</span>
+                <span class="checksum-panel-desc">{{ t('checksum.batch_desc') }}</span>
+              </div>
+
+              <div class="checksum-header-actions">
+                <div class="algo-selector">
+                  <select v-model="selectedAlgo" class="algo-select">
+                    <option value="sha256">SHA-256 {{ t('checksum.recommended') }}</option>
+                    <option value="md5">MD5</option>
+                    <option value="sha1">SHA-1</option>
+                    <option value="sha384">SHA-384</option>
+                    <option value="sha512">SHA-512</option>
+                    <option value="crc32">CRC32</option>
+                  </select>
+                </div>
+
+                <!-- 批量导入校验汇总文件按钮 -->
+                <button
+                  class="btn-secondary import-sums-header-btn"
+                  :disabled="isCalculatingHash || isBatchCalculating"
+                  :title="t('checksum.import_file_title')"
+                  @click="triggerSumsFilePick"
+                >
+                  <span class="btn-icon">📄</span>
+                  <span>{{ t('checksum.import_file') }}</span>
+                  <span v-if="cachedHashCount > 0" class="cached-count-pill" :title="t('checksum.cache_loaded', { count: cachedHashCount })">
+                    {{ cachedHashCount }}
+                  </span>
+                </button>
+
+                <!-- 一键批量校验全部按钮 -->
+                <button
+                  class="btn-secondary batch-calc-btn"
+                  :disabled="isBatchCalculating || isCalculatingHash"
+                  @click="handleBatchChecksum"
+                >
+                  <span class="btn-icon">{{ isBatchCalculating ? '⏳' : '🔍' }}</span>
+                  <span>{{ isBatchCalculating ? t('checksum.batch_verifying', { current: batchProgress.current, total: selectedIsoFiles.length }) : t('checksum.batch_verify_all') }}</span>
+                </button>
               </div>
             </div>
 
-            <div class="checksum-header-actions">
-              <!-- Always visible Import Checksum File Button for both batch and single mode -->
-              <button
-                class="btn-secondary import-sums-header-btn"
-                :disabled="isCalculatingHash || isBatchCalculating"
-                :title="t('checksum.import_file_title')"
-                @click="triggerSumsFilePick"
-              >
-                <span class="btn-icon">📄</span>
-                <span>{{ t('checksum.import_file') }}</span>
-                <span v-if="cachedHashCount > 0" class="cached-count-pill" :title="t('checksum.cache_loaded', { count: cachedHashCount })">
-                  {{ cachedHashCount }}
-                </span>
-              </button>
-
-              <!-- Single ISO calculate button -->
-              <button
-                class="btn-secondary calc-hash-btn"
-                :disabled="isCalculatingHash || isBatchCalculating"
-                @click="handleCalculateChecksum"
-              >
-                <span class="btn-icon">{{ isCalculatingHash ? '⏳' : '⚡' }}</span>
-                <span>{{ isCalculatingHash ? t('checksum.calculating') : t('checksum.calc_btn') }}</span>
-              </button>
-
-              <!-- Batch Checksum Button (visible when multiple ISOs selected) -->
-              <button
-                v-if="selectedIsoFiles.length > 1"
-                class="btn-secondary batch-calc-btn"
-                :disabled="isBatchCalculating || isCalculatingHash"
-                @click="handleBatchChecksum"
-              >
-                <span class="btn-icon">{{ isBatchCalculating ? '⏳' : '🔍' }}</span>
-                <span>{{ isBatchCalculating ? t('checksum.batch_verifying', { current: batchProgress.current, total: selectedIsoFiles.length }) : t('checksum.batch_verify_all') }}</span>
-              </button>
+            <!-- Batch Checksum Summary Banner -->
+            <div v-if="batchSummaryText" class="batch-summary-banner" :class="{ 'all-matched': isAllBatchMatched }">
+              <span class="summary-icon">{{ isAllBatchMatched ? '✅' : 'ℹ️' }}</span>
+              <span>{{ batchSummaryText }}</span>
             </div>
           </div>
 
-          <!-- Batch Checksum Summary Banner -->
-          <div v-if="batchSummaryText" class="batch-summary-banner" :class="{ 'all-matched': isAllBatchMatched }">
-            <span class="summary-icon">{{ isAllBatchMatched ? '✅' : 'ℹ️' }}</span>
-            <span>{{ batchSummaryText }}</span>
-          </div>
-
-          <!-- Calculated Hash Result & Compare Box -->
-          <div v-if="calculatedHash" class="checksum-result-box">
-            <div class="hash-code-row">
-              <span class="hash-algo-badge">{{ currentChecksumAlgo.toUpperCase() }}</span>
-              <code class="hash-code" :title="calculatedHash">{{ calculatedHash }}</code>
-              <button class="copy-hash-btn" :class="{ copied: isHashCopied }" :title="t('checksum.copy_hash')" @click="copyHashToClipboard">
-                {{ isHashCopied ? '✓' : '📋' }}
-              </button>
+          <!-- ================= TAB 2: 单个校验专属视图 ================= -->
+          <div v-else class="checksum-tab-panel single-panel">
+            <!-- Target ISO Selector Bar -->
+            <div class="checksum-target-bar">
+              <span class="target-bar-label">🎯 {{ t('checksum.target_iso_label') }}:</span>
+              <div v-if="selectedIsoFiles.length > 1" class="target-iso-selector">
+                <select v-model="selectedChecksumIsoIndex" class="target-iso-select">
+                  <option v-for="(file, idx) in selectedIsoFiles" :key="idx" :value="idx">
+                    {{ idx + 1 }}. {{ file.name }}
+                  </option>
+                </select>
+              </div>
+              <div v-else class="target-iso-single-name" :title="selectedIsoFiles[0].path">
+                {{ selectedIsoFiles[0].name }}
+              </div>
             </div>
-            <div class="hash-compare-row">
-              <input
-                v-model="expectedHashInput"
-                type="text"
-                class="hash-compare-input"
-                :placeholder="t('checksum.compare_placeholder')"
-              />
-              <button class="import-sums-btn" :title="t('checksum.import_file_title')" @click="triggerSumsFilePick">
-                <span class="btn-icon">📄</span>
-                <span>{{ t('checksum.import_file') }}</span>
-              </button>
-              <div v-if="parsedExpectedHash" class="match-badge" :class="isHashMatching ? 'match' : 'mismatch'">
-                <span class="badge-icon">{{ isHashMatching ? '✅' : '❌' }}</span>
-                <span>{{ isHashMatching ? t('checksum.match_success') : t('checksum.match_mismatch') }}</span>
+
+            <div class="checksum-header">
+              <div class="checksum-header-left">
+                <span class="checksum-title">{{ t('checksum.tab_single') }}</span>
+                <span class="checksum-panel-desc">{{ t('checksum.single_desc') }}</span>
+              </div>
+
+              <div class="checksum-header-actions">
+                <div class="algo-selector">
+                  <select v-model="selectedAlgo" class="algo-select">
+                    <option value="sha256">SHA-256 {{ t('checksum.recommended') }}</option>
+                    <option value="md5">MD5</option>
+                    <option value="sha1">SHA-1</option>
+                    <option value="sha384">SHA-384</option>
+                    <option value="sha512">SHA-512</option>
+                    <option value="crc32">CRC32</option>
+                  </select>
+                </div>
+
+                <!-- Single ISO calculate button -->
+                <button
+                  class="btn-secondary calc-hash-btn"
+                  :disabled="isCalculatingHash || isBatchCalculating"
+                  @click="handleCalculateChecksum"
+                >
+                  <span class="btn-icon">{{ isCalculatingHash ? '⏳' : '⚡' }}</span>
+                  <span>{{ isCalculatingHash ? t('checksum.calculating') : t('checksum.calc_btn') }}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Single ISO Result & Compare Box -->
+            <div class="checksum-result-box">
+              <div v-if="calculatedHash" class="hash-code-row">
+                <span class="hash-algo-badge">{{ currentChecksumAlgo.toUpperCase() }}</span>
+                <code class="hash-code" :title="calculatedHash">{{ calculatedHash }}</code>
+                <button class="copy-hash-btn" :class="{ copied: isHashCopied }" :title="t('checksum.copy_hash')" @click="copyHashToClipboard">
+                  {{ isHashCopied ? '✓' : '📋' }}
+                </button>
+              </div>
+              <div v-else class="hash-empty-hint">
+                <span class="hint-icon">⚡</span>
+                <span>{{ t('checksum.single_desc') }}</span>
+              </div>
+
+              <div class="hash-compare-row">
+                <input
+                  v-model="expectedHashInput"
+                  type="text"
+                  class="hash-compare-input"
+                  :placeholder="t('checksum.compare_placeholder')"
+                />
+                <button class="import-sums-btn" :title="t('checksum.import_file_title')" @click="triggerSumsFilePick">
+                  <span class="btn-icon">📄</span>
+                  <span>{{ t('checksum.import_file') }}</span>
+                </button>
+                <div v-if="parsedExpectedHash && calculatedHash" class="match-badge" :class="isHashMatching ? 'match' : 'mismatch'">
+                  <span class="badge-icon">{{ isHashMatching ? '✅' : '❌' }}</span>
+                  <span>{{ isHashMatching ? t('checksum.match_success') : t('checksum.match_mismatch') }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -527,12 +582,20 @@ const loadedSumsFileCount = ref(0);
 const isBatchCalculating = ref(false);
 const batchProgress = ref({ current: 0, total: 0, matched: 0, mismatched: 0 });
 const cachedHashCount = computed(() => Object.keys(checksumCache.value).length);
+const checksumActiveTab = ref<'batch' | 'single'>('batch');
 
 watch(() => props.selectedIsoFiles, (newFiles: any[]) => {
   if (selectedChecksumIsoIndex.value >= newFiles.length) {
     selectedChecksumIsoIndex.value = 0;
   }
   calculatedHash.value = '';
+
+  // 智能默认聚焦 Tab：单个 ISO 时自动切到 single，多个时切到 batch
+  if (newFiles.length <= 1) {
+    checksumActiveTab.value = 'single';
+  } else if (!checksumActiveTab.value) {
+    checksumActiveTab.value = 'batch';
+  }
 
   // 当选择新 ISO 时，自动从缓存中查找期望值
   if (newFiles.length > 0 && selectedChecksumIsoIndex.value < newFiles.length) {
@@ -542,7 +605,12 @@ watch(() => props.selectedIsoFiles, (newFiles: any[]) => {
       expectedHashInput.value = cachedHash;
     }
   }
-}, { deep: true });
+}, { deep: true, immediate: true });
+
+function inspectSingleIso(index: number) {
+  selectedChecksumIsoIndex.value = index;
+  checksumActiveTab.value = 'single';
+}
 
 watch(selectedChecksumIsoIndex, () => {
   if (props.selectedIsoFiles.length > 0 && selectedChecksumIsoIndex.value < props.selectedIsoFiles.length) {
@@ -1418,6 +1486,79 @@ function getFileIcon(filename: string): string {
   gap: 0.5rem;
 }
 
+.checksum-subtabs-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  background: var(--subtab-container-bg);
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  margin-bottom: 0.25rem;
+}
+
+.checksum-subtabs-nav .sub-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--subtab-btn-text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.checksum-subtabs-nav .sub-tab-btn:hover {
+  color: var(--text-main);
+}
+
+.checksum-subtabs-nav .sub-tab-btn.active {
+  background: var(--subtab-btn-active-bg);
+  color: var(--subtab-btn-active-text);
+  border-color: var(--subtab-btn-active-border);
+}
+
+.tab-badge {
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--accent-cyan);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.05rem 0.35rem;
+  border-radius: 9999px;
+  line-height: 1.2;
+}
+
+.checksum-tab-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checksum-panel-desc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.hash-empty-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  background: var(--input-bg);
+  border-radius: 6px;
+  border: 1px dashed var(--card-border);
+}
+
+.hash-empty-hint .hint-icon {
+  color: var(--accent-cyan);
+}
+
 .checksum-header {
   display: flex;
   align-items: center;
@@ -2069,6 +2210,37 @@ function getFileIcon(filename: string): string {
 }
 
 /* Light theme overrides for Checksum & Batch Checksum */
+[data-theme="light"] .checksum-subtabs-nav {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .checksum-subtabs-nav .sub-tab-btn {
+  color: #475569;
+}
+
+[data-theme="light"] .checksum-subtabs-nav .sub-tab-btn:hover {
+  color: #0f172a;
+}
+
+[data-theme="light"] .checksum-subtabs-nav .sub-tab-btn.active {
+  background: #ffffff;
+  color: #0284c7;
+  border-color: #0284c7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .tab-badge {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+[data-theme="light"] .hash-empty-hint {
+  background: #f8fafc;
+  color: #64748b;
+  border-color: #cbd5e1;
+}
+
 [data-theme="light"] .iso-status-badge.calculating {
   background: #e0f2fe;
   color: #0369a1;
