@@ -249,14 +249,14 @@ func getOrCreateVarsFile() string {
 		if info, err := os.Stat(p); err == nil && !info.IsDir() {
 			data, err := os.ReadFile(p)
 			if err == nil && len(data) > 0 {
-				_ = os.WriteFile(tmpVars, data, 0644)
+				_ = os.WriteFile(tmpVars, data, 0600)
 				return tmpVars
 			}
 		}
 	}
 	if _, err := os.Stat(tmpVars); err != nil {
 		buf := make([]byte, 540*1024)
-		_ = os.WriteFile(tmpVars, buf, 0644)
+		_ = os.WriteFile(tmpVars, buf, 0600)
 	}
 	return tmpVars
 }

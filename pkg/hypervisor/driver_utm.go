@@ -158,7 +158,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 </plist>
 `, vcpus, memMB, targetPath)
 
-	_ = os.WriteFile(utmBundle+"/config.plist", []byte(plistContent), 0644)
+	_ = os.WriteFile(utmBundle+"/config.plist", []byte(plistContent), 0600)
 
 	logger.Info("Opening UTM application with native raw disk bundle", "bundle", utmBundle, "targetPath", targetPath)
 	cmd := exec.Command("open", "-a", "UTM", utmBundle)

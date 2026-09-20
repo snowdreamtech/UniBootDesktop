@@ -71,7 +71,8 @@ func ExtractBinary(archiveData []byte, binaryName string) ([]byte, error) {
 					return nil, fmt.Errorf("failed to open file in zip: %w", err)
 				}
 				defer rc.Close()
-				return io.ReadAll(rc)
+				// 限制读取大小为100MB，防止恶意zip炸弹
+				return io.ReadAll(io.LimitReader(rc, 100*1024*1024))
 			}
 		}
 		return nil, fmt.Errorf("%w: %s", ErrFileNotFound, binaryName)
@@ -103,10 +104,12 @@ func ExtractBinary(archiveData []byte, binaryName string) ([]byte, error) {
 			// Some formats (like gzip) can compress a single file without a container.
 			// Let's reset and read the entire decompressed stream.
 			decompressedAgain, _ := NewDecompressReader(bytes.NewReader(archiveData), format)
-			return io.ReadAll(decompressedAgain)
+			// 限制读取大小为100MB
+			return io.ReadAll(io.LimitReader(decompressedAgain, 100*1024*1024))
 		}
 		if filepath.Base(hdr.Name) == binaryName && !hdr.FileInfo().IsDir() {
-			return io.ReadAll(tr)
+			// 限制读取大小为100MB
+			return io.ReadAll(io.LimitReader(tr, 100*1024*1024))
 		}
 	}
 
@@ -214,7 +217,8 @@ func extractZipFile(f *zip.File, destDir string) error {
 			return err
 		}
 		defer rc.Close()
-		target, err := io.ReadAll(rc)
+		// 限制符号链接目标路径长度为4KB
+		target, err := io.ReadAll(io.LimitReader(rc, 4096))
 		if err != nil {
 			return err
 		}

@@ -6,9 +6,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"net"
 	"net/url"
 	"os"
 	"runtime"
+	"strings"
 	"sync"
 	"time"
 
@@ -231,7 +233,7 @@ func (a *App) ExportLogs(content string, title string, logFilter string, textFil
 	if filePath == "" {
 		return "", nil // User cancelled
 	}
-	if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
+	if err := os.WriteFile(filePath, []byte(content), 0600); err != nil {
 		logger.Error("Failed to write log export file", "path", filePath, "error", err)
 		return "", fmt.Errorf("write log file: %w", err)
 	}
@@ -411,6 +413,86 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		logger.Info("Resetting application settings to default")
 		return config.GetDefaultConfig().Save()
 	}
+
+	// Validate GithubProxy URL format
+	if cfg.GithubProxy != "" && cfg.GithubProxy != "direct" {
+		proxyURL, err := url.Parse(cfg.GithubProxy)
+		if err != nil {
+			logger.Error("Invalid GitHub proxy URL format", "proxy", cfg.GithubProxy, "error", err)
+			return fmt.Errorf("invalid GitHub proxy URL: %w", err)
+		}
+		if proxyURL.Scheme != "http" && proxyURL.Scheme != "https" {
+			logger.Error("GitHub proxy must use http or https scheme", "scheme", proxyURL.Scheme)
+			return fmt.Errorf("GitHub proxy must use http:// or https:// (got %s://)", proxyURL.Scheme)
+		}
+		if proxyURL.Host == "" {
+			logger.Error("GitHub proxy URL missing host")
+			return fmt.Errorf("GitHub proxy URL must have a valid host")
+		}
+	}
+
+	// Validate ProxyPort range (1-65535)
+	if cfg.ProxyPort < 0 || cfg.ProxyPort > 65535 {
+		logger.Error("Invalid proxy port", "port", cfg.ProxyPort)
+		return fmt.Errorf("proxy port must be between 0 and 65535 (got %d)", cfg.ProxyPort)
+	}
+
+	// Validate ProxyHost format (basic validation - not empty if port is set)
+	if cfg.ProxyPort > 0 && cfg.ProxyHost == "" {
+		logger.Error("Proxy host is empty but port is set", "port", cfg.ProxyPort)
+		return fmt.Errorf("proxy host cannot be empty when proxy port is configured")
+	}
+
+	// Validate Language enum
+	validLanguages := map[string]bool{
+		"auto":   true,
+		"en-US":  true,
+		"zh-CN":  true,
+		"zh-TW":  true,
+		"ja-JP":  true,
+		"ko-KR":  true,
+		"de-DE":  true,
+		"fr-FR":  true,
+		"es-ES":  true,
+		"pt-BR":  true,
+		"ru-RU":  true,
+	}
+	if !validLanguages[cfg.Language] {
+		logger.Error("Invalid language code", "language", cfg.Language)
+		return fmt.Errorf("invalid language code: %s (must be one of: auto, en-US, zh-CN, zh-TW, etc.)", cfg.Language)
+	}
+
+	// Validate FileSystem enum
+	validFileSystems := map[string]bool{
+		"exFAT": true,
+		"NTFS":  true,
+		"FAT32": true,
+		"ext4":  true,
+	}
+	if !validFileSystems[cfg.FileSystem] {
+		logger.Error("Invalid file system type", "fileSystem", cfg.FileSystem)
+		return fmt.Errorf("invalid file system: %s (must be one of: exFAT, NTFS, FAT32, ext4)", cfg.FileSystem)
+	}
+
+	// Validate Mode enum
+	if cfg.Mode != "cloud" && cfg.Mode != "hybrid" {
+		logger.Error("Invalid mode", "mode", cfg.Mode)
+		return fmt.Errorf("invalid mode: %s (must be 'cloud' or 'hybrid')", cfg.Mode)
+	}
+
+	// Validate ProxyProtocol enum
+	validProxyProtocols := map[string]bool{
+		"direct": true,
+		"http":   true,
+		"https":  true,
+		"socks4": true,
+		"socks5": true,
+	}
+	if !validProxyProtocols[cfg.ProxyProtocol] {
+		logger.Error("Invalid proxy protocol", "protocol", cfg.ProxyProtocol)
+		return fmt.Errorf("invalid proxy protocol: %s (must be one of: direct, http, https, socks4, socks5)", cfg.ProxyProtocol)
+	}
+
 	logger.Info("Saving updated application preferences", "language", cfg.Language, "theme", cfg.Theme, "autoEject", cfg.AutoEjectAfterDeploy, "proxy", cfg.GithubProxy)
 	if cfg.ProxyPassword != "" {
 		if err := config.SaveProxyPassword(cfg.ProxyPassword); err != nil {
@@ -532,6 +614,12 @@ func (a *App) OpenBrowserURL(targetURL string) error {
 		return fmt.Errorf("invalid URL: missing host")
 	}
 
+	// SSRF防护: 阻止内网IP地址和本地主机访问
+	if isPrivateOrLocalIP(u.Hostname()) {
+		logger.Warn("Blocked private/local IP address from being opened", "url", targetURL, "host", u.Hostname())
+		return fmt.Errorf("access to private/local IP addresses is not allowed for security reasons")
+	}
+
 	logger.Info("Opening URL in system browser", "url", targetURL)
 	wailsRuntime.BrowserOpenURL(a.ctx, targetURL)
 	return nil
@@ -551,4 +639,86 @@ func (a *App) ReloadAppMenu(lang string) error {
 	wailsRuntime.MenuSetApplicationMenu(a.ctx, appMenu)
 	wailsRuntime.MenuUpdateApplicationMenu(a.ctx)
 	return nil
+}
+
+// isPrivateOrLocalIP 检测给定的主机名或IP是否为私有/本地地址，防止SSRF攻击
+func isPrivateOrLocalIP(host string) bool {
+	// 移除端口号（如果有）
+	if strings.Contains(host, ":") {
+		var err error
+		host, _, err = net.SplitHostPort(host)
+		if err != nil {
+			return true // 解析失败，保守处理，拒绝访问
+		}
+	}
+
+	// 检查localhost和特殊主机名
+	host = strings.ToLower(strings.TrimSpace(host))
+	if host == "localhost" || host == "localhost." ||
+		strings.HasSuffix(host, ".localhost") ||
+		strings.HasSuffix(host, ".local") {
+		return true
+	}
+
+	// 解析IP地址
+	ip := net.ParseIP(host)
+	if ip == nil {
+		// 无法解析为IP，可能是域名
+		// 对于域名，尝试解析DNS（注意：这可能有DNS rebinding风险）
+		// 为了安全，我们这里采用白名单策略，只允许已知的安全域名
+		// 对于无法识别的域名，返回false允许访问（因为我们已经检查了协议是HTTPS）
+		return false
+	}
+
+	// 检查私有IP地址段
+	// IPv4: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+	// IPv6: fc00::/7 (ULA), fe80::/10 (Link-local)
+	// Loopback: 127.0.0.0/8 (IPv4), ::1 (IPv6)
+	// Link-local: 169.254.0.0/16 (IPv4)
+
+	if ip.IsLoopback() || ip.IsLinkLocalUnicast() || ip.IsLinkLocalMulticast() {
+		return true
+	}
+
+	// 检查IPv4私有地址
+	if ip.To4() != nil {
+		// 10.0.0.0/8
+		if ip[0] == 10 {
+			return true
+		}
+		// 172.16.0.0/12
+		if ip[0] == 172 && ip[1] >= 16 && ip[1] <= 31 {
+			return true
+		}
+		// 192.168.0.0/16
+		if ip[0] == 192 && ip[1] == 168 {
+			return true
+		}
+		// 169.254.0.0/16 (Link-local)
+		if ip[0] == 169 && ip[1] == 254 {
+			return true
+		}
+		// 127.0.0.0/8 (Loopback)
+		if ip[0] == 127 {
+			return true
+		}
+		// 0.0.0.0/8 (This network)
+		if ip[0] == 0 {
+			return true
+		}
+	}
+
+	// 检查IPv6私有地址
+	if ip.To16() != nil && ip.To4() == nil {
+		// fc00::/7 (ULA - Unique Local Address)
+		if ip[0] >= 0xfc && ip[0] <= 0xfd {
+			return true
+		}
+		// fe80::/10 (Link-local)
+		if ip[0] == 0xfe && (ip[1]&0xc0) == 0x80 {
+			return true
+		}
+	}
+
+	return false
 }

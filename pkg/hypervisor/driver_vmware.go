@@ -199,7 +199,7 @@ ddb.geometry.sectors = "63"
 ddb.longContentID = "1234567890"
 ddb.virtualHWVersion = "14"
 `, sectors, diskDev, cylinders)
-		_ = os.WriteFile(vmdkPath, []byte(rawDiskContent), 0644)
+		_ = os.WriteFile(vmdkPath, []byte(rawDiskContent), 0600)
 	}
 
 	memMB := GetRecommendedVMMemoryMB()
@@ -227,7 +227,7 @@ ethernet0.addressType = "generated"
 displayName = "UniBoot"
 guestOS = "other-64"
 `, vcpus, memMB, fwSetting)
-	_ = os.WriteFile(vmxPath, []byte(vmxContent), 0644)
+	_ = os.WriteFile(vmxPath, []byte(vmxContent), 0600)
 
 	// 3. Launch VMware Fusion
 	var cmd *exec.Cmd

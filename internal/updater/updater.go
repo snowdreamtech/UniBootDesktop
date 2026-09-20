@@ -88,7 +88,7 @@ func writeCache(cache *UpdateCache) error {
 		return err
 	}
 
-	return os.WriteFile(getCachePath(), data, 0644)
+	return os.WriteFile(getCachePath(), data, 0600)
 }
 
 // ClearCache clears the update cache from disk.
@@ -151,7 +151,7 @@ func FetchLatestReleaseInfo(ctx context.Context) (*ReleaseInfo, error) {
 	}
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(io.LimitReader(resp.Body, 10*1024*1024)) // 限制10MB响应体
 	if err != nil {
 		return nil, err
 	}

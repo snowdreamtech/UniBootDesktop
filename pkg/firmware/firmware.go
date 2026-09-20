@@ -11,6 +11,7 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -210,6 +211,7 @@ func FetchLatestUniBootRelease(ctx context.Context, proxyPrefix string) (*UniBoo
 		return nil, fmt.Errorf("GitHub API returned status code %d for %s", resp.StatusCode, finalURL)
 	}
 
+	// 限制响应体大小为10MB，防止内存耗尽
 	var ghRelease struct {
 		TagName     string `json:"tag_name"`
 		Name        string `json:"name"`
@@ -222,7 +224,9 @@ func FetchLatestUniBootRelease(ctx context.Context, proxyPrefix string) (*UniBoo
 		} `json:"assets"`
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&ghRelease); err != nil {
+	limitedReader := io.LimitReader(resp.Body, 10*1024*1024)
+
+	if err := json.NewDecoder(limitedReader).Decode(&ghRelease); err != nil {
 		return nil, fmt.Errorf("failed to decode GitHub release response: %w", err)
 	}
 
