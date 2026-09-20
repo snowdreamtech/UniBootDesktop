@@ -276,6 +276,16 @@ func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []s
 
 	results := make([]*DeployResult, 0, len(targetDisks))
 	for index, d := range targetDisks {
+		// Check if context is cancelled before processing each disk
+		select {
+		case <-ctx.Done():
+			logger.Info("Batch hybrid deployment cancelled by user", "completedDisks", index, "totalDisks", len(targetDisks))
+			// Return results for disks that were already processed
+			return results, ctx.Err()
+		default:
+			// Continue with deployment
+		}
+
 		var snapshot disk.DiskInfo
 		if len(expected) > 0 {
 			snapshot = expected[index]
@@ -494,6 +504,16 @@ func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []st
 	batchStartTime := time.Now()
 
 	for index, d := range targetDisks {
+		// Check if context is cancelled before processing each disk
+		select {
+		case <-ctx.Done():
+			logger.Info("Batch deployment cancelled by user", "completedDisks", index, "totalDisks", totalDisks)
+			// Return results for disks that were already processed
+			return results, ctx.Err()
+		default:
+			// Continue with deployment
+		}
+
 		var snapshot *disk.DiskInfo
 		if len(expected) > 0 {
 			snapshot = &expected[index]

@@ -511,6 +511,14 @@ export function useDeployment(options: UseDeploymentOptions) {
         if (cancelled) {
           showToast(t('deploy.toast_cancelled'), 'info');
           logUserAction('INFO', 'Deployment task cancelled successfully');
+
+          // Clean up deployment state
+          isDeploying.value = false;
+          deployProgress.value = 0;
+          batchDeployInfo.value = null;
+          deploySpeedMBps.value = 0;
+          deployElapsedSec.value = 0;
+          deployEtaSec.value = 0;
         }
       } catch (e: any) {
         console.error('Failed to cancel deployment:', e);
