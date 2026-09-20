@@ -6,6 +6,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"os"
 	"runtime"
 	"sync"
@@ -509,8 +510,31 @@ func (a *App) PerformGuiUpdate() (*updater.GuiUpdateResult, error) {
 }
 
 // OpenBrowserURL opens the target URL in the user's default system browser.
-func (a *App) OpenBrowserURL(targetURL string) {
+// Only HTTPS URLs are allowed for security (prevents file://, javascript:, etc.)
+func (a *App) OpenBrowserURL(targetURL string) error {
+	// Parse and validate URL
+	u, err := url.Parse(targetURL)
+	if err != nil {
+		logger.Error("Failed to parse URL for browser open", "url", targetURL, "error", err)
+		return fmt.Errorf("invalid URL: %w", err)
+	}
+
+	// Protocol whitelist: only allow HTTPS for security
+	// Prevents: file:/// (local file access), javascript: (XSS), data: (data URI), etc.
+	if u.Scheme != "https" {
+		logger.Warn("Blocked non-HTTPS URL from being opened in browser", "url", targetURL, "scheme", u.Scheme)
+		return fmt.Errorf("only HTTPS URLs are allowed for security reasons (got: %s://)", u.Scheme)
+	}
+
+	// Validate host is not empty
+	if u.Host == "" {
+		logger.Error("URL has no host", "url", targetURL)
+		return fmt.Errorf("invalid URL: missing host")
+	}
+
+	logger.Info("Opening URL in system browser", "url", targetURL)
 	wailsRuntime.BrowserOpenURL(a.ctx, targetURL)
+	return nil
 }
 
 // OpenAboutModal emits an event to the frontend to trigger the About dialog.
