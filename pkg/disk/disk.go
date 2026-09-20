@@ -1218,11 +1218,9 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			devNode = "/dev/" + parentDisk
 		}
 
+		// Use IsRealVentoyDisk which correctly handles hybrid mode detection
+		isRealVentoy := IsRealVentoyDisk(devNode)
 		isCloudMode := IsCloudModeDisk(devNode)
-		isRealVentoy := false
-		if !isCloudMode {
-			isRealVentoy = IsVentoyDisk(devNode)
-		}
 		isGenericBoot := false
 		if !isCloudMode && !isRealVentoy {
 			isGenericBoot = IsGenericBootDisk(devNode)
