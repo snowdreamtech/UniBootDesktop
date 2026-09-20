@@ -110,6 +110,30 @@ func (a *App) ClearLogs() {
 
 // LogAction allows the frontend to log user UI interaction events directly into the Log Center.
 func (a *App) LogAction(level string, message string, details string) {
+	// 验证日志级别
+	validLevels := map[string]bool{
+		"":      true, // 空字符串默认为INFO
+		"DEBUG": true,
+		"INFO":  true,
+		"WARN":  true,
+		"ERROR": true,
+	}
+	if !validLevels[level] {
+		logger.Warn("Invalid log level from frontend", "level", level)
+		level = "INFO"
+	}
+
+	// 限制消息和详情长度，防止日志洪水攻击
+	const maxMessageLen = 1000
+	const maxDetailsLen = 5000
+
+	if len(message) > maxMessageLen {
+		message = message[:maxMessageLen] + "... (truncated)"
+	}
+	if len(details) > maxDetailsLen {
+		details = details[:maxDetailsLen] + "... (truncated)"
+	}
+
 	if level == "" {
 		level = "INFO"
 	}
@@ -133,6 +157,16 @@ func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
 
 // EjectDisk safely unmounts and ejects the target removable storage disk.
 func (a *App) EjectDisk(targetDisk string) error {
+	// 验证输入不为空
+	if strings.TrimSpace(targetDisk) == "" {
+		return fmt.Errorf("target disk path cannot be empty")
+	}
+
+	// 验证路径长度，防止过长路径攻击
+	if len(targetDisk) > 512 {
+		return fmt.Errorf("target disk path too long (max 512 characters)")
+	}
+
 	logger.Info("Requesting safe ejection for disk", "disk", targetDisk)
 	disk.InvalidateDiskCache()
 	err := disk.EjectDisk(targetDisk)
@@ -182,10 +216,36 @@ func (a *App) SelectIsoFiles(title string, ventoyFilter string, allFilter string
 
 // CalculateFileChecksum computes MD5, SHA256, or SHA512 hash for the specified image file.
 func (a *App) CalculateFileChecksum(filePath string, algo string) (*utils.ChecksumResult, error) {
-	logger.Info("Calculating file checksum", "filePath", filePath, "algorithm", algo)
-	res, err := utils.CalculateFileChecksum(a.ctx, filePath, algo)
+	// 验证输入
+	if strings.TrimSpace(filePath) == "" {
+		return nil, fmt.Errorf("file path cannot be empty")
+	}
+
+	// 验证路径长度
+	if len(filePath) > 4096 {
+		return nil, fmt.Errorf("file path too long (max 4096 characters)")
+	}
+
+	// 验证算法参数
+	validAlgos := map[string]bool{
+		"md5":    true,
+		"sha1":   true,
+		"sha256": true,
+		"sha384": true,
+		"sha512": true,
+	}
+	algoLower := strings.ToLower(strings.TrimSpace(algo))
+	if algoLower == "" {
+		algoLower = "sha256" // 默认使用SHA256
+	}
+	if !validAlgos[algoLower] {
+		return nil, fmt.Errorf("invalid checksum algorithm: %s (supported: md5, sha1, sha256, sha384, sha512)", algo)
+	}
+
+	logger.Info("Calculating file checksum", "filePath", filePath, "algorithm", algoLower)
+	res, err := utils.CalculateFileChecksum(a.ctx, filePath, algoLower)
 	if err != nil {
-		logger.Error("Failed to calculate file checksum", "filePath", filePath, "algorithm", algo, "error", err)
+		logger.Error("Failed to calculate file checksum", "filePath", filePath, "algorithm", algoLower, "error", err)
 		return nil, err
 	}
 	logger.Info("File checksum calculated successfully", "filePath", filePath, "algo", res.Algorithm, "hash", res.Hash, "durationMs", res.DurationMs)
@@ -264,6 +324,22 @@ func (a *App) DeployHybridMode(targetDisk string, fsType string, isoPaths []stri
 
 // ValidateVentoyCli verifies the user-specified Ventoy CLI path.
 func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidationResult {
+	// 验证路径输入
+	if strings.TrimSpace(ventoyPath) == "" {
+		return &installer.VentoyCliValidationResult{
+			Valid:   false,
+			Message: "Ventoy CLI path cannot be empty",
+		}
+	}
+
+	// 验证路径长度
+	if len(ventoyPath) > 4096 {
+		return &installer.VentoyCliValidationResult{
+			Valid:   false,
+			Message: "Ventoy CLI path too long (max 4096 characters)",
+		}
+	}
+
 	return installer.ValidateVentoyCli(ventoyPath)
 }
 
@@ -354,6 +430,40 @@ func (a *App) LaunchQEMU(targetDisk string) error {
 
 // LaunchVM launches a specified or best available virtual machine with boot mode (uefi, bios, auto).
 func (a *App) LaunchVM(targetDisk string, vmType string, bootMode string) error {
+	// 验证targetDisk
+	if strings.TrimSpace(targetDisk) == "" {
+		return fmt.Errorf("target disk path cannot be empty")
+	}
+	if len(targetDisk) > 512 {
+		return fmt.Errorf("target disk path too long")
+	}
+
+	// 验证vmType
+	validVMTypes := map[string]bool{
+		"":          true, // 空表示auto
+		"auto":      true,
+		"qemu":      true,
+		"utm":       true,
+		"vmware":    true,
+		"virtualbox": true,
+	}
+	vmTypeLower := strings.ToLower(strings.TrimSpace(vmType))
+	if !validVMTypes[vmTypeLower] {
+		return fmt.Errorf("invalid VM type: %s (supported: auto, qemu, utm, vmware, virtualbox)", vmType)
+	}
+
+	// 验证bootMode
+	validBootModes := map[string]bool{
+		"":     true, // 空表示auto
+		"auto": true,
+		"uefi": true,
+		"bios": true,
+	}
+	bootModeLower := strings.ToLower(strings.TrimSpace(bootMode))
+	if !validBootModes[bootModeLower] {
+		return fmt.Errorf("invalid boot mode: %s (supported: auto, uefi, bios)", bootMode)
+	}
+
 	if bootMode == "" {
 		bootMode = hypervisor.BootModeAuto
 	}
@@ -374,6 +484,22 @@ func (a *App) GetDefaultVMConfig() *hypervisor.VMConfig {
 
 // LaunchVMWithConfig launches a virtual machine with full custom VMConfig options.
 func (a *App) LaunchVMWithConfig(targetDisk string, vmType string, cfg hypervisor.VMConfig) error {
+	// 验证targetDisk
+	if strings.TrimSpace(targetDisk) == "" {
+		return fmt.Errorf("target disk path cannot be empty")
+	}
+	if len(targetDisk) > 512 {
+		return fmt.Errorf("target disk path too long")
+	}
+
+	// 验证VMConfig参数范围
+	if cfg.CpuCores < 0 || cfg.CpuCores > 256 {
+		return fmt.Errorf("invalid CPU cores: %d (must be 0-256)", cfg.CpuCores)
+	}
+	if cfg.MemoryMB < 0 || cfg.MemoryMB > 1048576 { // 最大1TB
+		return fmt.Errorf("invalid memory: %d MB (must be 0-1048576)", cfg.MemoryMB)
+	}
+
 	if cfg.BootMode == "" {
 		cfg.BootMode = hypervisor.BootModeAuto
 	}

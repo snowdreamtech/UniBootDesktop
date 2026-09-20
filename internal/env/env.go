@@ -5,7 +5,9 @@ package env
 
 import (
 	"crypto/rand"
+	"fmt"
 	"os"
+	"strings"
 )
 
 // EnvManager provides environment variable operations.
@@ -18,20 +20,55 @@ func Get(key string) string {
 	if key == "PATH" {
 		return os.Getenv("PATH")
 	}
+
+	value := ""
+
 	// 1. UNIBOOTDESKTOP_ prefix (Primary)
 	if v := os.Getenv("UNIBOOTDESKTOP_" + key); v != "" {
-		return v
+		value = v
 	}
 	// 2. UNIGODESKTOP_ prefix (Legacy fallback)
-	if v := os.Getenv("UNIGODESKTOP_" + key); v != "" {
-		return v
+	if value == "" {
+		if v := os.Getenv("UNIGODESKTOP_" + key); v != "" {
+			value = v
+		}
 	}
 	// 3. MISE_ prefix
-	if v := os.Getenv("MISE_" + key); v != "" {
-		return v
+	if value == "" {
+		if v := os.Getenv("MISE_" + key); v != "" {
+			value = v
+		}
 	}
 	// 4. Raw key (Native)
-	return os.Getenv(key)
+	if value == "" {
+		value = os.Getenv(key)
+	}
+
+	// 验证特定关键环境变量
+	switch key {
+	case "GITHUB_PROXY":
+		if value != "" && value != "direct" {
+			// 简单验证URL格式
+			if !strings.HasPrefix(value, "http://") && !strings.HasPrefix(value, "https://") {
+				return "" // 无效的代理URL，返回空
+			}
+		}
+	case "JOBS":
+		if value != "" {
+			// 验证JOBS是正整数
+			var n int
+			if _, err := fmt.Sscanf(value, "%d", &n); err != nil || n < 1 || n > 256 {
+				return "" // 无效的JOBS值，返回空
+			}
+		}
+	case "HTTP2":
+		// 只允许"0"或"1"
+		if value != "" && value != "0" && value != "1" {
+			return ""
+		}
+	}
+
+	return value
 }
 
 // GithubProxy returns the configured GitHub proxy URL or empty string by default.
