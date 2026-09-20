@@ -550,7 +550,7 @@ const props = defineProps<{
   selectedIsoFiles: { name: string; path: string }[];
   isDeploying: boolean;
   deployProgress: number;
-  batchDeployInfo?: { totalDisks: number; currentDiskIndex: number; currentDisk: string; currentStage: string; diskProgress: number; overallProgress: number } | null;
+  batchDeployInfo?: { totalDisks: number; currentDiskIndex: number; currentDisk: string; currentStage: string; diskProgress: number; overallProgress: number; speedMBps: number; elapsedSec: number; etaSec: number } | null;
   speedMBps?: number;
   elapsedSec?: number;
   etaSec?: number;

@@ -19,6 +19,9 @@ export interface BatchDeployProgress {
   currentStage: string;
   diskProgress: number;
   overallProgress: number;
+  speedMBps: number;
+  elapsedSec: number;
+  etaSec: number;
 }
 
 export interface UseDeploymentOptions {
@@ -361,6 +364,10 @@ export function useDeployment(options: UseDeploymentOptions) {
       window.runtime.EventsOn('cloud-deploy-batch-progress', (progress: BatchDeployProgress) => {
         deployProgress.value = progress.overallProgress;
         batchDeployInfo.value = progress;
+        // Update speed and time information from batch progress
+        deploySpeedMBps.value = progress.speedMBps;
+        deployElapsedSec.value = progress.elapsedSec;
+        deployEtaSec.value = progress.etaSec;
       });
       unsubBatchProgress = () => {
         if (window.runtime && window.runtime.EventsOff) {

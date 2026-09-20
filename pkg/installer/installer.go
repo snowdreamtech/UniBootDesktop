@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
@@ -25,12 +26,15 @@ type ProgressWithStageCallback func(progress int, stage string)
 
 // BatchDeployProgress represents real-time progress for batch deployment operations
 type BatchDeployProgress struct {
-	TotalDisks       int    `json:"totalDisks"`       // Total number of disks to deploy
-	CurrentDiskIndex int    `json:"currentDiskIndex"` // Current disk index (1-based)
-	CurrentDisk      string `json:"currentDisk"`      // Current disk device name
-	CurrentStage     string `json:"currentStage"`     // Current deployment stage description
-	DiskProgress     int    `json:"diskProgress"`     // Current disk progress 0-100
-	OverallProgress  int    `json:"overallProgress"`  // Overall progress 0-100
+	TotalDisks       int     `json:"totalDisks"`       // Total number of disks to deploy
+	CurrentDiskIndex int     `json:"currentDiskIndex"` // Current disk index (1-based)
+	CurrentDisk      string  `json:"currentDisk"`      // Current disk device name
+	CurrentStage     string  `json:"currentStage"`     // Current deployment stage description
+	DiskProgress     int     `json:"diskProgress"`     // Current disk progress 0-100
+	OverallProgress  int     `json:"overallProgress"`  // Overall progress 0-100
+	SpeedMBps        float64 `json:"speedMBps"`        // Current I/O speed in MB/s
+	ElapsedSec       int     `json:"elapsedSec"`       // Total elapsed time in seconds
+	EtaSec           int     `json:"etaSec"`           // Estimated time remaining in seconds
 }
 
 // BatchProgressCallback reports batch deployment progress with disk-level details
@@ -487,17 +491,51 @@ func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []st
 
 	results := make([]*DeployResult, 0, len(targetDisks))
 	totalDisks := len(targetDisks)
+	batchStartTime := time.Now()
+
 	for index, d := range targetDisks {
 		var snapshot *disk.DiskInfo
 		if len(expected) > 0 {
 			snapshot = &expected[index]
 		}
 
+		diskStartTime := time.Now()
+
+		// Get disk size for speed calculation
+		var diskSize int64
+		if snapshot != nil {
+			diskSize = int64(snapshot.Size)
+		}
+
 		// Calculate progress for batch operations: each disk contributes equally
 		diskProgressCallback := func(diskProgress int, stage string) {
 			if progressCallback != nil {
-				// Progress: (completed disks * 100 + current disk progress) / total disks
+				// Calculate elapsed time
+				elapsed := int(time.Since(batchStartTime).Seconds())
+
+				// Calculate overall progress
 				overallProgress := (index*100 + diskProgress) / totalDisks
+
+				// Calculate speed (MB/s) based on disk progress and size
+				var speedMBps float64
+				if diskSize > 0 && diskProgress > 0 {
+					diskElapsed := time.Since(diskStartTime).Seconds()
+					if diskElapsed > 0 {
+						bytesProcessed := float64(diskSize) * float64(diskProgress) / 100.0
+						speedMBps = bytesProcessed / diskElapsed / (1024 * 1024)
+					}
+				}
+
+				// Calculate ETA (estimated time remaining)
+				var etaSec int
+				if overallProgress > 0 && elapsed > 0 {
+					totalEstimated := (elapsed * 100) / overallProgress
+					etaSec = totalEstimated - elapsed
+					if etaSec < 0 {
+						etaSec = 0
+					}
+				}
+
 				progressCallback(BatchDeployProgress{
 					TotalDisks:       totalDisks,
 					CurrentDiskIndex: index + 1, // 1-based index for display
@@ -505,6 +543,9 @@ func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []st
 					CurrentStage:     stage,
 					DiskProgress:     diskProgress,
 					OverallProgress:  overallProgress,
+					SpeedMBps:        speedMBps,
+					ElapsedSec:       elapsed,
+					EtaSec:           etaSec,
 				})
 			}
 		}
