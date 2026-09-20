@@ -97,6 +97,7 @@ export function useDeployment(options: UseDeploymentOptions) {
   const showDeploySuccessBanner = computed(() => {
     const b = deploySuccessBanner.value;
     return Boolean(
+      !isDeploying.value &&
       b.visible &&
       !b.dismissed &&
       b.mode === activeMode.value
@@ -285,6 +286,8 @@ export function useDeployment(options: UseDeploymentOptions) {
   }
 
   function openDeployConfirm() {
+    dismissDeploySuccessBanner();
+
     let targets: string[] = [];
     if (selectionMode.value === 'single') {
       if (!selectedDisk.value) return;
@@ -307,6 +310,8 @@ export function useDeployment(options: UseDeploymentOptions) {
 
   async function handleDeployBtnClick() {
     if (isDeploying.value) return;
+
+    dismissDeploySuccessBanner();
 
     if (selectionMode.value === 'single' && !selectedDisk.value) {
       showToast(t('deploy.toast_select_target'), 'warning');
@@ -342,6 +347,8 @@ export function useDeployment(options: UseDeploymentOptions) {
 
   async function startDeployment() {
     if (isDeploying.value) return;
+
+    dismissDeploySuccessBanner();
 
     let targets: string[] = [];
     if (selectionMode.value === 'single') {
