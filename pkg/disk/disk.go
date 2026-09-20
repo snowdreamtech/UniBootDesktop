@@ -455,12 +455,51 @@ func IsCloudModeDisk(targetDisk string) bool {
 			}
 			return hasCloudFiles
 		}
-	} else {
-		// For Linux/Windows, check if the mount point has Ventoy files
-		if HasVentoyEngineFiles(targetDisk) {
-			return false // Hybrid mode or pure Ventoy
+	} else if runtime.GOOS == "linux" {
+		// Linux: targetDisk is typically a device path like /dev/sdb
+		if strings.HasPrefix(targetDisk, "/dev/") {
+			// Query partitions and their mount points using lsblk
+			out, err := exec.Command("lsblk", "-o", "MOUNTPOINT", "-n", "-l", targetDisk).Output()
+			if err == nil {
+				mountPoints := strings.Split(strings.TrimSpace(string(out)), "\n")
+
+				// Check if any partition has Ventoy engine files
+				hasVentoyFiles := false
+				hasCloudFiles := false
+				for _, mp := range mountPoints {
+					mp = strings.TrimSpace(mp)
+					if mp != "" {
+						if HasVentoyEngineFiles(mp) {
+							hasVentoyFiles = true
+						}
+						if HasUniBootCloudFiles(mp) {
+							hasCloudFiles = true
+						}
+					}
+				}
+
+				// Pure cloud mode: has cloud files but no Ventoy files
+				if hasCloudFiles && !hasVentoyFiles {
+					return true
+				}
+				return false
+			}
+		} else {
+			// Mount point provided directly
+			if HasVentoyEngineFiles(targetDisk) {
+				return false
+			}
+			if HasUniBootCloudFiles(targetDisk) {
+				return true
+			}
 		}
-		// Check if it has cloud files (pure cloud mode)
+	} else if runtime.GOOS == "windows" {
+		// Windows: cannot easily check partitions separately
+		// For now, rely on file detection only
+		// Note: This may have limitations for hybrid mode detection
+		if HasVentoyEngineFiles(targetDisk) {
+			return false
+		}
 		if HasUniBootCloudFiles(targetDisk) {
 			return true
 		}
@@ -1423,12 +1462,13 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      "500 mA",
 			SectorSize:        "512 Bytes (512n/512e)",
 			TransportProtocol: "BOT (Bulk-Only Transport)",
-			BootStatus:        DetectBootStatus(label, partitionScheme, IsRealVentoyDisk(mountPath), IsCloudModeDisk(mountPath), IsGenericBootDisk(mountPath)),
+			// Use devPath for disk type detection (MBR check), mountPath for file checks
+			BootStatus:        DetectBootStatus(label, partitionScheme, IsRealVentoyDisk(devPath), IsCloudModeDisk(devPath), IsGenericBootDisk(mountPath)),
 			ControllerVendor:  InferControllerVendor("", "", vendor),
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
-			IsRealVentoy:      IsRealVentoyDisk(mountPath),
-			IsCloudMode:           IsCloudModeDisk(mountPath),
+			IsRealVentoy:      IsRealVentoyDisk(devPath),
+			IsCloudMode:       IsCloudModeDisk(devPath),
 			IsGenericBoot:     IsGenericBootDisk(mountPath),
 			MountPoint:        mountPath,
 		})
