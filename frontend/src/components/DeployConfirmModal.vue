@@ -12,8 +12,16 @@
       </div>
 
       <div class="modal-body">
-        <!-- Safe Info Banner for ALL Ventoy Disks -->
-        <div v-if="isAllVentoy" class="safe-banner">
+        <!-- Special Warning Banner for Cloud Boot Disk converting to Hybrid Mode -->
+        <div v-if="hasCloudToHybrid" class="cloud-to-hybrid-banner">
+          <div class="banner-title"><span class="banner-icon">⚠️</span> {{ t("confirm.cloud_to_hybrid_warn_title") }}</div>
+          <div class="banner-desc">
+            {{ t("confirm.cloud_to_hybrid_warn_desc") }}
+          </div>
+        </div>
+
+        <!-- Safe Info Banner for ALL Ventoy / Non-destructive Disks -->
+        <div v-else-if="isAllVentoy" class="safe-banner">
           <div class="banner-title"><span class="banner-icon">💡</span> {{ t("confirm.safe_banner_title") }}</div>
           <div class="banner-desc">
             {{ t("confirm.safe_banner_desc") }}
@@ -162,22 +170,36 @@ const props = defineProps<{
 
 const emit = defineEmits(["close", "confirm"]);
 
-function checkIsExistingBootDisk(disk: any): boolean {
+function checkCanUpdateNonDestructively(disk: any, targetMode: "cloud" | "hybrid"): boolean {
   if (!disk) return false;
-  return Boolean(disk.isRealVentoy || disk.isCloudMode);
+  if (targetMode === "cloud") {
+    // Cloud boot mode: non-destructive for both cloud boot and Ventoy hybrid disks
+    return Boolean(disk.isCloudMode || disk.isRealVentoy);
+  } else {
+    // Hybrid mode: only true Ventoy disks support non-destructive upgrade
+    return Boolean(disk.isRealVentoy);
+  }
 }
 
 const ventoyDisks = computed(() => {
   if (!props.allDisks || props.allDisks.length === 0) {
-    if (props.targetDisk && checkIsExistingBootDisk(props.targetDisk)) {
+    if (props.targetDisk && checkCanUpdateNonDestructively(props.targetDisk, props.mode)) {
       return [props.targetDisk.device];
     }
     return [];
   }
   return props.targetDisks.filter((dev) => {
     const found = props.allDisks?.find((d) => d.device === dev);
-    return found ? checkIsExistingBootDisk(found) : false;
+    return found ? checkCanUpdateNonDestructively(found, props.mode) : false;
   });
+});
+
+const hasCloudToHybrid = computed(() => {
+  if (props.mode !== "hybrid") return false;
+  if (props.targetDisks.length === 1 && props.targetDisk) {
+    return Boolean(props.targetDisk.isCloudMode && !props.targetDisk.isRealVentoy);
+  }
+  return targetDiskDetails.value.some((d) => Boolean(d.isCloudMode && !d.isRealVentoy));
 });
 
 const blankDisks = computed(() => {
@@ -373,6 +395,26 @@ function confirm() {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+
+.cloud-to-hybrid-banner {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.cloud-to-hybrid-banner .banner-title {
+  color: #f87171;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+.cloud-to-hybrid-banner .banner-desc {
+  color: var(--text-main);
+  font-size: 0.85rem;
+  line-height: 1.5;
 }
 
 .safe-banner {

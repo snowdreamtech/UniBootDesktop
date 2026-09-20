@@ -94,16 +94,21 @@ export function useDeployment(options: UseDeploymentOptions) {
     logUserAction('DEBUG', 'User dismissed deployment success banner');
   }
 
-  function checkIsExistingBootDisk(d: DiskInfo): boolean {
+  function checkDiskCanUpdateNonDestructively(d: DiskInfo, mode: 'cloud' | 'hybrid'): boolean {
     if (!d) return false;
-    const nameUpper = (d.name || '').toUpperCase();
-    const isVentoyName = nameUpper.includes('VENTOY') || nameUpper.includes('UNIBOOT');
-    return Boolean(d.isRealVentoy || d.isCloudMode || d.isGenericBoot || isVentoyName);
+    if (mode === 'cloud') {
+      // Cloud boot mode: both existing cloud boot and Ventoy hybrid disks can be updated non-destructively without wiping user partitions
+      return Boolean(d.isCloudMode || d.isRealVentoy);
+    } else {
+      // Hybrid mode: only genuine Ventoy disks support non-destructive upgrade (ventoy -u) preserving files.
+      // Pure cloud boot disks lack Ventoy MBR and dual-partition layouts and MUST be fully formatted to install Ventoy.
+      return Boolean(d.isRealVentoy);
+    }
   }
 
   const isSelectedVentoyDisk = computed(() => {
     if (selectionMode.value === 'single' && selectedDisk.value) {
-      return checkIsExistingBootDisk(selectedDisk.value);
+      return checkDiskCanUpdateNonDestructively(selectedDisk.value, activeMode.value);
     }
     return false;
   });
@@ -115,7 +120,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     if (selectedDevices.value.size === 0) return false;
     return Array.from(selectedDevices.value).every((dev: string) => {
       const d = diskList.value.find((disk: DiskInfo) => disk.device === dev);
-      return d ? checkIsExistingBootDisk(d) : false;
+      return d ? checkDiskCanUpdateNonDestructively(d, activeMode.value) : false;
     });
   });
 
@@ -124,7 +129,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     let count = 0;
     selectedDevices.value.forEach((dev: string) => {
       const d = diskList.value.find((disk: DiskInfo) => disk.device === dev);
-      if (d && checkIsExistingBootDisk(d)) {
+      if (d && checkDiskCanUpdateNonDestructively(d, activeMode.value)) {
         count++;
       }
     });

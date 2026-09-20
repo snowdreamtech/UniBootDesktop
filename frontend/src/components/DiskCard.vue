@@ -129,7 +129,7 @@
     </div>
 
     <div class="disk-tags">
-      <span class="disk-badge" :class="diskType" :title="bootTooltip">{{ diskTagLabel }}</span>
+      <span class="disk-badge" :class="[diskType, bootSubtype ? `boot-${bootSubtype}` : '']" :title="bootTooltip">{{ diskTagLabel }}</span>
       <button
         class="btn-inspect"
         :title="t('disk.hw_inspect')"
@@ -234,8 +234,19 @@ const bootTooltip = computed(() => {
   return '';
 });
 
+const bootSubtype = computed<'hybrid' | 'cloud' | 'thirdparty' | null>(() => {
+  if (diskType.value !== 'boot') return null;
+  if (props.disk.isRealVentoy) return 'hybrid';
+  if (props.disk.isCloudMode) return 'cloud';
+  return 'thirdparty';
+});
+
 const diskTagLabel = computed(() => {
-  if (diskType.value === 'boot') return t('disk.tag_boot');
+  if (diskType.value === 'boot') {
+    if (bootSubtype.value === 'hybrid') return t('disk.tag_boot_hybrid');
+    if (bootSubtype.value === 'cloud') return t('disk.tag_boot_cloud');
+    return t('disk.tag_boot_thirdparty');
+  }
   if (diskType.value === 'ssd') return t('disk.tag_ssd');
   if (diskType.value === 'typec') return t('disk.tag_typec');
   if (diskType.value === 'secure') return t('disk.tag_secure');
@@ -483,6 +494,24 @@ const diskTagLabel = computed(() => {
 .disk-badge.boot {
   background: var(--badge-boot-bg);
   color: var(--badge-boot-text);
+}
+
+.disk-badge.boot-hybrid {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.disk-badge.boot-cloud {
+  background: rgba(14, 165, 233, 0.18);
+  color: #38bdf8;
+  border: 1px solid rgba(14, 165, 233, 0.35);
+}
+
+.disk-badge.boot-thirdparty {
+  background: rgba(148, 163, 184, 0.18);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.35);
 }
 
 .disk-badge.ssd {

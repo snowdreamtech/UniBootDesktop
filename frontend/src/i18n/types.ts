@@ -94,6 +94,11 @@ export interface TranslationDict {
   "disk.toast_batch_eject_success": string;
   "disk.toast_batch_eject_partial": string;
   "disk.tag_boot": string;
+  "disk.tag_boot_cloud": string;
+  "disk.tag_boot_hybrid": string;
+  "disk.tag_boot_thirdparty": string;
+  "confirm.cloud_to_hybrid_warn_title": string;
+  "confirm.cloud_to_hybrid_warn_desc": string;
   "disk.tag_ssd": string;
   "disk.tag_typec": string;
   "disk.tag_secure": string;
