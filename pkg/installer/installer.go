@@ -20,11 +20,15 @@ import (
 // ProgressCallback is a function type for reporting deployment progress (0-100)
 type ProgressCallback func(progress int)
 
+// ProgressWithStageCallback is a function type for reporting deployment progress with stage information
+type ProgressWithStageCallback func(progress int, stage string)
+
 // BatchDeployProgress represents real-time progress for batch deployment operations
 type BatchDeployProgress struct {
 	TotalDisks       int    `json:"totalDisks"`       // Total number of disks to deploy
 	CurrentDiskIndex int    `json:"currentDiskIndex"` // Current disk index (1-based)
 	CurrentDisk      string `json:"currentDisk"`      // Current disk device name
+	CurrentStage     string `json:"currentStage"`     // Current deployment stage description
 	DiskProgress     int    `json:"diskProgress"`     // Current disk progress 0-100
 	OverallProgress  int    `json:"overallProgress"`  // Overall progress 0-100
 }
@@ -326,6 +330,17 @@ func DeployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 }
 
 func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, expected *disk.DiskInfo, progressCallback ProgressCallback) (*DeployResult, error) {
+	// Convert simple progress callback to stage-aware callback
+	var stageCallback ProgressWithStageCallback
+	if progressCallback != nil {
+		stageCallback = func(progress int, stage string) {
+			progressCallback(progress)
+		}
+	}
+	return deployCloudModeWithStage(ctx, targetDisk, fsType, expected, stageCallback)
+}
+
+func deployCloudModeWithStage(ctx context.Context, targetDisk string, fsType string, expected *disk.DiskInfo, progressCallback ProgressWithStageCallback) (*DeployResult, error) {
 	if fsType == "" {
 		fsType = "exFAT"
 	}
@@ -336,7 +351,7 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 
 	// Report initial progress
 	if progressCallback != nil {
-		progressCallback(10)
+		progressCallback(10, "Validating disk")
 	}
 
 	// Step 1: Target Disk & Snapshot Validation
@@ -356,7 +371,7 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 
 	// Step 1 completed
 	if progressCallback != nil {
-		progressCallback(30)
+		progressCallback(30, "Formatting partitions")
 	}
 
 	// Step 2: Format Disk / Prepare EFI Partition
@@ -402,7 +417,7 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 
 	// Step 2 completed
 	if progressCallback != nil {
-		progressCallback(70)
+		progressCallback(70, "Writing firmware")
 	}
 
 	// Step 3: Extract Firmware Assets to ESP Partition
@@ -421,7 +436,7 @@ func deployCloudModeWithExpectedDisk(ctx context.Context, targetDisk string, fsT
 
 	// Step 3 completed
 	if progressCallback != nil {
-		progressCallback(100)
+		progressCallback(100, "Completed")
 	}
 
 	msg := fmt.Sprintf("Successfully deployed Cloud Mode to ESP EFI Partition (%s)", efiMountPoint)
@@ -479,7 +494,7 @@ func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []st
 		}
 
 		// Calculate progress for batch operations: each disk contributes equally
-		diskProgressCallback := func(diskProgress int) {
+		diskProgressCallback := func(diskProgress int, stage string) {
 			if progressCallback != nil {
 				// Progress: (completed disks * 100 + current disk progress) / total disks
 				overallProgress := (index*100 + diskProgress) / totalDisks
@@ -487,13 +502,14 @@ func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []st
 					TotalDisks:       totalDisks,
 					CurrentDiskIndex: index + 1, // 1-based index for display
 					CurrentDisk:      d,
+					CurrentStage:     stage,
 					DiskProgress:     diskProgress,
 					OverallProgress:  overallProgress,
 				})
 			}
 		}
 
-		res, err := deployCloudModeWithExpectedDisk(ctx, d, fsType, snapshot, diskProgressCallback)
+		res, err := deployCloudModeWithStage(ctx, d, fsType, snapshot, diskProgressCallback)
 		if err != nil {
 			if res != nil && res.Diagnostics != nil {
 				results = append(results, res)

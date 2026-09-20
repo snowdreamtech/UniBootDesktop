@@ -343,6 +343,9 @@
             {{ t('deploy.batch_current') }}: {{ batchDeployInfo.currentDiskIndex }}/{{ batchDeployInfo.totalDisks }}
           </div>
           <div class="batch-disk-name">{{ batchDeployInfo.currentDisk }}</div>
+          <div v-if="batchDeployInfo.currentStage" class="batch-current-stage">
+            {{ batchDeployInfo.currentStage }}
+          </div>
         </div>
 
         <ProgressBar
@@ -547,7 +550,7 @@ const props = defineProps<{
   selectedIsoFiles: { name: string; path: string }[];
   isDeploying: boolean;
   deployProgress: number;
-  batchDeployInfo?: { totalDisks: number; currentDiskIndex: number; currentDisk: string; diskProgress: number; overallProgress: number } | null;
+  batchDeployInfo?: { totalDisks: number; currentDiskIndex: number; currentDisk: string; currentStage: string; diskProgress: number; overallProgress: number } | null;
   speedMBps?: number;
   elapsedSec?: number;
   etaSec?: number;
@@ -2680,6 +2683,14 @@ function getFileIcon(filename: string): string {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.batch-current-stage {
+  font-size: 0.78rem;
+  color: var(--text-main);
+  font-weight: 500;
+  margin-top: 0.2rem;
+  font-style: italic;
 }
 
 .deploy-stats-row {

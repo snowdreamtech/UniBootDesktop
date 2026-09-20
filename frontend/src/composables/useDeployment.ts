@@ -16,6 +16,7 @@ export interface BatchDeployProgress {
   totalDisks: number;
   currentDiskIndex: number;
   currentDisk: string;
+  currentStage: string;
   diskProgress: number;
   overallProgress: number;
 }
