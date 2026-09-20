@@ -407,31 +407,61 @@ func IsVentoyDisk(targetDisk string) bool {
 
 // IsCloudModeDisk checks if a target disk is currently formatted in UniBoot Cloud mode (iPXE boot firmware in ESP, no Ventoy engine).
 // Strictly checks physical iPXE files. NEVER relies on volume names alone.
+// For hybrid mode disks (both Cloud and Ventoy), this returns false.
 func IsCloudModeDisk(targetDisk string) bool {
 	if targetDisk == "" {
 		return false
 	}
+
+	// First check if this is a Ventoy disk (hybrid mode or pure Ventoy)
+	// If it has Ventoy MBR signature or Ventoy engine files, it's not a pure cloud disk
+	if CheckVentoyMbrSignature(targetDisk) {
+		return false
+	}
+
 	if runtime.GOOS == "darwin" {
 		diskNode := filepath.Base(targetDisk)
 		if strings.HasPrefix(diskNode, "disk") {
-			p1 := diskNode
-			p2 := diskNode
-			if !strings.Contains(diskNode, "s") {
-				p1 = diskNode + "s1"
-				p2 = diskNode + "s2"
+			baseDisk := diskNode
+			if strings.Contains(diskNode, "s") {
+				// Extract base disk from partition (e.g., "disk2s1" -> "disk2")
+				baseDisk = NormalizeDarwinDiskNode(diskNode)
 			}
+
+			// Check if any partition has Ventoy engine files (indicates hybrid mode)
+			p1 := baseDisk + "s1"
+			p2 := baseDisk + "s2"
 			for _, p := range []string{p1, p2} {
 				str := getDarwinDiskutilInfo(p)
 				if str != "" {
 					mountPoint := extractPlistValue(str, "MountPoint")
-					if HasUniBootCloudFiles(mountPoint) && !HasVentoyEngineFiles(mountPoint) {
-						return true
+					if HasVentoyEngineFiles(mountPoint) {
+						return false // Hybrid mode - has Ventoy files
 					}
 				}
 			}
+
+			// Now check if it has cloud files (pure cloud mode)
+			hasCloudFiles := false
+			for _, p := range []string{p1, p2} {
+				str := getDarwinDiskutilInfo(p)
+				if str != "" {
+					mountPoint := extractPlistValue(str, "MountPoint")
+					if HasUniBootCloudFiles(mountPoint) {
+						hasCloudFiles = true
+						break
+					}
+				}
+			}
+			return hasCloudFiles
 		}
 	} else {
-		if HasUniBootCloudFiles(targetDisk) && !HasVentoyEngineFiles(targetDisk) {
+		// For Linux/Windows, check if the mount point has Ventoy files
+		if HasVentoyEngineFiles(targetDisk) {
+			return false // Hybrid mode or pure Ventoy
+		}
+		// Check if it has cloud files (pure cloud mode)
+		if HasUniBootCloudFiles(targetDisk) {
 			return true
 		}
 	}
