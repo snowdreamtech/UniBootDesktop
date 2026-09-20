@@ -293,7 +293,14 @@ func unmountTargetDisk(targetPath string) {
 		}
 		time.Sleep(300 * time.Millisecond)
 	} else if runtime.GOOS == "windows" {
-		psCmd := fmt.Sprintf(`Get-Volume | Where-DriveLetter | Where-Object { $_.Path -like "*%s*" } | Dismount-Volume -Confirm:$false`, targetPath)
+		// 安全地转义PowerShell参数，防止命令注入
+		// 移除可能的PowerShell注入字符
+		safePath := strings.ReplaceAll(targetPath, "'", "''") // PowerShell单引号转义
+		safePath = strings.ReplaceAll(safePath, "`", "``")     // PowerShell反引号转义
+		safePath = strings.ReplaceAll(safePath, "$", "`$")     // PowerShell变量转义
+		safePath = strings.ReplaceAll(safePath, "\"", "`\"")   // 双引号转义
+
+		psCmd := fmt.Sprintf(`Get-Volume | Where-DriveLetter | Where-Object { $_.Path -like '*%s*' } | Dismount-Volume -Confirm:$false`, safePath)
 		_ = exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd).Run()
 		time.Sleep(300 * time.Millisecond)
 	}
@@ -319,7 +326,13 @@ func remountTargetDisk(targetPath string) {
 		cmd := exec.Command("udisksctl", "mount", "-b", targetPath)
 		_ = cmd.Run()
 	} else if runtime.GOOS == "windows" {
-		psCmd := fmt.Sprintf(`Get-Volume | Where-DriveLetter | Where-Object { $_.Path -like "*%s*" } | Mount-Volume`, targetPath)
+		// 安全地转义PowerShell参数，防止命令注入
+		safePath := strings.ReplaceAll(targetPath, "'", "''") // PowerShell单引号转义
+		safePath = strings.ReplaceAll(safePath, "`", "``")     // PowerShell反引号转义
+		safePath = strings.ReplaceAll(safePath, "$", "`$")     // PowerShell变量转义
+		safePath = strings.ReplaceAll(safePath, "\"", "`\"")   // 双引号转义
+
+		psCmd := fmt.Sprintf(`Get-Volume | Where-DriveLetter | Where-Object { $_.Path -like '*%s*' } | Mount-Volume`, safePath)
 		_ = exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd).Run()
 	}
 }

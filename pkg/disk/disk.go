@@ -385,8 +385,15 @@ func IsVentoyDisk(targetDisk string) bool {
 			}
 		}
 	} else if runtime.GOOS == "windows" {
+		// 安全地转义PowerShell参数，防止命令注入
+		baseDisk := filepath.Base(targetDisk)
+		safeDisk := strings.ReplaceAll(baseDisk, "'", "''")  // PowerShell单引号转义
+		safeDisk = strings.ReplaceAll(safeDisk, "`", "``")    // PowerShell反引号转义
+		safeDisk = strings.ReplaceAll(safeDisk, "$", "`$")    // PowerShell变量转义
+		safeDisk = strings.ReplaceAll(safeDisk, "\"", "`\"")  // 双引号转义
+
 		out, err := exec.Command("powershell", "-NoProfile", "-Command",
-			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber | Get-Volume | Select-Object -ExpandProperty FileSystemLabel", filepath.Base(targetDisk))).Output()
+			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber | Get-Volume | Select-Object -ExpandProperty FileSystemLabel", safeDisk)).Output()
 		if err == nil {
 			upperOut := strings.ToUpper(string(out))
 			if strings.Contains(upperOut, "VTOYEFI") || strings.Contains(upperOut, "UNIBOOTEFI") {
