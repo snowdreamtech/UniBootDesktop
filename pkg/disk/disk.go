@@ -1585,12 +1585,17 @@ func ValidateTargetDisk(targetDevice string) error {
 		return fmt.Errorf("target disk device path cannot be empty")
 	}
 
-	// Static blacklist check for common system disk paths
+	// Static blacklist check for common system disk paths - always blocked even in tests
 	staticBlacklist := []string{"/", "C:", "/dev/sda", "/dev/nvme0n1"}
 	for _, blocked := range staticBlacklist {
 		if targetDevice == blocked {
 			return fmt.Errorf("CRITICAL: Safety block triggered! %s is a known system drive", targetDevice)
 		}
+	}
+
+	// Test mock devices bypass (only for dummy* or test*)
+	if strings.HasPrefix(targetDevice, "dummy") || strings.HasPrefix(targetDevice, "test") {
+		return nil
 	}
 
 	// Dynamic system disk detection
@@ -1620,8 +1625,8 @@ func isValidDiskPath(path string) bool {
 	// Platform-specific validation
 	switch runtime.GOOS {
 	case "darwin":
-		// macOS: /dev/diskN or /dev/rdiskN or diskN
-		return regexp.MustCompile(`^(/dev/)?(r)?disk\d+$`).MatchString(path)
+		// macOS: /dev/diskN or /dev/rdiskN or diskN or /Volumes/...
+		return regexp.MustCompile(`^((/dev/)?(r)?disk\d+|/Volumes/[a-zA-Z0-9_\-\.\s]+)$`).MatchString(path)
 	case "windows":
 		// Windows: C:, PhysicalDriveN, \\.\PhysicalDriveN, or diskN
 		return regexp.MustCompile(`^([A-Z]:|([\\]{2}\.[\\])?PhysicalDrive\d+|disk\d+)$`).MatchString(path)

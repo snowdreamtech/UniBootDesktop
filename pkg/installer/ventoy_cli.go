@@ -240,7 +240,7 @@ func FormatDiskWithVentoyCliWithConfig(ctx context.Context, ventoyPath string, t
 		}
 
 	case "linux":
-		linuxArgs := append(baseArgs, "-L", "UNIBOOT", targetDisk)
+		linuxArgs := append(baseArgs, targetDisk)
 		cmd := exec.CommandContext(ctx, val.ExecutablePath, linuxArgs...)
 		cmd.Dir = ventoyDir
 		output, err := cmd.CombinedOutput()
@@ -296,7 +296,5 @@ func FormatDiskWithVentoyCliWithConfig(ctx context.Context, ventoyPath string, t
 		return "", fmt.Errorf("failed to mount or resolve Partition 1 after Ventoy CLI formatting")
 	}
 
-	// Update Partition 1 volume label to UNIBOOT and return valid mount point
-	mountPoint = UpdateVolumeLabel(targetDisk, mountPoint, "UNIBOOT")
 	return mountPoint, nil
 }

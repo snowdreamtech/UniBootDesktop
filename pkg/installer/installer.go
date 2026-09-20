@@ -453,6 +453,16 @@ func deployCloudModeWithStage(ctx context.Context, targetDisk string, fsType str
 		progressCallback(100, "Completed")
 	}
 
+	// Step 4: Ensure Main Data Partition Volume Label is UNIBOOT (or skip if already labeled)
+	mainMountPoint, errResolve := ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
+	if errResolve != nil {
+		mainMountPoint, _ = ResolveMountPointWithLabel(targetDisk, "Ventoy")
+	}
+	if errResolve != nil && mainMountPoint == "" {
+		mainMountPoint, _ = ResolveMountPointWithLabel(targetDisk, "VENTOY")
+	}
+	_ = UpdateVolumeLabel(targetDisk, mainMountPoint, "UNIBOOT")
+
 	msg := fmt.Sprintf("Successfully deployed Cloud Mode to ESP EFI Partition (%s)", efiMountPoint)
 	if isExistingVentoy {
 		msg = fmt.Sprintf("Successfully converted Ventoy drive to Cloud Mode iPXE Cloud Boot by flashing EFI partition at %s (Main Data Partition untouched, ISO data preserved!)", efiMountPoint)

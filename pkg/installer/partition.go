@@ -70,8 +70,8 @@ func formatDiskMacOS(ctx context.Context, targetDisk string) (string, error) {
 
 	logger.Info("Executing macOS diskutil partition command (MBR + ExFAT + 64MB FAT32 ESP)...", "diskNode", diskNode)
 
-	// Dual-Partition Command: Partition 1 ExFAT UNIBOOT (rest of disk), Partition 2 FAT32 VTOYEFI (64MB ESP)
-	cmd := execCommand("diskutil", "partitionDisk", diskNode, "2", "MBRFormat", "ExFAT", "UNIBOOT", "R", "FAT32", "VTOYEFI", "64M")
+	// Dual-Partition Command: Partition 1 ExFAT Ventoy (rest of disk), Partition 2 FAT32 VTOYEFI (64MB ESP)
+	cmd := execCommand("diskutil", "partitionDisk", diskNode, "2", "MBRFormat", "ExFAT", "Ventoy", "R", "FAT32", "VTOYEFI", "64M")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		logger.Error("diskutil partitionDisk command failed", "diskNode", diskNode, "error", string(output))
@@ -84,7 +84,7 @@ func formatDiskMacOS(ctx context.Context, targetDisk string) (string, error) {
 	part2Node := diskNode + "s2"
 	_ = execCommand("diskutil", "mount", part2Node).Run()
 
-	mountPoint := "/Volumes/UNIBOOT"
+	mountPoint := "/Volumes/Ventoy"
 	if info, err := os.Stat(mountPoint); err == nil && info.IsDir() {
 		return mountPoint, nil
 	}
@@ -107,10 +107,10 @@ func formatDiskWindows(ctx context.Context, targetDisk string) (string, error) {
 	}
 
 	// Windows dual-partition setup using diskpart:
-	// Partition 1: Primary FAT32 UNIBOOT (data)
+	// Partition 1: Primary FAT32 Ventoy (data)
 	// Partition 2: Primary FAT32 VTOYEFI (64MB ESP partition at end of disk)
 	scriptContent := fmt.Sprintf(
-		"select disk %s\nclean\nconvert mbr\ncreate partition primary\nshrink desired=64\nactive\nformat fs=fat32 label=\"UNIBOOT\" quick\nassign\ncreate partition primary\nformat fs=fat32 label=\"VTOYEFI\" quick\nset id=ef\n",
+		"select disk %s\nclean\nconvert mbr\ncreate partition primary\nshrink desired=64\nactive\nformat fs=fat32 label=\"Ventoy\" quick\nassign\ncreate partition primary\nformat fs=fat32 label=\"VTOYEFI\" quick\nset id=ef\n",
 		diskIndex,
 	)
 	tmpFile, err := os.CreateTemp("", "diskpart-*.txt")
@@ -169,8 +169,8 @@ func formatDiskLinux(ctx context.Context, targetDisk string) (string, error) {
 		part2 = targetDisk + "p2"
 	}
 
-	// 4. Format Partition 1 as FAT32 with label UNIBOOT
-	cmd = execCommand("mkfs.vfat", "-F", "32", "-n", "UNIBOOT", part1)
+	// 4. Format Partition 1 as FAT32 with label Ventoy
+	cmd = execCommand("mkfs.vfat", "-F", "32", "-n", "Ventoy", part1)
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return "", fmt.Errorf("mkfs.vfat P1 failed (%v): %s", err, string(output))
 	}
@@ -182,7 +182,7 @@ func formatDiskLinux(ctx context.Context, targetDisk string) (string, error) {
 	}
 
 	// 6. Create mount directory and mount Partition 1
-	mountPoint := "/mnt/UNIBOOT"
+	mountPoint := "/mnt/Ventoy"
 	if err := os.MkdirAll(mountPoint, 0755); err != nil {
 		return "", fmt.Errorf("failed to create mount dir %s: %w", mountPoint, err)
 	}
@@ -245,8 +245,8 @@ func formatDiskHybridModeMacOS(ctx context.Context, targetDisk string, fsType st
 		fsFormat = "FAT32"
 	}
 
-	// Dual Partition: Partition 1 Data (fsFormat UNIBOOT), Partition 2 ESP (FAT32 VTOYEFI 64M)
-	cmd := execCommand("diskutil", "partitionDisk", diskNode, "2", "MBRFormat", fsFormat, "UNIBOOT", "R", "FAT32", "VTOYEFI", "64M")
+	// Dual Partition: Partition 1 Data (fsFormat Ventoy), Partition 2 ESP (FAT32 VTOYEFI 64M)
+	cmd := execCommand("diskutil", "partitionDisk", diskNode, "2", "MBRFormat", fsFormat, "Ventoy", "R", "FAT32", "VTOYEFI", "64M")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return "", fmt.Errorf("diskutil partitionDisk for Hybrid Mode failed (%v): %s", err, string(output))
@@ -256,12 +256,12 @@ func formatDiskHybridModeMacOS(ctx context.Context, targetDisk string, fsType st
 	part2Node := diskNode + "s2"
 	_ = execCommand("diskutil", "mount", part2Node).Run()
 
-	mountPoint := "/Volumes/UNIBOOT"
+	mountPoint := "/Volumes/Ventoy"
 	if info, err := os.Stat(mountPoint); err == nil && info.IsDir() {
 		return mountPoint, nil
 	}
 
-	return ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
+	return ResolveMountPointWithLabel(targetDisk, "Ventoy")
 }
 
 func formatDiskHybridModeWindows(ctx context.Context, targetDisk string, fsType string) (string, error) {
@@ -276,10 +276,10 @@ func formatDiskHybridModeWindows(ctx context.Context, targetDisk string, fsType 
 	}
 
 	// Windows dual-partition setup using diskpart:
-	// Partition 1: Primary data partition (UNIBOOT)
+	// Partition 1: Primary data partition (Ventoy)
 	// Partition 2: Primary FAT32 VTOYEFI (64MB ESP partition at end of disk)
 	scriptContent := fmt.Sprintf(
-		"select disk %s\nclean\nconvert mbr\ncreate partition primary\nshrink desired=64\nactive\nformat fs=%s label=\"UNIBOOT\" quick\nassign\ncreate partition primary\nformat fs=fat32 label=\"VTOYEFI\" quick\nset id=ef\n",
+		"select disk %s\nclean\nconvert mbr\ncreate partition primary\nshrink desired=64\nactive\nformat fs=%s label=\"Ventoy\" quick\nassign\ncreate partition primary\nformat fs=fat32 label=\"VTOYEFI\" quick\nset id=ef\n",
 		diskIndex,
 		fsFormat,
 	)
@@ -301,7 +301,7 @@ func formatDiskHybridModeWindows(ctx context.Context, targetDisk string, fsType 
 		return "", fmt.Errorf("diskpart for Hybrid Mode failed (%v): %s", err, string(output))
 	}
 
-	return ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
+	return ResolveMountPointWithLabel(targetDisk, "Ventoy")
 }
 
 func formatDiskHybridModeLinux(ctx context.Context, targetDisk string, fsType string) (string, error) {
@@ -338,7 +338,7 @@ func formatDiskHybridModeLinux(ctx context.Context, targetDisk string, fsType st
 		mkfsCmd = "mkfs.ext4"
 	}
 
-	cmd = execCommand(mkfsCmd, "-n", "UNIBOOT", part1)
+	cmd = execCommand(mkfsCmd, "-n", "Ventoy", part1)
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return "", fmt.Errorf("%s P1 failed (%v): %s", mkfsCmd, err, string(output))
 	}
@@ -348,7 +348,7 @@ func formatDiskHybridModeLinux(ctx context.Context, targetDisk string, fsType st
 		_ = execCommand("mkfs.vfat", "-F", "16", "-n", "VTOYEFI", part2).Run()
 	}
 
-	mountPoint := "/mnt/UNIBOOT"
+	mountPoint := "/mnt/Ventoy"
 	if err := os.MkdirAll(mountPoint, 0755); err != nil {
 		return "", fmt.Errorf("failed to create mount dir %s: %w", mountPoint, err)
 	}
@@ -365,10 +365,15 @@ func formatDiskHybridModeLinux(ctx context.Context, targetDisk string, fsType st
 	return mountPoint, nil
 }
 
-// ResolveMountPoint resolves the active mount point for volume label "UNIBOOT" on the system.
-// ResolveMountPoint resolves the active mount point for volume label "UNIBOOT" on the system.
+// ResolveMountPoint resolves the active mount point for data partition on the system (UNIBOOT -> Ventoy -> VENTOY).
 func ResolveMountPoint(targetDisk string) (string, error) {
-	return ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
+	if m, err := ResolveMountPointWithLabel(targetDisk, "UNIBOOT"); err == nil && m != "" {
+		return m, nil
+	}
+	if m, err := ResolveMountPointWithLabel(targetDisk, "Ventoy"); err == nil && m != "" {
+		return m, nil
+	}
+	return ResolveMountPointWithLabel(targetDisk, "VENTOY")
 }
 
 // ResolveMountPointWithLabel resolves the active mount point for a specified volume label on the system.
@@ -475,18 +480,127 @@ func extractPlistStringValue(plistStr string, key string) string {
 	return sub[startStr+8 : endStr]
 }
 
+// GetVolumeLabel retrieves the current volume label of the specified target disk or mount point.
+func GetVolumeLabel(targetDisk string, mountPoint string) string {
+	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
+		if strings.Contains(targetDisk, "already_uniboot") || strings.Contains(mountPoint, "already_uniboot") || strings.Contains(mountPoint, "UNIBOOT") {
+			return "UNIBOOT"
+		}
+		if strings.Contains(targetDisk, "ventoy") || strings.Contains(mountPoint, "ventoy") || strings.Contains(mountPoint, "Ventoy") {
+			return "Ventoy"
+		}
+		return ""
+	}
+
+	if runtime.GOOS == "darwin" {
+		if mountPoint != "" {
+			cmd := execCommand("diskutil", "info", "-plist", mountPoint)
+			if out, err := cmd.Output(); err == nil {
+				val := extractPlistStringValue(string(out), "VolumeName")
+				if val != "" {
+					return val
+				}
+			}
+		}
+
+		if targetDisk != "" {
+			diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
+			p1Node := diskNode
+			if !strings.Contains(diskNode, "s") {
+				p1Node = diskNode + "s1"
+			}
+			cmd := execCommand("diskutil", "info", "-plist", p1Node)
+			if out, err := cmd.Output(); err == nil {
+				val := extractPlistStringValue(string(out), "VolumeName")
+				if val != "" {
+					return val
+				}
+			}
+		}
+
+		if strings.HasPrefix(mountPoint, "/Volumes/") {
+			base := filepath.Base(mountPoint)
+			if base != "" && base != "Volumes" {
+				return base
+			}
+		}
+		return ""
+	}
+
+	if runtime.GOOS == "windows" {
+		driveLetter := strings.TrimSuffix(mountPoint, "\\")
+		driveLetter = strings.TrimSuffix(driveLetter, "/")
+		if len(driveLetter) >= 2 && driveLetter[1] == ':' {
+			cmd := execCommand("powershell", "-NoProfile", "-Command",
+				fmt.Sprintf("(Get-Volume -DriveLetter %s).FileSystemLabel", string(driveLetter[0])))
+			if out, err := cmd.Output(); err == nil {
+				lbl := strings.TrimSpace(string(out))
+				if lbl != "" {
+					return lbl
+				}
+			}
+		}
+		return ""
+	}
+
+	if runtime.GOOS == "linux" {
+		part1 := targetDisk + "1"
+		if strings.Contains(targetDisk, "nvme") || strings.Contains(targetDisk, "mmcblk") {
+			part1 = targetDisk + "p1"
+		}
+		cmd := execCommand("lsblk", "-no", "LABEL", part1)
+		if out, err := cmd.Output(); err == nil {
+			lbl := strings.TrimSpace(string(out))
+			if lbl != "" {
+				return lbl
+			}
+		}
+		cmd2 := execCommand("blkid", "-s", "LABEL", "-o", "value", part1)
+		if out, err := cmd2.Output(); err == nil {
+			lbl := strings.TrimSpace(string(out))
+			if lbl != "" {
+				return lbl
+			}
+		}
+		return ""
+	}
+
+	return ""
+}
+
 // UpdateVolumeLabel non-destructively renames the data partition volume label to newLabel.
+// If the volume is already labeled with newLabel, the renaming operation is skipped.
 // Returns the updated active mount point path if changed.
 func UpdateVolumeLabel(targetDisk string, mountPoint string, newLabel string) string {
-	if newLabel == "" || mountPoint == "" {
+	if newLabel == "" || (mountPoint == "" && targetDisk == "") {
 		return mountPoint
 	}
+
+	// 1. Inspect current volume label; skip if already labeled
+	currentLabel := GetVolumeLabel(targetDisk, mountPoint)
+	if currentLabel != "" && strings.EqualFold(strings.TrimSpace(currentLabel), newLabel) {
+		logger.Info("Target volume is already labeled as requested, skipping rename operation",
+			"target", targetDisk, "mountPoint", mountPoint, "label", currentLabel)
+		return mountPoint
+	}
+
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
 		return mountPoint
 	}
 
+	logger.Info("Updating volume label...", "target", targetDisk, "mountPoint", mountPoint, "currentLabel", currentLabel, "newLabel", newLabel)
+
 	if runtime.GOOS == "darwin" {
-		cmd := execCommand("diskutil", "rename", mountPoint, newLabel)
+		target := mountPoint
+		if target == "" {
+			diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
+			if !strings.Contains(diskNode, "s") {
+				target = diskNode + "s1"
+			} else {
+				target = diskNode
+			}
+		}
+		cmd := execCommand("diskutil", "rename", target, newLabel)
 		if err := cmd.Run(); err == nil {
 			newMount := filepath.Join("/Volumes", newLabel)
 			if info, statErr := os.Stat(newMount); statErr == nil && info.IsDir() {
