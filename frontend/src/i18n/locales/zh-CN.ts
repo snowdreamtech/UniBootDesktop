@@ -152,6 +152,8 @@ export const zhCn: TranslationDict = {
   "deploy.start_update": "开始无损更新 (保留数据)",
   "deploy.batch_create": "开始批量制作 ({count} 块磁盘)",
   "deploy.writing": "正在写入引导与固件包...",
+  "deploy.batch_current": "当前磁盘",
+  "deploy.batch_overall_progress": "总体进度",
   "deploy.toast_switched_b": "已成功切换至云端模式！",
   "deploy.toast_added_iso": "成功添加 {count} 个 ISO 镜像",
   "deploy.toast_added_demo_iso": "已成功添加 2 个演示 ISO 镜像 (浏览器演示模式)",

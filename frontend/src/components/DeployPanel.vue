@@ -337,8 +337,18 @@
       </div>
 
       <div v-if="isDeploying" class="deploy-active-container">
+        <!-- Batch deployment info (when deploying multiple disks) -->
+        <div v-if="batchDeployInfo && batchDeployInfo.totalDisks > 1" class="batch-deploy-info">
+          <div class="batch-current-disk">
+            {{ t('deploy.batch_current') }}: {{ batchDeployInfo.currentDiskIndex }}/{{ batchDeployInfo.totalDisks }}
+          </div>
+          <div class="batch-disk-name">{{ batchDeployInfo.currentDisk }}</div>
+        </div>
+
         <ProgressBar
-          :label="t('deploy.writing')"
+          :label="batchDeployInfo && batchDeployInfo.totalDisks > 1
+            ? t('deploy.batch_overall_progress')
+            : t('deploy.writing')"
           :progress="deployProgress"
         />
         <div class="deploy-stats-row">
@@ -537,6 +547,7 @@ const props = defineProps<{
   selectedIsoFiles: { name: string; path: string }[];
   isDeploying: boolean;
   deployProgress: number;
+  batchDeployInfo?: { totalDisks: number; currentDiskIndex: number; currentDisk: string; diskProgress: number; overallProgress: number } | null;
   speedMBps?: number;
   elapsedSec?: number;
   etaSec?: number;
@@ -2641,6 +2652,34 @@ function getFileIcon(filename: string): string {
   flex-direction: column;
   gap: 0.65rem;
   margin-bottom: 0.85rem;
+}
+
+.batch-deploy-info {
+  background: var(--subtab-container-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.batch-current-disk {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.batch-disk-name {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .deploy-stats-row {

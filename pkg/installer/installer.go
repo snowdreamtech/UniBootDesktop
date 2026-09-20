@@ -20,6 +20,18 @@ import (
 // ProgressCallback is a function type for reporting deployment progress (0-100)
 type ProgressCallback func(progress int)
 
+// BatchDeployProgress represents real-time progress for batch deployment operations
+type BatchDeployProgress struct {
+	TotalDisks       int    `json:"totalDisks"`       // Total number of disks to deploy
+	CurrentDiskIndex int    `json:"currentDiskIndex"` // Current disk index (1-based)
+	CurrentDisk      string `json:"currentDisk"`      // Current disk device name
+	DiskProgress     int    `json:"diskProgress"`     // Current disk progress 0-100
+	OverallProgress  int    `json:"overallProgress"`  // Overall progress 0-100
+}
+
+// BatchProgressCallback reports batch deployment progress with disk-level details
+type BatchProgressCallback func(BatchDeployProgress)
+
 // DeployResult contains the output metadata of a disk deployment run.
 type DeployResult struct {
 	Success     bool                `json:"success"`
@@ -433,11 +445,11 @@ func DeployCloudModeBatch(ctx context.Context, targetDisks []string, fsType stri
 }
 
 // DeployCloudModeBatchWithExpectedDisks deploys Cloud Mode only after all selected disk snapshots pass final validation.
-func DeployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo, progressCallback ProgressCallback) ([]*DeployResult, error) {
+func DeployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo, progressCallback BatchProgressCallback) ([]*DeployResult, error) {
 	return deployCloudModeBatchWithExpectedDisks(ctx, targetDisks, fsType, expected, progressCallback)
 }
 
-func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo, progressCallback ProgressCallback) ([]*DeployResult, error) {
+func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, expected []disk.DiskInfo, progressCallback BatchProgressCallback) ([]*DeployResult, error) {
 	if len(targetDisks) == 0 {
 		return nil, fmt.Errorf("no target disks specified for batch deployment")
 	}
@@ -471,7 +483,13 @@ func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []st
 			if progressCallback != nil {
 				// Progress: (completed disks * 100 + current disk progress) / total disks
 				overallProgress := (index*100 + diskProgress) / totalDisks
-				progressCallback(overallProgress)
+				progressCallback(BatchDeployProgress{
+					TotalDisks:       totalDisks,
+					CurrentDiskIndex: index + 1, // 1-based index for display
+					CurrentDisk:      d,
+					DiskProgress:     diskProgress,
+					OverallProgress:  overallProgress,
+				})
 			}
 		}
 

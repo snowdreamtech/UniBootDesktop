@@ -1,6 +1,6 @@
-import { ref, computed, watch, type Ref } from 'vue';
-import type { DiskInfo } from '../components/DiskPanel.vue';
+import { computed, ref, watch, type Ref } from 'vue';
 import type { InstallDiagnosticsData } from '../components/DiagnosticsModal.vue';
+import type { DiskInfo } from '../components/DiskPanel.vue';
 import { logUserAction } from '../utils/logger';
 
 export interface DeployBannerState {
@@ -10,6 +10,14 @@ export interface DeployBannerState {
   autoEjected?: boolean;
   mode?: 'cloud' | 'hybrid';
   dismissed?: boolean;
+}
+
+export interface BatchDeployProgress {
+  totalDisks: number;
+  currentDiskIndex: number;
+  currentDisk: string;
+  diskProgress: number;
+  overallProgress: number;
 }
 
 export interface UseDeploymentOptions {
@@ -46,6 +54,9 @@ export function useDeployment(options: UseDeploymentOptions) {
   const deploySpeedMBps = ref(0);
   const deployElapsedSec = ref(0);
   const deployEtaSec = ref(0);
+
+  // Batch deployment state
+  const batchDeployInfo = ref<BatchDeployProgress | null>(null);
 
   const isDeployConfirmOpen = ref(false);
   const pendingTargets = ref<string[]>([]);
@@ -339,11 +350,28 @@ export function useDeployment(options: UseDeploymentOptions) {
 
     isDeploying.value = true;
     deployProgress.value = 5;
+    batchDeployInfo.value = null;
 
     let unsubCloudProgress: (() => void) | null = null;
+    let unsubBatchProgress: (() => void) | null = null;
+
     if (activeMode.value === 'cloud' && window.runtime && window.runtime.EventsOn) {
+      // Listen for batch deployment progress (multi-disk)
+      window.runtime.EventsOn('cloud-deploy-batch-progress', (progress: BatchDeployProgress) => {
+        deployProgress.value = progress.overallProgress;
+        batchDeployInfo.value = progress;
+      });
+      unsubBatchProgress = () => {
+        if (window.runtime && window.runtime.EventsOff) {
+          window.runtime.EventsOff('cloud-deploy-batch-progress');
+        }
+      };
+
+      // Listen for single disk progress (for backward compatibility)
       window.runtime.EventsOn('cloud-deploy-progress', (progress: number) => {
-        deployProgress.value = progress;
+        if (!batchDeployInfo.value) {
+          deployProgress.value = progress;
+        }
       });
       unsubCloudProgress = () => {
         if (window.runtime && window.runtime.EventsOff) {
@@ -413,6 +441,10 @@ export function useDeployment(options: UseDeploymentOptions) {
         unsubCloudProgress();
         unsubCloudProgress = null;
       }
+      if (unsubBatchProgress) {
+        unsubBatchProgress();
+        unsubBatchProgress = null;
+      }
     }
 
     if (success) {
@@ -420,6 +452,7 @@ export function useDeployment(options: UseDeploymentOptions) {
       setTimeout(async () => {
         isDeploying.value = false;
         deployProgress.value = 0;
+        batchDeployInfo.value = null;
 
         let autoEjectedCount = 0;
         if (autoEjectAfterDeploy.value) {
@@ -453,6 +486,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     } else {
       isDeploying.value = false;
       deployProgress.value = 0;
+      batchDeployInfo.value = null;
       deploySpeedMBps.value = 0;
       deployElapsedSec.value = 0;
       deployEtaSec.value = 0;
@@ -482,6 +516,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     autoEjectAfterDeploy,
     isDeploying,
     deployProgress,
+    batchDeployInfo,
     deploySpeedMBps,
     deployElapsedSec,
     deployEtaSec,

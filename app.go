@@ -384,9 +384,9 @@ func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected
 	deployCtx := a.initDeployContext()
 	defer a.clearDeployContext()
 
-	// Create progress callback for batch operations
-	progressCallback := func(progress int) {
-		wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", progress)
+	// Create batch progress callback to emit real-time progress events with disk-level details
+	progressCallback := func(progress installer.BatchDeployProgress) {
+		wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-batch-progress", progress)
 	}
 
 	results, err := installer.DeployCloudModeBatchWithExpectedDisks(deployCtx, targetDisks, fsType, expected, progressCallback)

@@ -152,6 +152,8 @@ export const enUs: TranslationDict = {
   "deploy.start_update": "Start In-Place Update (Data Safe)",
   "deploy.batch_create": "Start Batch Deployment ({count} Drive(s))",
   "deploy.writing": "Writing bootloader and firmware packages...",
+  "deploy.batch_current": "Current Disk",
+  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Switched to Cloud Mode!",
   "deploy.toast_added_iso": "Successfully added {count} ISO image(s)",
   "deploy.toast_added_demo_iso": "Added 2 demo ISO images",

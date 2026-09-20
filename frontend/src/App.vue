@@ -62,6 +62,7 @@
         :selectedIsoFiles="selectedIsoFiles"
         :isDeploying="isDeploying"
         :deployProgress="deployProgress"
+        :batchDeployInfo="batchDeployInfo"
         :speedMBps="deploySpeedMBps"
         :elapsedSec="deployElapsedSec"
         :etaSec="deployEtaSec"
@@ -259,6 +260,7 @@ const {
   autoEjectAfterDeploy,
   isDeploying,
   deployProgress,
+  batchDeployInfo,
   deploySpeedMBps,
   deployElapsedSec,
   deployEtaSec,
