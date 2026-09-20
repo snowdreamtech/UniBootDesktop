@@ -154,8 +154,6 @@ export const ruRu: TranslationDict = {
   "deploy.writing": "Запись пакетов прошивки загрузчика...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Успешно переключено в облачный режим!",
   "deploy.toast_added_iso": "Успешно добавлено ISO-образов: {count}",
   "deploy.toast_added_demo_iso": "Добавлено 2 демо ISO-образа (Демо в браузере)",

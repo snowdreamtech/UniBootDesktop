@@ -154,8 +154,6 @@ export const nlNl: TranslationDict = {
   "deploy.writing": "Opstartfirmwarepakketten schrijven...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Opgeschakeld naar Cloudmodus!",
   "deploy.toast_added_iso": "Succesvol {count} ISO-bestanden toegevoegd",
   "deploy.toast_added_demo_iso": "2 bronbestanden voor demo-afbeeldingen toegevoegd (Browserdemo)",

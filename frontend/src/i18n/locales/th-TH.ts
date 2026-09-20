@@ -154,8 +154,6 @@ export const thTh: TranslationDict = {
   "deploy.writing": "กำลังเขียนแพ็คเกจเฟิร์มแวร์บูต...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "สลับเป็นโหมดคลาวด์สำเร็จแล้ว!",
   "deploy.toast_added_iso": "สำเร็จfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "เพิ่มไฟล์ต้นฉบับรูปภาพสาธิต 2 ไฟล์ (Browser Demo)",

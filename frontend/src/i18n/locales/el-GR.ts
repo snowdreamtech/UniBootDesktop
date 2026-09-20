@@ -154,8 +154,6 @@ export const elGr: TranslationDict = {
   "deploy.writing": "Σύνταξη πακέτων υλικολογισμικού εκκίνησης...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Επιτυχής μετάβαση σε λειτουργία Cloud!",
   "deploy.toast_added_iso": "Επιτυχίαfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Προστέθηκαν 2 αρχεία πηγής εικόνας επίδειξης (Επίδειξη προγράμματος περιήγησης)",

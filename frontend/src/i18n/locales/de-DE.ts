@@ -154,8 +154,6 @@ export const deDe: TranslationDict = {
   "deploy.writing": "Boot-Firmware-Pakete werden geschrieben...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Erfolgreich in den Cloud-Modus gewechselt!",
   "deploy.toast_added_iso": "{count} ISO-Images erfolgreich hinzugefügt",
   "deploy.toast_added_demo_iso": "2 Demo-ISO-Images hinzugefügt (Browser-Demo)",

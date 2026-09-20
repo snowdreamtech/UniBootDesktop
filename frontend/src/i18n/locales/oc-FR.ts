@@ -154,8 +154,6 @@ export const ocFr: TranslationDict = {
   "deploy.writing": "Escriure de paquets de micrologicial d'arrenjament...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Cambiament cap al mòde Cloud reüssit !",
   "deploy.toast_added_iso": "Succèsfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Apondut 2 fichièrs font d'imatge de demo (Demo del navigador)",

@@ -154,8 +154,6 @@ export const csCz: TranslationDict = {
   "deploy.writing": "Zápis balíčků bootovacího firmwaru...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Přejito do cloudového režimu!",
   "deploy.toast_added_iso": "Úspěchfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Přidány 2 zdrojové soubory ukázkových obrázků (Demo prohlížeče)",

@@ -154,8 +154,6 @@ export const bgBg: TranslationDict = {
   "deploy.writing": "Писане на стартиращи фърмуерни пакети...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Успешно превключване към облачен режим!",
   "deploy.toast_added_iso": "Успешноfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Добавени са 2 изходни файла с демонстрационни изображения (демонстрация на браузър)",

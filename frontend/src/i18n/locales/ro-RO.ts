@@ -154,8 +154,6 @@ export const roRo: TranslationDict = {
   "deploy.writing": "Se scrie pachete de firmware de pornire...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "S-a comutat la modul Cloud!",
   "deploy.toast_added_iso": "S-au adăugat cu succes {count} imagini ISO",
   "deploy.toast_added_demo_iso": "S-au adăugat 2 fișiere sursă imagine demonstrativă (Demo browser)",

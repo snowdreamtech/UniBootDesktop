@@ -154,8 +154,6 @@ export const huHu: TranslationDict = {
   "deploy.writing": "Indító belső vezérlőprogram csomagok írása...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Sikeresen átváltva Felhő módra!",
   "deploy.toast_added_iso": "Sikeresfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "2 demókép forrásfájl hozzáadva (böngésző bemutató)",

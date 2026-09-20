@@ -154,8 +154,6 @@ export const azAz: TranslationDict = {
   "deploy.writing": "Yükləmə Mikro Proqramı Paketləri Yazılır...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Uğurla bulud rejiminə keçdi!",
   "deploy.toast_added_iso": "Uğurlufully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "2 demo şəkil mənbəyi faylı əlavə edildi (Browser Demo)",

@@ -154,8 +154,6 @@ export const taIn: TranslationDict = {
   "deploy.writing": "துவக்க நிலைபொருள் தொகுப்புகளை எழுதுதல்...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "கிளவுட் பயன்முறைக்கு വിജയകരமாக மாற்றப்பட்டது!",
   "deploy.toast_added_iso": "வெற்றிfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "2 டெமோ பட மூல கோப்புகள் சேர்க்கப்பட்டது (உலாவி டெமோ)",

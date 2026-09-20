@@ -154,8 +154,6 @@ export const jaJp: TranslationDict = {
   "deploy.writing": "ブートファームウェアを書き込み中...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "クラウドモードに切り替えました！",
   "deploy.toast_added_iso": "{count} 個の ISO イメージを正常に追加しました",
   "deploy.toast_added_demo_iso": "デモ用 ISO イメージ 2 個を追加しました (ブラウザデモ)",

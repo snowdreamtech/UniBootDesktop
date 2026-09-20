@@ -154,8 +154,6 @@ export const hiIn: TranslationDict = {
   "deploy.writing": "बूट फ़र्मवेयर पैकेज़ लिखना...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "सफलतापूर्वक क्लाउड मोड में स्विच किया गया!",
   "deploy.toast_added_iso": "सफलfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "2 डेमो छवि स्रोत फ़ाइलें जोड़ी गईं (ब्राउज़र डेमो)",

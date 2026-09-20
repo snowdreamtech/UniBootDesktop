@@ -154,8 +154,6 @@ export const plPl: TranslationDict = {
   "deploy.writing": "Zapisywanie pakietów oprogramowania rozruchowego...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Przełączono na tryb chmury!",
   "deploy.toast_added_iso": "Pomyślnie dodano {count} obrazów ISO",
   "deploy.toast_added_demo_iso": "Dodano 2 wersje demonstracyjne plików obrazu ISO (Demo przeglądarki)",

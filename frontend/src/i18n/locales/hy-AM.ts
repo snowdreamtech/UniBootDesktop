@@ -154,8 +154,6 @@ export const hyAm: TranslationDict = {
   "deploy.writing": "Boot ծրագրակազմի փաթեթներ գրելը...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Հաջողությամբ անցավ ամպային ռեժիմի:",
   "deploy.toast_added_iso": "Հաջողվեցfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Ավելացվեց 2 ցուցադրական պատկերի աղբյուրի ֆայլ (Browser Demo)",

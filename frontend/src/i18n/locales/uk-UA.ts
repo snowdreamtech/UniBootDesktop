@@ -154,8 +154,6 @@ export const ukUa: TranslationDict = {
   "deploy.writing": "Запис завантажувальних пакетів прошивки...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Успішно переключено в хмарний режим!",
   "deploy.toast_added_iso": "Успішно додано ISO-образів: {count}",
   "deploy.toast_added_demo_iso": "Додано 2 вихідних файли демонстраційних зображень (демонстрація браузера)",

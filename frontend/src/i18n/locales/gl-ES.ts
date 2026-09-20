@@ -154,8 +154,6 @@ export const glEs: TranslationDict = {
   "deploy.writing": "Escribindo paquetes de firmware de arranque...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Cambiado ao modo Nube con éxito!",
   "deploy.toast_added_iso": "Éxitofully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Engadíronse 2 ficheiros de orixe de imaxe de demostración (Demo do navegador)",

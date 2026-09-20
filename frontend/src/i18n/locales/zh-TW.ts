@@ -154,8 +154,6 @@ export const zhTw: TranslationDict = {
   "deploy.writing": "正在寫入引導與韌體包...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "已成功切換至雲端模式！",
   "deploy.toast_added_iso": "成功新增 {count} 個 ISO 映像檔",
   "deploy.toast_added_demo_iso": "已成功新增 2 個演示 ISO 映像檔 (瀏覽器演示模式)",

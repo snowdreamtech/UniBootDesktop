@@ -154,8 +154,6 @@ export const nbNo: TranslationDict = {
   "deploy.writing": "Skriver oppstartsfastvarepakker...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Byttet til skymodus!",
   "deploy.toast_added_iso": "Vellykketfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Lagt til 2 demobildekildefiler (nettleserdemo)",

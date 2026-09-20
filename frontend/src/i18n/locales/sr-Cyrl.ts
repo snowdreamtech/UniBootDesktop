@@ -154,8 +154,6 @@ export const srCyrl: TranslationDict = {
   "deploy.writing": "Писање пакета фирмвера за покретање...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Успешно пребачено у облачни режим!",
   "deploy.toast_added_iso": "Успешноfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Додате 2 изворне датотеке демо слике (демо прегледача)",

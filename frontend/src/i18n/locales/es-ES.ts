@@ -154,8 +154,6 @@ export const esEs: TranslationDict = {
   "deploy.writing": "Escribiendo paquetes de firmware de arranque...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "¡Cambiado al modo Nube con éxito!",
   "deploy.toast_added_iso": "Se agregaron con éxito {count} imágenes ISO",
   "deploy.toast_added_demo_iso": "2 archivos de imagen ISO de demostración agregados (Demo del navegador)",

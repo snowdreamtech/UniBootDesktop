@@ -154,8 +154,6 @@ export const srLatn: TranslationDict = {
   "deploy.writing": "Писање пакета фирмвера за покретање...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Uspešno prebačeno u oblačni režim!",
   "deploy.toast_added_iso": "Uspešnofully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Додате 2 изворне датотеке демо слике (демо прегледача)",

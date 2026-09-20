@@ -154,8 +154,6 @@ export const urPk: TranslationDict = {
   "deploy.writing": "بوٹ فرم ویئر پیکجز لکھنا...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "کامیابی کے ساتھ کلاؤڈ موڈ پر سوئچ ہو گیا!",
   "deploy.toast_added_iso": "کامیابfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "2 ڈیمو امیج سورس فائلیں شامل کی گئیں (براؤزر ڈیمو)",

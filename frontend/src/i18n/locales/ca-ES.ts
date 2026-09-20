@@ -154,8 +154,6 @@ export const caEs: TranslationDict = {
   "deploy.writing": "Escrivint paquets de firmware d'arrencada...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Canviat al mode Núvol amb èxit!",
   "deploy.toast_added_iso": "Èxitfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "S'han afegit 2 fitxers d'origen d'imatge de demostració (demo del navegador)",

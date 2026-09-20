@@ -154,8 +154,6 @@ export const mkMk: TranslationDict = {
   "deploy.writing": "Пишување пакети со фирмвер за подигање...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Успешно префрлено во облачен режим!",
   "deploy.toast_added_iso": "Успешноfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Додадени се 2 изворни датотеки за демо слики (Демо од прелистувачот)",

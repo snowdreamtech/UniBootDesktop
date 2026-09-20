@@ -154,8 +154,6 @@ export const idId: TranslationDict = {
   "deploy.writing": "Menulis Paket Boot Firmware...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Berhasil beralih ke Mode Cloud!",
   "deploy.toast_added_iso": "Berhasilfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Menambahkan 2 file sumber gambar demo (Demo Browser)",

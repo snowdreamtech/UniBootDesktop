@@ -154,8 +154,6 @@ export const mlIn: TranslationDict = {
   "deploy.writing": "ബൂട്ട് ഫേംവെയർ പാക്കേജുകൾ എഴുതുന്നു...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "ക്ലൗഡ് മോഡിലേക്ക് വിജയകരമായി മാറി!",
   "deploy.toast_added_iso": "വിജയിച്ചുfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "2 ഡെമോ ഇമേജ് സോഴ്സ് ഫയലുകൾ ചേർത്തു (ബ്രൗസർ ഡെമോ)",

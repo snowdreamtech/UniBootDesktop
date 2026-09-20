@@ -154,8 +154,6 @@ export const itIt: TranslationDict = {
   "deploy.writing": "Scrittura Pacchetti Firmware di Avvio...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Passato alla modalità Cloud!",
   "deploy.toast_added_iso": "{count} file di immagine ISO aggiunti con successo",
   "deploy.toast_added_demo_iso": "2 file di immagine ISO di dimostrazione aggiunti (Demo del browser)",

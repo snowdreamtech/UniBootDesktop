@@ -154,8 +154,6 @@ export const frFr: TranslationDict = {
   "deploy.writing": "Écriture des paquets de micrologiciel d'amorçage...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Bascule vers le mode Cloud réussie !",
   "deploy.toast_added_iso": "{count} image(s) ISO ajoutée(s) avec succès",
   "deploy.toast_added_demo_iso": "2 fichiers image ISO de démonstration ajoutés (Démo navigateur)",

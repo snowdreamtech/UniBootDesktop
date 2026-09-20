@@ -154,8 +154,6 @@ export const ptBr: TranslationDict = {
   "deploy.writing": "Gravando Pacotes de Firmware de Boot...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Alternado para o Modo Nuvem com sucesso!",
   "deploy.toast_added_iso": "Adicionadas com sucesso {count} imagens ISO",
   "deploy.toast_added_demo_iso": "2 arquivos de imagem ISO de demonstração adicionados (Demonstração do navegador)",

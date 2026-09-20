@@ -154,8 +154,6 @@ export const kaGe: TranslationDict = {
   "deploy.writing": "ჩატვირთვის პროგრამული უზრუნველყოფის პაკეტების ჩაწერა...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "წარმატებით გადაერთო ღრუბლოვან რეჟიმზე!",
   "deploy.toast_added_iso": "წარმატებაfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "დამატებულია 2 დემო გამოსახულების წყაროს ფაილი (ბრაუზერის დემო)",

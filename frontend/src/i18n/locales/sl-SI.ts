@@ -154,8 +154,6 @@ export const slSi: TranslationDict = {
   "deploy.writing": "Pisanje zagonskih paketov vdelane programske opreme ...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Preklopljeno v način oblaka!",
   "deploy.toast_added_iso": "Uspešnofully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Dodani 2 izvorni datoteki predstavitvene slike (predstavitev brskalnika)",

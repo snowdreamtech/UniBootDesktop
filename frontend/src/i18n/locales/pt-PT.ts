@@ -154,8 +154,6 @@ export const ptPt: TranslationDict = {
   "deploy.writing": "Escrevendo pacotes de firmware de inicialização...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Alternado para o Modo Nuvem com sucesso!",
   "deploy.toast_added_iso": "Sucessofully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "Adicionados 2 arquivos de origem de imagem de demonstração (demonstração do navegador)",

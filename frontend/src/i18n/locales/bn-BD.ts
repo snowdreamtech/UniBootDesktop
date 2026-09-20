@@ -154,8 +154,6 @@ export const bnBd: TranslationDict = {
   "deploy.writing": "বুট ফার্মওয়্যার প্যাকেজ লেখা হচ্ছে...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "সফলভাবে ক্লাউড মোডে সুইচ করা হয়েছে!",
   "deploy.toast_added_iso": "সফলfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "2টি ডেমো ইমেজ সোর্স ফাইল যোগ করা হয়েছে (ব্রাউজার ডেমো)",

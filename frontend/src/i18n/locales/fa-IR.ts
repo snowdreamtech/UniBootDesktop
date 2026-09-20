@@ -154,8 +154,6 @@ export const faIr: TranslationDict = {
   "deploy.writing": "نوشتن بسته های سفت افزار بوت...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "با موفقیت به حالت ابری تغییر یافت!",
   "deploy.toast_added_iso": "موفقیت‌آمیزfully added {count} image source file(s)",
   "deploy.toast_added_demo_iso": "اضافه شدن 2 فایل منبع تصویر نمایشی (نمایشگر مرورگر)",

@@ -154,8 +154,6 @@ export const koKr: TranslationDict = {
   "deploy.writing": "부팅 펌웨어 패키지 작성 중...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "클라우드 모드로 전환되었습니다!",
   "deploy.toast_added_iso": "{count}개의 ISO 이미지 추가 성공",
   "deploy.toast_added_demo_iso": "데모 ISO 이미지 2개를 추가했습니다 (브라우저 데모)",

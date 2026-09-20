@@ -154,8 +154,6 @@ export const trTr: TranslationDict = {
   "deploy.writing": "Önyükleme Ürün Yazılımı Paketleri Yazılıyor...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Bulut Moduna Geçildi!",
   "deploy.toast_added_iso": "Başarıyla {count} ISO imajı eklendi",
   "deploy.toast_added_demo_iso": "2 demolar ISO kalıp dosyası eklendi (Tarayıcı Demosu)",

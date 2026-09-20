@@ -154,8 +154,6 @@ export const viVn: TranslationDict = {
   "deploy.writing": "Đang ghi các gói firmware khởi động...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Đã chuyển sang chế độ đám mây!",
   "deploy.toast_added_iso": "Đã thêm thành công {count} tệp hình ảnh ISO",
   "deploy.toast_added_demo_iso": "Đã thêm 2 tệp hình ảnh ISO bản demo (Demo trình duyệt)",

@@ -154,8 +154,6 @@ export const svSe: TranslationDict = {
   "deploy.writing": "Skriver boot-firmwarepaket...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "Växlat till molnläge!",
   "deploy.toast_added_iso": "Lade till {count} ISO-avbilder",
   "deploy.toast_added_demo_iso": "Lade till 2 demobildkällfiler (webbläsardemo)",

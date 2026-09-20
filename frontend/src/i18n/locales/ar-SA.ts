@@ -154,8 +154,6 @@ export const arSa: TranslationDict = {
   "deploy.writing": "جاري كتابة حزم البرامج الثابتة للإقلاع...",
   "deploy.batch_current": "Current Disk",
   "deploy.batch_overall_progress": "Overall Progress",
-  "deploy.batch_current": "Current Disk",
-  "deploy.batch_overall_progress": "Overall Progress",
   "deploy.toast_switched_b": "تم التبديل إلى وضع السحابة بنجاح!",
   "deploy.toast_added_iso": "تم إضافة {count} صور ISO بنجاح",
   "deploy.toast_added_demo_iso": "تمت إضافة 2 ملف صورة عرض توضيحي (عرض المتصفح)",
