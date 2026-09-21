@@ -481,5 +481,14 @@ export const zhCn: TranslationDict = {
   "privilege.safety_desc": "检测阶段全程只读，不破坏现有数据；代码完全开源。",
   "privilege.confirm_btn": "立即授权",
   "privilege.cancel_btn": "暂不授权",
-  "privilege.success_msg": "已获得管理员权限"
+  "privilege.success_msg": "已获得管理员权限",
+  "disk.tag_needs_privilege": "待授权",
+  "disk.tooltip_needs_privilege": "需要系统授权以读取引导信息",
+  "inspector.val_needs_privilege": "待授权",
+  "deploy.stage_preparing": "准备部署环境...",
+  "deploy.stage_partitioning": "解构并重建磁盘分区...",
+  "deploy.stage_firmware": "写入 UniBoot 引导与固件扩展...",
+  "deploy.stage_iso_copy": "复制系统镜像文件...",
+  "deploy.stage_verifying": "校验引导结构与分区对齐...",
+  "deploy.stage_done": "部署完成",
 };

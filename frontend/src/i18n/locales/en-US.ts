@@ -481,5 +481,14 @@ export const enUs: TranslationDict = {
   "privilege.safety_desc": "Inspection is strictly read-only and non-destructive; source code is fully open.",
   "privilege.confirm_btn": "Authorize Now",
   "privilege.cancel_btn": "Cancel",
-  "privilege.success_msg": "Administrator privilege granted"
+  "privilege.success_msg": "Administrator privilege granted",
+  "disk.tag_needs_privilege": "Unauthorized",
+  "disk.tooltip_needs_privilege": "System authorization required to inspect boot data",
+  "inspector.val_needs_privilege": "Unauthorized",
+  "deploy.stage_preparing": "Preparing deployment environment...",
+  "deploy.stage_partitioning": "Partitioning and formatting disk...",
+  "deploy.stage_firmware": "Writing UniBoot firmware & boot files...",
+  "deploy.stage_iso_copy": "Copying operating system images...",
+  "deploy.stage_verifying": "Verifying boot layout & alignment...",
+  "deploy.stage_done": "Deployment completed",
 };

@@ -481,4 +481,13 @@ export interface TranslationDict {
   "privilege.confirm_btn": string;
   "privilege.cancel_btn": string;
   "privilege.success_msg": string;
+  "deploy.stage_done": string;
+  "deploy.stage_verifying": string;
+  "deploy.stage_iso_copy": string;
+  "deploy.stage_firmware": string;
+  "deploy.stage_partitioning": string;
+  "deploy.stage_preparing": string;
+  "inspector.val_needs_privilege": string;
+  "disk.tooltip_needs_privilege": string;
+  "disk.tag_needs_privilege": string;
 }

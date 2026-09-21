@@ -242,7 +242,7 @@ const bootTooltip = computed(() => {
       return props.disk.thirdPartyBootType;
     }
     if (props.disk.bootStatusCode === 'needs_privilege') {
-      return props.disk.bootStatus || '需要系统授权以读取引导信息';
+      return t('disk.tooltip_needs_privilege');
     }
     return t('disk.tooltip_third_party_boot');
   }
@@ -258,7 +258,7 @@ const bootSubtype = computed<'hybrid' | 'cloud' | 'thirdparty' | 'needs_privileg
 });
 
 const diskTagLabel = computed(() => {
-  if (props.disk.bootStatusCode === 'needs_privilege') return props.disk.bootStatus || '待授权';
+  if (props.disk.bootStatusCode === 'needs_privilege') return t('disk.tag_needs_privilege');
   if (diskType.value === 'boot') {
     if (bootSubtype.value === 'hybrid') return t('disk.tag_boot_hybrid');
     if (bootSubtype.value === 'cloud') return t('disk.tag_boot_cloud');

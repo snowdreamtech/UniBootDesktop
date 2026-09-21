@@ -238,7 +238,7 @@ function formatBootStatus(disk?: any): string {
     return t('inspector.val_boot_mbr_data');
   }
   if (code === 'needs_privilege') {
-    return disk.bootStatus || '待授权';
+    return t('inspector.val_needs_privilege');
   }
   if (code === 'data_storage') {
     return t('inspector.val_data_disk');
