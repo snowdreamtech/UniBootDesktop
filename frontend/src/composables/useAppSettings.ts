@@ -1,6 +1,7 @@
 import { ref, watch, type Ref } from 'vue';
 import { setLanguage } from '../i18n';
 import { logUserAction } from '../utils/logger';
+import { useTheme } from './useTheme';
 import {
   GetConfig,
   SaveConfig,
@@ -16,6 +17,7 @@ export interface UseAppSettingsOptions {
 export function useAppSettings(options: UseAppSettingsOptions) {
   const { selectedFsType, activeMode, autoEjectAfterDeploy } = options;
 
+  const { currentTheme, applyTheme, getActiveTheme } = useTheme();
   const settingsInitialTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
   const isSettingsOpen = ref(false);
   const isAboutOpen = ref(false);
@@ -31,16 +33,6 @@ export function useAppSettings(options: UseAppSettingsOptions) {
     settingsInitialTab.value = tab;
     isSettingsOpen.value = true;
     logUserAction('INFO', 'User opened settings modal', tab);
-  }
-
-  function applyTheme(themeName?: string) {
-    const theme = themeName === 'light' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', theme);
-    try {
-      localStorage.setItem('unigo_theme_cache', theme);
-    } catch (e) {
-      // localStorage unavailable, ignore
-    }
   }
 
   async function saveLangToConfig(langVal: string) {
@@ -64,24 +56,44 @@ export function useAppSettings(options: UseAppSettingsOptions) {
   }
 
   async function loadConfig() {
+    let cfg: any = null;
+
     if (window.go && window.go.main && window.go.main.App) {
       try {
-        const cfg = await window.go.main.App.GetConfig();
-        if (cfg) {
-          if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
-          if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
-          if (cfg.language) {
-            setLanguage(cfg.language);
-            if (window.go.main.App.ReloadAppMenu) {
-              window.go.main.App.ReloadAppMenu(cfg.language).catch(() => {});
-            }
-          }
-          applyTheme(cfg.theme);
-          autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
-        }
+        cfg = await window.go.main.App.GetConfig();
       } catch (e) {
         console.error('Failed to load config:', e);
       }
+    }
+
+    if (!cfg) {
+      // Retry in case Wails IPC is still initializing when Vue mounts
+      for (let i = 0; i < 15; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 60));
+        if (window.go && window.go.main && window.go.main.App) {
+          try {
+            cfg = await window.go.main.App.GetConfig();
+            if (cfg) break;
+          } catch (e) {
+            // Wait for next attempt
+          }
+        }
+      }
+    }
+
+    if (cfg) {
+      if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
+      if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
+      if (cfg.language) {
+        setLanguage(cfg.language);
+        if (window.go?.main?.App?.ReloadAppMenu) {
+          window.go.main.App.ReloadAppMenu(cfg.language).catch(() => {});
+        }
+      }
+      if (cfg.theme === 'light' || cfg.theme === 'dark') {
+        applyTheme(cfg.theme);
+      }
+      autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
     }
   }
 
@@ -104,7 +116,7 @@ export function useAppSettings(options: UseAppSettingsOptions) {
         const configObj = typeof payload === 'object' && payload !== null ? {
           mode: payload.mode || activeMode.value,
           autoCheckUpdate: payload.autoCheckUpdate !== false,
-          theme: payload.theme || 'dark',
+          theme: payload.theme || currentTheme.value,
           language: payload.language || 'auto',
           githubProxy: proxyUrl,
           fileSystem: payload.fileSystem || selectedFsType.value,
@@ -123,7 +135,7 @@ export function useAppSettings(options: UseAppSettingsOptions) {
         } : {
           mode: activeMode.value,
           autoCheckUpdate: true,
-          theme: 'dark',
+          theme: currentTheme.value,
           githubProxy: proxyUrl,
           fileSystem: selectedFsType.value,
         };
@@ -143,8 +155,10 @@ export function useAppSettings(options: UseAppSettingsOptions) {
     isSettingsOpen,
     isAboutOpen,
     currentGithubProxy,
-    openSettings,
+    currentTheme,
     applyTheme,
+    getActiveTheme,
+    openSettings,
     selectLanguage,
     loadConfig,
     onSaveSettings,

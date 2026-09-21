@@ -129,7 +129,7 @@
                 <CustomSelect
                   v-model="appTheme"
                   :options="themeSelectOptions"
-                  @change="triggerAutoSave"
+                  @change="onThemeChange"
                 />
               </div>
             </div>
@@ -404,6 +404,9 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import CustomSelect from './CustomSelect.vue';
 import { setLanguage, t, SUPPORTED_LANGUAGES } from '../i18n';
+import { useTheme } from '../composables/useTheme';
+
+const { applyTheme, getActiveTheme } = useTheme();
 
 const languageSelectOptions = computed(() => [
   { value: 'auto', label: t('common.autoDetect') },
@@ -462,6 +465,8 @@ watch(() => props.isOpen, (newVal) => {
     if (props.initialTab) {
       activeTab.value = props.initialTab;
     }
+    // Always sync appTheme with the active DOM theme immediately upon opening
+    appTheme.value = getActiveTheme();
     loadFullConfig();
     fetchFirmwareList();
     checkUniBootRelease();
@@ -473,7 +478,7 @@ const defaultMode = ref('cloud');
 const defaultFs = ref('exFAT');
 const autoCheckUpdate = ref(true);
 const autoEjectAfterDeploy = ref(false);
-const appTheme = ref('dark');
+const appTheme = ref(getActiveTheme());
 const appLanguage = ref('auto');
 
 // Network proxy state
@@ -578,6 +583,17 @@ function onLanguageChange(val: string) {
   triggerAutoSave();
 }
 
+function onThemeChange(val: string) {
+  applyTheme(val);
+  triggerAutoSave();
+}
+
+watch(appTheme, (newTheme) => {
+  if (newTheme === 'light' || newTheme === 'dark') {
+    applyTheme(newTheme);
+  }
+});
+
 let ventoyDebounceTimer: any = null;
 
 watch(
@@ -652,7 +668,12 @@ async function loadFullConfig() {
         defaultFs.value = cfg.fileSystem || 'exFAT';
         autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
         autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
-        appTheme.value = cfg.theme || 'dark';
+        if (cfg.theme === 'light' || cfg.theme === 'dark') {
+          appTheme.value = cfg.theme;
+          applyTheme(cfg.theme);
+        } else {
+          appTheme.value = getActiveTheme();
+        }
         appLanguage.value = cfg.language || 'auto';
         setLanguage(appLanguage.value);
         proxyInputUrl.value = cfg.githubProxy || '';
@@ -677,14 +698,6 @@ async function loadFullConfig() {
     isInitializing = false;
   }, 100);
 }
-
-watch(() => props.isOpen, (val) => {
-  if (val) {
-    loadFullConfig();
-    fetchFirmwareList();
-    checkUniBootRelease();
-  }
-}, { immediate: true });
 
 watch(() => props.currentProxy, (val) => {
   if (val !== undefined && val !== proxyInputUrl.value) {
