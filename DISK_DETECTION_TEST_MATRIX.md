@@ -99,26 +99,28 @@
 
 ---
 
-### Scenario 5: Third-party Boot Disk (Rufus, BalenaEtcher, WinPE, ISO)
+### Scenario 5: Third-party Boot Disks (Fine-Grained Classification)
 **Physical Layout:**
 - MBR Sector 0: Third-party bootloader (NO Ventoy signature)
-- Partitions: Generic boot files (`bootmgr`, `sources/boot.wim`, generic `EFI/BOOT/BOOTX64.EFI`, `syslinux.cfg`)
+- Partitions: Specific vendor/distro system files
 
-**Expected Detection:**
-- `CheckVentoyMbrSignature()` → `false`
-- `HasVentoyEngineFiles()` → `false`
-- `HasUniBootCloudFiles()` → `false` (no `ipxe/uniboot.json`)
-- `IsCloudModeDisk()` → `false`
-- `IsVentoyDisk()` → `false`
-- `IsRealVentoyDisk()` → `false`
-- `IsGenericBootDisk()` → `true`
+**Fingerprint Specifications & Detection:**
+| Target Type | Path Fingerprints | `thirdPartyBootType` | `bootStatus` |
+| :--- | :--- | :--- | :--- |
+| **OpenCore Hackintosh** | `EFI/OC/OpenCore.efi` or `EFI/OC/config.plist` | `"OpenCore 黑苹果引导盘"` | `"第三方引导: OpenCore 黑苹果引导盘"` |
+| **Clover Hackintosh** | `EFI/CLOVER/CloverX64.efi` or `EFI/CLOVER/config.plist` | `"Clover 黑苹果引导盘"` | `"第三方引导: Clover 黑苹果引导盘"` |
+| **Windows Official Installer** | `sources/install.wim` or `sources/install.esd` or `sources/install.swm` | `"Windows 安装介质"` | `"第三方引导: Windows 安装介质"` |
+| **WinPE Maintenance Disk** | `WEPE/`, `USBDATA/`, `PETOOLS/`, `winpe.ini`, `pe.cfg`, or standalone `sources/boot.wim` | `"WinPE 装机维护盘"` | `"第三方引导: WinPE 装机维护盘"` |
+| **Linux Live USB** | `casper/`, `LiveOS/`, `arch/boot/`, `isolinux/`, or `boot/grub/grub.cfg` | `"Linux Live 安装盘"` | `"第三方引导: Linux Live 安装盘"` |
+| **Generic UEFI USB** | `EFI/BOOT/BOOTX64.EFI`, `BOOTAA64.EFI`, `bootmgr`, `boot/bcd` | `"通用 UEFI 引导盘"` | `"第三方引导: 通用 UEFI 引导盘"` |
 
 **Frontend:**
 - `disk.isCloudMode` = `false`
 - `disk.isRealVentoy` = `false`
 - `disk.isGenericBoot` = `true`
-- Status: "第三方引导盘 (Rufus / PE / ISO)"
-- Any mode → "Full Format" (with warning prompt) ✅
+- `disk.thirdPartyBootType` = Specific classified type
+- Status: `"第三方引导: <Type>"`
+- User Protection: Prominent warning prompt before format/deployment to avoid accidental destruction of maintenance tools or installer media. ✅
 
 ---
 

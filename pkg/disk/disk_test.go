@@ -4,6 +4,8 @@
 package disk
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 	"time"
 
@@ -189,4 +191,118 @@ func TestGetRemovableDisksCaching(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, disks)
 	assert.Less(t, elapsed, 10*time.Millisecond, "Cached GetRemovableDisks took too long: %v", elapsed)
+}
+
+func TestIdentifyThirdPartyBoot_Fingerprints(t *testing.T) {
+	tests := []struct {
+		name         string
+		relativeDirs []string
+		relativeFiles []string
+		expected     ThirdPartyBootType
+	}{
+		{
+			name:          "OpenCore Hackintosh Bootloader",
+			relativeDirs:  []string{"EFI/OC"},
+			relativeFiles: []string{"EFI/OC/OpenCore.efi", "EFI/OC/config.plist"},
+			expected:      BootTypeOpenCore,
+		},
+		{
+			name:          "Clover Hackintosh Bootloader",
+			relativeDirs:  []string{"EFI/CLOVER"},
+			relativeFiles: []string{"EFI/CLOVER/CloverX64.efi"},
+			expected:      BootTypeClover,
+		},
+		{
+			name:          "WinPE Maintenance Disk with WEPE folder",
+			relativeDirs:  []string{"WEPE", "sources"},
+			relativeFiles: []string{"sources/boot.wim"},
+			expected:      BootTypeWinPE,
+		},
+		{
+			name:          "WinPE Maintenance Disk with winpe.ini",
+			relativeDirs:  []string{"sources"},
+			relativeFiles: []string{"winpe.ini", "sources/boot.wim"},
+			expected:      BootTypeWinPE,
+		},
+		{
+			name:          "Windows Official Installer with install.wim",
+			relativeDirs:  []string{"sources"},
+			relativeFiles: []string{"sources/boot.wim", "sources/install.wim"},
+			expected:      BootTypeWindowsInstaller,
+		},
+		{
+			name:          "Windows Official Installer with install.esd",
+			relativeDirs:  []string{"sources"},
+			relativeFiles: []string{"sources/install.esd"},
+			expected:      BootTypeWindowsInstaller,
+		},
+		{
+			name:          "Linux Live USB (Ubuntu casper)",
+			relativeDirs:  []string{"casper", "boot/grub"},
+			relativeFiles: []string{"boot/grub/grub.cfg"},
+			expected:      BootTypeLinuxLive,
+		},
+		{
+			name:          "Linux Live USB (Fedora LiveOS)",
+			relativeDirs:  []string{"LiveOS"},
+			relativeFiles: []string{"LiveOS/squashfs.img"},
+			expected:      BootTypeLinuxLive,
+		},
+		{
+			name:          "Generic UEFI Fallback USB",
+			relativeDirs:  []string{"EFI/BOOT"},
+			relativeFiles: []string{"EFI/BOOT/BOOTX64.EFI"},
+			expected:      BootTypeGenericUEFI,
+		},
+		{
+			name:          "Plain Data USB (no boot files)",
+			relativeDirs:  []string{"Documents", "Photos"},
+			relativeFiles: []string{"Documents/resume.pdf", "Photos/trip.jpg"},
+			expected:      BootTypeNone,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tmpDir := t.TempDir()
+			for _, d := range tt.relativeDirs {
+				err := os.MkdirAll(filepath.Join(tmpDir, d), 0755)
+				assert.NoError(t, err)
+			}
+			for _, f := range tt.relativeFiles {
+				filePath := filepath.Join(tmpDir, f)
+				err := os.MkdirAll(filepath.Dir(filePath), 0755)
+				assert.NoError(t, err)
+				err = os.WriteFile(filePath, []byte("dummy binary"), 0644)
+				assert.NoError(t, err)
+			}
+
+			detected := IdentifyThirdPartyBoot([]string{tmpDir})
+			assert.Equal(t, tt.expected, detected)
+		})
+	}
+}
+
+func TestDetectBootStatus_Classification(t *testing.T) {
+	// 1. UniBoot Cloud Mode
+	assert.Equal(t, "UniBoot (1秒极速云引导盘)", DetectBootStatus("", "GPT", false, true, BootTypeNone, nil))
+
+	// 2. UniBoot Hybrid Mode
+	hybridManifest := &UniBootManifest{Magic: MagicUniBootDisk, Mode: "hybrid", Version: "1.0.0"}
+	assert.Equal(t, "UniBoot (混合模式引导盘)", DetectBootStatus("", "GPT", true, false, BootTypeNone, hybridManifest))
+
+	// 3. Genuine Ventoy Disk (no UniBoot manifest)
+	assert.Equal(t, "原生 Ventoy 启动盘 (可无损升级)", DetectBootStatus("", "GPT", true, false, BootTypeNone, nil))
+
+	// 4. Third-party boot disks
+	assert.Equal(t, "第三方引导: Windows 安装介质", DetectBootStatus("", "GPT", false, false, BootTypeWindowsInstaller, nil))
+	assert.Equal(t, "第三方引导: WinPE 装机维护盘", DetectBootStatus("", "GPT", false, false, BootTypeWinPE, nil))
+	assert.Equal(t, "第三方引导: Linux Live 安装盘", DetectBootStatus("", "GPT", false, false, BootTypeLinuxLive, nil))
+	assert.Equal(t, "第三方引导: OpenCore 黑苹果引导盘", DetectBootStatus("", "GPT", false, false, BootTypeOpenCore, nil))
+	assert.Equal(t, "第三方引导: 通用 UEFI 引导盘", DetectBootStatus("", "GPT", false, false, BootTypeGenericUEFI, nil))
+
+	// 5. Normal data disks
+	assert.Equal(t, "GPT 数据盘", DetectBootStatus("", "GPT", false, false, BootTypeNone, nil))
+	assert.Equal(t, "MBR 数据盘", DetectBootStatus("", "MBR", false, false, BootTypeNone, nil))
+	assert.Equal(t, "数据存储盘 (未检测到引导包)", DetectBootStatus("", "", false, false, BootTypeNone, nil))
 }
