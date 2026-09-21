@@ -1,4 +1,4 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const srCyrl: TranslationDict = {
   "menu.app": "UniGoDesktop",
@@ -83,7 +83,8 @@ export const srCyrl: TranslationDict = {
   "disk.no_disk": "Није изабран УСБ диск",
   "disk.removable": "Ремовабле Дриве",
   "disk.system_disk": "Системски диск (заштићен)",
-  "disk.fake_usb3_warning": "Претпоставља се да је лажни УСБ 3.0 диск диск на старију верзију (ради на УСБ 2.0 480 Мб/с)",
+  "disk.fake_usb3_warning":
+    "Претпоставља се да је лажни УСБ 3.0 диск диск на старију верзију (ради на УСБ 2.0 480 Мб/с)",
   "disk.genuine_usb3": "УСБ 3.0+ диск велике брзине",
   "disk.free_space": "Фрее Спаце",
   "disk.change_icon": "Прилагођена икона",
@@ -100,7 +101,8 @@ export const srCyrl: TranslationDict = {
   "disk.tag_boot_hybrid": "Хибридно покретање",
   "disk.tag_boot_thirdparty": "Покретање треће стране",
   "confirm.cloud_to_hybrid_warn_title": "Обавештење: Прелазак на хибридни режим захтева потпуно форматирање",
-  "confirm.cloud_to_hybrid_warn_desc": "Овај диск је у режиму чистог покретања из облака. Ventoy хибридни режим захтева поновну изградњу MBR-а и табеле партиција, што ће ОБРИСАТИ све податке и ISO слике!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Овај диск је у режиму чистог покретања из облака. Ventoy хибридни режим захтева поновну изградњу MBR-а и табеле партиција, што ће ОБРИСАТИ све податке и ISO слике!",
   "disk.tag_ssd": "Преносиви ССД",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Шифровани диск",
@@ -128,13 +130,16 @@ export const srCyrl: TranslationDict = {
   "log.level_error": "ГРЕШКА",
   "log.level_debug": "Отклањање грешака",
   "safe.title_cloud": "Откривен постојећи Ventoy/UniBoot диск (Облачни режим освежава само ESP партицију)",
-  "safe.desc_cloud": "Облачни режим чува UNIBOOT структуру са две партиције. Освежавање ESP партиције оставља све ISO фајлове нетакнутим!",
+  "safe.desc_cloud":
+    "Облачни режим чува UNIBOOT структуру са две партиције. Освежавање ESP партиције оставља све ISO фајлове нетакнутим!",
   "safe.title_hybrid": "Откривен постојећи Ventoy диск (Ажурирање на лицу места у хибридном режиму)",
-  "safe.desc_hybrid": "Хибридни режим чува све постојеће ISO фајлове без форматирања, безбедно убризгавајући UniBoot тамну тему и облачни мени!",
+  "safe.desc_hybrid":
+    "Хибридни режим чува све постојеће ISO фајлове без форматирања, безбедно убризгавајући UniBoot тамну тему и облачни мени!",
   "common.optional": "Опционо",
   "common.optional_test": "Опциони тест",
   "iso.title": "Локални извори системских слика (ИСО / ИМГ / ВИМ / ВХД)",
-  "iso.desc": "Додајте ИСО датотеке за аутоматско копирање у /УНИБООТ/исо/ директоријум за Вентои / УниБоот директно покретање.",
+  "iso.desc":
+    "Додајте ИСО датотеке за аутоматско копирање у /УНИБООТ/исо/ директоријум за Вентои / УниБоот директно покретање.",
   "iso.add_btn": "Додајте датотеке слика",
   "iso.empty_title": "Кликните да бисте додали датотеке слика (подржава појединачни или групни избор)",
   "iso.empty_sub": "Подржава .исо, .вим, .имг, .вхд, .вхдк, .вти, .ефи, .бин, .кз, .гз, .рав формате",
@@ -145,12 +150,15 @@ export const srCyrl: TranslationDict = {
   "iso.drag_unsupported": "Нису открите подржане датотеке слика (.iso, .wim, .img итд.)",
   "deploy.title": "Израда покретачког погона и QEMU тест",
   "deploy.desc_cloud": "Чисто iPXE покретање из облака • Ултрабрзо постављање две партиције са мрежним iPXE фирмвером.",
-  "deploy.desc_hybrid": "Локални мотор Ventoy CLI • Постављање хибридне партиције Ventoy са локалним управљањем ISO датотекама.",
+  "deploy.desc_hybrid":
+    "Локални мотор Ventoy CLI • Постављање хибридне партиције Ventoy са локалним управљањем ISO датотекама.",
   "deploy.target_device": "Циљни уређај:",
   "deploy.batch_target": "Изабрано {count} USB уређаја",
   "deploy.start_create": "Направи покретачки диск",
-  "deploy.tip_batch_update_all": "Групно ажурирање без губитка података: Сви {count} изабрани УСБ уређаји биће ажурирани на лицу места",
-  "deploy.tip_batch_mixed": "Групно мешовито распоређивање: {bootCount} уређаја ажурирање без губитка, {blankCount} уређаја ново форматирање",
+  "deploy.tip_batch_update_all":
+    "Групно ажурирање без губитка података: Сви {count} изабрани УСБ уређаји биће ажурирани на лицу места",
+  "deploy.tip_batch_mixed":
+    "Групно мешовито распоређивање: {bootCount} уређаја ажурирање без губитка, {blankCount} уређаја ново форматирање",
   "deploy.start_update": "Надоградња на месту (безбедно за податке)",
   "deploy.batch_create": "Започни групно креирање ({count} уређаја)",
   "deploy.writing": "Писање пакета фирмвера за покретање...",
@@ -165,19 +173,24 @@ export const srCyrl: TranslationDict = {
   "deploy.tip_writing": "Писање фирмвера за покретање...",
   "deploy.tip_select_single": "Прво изаберите циљни УСБ диск",
   "deploy.tip_select_batch": "Молимо проверите циљне УСБ дискове за групну примену",
-  "deploy.tip_macos_unsupported": "macOS не подржава ново форматирање у хибридном режиму (користите режим у облаку или прво иницијализујте на Win/Linux)",
+  "deploy.tip_macos_unsupported":
+    "macOS не подржава ново форматирање у хибридном режиму (користите режим у облаку или прво иницијализујте на Win/Linux)",
   "deploy.tip_need_ventoy": "Хибридни режим захтева локалне Ventoy CLI алате. Препоручујемо Режим у облаку!",
-  "deploy.macos_alert_title": "мацОС Вентои ЦЛИ Свеже форматирање није подржано",
-  "deploy.macos_alert_desc": "Званични Ventoy још не подржава покретање програма за форматирање на macOS-у. За израду новог [Хибридног диска] потребан је Ventoy CLI. Препоручује се употреба [Режима у облаку (1s покретачки диск у облаку)]!",
+  "deploy.macos_alert_title": "Ново форматирање помоћу Ventoy CLI није подржано на macOS-у",
+  "deploy.macos_alert_desc":
+    "Званични Ventoy још не подржава покретање програма за форматирање на macOS-у. За израду новог [Хибридног диска] потребан је Ventoy CLI. Препоручује се употреба [Режима у облаку (1s покретачки диск у облаку)]!",
   "deploy.no_ventoy_title": "Вентои ЦЛИ извршни фајл није откривен",
-  "deploy.no_ventoy_desc": "Израда [Хибридног диска] захтева локално инсталиран Ventoy CLI. Молимо изаберите подржани [Режим у облаку]!",
+  "deploy.no_ventoy_desc":
+    "Израда [Хибридног диска] захтева локално инсталиран Ventoy CLI. Молимо изаберите подржани [Режим у облаку]!",
   "deploy.result_batch_success": "1-секундни инсталациони диск у облаку успешно је распоређен на {count} диск(ова)!",
   "deploy.result_success": "Режим {mode} је успешно распоређен на {targets}",
   "deploy.alert_success": "Deployment Успешноful!nn{msg}",
   "deploy.safely_eject_btn": "Безбедно избаци USB драјв",
   "deploy.success_banner_title": "Уредник за покретање је успешно направљен!",
-  "deploy.success_banner_desc": "Датотеке за покретање и фирмвер су уписани. Безбедно избаците пре искључивања да бисте спречили губитак података.",
-  "deploy.toast_auto_ejected": "Израда је завршена! Аутоматски је безбедно избачено {count} УСБ уређаја. Сви подаци су сачувани.",
+  "deploy.success_banner_desc":
+    "Датотеке за покретање и фирмвер су уписани. Безбедно избаците пре искључивања да бисте спречили губитак података.",
+  "deploy.toast_auto_ejected":
+    "Израда је завршена! Аутоматски је безбедно избачено {count} УСБ уређаја. Сви подаци су сачувани.",
   "deploy.confirm_auto_eject_title": "Писање завршено — Безбедно избацити?",
   "deploy.confirm_auto_eject_desc": "Сви подаци су успешно записани. Желите ли сада безбедно избацити USB драјв?",
   "deploy.confirm_auto_eject_yes": "Безбедно избаци",
@@ -197,7 +210,8 @@ export const srCyrl: TranslationDict = {
   "vm.boot_mode_bios": "Режим BIOS (Legacy)",
   "vm.boot_mode_auto": "Аутоматско препознавање",
   "vm.startSuccess_vm": "Тест симулације {name} успешно је покренут",
-  "vm.desc_optional": "Опциона функција: Преглед покретања са USB-а у виртуелној машини без поновног покретања рачунара.",
+  "vm.desc_optional":
+    "Опциона функција: Преглед покретања са USB-а у виртуелној машини без поновног покретања рачунара.",
   "vm.installed": "QEMU откривен",
   "vm.not_installed": "QEMU није откривен",
   "vm.target": "Циљ теста:",
@@ -210,7 +224,8 @@ export const srCyrl: TranslationDict = {
   "vm.tip_select_target": "Прво изаберите циљни УСБ диск са леве табле",
   "vm.tip_ready": "Кликните да бисте покренули КЕМУ ВМ да бисте потврдили УСБ покретач на тренутној радној површини",
   "vm.toast_select_first": "Кликните да прво изаберете циљни УСБ диск са леве табле!",
-  "vm.toast_not_installed": "КЕМУ емулатор није пронађен! Молимо инсталирајте КЕМУ (брев инсталл кему или порт инсталл кему)",
+  "vm.toast_not_installed":
+    "КЕМУ емулатор није пронађен! Молимо инсталирајте КЕМУ (брев инсталл кему или порт инсталл кему)",
   "vm.cfg_secure_boot": "Симулација SecureBoot-а",
   "vm.cfg_accel": "Хардверско убрзање",
   "vm.cfg_ram": "Алокација RAM-а",
@@ -256,7 +271,8 @@ export const srCyrl: TranslationDict = {
   "settings.ventoy_timeout": "Временско ограничење Вентои менија (секунде):",
   "confirm.title": "High-Risk Format Упозорење",
   "confirm.warning_title": "Упозорење: Formatting will erase all data!",
-  "confirm.warning_desc": "Изабрани УСБ диск ће бити поново партиционисан и форматиран. Све постојеће датотеке ће бити потпуно избрисане. Уверите се да сте направили резервну копију важних података!",
+  "confirm.warning_desc":
+    "Изабрани УСБ диск ће бити поново партиционисан и форматиран. Све постојеће датотеке ће бити потпуно избрисане. Уверите се да сте направили резервну копију важних података!",
   "confirm.mode_title": "Режим примене:",
   "confirm.fs_title": "Циљни систем датотека:",
   "confirm.disks_title": "USB уређаји за форматирање ({count}):",
@@ -266,11 +282,14 @@ export const srCyrl: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Потврдиation",
   "confirm.title_danger": "Format Упозорење: Disk Initialization",
   "confirm.safe_banner_title": "Обавештење о инкременталном ажурирању (безбедно за податке)",
-  "confirm.safe_banner_desc": "Вентои / УниБоот структура покретања је откривена на циљном диску. Систем ће извршити инкрементални формат прескакања ажурирања. Све постојеће датотеке и ИСО-ови су 100% очувани!",
-  "confirm.mixed_banner_title": "Паметни мешовити режим: ажурирање на месту за дискове за покретање, формат за празне дискове",
+  "confirm.safe_banner_desc":
+    "Вентои / УниБоот структура покретања је откривена на циљном диску. Систем ће извршити инкрементални формат прескакања ажурирања. Све постојеће датотеке и ИСО-ови су 100% очувани!",
+  "confirm.mixed_banner_title":
+    "Паметни мешовити режим: ажурирање на месту за дискове за покретање, формат за празне дискове",
   "confirm.mixed_banner_desc": "Изабрано {ventoyCount} резаних уређаја и {blankCount} празних уређаја.",
   "confirm.danger_banner_title": "Упозорење: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Писање ће поново партиционисати и форматирати циљни уређај (МБР/ГПТ). Све постојеће датотеке на одабраним дисковима ће бити потпуно избрисане!",
+  "confirm.danger_banner_desc":
+    "Писање ће поново партиционисати и форматирати циљни уређај (МБР/ГПТ). Све постојеће датотеке на одабраним дисковима ће бити потпуно избрисане!",
   "confirm.summary_title": "Циљни дискови за примену покретања:",
   "confirm.smart_safe_tag": "Паметна заштита",
   "confirm.ventoy_group_title": "Дискови за надоградњу на месту (сви ИСО-ови очувани):",
@@ -407,8 +426,10 @@ export const srCyrl: TranslationDict = {
   "diag.action_reformat_title": "Поново форматирај (reformat)",
   "diag.action_remount_title": "Поново монтирај (remount)",
   "diag.action_retry_title": "Покушај поново (retry)",
-  "diag.action_reformat_desc": "Прекид писања оштетио је табелу партиција или фајл систем. Препоручује се ново форматирање.",
-  "diag.action_remount_desc": "Циљна путања монтирања искључена је током писања. Поново убаците USB драјв или поново монтирајте волумен.",
+  "diag.action_reformat_desc":
+    "Прекид писања оштетио је табелу партиција или фајл систем. Препоручује се ново форматирање.",
+  "diag.action_remount_desc":
+    "Циљна путања монтирања искључена је током писања. Поново убаците USB драјв или поново монтирајте волумен.",
   "diag.action_retry_desc": "Окружење и стање уређаја су исправни. Можете безбедно покушати инсталацију поново.",
   "about.updating": "Ажурирање ({progress}%)",
   "about.updateTo": "Мрежно ажурирање на {tag}",
@@ -425,7 +446,8 @@ export const srCyrl: TranslationDict = {
   "dialog.textFilesFilter": "Текстуалне датотеке (*.txt)",
   "dialog.allFilesFilter": "Све датотеке (*.*)",
   "dialog.selectIsoTitle": "Изаберите датотеке слика система (*.iso, *.wim, *.img итд.)",
-  "dialog.ventoyFilter": "Изворне слике Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Изворне слике Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Израчунај Хеш",
   "checksum.calculating": "Израчунавање Хеша...",
   "checksum.algo_label": "Алгоритам",
@@ -456,8 +478,8 @@ export const srCyrl: TranslationDict = {
   "checksum.auto_algo_switched": "Алгоритам је аутоматски препознат и пребачен на {algo}",
   "checksum.expand": "Провери хеш",
   "checksum.collapse": "Скупи проверу",
-    "checksum.card_title": "Провера Хеш-а слике",
-"progress.speed": "Брзина уписивања",
+  "checksum.card_title": "Провера Хеш-а слике",
+  "progress.speed": "Брзина уписивања",
   "progress.eta": "Преостало време",
   "checksum.import_file": "Увези датотеку провере",
   "checksum.import_file_title": "Увези и анализирај званичну SHA256SUMS / CHECKSUM датотеку",
@@ -483,9 +505,11 @@ export const srCyrl: TranslationDict = {
   "privilege.modal_title": "Потребна је дозвола администратора",
   "privilege.modal_subtitle": "Потребна је ауторизација система за читање података о покретању и упис на дискове",
   "privilege.reason_title": "Зашто су потребне администраторске привилегије?",
-  "privilege.reason_desc": "Оперативни систем изолује сирове секторе и EFI партиције. Ауторизација омогућава директно препознавање и безбедно креирање диска.",
+  "privilege.reason_desc":
+    "Оперативни систем изолује сирове секторе и EFI партиције. Ауторизација омогућава директно препознавање и безбедно креирање диска.",
   "privilege.scope_title": "Опсег приступа",
-  "privilege.scope_desc": "Строго ограничено на изабране спољне USB уређаје. Интерни дискови система се никада не дирају.",
+  "privilege.scope_desc":
+    "Строго ограничено на изабране спољне USB уређаје. Интерни дискови система се никада не дирају.",
   "privilege.safety_title": "Безбедност и транспарентност",
   "privilege.safety_desc": "Преглед је искључиво само за читање и недеструктиван; изворни код је потпуно отворен.",
   "privilege.confirm_btn": "Овласти сада",
