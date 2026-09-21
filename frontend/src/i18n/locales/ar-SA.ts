@@ -34,7 +34,7 @@ export const arSa: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "فارغ افتراضيًا",
   "settings.testingProxy": "جاري اختبار الوكيل...",
   "settings.testProxyConn": "اختبار اتصال وكيل الشبكة",
-  "settings.firmwareMatrixTitle": "مصفوفة البرنامج الثابت و ISO لـ UniBoot (جميع العناصر الـ 13 مدمجة)",
+  "settings.firmwareMatrixTitle": "مصفوفة البرنامج الثابت و ISO لـ UniBoot",
   "settings.embeddedBadge": "مدمج في النظام (`embed.FS`)",
   "settings.localVersion": "الإصدار المحلي الحالي:",
   "settings.cloudRelease": "أحدث إصدار سحابي:",

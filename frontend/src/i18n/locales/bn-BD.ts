@@ -34,7 +34,7 @@ export const bnBd: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "ডিফল্ট খালি (যদি প্রমাণীকরণের প্রয়োজন না হয় তবে খালি রাখুন)",
   "settings.testingProxy": "প্রক্সি পরীক্ষা করা হচ্ছে...",
   "settings.testProxyConn": "নেটওয়ার্ক প্রক্সি সংযোগ পরীক্ষা করুন",
-  "settings.firmwareMatrixTitle": "UniBoot ফার্মওয়্যার এবং ISO ম্যাট্রিক্স (সমস্ত 13টি এমবেডেড আইটেম)",
+  "settings.firmwareMatrixTitle": "UniBoot ফার্মওয়্যার এবং ISO ম্যাট্রিক্স",
   "settings.embeddedBadge": "এমবেড করা (`এম্বেড.এফএস`)",
   "settings.localVersion": "বর্তমান স্থানীয় সংস্করণ:",
   "settings.cloudRelease": "সর্বশেষ ক্লাউড রিলিজ:",

@@ -34,7 +34,7 @@ export const faIr: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "پیش فرض خالی (در صورت عدم نیاز به احراز هویت، خالی بگذارید)",
   "settings.testingProxy": "تست پروکسی...",
   "settings.testProxyConn": "تست اتصال پروکسی شبکه",
-  "settings.firmwareMatrixTitle": "سیستم عامل و ماتریس ISO UniBoot (همه 13 مورد تعبیه شده)",
+  "settings.firmwareMatrixTitle": "سیستم عامل و ماتریس ISO UniBoot",
   "settings.embeddedBadge": "جاسازی شده ('embed.FS')",
   "settings.localVersion": "نسخه محلی فعلی:",
   "settings.cloudRelease": "آخرین نسخه Cloud:",

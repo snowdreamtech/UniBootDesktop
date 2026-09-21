@@ -34,7 +34,7 @@ export const taIn: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "இயல்புநிலை காலியாக உள்ளது (அங்கீகாரம் தேவையில்லை என்றால் காலியாக விடவும்)",
   "settings.testingProxy": "ப்ராக்ஸியை சோதிக்கிறது...",
   "settings.testProxyConn": "நெட்வொர்க் ப்ராக்ஸி இணைப்பை சோதிக்கவும்",
-  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix (அனைத்து 13 உட்பொதிக்கப்பட்ட பொருட்களும்)",
+  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix",
   "settings.embeddedBadge": "உட்பொதிக்கப்பட்ட (`embed.FS`)",
   "settings.localVersion": "தற்போதைய உள்ளூர் பதிப்பு:",
   "settings.cloudRelease": "சமீபத்திய கிளவுட் வெளியீடு:",

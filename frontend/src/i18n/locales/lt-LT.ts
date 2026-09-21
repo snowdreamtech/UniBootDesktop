@@ -34,7 +34,7 @@ export const ltLt: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Numatytasis tuščias (jei autentifikavimo nereikia, palikite tuščią)",
   "settings.testingProxy": "Tikrinamas tarpinis serveris...",
   "settings.testProxyConn": "Išbandykite tinklo tarpinio serverio ryšį",
-  "settings.firmwareMatrixTitle": "„UniBoot“ programinė įranga ir ISO matrica (visi 13 įterptųjų elementų)",
+  "settings.firmwareMatrixTitle": "„UniBoot“ programinė įranga ir ISO matrica",
   "settings.embeddedBadge": "Įterpta („embed.FS“)",
   "settings.localVersion": "Dabartinė vietinė versija:",
   "settings.cloudRelease": "Naujausias debesies leidimas:",

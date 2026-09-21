@@ -34,7 +34,7 @@ export const ukUa: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "За замовчуванням пусто (залиште пустим, якщо автентифікація не потрібна)",
   "settings.testingProxy": "Тестування проксі...",
   "settings.testProxyConn": "Перевірте мережевий проксі-сервер",
-  "settings.firmwareMatrixTitle": "Прошивка UniBoot і матриця ISO (усі 13 вбудованих елементів)",
+  "settings.firmwareMatrixTitle": "Прошивка UniBoot і матриця ISO",
   "settings.embeddedBadge": "Вбудований (`embed.FS`)",
   "settings.localVersion": "Поточна локальна версія:",
   "settings.cloudRelease": "Остання хмарна версія:",

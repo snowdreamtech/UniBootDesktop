@@ -34,7 +34,7 @@ export const slSi: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Privzeto prazno (pustite prazno, če preverjanje pristnosti ni potrebno)",
   "settings.testingProxy": "Testiranje proxyja ...",
   "settings.testProxyConn": "Preizkusite povezljivost omrežnega posrednika",
-  "settings.firmwareMatrixTitle": "Firmware UniBoot & ISO Matrix (vseh 13 vdelanih elementov)",
+  "settings.firmwareMatrixTitle": "Firmware UniBoot & ISO Matrix",
   "settings.embeddedBadge": "Vdelano (`embed.FS`)",
   "settings.localVersion": "Trenutna lokalna različica:",
   "settings.cloudRelease": "Najnovejša izdaja v oblaku:",

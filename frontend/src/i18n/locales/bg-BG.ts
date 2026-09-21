@@ -34,7 +34,7 @@ export const bgBg: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "По подразбиране празно (оставете празно, ако не се изисква удостоверяване)",
   "settings.testingProxy": "Проксито се тества...",
   "settings.testProxyConn": "Тествайте мрежовата прокси връзка",
-  "settings.firmwareMatrixTitle": "UniBoot фърмуер и ISO матрица (всички 13 вградени елемента)",
+  "settings.firmwareMatrixTitle": "UniBoot фърмуер и ISO матрица",
   "settings.embeddedBadge": "Вграден (`embed.FS`)",
   "settings.localVersion": "Текуща локална версия:",
   "settings.cloudRelease": "Най-новата версия на облака:",

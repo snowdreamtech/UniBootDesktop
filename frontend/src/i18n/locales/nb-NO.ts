@@ -34,7 +34,7 @@ export const nbNo: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Standard tom (la stå tomt hvis autentisering ikke er nødvendig)",
   "settings.testingProxy": "Tester proxy...",
   "settings.testProxyConn": "Test nettverks proxy-tilkobling",
-  "settings.firmwareMatrixTitle": "UniBoot-fastvare og ISO-matrise (alle 13 innebygde elementer)",
+  "settings.firmwareMatrixTitle": "UniBoot-fastvare og ISO-matrise",
   "settings.embeddedBadge": "Innebygd (`embed.FS`)",
   "settings.localVersion": "Gjeldende lokal versjon:",
   "settings.cloudRelease": "Siste skyutgivelse:",

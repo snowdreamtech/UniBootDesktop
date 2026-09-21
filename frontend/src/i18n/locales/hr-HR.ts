@@ -34,7 +34,7 @@ export const hrHr: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Zadano prazno (ostavite prazno ako provjera autentičnosti nije potrebna)",
   "settings.testingProxy": "Testiranje proxyja...",
   "settings.testProxyConn": "Testirajte mrežnu proxy vezu",
-  "settings.firmwareMatrixTitle": "UniBoot firmware i ISO matrica (svih 13 ugrađenih stavki)",
+  "settings.firmwareMatrixTitle": "UniBoot firmware i ISO matrica",
   "settings.embeddedBadge": "Ugrađeno (`embed.FS`)",
   "settings.localVersion": "Trenutna lokalna verzija:",
   "settings.cloudRelease": "Najnovije izdanje u oblaku:",

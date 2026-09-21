@@ -34,7 +34,7 @@ export const nlNl: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Standaard leeg (laat leeg als authenticatie niet vereist is)",
   "settings.testingProxy": "Proxy testen...",
   "settings.testProxyConn": "Netwerkproxy-connectiviteit testen",
-  "settings.firmwareMatrixTitle": "UniBoot-firmware en ISO-matrix (alle 13 ingebedde items)",
+  "settings.firmwareMatrixTitle": "UniBoot-firmware en ISO-matrix",
   "settings.embeddedBadge": "Ingebed (`embed.FS`)",
   "settings.localVersion": "Huidige lokale versie:",
   "settings.cloudRelease": "Nieuwste cloudrelease:",

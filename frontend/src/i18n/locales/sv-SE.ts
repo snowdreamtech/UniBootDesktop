@@ -34,7 +34,7 @@ export const svSe: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Tomt som standard (lämna tomt om autentisering inte krävs)",
   "settings.testingProxy": "Testar proxy...",
   "settings.testProxyConn": "Testa nätverksproxyanslutning",
-  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix (alla 13 inbäddade objekt)",
+  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix",
   "settings.embeddedBadge": "Inbäddad ('embed.FS')",
   "settings.localVersion": "Aktuell lokal version:",
   "settings.cloudRelease": "Senaste molnversionen:",

@@ -34,7 +34,7 @@ export const mkMk: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Стандардно празно (оставете празно ако не е потребна автентикација)",
   "settings.testingProxy": "Се тестира прокси...",
   "settings.testProxyConn": "Тестирајте ја поврзаноста со мрежен прокси",
-  "settings.firmwareMatrixTitle": "UniBoot фирмвер и ISO матрица (сите 13 вградени ставки)",
+  "settings.firmwareMatrixTitle": "UniBoot фирмвер и ISO матрица",
   "settings.embeddedBadge": "Вградено (`embed.FS`)",
   "settings.localVersion": "Тековна локална верзија:",
   "settings.cloudRelease": "Најновото издание на Cloud:",

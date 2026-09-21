@@ -34,7 +34,7 @@ export const koKr: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "기본 빈칸 (인증 불필요 시 비워 두세요)",
   "settings.testingProxy": "프록시 테스트 중...",
   "settings.testProxyConn": "네트워크 프록시 연결 테스트",
-  "settings.firmwareMatrixTitle": "UniBoot 펌웨어 & ISO 매트릭스 (총 13개 내장)",
+  "settings.firmwareMatrixTitle": "UniBoot 펌웨어 & ISO 매트릭스",
   "settings.embeddedBadge": "시스템 내장 (`embed.FS`)",
   "settings.localVersion": "현재 로컬 버전:",
   "settings.cloudRelease": "최신 클라우드 릴리스:",

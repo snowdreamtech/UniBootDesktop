@@ -34,7 +34,7 @@ export const fiFi: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Oletuksena tyhjä (jätä tyhjäksi, jos todennusta ei vaadita)",
   "settings.testingProxy": "Testataan välityspalvelinta...",
   "settings.testProxyConn": "Testaa verkon välityspalvelimen yhteyksiä",
-  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix (kaikki 13 upotettua kohdetta)",
+  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix",
   "settings.embeddedBadge": "Upotettu (`embed.FS`)",
   "settings.localVersion": "Nykyinen paikallinen versio:",
   "settings.cloudRelease": "Viimeisin pilvijulkaisu:",

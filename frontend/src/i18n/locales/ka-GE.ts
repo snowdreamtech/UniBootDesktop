@@ -34,7 +34,7 @@ export const kaGe: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "ნაგულისხმევი ცარიელი (დატოვეთ ცარიელი, თუ ავთენტიფიკაცია არ არის საჭირო)",
   "settings.testingProxy": "პროქსის ტესტირება...",
   "settings.testProxyConn": "შეამოწმეთ ქსელის პროქსი კავშირი",
-  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix (13-ვე ჩაშენებული ელემენტი)",
+  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix",
   "settings.embeddedBadge": "ჩაშენებული (`embed.FS`)",
   "settings.localVersion": "მიმდინარე ლოკალური ვერსია:",
   "settings.cloudRelease": "Cloud-ის უახლესი გამოშვება:",

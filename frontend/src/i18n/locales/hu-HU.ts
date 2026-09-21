@@ -34,7 +34,7 @@ export const huHu: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Alapértelmezett üres (hagyja üresen, ha nincs szükség hitelesítésre)",
   "settings.testingProxy": "Proxy tesztelése...",
   "settings.testProxyConn": "Tesztelje a hálózati proxy kapcsolatát",
-  "settings.firmwareMatrixTitle": "UniBoot firmware és ISO Matrix (mind a 13 beágyazott elem)",
+  "settings.firmwareMatrixTitle": "UniBoot firmware és ISO Matrix",
   "settings.embeddedBadge": "Beágyazott (`embed.FS`)",
   "settings.localVersion": "Jelenlegi helyi verzió:",
   "settings.cloudRelease": "Legújabb felhőalapú kiadás:",

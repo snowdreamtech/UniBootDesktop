@@ -34,7 +34,7 @@ export const daDk: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Standard tom (lad tom, hvis godkendelse ikke er påkrævet)",
   "settings.testingProxy": "Tester proxy...",
   "settings.testProxyConn": "Test netværksproxyforbindelse",
-  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix (alle 13 indlejrede elementer)",
+  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix",
   "settings.embeddedBadge": "Indlejret ('embed.FS')",
   "settings.localVersion": "Aktuel lokal version:",
   "settings.cloudRelease": "Seneste skyudgivelse:",

@@ -34,7 +34,7 @@ export const glEs: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Valor predeterminado baleiro (deixe en branco se non é necesaria a autenticación)",
   "settings.testingProxy": "Probando proxy...",
   "settings.testProxyConn": "Proba a conectividade do proxy de rede",
-  "settings.firmwareMatrixTitle": "Firmware UniBoot e matriz ISO (todos os 13 elementos incorporados)",
+  "settings.firmwareMatrixTitle": "Firmware UniBoot e matriz ISO",
   "settings.embeddedBadge": "Incrustado (`embed.FS`)",
   "settings.localVersion": "Versión local actual:",
   "settings.cloudRelease": "Último lanzamento na nube:",

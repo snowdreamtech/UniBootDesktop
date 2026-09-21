@@ -34,7 +34,7 @@ export const urPk: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "ڈیفالٹ خالی (اگر تصدیق کی ضرورت نہ ہو تو خالی چھوڑ دیں)",
   "settings.testingProxy": "پراکسی کی جانچ ہو رہی ہے...",
   "settings.testProxyConn": "نیٹ ورک پراکسی کنیکٹیویٹی کی جانچ کریں۔",
-  "settings.firmwareMatrixTitle": "یونی بوٹ فرم ویئر اور آئی ایس او میٹرکس (تمام 13 ایمبیڈڈ آئٹمز)",
+  "settings.firmwareMatrixTitle": "یونی بوٹ فرم ویئر اور آئی ایس او میٹرکس",
   "settings.embeddedBadge": "سرایت شدہ (`embed.FS`)",
   "settings.localVersion": "موجودہ مقامی ورژن:",
   "settings.cloudRelease": "تازہ ترین کلاؤڈ ریلیز:",

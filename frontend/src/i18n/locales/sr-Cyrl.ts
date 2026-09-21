@@ -34,7 +34,7 @@ export const srCyrl: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Подразумевано празно (оставите празно ако аутентификација није потребна)",
   "settings.testingProxy": "Тестирање проксија...",
   "settings.testProxyConn": "Тестирајте мрежну прокси везу",
-  "settings.firmwareMatrixTitle": "УниБоот фирмвер и ИСО матрица (свих 13 уграђених ставки)",
+  "settings.firmwareMatrixTitle": "УниБоот фирмвер и ИСО матрица",
   "settings.embeddedBadge": "Уграђено (`ембед.ФС`)",
   "settings.localVersion": "Тренутна локална верзија:",
   "settings.cloudRelease": "Најновије Цлоуд издање:",

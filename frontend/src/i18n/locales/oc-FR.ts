@@ -34,7 +34,7 @@ export const ocFr: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Void per defaut (daissar vuèg se l'autentificacion es pas requerida)",
   "settings.testingProxy": "En tèst de mandatari...",
   "settings.testProxyConn": "Testar la connectivitat del proxy de ret",
-  "settings.firmwareMatrixTitle": "Firmware UniBoot e matritz ISO (Totes los 13 elements encastrats)",
+  "settings.firmwareMatrixTitle": "Firmware UniBoot e matritz ISO",
   "settings.embeddedBadge": "Encastrat (`encastrar.FS`)",
   "settings.localVersion": "Version locala actuala:",
   "settings.cloudRelease": "Darrièra version Cloud:",

@@ -34,7 +34,7 @@ export const plPl: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Domyślnie puste",
   "settings.testingProxy": "Testowanie serwera proxy...",
   "settings.testProxyConn": "Testuj Połączenie z Serwerem Proxy",
-  "settings.firmwareMatrixTitle": "Macierz Oprogramowania Układowego i ISO UniBoot (Wszystkie 13 elementów wbudowane)",
+  "settings.firmwareMatrixTitle": "Macierz Oprogramowania Układowego i ISO UniBoot",
   "settings.embeddedBadge": "Wbudowane w System (`embed.FS`)",
   "settings.localVersion": "Aktualna Wersja Lokalna:",
   "settings.cloudRelease": "Najnowsze Wydanie w Chmurze:",

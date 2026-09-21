@@ -34,7 +34,7 @@ export const hiIn: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "डिफ़ॉल्ट खाली (यदि प्रमाणीकरण की आवश्यकता नहीं है तो खाली छोड़ दें)",
   "settings.testingProxy": "प्रॉक्सी का परीक्षण किया जा रहा है...",
   "settings.testProxyConn": "नेटवर्क प्रॉक्सी कनेक्टिविटी का परीक्षण करें",
-  "settings.firmwareMatrixTitle": "यूनीबूट फर्मवेयर और आईएसओ मैट्रिक्स (सभी 13 एंबेडेड आइटम)",
+  "settings.firmwareMatrixTitle": "यूनीबूट फर्मवेयर और आईएसओ मैट्रिक्स",
   "settings.embeddedBadge": "एंबेडेड (`एम्बेड.एफएस`)",
   "settings.localVersion": "वर्तमान स्थानीय संस्करण:",
   "settings.cloudRelease": "नवीनतम क्लाउड रिलीज़:",

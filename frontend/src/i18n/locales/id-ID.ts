@@ -34,7 +34,7 @@ export const idId: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Defaultnya kosong (biarkan kosong jika autentikasi tidak diperlukan)",
   "settings.testingProxy": "Menguji proksi...",
   "settings.testProxyConn": "Uji Konektivitas Proksi Jaringan",
-  "settings.firmwareMatrixTitle": "Firmware UniBoot & Matriks ISO (Semua 13 Item Tersemat)",
+  "settings.firmwareMatrixTitle": "Firmware UniBoot & Matriks ISO",
   "settings.embeddedBadge": "Tertanam (`sematkan.FS`)",
   "settings.localVersion": "Versi Lokal Saat Ini:",
   "settings.cloudRelease": "Rilis Cloud Terbaru:",

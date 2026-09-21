@@ -34,7 +34,7 @@ export const ruRu: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "По умолчанию пусто (оставьте пустым, если аутентификация не требуется)",
   "settings.testingProxy": "Тестирование прокси...",
   "settings.testProxyConn": "Проверить подключение сетевого прокси",
-  "settings.firmwareMatrixTitle": "Матрица прошивок и ISO UniBoot (все 13 встроенных элементов)",
+  "settings.firmwareMatrixTitle": "Матрица прошивок и ISO UniBoot",
   "settings.embeddedBadge": "Встроено (`embed.FS`)",
   "settings.localVersion": "Текущая локальная версия:",
   "settings.cloudRelease": "Последний облачный выпуск:",

@@ -34,7 +34,7 @@ export const viVn: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Mặc định để trống",
   "settings.testingProxy": "Đang kiểm tra proxy...",
   "settings.testProxyConn": "Kiểm Tra Kết Nối Proxy Mạng",
-  "settings.firmwareMatrixTitle": "Ma Trận Firmware và ISO UniBoot (Tích hợp trọn bộ 13 mục)",
+  "settings.firmwareMatrixTitle": "Ma Trận Firmware và ISO UniBoot",
   "settings.embeddedBadge": "Đã tích hợp trong hệ thống (`embed.FS`)",
   "settings.localVersion": "Phiên bản cục bộ hiện tại:",
   "settings.cloudRelease": "Bản phát hành đám mây mới nhất:",

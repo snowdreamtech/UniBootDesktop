@@ -34,7 +34,7 @@ export const etEe: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Vaikimisi tühi (jätke tühjaks, kui autentimine pole vajalik)",
   "settings.testingProxy": "Puhverserveri testimine...",
   "settings.testProxyConn": "Testige võrgupuhverserveri ühenduvust",
-  "settings.firmwareMatrixTitle": "UniBooti püsivara ja ISO maatriks (kõik 13 manustatud üksust)",
+  "settings.firmwareMatrixTitle": "UniBooti püsivara ja ISO maatriks",
   "settings.embeddedBadge": "Manustatud (\"embed.FS\")",
   "settings.localVersion": "Praegune kohalik versioon:",
   "settings.cloudRelease": "Viimane pilveväljalase:",

@@ -34,7 +34,7 @@ export const hyAm: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Կանխադրված դատարկ (թողեք դատարկ, եթե նույնականացում չի պահանջվում)",
   "settings.testingProxy": "Փորձարկում է վստահված անձի...",
   "settings.testProxyConn": "Փորձարկել ցանցի վստահված անձի կապը",
-  "settings.firmwareMatrixTitle": "UniBoot որոնվածը և ISO մատրիցը (բոլոր 13 ներկառուցված տարրերը)",
+  "settings.firmwareMatrixTitle": "UniBoot որոնվածը և ISO մատրիցը",
   "settings.embeddedBadge": "Ներկառուցված (`embed.FS`)",
   "settings.localVersion": "Ներկայիս տեղական տարբերակը.",
   "settings.cloudRelease": "Cloud-ի վերջին թողարկումը.",

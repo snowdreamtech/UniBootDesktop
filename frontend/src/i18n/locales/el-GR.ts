@@ -34,7 +34,7 @@ export const elGr: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Προεπιλογή κενό (αφήστε κενό εάν δεν απαιτείται έλεγχος ταυτότητας)",
   "settings.testingProxy": "Δοκιμή διακομιστή μεσολάβησης...",
   "settings.testProxyConn": "Δοκιμή συνδεσιμότητας διακομιστή μεσολάβησης δικτύου",
-  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix (και τα 13 ενσωματωμένα στοιχεία)",
+  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix",
   "settings.embeddedBadge": "Ενσωματωμένο (\"embed.FS\")",
   "settings.localVersion": "Τρέχουσα τοπική έκδοση:",
   "settings.cloudRelease": "Τελευταία έκδοση Cloud:",

@@ -34,7 +34,7 @@ export const caEs: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Buit per defecte (deixeu en blanc si no cal l'autenticació)",
   "settings.testingProxy": "S'està provant el proxy...",
   "settings.testProxyConn": "Prova la connectivitat del servidor intermediari de xarxa",
-  "settings.firmwareMatrixTitle": "Firmware UniBoot i matriu ISO (els 13 elements incrustats)",
+  "settings.firmwareMatrixTitle": "Firmware UniBoot i matriu ISO",
   "settings.embeddedBadge": "Incrustat (`embed.FS`)",
   "settings.localVersion": "Versió local actual:",
   "settings.cloudRelease": "Últim llançament al núvol:",

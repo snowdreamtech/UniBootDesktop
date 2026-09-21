@@ -34,7 +34,7 @@ export const deDe: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Standard leer (leer lassen, wenn keine Authentifizierung erforderlich)",
   "settings.testingProxy": "Proxy wird getestet...",
   "settings.testProxyConn": "Netzwerk-Proxy-Verbindung testen",
-  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix (alle 13 eingebetteten Elemente)",
+  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix",
   "settings.embeddedBadge": "Eingebettet (`embed.FS`)",
   "settings.localVersion": "Aktuelle lokale Version:",
   "settings.cloudRelease": "Neueste Cloud-Version:",

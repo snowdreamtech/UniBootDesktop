@@ -34,7 +34,7 @@ export const csCz: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Výchozí prázdné (pokud ověření není vyžadováno, ponechte prázdné)",
   "settings.testingProxy": "Testování proxy...",
   "settings.testProxyConn": "Otestujte připojení síťového proxy",
-  "settings.firmwareMatrixTitle": "Firmware UniBoot a matice ISO (všech 13 vložených položek)",
+  "settings.firmwareMatrixTitle": "Firmware UniBoot a matice ISO",
   "settings.embeddedBadge": "Vložené (`embed.FS`)",
   "settings.localVersion": "Aktuální místní verze:",
   "settings.cloudRelease": "Nejnovější cloudové vydání:",

@@ -34,7 +34,7 @@ export const zhCn: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "默认为空（若无需认证留空即可）",
   "settings.testingProxy": "正在测试代理...",
   "settings.testProxyConn": "测试网络代理连通性",
-  "settings.firmwareMatrixTitle": "UniBoot 核心固件与 ISO 打包矩阵 (全量 13 项内置嵌入)",
+  "settings.firmwareMatrixTitle": "UniBoot 核心固件与 ISO 打包矩阵",
   "settings.embeddedBadge": "已打包嵌入 (`embed.FS`)",
   "settings.localVersion": "当前本地版本:",
   "settings.cloudRelease": "云端最新 Release:",

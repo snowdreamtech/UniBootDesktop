@@ -34,7 +34,7 @@ export const mlIn: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "ഡിഫോൾട്ട് ശൂന്യം (ആധികാരികത ആവശ്യമില്ലെങ്കിൽ ശൂന്യമായി വിടുക)",
   "settings.testingProxy": "പ്രോക്സി പരിശോധിക്കുന്നു...",
   "settings.testProxyConn": "നെറ്റ്‌വർക്ക് പ്രോക്സി കണക്റ്റിവിറ്റി പരീക്ഷിക്കുക",
-  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix (എല്ലാ 13 ഉൾച്ചേർത്ത ഇനങ്ങളും)",
+  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix",
   "settings.embeddedBadge": "ഉൾച്ചേർത്തത് (`embed.FS`)",
   "settings.localVersion": "നിലവിലെ പ്രാദേശിക പതിപ്പ്:",
   "settings.cloudRelease": "ഏറ്റവും പുതിയ ക്ലൗഡ് റിലീസ്:",

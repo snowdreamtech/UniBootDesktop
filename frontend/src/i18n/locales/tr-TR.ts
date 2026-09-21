@@ -34,7 +34,7 @@ export const trTr: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Varsayılan olarak boş",
   "settings.testingProxy": "Vekil sunucu test ediliyor...",
   "settings.testProxyConn": "Ağ Vekil Sunucu Bağlantısını Test Et",
-  "settings.firmwareMatrixTitle": "UniBoot Ürün Yazılımı ve ISO Matrisi (Tüm 13 öğe yerleşik)",
+  "settings.firmwareMatrixTitle": "UniBoot Ürün Yazılımı ve ISO Matrisi",
   "settings.embeddedBadge": "Sisteme Gömülü (`embed.FS`)",
   "settings.localVersion": "Mevcut Yerel Sürüm:",
   "settings.cloudRelease": "Son Bulut Sürümü:",

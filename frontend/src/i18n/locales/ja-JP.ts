@@ -34,7 +34,7 @@ export const jaJp: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "デフォルト空欄 (認証不要な場合は空欄のまま)",
   "settings.testingProxy": "プロキシ接続テスト中...",
   "settings.testProxyConn": "ネットワークプロキシ接続テスト",
-  "settings.firmwareMatrixTitle": "UniBoot ファームウェア & ISO マトリックス (全 13 項目内蔵)",
+  "settings.firmwareMatrixTitle": "UniBoot ファームウェア & ISO マトリックス",
   "settings.embeddedBadge": "システム内蔵 (`embed.FS`)",
   "settings.localVersion": "現在のローカルバージョン:",
   "settings.cloudRelease": "最新クラウドリリース:",

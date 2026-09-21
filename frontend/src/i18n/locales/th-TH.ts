@@ -34,7 +34,7 @@ export const thTh: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "ค่าเริ่มต้นว่างเปล่า (เว้นว่างไว้หากไม่จำเป็นต้องมีการตรวจสอบสิทธิ์)",
   "settings.testingProxy": "กำลังทดสอบพร็อกซี...",
   "settings.testProxyConn": "ทดสอบการเชื่อมต่อพร็อกซีเครือข่าย",
-  "settings.firmwareMatrixTitle": "เฟิร์มแวร์ UniBoot และ ISO Matrix (รายการที่ฝังไว้ทั้งหมด 13 รายการ)",
+  "settings.firmwareMatrixTitle": "เฟิร์มแวร์ UniBoot และ ISO Matrix",
   "settings.embeddedBadge": "ฝังตัว (`embed.FS`)",
   "settings.localVersion": "เวอร์ชันท้องถิ่นปัจจุบัน:",
   "settings.cloudRelease": "การเปิดตัวคลาวด์ล่าสุด:",

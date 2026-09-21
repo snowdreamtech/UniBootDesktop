@@ -34,7 +34,7 @@ export const beBy: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Па змаўчанні пусты (пакіньце пустым, калі аўтэнтыфікацыя не патрабуецца)",
   "settings.testingProxy": "Тэставанне проксі...",
   "settings.testProxyConn": "Праверце падключэнне да сеткі проксі",
-  "settings.firmwareMatrixTitle": "Прашыўка UniBoot і ISO Matrix (усе 13 убудаваных элементаў)",
+  "settings.firmwareMatrixTitle": "Прашыўка UniBoot і ISO Matrix",
   "settings.embeddedBadge": "Убудаваны (`embed.FS`)",
   "settings.localVersion": "Бягучая лакальная версія:",
   "settings.cloudRelease": "Апошні выпуск Cloud:",

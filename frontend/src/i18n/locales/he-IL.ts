@@ -34,7 +34,7 @@ export const heIl: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "ברירת המחדל ריקה (השאירו ריק אם לא נדרש אימות)",
   "settings.testingProxy": "בודק פרוקסי...",
   "settings.testProxyConn": "בדוק קישוריות פרוקסי לרשת",
-  "settings.firmwareMatrixTitle": "קושחת UniBoot ומטריצת ISO (כל 13 הפריטים המשובצים)",
+  "settings.firmwareMatrixTitle": "קושחת UniBoot ומטריצת ISO",
   "settings.embeddedBadge": "מוטבע (`embed.FS`)",
   "settings.localVersion": "גרסה מקומית נוכחית:",
   "settings.cloudRelease": "מהדורת ענן אחרונה:",

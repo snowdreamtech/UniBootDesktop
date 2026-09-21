@@ -34,7 +34,7 @@ export const roRo: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Implicit gol (lăsați necompletat dacă nu este necesară autentificarea)",
   "settings.testingProxy": "Se testează proxy...",
   "settings.testProxyConn": "Testați conectivitatea proxy de rețea",
-  "settings.firmwareMatrixTitle": "Firmware UniBoot și matrice ISO (toate cele 13 elemente încorporate)",
+  "settings.firmwareMatrixTitle": "Firmware UniBoot și matrice ISO",
   "settings.embeddedBadge": "Încorporat (`embed.FS`)",
   "settings.localVersion": "Versiunea locală actuală:",
   "settings.cloudRelease": "Cea mai recentă lansare în cloud:",

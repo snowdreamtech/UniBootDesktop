@@ -34,7 +34,7 @@ export const ptPt: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Padrão vazio (deixe em branco se a autenticação não for necessária)",
   "settings.testingProxy": "Testando proxy...",
   "settings.testProxyConn": "Teste a conectividade do proxy de rede",
-  "settings.firmwareMatrixTitle": "Firmware UniBoot e matriz ISO (todos os 13 itens incorporados)",
+  "settings.firmwareMatrixTitle": "Firmware UniBoot e matriz ISO",
   "settings.embeddedBadge": "Incorporado (`embed.FS`)",
   "settings.localVersion": "Versão local atual:",
   "settings.cloudRelease": "Último lançamento na nuvem:",

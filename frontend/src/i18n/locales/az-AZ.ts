@@ -34,7 +34,7 @@ export const azAz: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Defolt boşdur (identifikasiya tələb olunmursa, boş buraxın)",
   "settings.testingProxy": "Proksi sınaqdan keçirilir...",
   "settings.testProxyConn": "Şəbəkə Proksi Bağlantısını sınaqdan keçirin",
-  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix (Bütün 13 Daxili Elementlər)",
+  "settings.firmwareMatrixTitle": "UniBoot Firmware & ISO Matrix",
   "settings.embeddedBadge": "Daxili (`yerləşdir.FS`)",
   "settings.localVersion": "Cari Yerli Versiya:",
   "settings.cloudRelease": "Son Bulud Buraxılışı:",

@@ -34,7 +34,7 @@ export const skSk: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Predvolené prázdne (ak sa nevyžaduje overenie, nechajte prázdne)",
   "settings.testingProxy": "Testovanie proxy...",
   "settings.testProxyConn": "Otestujte sieťové pripojenie proxy",
-  "settings.firmwareMatrixTitle": "Firmvér UniBoot a matica ISO (všetkých 13 vložených položiek)",
+  "settings.firmwareMatrixTitle": "Firmvér UniBoot a matica ISO",
   "settings.embeddedBadge": "Vložené (`embed.FS`)",
   "settings.localVersion": "Aktuálna lokálna verzia:",
   "settings.cloudRelease": "Najnovšie cloudové vydanie:",

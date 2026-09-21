@@ -254,8 +254,10 @@
         <div v-if="activeTab === 'uniboot'" class="tab-content">
           <div class="settings-section">
             <h4 class="section-title">
-              <span class="section-icon">📦</span>
-              <span>{{ t('settings.firmwareMatrixTitle') }}</span>
+              <div class="title-left">
+                <span class="section-icon">📦</span>
+                <span>{{ t('settings.firmwareMatrixTitle') }}</span>
+              </div>
             </h4>
 
             <div class="firmware-list">
@@ -1033,6 +1035,12 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   color: var(--accent-cyan);
+}
+
+.title-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .badge {

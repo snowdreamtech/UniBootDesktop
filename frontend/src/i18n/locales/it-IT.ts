@@ -34,7 +34,7 @@ export const itIt: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "Vuoto per impostazione predefinita",
   "settings.testingProxy": "Test del proxy in corso...",
   "settings.testProxyConn": "Test Connettività Proxy di Rete",
-  "settings.firmwareMatrixTitle": "Matrice Firmware e ISO UniBoot (Tutti i 13 elementi integrati)",
+  "settings.firmwareMatrixTitle": "Matrice Firmware e ISO UniBoot",
   "settings.embeddedBadge": "Integrato nel Sistema (`embed.FS`)",
   "settings.localVersion": "Versione Locale Attuale:",
   "settings.cloudRelease": "Ultimo Rilascio Cloud:",
