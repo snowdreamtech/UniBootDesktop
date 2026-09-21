@@ -485,7 +485,7 @@ export const jaJp: TranslationDict = {
   "disk.tag_needs_privilege": "未承認",
   "disk.tooltip_needs_privilege": "ブート情報を読み取るにはシステム承認が必要です",
   "inspector.val_needs_privilege": "未承認",
-  "deploy.stage_preparing": "環境を準備中...",
+  "deploy.stage_preparing": "展開環境を準備中...",
   "deploy.stage_partitioning": "ディスクパーティションを再構築中...",
   "deploy.stage_firmware": "UniBoot ファームウェアを書き込み中...",
   "deploy.stage_iso_copy": "OSイメージファイルをコピー中...",
