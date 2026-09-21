@@ -125,8 +125,14 @@ func ValidateCommandArgument(arg string) error {
 	if trimmed == "" {
 		return fmt.Errorf("command argument is empty")
 	}
-	if strings.ContainsAny(trimmed, "\x00\r\n;|`$&<>") {
-		return fmt.Errorf("command argument contains unsafe shell syntax")
+	if strings.ContainsAny(trimmed, "\x00\r\n") {
+		return fmt.Errorf("command argument contains control characters")
+	}
+	if strings.Contains(trimmed, "&&") || strings.Contains(trimmed, "||") || strings.Contains(trimmed, "`") || strings.Contains(trimmed, "$(") || strings.Contains(trimmed, "${") {
+		return fmt.Errorf("command argument contains unsafe shell substitution")
+	}
+	if strings.Contains(trimmed, ";") {
+		return fmt.Errorf("command argument contains unsafe command chaining")
 	}
 	if strings.Contains(trimmed, "..") {
 		return fmt.Errorf("command argument contains path traversal")
@@ -262,9 +268,19 @@ func ReadSector(devicePath string, numBytes int) ([]byte, error) {
 		}
 	}
 
-	// If direct open failed but process has elevation or sudo access, try sudo dd
+	// If direct open failed but process has elevation or sudo access, try sudo dd.
+	// The dd arguments are tightly structured and validated so they remain usable for
+	// legitimate raw-disk reads without allowing shell command injection.
 	if IsElevated() && (runtime.GOOS == "darwin" || runtime.GOOS == "linux") {
-		out, errDd := exec.Command("sudo", "-n", "dd", fmt.Sprintf("if=%s", rawDevice), fmt.Sprintf("bs=%d", numBytes), "count=1").Output()
+		cmd, err := SafeExecCommandContext(context.Background(), "sudo", "-n", "dd",
+			fmt.Sprintf("if=%s", rawDevice),
+			fmt.Sprintf("bs=%d", numBytes),
+			"count=1",
+		)
+		if err != nil {
+			return nil, fmt.Errorf("unsafe sudo dd invocation: %w", err)
+		}
+		out, errDd := cmd.Output()
 		if errDd == nil && len(out) >= numBytes {
 			return out[:numBytes], nil
 		}
@@ -292,17 +308,27 @@ func MountHiddenESP(partitionDevice string) (string, func(), error) {
 	cleanup := func() {
 		switch runtime.GOOS {
 		case "darwin":
-			_ = exec.Command("diskutil", "unmount", tempDir).Run()
+			if cmd, err := SafeExecCommandContext(context.Background(), "diskutil", "unmount", tempDir); err == nil {
+				_ = cmd.Run()
+			}
 			if os.Geteuid() == 0 {
-				_ = exec.Command("umount", "-f", tempDir).Run()
+				if cmd, err := SafeExecCommandContext(context.Background(), "umount", "-f", tempDir); err == nil {
+					_ = cmd.Run()
+				}
 			} else {
-				_ = exec.Command("sudo", "-n", "umount", "-f", tempDir).Run()
+				if cmd, err := SafeExecCommandContext(context.Background(), "sudo", "-n", "umount", "-f", tempDir); err == nil {
+					_ = cmd.Run()
+				}
 			}
 		case "linux":
 			if os.Geteuid() == 0 {
-				_ = exec.Command("umount", "-f", tempDir).Run()
+				if cmd, err := SafeExecCommandContext(context.Background(), "umount", "-f", tempDir); err == nil {
+					_ = cmd.Run()
+				}
 			} else {
-				_ = exec.Command("sudo", "-n", "umount", "-f", tempDir).Run()
+				if cmd, err := SafeExecCommandContext(context.Background(), "sudo", "-n", "umount", "-f", tempDir); err == nil {
+					_ = cmd.Run()
+				}
 			}
 		}
 		_ = os.RemoveAll(tempDir)
@@ -311,37 +337,42 @@ func MountHiddenESP(partitionDevice string) (string, func(), error) {
 	switch runtime.GOOS {
 	case "darwin":
 		// On macOS, attempt read-only mount via diskutil
-		outDiskutil, errDiskutil := exec.Command("diskutil", "mount", "readOnly", "-mountPoint", tempDir, partitionDevice).CombinedOutput()
-		if errDiskutil == nil && strings.Contains(string(outDiskutil), "mounted") {
-			return tempDir, cleanup, nil
+		cmd, err := SafeExecCommandContext(context.Background(), "diskutil", "mount", "readOnly", "-mountPoint", tempDir, partitionDevice)
+		if err == nil {
+			outDiskutil, errDiskutil := cmd.CombinedOutput()
+			if errDiskutil == nil && strings.Contains(string(outDiskutil), "mounted") {
+				return tempDir, cleanup, nil
+			}
 		}
 
 		// If running with root/elevated privilege, use mount_msdos directly or via sudo
 		if IsElevated() {
-			var cmd *exec.Cmd
+			var mountCmd *exec.Cmd
 			if os.Geteuid() == 0 {
-				cmd = exec.Command("mount_msdos", "-o", "rdonly", partitionDevice, tempDir)
+				mountCmd, err = SafeExecCommandContext(context.Background(), "mount_msdos", "-o", "rdonly", partitionDevice, tempDir)
 			} else {
-				cmd = exec.Command("sudo", "-n", "mount_msdos", "-o", "rdonly", partitionDevice, tempDir)
+				mountCmd, err = SafeExecCommandContext(context.Background(), "sudo", "-n", "mount_msdos", "-o", "rdonly", partitionDevice, tempDir)
 			}
-			outMount, errMount := cmd.CombinedOutput()
-			if errMount == nil {
-				return tempDir, cleanup, nil
+			if err == nil {
+				outMount, errMount := mountCmd.CombinedOutput()
+				if errMount == nil {
+					return tempDir, cleanup, nil
+				}
+				cleanup()
+				return "", func() {}, fmt.Errorf("elevated mount failed: %s", string(outMount))
 			}
-			cleanup()
-			return "", func() {}, fmt.Errorf("elevated mount failed: %s", string(outMount))
 		}
 
 	case "linux":
 		// On Linux, attempt standard mount if elevated
 		if IsElevated() {
-			var cmd *exec.Cmd
+			var mountCmd *exec.Cmd
 			if os.Geteuid() == 0 {
-				cmd = exec.Command("mount", "-o", "ro", partitionDevice, tempDir)
+				mountCmd, err = SafeExecCommandContext(context.Background(), "mount", "-o", "ro", partitionDevice, tempDir)
 			} else {
-				cmd = exec.Command("sudo", "-n", "mount", "-o", "ro", partitionDevice, tempDir)
+				mountCmd, err = SafeExecCommandContext(context.Background(), "sudo", "-n", "mount", "-o", "ro", partitionDevice, tempDir)
 			}
-			if errMount := cmd.Run(); errMount == nil {
+			if err == nil && mountCmd.Run() == nil {
 				return tempDir, cleanup, nil
 			}
 		}

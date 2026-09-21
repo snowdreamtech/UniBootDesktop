@@ -446,6 +446,9 @@ func IsVentoyDisk(targetDisk string) bool {
 	if targetDisk == "" {
 		return false
 	}
+	if err := ValidateTargetDisk(targetDisk); err != nil {
+		return false
+	}
 
 	// 1. Direct mount directory check if targetDisk is already a mount point
 	if HasVentoyEngineFiles(targetDisk) {
@@ -512,6 +515,9 @@ func IsVentoyDisk(targetDisk string) bool {
 // For hybrid mode disks (both Cloud and Ventoy), this returns false.
 func IsCloudModeDisk(targetDisk string) bool {
 	if targetDisk == "" {
+		return false
+	}
+	if err := ValidateTargetDisk(targetDisk); err != nil {
 		return false
 	}
 
