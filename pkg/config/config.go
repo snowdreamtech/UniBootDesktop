@@ -49,8 +49,8 @@ func GetDefaultConfig() *AppConfig {
 		ProxyPort:            0,
 		ProxyUser:            "",
 		ProxyPassword:        "",
-		VentoyPath:           "",
-		UniBootPath:          "",
+		VentoyPath:           env.GetVentoyDir(),
+		UniBootPath:          env.GetFirmwareDir(),
 		VentoySecureBoot:     true,  // Official Ventoy default: Enabled (Checked)
 		VentoyPartitionStyle: "MBR", // Official Ventoy default: MBR
 		VentoyReserveSpace:   0,     // Official Ventoy default: 0 MB
@@ -67,6 +67,12 @@ func Load() (*AppConfig, error) {
 		cfg := GetDefaultConfig()
 		if err := toml.Unmarshal(data, cfg); err != nil {
 			return nil, fmt.Errorf("parse config error: %w", err)
+		}
+		if cfg.VentoyPath == "" {
+			cfg.VentoyPath = env.GetVentoyDir()
+		}
+		if cfg.UniBootPath == "" {
+			cfg.UniBootPath = env.GetFirmwareDir()
 		}
 		return cfg, nil
 	}

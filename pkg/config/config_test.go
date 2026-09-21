@@ -40,6 +40,7 @@ func (s *memorySecretStore) Delete(_ string, _ string) error {
 }
 
 func TestDefaultConfig(t *testing.T) {
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", t.TempDir())
 	cfg := GetDefaultConfig()
 	if cfg.Mode != "cloud" {
 		t.Errorf("expected default Mode 'cloud', got %s", cfg.Mode)
@@ -49,6 +50,9 @@ func TestDefaultConfig(t *testing.T) {
 	}
 	if cfg.FileSystem != "exFAT" {
 		t.Errorf("expected default FileSystem 'exFAT', got %s", cfg.FileSystem)
+	}
+	if cfg.VentoyPath == "" || cfg.UniBootPath == "" {
+		t.Fatalf("expected default Ventoy and UniBoot paths, got Ventoy=%q UniBoot=%q", cfg.VentoyPath, cfg.UniBootPath)
 	}
 }
 

@@ -582,6 +582,12 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		logger.Info("Resetting application settings to default")
 		return config.GetDefaultConfig().Save()
 	}
+	if cfg.VentoyPath == "" {
+		cfg.VentoyPath = env.GetVentoyDir()
+	}
+	if cfg.UniBootPath == "" {
+		cfg.UniBootPath = env.GetFirmwareDir()
+	}
 
 	// Validate GithubProxy URL format
 	if cfg.GithubProxy != "" && cfg.GithubProxy != "direct" {
