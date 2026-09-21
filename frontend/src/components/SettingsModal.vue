@@ -783,6 +783,7 @@ async function checkVentoyCli() {
     ventoyValidation.value = {
       valid: false,
       version: "",
+      code: "exception",
       message: t("settings.verifyException", { error: e?.message || String(e) }),
       executablePath: "",
     };
@@ -984,7 +985,7 @@ async function syncFirmware() {
 async function selectVentoyDirectory() {
   if (window.go && window.go.main && window.go.main.App && window.go.main.App.SelectDirectory) {
     try {
-      const selected = await window.go.main.App.SelectDirectory("Select Ventoy installation folder");
+      const selected = await window.go.main.App.SelectDirectory(t("settings.select_ventoy_dir"));
       if (selected) {
         ventoyPath.value = selected;
         triggerAutoSave();
@@ -995,7 +996,8 @@ async function selectVentoyDirectory() {
       ventoyValidation.value = {
         valid: false,
         version: "",
-        message: String(e),
+        code: "exception",
+        message: t("settings.verifyException", { error: String(e) }),
         executablePath: "",
       };
     }
