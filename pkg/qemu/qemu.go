@@ -149,17 +149,9 @@ func ResolveRawDiskDevice(diskPath string) string {
 		}
 
 		// Case 2: Standard block disk node (e.g. /dev/disk2 or /dev/disk2s1)
-		if strings.HasPrefix(diskPath, "/dev/disk") {
-			rawNode := strings.Replace(diskPath, "/dev/disk", "/dev/rdisk", 1)
-			base := filepath.Base(rawNode)
-			if strings.HasPrefix(base, "rdisk") {
-				diskNumPart := base[len("rdisk"):]
-				if idx := strings.Index(diskNumPart, "s"); idx != -1 {
-					diskNumPart = diskNumPart[:idx]
-				}
-				base = "rdisk" + diskNumPart
-			}
-			return filepath.Join(filepath.Dir(rawNode), base)
+		if strings.HasPrefix(diskPath, "/dev/disk") || strings.HasPrefix(diskPath, "/dev/rdisk") {
+			baseNode := disk.NormalizeDarwinDiskNode(diskPath)
+			return "/dev/r" + baseNode
 		}
 
 		// Case 3: Volume mount path (e.g. /Volumes/Ventoy, /Volumes/UNIBOOT)
@@ -171,12 +163,8 @@ func ResolveRawDiskDevice(diskPath string) string {
 				return "/dev/r" + parentDisk
 			}
 			if devNode := extractPlistString(plistStr, "DeviceNode"); devNode != "" {
-				rawNode := strings.Replace(devNode, "/dev/disk", "/dev/rdisk", 1)
-				if idx := strings.Index(filepath.Base(rawNode), "s"); idx != -1 {
-					base := filepath.Base(rawNode)[:idx]
-					rawNode = filepath.Join(filepath.Dir(rawNode), base)
-				}
-				return rawNode
+				node := disk.NormalizeDarwinDiskNode(devNode)
+				return "/dev/r" + node
 			}
 		}
 

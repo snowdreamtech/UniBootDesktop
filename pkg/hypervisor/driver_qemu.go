@@ -129,20 +129,9 @@ func ResolveRawDiskDevice(diskPath string) string {
 
 	switch runtime.GOOS {
 	case "darwin":
-		if strings.HasPrefix(diskPath, "/dev/rdisk") {
-			return diskPath
-		}
-		if strings.HasPrefix(diskPath, "/dev/disk") {
-			rawNode := strings.Replace(diskPath, "/dev/disk", "/dev/rdisk", 1)
-			base := filepath.Base(rawNode)
-			if strings.HasPrefix(base, "rdisk") {
-				diskNumPart := base[len("rdisk"):]
-				if idx := strings.Index(diskNumPart, "s"); idx != -1 {
-					diskNumPart = diskNumPart[:idx]
-				}
-				base = "rdisk" + diskNumPart
-			}
-			return filepath.Join(filepath.Dir(rawNode), base)
+		if strings.HasPrefix(diskPath, "/dev/disk") || strings.HasPrefix(diskPath, "/dev/rdisk") {
+			node := disk.NormalizeDarwinDiskNode(diskPath)
+			return "/dev/r" + node
 		}
 		cmd := exec.Command("diskutil", "info", "-plist", diskPath)
 		output, err := cmd.Output()

@@ -84,12 +84,29 @@ func formatDiskMacOS(ctx context.Context, targetDisk string) (string, error) {
 	part2Node := diskNode + "s2"
 	_ = execCommand("diskutil", "mount", part2Node).Run()
 
-	mountPoint := "/Volumes/Ventoy"
-	if info, err := os.Stat(mountPoint); err == nil && info.IsDir() {
-		return mountPoint, nil
+	// Mount and resolve Partition 1 data mount point strictly from p1Node
+	p1Node := diskNode + "s1"
+	infoCmd := execCommand("diskutil", "info", "-plist", p1Node)
+	if out, errInfo := infoCmd.Output(); errInfo == nil {
+		if mount := extractPlistStringValue(string(out), "MountPoint"); mount != "" {
+			if info, statErr := os.Stat(mount); statErr == nil && info.IsDir() {
+				return mount, nil
+			}
+		}
 	}
 
-	return ResolveMountPoint(targetDisk)
+	// Try mounting Partition 1 explicitly
+	_ = execCommand("diskutil", "mount", p1Node).Run()
+	infoCmd2 := execCommand("diskutil", "info", "-plist", p1Node)
+	if out2, errInfo2 := infoCmd2.Output(); errInfo2 == nil {
+		if mount := extractPlistStringValue(string(out2), "MountPoint"); mount != "" {
+			if info, statErr := os.Stat(mount); statErr == nil && info.IsDir() {
+				return mount, nil
+			}
+		}
+	}
+
+	return "", fmt.Errorf("failed to mount or resolve Partition 1 (%s) after formatting", p1Node)
 }
 
 // formatDiskWindows formats disk on Windows using diskpart
@@ -237,7 +254,7 @@ func FormatDiskHybridMode(ctx context.Context, targetDisk string, fsType string)
 }
 
 func formatDiskHybridModeMacOS(ctx context.Context, targetDisk string, fsType string) (string, error) {
-	diskNode := filepath.Base(targetDisk)
+	diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
 	fsFormat := strings.ToUpper(fsType)
 	if fsFormat == "EXFAT" {
 		fsFormat = "ExFAT"
@@ -256,12 +273,29 @@ func formatDiskHybridModeMacOS(ctx context.Context, targetDisk string, fsType st
 	part2Node := diskNode + "s2"
 	_ = execCommand("diskutil", "mount", part2Node).Run()
 
-	mountPoint := "/Volumes/Ventoy"
-	if info, err := os.Stat(mountPoint); err == nil && info.IsDir() {
-		return mountPoint, nil
+	// Mount and resolve Partition 1 data mount point strictly from p1Node
+	p1Node := diskNode + "s1"
+	infoCmd := execCommand("diskutil", "info", "-plist", p1Node)
+	if out, errInfo := infoCmd.Output(); errInfo == nil {
+		if mount := extractPlistStringValue(string(out), "MountPoint"); mount != "" {
+			if info, statErr := os.Stat(mount); statErr == nil && info.IsDir() {
+				return mount, nil
+			}
+		}
 	}
 
-	return ResolveMountPointWithLabel(targetDisk, "Ventoy")
+	// Try mounting Partition 1 explicitly
+	_ = execCommand("diskutil", "mount", p1Node).Run()
+	infoCmd2 := execCommand("diskutil", "info", "-plist", p1Node)
+	if out2, errInfo2 := infoCmd2.Output(); errInfo2 == nil {
+		if mount := extractPlistStringValue(string(out2), "MountPoint"); mount != "" {
+			if info, statErr := os.Stat(mount); statErr == nil && info.IsDir() {
+				return mount, nil
+			}
+		}
+	}
+
+	return "", fmt.Errorf("failed to mount or resolve Partition 1 (%s) after Hybrid Mode formatting", p1Node)
 }
 
 func formatDiskHybridModeWindows(ctx context.Context, targetDisk string, fsType string) (string, error) {
@@ -456,11 +490,6 @@ func MountAndResolveEFIPartition(targetDisk string) (string, error) {
 					return mount, nil
 				}
 			}
-		}
-
-		vtoyEfiPath := "/Volumes/VTOYEFI"
-		if info, err := os.Stat(vtoyEfiPath); err == nil && info.IsDir() {
-			return vtoyEfiPath, nil
 		}
 	}
 

@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 )
 
 type VMwareDriver struct{}
@@ -148,16 +149,8 @@ func launchVMwareVM(status *VMStatus, targetPath string, bootMode string) error 
 	}
 
 	diskDev := targetPath
-	if strings.HasPrefix(diskDev, "/dev/rdisk") {
-		diskDev = strings.Replace(diskDev, "/dev/rdisk", "/dev/disk", 1)
-	}
-	prefix := "/dev/disk"
-	if strings.HasPrefix(diskDev, prefix) {
-		remainder := diskDev[len(prefix):]
-		if sIdx := strings.Index(remainder, "s"); sIdx != -1 {
-			remainder = remainder[:sIdx]
-		}
-		diskDev = prefix + remainder
+	if runtime.GOOS == "darwin" {
+		diskDev = "/dev/" + disk.NormalizeDarwinDiskNode(targetPath)
 	}
 
 	// 1. On macOS, use official vmware-rawdiskCreator if available

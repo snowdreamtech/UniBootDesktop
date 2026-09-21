@@ -316,7 +316,17 @@ func NormalizeDarwinDiskNode(targetDisk string) string {
 	if strings.HasPrefix(node, "disk") {
 		rest := node[4:] // Part after "disk", e.g. "2", "2s1", "12s3"
 		if idx := strings.Index(rest, "s"); idx > 0 {
-			return "disk" + rest[:idx]
+			diskNum := rest[:idx]
+			isNumeric := true
+			for _, r := range diskNum {
+				if r < '0' || r > '9' {
+					isNumeric = false
+					break
+				}
+			}
+			if isNumeric {
+				return "disk" + diskNum
+			}
 		}
 		return node
 	}
@@ -420,13 +430,9 @@ func IsCloudModeDisk(targetDisk string) bool {
 	}
 
 	if runtime.GOOS == "darwin" {
-		diskNode := filepath.Base(targetDisk)
-		if strings.HasPrefix(diskNode, "disk") {
-			baseDisk := diskNode
-			if strings.Contains(diskNode, "s") {
-				// Extract base disk from partition (e.g., "disk2s1" -> "disk2")
-				baseDisk = NormalizeDarwinDiskNode(diskNode)
-			}
+		baseDisk := NormalizeDarwinDiskNode(targetDisk)
+		if strings.HasPrefix(baseDisk, "disk") {
+			// Check if any partition has Ventoy engine files (indicates hybrid mode)
 
 			// Check if any partition has Ventoy engine files (indicates hybrid mode)
 			p1 := baseDisk + "s1"
@@ -551,12 +557,9 @@ func IsGenericBootDisk(targetDisk string) bool {
 	}
 
 	if runtime.GOOS == "darwin" {
-		diskNode := filepath.Base(targetDisk)
-		if strings.HasPrefix(diskNode, "disk") {
-			partitions := []string{diskNode}
-			if !strings.Contains(diskNode, "s") {
-				partitions = []string{diskNode + "s1", diskNode + "s2"}
-			}
+		baseDisk := NormalizeDarwinDiskNode(targetDisk)
+		if strings.HasPrefix(baseDisk, "disk") {
+			partitions := []string{baseDisk + "s1", baseDisk + "s2"}
 			for _, p := range partitions {
 				str := getDarwinDiskutilInfo(p)
 				if str != "" {
@@ -1586,7 +1589,7 @@ func ValidateTargetDisk(targetDevice string) error {
 	}
 
 	// Static blacklist check for common system disk paths - always blocked even in tests
-	staticBlacklist := []string{"/", "C:", "/dev/sda", "/dev/nvme0n1"}
+	staticBlacklist := []string{"/", "C:", "/dev/sda", "/dev/nvme0n1", "/dev/disk0", "disk0"}
 	for _, blocked := range staticBlacklist {
 		if targetDevice == blocked {
 			return fmt.Errorf("CRITICAL: Safety block triggered! %s is a known system drive", targetDevice)
@@ -1598,11 +1601,11 @@ func ValidateTargetDisk(targetDevice string) error {
 		return nil
 	}
 
-	// Dynamic system disk detection
+	// Dynamic system disk detection (Fail-closed: erroring out blocks formatting)
 	isSystem, err := isSystemDisk(targetDevice)
 	if err != nil {
-		// Log warning but don't fail if detection fails
-		logger.Warn("System disk detection failed, proceeding with caution", "device", targetDevice, "error", err)
+		logger.Error("System disk detection failed, blocking operation for safety", "device", targetDevice, "error", err)
+		return fmt.Errorf("CRITICAL: Safety block triggered! Unable to verify if %s is a system disk: %w", targetDevice, err)
 	} else if isSystem {
 		return fmt.Errorf("CRITICAL: Safety block triggered! %s is detected as an active system disk", targetDevice)
 	}
@@ -1652,18 +1655,47 @@ func isSystemDisk(device string) (bool, error) {
 	}
 }
 
+var darwinRootSystemDiskOnce sync.Once
+var darwinRootSystemDisk string
+
+func getDarwinRootSystemDisk() string {
+	darwinRootSystemDiskOnce.Do(func() {
+		cmd := execCommand("diskutil", "info", "-plist", "/")
+		if out, err := cmd.Output(); err == nil {
+			darwinRootSystemDisk = extractPlistValue(string(out), "ParentWholeDisk")
+			if darwinRootSystemDisk == "" {
+				darwinRootSystemDisk = extractPlistValue(string(out), "DeviceIdentifier")
+			}
+		}
+	})
+	return darwinRootSystemDisk
+}
+
 // isSystemDiskDarwin checks if a disk is a system disk on macOS
 func isSystemDiskDarwin(device string) (bool, error) {
 	// Normalize device path
 	diskNode := NormalizeDarwinDiskNode(device)
-	if diskNode == "" {
-		return false, fmt.Errorf("invalid device path: %s", device)
+
+	// Direct match against the true macOS boot/root disk
+	if rootDisk := getDarwinRootSystemDisk(); rootDisk != "" && diskNode != "" {
+		if diskNode == rootDisk {
+			return true, nil
+		}
 	}
 
-	cmd := execCommand("diskutil", "info", "-plist", diskNode)
+	target := diskNode
+	if target == "" {
+		target = device
+	}
+
+	cmd := execCommand("diskutil", "info", "-plist", target)
 	output, err := cmd.Output()
 	if err != nil {
-		return false, fmt.Errorf("failed to get disk info: %w", err)
+		// If diskutil cannot find the device, verify it doesn't match root disk
+		if rootDisk := getDarwinRootSystemDisk(); rootDisk != "" && diskNode == rootDisk {
+			return true, nil
+		}
+		return false, nil
 	}
 
 	outputStr := string(output)
