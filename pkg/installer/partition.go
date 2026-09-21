@@ -335,7 +335,7 @@ func formatDiskHybridModeWindows(ctx context.Context, targetDisk string, fsType 
 		return "", fmt.Errorf("diskpart for Hybrid Mode failed (%v): %s", err, string(output))
 	}
 
-	return ResolveMountPointWithLabel(targetDisk, "Ventoy")
+	return ResolveMountPoint(targetDisk)
 }
 
 func formatDiskHybridModeLinux(ctx context.Context, targetDisk string, fsType string) (string, error) {
@@ -399,19 +399,9 @@ func formatDiskHybridModeLinux(ctx context.Context, targetDisk string, fsType st
 	return mountPoint, nil
 }
 
-// ResolveMountPoint resolves the active mount point for data partition on the system (UNIBOOT -> Ventoy -> VENTOY).
+// ResolveMountPoint resolves the active mount point for data Partition 1 of the specified target disk.
+// NEVER relies on volume labels, which may collide across disks, be blank, or change arbitrarily.
 func ResolveMountPoint(targetDisk string) (string, error) {
-	if m, err := ResolveMountPointWithLabel(targetDisk, "UNIBOOT"); err == nil && m != "" {
-		return m, nil
-	}
-	if m, err := ResolveMountPointWithLabel(targetDisk, "Ventoy"); err == nil && m != "" {
-		return m, nil
-	}
-	return ResolveMountPointWithLabel(targetDisk, "VENTOY")
-}
-
-// ResolveMountPointWithLabel resolves the active mount point for a specified volume label on the system.
-func ResolveMountPointWithLabel(targetDisk string, label string) (string, error) {
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
 		if strings.Contains(targetDisk, "fail") {
 			return "", fmt.Errorf("simulated mount resolution failure for disk %s", targetDisk)
@@ -419,11 +409,12 @@ func ResolveMountPointWithLabel(targetDisk string, label string) (string, error)
 		return os.TempDir(), nil
 	}
 
-	// macOS target isolation
+	// macOS target partition isolation
 	if runtime.GOOS == "darwin" {
 		diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
 		p1Node := diskNode + "s1"
 
+		// 1. Check if partition 1 is already mounted
 		infoCmd := execCommand("diskutil", "info", "-plist", p1Node)
 		infoOut, infoErr := infoCmd.Output()
 		if infoErr == nil {
@@ -435,7 +426,7 @@ func ResolveMountPointWithLabel(targetDisk string, label string) (string, error)
 			}
 		}
 
-		// If partition 1 is not yet mounted, attempt to mount it and check again
+		// 2. If partition 1 is not yet mounted, mount it explicitly and check again
 		_ = execCommand("diskutil", "mount", p1Node).Run()
 		infoCmd2 := execCommand("diskutil", "info", "-plist", p1Node)
 		if infoOut2, err2 := infoCmd2.Output(); err2 == nil {
@@ -446,12 +437,60 @@ func ResolveMountPointWithLabel(targetDisk string, label string) (string, error)
 				}
 			}
 		}
+
+		return "", fmt.Errorf("could not resolve mount point for data partition 1 (%s) on target disk %s", p1Node, targetDisk)
 	}
 
-	return "", fmt.Errorf("could not resolve mount point for label %s on target disk %s", label, targetDisk)
+	// Linux target partition resolution
+	if runtime.GOOS == "linux" {
+		part1 := targetDisk + "1"
+		if strings.Contains(targetDisk, "nvme") || strings.Contains(targetDisk, "mmcblk") {
+			part1 = targetDisk + "p1"
+		}
+		out, err := execCommand("findmnt", "-n", "-o", "TARGET", part1).Output()
+		if err == nil {
+			m := strings.TrimSpace(string(out))
+			if m != "" {
+				return m, nil
+			}
+		}
+		out2, err2 := execCommand("lsblk", "-no", "MOUNTPOINT", part1).Output()
+		if err2 == nil {
+			m := strings.TrimSpace(string(out2))
+			if m != "" {
+				return m, nil
+			}
+		}
+		return "", fmt.Errorf("could not resolve mount point for partition 1 (%s) on target disk %s", part1, targetDisk)
+	}
+
+	// Windows target partition resolution
+	if runtime.GOOS == "windows" {
+		baseDisk := filepath.Base(targetDisk)
+		safeDisk := strings.ReplaceAll(baseDisk, "'", "''")
+		cmd := execCommand("powershell", "-NoProfile", "-Command",
+			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber -PartitionNumber 1 | Get-Volume | Select-Object -ExpandProperty DriveLetter", safeDisk))
+		if out, err := cmd.Output(); err == nil {
+			letter := strings.TrimSpace(string(out))
+			if letter != "" {
+				return letter + ":\\", nil
+			}
+		}
+		return "", fmt.Errorf("could not resolve mount point for partition 1 on target disk %s", targetDisk)
+	}
+
+	return "", fmt.Errorf("could not resolve mount point for target disk %s on %s", targetDisk, runtime.GOOS)
 }
 
-// MountAndResolveEFIPartition resolves or automatically mounts Partition 2 (VTOYEFI / ESP) for existing Ventoy drives.
+// ResolveMountPointWithLabel is a deprecated compatibility helper.
+// Disk labels are unreliable and must not be used as significant criteria for disk operations.
+// Delegates directly to ResolveMountPoint.
+func ResolveMountPointWithLabel(targetDisk string, _ string) (string, error) {
+	return ResolveMountPoint(targetDisk)
+}
+
+// MountAndResolveEFIPartition resolves or automatically mounts Partition 2 (ESP boot partition) for target disk.
+// NEVER relies on volume labels, which may collide or be duplicated.
 func MountAndResolveEFIPartition(targetDisk string) (string, error) {
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
 		if strings.Contains(targetDisk, "fail") {
@@ -491,6 +530,44 @@ func MountAndResolveEFIPartition(targetDisk string) (string, error) {
 				}
 			}
 		}
+
+		return "", fmt.Errorf("could not resolve EFI boot partition (%s) for target disk %s", part2, targetDisk)
+	}
+
+	if runtime.GOOS == "linux" {
+		part2 := targetDisk + "2"
+		if strings.Contains(targetDisk, "nvme") || strings.Contains(targetDisk, "mmcblk") {
+			part2 = targetDisk + "p2"
+		}
+		out, err := execCommand("findmnt", "-n", "-o", "TARGET", part2).Output()
+		if err == nil {
+			m := strings.TrimSpace(string(out))
+			if m != "" {
+				return m, nil
+			}
+		}
+		out2, err2 := execCommand("lsblk", "-no", "MOUNTPOINT", part2).Output()
+		if err2 == nil {
+			m := strings.TrimSpace(string(out2))
+			if m != "" {
+				return m, nil
+			}
+		}
+		return "", fmt.Errorf("could not resolve EFI boot partition (%s) for target disk %s", part2, targetDisk)
+	}
+
+	if runtime.GOOS == "windows" {
+		baseDisk := filepath.Base(targetDisk)
+		safeDisk := strings.ReplaceAll(baseDisk, "'", "''")
+		cmd := execCommand("powershell", "-NoProfile", "-Command",
+			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber -PartitionNumber 2 | Get-Volume | Select-Object -ExpandProperty DriveLetter", safeDisk))
+		if out, err := cmd.Output(); err == nil {
+			letter := strings.TrimSpace(string(out))
+			if letter != "" {
+				return letter + ":\\", nil
+			}
+		}
+		return "", fmt.Errorf("could not resolve EFI boot partition for target disk %s", targetDisk)
 	}
 
 	return "", fmt.Errorf("could not resolve EFI boot partition for target disk %s", targetDisk)

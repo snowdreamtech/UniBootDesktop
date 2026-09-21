@@ -267,45 +267,10 @@ func FormatDiskWithVentoyCliWithConfig(ctx context.Context, ventoyPath string, t
 		}
 	}
 
-	// Ensure Partition 1 is mounted and resolved properly on macOS / Linux
-	if runtime.GOOS == "darwin" {
-		diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
-		p1Node := diskNode + "s1"
-		_ = exec.Command("diskutil", "mount", p1Node).Run()
-
-		// Try resolving mount point by label: UNIBOOT -> Ventoy -> VENTOY -> direct plist query
-		mountPoint, errResolve := ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
-		if errResolve != nil {
-			mountPoint, errResolve = ResolveMountPointWithLabel(targetDisk, "Ventoy")
-		}
-		if errResolve != nil {
-			mountPoint, errResolve = ResolveMountPointWithLabel(targetDisk, "VENTOY")
-		}
-		if errResolve != nil {
-			infoCmd := exec.Command("diskutil", "info", "-plist", p1Node)
-			if infoOut, infoErr := infoCmd.Output(); infoErr == nil {
-				mountPoint = extractPlistStringValue(string(infoOut), "MountPoint")
-			}
-		}
-
-		if mountPoint == "" {
-			return "", fmt.Errorf("failed to mount or resolve Partition 1 after Ventoy CLI formatting")
-		}
-
-		return mountPoint, nil
-	}
-
-	// Linux / Other
-	mountPoint, errResolve := ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
-	if errResolve != nil {
-		mountPoint, errResolve = ResolveMountPointWithLabel(targetDisk, "Ventoy")
-	}
-	if errResolve != nil {
-		mountPoint, errResolve = ResolveMountPointWithLabel(targetDisk, "VENTOY")
-	}
-
-	if mountPoint == "" {
-		return "", fmt.Errorf("failed to mount or resolve Partition 1 after Ventoy CLI formatting")
+	// Ensure Partition 1 is mounted and resolved properly on macOS / Linux / Windows
+	mountPoint, errResolve := ResolveMountPoint(targetDisk)
+	if errResolve != nil || mountPoint == "" {
+		return "", fmt.Errorf("failed to mount or resolve Partition 1 after Ventoy CLI formatting: %w", errResolve)
 	}
 
 	return mountPoint, nil

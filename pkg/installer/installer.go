@@ -144,13 +144,7 @@ func deployHybridModeWithStage(ctx context.Context, targetDisk string, fsType st
 	if isExistingVentoy {
 		logger.Info("[Step 2/6] Existing Ventoy partition detected, performing in-place upgrade (data preserved)...", "target", targetDisk)
 		tracker.SetFormatted(true)
-		mountPoint, err = ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
-		if err != nil {
-			mountPoint, err = ResolveMountPointWithLabel(targetDisk, "Ventoy")
-		}
-		if err != nil {
-			mountPoint, err = ResolveMountPointWithLabel(targetDisk, "VENTOY")
-		}
+		mountPoint, err = ResolveMountPoint(targetDisk)
 		if err != nil {
 			mountPoint, err = FormatDiskHybridMode(ctx, targetDisk, fsType)
 		}
@@ -504,9 +498,6 @@ func deployCloudModeWithStage(ctx context.Context, targetDisk string, fsType str
 		tracker.SetFormatted(true)
 		logger.Info("Mounting and resolving newly created ESP boot partition...", "target", targetDisk)
 		efiMountPoint, err = MountAndResolveEFIPartition(targetDisk)
-		if err != nil {
-			efiMountPoint, err = ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
-		}
 	}
 	if err != nil {
 		errPrep := fmt.Errorf("preparing EFI partition for Cloud Mode failed: %w", err)
@@ -540,15 +531,10 @@ func deployCloudModeWithStage(ctx context.Context, targetDisk string, fsType str
 		progressCallback(100, "Completed")
 	}
 
-	// Step 4: Ensure Main Data Partition Volume Label is UNIBOOT (or skip if already labeled)
-	mainMountPoint, errResolve := ResolveMountPointWithLabel(targetDisk, "UNIBOOT")
-	if errResolve != nil {
-		mainMountPoint, _ = ResolveMountPointWithLabel(targetDisk, "Ventoy")
+	// Step 4: Ensure Main Data Partition Volume Label is UNIBOOT (for display friendly naming)
+	if mainMountPoint, errResolve := ResolveMountPoint(targetDisk); errResolve == nil && mainMountPoint != "" {
+		_ = UpdateVolumeLabel(targetDisk, mainMountPoint, "UNIBOOT")
 	}
-	if errResolve != nil && mainMountPoint == "" {
-		mainMountPoint, _ = ResolveMountPointWithLabel(targetDisk, "VENTOY")
-	}
-	_ = UpdateVolumeLabel(targetDisk, mainMountPoint, "UNIBOOT")
 
 	msg := fmt.Sprintf("Successfully deployed Cloud Mode to ESP EFI Partition (%s)", efiMountPoint)
 	if isExistingVentoy {

@@ -350,64 +350,55 @@ func IsVentoyDisk(targetDisk string) bool {
 		return true
 	}
 
-	// 3. Platform-specific target partition inspection with label and metadata checks
+	// 3. Platform-specific target partition inspection with physical file presence (NEVER rely on volume labels)
 	if runtime.GOOS == "darwin" {
 		baseDisk := NormalizeDarwinDiskNode(targetDisk)
 		if strings.HasPrefix(baseDisk, "disk") {
 			p1 := baseDisk + "s1"
 			p2 := baseDisk + "s2"
 
-			// Inspect Partition 2 (VTOYEFI / UNIBOOTEFI ESP Partition)
+			// Inspect Partition 2 (ESP Partition) for Ventoy bootloader files
 			strP2 := getDarwinDiskutilInfo(p2)
 			if strP2 != "" {
-				volNameP2 := strings.ToUpper(extractPlistValue(strP2, "VolumeName"))
 				mountP2 := extractPlistValue(strP2, "MountPoint")
-
-				if strings.Contains(volNameP2, "VTOYEFI") || strings.Contains(volNameP2, "UNIBOOTEFI") {
-					return true
-				}
 				if mountP2 != "" && HasVentoyEngineFiles(mountP2) {
 					return true
 				}
 			}
 
-			// Inspect Partition 1 (Ventoy / UniBoot Data Partition)
+			// Inspect Partition 1 (Data Partition) for Ventoy core engine files
 			strP1 := getDarwinDiskutilInfo(p1)
 			if strP1 != "" {
-				volNameP1 := strings.ToUpper(extractPlistValue(strP1, "VolumeName"))
 				mountP1 := extractPlistValue(strP1, "MountPoint")
-
 				if mountP1 != "" && HasVentoyEngineFiles(mountP1) {
-					return true
-				}
-
-				if (strings.Contains(volNameP1, "VENTOY") || strings.Contains(volNameP1, "UNIBOOT")) && strP2 != "" {
 					return true
 				}
 			}
 		}
 	} else if runtime.GOOS == "linux" {
-		out, err := exec.Command("lsblk", "-o", "NAME,LABEL", "-J", targetDisk).Output()
+		// Linux: query mounted partitions and check physical engine files
+		out, err := exec.Command("lsblk", "-o", "MOUNTPOINT", "-n", "-l", targetDisk).Output()
 		if err == nil {
-			upperOut := strings.ToUpper(string(out))
-			if strings.Contains(upperOut, "VTOYEFI") || strings.Contains(upperOut, "UNIBOOTEFI") {
-				return true
+			mountPoints := strings.Split(strings.TrimSpace(string(out)), "\n")
+			for _, mp := range mountPoints {
+				mp = strings.TrimSpace(mp)
+				if mp != "" && HasVentoyEngineFiles(mp) {
+					return true
+				}
 			}
 		}
 	} else if runtime.GOOS == "windows" {
-		// 安全地转义PowerShell参数，防止命令注入
 		baseDisk := filepath.Base(targetDisk)
-		safeDisk := strings.ReplaceAll(baseDisk, "'", "''")  // PowerShell单引号转义
-		safeDisk = strings.ReplaceAll(safeDisk, "`", "``")    // PowerShell反引号转义
-		safeDisk = strings.ReplaceAll(safeDisk, "$", "`$")    // PowerShell变量转义
-		safeDisk = strings.ReplaceAll(safeDisk, "\"", "`\"")  // 双引号转义
-
+		safeDisk := strings.ReplaceAll(baseDisk, "'", "''")
 		out, err := exec.Command("powershell", "-NoProfile", "-Command",
-			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber | Get-Volume | Select-Object -ExpandProperty FileSystemLabel", safeDisk)).Output()
+			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber | Get-Volume | Select-Object -ExpandProperty DriveLetter", safeDisk)).Output()
 		if err == nil {
-			upperOut := strings.ToUpper(string(out))
-			if strings.Contains(upperOut, "VTOYEFI") || strings.Contains(upperOut, "UNIBOOTEFI") {
-				return true
+			lines := strings.Split(strings.TrimSpace(string(out)), "\n")
+			for _, l := range lines {
+				l = strings.TrimSpace(l)
+				if l != "" && HasVentoyEngineFiles(l+":\\") {
+					return true
+				}
 			}
 		}
 	}
