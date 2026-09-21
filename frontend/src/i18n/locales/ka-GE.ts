@@ -222,6 +222,8 @@ export const kaGe: TranslationDict = {
   "settings.tab_ventoy": "Ventoy ინსტრუმენტების პარამეტრები",
   "settings.language": "აპლიკაციის ენა:",
   "settings.theme": "UI თემის სტილი:",
+  "settings.theme_dark": "მუქი რეჟიმი",
+  "settings.theme_light": "ნათელი რეჟიმი",
   "settings.default_mode": "განლაგების ნაგულისხმევი რეჟიმი:",
   "settings.default_fs": "ნაგულისხმევი ფაილური სისტემა:",
   "settings.app_update": "აპლიკაციის განახლების შემოწმება:",

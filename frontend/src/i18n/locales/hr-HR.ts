@@ -222,6 +222,8 @@ export const hrHr: TranslationDict = {
   "settings.tab_ventoy": "Postavke Ventoy alata",
   "settings.language": "Jezik aplikacije:",
   "settings.theme": "Stil teme korisničkog sučelja:",
+  "settings.theme_dark": "Tamni način",
+  "settings.theme_light": "Svijetli način",
   "settings.default_mode": "Zadani način implementacije:",
   "settings.default_fs": "Zadani sustav datoteka:",
   "settings.app_update": "Provjera ažuriranja aplikacije:",

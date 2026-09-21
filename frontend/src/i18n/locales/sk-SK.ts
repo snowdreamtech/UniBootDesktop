@@ -222,6 +222,8 @@ export const skSk: TranslationDict = {
   "settings.tab_ventoy": "Nastavenia nástrojov Ventoy",
   "settings.language": "Jazyk aplikácie:",
   "settings.theme": "Štýl témy používateľského rozhrania:",
+  "settings.theme_dark": "Tmavý režim",
+  "settings.theme_light": "Svetlý režim",
   "settings.default_mode": "Predvolený režim nasadenia:",
   "settings.default_fs": "Predvolený systém súborov:",
   "settings.app_update": "Kontrola aktualizácie aplikácie:",

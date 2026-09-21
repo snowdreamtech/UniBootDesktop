@@ -222,6 +222,8 @@ export const itIt: TranslationDict = {
   "settings.tab_ventoy": "Toolchain Ventoy",
   "settings.language": "Lingua dell'Applicazione:",
   "settings.theme": "Stile Tema Interfaccia:",
+  "settings.theme_dark": "Modalità scura",
+  "settings.theme_light": "Modalità chiara",
   "settings.default_mode": "Modalità Distribuzione Predefinita:",
   "settings.default_fs": "File System Predefinito:",
   "settings.app_update": "Controllo Aggiornamenti:",

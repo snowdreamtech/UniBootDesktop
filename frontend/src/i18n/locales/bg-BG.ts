@@ -222,6 +222,8 @@ export const bgBg: TranslationDict = {
   "settings.tab_ventoy": "Настройки на инструментите Ventoy",
   "settings.language": "Език на приложението:",
   "settings.theme": "Стил на темата на потребителския интерфейс:",
+  "settings.theme_dark": "Тъмен режим",
+  "settings.theme_light": "Светъл режим",
   "settings.default_mode": "Режим на внедряване по подразбиране:",
   "settings.default_fs": "Файлова система по подразбиране:",
   "settings.app_update": "Проверка на актуализацията на приложението:",

@@ -222,6 +222,8 @@ export const hiIn: TranslationDict = {
   "settings.tab_ventoy": "Ventoy टूल सेटिंग्स",
   "settings.language": "ऐप भाषा:",
   "settings.theme": "यूआई थीम शैली:",
+  "settings.theme_dark": "डार्क मोड",
+  "settings.theme_light": "लाइट मोड",
   "settings.default_mode": "डिफ़ॉल्ट परिनियोजन मोड:",
   "settings.default_fs": "डिफ़ॉल्ट फ़ाइल सिस्टम:",
   "settings.app_update": "ऐप अपडेट जांच:",

@@ -222,6 +222,8 @@ export const caEs: TranslationDict = {
   "settings.tab_ventoy": "Configuració d'eines Ventoy",
   "settings.language": "Idioma de l'aplicació:",
   "settings.theme": "Estil del tema de la IU:",
+  "settings.theme_dark": "Mode fosc",
+  "settings.theme_light": "Mode clar",
   "settings.default_mode": "Mode de desplegament per defecte:",
   "settings.default_fs": "Sistema de fitxers per defecte:",
   "settings.app_update": "Comprovació d'actualització de l'aplicació:",

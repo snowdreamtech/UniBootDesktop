@@ -222,6 +222,8 @@ export const taIn: TranslationDict = {
   "settings.tab_ventoy": "Ventoy கருவி அமைப்புகள்",
   "settings.language": "பயன்பாட்டு மொழி:",
   "settings.theme": "UI தீம் நடை:",
+  "settings.theme_dark": "இருண்ட பயன்முறை",
+  "settings.theme_light": "வெளிச்ச பயன்முறை",
   "settings.default_mode": "இயல்புநிலை வரிசைப்படுத்தல் முறை:",
   "settings.default_fs": "இயல்புநிலை கோப்பு முறைமை:",
   "settings.app_update": "பயன்பாட்டு புதுப்பிப்பு சரிபார்ப்பு:",

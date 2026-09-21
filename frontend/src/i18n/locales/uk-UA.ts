@@ -222,6 +222,8 @@ export const ukUa: TranslationDict = {
   "settings.tab_ventoy": "Набір інструментів Ventoy",
   "settings.language": "Мова програми:",
   "settings.theme": "Стиль теми інтерфейсу користувача:",
+  "settings.theme_dark": "Темна тема",
+  "settings.theme_light": "Світла тема",
   "settings.default_mode": "Режим розгортання за замовчуванням:",
   "settings.default_fs": "Файлова система за замовчуванням:",
   "settings.app_update": "Перевірка оновлень програми:",

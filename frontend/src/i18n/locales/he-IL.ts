@@ -222,6 +222,8 @@ export const heIl: TranslationDict = {
   "settings.tab_ventoy": "הגדרות כלי Ventoy",
   "settings.language": "שפת האפליקציה:",
   "settings.theme": "סגנון נושא של ממשק משתמש:",
+  "settings.theme_dark": "מצב כהה",
+  "settings.theme_light": "מצב בהיר",
   "settings.default_mode": "מצב פריסה ברירת מחדל:",
   "settings.default_fs": "מערכת קבצים ברירת מחדל:",
   "settings.app_update": "בדיקת עדכון אפליקציה:",

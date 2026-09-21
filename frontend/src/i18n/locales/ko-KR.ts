@@ -222,6 +222,8 @@ export const koKr: TranslationDict = {
   "settings.tab_ventoy": "Ventoy 도구 체인",
   "settings.language": "앱 언어:",
   "settings.theme": "UI 테마 스타일:",
+  "settings.theme_dark": "다크 모드",
+  "settings.theme_light": "라이트 모드",
   "settings.default_mode": "기본 배포 모드:",
   "settings.default_fs": "기본 파일 시스템:",
   "settings.app_update": "업데이트 확인:",

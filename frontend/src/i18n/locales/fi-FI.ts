@@ -222,6 +222,8 @@ export const fiFi: TranslationDict = {
   "settings.tab_ventoy": "Ventoy-työkaluasetukset",
   "settings.language": "Sovelluksen kieli:",
   "settings.theme": "Käyttöliittymän teematyyli:",
+  "settings.theme_dark": "Tumma tila",
+  "settings.theme_light": "Vaalea tila",
   "settings.default_mode": "Oletuskäyttöönottotila:",
   "settings.default_fs": "Oletustiedostojärjestelmä:",
   "settings.app_update": "Sovelluspäivitysten tarkistus:",

@@ -222,6 +222,8 @@ export const slSi: TranslationDict = {
   "settings.tab_ventoy": "Nastavitve orodij Ventoy",
   "settings.language": "Jezik aplikacije:",
   "settings.theme": "Slog teme uporabniškega vmesnika:",
+  "settings.theme_dark": "Temni način",
+  "settings.theme_light": "Svetli način",
   "settings.default_mode": "Privzeti način uvajanja:",
   "settings.default_fs": "Privzeti datotečni sistem:",
   "settings.app_update": "Preverjanje posodobitve aplikacije:",

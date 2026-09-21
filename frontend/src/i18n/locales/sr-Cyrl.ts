@@ -222,6 +222,8 @@ export const srCyrl: TranslationDict = {
   "settings.tab_ventoy": "Подешавања Ventoy алата",
   "settings.language": "Језик апликације:",
   "settings.theme": "Стил теме корисничког интерфејса:",
+  "settings.theme_dark": "Тамни режим",
+  "settings.theme_light": "Светли режим",
   "settings.default_mode": "Подразумевани режим примене:",
   "settings.default_fs": "Подразумевани систем датотека:",
   "settings.app_update": "Провера ажурирања апликације:",

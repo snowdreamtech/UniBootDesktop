@@ -222,6 +222,8 @@ export const zhTw: TranslationDict = {
   "settings.tab_ventoy": "Ventoy 工具鏈設置",
   "settings.language": "應用語言 / Language:",
   "settings.theme": "UI 主題風格:",
+  "settings.theme_dark": "深色模式",
+  "settings.theme_light": "淺色模式",
   "settings.default_mode": "預設製作模式:",
   "settings.default_fs": "預設檔案系統:",
   "settings.app_update": "軟體檢查更新:",

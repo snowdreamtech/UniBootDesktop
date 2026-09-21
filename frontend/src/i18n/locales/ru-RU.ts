@@ -222,6 +222,8 @@ export const ruRu: TranslationDict = {
   "settings.tab_ventoy": "Набор инструментов Ventoy",
   "settings.language": "Язык приложения:",
   "settings.theme": "Тема интерфейса:",
+  "settings.theme_dark": "Темная тема",
+  "settings.theme_light": "Светлая тема",
   "settings.default_mode": "Режим развертывания по умолчанию:",
   "settings.default_fs": "Файловая система по умолчанию:",
   "settings.app_update": "Проверка обновлений:",

@@ -222,6 +222,8 @@ export const trTr: TranslationDict = {
   "settings.tab_ventoy": "Ventoy araç zinciri",
   "settings.language": "Uygulama Dili:",
   "settings.theme": "Arayüz Tema Stili:",
+  "settings.theme_dark": "Koyu Mod",
+  "settings.theme_light": "Açık Mod",
   "settings.default_mode": "Varsayılan Dağıtım Modu:",
   "settings.default_fs": "Varsayılan Dosya Sistemi:",
   "settings.app_update": "Güncelleme Kontrolü:",

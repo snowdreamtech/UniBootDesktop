@@ -222,6 +222,8 @@ export const azAz: TranslationDict = {
   "settings.tab_ventoy": "Ventoy alətlərinin tənzimləmələri",
   "settings.language": "Tətbiq Dili:",
   "settings.theme": "UI Mövzu Stili:",
+  "settings.theme_dark": "Qaranlıq rejim",
+  "settings.theme_light": "İşıqlı rejim",
   "settings.default_mode": "Defolt Yerləşdirmə Rejimi:",
   "settings.default_fs": "Defolt Fayl Sistemi:",
   "settings.app_update": "Proqram Yeniləmə Yoxlanışı:",

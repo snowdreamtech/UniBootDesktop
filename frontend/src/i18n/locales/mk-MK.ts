@@ -222,6 +222,8 @@ export const mkMk: TranslationDict = {
   "settings.tab_ventoy": "Поставки за Ventoy алатки",
   "settings.language": "Јазик на апликацијата:",
   "settings.theme": "Стил на тема UI:",
+  "settings.theme_dark": "Темен режим",
+  "settings.theme_light": "Светол режим",
   "settings.default_mode": "Стандарден режим на распоредување:",
   "settings.default_fs": "Стандарден датотечен систем:",
   "settings.app_update": "Проверка на ажурирање на апликацијата:",

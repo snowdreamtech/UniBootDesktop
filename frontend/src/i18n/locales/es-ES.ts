@@ -222,6 +222,8 @@ export const esEs: TranslationDict = {
   "settings.tab_ventoy": "Cadena de herramientas Ventoy",
   "settings.language": "Idioma de la aplicación:",
   "settings.theme": "Estilo de tema UI:",
+  "settings.theme_dark": "Modo oscuro",
+  "settings.theme_light": "Modo claro",
   "settings.default_mode": "Modo de despliegue predeterminado:",
   "settings.default_fs": "Sistema de archivos predeterminado:",
   "settings.app_update": "Comprobación de actualizaciones:",

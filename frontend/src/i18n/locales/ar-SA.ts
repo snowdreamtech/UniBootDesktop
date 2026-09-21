@@ -222,6 +222,8 @@ export const arSa: TranslationDict = {
   "settings.tab_ventoy": "سلسلة أدوات Ventoy",
   "settings.language": "لغة التطبيق:",
   "settings.theme": "نمط مظهر الواجهة:",
+  "settings.theme_dark": "الوضع الداكن",
+  "settings.theme_light": "الوضع الفاتح",
   "settings.default_mode": "وضع النشر الافتراضي:",
   "settings.default_fs": "نظام الملفات الافتراضي:",
   "settings.app_update": "التحقق من التحديثات:",

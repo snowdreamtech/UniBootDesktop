@@ -222,6 +222,8 @@ export const roRo: TranslationDict = {
   "settings.tab_ventoy": "Setări instrumente Ventoy",
   "settings.language": "Limba aplicației:",
   "settings.theme": "Stilul temei UI:",
+  "settings.theme_dark": "Mod întunecat",
+  "settings.theme_light": "Mod luminos",
   "settings.default_mode": "Mod de implementare implicit:",
   "settings.default_fs": "Sistem de fișiere implicit:",
   "settings.app_update": "Verificarea actualizării aplicației:",

@@ -222,6 +222,8 @@ export const thTh: TranslationDict = {
   "settings.tab_ventoy": "ชุดเครื่องมือ Ventoy",
   "settings.language": "ภาษาของแอป:",
   "settings.theme": "สไตล์ธีม UI:",
+  "settings.theme_dark": "โหมดมืด",
+  "settings.theme_light": "โหมดสว่าง",
   "settings.default_mode": "โหมดการปรับใช้เริ่มต้น:",
   "settings.default_fs": "ระบบไฟล์เริ่มต้น:",
   "settings.app_update": "ตรวจสอบการอัปเดตแอป:",

@@ -222,6 +222,8 @@ export const urPk: TranslationDict = {
   "settings.tab_ventoy": "Ventoy ٹول کی ترتیبات",
   "settings.language": "ایپ کی زبان:",
   "settings.theme": "UI تھیم کا انداز:",
+  "settings.theme_dark": "ڈارک موڈ",
+  "settings.theme_light": "لائٹ موڈ",
   "settings.default_mode": "ڈیفالٹ تعیناتی موڈ:",
   "settings.default_fs": "ڈیفالٹ فائل سسٹم:",
   "settings.app_update": "ایپ اپ ڈیٹ چیک:",

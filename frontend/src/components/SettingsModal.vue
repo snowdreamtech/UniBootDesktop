@@ -128,10 +128,7 @@
                 <label class="form-label">{{ t('settings.theme') }}</label>
                 <CustomSelect
                   v-model="appTheme"
-                  :options="[
-                    { value: 'dark', label: '🌙 Dark' },
-                    { value: 'light', label: '☀️ Light' }
-                  ]"
+                  :options="themeSelectOptions"
                   @change="triggerAutoSave"
                 />
               </div>
@@ -414,6 +411,11 @@ const languageSelectOptions = computed(() => [
     value: item.code,
     label: item.nativeName
   }))
+]);
+
+const themeSelectOptions = computed(() => [
+  { value: 'dark', label: `🌙 ${t('settings.theme_dark')}` },
+  { value: 'light', label: `☀️ ${t('settings.theme_light')}` }
 ]);
 
 interface FirmwareMapping {

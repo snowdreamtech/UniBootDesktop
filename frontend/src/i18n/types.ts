@@ -225,6 +225,8 @@ export interface TranslationDict {
   "settings.tab_ventoy": string;
   "settings.language": string;
   "settings.theme": string;
+  "settings.theme_dark": string;
+  "settings.theme_light": string;
   "settings.default_mode": string;
   "settings.default_fs": string;
   "settings.app_update": string;

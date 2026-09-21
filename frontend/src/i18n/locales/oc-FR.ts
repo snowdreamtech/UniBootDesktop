@@ -222,6 +222,8 @@ export const ocFr: TranslationDict = {
   "settings.tab_ventoy": "Reglatges d'aisines Ventoy",
   "settings.language": "Lenga de l'aplicacion:",
   "settings.theme": "Estil de tèma de l'interfàcia utilizaire:",
+  "settings.theme_dark": "Mòde escur",
+  "settings.theme_light": "Mòde clar",
   "settings.default_mode": "Mòde de desplegament per defaut :",
   "settings.default_fs": "Sistèma de fichièrs per defaut :",
   "settings.app_update": "Verificacion de la mesa a jorn de l'aplicacion:",

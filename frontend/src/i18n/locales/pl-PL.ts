@@ -222,6 +222,8 @@ export const plPl: TranslationDict = {
   "settings.tab_ventoy": "Ustawienia narzędzi Ventoy",
   "settings.language": "Język aplikacji:",
   "settings.theme": "Styl motywu interfejsu:",
+  "settings.theme_dark": "Tryb ciemny",
+  "settings.theme_light": "Tryb jasny",
   "settings.default_mode": "Domyślny tryb wdrażania:",
   "settings.default_fs": "Domyślny système plików:",
   "settings.app_update": "Sprawdzanie aktualizacji:",

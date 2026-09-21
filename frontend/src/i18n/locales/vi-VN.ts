@@ -222,6 +222,8 @@ export const viVn: TranslationDict = {
   "settings.tab_ventoy": "Chuỗi công cụ Ventoy",
   "settings.language": "Ngôn ngữ ứng dụng:",
   "settings.theme": "Kiểu giao diện UI:",
+  "settings.theme_dark": "Giao diện tối",
+  "settings.theme_light": "Giao diện sáng",
   "settings.default_mode": "Chế độ triển khai mặc định:",
   "settings.default_fs": "Hệ thống tệp mặc định:",
   "settings.app_update": "Kiểm tra cập nhật:",

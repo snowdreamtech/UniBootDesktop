@@ -222,6 +222,8 @@ export const huHu: TranslationDict = {
   "settings.tab_ventoy": "Ventoy eszközkészlet beállításai",
   "settings.language": "Alkalmazás nyelve:",
   "settings.theme": "UI téma stílusa:",
+  "settings.theme_dark": "Sötét mód",
+  "settings.theme_light": "Világos mód",
   "settings.default_mode": "Alapértelmezett telepítési mód:",
   "settings.default_fs": "Alapértelmezett fájlrendszer:",
   "settings.app_update": "Alkalmazásfrissítés ellenőrzése:",

@@ -222,6 +222,8 @@ export const csCz: TranslationDict = {
   "settings.tab_ventoy": "Nastavení nástrojů Ventoy",
   "settings.language": "Jazyk aplikace:",
   "settings.theme": "Styl motivu uživatelského rozhraní:",
+  "settings.theme_dark": "Tmavý režim",
+  "settings.theme_light": "Světlý režim",
   "settings.default_mode": "Výchozí režim nasazení:",
   "settings.default_fs": "Výchozí systém souborů:",
   "settings.app_update": "Kontrola aktualizace aplikace:",

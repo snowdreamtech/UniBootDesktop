@@ -222,6 +222,8 @@ export const ltLt: TranslationDict = {
   "settings.tab_ventoy": "Ventoy įrankių nustatymai",
   "settings.language": "Programos kalba:",
   "settings.theme": "UI temos stilius:",
+  "settings.theme_dark": "Tamsus režimas",
+  "settings.theme_light": "Šviesus režimas",
   "settings.default_mode": "Numatytasis diegimo režimas:",
   "settings.default_fs": "Numatytoji failų sistema:",
   "settings.app_update": "Programos atnaujinimo patikra:",

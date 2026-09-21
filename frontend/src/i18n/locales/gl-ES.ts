@@ -222,6 +222,8 @@ export const glEs: TranslationDict = {
   "settings.tab_ventoy": "Configuración de ferramentas Ventoy",
   "settings.language": "Idioma da aplicación:",
   "settings.theme": "Estilo do tema da IU:",
+  "settings.theme_dark": "Modo escuro",
+  "settings.theme_light": "Modo claro",
   "settings.default_mode": "Modo de implantación predeterminado:",
   "settings.default_fs": "Sistema de ficheiros predeterminado:",
   "settings.app_update": "Verificación da actualización da aplicación:",

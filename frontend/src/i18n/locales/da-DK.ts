@@ -222,6 +222,8 @@ export const daDk: TranslationDict = {
   "settings.tab_ventoy": "Ventoy værktøjsindstillinger",
   "settings.language": "App sprog:",
   "settings.theme": "UI-temastil:",
+  "settings.theme_dark": "Mørk tilstand",
+  "settings.theme_light": "Lys tilstand",
   "settings.default_mode": "Standard implementeringstilstand:",
   "settings.default_fs": "Standard filsystem:",
   "settings.app_update": "Tjek appopdatering:",

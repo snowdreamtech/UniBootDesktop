@@ -222,6 +222,8 @@ export const svSe: TranslationDict = {
   "settings.tab_ventoy": "Inställningar för Ventoy-verktyg",
   "settings.language": "Appens språk:",
   "settings.theme": "UI-temastil:",
+  "settings.theme_dark": "Mörkt läge",
+  "settings.theme_light": "Ljust läge",
   "settings.default_mode": "Standard distributionsläge:",
   "settings.default_fs": "Standard filsystem:",
   "settings.app_update": "Appuppdateringskontroll:",

@@ -222,6 +222,8 @@ export const beBy: TranslationDict = {
   "settings.tab_ventoy": "Налады інструментаў Ventoy",
   "settings.language": "Мова праграмы:",
   "settings.theme": "Стыль тэмы інтэрфейсу:",
+  "settings.theme_dark": "Цёмная тэма",
+  "settings.theme_light": "Светлая тэма",
   "settings.default_mode": "Рэжым разгортвання па змаўчанні:",
   "settings.default_fs": "Файлавая сістэма па змаўчанні:",
   "settings.app_update": "Праверка абнаўленняў праграмы:",

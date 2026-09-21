@@ -222,6 +222,8 @@ export const faIr: TranslationDict = {
   "settings.tab_ventoy": "تنظیمات ابزارهای Ventoy",
   "settings.language": "زبان برنامه:",
   "settings.theme": "سبک تم رابط کاربری:",
+  "settings.theme_dark": "حالت تاریک",
+  "settings.theme_light": "حالت روشن",
   "settings.default_mode": "حالت استقرار پیش فرض:",
   "settings.default_fs": "سیستم فایل پیش فرض:",
   "settings.app_update": "بررسی به‌روزرسانی برنامه:",

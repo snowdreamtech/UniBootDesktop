@@ -222,6 +222,8 @@ export const enUs: TranslationDict = {
   "settings.tab_ventoy": "Ventoy Toolchain",
   "settings.language": "App Language:",
   "settings.theme": "UI Theme Style:",
+  "settings.theme_dark": "Dark Mode",
+  "settings.theme_light": "Light Mode",
   "settings.default_mode": "Default Deployment Mode:",
   "settings.default_fs": "Default File System:",
   "settings.app_update": "App Update Check:",

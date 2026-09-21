@@ -222,6 +222,8 @@ export const jaJp: TranslationDict = {
   "settings.tab_ventoy": "Ventoy ツールチェーン",
   "settings.language": "アプリの言語:",
   "settings.theme": "UI テーマスタイル:",
+  "settings.theme_dark": "ダークモード",
+  "settings.theme_light": "ライトモード",
   "settings.default_mode": "デフォルト作成モード:",
   "settings.default_fs": "デフォルトファイルシステム:",
   "settings.app_update": "アップデートの確認:",

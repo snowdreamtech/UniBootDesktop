@@ -222,6 +222,8 @@ export const etEe: TranslationDict = {
   "settings.tab_ventoy": "Ventoy tööriistade seaded",
   "settings.language": "Rakenduse keel:",
   "settings.theme": "UI teema stiil:",
+  "settings.theme_dark": "Tume režiim",
+  "settings.theme_light": "Hele režiim",
   "settings.default_mode": "Vaikimisi juurutamise režiim:",
   "settings.default_fs": "Vaikefailisüsteem:",
   "settings.app_update": "Rakenduse värskenduse kontroll:",

@@ -222,6 +222,8 @@ export const esLa: TranslationDict = {
   "settings.tab_ventoy": "Cadena de herramientas Ventoy",
   "settings.language": "Idioma de la aplicación:",
   "settings.theme": "Estilo del tema de la interfaz de usuario:",
+  "settings.theme_dark": "Modo oscuro",
+  "settings.theme_light": "Modo claro",
   "settings.default_mode": "Modo de implementación predeterminado:",
   "settings.default_fs": "Sistema de archivos predeterminado:",
   "settings.app_update": "Verificación de actualización de la aplicación:",

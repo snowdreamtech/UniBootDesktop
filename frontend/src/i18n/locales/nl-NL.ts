@@ -222,6 +222,8 @@ export const nlNl: TranslationDict = {
   "settings.tab_ventoy": "Ventoy Toolchain Instellingen",
   "settings.language": "App-taal:",
   "settings.theme": "UI-themastijl:",
+  "settings.theme_dark": "Donkere modus",
+  "settings.theme_light": "Lichte modus",
   "settings.default_mode": "Standaard implementatiemodus:",
   "settings.default_fs": "Standaard bestandssysteem:",
   "settings.app_update": "App-updatecontrole:",

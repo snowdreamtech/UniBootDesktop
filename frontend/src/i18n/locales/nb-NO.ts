@@ -222,6 +222,8 @@ export const nbNo: TranslationDict = {
   "settings.tab_ventoy": "Instillinger for Ventoy-verktøy",
   "settings.language": "App-språk:",
   "settings.theme": "UI-temastil:",
+  "settings.theme_dark": "Mørk modus",
+  "settings.theme_light": "Lys modus",
   "settings.default_mode": "Standard distribusjonsmodus:",
   "settings.default_fs": "Standard filsystem:",
   "settings.app_update": "Sjekk appoppdatering:",

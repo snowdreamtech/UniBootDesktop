@@ -222,6 +222,8 @@ export const elGr: TranslationDict = {
   "settings.tab_ventoy": "Ρυθμίσεις εργαλείων Ventoy",
   "settings.language": "Γλώσσα εφαρμογής:",
   "settings.theme": "Στυλ θέματος διεπαφής χρήστη:",
+  "settings.theme_dark": "Σκούρα λειτουργία",
+  "settings.theme_light": "Φωτεινή λειτουργία",
   "settings.default_mode": "Προεπιλεγμένη λειτουργία ανάπτυξης:",
   "settings.default_fs": "Προεπιλεγμένο σύστημα αρχείων:",
   "settings.app_update": "Έλεγχος ενημέρωσης εφαρμογής:",

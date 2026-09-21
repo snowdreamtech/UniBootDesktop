@@ -222,6 +222,8 @@ export const srLatn: TranslationDict = {
   "settings.tab_ventoy": "Podešavanja Ventoy alata",
   "settings.language": "Језик апликације:",
   "settings.theme": "Стил теме корисничког интерфејса:",
+  "settings.theme_dark": "Tamni režim",
+  "settings.theme_light": "Svetli režim",
   "settings.default_mode": "Подразумевани режим примене:",
   "settings.default_fs": "Подразумевани систем датотека:",
   "settings.app_update": "Провера ажурирања апликације:",

@@ -222,6 +222,8 @@ export const mlIn: TranslationDict = {
   "settings.tab_ventoy": "Ventoy ടൂൾ ക്രമീകരണങ്ങൾ",
   "settings.language": "ആപ്പ് ഭാഷ:",
   "settings.theme": "UI തീം ശൈലി:",
+  "settings.theme_dark": "ഡാർക്ക് മോഡ്",
+  "settings.theme_light": "ലൈറ്റ് മോഡ്",
   "settings.default_mode": "ഡിഫോൾട്ട് വിന്യാസ മോഡ്:",
   "settings.default_fs": "ഡിഫോൾട്ട് ഫയൽ സിസ്റ്റം:",
   "settings.app_update": "ആപ്പ് അപ്ഡേറ്റ് ചെക്ക്:",

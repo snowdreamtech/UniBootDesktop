@@ -222,6 +222,8 @@ export const hyAm: TranslationDict = {
   "settings.tab_ventoy": "Ventoy գործիքների կարգավորումներ",
   "settings.language": "Հավելվածի լեզուն՝",
   "settings.theme": "UI թեմայի ոճը.",
+  "settings.theme_dark": "Մութ ռեժիմ",
+  "settings.theme_light": "Լուսավոր ռեժիմ",
   "settings.default_mode": "Կանխադրված տեղակայման ռեժիմ.",
   "settings.default_fs": "Կանխադրված ֆայլային համակարգ.",
   "settings.app_update": "Հավելվածի թարմացման ստուգում.",

@@ -222,6 +222,8 @@ export const ptPt: TranslationDict = {
   "settings.tab_ventoy": "Cadeia de ferramentas Ventoy",
   "settings.language": "Idioma do aplicativo:",
   "settings.theme": "Estilo do tema da interface do usuário:",
+  "settings.theme_dark": "Modo escuro",
+  "settings.theme_light": "Modo claro",
   "settings.default_mode": "Modo de implantação padrão:",
   "settings.default_fs": "Sistema de arquivos padrão:",
   "settings.app_update": "Verificação de atualização do aplicativo:",

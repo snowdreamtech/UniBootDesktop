@@ -222,6 +222,8 @@ export const bnBd: TranslationDict = {
   "settings.tab_ventoy": "Ventoy টুল সেটআপ",
   "settings.language": "অ্যাপের ভাষা:",
   "settings.theme": "UI থিম শৈলী:",
+  "settings.theme_dark": "ডার্ক মোড",
+  "settings.theme_light": "লাইট মোড",
   "settings.default_mode": "ডিফল্ট স্থাপনা মোড:",
   "settings.default_fs": "ডিফল্ট ফাইল সিস্টেম:",
   "settings.app_update": "অ্যাপ আপডেট চেক:",

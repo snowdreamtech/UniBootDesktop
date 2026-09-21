@@ -222,6 +222,8 @@ export const frFr: TranslationDict = {
   "settings.tab_ventoy": "Chaîne d'outils Ventoy",
   "settings.language": "Langue de l'application :",
   "settings.theme": "Style de thème UI :",
+  "settings.theme_dark": "Mode sombre",
+  "settings.theme_light": "Mode clair",
   "settings.default_mode": "Mode de déploiement par défaut :",
   "settings.default_fs": "Système de fichiers par défaut :",
   "settings.app_update": "Vérification des mises à jour :",

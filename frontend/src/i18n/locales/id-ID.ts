@@ -222,6 +222,8 @@ export const idId: TranslationDict = {
   "settings.tab_ventoy": "Pengaturan Alat Ventoy",
   "settings.language": "Bahasa Aplikasi:",
   "settings.theme": "Gaya Tema UI:",
+  "settings.theme_dark": "Mode Gelap",
+  "settings.theme_light": "Mode Terang",
   "settings.default_mode": "Mode Penerapan Default:",
   "settings.default_fs": "Sistem File Bawaan:",
   "settings.app_update": "Pemeriksaan Pembaruan Aplikasi:",
