@@ -143,19 +143,20 @@ const handleConfirm = async () => {
   width: 100%;
   max-width: 580px;
   max-height: 90vh;
-  background: var(--color-bg-card, #1a2233);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--modal-bg, #131c2e);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.12));
   border-radius: 1rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .modal-header {
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--section-bg, rgba(255, 255, 255, 0.03));
+  border-bottom: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -188,19 +189,19 @@ const handleConfirm = async () => {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--color-text-primary, #ffffff);
+  color: var(--text-main, #ffffff);
 }
 
 .subtitle {
   margin: 0.25rem 0 0 0;
   font-size: 0.85rem;
-  color: var(--color-text-muted, #94a3b8);
+  color: var(--text-muted, #94a3b8);
 }
 
 .close-btn {
   background: transparent;
   border: none;
-  color: var(--color-text-muted, #94a3b8);
+  color: var(--text-muted, #94a3b8);
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 6px;
@@ -209,7 +210,7 @@ const handleConfirm = async () => {
 
 .close-btn:hover {
   background: rgba(255, 255, 255, 0.08);
-  color: var(--color-text-primary, #ffffff);
+  color: var(--text-main, #ffffff);
 }
 
 .trust-pillars {
@@ -229,6 +230,7 @@ const handleConfirm = async () => {
   border-radius: 0.75rem;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .pillar-icon-box {
@@ -263,55 +265,58 @@ const handleConfirm = async () => {
   margin: 0;
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--color-text-primary, #ffffff);
+  color: var(--text-main, #ffffff);
 }
 
 .pillar-content p {
   margin: 0.25rem 0 0 0;
   font-size: 0.82rem;
   line-height: 1.4;
-  color: var(--color-text-muted, #94a3b8);
+  color: var(--text-muted, #94a3b8);
 }
 
 .modal-footer {
   padding: 1.25rem 1.5rem;
-  background: rgba(255, 255, 255, 0.02);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--section-bg, rgba(255, 255, 255, 0.02));
+  border-top: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
 }
 
 .btn {
-  padding: 0.6rem 1.2rem;
+  padding: 0.6rem 1.25rem;
   border-radius: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
-  border: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--color-text-muted, #94a3b8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--btn-sec-bg, rgba(255, 255, 255, 0.06));
+  color: var(--btn-sec-text, #94a3b8);
+  border: 1px solid var(--btn-sec-border, rgba(255, 255, 255, 0.1));
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--color-text-primary, #ffffff);
+  background: var(--btn-sec-hover-bg, rgba(255, 255, 255, 0.1));
+  color: var(--btn-sec-hover-text, #ffffff);
+  border-color: var(--btn-sec-hover-border, rgba(255, 255, 255, 0.2));
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, #0396e6 0%, #0284c7 45%, #2563eb 100%);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #059669, #047857);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 45%, #1d4ed8 100%);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
+  transform: translateY(-1px);
 }
 
 .btn:disabled {
@@ -336,5 +341,92 @@ const handleConfirm = async () => {
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.98); }
   to { opacity: 1; transform: scale(1); }
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] .privilege-modal-overlay {
+  background: rgba(15, 23, 42, 0.45);
+}
+
+[data-theme="light"] .privilege-modal-card {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.18);
+}
+
+[data-theme="light"] .modal-header {
+  background: #f8fafc;
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="light"] .shield-badge {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #15803d;
+}
+
+[data-theme="light"] .title {
+  color: #0f172a;
+}
+
+[data-theme="light"] .subtitle {
+  color: #475569;
+}
+
+[data-theme="light"] .close-btn {
+  color: #64748b;
+}
+
+[data-theme="light"] .close-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+[data-theme="light"] .pillar-card {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .pillar-icon-box.blue {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #bae6fd;
+}
+
+[data-theme="light"] .pillar-icon-box.green {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+[data-theme="light"] .pillar-icon-box.amber {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+[data-theme="light"] .pillar-content h4 {
+  color: #0f172a;
+}
+
+[data-theme="light"] .pillar-content p {
+  color: #475569;
+}
+
+[data-theme="light"] .modal-footer {
+  background: #f8fafc;
+  border-top-color: #e2e8f0;
+}
+
+[data-theme="light"] .btn-secondary {
+  background: #f1f5f9;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .btn-secondary:hover:not(:disabled) {
+  background: #e2e8f0;
+  color: #0f172a;
+  border-color: #94a3b8;
 }
 </style>
