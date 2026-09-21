@@ -111,6 +111,20 @@ func TestEnv_DefaultAppDirs(t *testing.T) {
 	assert.Equal(t, filepath.Join(homeDir, ".local", "share", "unibootdesktop", "ventoy"), GetVentoyDir())
 }
 
+func TestEnv_EnsureAppDirsCreatesDefaultFolders(t *testing.T) {
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", "")
+	t.Setenv("UNIGODESKTOP_DATA_DIR", "")
+	t.Setenv("DATA_DIR", "")
+	t.Setenv("XDG_DATA_HOME", "")
+
+	tempRoot := t.TempDir()
+	t.Setenv("HOME", tempRoot)
+	assert.NoError(t, EnsureAppDirs())
+	assert.DirExists(t, GetDataDir())
+	assert.DirExists(t, GetFirmwareDir())
+	assert.DirExists(t, GetVentoyDir())
+}
+
 func TestEnv_GetLockFilePath(t *testing.T) {
 	tmpDir := t.TempDir()
 	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)

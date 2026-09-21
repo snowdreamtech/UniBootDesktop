@@ -122,6 +122,16 @@ func GetVentoyDir() string {
 	return filepath.Join(GetDataDir(), "ventoy")
 }
 
+// EnsureAppDirs creates the default application data folders used by firmware and Ventoy.
+func EnsureAppDirs() error {
+	for _, dir := range []string{GetDataDir(), GetFirmwareDir(), GetVentoyDir()} {
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // GetPluginsDir returns the directory where plugins (e.g., asdf plugins) are stored.
 func GetPluginsDir() string {
 	return filepath.Join(GetDataDir(), "plugins")

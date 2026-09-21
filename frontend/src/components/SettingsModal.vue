@@ -329,10 +329,6 @@
                   <span class="btn-icon">📁</span>
                   <span>{{ t("settings.browse_btn") }}</span>
                 </button>
-                <button class="btn-secondary test-btn" :disabled="isValidatingVentoy" @click="checkVentoyCli">
-                  <span class="btn-icon">⚡</span>
-                  <span>{{ isValidatingVentoy ? "..." : t("settings.testVentoyCli") }}</span>
-                </button>
               </div>
               <div
                 v-if="ventoyValidation"
@@ -340,10 +336,15 @@
                 :class="ventoyValidation.valid ? 'success-card' : 'error-card'"
               >
                 <div class="status-header">
-                  <span class="status-title">{{ ventoyValidation.valid ? "Ventoy CLI OK" : "Ventoy CLI Error" }}</span>
-                  <span v-if="ventoyValidation.valid && ventoyValidation.version" class="version-badge-green">{{
-                    ventoyValidation.version
-                  }}</span>
+                  <span class="status-indicator" :class="ventoyValidation.valid ? 'success' : 'error'">
+                    {{ ventoyValidation.valid ? "✓" : "!" }}
+                  </span>
+                  <span class="status-title">
+                    {{ ventoyValidation.valid ? "Ventoy CLI Ready" : "Ventoy CLI Error" }}
+                  </span>
+                  <span v-if="ventoyValidation.valid && ventoyValidation.version" class="version-badge-green">
+                    {{ ventoyValidation.version }}
+                  </span>
                 </div>
                 <div class="status-message">{{ ventoyValidation.message }}</div>
                 <div v-if="ventoyValidation.executablePath" class="exec-path">
@@ -500,6 +501,8 @@ const emit = defineEmits<{
 
 const activeTab = ref<"general" | "network" | "uniboot" | "ventoy">("general");
 
+const getWailsApp = () => (window as any)?.go?.main?.App;
+
 watch(
   () => props.isOpen,
   (newVal) => {
@@ -509,6 +512,19 @@ watch(
       }
       // Always sync appTheme with the active DOM theme immediately upon opening
       appTheme.value = getActiveTheme();
+
+      const app = getWailsApp();
+      if (!app) {
+        setTimeout(() => {
+          if (props.isOpen && getWailsApp()) {
+            loadFullConfig();
+            fetchFirmwareList();
+            checkUniBootRelease();
+          }
+        }, 250);
+        return;
+      }
+
       loadFullConfig();
       fetchFirmwareList();
       checkUniBootRelease();
@@ -750,12 +766,16 @@ watch(ventoyPath, (newVal) => {
 });
 
 async function checkVentoyCli() {
+  const app = getWailsApp();
+  if (!app || typeof app.ValidateVentoyCli !== "function") {
+    ventoyValidation.value = null;
+    return;
+  }
+
   isValidatingVentoy.value = true;
   try {
-    if (window.go && window.go.main && window.go.main.App && window.go.main.App.ValidateVentoyCli) {
-      const res = await window.go.main.App.ValidateVentoyCli(ventoyPath.value.trim());
-      ventoyValidation.value = res;
-    }
+    const res = await app.ValidateVentoyCli(ventoyPath.value.trim());
+    ventoyValidation.value = res;
   } catch (e: any) {
     ventoyValidation.value = {
       valid: false,
@@ -769,45 +789,56 @@ async function checkVentoyCli() {
 }
 
 async function loadFullConfig() {
-  isInitializing = true;
-  if (window.go && window.go.main && window.go.main.App) {
-    try {
-      const cfg = await window.go.main.App.GetConfig();
-      if (cfg) {
-        defaultMode.value = cfg.mode || "cloud";
-        defaultFs.value = cfg.fileSystem || "exFAT";
-        autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
-        autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
-        if (cfg.theme === "light" || cfg.theme === "dark") {
-          appTheme.value = cfg.theme;
-          applyTheme(cfg.theme);
-        } else {
-          appTheme.value = getActiveTheme();
-        }
-        appLanguage.value = cfg.language || "auto";
-        setLanguage(appLanguage.value);
-        proxyInputUrl.value = cfg.githubProxy || "";
-        proxyProtocol.value = cfg.proxyProtocol || "direct";
-        proxyHost.value = cfg.proxyHost || "";
-        proxyPort.value = cfg.proxyPort > 0 ? cfg.proxyPort : 1080;
-        proxyUser.value = cfg.proxyUser || "";
-        proxyPassword.value = cfg.proxyPassword || "";
-        ventoyPath.value = cfg.ventoyPath || "";
-        ventoySecureBoot.value = cfg.ventoySecureBoot !== false;
-        ventoyPartitionStyle.value = cfg.ventoyPartitionStyle || "MBR";
-        ventoyReserveSpace.value = cfg.ventoyReserveSpace || 0;
-        ventoyWin11Bypass.value = cfg.ventoyWin11Bypass === true;
-        ventoyMenuTimeout.value = cfg.menuTimeout || cfg.ventoyMenuTimeout || 0;
-        unibootPath.value = cfg.unibootPath || "";
-        checkVentoyCli();
-      }
-    } catch (e) {
-      console.error("Failed to load full config:", e);
-    }
+  const app = getWailsApp();
+  if (!app) {
+    ventoyValidation.value = null;
+    return;
   }
-  setTimeout(() => {
-    isInitializing = false;
-  }, 100);
+
+  isInitializing = true;
+  try {
+    const cfg = await app.GetConfig();
+    if (cfg) {
+      defaultMode.value = cfg.mode || "cloud";
+      defaultFs.value = cfg.fileSystem || "exFAT";
+      autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
+      autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
+      if (cfg.theme === "light" || cfg.theme === "dark") {
+        appTheme.value = cfg.theme;
+        applyTheme(cfg.theme);
+      } else {
+        appTheme.value = getActiveTheme();
+      }
+      appLanguage.value = cfg.language || "auto";
+      setLanguage(appLanguage.value);
+      proxyInputUrl.value = cfg.githubProxy || "";
+      proxyProtocol.value = cfg.proxyProtocol || "direct";
+      proxyHost.value = cfg.proxyHost || "";
+      proxyPort.value = cfg.proxyPort > 0 ? cfg.proxyPort : 1080;
+      proxyUser.value = cfg.proxyUser || "";
+      proxyPassword.value = cfg.proxyPassword || "";
+      ventoyPath.value = cfg.ventoyPath || "";
+      ventoySecureBoot.value = cfg.ventoySecureBoot !== false;
+      ventoyPartitionStyle.value = cfg.ventoyPartitionStyle || "MBR";
+      ventoyReserveSpace.value = cfg.ventoyReserveSpace || 0;
+      ventoyWin11Bypass.value = cfg.ventoyWin11Bypass === true;
+      ventoyMenuTimeout.value = cfg.menuTimeout || cfg.ventoyMenuTimeout || 0;
+      unibootPath.value = cfg.unibootPath || "";
+
+      if (ventoyPath.value.trim()) {
+        checkVentoyCli();
+      } else {
+        ventoyValidation.value = null;
+      }
+    }
+  } catch (e) {
+    console.error("Failed to load full config:", e);
+    ventoyValidation.value = null;
+  } finally {
+    setTimeout(() => {
+      isInitializing = false;
+    }, 100);
+  }
 }
 
 watch(
@@ -1521,6 +1552,32 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.status-indicator {
+  width: 1.4rem;
+  height: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.status-indicator.success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.65);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+}
+
+.status-indicator.error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.65);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
 }
 
 .status-title {
@@ -1537,7 +1594,7 @@ onMounted(() => {
   border-radius: 20px;
   font-size: 0.775rem;
   font-weight: 800;
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
 }
 
 .status-message {

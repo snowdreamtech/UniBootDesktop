@@ -87,6 +87,9 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	logger.SetWailsContext(ctx)
 	logger.Info(fmt.Sprintf("UniGoDesktop Wails GUI runtime started successfully (%s/%s)", runtime.GOOS, runtime.GOARCH))
+	if err := env.EnsureAppDirs(); err != nil {
+		logger.Warn("Failed to ensure default app directories exist", "error", err)
+	}
 	if cfg, err := config.Load(); err == nil && cfg != nil && cfg.UniBootPath != "" {
 		firmware.SetCustomUniBootDir(cfg.UniBootPath)
 	}
@@ -224,14 +227,13 @@ func (a *App) SelectDirectory(title string) (string, error) {
 		title = "Select Folder"
 	}
 	defaultDir := ""
-	switch title {
-	case "Select Ventoy installation folder":
+	titleLower := strings.ToLower(title)
+	switch {
+	case strings.Contains(titleLower, "ventoy"):
 		defaultDir = env.GetVentoyDir()
-	case "Select UniBoot firmware directory":
+	case strings.Contains(titleLower, "uniboot") || strings.Contains(titleLower, "firmware"):
 		defaultDir = env.GetFirmwareDir()
-	case "Select UniBoot directory":
-		defaultDir = env.GetFirmwareDir()
-	case "Select Folder":
+	case strings.Contains(titleLower, "folder") || titleLower == "select folder":
 		defaultDir = env.GetDataDir()
 	}
 	logger.Info("Opening native directory picker dialog", "title", title, "defaultDir", defaultDir)
