@@ -387,12 +387,10 @@ func ResolveMountPointWithLabel(targetDisk string, label string) (string, error)
 
 	// macOS target isolation
 	if runtime.GOOS == "darwin" {
-		diskNode := filepath.Base(targetDisk)
-		if !strings.Contains(diskNode, "s") {
-			diskNode = diskNode + "s1"
-		}
+		diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
+		p1Node := diskNode + "s1"
 
-		infoCmd := execCommand("diskutil", "info", "-plist", diskNode)
+		infoCmd := execCommand("diskutil", "info", "-plist", p1Node)
 		infoOut, infoErr := infoCmd.Output()
 		if infoErr == nil {
 			mount := extractPlistStringValue(string(infoOut), "MountPoint")
@@ -403,9 +401,16 @@ func ResolveMountPointWithLabel(targetDisk string, label string) (string, error)
 			}
 		}
 
-		macPath := filepath.Join("/Volumes", label)
-		if info, err := os.Stat(macPath); err == nil && info.IsDir() {
-			return macPath, nil
+		// If partition 1 is not yet mounted, attempt to mount it and check again
+		_ = execCommand("diskutil", "mount", p1Node).Run()
+		infoCmd2 := execCommand("diskutil", "info", "-plist", p1Node)
+		if infoOut2, err2 := infoCmd2.Output(); err2 == nil {
+			mount := extractPlistStringValue(string(infoOut2), "MountPoint")
+			if mount != "" {
+				if info, err := os.Stat(mount); err == nil && info.IsDir() {
+					return mount, nil
+				}
+			}
 		}
 	}
 
@@ -505,10 +510,7 @@ func GetVolumeLabel(targetDisk string, mountPoint string) string {
 
 		if targetDisk != "" {
 			diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
-			p1Node := diskNode
-			if !strings.Contains(diskNode, "s") {
-				p1Node = diskNode + "s1"
-			}
+			p1Node := diskNode + "s1"
 			cmd := execCommand("diskutil", "info", "-plist", p1Node)
 			if out, err := cmd.Output(); err == nil {
 				val := extractPlistStringValue(string(out), "VolumeName")
@@ -556,7 +558,7 @@ func GetVolumeLabel(targetDisk string, mountPoint string) string {
 			}
 		}
 		cmd2 := execCommand("blkid", "-s", "LABEL", "-o", "value", part1)
-		if out, err := cmd2.Output(); err == nil {
+		if out, err2 := cmd2.Output(); err2 == nil {
 			lbl := strings.TrimSpace(string(out))
 			if lbl != "" {
 				return lbl
@@ -591,20 +593,22 @@ func UpdateVolumeLabel(targetDisk string, mountPoint string, newLabel string) st
 	logger.Info("Updating volume label...", "target", targetDisk, "mountPoint", mountPoint, "currentLabel", currentLabel, "newLabel", newLabel)
 
 	if runtime.GOOS == "darwin" {
+		diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
+		p1Node := diskNode + "s1"
 		target := mountPoint
 		if target == "" {
-			diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
-			if !strings.Contains(diskNode, "s") {
-				target = diskNode + "s1"
-			} else {
-				target = diskNode
-			}
+			target = p1Node
 		}
 		cmd := execCommand("diskutil", "rename", target, newLabel)
 		if err := cmd.Run(); err == nil {
-			newMount := filepath.Join("/Volumes", newLabel)
-			if info, statErr := os.Stat(newMount); statErr == nil && info.IsDir() {
-				return newMount
+			// Query the renamed partition's actual new mount point directly to avoid collision with other UNIBOOT drives
+			infoCmd := execCommand("diskutil", "info", "-plist", p1Node)
+			if out, errInfo := infoCmd.Output(); errInfo == nil {
+				if realMount := extractPlistStringValue(string(out), "MountPoint"); realMount != "" {
+					if info, statErr := os.Stat(realMount); statErr == nil && info.IsDir() {
+						return realMount
+					}
+				}
 			}
 		}
 		return mountPoint
