@@ -115,25 +115,40 @@
       />
     </transition-group>
 
-    <!-- Premium Native Empty & Scanning Canvas -->
+    <!-- Premium Native Empty & Calm Canvas -->
     <div v-else class="empty-state-canvas">
-      <div v-if="isScanningDisks" class="scanner-container">
-        <div class="radar-scan-box">
-          <div class="radar-wave wave-1"></div>
-          <div class="radar-wave wave-2"></div>
-          <div class="radar-core">
-            <svg class="radar-usb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <!-- 1. Post-Deploy Ejected Reassurance State (No Panic, Clear Confirmation) -->
+      <div v-if="isPostDeployEjected" class="empty-notice-box success-ejected-box">
+        <div class="ejected-icon-wrapper">
+          <svg class="ejected-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+        </div>
+        <div class="canvas-text">
+          <h3 class="canvas-title text-success">{{ t('deploy.stage_done') }}</h3>
+          <p class="canvas-desc">{{ t('deploy.success_banner_desc') }}</p>
+        </div>
+      </div>
+
+      <!-- 2. Gentle Initial Scanning State (Calm Hardware Sense, No Sonar Alarm) -->
+      <div v-else-if="isScanningDisks" class="scanner-container">
+        <div class="calm-scan-box">
+          <div class="usb-core-circle">
+            <svg class="calm-usb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M10 2v7M14 2v7M8 9h8v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V9z" />
               <path d="M10 5h4" />
             </svg>
           </div>
+          <div class="calm-spinner-ring"></div>
         </div>
         <div class="canvas-text">
-          <h3 class="canvas-title pulse-text">{{ t('disk.scanning') }}</h3>
+          <h3 class="canvas-title calm-title">{{ t('disk.scanning') }}</h3>
           <p class="canvas-desc">{{ t('disk.select_desc') }}</p>
         </div>
       </div>
 
+      <!-- 3. Idle Empty Notice (No disks attached) -->
       <div v-else class="empty-notice-box">
         <div class="empty-icon-wrapper">
           <svg class="empty-usb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -180,6 +195,7 @@ const props = defineProps<{
   selectedDevices: Set<string>;
   isScanningDisks: boolean;
   customIcons: Record<string, DiskIconType>;
+  isPostDeployEjected?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -504,61 +520,80 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   max-width: 320px;
 }
 
-/* Radar pulse animation */
-.radar-scan-box {
+/* Post-Deploy Success Ejected State */
+.success-ejected-box {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.ejected-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #10b981;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+}
+
+.ejected-check-icon {
+  width: 26px;
+  height: 26px;
+}
+
+.text-success {
+  color: #10b981 !important;
+}
+
+/* Calm Hardware Scanning (Gentle quiet ring, no sonar alarm) */
+.calm-scan-box {
   position: relative;
-  width: 72px;
-  height: 72px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.radar-wave {
+.usb-core-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+}
+
+.calm-usb-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.calm-spinner-ring {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 1.5px solid var(--accent-cyan);
-  opacity: 0;
-  animation: radar-expand 2.2s cubic-bezier(0.1, 0.2, 0.4, 1) infinite;
+  border: 2px solid transparent;
+  border-top-color: var(--accent-cyan);
+  border-right-color: rgba(14, 165, 233, 0.25);
+  animation: calm-spin 1.2s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
 }
 
-.radar-wave.wave-2 {
-  animation-delay: 1.1s;
-}
-
-@keyframes radar-expand {
+@keyframes calm-spin {
   0% {
-    transform: scale(0.6);
-    opacity: 0.8;
+    transform: rotate(0deg);
   }
   100% {
-    transform: scale(1.8);
-    opacity: 0;
+    transform: rotate(360deg);
   }
-}
-
-.radar-core {
-  position: relative;
-  z-index: 2;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(14, 165, 233, 0.12);
-  border: 1px solid rgba(14, 165, 233, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent-cyan);
-  box-shadow: 0 0 16px rgba(14, 165, 233, 0.2);
-}
-
-.radar-usb-icon {
-  width: 22px;
-  height: 22px;
 }
 
 .empty-icon-wrapper {
@@ -591,14 +626,8 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   margin: 0;
 }
 
-.canvas-title.pulse-text {
-  color: var(--accent-cyan);
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
+.canvas-title.calm-title {
+  color: var(--text-main);
 }
 
 .canvas-desc {
