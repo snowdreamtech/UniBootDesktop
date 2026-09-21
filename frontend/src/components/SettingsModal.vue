@@ -1613,10 +1613,14 @@ onMounted(() => {
 }
 
 .exec-path code {
-  color: var(--accent-cyan);
-  background: rgba(0, 0, 0, 0.2);
-  padding: 0.1rem 0.4rem;
+  display: inline-block;
+  max-width: 100%;
+  color: var(--text-main);
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
+  padding: 0.2rem 0.45rem;
   border-radius: 4px;
+  overflow-wrap: anywhere;
 }
 
 .settings-sub-card {
