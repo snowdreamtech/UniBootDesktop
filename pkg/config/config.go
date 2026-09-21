@@ -66,7 +66,15 @@ func Load() (*AppConfig, error) {
 	if data, err := os.ReadFile(cfgPath); err == nil {
 		cfg := GetDefaultConfig()
 		if err := toml.Unmarshal(data, cfg); err != nil {
-			return nil, fmt.Errorf("parse config error: %w", err)
+			backupPath := cfgPath + ".corrupt"
+			if renameErr := os.Rename(cfgPath, backupPath); renameErr != nil {
+				return nil, fmt.Errorf("parse config error: %w (backup failed: %v)", err, renameErr)
+			}
+			cfg = GetDefaultConfig()
+			if saveErr := cfg.Save(); saveErr != nil {
+				return nil, fmt.Errorf("parse config error: %w (default restore failed: %v)", err, saveErr)
+			}
+			return cfg, nil
 		}
 		needsMigration := false
 		if cfg.VentoyPath == "" {
@@ -97,8 +105,25 @@ func (c *AppConfig) Save() error {
 	if err != nil {
 		return fmt.Errorf("marshal config error: %w", err)
 	}
-	if err := os.WriteFile(cfgPath, data, 0600); err != nil {
-		return err
+	tmpFile, err := os.CreateTemp(filepath.Dir(cfgPath), ".unibootdesktop-*.toml")
+	if err != nil {
+		return fmt.Errorf("create temporary config file: %w", err)
+	}
+	tmpPath := tmpFile.Name()
+	defer os.Remove(tmpPath)
+	if _, err := tmpFile.Write(data); err != nil {
+		tmpFile.Close()
+		return fmt.Errorf("write temporary config file: %w", err)
+	}
+	if err := tmpFile.Chmod(0600); err != nil {
+		tmpFile.Close()
+		return fmt.Errorf("set temporary config permissions: %w", err)
+	}
+	if err := tmpFile.Close(); err != nil {
+		return fmt.Errorf("close temporary config file: %w", err)
+	}
+	if err := os.Rename(tmpPath, cfgPath); err != nil {
+		return fmt.Errorf("replace config file: %w", err)
 	}
 	if err := os.Chmod(cfgPath, 0600); err != nil {
 		return fmt.Errorf("set config file permissions: %w", err)

@@ -135,6 +135,29 @@ func TestLoadMigratesEmptyFirmwareDirectories(t *testing.T) {
 	}
 }
 
+func TestLoadRestoresCorruptConfig(t *testing.T) {
+	tmpDir := t.TempDir()
+	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", filepath.Join(tmpDir, "data"))
+
+	configPath := filepath.Join(tmpDir, "unibootdesktop.toml")
+	if err := os.WriteFile(configPath, []byte("not valid toml =\n"), 0600); err != nil {
+		t.Fatalf("write corrupt config failed: %v", err)
+	}
+
+	loaded, err := Load()
+	if err != nil {
+		t.Fatalf("restore corrupt config failed: %v", err)
+	}
+	if loaded.VentoyPath == "" || loaded.UniBootPath == "" {
+		t.Fatalf("expected default paths after restore, got Ventoy=%q UniBoot=%q", loaded.VentoyPath, loaded.UniBootPath)
+	}
+	if _, err := os.Stat(configPath + ".corrupt"); err != nil {
+		t.Fatalf("expected corrupt config backup: %v", err)
+	}
+}
+
 func TestProxyPasswordStore(t *testing.T) {
 	previousStore := proxyPasswordStore
 	store := newMemorySecretStore()
