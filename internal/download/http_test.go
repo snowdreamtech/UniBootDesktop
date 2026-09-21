@@ -500,6 +500,12 @@ func TestHTTPDownloader_Download_OptionsTimeout(t *testing.T) {
 	assert.True(t, errors.IsExternalError(err), "Should be an external error")
 }
 
+func TestHTTPDownloader_DefaultClientHasBoundedTimeout(t *testing.T) {
+	downloader := download.NewHTTPDownloader()
+	assert.NotNil(t, downloader)
+	assert.Equal(t, download.DefaultHTTPClientTimeout, downloader.DownloadTimeout(), "default client timeout must be bounded and consistent")
+}
+
 // TestHTTPDownloader_Download_CleanupOnFailure verifies partial download cleanup.
 func TestHTTPDownloader_Download_CleanupOnFailure(t *testing.T) {
 	// Create test server that fails mid-download

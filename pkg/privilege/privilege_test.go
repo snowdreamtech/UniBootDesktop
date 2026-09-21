@@ -34,3 +34,17 @@ func TestMountHiddenESP_EmptyDevice(t *testing.T) {
 		t.Fatal("expected error for empty partition device, got nil")
 	}
 }
+
+func TestRunElevatedRejectsUnsafeShellInput(t *testing.T) {
+	_, err := RunElevated("prompt", "echo ok; rm -rf /")
+	if err == nil {
+		t.Fatal("expected unsafe command string to be rejected")
+	}
+}
+
+func TestRunElevatedRejectsEmptyCommand(t *testing.T) {
+	_, err := RunElevated("prompt", "   ")
+	if err == nil {
+		t.Fatal("expected empty command string to be rejected")
+	}
+}

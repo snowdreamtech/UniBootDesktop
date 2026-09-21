@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	elevationMutex sync.RWMutex
+	elevationMutex   sync.RWMutex
 	isCachedElevated bool
 	cachedEvaluated  bool
 )
@@ -69,7 +69,28 @@ func checkIsElevated() bool {
 // On macOS, it invokes AppleScript 'with administrator privileges'.
 // On Linux, it leverages 'pkexec'.
 // On Windows, it invokes PowerShell with 'RunAs' verb.
+func validateElevatedCommand(cmdLine string) error {
+	trimmed := strings.TrimSpace(cmdLine)
+	if trimmed == "" {
+		return fmt.Errorf("command is empty")
+	}
+	for _, ch := range trimmed {
+		if ch < 32 || ch == 127 {
+			return fmt.Errorf("command contains control characters")
+		}
+	}
+
+	if strings.ContainsAny(trimmed, ";|`$><") {
+		return fmt.Errorf("command contains shell metacharacters that are not allowed")
+	}
+	return nil
+}
+
 func RunElevated(prompt string, cmdLine string) (string, error) {
+	if err := validateElevatedCommand(cmdLine); err != nil {
+		return "", fmt.Errorf("unsafe elevated command: %w", err)
+	}
+
 	if IsElevated() {
 		// Already elevated, run directly via shell
 		var cmd *exec.Cmd
@@ -233,4 +254,3 @@ func MountHiddenESP(partitionDevice string) (string, func(), error) {
 	cleanup()
 	return "", func() {}, fmt.Errorf("unprivileged mount unavailable for %s", partitionDevice)
 }
-
