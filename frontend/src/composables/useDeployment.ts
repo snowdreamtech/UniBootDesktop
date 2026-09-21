@@ -490,8 +490,6 @@ export function useDeployment(options: UseDeploymentOptions) {
           }
         }
 
-        await refreshDisks();
-
         deploySuccessBanner.value = {
           visible: true,
           msg: resultMsg,
@@ -503,6 +501,12 @@ export function useDeployment(options: UseDeploymentOptions) {
 
         if (autoEjectedCount > 0) {
           showToast(t("deploy.toast_auto_ejected", { count: autoEjectedCount }), "success");
+        }
+
+        try {
+          await refreshDisks();
+        } catch (refreshErr) {
+          console.warn("Refresh disks after deploy failed:", refreshErr);
         }
       }, 200);
     } else {
