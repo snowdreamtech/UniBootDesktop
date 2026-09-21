@@ -467,5 +467,19 @@ export const esLa: TranslationDict = {
   "inspector.tool_windows_installer": "Medio de instalación oficial de Windows",
   "inspector.tool_winpe_generic": "Unidad de mantenimiento WinPE genérica",
   "inspector.tool_linux_live": "USB de instalación Linux Live",
-  "inspector.tool_generic_uefi": "Cargador de arranque UEFI genérico"
+  "inspector.tool_generic_uefi": "Cargador de arranque UEFI genérico",
+  "privilege.status_elevated": "Modo Privilegiado de Hardware",
+  "privilege.status_standard": "Modo de Usuario Estándar",
+  "privilege.btn_elevate": "Elevar privilegios de hardware",
+  "privilege.modal_title": "Solicitud de acceso a hardware de bajo nivel",
+  "privilege.modal_subtitle": "Identificación precisa de sectores de arranque y particiones ESP ocultas",
+  "privilege.reason_title": "¿Por qué se requieren privilegios de administrador?",
+  "privilege.reason_desc": "Los sistemas modernos aíslan el Sector 0 (código MBR) y particiones EFI/ESP ocultas. La elevación permite leer firmas mágicas directas evitando errores de identificación.",
+  "privilege.scope_title": "Alcance de privilegios estrictamente limitado",
+  "privilege.scope_desc": "Los privilegios se limitan exclusivamente al dispositivo USB extraíble seleccionado. Las unidades de sistema internas nunca se tocan.",
+  "privilege.safety_title": "Seguridad de solo lectura y transparencia total",
+  "privilege.safety_desc": "La inspección se ejecuta estrictamente en modo de solo lectura sin alterar datos. Todas las acciones se registran y el código es de código abierto.",
+  "privilege.confirm_btn": "Autorizar con seguridad",
+  "privilege.cancel_btn": "Ahora no (Modo restringido)",
+  "privilege.success_msg": "¡Privilegios de administrador concedidos con éxito. Sectores sin formato y particiones ocultas desbloqueadas!"
 };

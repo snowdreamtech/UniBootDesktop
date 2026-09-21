@@ -535,9 +535,10 @@ func deployCloudModeWithStage(ctx context.Context, targetDisk string, fsType str
 		progressCallback(100, "Completed")
 	}
 
-	// Step 4: Ensure Main Data Partition Volume Label is UNIBOOT (for display friendly naming)
+	// Step 4: Ensure Main Data Partition Volume Label is UNIBOOT and sync manifest for zero-privilege recognition
 	if mainMountPoint, errResolve := ResolveMountPoint(targetDisk); errResolve == nil && mainMountPoint != "" {
 		_ = UpdateVolumeLabel(targetDisk, mainMountPoint, "UNIBOOT")
+		_ = disk.WriteUniBootManifest(mainMountPoint, "cloud", "1.0.0")
 	}
 
 	msg := fmt.Sprintf("Successfully deployed Cloud Mode to ESP EFI Partition (%s)", efiMountPoint)

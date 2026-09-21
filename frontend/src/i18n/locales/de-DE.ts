@@ -467,5 +467,19 @@ export const deDe: TranslationDict = {
   "inspector.tool_windows_installer": "Offizielles Windows-Installationsmedium",
   "inspector.tool_winpe_generic": "Generisches WinPE-Wartungslaufwerk",
   "inspector.tool_linux_live": "Linux-Live-Installations-USB",
-  "inspector.tool_generic_uefi": "Generischer UEFI-Bootloader"
+  "inspector.tool_generic_uefi": "Generischer UEFI-Bootloader",
+  "privilege.status_elevated": "Hardware-Rechtemodus",
+  "privilege.status_standard": "Standard-Benutzermodus",
+  "privilege.btn_elevate": "Hardware-Berechtigungen erweitern",
+  "privilege.modal_title": "Anforderung von Low-Level-Hardware-Zugriffsrechten",
+  "privilege.modal_subtitle": "Präzise Erkennung von Bootsektoren und versteckten ESP-Partitionen",
+  "privilege.reason_title": "Warum sind Administratorrechte erforderlich?",
+  "privilege.reason_desc": "Moderne Betriebssysteme isolieren Sektor 0 (MBR-Bootcode) und versteckte EFI/ESP-Partitionen. Die Rechteerweiterung ermöglicht das direkte Lesen der Signaturen zur Vermeidung von Fehlern.",
+  "privilege.scope_title": "Streng beschränkter Berechtigungsumfang",
+  "privilege.scope_desc": "Die Rechte sind strikt auf das ausgewählte externe USB-Gerät für Sektorprüfungen beschränkt. Interne Systemlaufwerke werden keinesfalls angetastet.",
+  "privilege.safety_title": "Schreibgeschützte Sicherheit & Transparenz",
+  "privilege.safety_desc": "Die Datenträgerprüfung erfolgt rein lesend ohne Datenänderung. Alle Aktionen werden protokolliert und der Quellcode ist vollständig Open Source.",
+  "privilege.confirm_btn": "Jetzt sicher autorisieren",
+  "privilege.cancel_btn": "Nicht jetzt (Eingeschränkter Modus)",
+  "privilege.success_msg": "Administratorrechte erfolgreich erteilt. Raw-Sektoren und versteckte Partitionen sind freigeschaltet!"
 };

@@ -467,5 +467,19 @@ export const koKr: TranslationDict = {
   "inspector.tool_windows_installer": "Windows 공식 설치 미디어",
   "inspector.tool_winpe_generic": "범용 WinPE 유지보수 드라이브",
   "inspector.tool_linux_live": "Linux Live 설치 드라이브",
-  "inspector.tool_generic_uefi": "범용 UEFI 부트로더"
+  "inspector.tool_generic_uefi": "범용 UEFI 부트로더",
+  "privilege.status_elevated": "하드웨어 권한 모드",
+  "privilege.status_standard": "표준 사용자 모드",
+  "privilege.btn_elevate": "하드웨어 접근 권한 상승",
+  "privilege.modal_title": "로우레벨 하드웨어 접근 권한 요청",
+  "privilege.modal_subtitle": "부트 섹터 및 숨겨진 ESP 부팅 파티션의 정밀 인식",
+  "privilege.reason_title": "관리자 권한이 필요한 이유",
+  "privilege.reason_desc": "최신 운영체제는 섹터 0(MBR 부트 코드) 및 숨겨진 EFI/ESP 파티션을 격리합니다. 권한을 부여하면 매직 바이트를 직접 읽어 오탐을 방지합니다.",
+  "privilege.scope_title": "엄격히 제한된 권한 범위",
+  "privilege.scope_desc": "권한은 선택한 외장 이동식 USB 드라이브의 검증 및 마운트에만 사용되며, 내장 시스템 드라이브는 절대 건드리지 않습니다.",
+  "privilege.safety_title": "읽기 전용 안전 및 투명성 보장",
+  "privilege.safety_desc": "디스크 검사는 완전한 읽기 전용으로 실행되어 데이터를 변경하지 않습니다. 모든 작업은 로그로 기록되며 완전한 오픈 소스입니다.",
+  "privilege.confirm_btn": "지금 안전하게 승인",
+  "privilege.cancel_btn": "나중에 (제한 모드)",
+  "privilege.success_msg": "관리자 권한이 성공적으로 부여되었습니다. 원시 섹터 및 숨김 파티션이 잠금 해제되었습니다!"
 };

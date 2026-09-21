@@ -21,6 +21,7 @@ import (
 	"github.com/snowdreamtech/unigodesktop/pkg/firmware"
 	"github.com/snowdreamtech/unigodesktop/pkg/hypervisor"
 	"github.com/snowdreamtech/unigodesktop/pkg/installer"
+	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
 	"github.com/snowdreamtech/unigodesktop/pkg/qemu"
 	"github.com/snowdreamtech/unigodesktop/pkg/updater"
 	"github.com/snowdreamtech/unigodesktop/pkg/utils"
@@ -852,3 +853,37 @@ func isPrivateOrLocalIP(host string) bool {
 
 	return false
 }
+
+// IsPrivileged returns true if the app process or worker currently possesses administrator or root privileges.
+func (a *App) IsPrivileged() bool {
+	return privilege.IsElevated()
+}
+
+// RequestPrivilegeElevation prompts the user for administrator privileges across operating systems.
+func (a *App) RequestPrivilegeElevation() (bool, error) {
+	if privilege.IsElevated() {
+		return true, nil
+	}
+
+	prompt := "UniGoDesktop requires administrator privileges to access raw storage devices and verify boot partitions."
+	var cmdLine string
+	switch runtime.GOOS {
+	case "darwin", "linux":
+		cmdLine = "id -u"
+	case "windows":
+		cmdLine = "net session"
+	default:
+		cmdLine = "echo 1"
+	}
+
+	_, err := privilege.RunElevated(prompt, cmdLine)
+	if err != nil {
+		logger.Warn("User declined or privilege elevation failed", "error", err)
+		return false, err
+	}
+
+	privilege.ResetElevationCache()
+	logger.Info("Administrator privilege successfully granted by user")
+	return true, nil
+}
+

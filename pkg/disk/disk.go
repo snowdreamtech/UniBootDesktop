@@ -18,6 +18,7 @@ import (
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
 )
 
 var (
@@ -242,18 +243,32 @@ func MapThirdPartyBootCode(t ThirdPartyBootType) string {
 
 // DetectBootStatus evaluates the boot status text and standard machine code based on partition scheme, volume label, Ventoy/Cloud Mode, 3rd-party boot type, and UniBoot manifest.
 func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isCloudMode bool, thirdPartyBoot ThirdPartyBootType, manifest *UniBootManifest) (string, string) {
+	// 1. Highest priority: Official UniBoot Manifest (Magic: UNIBOOT_DISK)
+	if manifest != nil {
+		if manifest.Mode == "cloud" {
+			return "UniBoot (1秒极速云引导盘)", "uniboot_cloud"
+		}
+		if manifest.Mode == "hybrid" {
+			return "UniBoot (混合模式引导盘)", "uniboot_hybrid"
+		}
+	}
+
+	// 2. Pure Cloud Mode flag fallback
 	if isCloudMode {
 		return "UniBoot (1秒极速云引导盘)", "uniboot_cloud"
 	}
+
+	// 3. Ventoy base drive (Native Ventoy bootloader)
 	if isRealVentoy {
-		if manifest != nil && manifest.Mode == "hybrid" {
-			return "UniBoot (混合模式引导盘)", "uniboot_hybrid"
-		}
 		return "原生 Ventoy 启动盘 (可无损升级)", "ventoy_pure"
 	}
+
+	// 4. Specific 3rd-party boot creation tools
 	if thirdPartyBoot != BootTypeNone {
 		return fmt.Sprintf("第三方引导: %s", thirdPartyBoot), "third_party_boot"
 	}
+
+	// 5. Plain data partition fallback
 	if strings.Contains(strings.ToUpper(partitionScheme), "GPT") {
 		return "GPT 数据盘", "gpt_data"
 	}
@@ -316,27 +331,13 @@ func HasVentoyEngineFiles(mountPoint string) bool {
 }
 
 // CheckVentoyMbrSignature inspects MBR Sector 0 for Ventoy's bootloader magic byte signature.
+// Leverages direct raw read with privilege escalation fallback.
 func CheckVentoyMbrSignature(targetDisk string) bool {
 	if targetDisk == "" {
 		return false
 	}
-	devicePath := targetDisk
-	if runtime.GOOS == "darwin" && strings.HasPrefix(targetDisk, "/dev/disk") && !strings.HasPrefix(targetDisk, "/dev/rdisk") {
-		devicePath = "/dev/r" + strings.TrimPrefix(targetDisk, "/dev/")
-	}
-
-	f, err := os.Open(devicePath)
-	if err != nil {
-		f, err = os.Open(targetDisk)
-	}
-	if err != nil {
-		return false
-	}
-	defer f.Close()
-
-	buf := make([]byte, 512)
-	n, err := f.Read(buf)
-	if err != nil || n < 512 {
+	buf, err := privilege.ReadSector(targetDisk, 512)
+	if err != nil || len(buf) < 512 {
 		return false
 	}
 
@@ -666,6 +667,14 @@ func IdentifyThirdPartyBoot(mountPoints []string) ThirdPartyBootType {
 		if mp == "" {
 			continue
 		}
+		// Exclude official UniBoot / Ventoy footprints to avoid misidentifying own bootloaders as 3rd-party generic UEFI
+		if HasUniBootManifest(mp) || HasVentoyEngineFiles(mp) ||
+			pathExists(filepath.Join(mp, "ipxe", "uniboot.ipxe")) ||
+			pathExists(filepath.Join(mp, "ipxe", "uniboot.json")) ||
+			pathExists(filepath.Join(mp, "ventoy")) {
+			continue
+		}
+
 		if pathExists(filepath.Join(mp, "EFI", "BOOT", "BOOTX64.EFI")) ||
 			pathExists(filepath.Join(mp, "EFI", "BOOT", "BOOTAA64.EFI")) ||
 			pathExists(filepath.Join(mp, "EFI", "BOOT", "BOOTIA32.EFI")) ||

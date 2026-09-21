@@ -467,5 +467,19 @@ export const idId: TranslationDict = {
   "inspector.tool_windows_installer": "Media Instalasi Resmi Windows",
   "inspector.tool_winpe_generic": "Drive Pemeliharaan WinPE Generik",
   "inspector.tool_linux_live": "USB Instalasi Linux Live",
-  "inspector.tool_generic_uefi": "Bootloader UEFI Generik"
+  "inspector.tool_generic_uefi": "Bootloader UEFI Generik",
+  "privilege.status_elevated": "Mode Hak Istimewa Perangkat Keras",
+  "privilege.status_standard": "Mode Pengguna Standar",
+  "privilege.btn_elevate": "Tingkatkan Hak Akses Perangkat Keras",
+  "privilege.modal_title": "Otorisasi Akses Perangkat Keras Tingkat Rendah",
+  "privilege.modal_subtitle": "Identifikasi akurat sektor boot dan partisi boot ESP tersembunyi",
+  "privilege.reason_title": "Mengapa Hak Administrator Diperlukan?",
+  "privilege.reason_desc": "Sistem operasi modern mengisolasi Sektor 0 (kode boot MBR) dan partisi EFI/ESP tersembunyi. Elevasi memungkinkan pembacaan tanda pengenal langsung dan mencegah kesalahan identifikasi.",
+  "privilege.scope_title": "Cakupan Hak Akses Sangat Dibatasi",
+  "privilege.scope_desc": "Hak akses dibatasi secara ketat hanya pada drive USB eksternal yang dipilih. Drive sistem internal sama sekali tidak disentuh.",
+  "privilege.safety_title": "Keamanan Hanya-Baca & Transparansi Penuh",
+  "privilege.safety_desc": "Pemeriksaan disk berjalan murni dalam mode hanya-baca tanpa mengubah data. Semua tindakan diaudit dalam log dan kode sumber sepenuhnya terbuka.",
+  "privilege.confirm_btn": "Beri Izin Sekarang",
+  "privilege.cancel_btn": "Nanti Saja (Mode Terbatas)",
+  "privilege.success_msg": "Hak istimewa administrator berhasil diberikan. Sektor mentah dan partisi tersembunyi terbuka!"
 };

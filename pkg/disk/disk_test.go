@@ -325,6 +325,11 @@ func TestDetectBootStatus_Classification(t *testing.T) {
 	assert.Equal(t, "UniBoot (混合模式引导盘)", status)
 	assert.Equal(t, "uniboot_hybrid", code)
 
+	// 2b. UniBoot Hybrid Mode even if isRealVentoy is temporarily false (e.g. unprivileged raw MBR read)
+	status, code = DetectBootStatus("", "GPT", false, false, BootTypeNone, hybridManifest)
+	assert.Equal(t, "UniBoot (混合模式引导盘)", status)
+	assert.Equal(t, "uniboot_hybrid", code)
+
 	// 3. Genuine Ventoy Disk (no UniBoot manifest)
 	status, code = DetectBootStatus("", "GPT", true, false, BootTypeNone, nil)
 	assert.Equal(t, "原生 Ventoy 启动盘 (可无损升级)", status)

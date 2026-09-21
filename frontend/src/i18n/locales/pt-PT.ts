@@ -467,5 +467,19 @@ export const ptPt: TranslationDict = {
   "inspector.tool_windows_installer": "Suporte de instalação oficial do Windows",
   "inspector.tool_winpe_generic": "Unidade de manutenção WinPE genérica",
   "inspector.tool_linux_live": "USB de instalação Linux Live",
-  "inspector.tool_generic_uefi": "Gestor de arranque UEFI genérico"
+  "inspector.tool_generic_uefi": "Gestor de arranque UEFI genérico",
+  "privilege.status_elevated": "Modo de Privilégio de Hardware",
+  "privilege.status_standard": "Modo de Usuário Padrão",
+  "privilege.btn_elevate": "Elevar Privilégios de Hardware",
+  "privilege.modal_title": "Autorização de Acesso de Baixo Nível ao Hardware",
+  "privilege.modal_subtitle": "Identificação precisa de setores de inicialização e partições ESP ocultas",
+  "privilege.reason_title": "Por que os privilégios de administrador são necessários?",
+  "privilege.reason_desc": "Os sistemas operacionais modernos isolam o Setor 0 (código MBR) e as partições EFI/ESP ocultas. A elevação permite a leitura direta de assinaturas e evita erros.",
+  "privilege.scope_title": "Escopo de Privilégios Estritamente Restrito",
+  "privilege.scope_desc": "Os privilégios são limitados exclusivamente à unidade USB externa selecionada. Os discos internos do sistema nunca são acessados.",
+  "privilege.safety_title": "Segurança Somente Leitura e Total Transparência",
+  "privilege.safety_desc": "A inspeção é executada estritamente em modo somente leitura sem alterar dados. Todas as ações são auditadas e o código é totalmente aberto.",
+  "privilege.confirm_btn": "Conceder Acesso com Segurança",
+  "privilege.cancel_btn": "Agora Não (Modo Restrito)",
+  "privilege.success_msg": "Privilégios de administrador concedidos com sucesso. Setores brutos e partições ocultas desbloqueados!"
 };

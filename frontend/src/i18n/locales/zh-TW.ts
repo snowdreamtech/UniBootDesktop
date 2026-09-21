@@ -467,5 +467,19 @@ export const zhTw: TranslationDict = {
   "inspector.tool_windows_installer": "Windows 官方安裝媒體",
   "inspector.tool_winpe_generic": "通用 WinPE 維護碟",
   "inspector.tool_linux_live": "Linux Live 安裝碟",
-  "inspector.tool_generic_uefi": "通用 UEFI 開機碟"
+  "inspector.tool_generic_uefi": "通用 UEFI 開機碟",
+  "privilege.status_elevated": "硬體特權模式",
+  "privilege.status_standard": "標準使用者模式",
+  "privilege.btn_elevate": "提升硬體存取特權",
+  "privilege.modal_title": "申請底層硬體存取特權",
+  "privilege.modal_subtitle": "精準識別開機磁區與隱藏 ESP 開機分割區",
+  "privilege.reason_title": "為什麼需要管理員權限？",
+  "privilege.reason_desc": "現代作業系統對磁碟第 0 磁區（MBR 開機程式碼）及隱藏的 EFI/ESP 分割區施加了安全隔離。提權後可直讀底層魔術字串，徹底杜絕誤判。",
+  "privilege.scope_title": "嚴格受限的權限範圍",
+  "privilege.scope_desc": "特權僅用於所選外部卸除式隨身碟的開機磁區校驗與必要的分割區掛載，嚴禁且絕對不觸碰您的任何內建系統硬碟。",
+  "privilege.safety_title": "唯讀安全與透明承諾",
+  "privilege.safety_desc": "磁碟檢測階段全程採用唯讀模式，絕對不破壞現有資料；操作全日誌透明可溯源，且程式碼完全開源。",
+  "privilege.confirm_btn": "立即安全授權",
+  "privilege.cancel_btn": "暫不授權 (受限模式)",
+  "privilege.success_msg": "已成功獲得管理員特權，底層開機磁區與隱藏分割區已解鎖！"
 };

@@ -467,5 +467,19 @@ export const zhCn: TranslationDict = {
   "vm.cfg_core_singular": "核",
   "vm.cfg_core_plural": "核",
   "common.on": "开启",
-  "common.off": "关闭"
+  "common.off": "关闭",
+  "privilege.status_elevated": "硬件特权模式",
+  "privilege.status_standard": "标准用户模式",
+  "privilege.btn_elevate": "提升硬件访问特权",
+  "privilege.modal_title": "申请底层硬件访问特权",
+  "privilege.modal_subtitle": "精准识别引导扇区与隐藏 ESP 引导分区",
+  "privilege.reason_title": "为什么需要管理员权限？",
+  "privilege.reason_desc": "现代操作系统对磁盘第 0 扇区（MBR 引导代码）及隐藏的 EFI/ESP 分区施加了安全隔离。提权后可直读底层魔数，彻底杜绝误判。",
+  "privilege.scope_title": "严格受限的权限范围",
+  "privilege.scope_desc": "特权仅用于所选外部可移动 U 盘的引导扇区校验与必要的分区挂载，严禁并绝对不触碰您的任何内置系统硬盘。",
+  "privilege.safety_title": "只读安全与透明承诺",
+  "privilege.safety_desc": "磁盘检测阶段全程采用只读模式，绝对不破坏现有数据；操作全日志透明可溯源，且代码完全开源。",
+  "privilege.confirm_btn": "立即安全授权",
+  "privilege.cancel_btn": "暂不授权 (受限模式)",
+  "privilege.success_msg": "已成功获得管理员特权，底层引导扇区与隐藏分区已解锁！"
 };

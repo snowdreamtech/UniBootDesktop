@@ -467,5 +467,19 @@ export const frFr: TranslationDict = {
   "inspector.tool_windows_installer": "Média d'installation officiel Windows",
   "inspector.tool_winpe_generic": "Lecteur de maintenance WinPE générique",
   "inspector.tool_linux_live": "USB d'installation Linux Live",
-  "inspector.tool_generic_uefi": "Chargeur d'amorçage UEFI générique"
+  "inspector.tool_generic_uefi": "Chargeur d'amorçage UEFI générique",
+  "privilege.status_elevated": "Mode Privilèges Matériels",
+  "privilege.status_standard": "Mode Utilisateur Standard",
+  "privilege.btn_elevate": "Élever les privilèges matériels",
+  "privilege.modal_title": "Demande d'accès matériel de bas niveau",
+  "privilege.modal_subtitle": "Identification précise des secteurs de boot et partitions ESP masquées",
+  "privilege.reason_title": "Pourquoi les privilèges administrateur sont-ils requis ?",
+  "privilege.reason_desc": "Les systèmes modernes isolent le secteur 0 (MBR) et les partitions EFI/ESP masquées. L'élévation permet de lire directement les signatures pour éviter toute mauvaise identification.",
+  "privilege.scope_title": "Périmètre de privilèges strictement restreint",
+  "privilege.scope_desc": "Les privilèges sont limités exclusivement au support USB externe sélectionné. Les disques système internes ne sont jamais touchés.",
+  "privilege.safety_title": "Sécurité en lecture seule & Transparence",
+  "privilege.safety_desc": "L'inspection s'exécute strictement en lecture seule sans altérer les données. Toutes les actions sont tracées et le code est entièrement open source.",
+  "privilege.confirm_btn": "Autoriser en toute sécurité",
+  "privilege.cancel_btn": "Pas maintenant (Mode restreint)",
+  "privilege.success_msg": "Privilèges administrateur accordés. Secteurs bruts et partitions masquées déverrouillés !"
 };

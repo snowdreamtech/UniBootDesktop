@@ -467,5 +467,19 @@ export const hyAm: TranslationDict = {
   "inspector.tool_windows_installer": "Windows-ի պաշտոնական տեղադրման կրիչ",
   "inspector.tool_winpe_generic": "Ընդհանուր WinPE սպասարկման կրիչ",
   "inspector.tool_linux_live": "Linux Live տեղադրման USB",
-  "inspector.tool_generic_uefi": "Ընդհանուր UEFI բեռնիչ"
+  "inspector.tool_generic_uefi": "Ընդհանուր UEFI բեռնիչ",
+  "privilege.status_elevated": "Hardware Privileged Mode",
+  "privilege.status_standard": "Standard User Mode",
+  "privilege.btn_elevate": "Elevate Hardware Privileges",
+  "privilege.modal_title": "Hardware Privilege Authorization",
+  "privilege.modal_subtitle": "Accurately inspect boot sectors & hidden ESP boot partitions",
+  "privilege.reason_title": "Why is Administrator Privilege Required?",
+  "privilege.reason_desc": "Modern operating systems strictly isolate Sector 0 (MBR boot code) and hidden EFI/ESP partitions. Elevation enables direct magic verification and prevents misidentifications.",
+  "privilege.scope_title": "Strictly Restricted Privilege Scope",
+  "privilege.scope_desc": "Privileges are exclusively scoped to selected external removable USB devices for boot sector checks and temporary mounting. Internal system drives are strictly excluded.",
+  "privilege.safety_title": "Read-Only Safety & Full Transparency",
+  "privilege.safety_desc": "Disk inspection runs strictly in read-only mode, guaranteeing no data alteration. All actions are audited in logs and the entire source code is open.",
+  "privilege.confirm_btn": "Grant Administrator Access",
+  "privilege.cancel_btn": "Not Now (Restricted Mode)",
+  "privilege.success_msg": "Administrator privilege successfully granted. Raw sectors and hidden partitions unlocked!"
 };

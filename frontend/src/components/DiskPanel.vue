@@ -5,6 +5,21 @@
         <h2>{{ t('disk.select_title') }}</h2>
         <p class="section-desc">{{ t('disk.select_desc') }}</p>
       </div>
+
+      <!-- Privilege Status Shield Badge -->
+      <div class="privilege-badge-wrapper">
+        <button
+          class="privilege-status-badge"
+          :class="{ elevated: isPrivileged, standard: !isPrivileged }"
+          :title="isPrivileged ? t('privilege.status_elevated') : t('privilege.btn_elevate')"
+          @click="handlePrivilegeBadgeClick"
+        >
+          <svg class="badge-shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span>{{ isPrivileged ? t('privilege.status_elevated') : t('privilege.btn_elevate') }}</span>
+        </button>
+      </div>
     </div>
 
     <!-- Mode controls -->
@@ -91,11 +106,19 @@
       <span class="refresh-icon">🔄</span>
       <span>{{ isScanningDisks ? t('disk.scanning') : t('disk.rescan') }}</span>
     </button>
+
+    <!-- Privilege Trust Modal -->
+    <PrivilegeTrustModal
+      v-model:visible="showPrivilegeModal"
+      @authorized="handlePrivilegeAuthorized"
+    />
   </section>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import DiskCard from './DiskCard.vue';
+import PrivilegeTrustModal from './PrivilegeTrustModal.vue';
 import type { DiskIconType } from './IconPickerModal.vue';
 import { t } from '../i18n';
 import type { disk } from '../../wailsjs/go/models';
@@ -124,6 +147,33 @@ const emit = defineEmits<{
   (e: 'refresh-disks'): void;
 }>();
 
+const isPrivileged = ref(false);
+const showPrivilegeModal = ref(false);
+
+const checkPrivilegeStatus = async () => {
+  try {
+    const wailsAny = window as any;
+    if (wailsAny.go?.main?.App?.IsPrivileged) {
+      isPrivileged.value = await wailsAny.go.main.App.IsPrivileged();
+    }
+  } catch (e) {
+    console.debug('Privilege check error:', e);
+  }
+};
+
+onMounted(() => {
+  checkPrivilegeStatus();
+});
+
+const handlePrivilegeBadgeClick = () => {
+  showPrivilegeModal.value = true;
+};
+
+const handlePrivilegeAuthorized = () => {
+  isPrivileged.value = true;
+  emit('refresh-disks');
+};
+
 function getDiskFingerprint(disk: DiskInfo): string {
   if (disk.serialNumber && disk.serialNumber.trim() !== '') {
     return `sn:${disk.serialNumber.trim()}`;
@@ -132,8 +182,6 @@ function getDiskFingerprint(disk: DiskInfo): string {
 }
 
 function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
-  // Prefer fingerprint key (serial-number-based, survives hot-plug path changes).
-  // Fall back to device path for backward compatibility with pre-existing data.
   const fp = getDiskFingerprint(disk);
   return props.customIcons[fp] ?? props.customIcons[disk.device];
 }
@@ -156,6 +204,41 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
+}
+
+.privilege-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.privilege-status-badge.elevated {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.privilege-status-badge.standard {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.privilege-status-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.badge-shield-icon {
+  width: 14px;
+  height: 14px;
 }
 
 .section-header-row h2 {

@@ -467,5 +467,19 @@ export const ruRu: TranslationDict = {
   "inspector.tool_windows_installer": "Официальный установочный носитель Windows",
   "inspector.tool_winpe_generic": "Универсальный диск обслуживания WinPE",
   "inspector.tool_linux_live": "Установочный диск Linux Live",
-  "inspector.tool_generic_uefi": "Стандартный загрузчик UEFI"
+  "inspector.tool_generic_uefi": "Стандартный загрузчик UEFI",
+  "privilege.status_elevated": "Привилегированный режим",
+  "privilege.status_standard": "Стандартный пользовательский режим",
+  "privilege.btn_elevate": "Повысить привилегии оборудования",
+  "privilege.modal_title": "Запрос низкоуровневого доступа к оборудованию",
+  "privilege.modal_subtitle": "Точное распознавание загрузочных секторов и скрытых разделов ESP",
+  "privilege.reason_title": "Зачем требуются права администратора?",
+  "privilege.reason_desc": "Современные ОС изолируют сектор 0 (код MBR) и скрытые разделы EFI/ESP. Повышение привилегий позволяет напрямую считывать сигнатуры и исключить ложные срабатывания.",
+  "privilege.scope_title": "Строго ограниченная область доступа",
+  "privilege.scope_desc": "Привилегии используются исключительно для выбранного внешнего USB-накопителя. Внутренние системные диски никогда не затрагиваются.",
+  "privilege.safety_title": "Безопасность только для чтения и прозрачность",
+  "privilege.safety_desc": "Проверка выполняется строго в режиме чтения без изменения данных. Все действия логируются, а исходный код полностью открыт.",
+  "privilege.confirm_btn": "Безопасно авторизовать",
+  "privilege.cancel_btn": "Не сейчас (Ограниченный режим)",
+  "privilege.success_msg": "Права администратора успешно предоставлены. Необработанные секторы и скрытые разделы разблокированы!"
 };

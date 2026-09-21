@@ -467,5 +467,19 @@ export const jaJp: TranslationDict = {
   "inspector.tool_windows_installer": "Windows 公式インストールメディア",
   "inspector.tool_winpe_generic": "汎用 WinPE メンテナンスディスク",
   "inspector.tool_linux_live": "Linux Live インストールディスク",
-  "inspector.tool_generic_uefi": "汎用 UEFI 起動ディスク"
+  "inspector.tool_generic_uefi": "汎用 UEFI 起動ディスク",
+  "privilege.status_elevated": "ハードウェア特権モード",
+  "privilege.status_standard": "標準ユーザーモード",
+  "privilege.btn_elevate": "ハードウェア特権の昇格",
+  "privilege.modal_title": "低レベルハードウェアアクセス特権の要求",
+  "privilege.modal_subtitle": "起動セクターおよび非表示のESP起動パーティションの正確な検出",
+  "privilege.reason_title": "管理者権限が必要な理由",
+  "privilege.reason_desc": "現代のOSはセクター0（MBRブートコード）や非表示のESPパーティションを隔離しています。権限昇格により正確なシグネチャを読み取り、誤認識を防止します。",
+  "privilege.scope_title": "厳格に制限された特権範囲",
+  "privilege.scope_desc": "特権は選択された外部USBドライブの検証と一時マウントのみに使用され、内部システムドライブには一切アクセスしません。",
+  "privilege.safety_title": "読み取り専用の安全性と透明性",
+  "privilege.safety_desc": "検査は完全に読み取り専用で実行され、データを変更しません。全操作ログが監査可能で、完全なオープンソースです。",
+  "privilege.confirm_btn": "今すぐ安全に承認",
+  "privilege.cancel_btn": "今は許可しない (制限モード)",
+  "privilege.success_msg": "管理者権限が付与されました。生セクターと隠しパーティションが解放されました！"
 };
