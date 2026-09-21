@@ -3,35 +3,24 @@
     <div class="brand">
       <span class="logo">🚀</span>
       <div>
-        <h1>{{ t('app.title') }}</h1>
-        <span class="sub-brand">{{ t('app.subtitle') }}</span>
+        <h1>{{ t("app.title") }}</h1>
+        <span class="sub-brand">{{ t("app.subtitle") }}</span>
       </div>
     </div>
-    <div class="mode-tabs">
-      <button 
-        class="tab-btn" 
-        :class="{ active: activeMode === 'cloud' }"
-        @click="emit('select-mode', 'cloud')"
-      >
+    <div class="mode-tabs" :class="{ 'is-busy': isActionBusy }">
+      <div v-if="isActionBusy" class="local-action-overlay" aria-hidden="true"></div>
+      <button class="tab-btn" :class="{ active: activeMode === 'cloud' }" @click="emit('select-mode', 'cloud')">
         <span class="btn-icon">⚡</span>
-        <span>{{ t('mode.cloud') }}</span>
+        <span>{{ t("mode.cloud") }}</span>
       </button>
-      <button 
-        class="tab-btn" 
-        :class="{ active: activeMode === 'hybrid' }"
-        @click="emit('select-mode', 'hybrid')"
-      >
+      <button class="tab-btn" :class="{ active: activeMode === 'hybrid' }" @click="emit('select-mode', 'hybrid')">
         <span class="btn-icon">🛠️</span>
-        <span>{{ t('mode.hybrid') }}</span>
+        <span>{{ t("mode.hybrid") }}</span>
       </button>
 
       <!-- Header Quick Language Switcher Dropdown -->
       <div class="lang-selector-header" ref="langDropdownRef">
-        <button 
-          class="lang-pill-btn" 
-          :title="t('settings.language')"
-          @click.stop="toggleLangMenu"
-        >
+        <button class="lang-pill-btn" :title="t('settings.language')" @click.stop="toggleLangMenu">
           <span class="lang-icon">🌐</span>
           <span class="lang-label">{{ currentLangLabel }}</span>
           <span class="dropdown-caret">▾</span>
@@ -39,8 +28,8 @@
 
         <transition name="dropdown-fade">
           <div v-if="isLangMenuOpen" class="lang-dropdown-menu" @click.stop>
-            <button 
-              v-for="opt in langOptions" 
+            <button
+              v-for="opt in langOptions"
               :key="opt.value"
               class="lang-option"
               :class="{ active: currentLang === opt.value }"
@@ -53,77 +42,88 @@
         </transition>
       </div>
 
-      <button 
-        class="settings-icon-btn log-toggle-btn" 
+      <button
+        class="settings-icon-btn log-toggle-btn"
         :class="{ active: isLogCardVisible }"
         :title="t('log.title')"
-        @click="emit('toggle-log')"
+        @click="handleToggleLog"
       >
         📜
       </button>
 
-      <button 
-        class="settings-icon-btn" 
-        :title="t('settings.title')"
-        @click="emit('open-settings', 'general')"
-      >
-        ⚙️
-      </button>
+      <button class="settings-icon-btn" :title="t('settings.title')" @click="handleOpenSettings">⚙️</button>
 
-      <button 
-        class="settings-icon-btn" 
-        :title="t('about.title')"
-        @click="emit('open-about')"
-      >
-        ℹ️
-      </button>
+      <button class="settings-icon-btn" :title="t('about.title')" @click="handleOpenAbout">ℹ️</button>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { t, SUPPORTED_LANGUAGES } from '../i18n';
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { SUPPORTED_LANGUAGES, t } from "../i18n";
 
 const props = defineProps<{
-  activeMode: 'cloud' | 'hybrid';
+  activeMode: "cloud" | "hybrid";
   isLogCardVisible: boolean;
   currentLang: string;
 }>();
 
 const emit = defineEmits<{
-  (e: 'select-mode', mode: 'cloud' | 'hybrid'): void;
-  (e: 'toggle-log'): void;
-  (e: 'open-settings', tab: string): void;
-  (e: 'open-about'): void;
-  (e: 'select-lang', lang: string): void;
+  (e: "select-mode", mode: "cloud" | "hybrid"): void;
+  (e: "toggle-log"): void;
+  (e: "open-settings", tab: string): void;
+  (e: "open-about"): void;
+  (e: "select-lang", lang: string): void;
 }>();
 
 const isLangMenuOpen = ref(false);
+const isActionBusy = ref(false);
 const langDropdownRef = ref<HTMLElement | null>(null);
 
 const langOptions = computed(() => [
-  { value: 'auto', label: t('common.autoDetect') },
-  ...SUPPORTED_LANGUAGES.map(item => ({
+  { value: "auto", label: t("common.autoDetect") },
+  ...SUPPORTED_LANGUAGES.map((item) => ({
     value: item.code,
-    label: item.nativeName
-  }))
+    label: item.nativeName,
+  })),
 ]);
 
 const currentLangLabel = computed(() => {
-  if (props.currentLang === 'auto') {
-    return t('common.langAuto');
+  if (props.currentLang === "auto") {
+    return t("common.langAuto");
   }
-  const opt = langOptions.value.find(o => o.value === props.currentLang);
-  return opt ? opt.label : t('common.lang');
+  const opt = langOptions.value.find((o) => o.value === props.currentLang);
+  return opt ? opt.label : t("common.lang");
 });
+
+function triggerActionFeedback() {
+  isActionBusy.value = true;
+  window.setTimeout(() => {
+    isActionBusy.value = false;
+  }, 180);
+}
+
+function handleToggleLog() {
+  triggerActionFeedback();
+  emit("toggle-log");
+}
+
+function handleOpenSettings() {
+  triggerActionFeedback();
+  emit("open-settings", "general");
+}
+
+function handleOpenAbout() {
+  triggerActionFeedback();
+  emit("open-about");
+}
 
 function toggleLangMenu() {
   isLangMenuOpen.value = !isLangMenuOpen.value;
 }
 
 function selectLanguage(langVal: string) {
-  emit('select-lang', langVal);
+  emit("select-lang", langVal);
   isLangMenuOpen.value = false;
 }
 
@@ -134,11 +134,11 @@ function handleGlobalClick(event: MouseEvent) {
 }
 
 onMounted(() => {
-  window.addEventListener('click', handleGlobalClick);
+  window.addEventListener("click", handleGlobalClick);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('click', handleGlobalClick);
+  window.removeEventListener("click", handleGlobalClick);
 });
 </script>
 
@@ -182,6 +182,23 @@ h1 {
   padding: 0.3rem;
   border-radius: 12px;
   border: 1px solid var(--card-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-tabs.is-busy {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.local-action-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 2;
+  pointer-events: all;
+  background: rgba(10, 15, 26, 0.14);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
 }
 
 .tab-btn {
@@ -202,7 +219,9 @@ h1 {
 .tab-btn.active {
   background: var(--tab-btn-active-bg);
   color: var(--tab-btn-active-text);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), var(--tab-btn-shadow);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    var(--tab-btn-shadow);
 }
 
 .settings-icon-btn {
@@ -214,21 +233,27 @@ h1 {
   cursor: pointer;
   font-size: 1rem;
   transition: all 0.2s ease;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .settings-icon-btn:hover {
   background: var(--btn-sec-hover-bg);
   color: var(--accent-cyan);
   border-color: var(--btn-sec-hover-border);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 12px var(--accent-cyan-glow);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 4px 12px var(--accent-cyan-glow);
 }
 
 .settings-icon-btn.active {
   background: var(--tab-btn-active-bg);
   color: var(--tab-btn-active-text);
   border-color: var(--accent-cyan);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), var(--tab-btn-shadow);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    var(--tab-btn-shadow);
 }
 
 /* Header Quick Language Dropdown */
@@ -250,14 +275,18 @@ h1 {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .lang-pill-btn:hover {
   background: var(--btn-sec-hover-bg);
   color: var(--accent-cyan);
   border-color: var(--btn-sec-hover-border);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 12px var(--accent-cyan-glow);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 4px 12px var(--accent-cyan-glow);
 }
 
 .lang-icon {

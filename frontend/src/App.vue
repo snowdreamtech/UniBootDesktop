@@ -21,7 +21,7 @@
       :currentLang="currentLang"
       @select-mode="selectMode"
       @toggle-log="toggleLogCard"
-      @open-settings="tab => openSettings(tab as any)"
+      @open-settings="(tab) => openSettings(tab as any)"
       @open-about="isAboutOpen = true"
       @select-lang="selectLanguage"
     />
@@ -34,6 +34,7 @@
         :selectionMode="selectionMode"
         :selectedDisk="selectedDisk"
         :selectedDevices="selectedDevices"
+        :ejectingDevices="ejectingDevices"
         :isScanningDisks="isScanningDisks"
         :customIcons="customIcons"
         @set-selection-mode="setSelectionMode"
@@ -111,18 +112,18 @@
     <IconPickerModal
       :isOpen="isPickerOpen"
       :diskName="targetPickerDisk?.name || targetPickerDisk?.device || ''"
-      :currentIcon="targetPickerDisk ? (customIcons[getDiskFingerprint(targetPickerDisk)] || customIcons[targetPickerDisk.device]) : undefined"
+      :currentIcon="
+        targetPickerDisk
+          ? customIcons[getDiskFingerprint(targetPickerDisk)] || customIcons[targetPickerDisk.device]
+          : undefined
+      "
       @close="isPickerOpen = false"
       @select-icon="onIconSelected"
       @reset-icon="onIconReset"
     />
 
     <!-- USB Hardware Inspector Modal -->
-    <UsbInspectorModal
-      :isOpen="isInspectorOpen"
-      :disk="targetInspectorDisk"
-      @close="isInspectorOpen = false"
-    />
+    <UsbInspectorModal :isOpen="isInspectorOpen" :disk="targetInspectorDisk" @close="isInspectorOpen = false" />
 
     <!-- High-Risk Format Confirmation Modal -->
     <DeployConfirmModal
@@ -167,47 +168,38 @@
     />
 
     <!-- About Modal -->
-    <AboutModal
-      :show="isAboutOpen"
-      @close="isAboutOpen = false"
-    />
+    <AboutModal :show="isAboutOpen" @close="isAboutOpen = false" />
   </div>
 </template>
 
 <script setup lang="ts">
-import AppHeader from './components/AppHeader.vue';
-import DiskPanel from './components/DiskPanel.vue';
-import DeployPanel from './components/DeployPanel.vue';
-import LogPanel from './components/LogPanel.vue';
-import IconPickerModal from './components/IconPickerModal.vue';
-import UsbInspectorModal from './components/UsbInspectorModal.vue';
-import DeployConfirmModal from './components/DeployConfirmModal.vue';
-import SettingsModal from './components/SettingsModal.vue';
-import VentoyAlertModal from './components/VentoyAlertModal.vue';
-import DiagnosticsModal from './components/DiagnosticsModal.vue';
-import AboutModal from './components/AboutModal.vue';
-import { t, currentLang } from './i18n';
-import { useToast } from './composables/useToast';
-import { useIsoManager } from './composables/useIsoManager';
-import { useVirtualMachine } from './composables/useVirtualMachine';
-import { useDiskSelection, getDiskFingerprint } from './composables/useDiskSelection';
-import { useDeployment } from './composables/useDeployment';
-import { useLogPanel } from './composables/useLogPanel';
-import { useAppSettings } from './composables/useAppSettings';
-import { useAppRuntimeEvents } from './composables/useAppRuntimeEvents';
+import AboutModal from "./components/AboutModal.vue";
+import AppHeader from "./components/AppHeader.vue";
+import DeployConfirmModal from "./components/DeployConfirmModal.vue";
+import DeployPanel from "./components/DeployPanel.vue";
+import DiagnosticsModal from "./components/DiagnosticsModal.vue";
+import DiskPanel from "./components/DiskPanel.vue";
+import IconPickerModal from "./components/IconPickerModal.vue";
+import LogPanel from "./components/LogPanel.vue";
+import SettingsModal from "./components/SettingsModal.vue";
+import UsbInspectorModal from "./components/UsbInspectorModal.vue";
+import VentoyAlertModal from "./components/VentoyAlertModal.vue";
+import { useAppRuntimeEvents } from "./composables/useAppRuntimeEvents";
+import { useAppSettings } from "./composables/useAppSettings";
+import { useDeployment } from "./composables/useDeployment";
+import { getDiskFingerprint, useDiskSelection } from "./composables/useDiskSelection";
+import { useIsoManager } from "./composables/useIsoManager";
+import { useLogPanel } from "./composables/useLogPanel";
+import { useToast } from "./composables/useToast";
+import { useVirtualMachine } from "./composables/useVirtualMachine";
+import { currentLang, t } from "./i18n";
 
 // 1. Global Toast
 const { toastMessage, toastType, showToast, dismissToast } = useToast();
 
 // 2. ISO Manager
-const {
-  selectedIsoFiles,
-  isoCopyStatus,
-  addIsoFilesByPaths,
-  handleSelectIsoFiles,
-  removeIsoFile,
-  clearIsoFiles,
-} = useIsoManager(showToast);
+const { selectedIsoFiles, isoCopyStatus, addIsoFilesByPaths, handleSelectIsoFiles, removeIsoFile, clearIsoFiles } =
+  useIsoManager(showToast);
 
 // 3. Disk Selection
 const {
@@ -215,6 +207,7 @@ const {
   diskList,
   selectedDisk,
   selectedDevices,
+  ejectingDevices,
   customIcons,
   isPickerOpen,
   targetPickerDisk,
@@ -251,7 +244,7 @@ const {
 });
 
 // 4. App Settings & Theme (Declared early so openSettings callback can be passed to useDeployment)
-let openSettingsFn: (tab?: 'general' | 'network' | 'uniboot' | 'ventoy') => void;
+let openSettingsFn: (tab?: "general" | "network" | "uniboot" | "ventoy") => void;
 
 // 5. Deployment Engine
 const {
@@ -464,7 +457,9 @@ useAppRuntimeEvents({
 
 .toast-fade-enter-active,
 .toast-fade-leave-active {
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .toast-fade-enter-from,

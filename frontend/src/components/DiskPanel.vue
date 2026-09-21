@@ -2,8 +2,8 @@
   <section class="glass-card section-card">
     <div class="section-header-row">
       <div>
-        <h2>{{ t('disk.select_title') }}</h2>
-        <p class="section-desc">{{ t('disk.select_desc') }}</p>
+        <h2>{{ t("disk.select_title") }}</h2>
+        <p class="section-desc">{{ t("disk.select_desc") }}</p>
       </div>
 
       <div class="header-actions">
@@ -39,9 +39,14 @@
             @click="handlePrivilegeBadgeClick"
           >
             <svg class="badge-shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+              />
             </svg>
-            <span>{{ isPrivileged ? t('privilege.status_elevated') : t('privilege.btn_elevate') }}</span>
+            <span>{{ isPrivileged ? t("privilege.status_elevated") : t("privilege.btn_elevate") }}</span>
           </button>
         </div>
       </div>
@@ -55,14 +60,14 @@
           :class="{ active: selectionMode === 'single' }"
           @click="emit('set-selection-mode', 'single')"
         >
-          {{ t('disk.single_mode') }}
+          {{ t("disk.single_mode") }}
         </button>
         <button
           class="sub-tab-btn"
           :class="{ active: selectionMode === 'batch' }"
           @click="emit('set-selection-mode', 'batch')"
         >
-          {{ t('disk.batch_mode') }}
+          {{ t("disk.batch_mode") }}
         </button>
       </div>
     </div>
@@ -76,14 +81,10 @@
             :disabled="diskList.length === 0 || selectedDevices.size === diskList.length"
             @click="emit('select-all')"
           >
-            {{ t('disk.select_all') }}
+            {{ t("disk.select_all") }}
           </button>
-          <button
-            class="batch-btn"
-            :disabled="selectedDevices.size === 0"
-            @click="emit('deselect-all')"
-          >
-            {{ t('disk.clear_select') }}
+          <button class="batch-btn" :disabled="selectedDevices.size === 0" @click="emit('deselect-all')">
+            {{ t("disk.clear_select") }}
           </button>
           <button
             class="batch-btn btn-eject"
@@ -91,11 +92,11 @@
             :title="t('disk.batch_eject')"
             @click="emit('batch-eject')"
           >
-            ⏏️ {{ t('disk.batch_eject') }}
+            ⏏️ {{ t("disk.batch_eject") }}
           </button>
         </div>
         <div class="selection-count-badge">
-          {{ t('disk.selected_count', { count: selectedDevices.size, total: diskList.length }) }}
+          {{ t("disk.selected_count", { count: selectedDevices.size, total: diskList.length }) }}
         </div>
       </div>
     </transition>
@@ -107,7 +108,10 @@
         :key="disk.device"
         :disk="disk"
         :isBatchMode="selectionMode === 'batch'"
-        :isSelected="selectionMode === 'single' ? selectedDisk?.device === disk.device : selectedDevices.has(disk.device)"
+        :isSelected="
+          selectionMode === 'single' ? selectedDisk?.device === disk.device : selectedDevices.has(disk.device)
+        "
+        :isEjecting="ejectingDevices.has(disk.device)"
         :customIcon="getCustomIcon(disk)"
         @select="emit('select-disk', disk)"
         @toggle="emit('toggle-disk', disk)"
@@ -124,34 +128,47 @@
           <div class="radar-wave wave-1"></div>
           <div class="radar-wave wave-2"></div>
           <div class="radar-core">
-            <svg class="radar-usb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              class="radar-usb-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="M10 2v7M14 2v7M8 9h8v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V9z" />
               <path d="M10 5h4" />
             </svg>
           </div>
         </div>
         <div class="canvas-text">
-          <h3 class="canvas-title pulse-text">{{ t('disk.scanning') }}</h3>
-          <p class="canvas-desc">{{ t('disk.select_desc') }}</p>
+          <h3 class="canvas-title pulse-text">{{ t("disk.scanning") }}</h3>
+          <p class="canvas-desc">{{ t("disk.select_desc") }}</p>
         </div>
       </div>
 
       <div v-else class="empty-notice-box">
         <div class="empty-icon-wrapper">
-          <svg class="empty-usb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            class="empty-usb-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <rect x="7" y="2" width="10" height="20" rx="3" />
             <path d="M10 6h4M10 10h4" />
             <circle cx="12" cy="16" r="1.5" fill="currentColor" />
           </svg>
         </div>
         <div class="canvas-text">
-          <h3 class="canvas-title">{{ t('disk.empty_list') }}</h3>
-          <p class="canvas-desc">{{ t('disk.select_desc') }}</p>
+          <h3 class="canvas-title">{{ t("disk.empty_list") }}</h3>
+          <p class="canvas-desc">{{ t("disk.select_desc") }}</p>
         </div>
-        <button
-          class="btn-rescan-subtle"
-          @click="emit('refresh-disks')"
-        >
+        <button class="btn-rescan-subtle" @click="emit('refresh-disks')">
           <svg
             class="rescan-subtle-icon"
             viewBox="0 0 24 24"
@@ -163,49 +180,47 @@
           >
             <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
           </svg>
-          <span>{{ t('disk.rescan') }}</span>
+          <span>{{ t("disk.rescan") }}</span>
         </button>
       </div>
     </div>
 
     <!-- Privilege Trust Modal -->
-    <PrivilegeTrustModal
-      v-model:visible="showPrivilegeModal"
-      @authorized="handlePrivilegeAuthorized"
-    />
+    <PrivilegeTrustModal v-model:visible="showPrivilegeModal" @authorized="handlePrivilegeAuthorized" />
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import DiskCard from './DiskCard.vue';
-import PrivilegeTrustModal from './PrivilegeTrustModal.vue';
-import type { DiskIconType } from './IconPickerModal.vue';
-import { t } from '../i18n';
-import type { disk } from '../../wailsjs/go/models';
+import { onMounted, ref } from "vue";
+import type { disk } from "../../wailsjs/go/models";
+import { t } from "../i18n";
+import DiskCard from "./DiskCard.vue";
+import type { DiskIconType } from "./IconPickerModal.vue";
+import PrivilegeTrustModal from "./PrivilegeTrustModal.vue";
 
 export type DiskInfo = disk.DiskInfo;
 
 const props = defineProps<{
   diskList: DiskInfo[];
-  selectionMode: 'single' | 'batch';
+  selectionMode: "single" | "batch";
   selectedDisk: DiskInfo | null;
   selectedDevices: Set<string>;
+  ejectingDevices: Set<string>;
   isScanningDisks: boolean;
   customIcons: Record<string, DiskIconType>;
 }>();
 
 const emit = defineEmits<{
-  (e: 'set-selection-mode', mode: 'single' | 'batch'): void;
-  (e: 'select-all'): void;
-  (e: 'deselect-all'): void;
-  (e: 'batch-eject'): void;
-  (e: 'select-disk', disk: DiskInfo): void;
-  (e: 'toggle-disk', disk: DiskInfo): void;
-  (e: 'pick-icon', disk: DiskInfo): void;
-  (e: 'inspect-disk', disk: DiskInfo): void;
-  (e: 'eject-disk', disk: DiskInfo): void;
-  (e: 'refresh-disks'): void;
+  (e: "set-selection-mode", mode: "single" | "batch"): void;
+  (e: "select-all"): void;
+  (e: "deselect-all"): void;
+  (e: "batch-eject"): void;
+  (e: "select-disk", disk: DiskInfo): void;
+  (e: "toggle-disk", disk: DiskInfo): void;
+  (e: "pick-icon", disk: DiskInfo): void;
+  (e: "inspect-disk", disk: DiskInfo): void;
+  (e: "eject-disk", disk: DiskInfo): void;
+  (e: "refresh-disks"): void;
 }>();
 
 const isPrivileged = ref(false);
@@ -223,7 +238,7 @@ const checkPrivilegeStatus = async (retryCount = 0) => {
       setTimeout(() => checkPrivilegeStatus(retryCount + 1), 200);
     }
   } catch (e) {
-    console.debug('Privilege check error:', e);
+    console.debug("Privilege check error:", e);
   }
 };
 
@@ -240,11 +255,11 @@ const handlePrivilegeBadgeClick = () => {
 
 const handlePrivilegeAuthorized = () => {
   isPrivileged.value = true;
-  emit('refresh-disks');
+  emit("refresh-disks");
 };
 
 function getDiskFingerprint(disk: DiskInfo): string {
-  if (disk.serialNumber && disk.serialNumber.trim() !== '') {
+  if (disk.serialNumber && disk.serialNumber.trim() !== "") {
     return `sn:${disk.serialNumber.trim()}`;
   }
   return `dev:${disk.name}_${disk.size}`;
@@ -480,8 +495,12 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
 }
 
 @keyframes smooth-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .disk-list {
@@ -616,7 +635,8 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
   }
   50% {
@@ -698,7 +718,9 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
   color: #475569;
   border: 1px solid #cbd5e1;
-  box-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(15, 23, 42, 0.05);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 [data-theme="light"] .sub-tab-btn:hover {
@@ -712,7 +734,9 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   color: #0284c7;
   border-color: #38bdf8;
   font-weight: 700;
-  box-shadow: inset 0 1px 0 #ffffff, 0 2px 8px rgba(2, 132, 199, 0.2);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 2px 8px rgba(2, 132, 199, 0.2);
 }
 
 [data-theme="light"] .btn-text {

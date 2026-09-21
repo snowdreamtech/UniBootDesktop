@@ -1,16 +1,11 @@
 <template>
   <div
     class="glass-card disk-card"
-    :class="{ selected: isSelected }"
+    :class="{ selected: isSelected, 'is-ejecting': isEjecting }"
     @click="$emit('select', disk)"
   >
     <div class="disk-checkbox-container" v-if="isBatchMode">
-      <input
-        type="checkbox"
-        class="disk-checkbox"
-        :checked="isSelected"
-        @click.stop="$emit('toggle', disk)"
-      />
+      <input type="checkbox" class="disk-checkbox" :checked="isSelected" @click.stop="$emit('toggle', disk)" />
     </div>
 
     <!-- Dynamic SVG Disk Icon -->
@@ -21,215 +16,391 @@
       @click.stop="$emit('pick-icon', disk)"
     >
       <!-- Boot USB Icon with Lightning -->
-      <svg v-if="diskType === 'boot'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-        <path d="M6 7h12a1.5 1.5 0 0 1 1.5 1.5v10a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-10A1.5 1.5 0 0 1 6 7z"/>
-        <polygon points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10" fill="currentColor" stroke="none"/>
+      <svg
+        v-if="diskType === 'boot'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <path d="M6 7h12a1.5 1.5 0 0 1 1.5 1.5v10a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-10A1.5 1.5 0 0 1 6 7z" />
+        <polygon
+          points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10"
+          fill="currentColor"
+          stroke="none"
+        />
       </svg>
       <!-- Portable SSD Icon -->
-      <svg v-else-if="diskType === 'ssd'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="5" width="18" height="14" rx="3"/>
-        <line x1="7" y1="9" x2="11" y2="9"/>
-        <line x1="7" y1="12" x2="17" y2="12"/>
-        <circle cx="17" cy="9" r="1" fill="currentColor"/>
+      <svg
+        v-else-if="diskType === 'ssd'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="3" y="5" width="18" height="14" rx="3" />
+        <line x1="7" y1="9" x2="11" y2="9" />
+        <line x1="7" y1="12" x2="17" y2="12" />
+        <circle cx="17" cy="9" r="1" fill="currentColor" />
       </svg>
       <!-- Type-C Dual Icon -->
-      <svg v-else-if="diskType === 'typec'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="8" y="2" width="8" height="4" rx="2"/>
-        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
-        <rect x="9" y="20" width="6" height="3" rx="0.5"/>
+      <svg
+        v-else-if="diskType === 'typec'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="8" y="2" width="8" height="4" rx="2" />
+        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z" />
+        <rect x="9" y="20" width="6" height="3" rx="0.5" />
       </svg>
       <!-- Secure USB Icon -->
-      <svg v-else-if="diskType === 'secure'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
-        <circle cx="10" cy="11" r="0.8" fill="currentColor"/>
-        <circle cx="12" cy="11" r="0.8" fill="currentColor"/>
-        <circle cx="14" cy="11" r="0.8" fill="currentColor"/>
-        <circle cx="10" cy="14" r="0.8" fill="currentColor"/>
-        <circle cx="12" cy="14" r="0.8" fill="currentColor"/>
-        <circle cx="14" cy="14" r="0.8" fill="currentColor"/>
+      <svg
+        v-else-if="diskType === 'secure'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
+        <circle cx="10" cy="11" r="0.8" fill="currentColor" />
+        <circle cx="12" cy="11" r="0.8" fill="currentColor" />
+        <circle cx="14" cy="11" r="0.8" fill="currentColor" />
+        <circle cx="10" cy="14" r="0.8" fill="currentColor" />
+        <circle cx="12" cy="14" r="0.8" fill="currentColor" />
+        <circle cx="14" cy="14" r="0.8" fill="currentColor" />
       </svg>
       <!-- Card Reader Icon -->
-      <svg v-else-if="diskType === 'reader'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-        <rect x="5" y="7" width="14" height="14" rx="2"/>
-        <rect x="8" y="11" width="8" height="6" rx="1" stroke-dasharray="2 2"/>
+      <svg
+        v-else-if="diskType === 'reader'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <rect x="5" y="7" width="14" height="14" rx="2" />
+        <rect x="8" y="11" width="8" height="6" rx="1" stroke-dasharray="2 2" />
       </svg>
       <!-- Mobile HDD Icon -->
-      <svg v-else-if="diskType === 'hdd'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="4" y="4" width="16" height="16" rx="2"/>
-        <circle cx="12" cy="11" r="4"/>
-        <circle cx="12" cy="11" r="1.5"/>
-        <line x1="6" y1="17" x2="8" y2="17"/>
+      <svg
+        v-else-if="diskType === 'hdd'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="4" y="4" width="16" height="16" rx="2" />
+        <circle cx="12" cy="11" r="4" />
+        <circle cx="12" cy="11" r="1.5" />
+        <line x1="6" y1="17" x2="8" y2="17" />
       </svg>
       <!-- Security Key Icon -->
-      <svg v-else-if="diskType === 'key'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="7.5" cy="12.5" r="3.5"/>
-        <path d="M11 12.5h9.5M16 12.5v2.5M18.5 12.5v2"/>
+      <svg
+        v-else-if="diskType === 'key'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="7.5" cy="12.5" r="3.5" />
+        <path d="M11 12.5h9.5M16 12.5v2.5M18.5 12.5v2" />
       </svg>
       <!-- CD-ROM ISO Icon -->
-      <svg v-else-if="diskType === 'cdrom'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="9"/>
-        <circle cx="12" cy="12" r="3"/>
-        <circle cx="12" cy="12" r="1"/>
+      <svg
+        v-else-if="diskType === 'cdrom'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="9" />
+        <circle cx="12" cy="12" r="3" />
+        <circle cx="12" cy="12" r="1" />
       </svg>
       <!-- Traditional USB 2.0 Icon -->
-      <svg v-else-if="diskType === 'usb2'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-        <rect x="10.5" y="3.5" width="3" height="2" fill="currentColor" opacity="0.4"/>
-        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
-        <circle cx="12" cy="18" r="1.2"/>
+      <svg
+        v-else-if="diskType === 'usb2'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <rect x="10.5" y="3.5" width="3" height="2" fill="currentColor" opacity="0.4" />
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
+        <circle cx="12" cy="18" r="1.2" />
       </svg>
       <!-- USB 3.1 Gen 2 (10G Speed Ring) Icon -->
-      <svg v-else-if="diskType === 'usb3_1'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
-        <circle cx="12" cy="13" r="3" stroke-dasharray="4 2"/>
-        <path d="M12 11v4M10.5 13h3"/>
+      <svg
+        v-else-if="diskType === 'usb3_1'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
+        <circle cx="12" cy="13" r="3" stroke-dasharray="4 2" />
+        <path d="M12 11v4M10.5 13h3" />
       </svg>
       <!-- USB 3.2 Gen 2x2 (20G Dual Channel Speed Lightning) Icon -->
-      <svg v-else-if="diskType === 'usb3_2'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="8" y="2" width="8" height="4" rx="2"/>
-        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
-        <polygon points="12.8 9.5 10 13.5 12.2 13.5 11 17.5 15 12.5 12.8 12.5 13.2 9.5" fill="currentColor" stroke="none"/>
+      <svg
+        v-else-if="diskType === 'usb3_2'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="8" y="2" width="8" height="4" rx="2" />
+        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z" />
+        <polygon
+          points="12.8 9.5 10 13.5 12.2 13.5 11 17.5 15 12.5 12.8 12.5 13.2 9.5"
+          fill="currentColor"
+          stroke="none"
+        />
       </svg>
       <!-- USB4 / Thunderbolt 4 (40G Flagship) Icon -->
-      <svg v-else-if="diskType === 'usb4'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="8" y="2" width="8" height="4" rx="2"/>
-        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
-        <polygon points="13 9 10 13.5 12.5 13.5 11 18 15 12.5 12.5 12.5 13 9" fill="currentColor" stroke="none"/>
+      <svg
+        v-else-if="diskType === 'usb4'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="8" y="2" width="8" height="4" rx="2" />
+        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z" />
+        <polygon points="13 9 10 13.5 12.5 13.5 11 18 15 12.5 12.5 12.5 13 9" fill="currentColor" stroke="none" />
       </svg>
       <!-- USB 3.0 SuperSpeed Flash Drive Icon -->
-      <svg v-else class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        v-else
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <!-- Metal USB-A Plug Head -->
-        <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-        <circle cx="10.8" cy="4" r="0.6" fill="currentColor"/>
-        <circle cx="13.2" cy="4" r="0.6" fill="currentColor"/>
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <circle cx="10.8" cy="4" r="0.6" fill="currentColor" />
+        <circle cx="13.2" cy="4" r="0.6" fill="currentColor" />
         <!-- USB Main Body -->
-        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
         <!-- SuperSpeed Lightning Emblem -->
-        <polygon points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10" fill="currentColor" stroke="none"/>
+        <polygon
+          points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10"
+          fill="currentColor"
+          stroke="none"
+        />
       </svg>
     </div>
 
     <div class="disk-details">
       <div class="disk-name-row">
         <span class="disk-name">{{ disk.name || disk.device }}</span>
-        <span v-if="disk.isFakeUsb3" class="fake-badge" :title="t('disk.fake_usb3_warning')">
-          ⚠️ Fake USB 3.0
-        </span>
+        <span v-if="disk.isFakeUsb3" class="fake-badge" :title="t('disk.fake_usb3_warning')"> ⚠️ Fake USB 3.0 </span>
       </div>
       <div class="disk-meta">
         {{ disk.device }} • {{ formatDiskCapacity(disk.formatted) }}
         <span class="speed-tag" :class="disk.protocolCode || 'usb2'">
-          {{ disk.usbVersion || 'USB 2.0' }} • {{ disk.usbSpeed || '480 Mb/s' }}
+          {{ disk.usbVersion || "USB 2.0" }} • {{ disk.usbSpeed || "480 Mb/s" }}
         </span>
       </div>
     </div>
 
     <div class="disk-tags">
-      <span class="disk-badge" :class="[diskType, bootSubtype ? `boot-${bootSubtype}` : '']" :title="bootTooltip">{{ diskTagLabel }}</span>
-      <button
-        class="btn-inspect"
-        :title="t('disk.hw_inspect')"
-        @click.stop="$emit('inspect', disk)"
-      >
-        ℹ️ {{ t('disk.details') }}
+      <span class="disk-badge" :class="[diskType, bootSubtype ? `boot-${bootSubtype}` : '']" :title="bootTooltip">{{
+        diskTagLabel
+      }}</span>
+      <button class="btn-inspect" :title="t('disk.hw_inspect')" @click.stop="$emit('inspect', disk)">
+        ℹ️ {{ t("disk.details") }}
       </button>
-      <button
-        class="btn-eject"
-        :title="t('disk.eject')"
-        @click.stop="$emit('eject', disk)"
-      >
-        ⏏️ {{ t('disk.eject') }}
+      <button class="btn-eject" :title="t('disk.eject')" :disabled="isEjecting" @click.stop="$emit('eject', disk)">
+        <span class="eject-button-icon" :class="{ 'is-spinning': isEjecting }">⏏️</span>
+        {{ t("disk.eject") }}
       </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { t, formatDiskCapacity } from '../i18n';
-import type { disk } from '../../wailsjs/go/models';
+import { computed } from "vue";
+import type { disk } from "../../wailsjs/go/models";
+import { formatDiskCapacity, t } from "../i18n";
 
 type DiskInfo = disk.DiskInfo;
 
-const props = withDefaults(defineProps<{
-  disk: DiskInfo;
-  isSelected: boolean;
-  isBatchMode?: boolean;
-  customIcon?: string;
-}>(), {
-  isBatchMode: false
-});
+const props = withDefaults(
+  defineProps<{
+    disk: DiskInfo;
+    isSelected: boolean;
+    isBatchMode?: boolean;
+    isEjecting?: boolean;
+    customIcon?: string;
+  }>(),
+  {
+    isBatchMode: false,
+    isEjecting: false,
+  }
+);
 
-defineEmits(['select', 'toggle', 'pick-icon', 'inspect', 'eject']);
+defineEmits(["select", "toggle", "pick-icon", "inspect", "eject"]);
 
-const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom' | 'usb2' | 'usb3_1' | 'usb3_2' | 'usb4' | 'usb'>(() => {
-  if (props.customIcon && ['boot', 'ssd', 'typec', 'secure', 'reader', 'hdd', 'key', 'cdrom', 'usb2', 'usb3_1', 'usb3_2', 'usb4', 'usb'].includes(props.customIcon)) {
+const diskType = computed<
+  | "boot"
+  | "ssd"
+  | "typec"
+  | "secure"
+  | "reader"
+  | "hdd"
+  | "key"
+  | "cdrom"
+  | "usb2"
+  | "usb3_1"
+  | "usb3_2"
+  | "usb4"
+  | "usb"
+>(() => {
+  if (
+    props.customIcon &&
+    [
+      "boot",
+      "ssd",
+      "typec",
+      "secure",
+      "reader",
+      "hdd",
+      "key",
+      "cdrom",
+      "usb2",
+      "usb3_1",
+      "usb3_2",
+      "usb4",
+      "usb",
+    ].includes(props.customIcon)
+  ) {
     return props.customIcon as any;
   }
 
-  const nameUpper = (props.disk.name || '').toUpperCase();
-  const vendorUpper = (props.disk.vendor || '').toUpperCase();
-  const controllerUpper = (props.disk.controllerVendor || '').toUpperCase();
-  const vidUpper = (props.disk.vendorId || '').toUpperCase();
+  const nameUpper = (props.disk.name || "").toUpperCase();
+  const vendorUpper = (props.disk.vendor || "").toUpperCase();
+  const controllerUpper = (props.disk.controllerVendor || "").toUpperCase();
+  const vidUpper = (props.disk.vendorId || "").toUpperCase();
 
-  const isReader = nameUpper.includes('CARD') || nameUpper.includes('READER') || nameUpper.includes('SD') || nameUpper.includes('MICROSD') || nameUpper.includes('TF') ||
-                   vendorUpper.includes('CARD') || vendorUpper.includes('READER') || vendorUpper.includes('SD') ||
-                   controllerUpper.includes('CARD') || controllerUpper.includes('READER') || controllerUpper.includes('读卡器') || controllerUpper.includes('CHIPSBANK') || controllerUpper.includes('CHIPSBRAND') ||
-                   vidUpper.includes('0X1E3D') || vidUpper.includes('0X0BDA') || vidUpper.includes('0X05E3');
+  const isReader =
+    nameUpper.includes("CARD") ||
+    nameUpper.includes("READER") ||
+    nameUpper.includes("SD") ||
+    nameUpper.includes("MICROSD") ||
+    nameUpper.includes("TF") ||
+    vendorUpper.includes("CARD") ||
+    vendorUpper.includes("READER") ||
+    vendorUpper.includes("SD") ||
+    controllerUpper.includes("CARD") ||
+    controllerUpper.includes("READER") ||
+    controllerUpper.includes("读卡器") ||
+    controllerUpper.includes("CHIPSBANK") ||
+    controllerUpper.includes("CHIPSBRAND") ||
+    vidUpper.includes("0X1E3D") ||
+    vidUpper.includes("0X0BDA") ||
+    vidUpper.includes("0X05E3");
 
-  const isBoot = props.disk.isRealVentoy || props.disk.isCloudMode || props.disk.isGenericBoot ||
-                 props.disk.bootStatusCode === 'uniboot_cloud' || props.disk.bootStatusCode === 'uniboot_hybrid' ||
-                 props.disk.bootStatusCode === 'ventoy_pure' || props.disk.bootStatusCode === 'third_party_boot';
+  const isBoot =
+    props.disk.isRealVentoy ||
+    props.disk.isCloudMode ||
+    props.disk.isGenericBoot ||
+    props.disk.bootStatusCode === "uniboot_cloud" ||
+    props.disk.bootStatusCode === "uniboot_hybrid" ||
+    props.disk.bootStatusCode === "ventoy_pure" ||
+    props.disk.bootStatusCode === "third_party_boot";
   if (isBoot) {
-    return 'boot';
+    return "boot";
   }
   if (isReader) {
-    return 'reader';
+    return "reader";
   }
-  if (nameUpper.includes('SECURE') || nameUpper.includes('VAULT') || nameUpper.includes('LOCK')) {
-    return 'secure';
+  if (nameUpper.includes("SECURE") || nameUpper.includes("VAULT") || nameUpper.includes("LOCK")) {
+    return "secure";
   }
-  if (nameUpper.includes('FIDO') || nameUpper.includes('KEY') || nameUpper.includes('YUBI')) {
-    return 'key';
+  if (nameUpper.includes("FIDO") || nameUpper.includes("KEY") || nameUpper.includes("YUBI")) {
+    return "key";
   }
-  if (nameUpper.includes('CDROM') || nameUpper.includes('ISO') || nameUpper.includes('VIRTUAL')) {
-    return 'cdrom';
+  if (nameUpper.includes("CDROM") || nameUpper.includes("ISO") || nameUpper.includes("VIRTUAL")) {
+    return "cdrom";
   }
-  if (nameUpper.includes('HDD') || nameUpper.includes('DISK DRIVE')) {
-    return 'hdd';
+  if (nameUpper.includes("HDD") || nameUpper.includes("DISK DRIVE")) {
+    return "hdd";
   }
-  if (nameUpper.includes('TYPE-C') || nameUpper.includes('TYPEC') || nameUpper.includes('DUAL')) {
-    return 'typec';
+  if (nameUpper.includes("TYPE-C") || nameUpper.includes("TYPEC") || nameUpper.includes("DUAL")) {
+    return "typec";
   }
-  if (props.disk.size >= 128 * 1024 * 1024 * 1024 || nameUpper.includes('SSD') || nameUpper.includes('NVME')) {
-    return 'ssd';
+  if (props.disk.size >= 128 * 1024 * 1024 * 1024 || nameUpper.includes("SSD") || nameUpper.includes("NVME")) {
+    return "ssd";
   }
-  if (props.disk.protocolCode === 'usb4' || props.disk.usbVersion === 'USB4') {
-    return 'usb4';
+  if (props.disk.protocolCode === "usb4" || props.disk.usbVersion === "USB4") {
+    return "usb4";
   }
-  if (props.disk.protocolCode === 'usb3_2' || props.disk.usbVersion === 'USB 3.2') {
-    return 'usb3_2';
+  if (props.disk.protocolCode === "usb3_2" || props.disk.usbVersion === "USB 3.2") {
+    return "usb3_2";
   }
-  if (props.disk.protocolCode === 'usb3_1' || props.disk.usbVersion === 'USB 3.1') {
-    return 'usb3_1';
+  if (props.disk.protocolCode === "usb3_1" || props.disk.usbVersion === "USB 3.1") {
+    return "usb3_1";
   }
-  if (props.disk.protocolCode === 'usb2' || props.disk.usbVersion === 'USB 2.0') {
-    return 'usb2';
+  if (props.disk.protocolCode === "usb2" || props.disk.usbVersion === "USB 2.0") {
+    return "usb2";
   }
-  return 'usb';
+  return "usb";
 });
 
 const bootTooltip = computed(() => {
-  if (diskType.value === 'boot') {
+  if (diskType.value === "boot") {
     if (props.disk.isRealVentoy) {
-      return t('disk.tooltip_uniboot_hybrid');
+      return t("disk.tooltip_uniboot_hybrid");
     }
     if (props.disk.isCloudMode) {
-      return t('disk.tooltip_uniboot_cloud');
+      return t("disk.tooltip_uniboot_cloud");
     }
     if (props.disk.thirdPartyBootCode) {
       const toolKey = `inspector.tool_${props.disk.thirdPartyBootCode}` as any;
@@ -241,27 +412,27 @@ const bootTooltip = computed(() => {
     if (props.disk.thirdPartyBootType) {
       return props.disk.thirdPartyBootType;
     }
-    if (props.disk.bootStatusCode === 'needs_privilege') {
-      return t('disk.tooltip_needs_privilege');
+    if (props.disk.bootStatusCode === "needs_privilege") {
+      return t("disk.tooltip_needs_privilege");
     }
-    return t('disk.tooltip_third_party_boot');
+    return t("disk.tooltip_third_party_boot");
   }
-  return '';
+  return "";
 });
 
-const bootSubtype = computed<'hybrid' | 'cloud' | 'thirdparty' | 'needs_privilege' | null>(() => {
-  if (diskType.value !== 'boot') return null;
-  if (props.disk.bootStatusCode === 'needs_privilege') return 'needs_privilege';
-  if (props.disk.isRealVentoy) return 'hybrid';
-  if (props.disk.isCloudMode) return 'cloud';
-  return 'thirdparty';
+const bootSubtype = computed<"hybrid" | "cloud" | "thirdparty" | "needs_privilege" | null>(() => {
+  if (diskType.value !== "boot") return null;
+  if (props.disk.bootStatusCode === "needs_privilege") return "needs_privilege";
+  if (props.disk.isRealVentoy) return "hybrid";
+  if (props.disk.isCloudMode) return "cloud";
+  return "thirdparty";
 });
 
 const diskTagLabel = computed(() => {
-  if (props.disk.bootStatusCode === 'needs_privilege') return t('disk.tag_needs_privilege');
-  if (diskType.value === 'boot') {
-    if (bootSubtype.value === 'hybrid') return t('disk.tag_boot_hybrid');
-    if (bootSubtype.value === 'cloud') return t('disk.tag_boot_cloud');
+  if (props.disk.bootStatusCode === "needs_privilege") return t("disk.tag_needs_privilege");
+  if (diskType.value === "boot") {
+    if (bootSubtype.value === "hybrid") return t("disk.tag_boot_hybrid");
+    if (bootSubtype.value === "cloud") return t("disk.tag_boot_cloud");
     if (props.disk.thirdPartyBootCode) {
       const toolKey = `inspector.tool_${props.disk.thirdPartyBootCode}` as any;
       const toolName = t(toolKey);
@@ -272,20 +443,20 @@ const diskTagLabel = computed(() => {
     if (props.disk.thirdPartyBootType) {
       return props.disk.thirdPartyBootType;
     }
-    return t('disk.tag_boot_thirdparty');
+    return t("disk.tag_boot_thirdparty");
   }
-  if (diskType.value === 'ssd') return t('disk.tag_ssd');
-  if (diskType.value === 'typec') return t('disk.tag_typec');
-  if (diskType.value === 'secure') return t('disk.tag_secure');
-  if (diskType.value === 'reader') return t('disk.tag_reader');
-  if (diskType.value === 'hdd') return t('disk.tag_hdd');
-  if (diskType.value === 'key') return t('disk.tag_key');
-  if (diskType.value === 'cdrom') return t('disk.tag_cdrom');
-  if (diskType.value === 'usb2') return 'USB 2.0';
-  if (diskType.value === 'usb3_1') return 'USB 3.1';
-  if (diskType.value === 'usb3_2') return 'USB 3.2';
-  if (diskType.value === 'usb4') return 'USB4';
-  return 'USB 3.0';
+  if (diskType.value === "ssd") return t("disk.tag_ssd");
+  if (diskType.value === "typec") return t("disk.tag_typec");
+  if (diskType.value === "secure") return t("disk.tag_secure");
+  if (diskType.value === "reader") return t("disk.tag_reader");
+  if (diskType.value === "hdd") return t("disk.tag_hdd");
+  if (diskType.value === "key") return t("disk.tag_key");
+  if (diskType.value === "cdrom") return t("disk.tag_cdrom");
+  if (diskType.value === "usb2") return "USB 2.0";
+  if (diskType.value === "usb3_1") return "USB 3.1";
+  if (diskType.value === "usb3_2") return "USB 3.2";
+  if (diskType.value === "usb4") return "USB4";
+  return "USB 3.0";
 });
 </script>
 
@@ -428,8 +599,13 @@ const diskTagLabel = computed(() => {
 }
 
 @keyframes pulse-warn {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
 .disk-meta {
@@ -459,7 +635,8 @@ const diskTagLabel = computed(() => {
   color: var(--accent-cyan);
 }
 
-.speed-tag.usb3_1, .speed-tag.usb3_2 {
+.speed-tag.usb3_1,
+.speed-tag.usb3_2 {
   color: #c084fc;
 }
 
@@ -492,6 +669,10 @@ const diskTagLabel = computed(() => {
 }
 
 .btn-eject {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
   background: var(--btn-sec-bg);
   color: var(--btn-sec-text);
   border: 1px solid var(--btn-sec-border);
@@ -500,12 +681,44 @@ const diskTagLabel = computed(() => {
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .btn-eject:hover {
   background: var(--badge-danger-bg);
   color: var(--danger);
   border-color: var(--alert-danger-border);
+}
+
+.eject-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.eject-button-icon.is-spinning {
+  animation: eject-spin 0.8s linear infinite;
+}
+
+@keyframes eject-spin {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  to {
+    transform: rotate(360deg) scale(1.05);
+  }
+}
+
+@keyframes eject-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .disk-badge {
