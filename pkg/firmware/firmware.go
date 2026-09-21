@@ -43,7 +43,7 @@ func GetCustomUniBootDir() string {
 	return customFirmwareDir
 }
 
-// GetEffectiveFirmwareDir returns user-customized firmware directory if set and accessible, otherwise GetDataDir()/firmware.
+// GetEffectiveFirmwareDir returns user-customized firmware directory if set and accessible, otherwise the default app local firmware dir.
 func GetEffectiveFirmwareDir() string {
 	custom := GetCustomUniBootDir()
 	if custom != "" {
@@ -51,7 +51,7 @@ func GetEffectiveFirmwareDir() string {
 			return custom
 		}
 	}
-	return filepath.Join(env.GetDataDir(), "firmware")
+	return env.GetFirmwareDir()
 }
 
 //go:embed assets/*

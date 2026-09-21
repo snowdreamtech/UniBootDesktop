@@ -112,6 +112,16 @@ func GetDownloadsDir() string {
 	return filepath.Join(GetDataDir(), "downloads")
 }
 
+// GetFirmwareDir returns the default directory for local UniBoot firmware downloads and updates.
+func GetFirmwareDir() string {
+	return filepath.Join(GetDataDir(), "firmware")
+}
+
+// GetVentoyDir returns the default directory for local Ventoy installation files.
+func GetVentoyDir() string {
+	return filepath.Join(GetDataDir(), "ventoy")
+}
+
 // GetPluginsDir returns the directory where plugins (e.g., asdf plugins) are stored.
 func GetPluginsDir() string {
 	return filepath.Join(GetDataDir(), "plugins")

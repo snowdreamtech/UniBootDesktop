@@ -223,9 +223,21 @@ func (a *App) SelectDirectory(title string) (string, error) {
 	if title == "" {
 		title = "Select Folder"
 	}
-	logger.Info("Opening native directory picker dialog", "title", title)
+	defaultDir := ""
+	switch title {
+	case "Select Ventoy installation folder":
+		defaultDir = env.GetVentoyDir()
+	case "Select UniBoot firmware directory":
+		defaultDir = env.GetFirmwareDir()
+	case "Select UniBoot directory":
+		defaultDir = env.GetFirmwareDir()
+	case "Select Folder":
+		defaultDir = env.GetDataDir()
+	}
+	logger.Info("Opening native directory picker dialog", "title", title, "defaultDir", defaultDir)
 	dir, err := wailsRuntime.OpenDirectoryDialog(a.ctx, wailsRuntime.OpenDialogOptions{
 		Title: title,
+		DefaultDirectory: defaultDir,
 	})
 	if err != nil {
 		logger.Error("Failed to open directory picker", "error", err)
