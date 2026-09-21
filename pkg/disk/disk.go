@@ -198,10 +198,14 @@ type ThirdPartyBootType string
 
 const (
 	BootTypeNone             ThirdPartyBootType = ""
+	BootTypeRufus            ThirdPartyBootType = "Rufus 制作盘"
+	BootTypeWePE             ThirdPartyBootType = "微PE (WePE) 维护盘"
+	BootTypeEasyU            ThirdPartyBootType = "优启通 (EasyU) 维护盘"
+	BootTypeYUMI             ThirdPartyBootType = "YUMI 多系统引导盘"
 	BootTypeOpenCore         ThirdPartyBootType = "OpenCore 黑苹果引导盘"
 	BootTypeClover           ThirdPartyBootType = "Clover 黑苹果引导盘"
-	BootTypeWindowsInstaller ThirdPartyBootType = "Windows 安装介质"
-	BootTypeWinPE            ThirdPartyBootType = "WinPE 装机维护盘"
+	BootTypeWindowsInstaller ThirdPartyBootType = "Windows 官方安装介质"
+	BootTypeWinPE            ThirdPartyBootType = "通用 WinPE 维护盘"
 	BootTypeLinuxLive        ThirdPartyBootType = "Linux Live 安装盘"
 	BootTypeGenericUEFI      ThirdPartyBootType = "通用 UEFI 引导盘"
 )
@@ -547,28 +551,68 @@ func pathExists(p string) bool {
 // IdentifyThirdPartyBoot scans a list of mount points belonging to a physical disk
 // and returns the most specific ThirdPartyBootType detected based on exact directory/file fingerprints.
 func IdentifyThirdPartyBoot(mountPoints []string) ThirdPartyBootType {
-	// First pass: highly specific vendor/system bootloaders
+	// First pass: highly specific popular tools & specialized bootloaders
 	for _, mp := range mountPoints {
 		if mp == "" {
 			continue
 		}
 
-		// 1. OpenCore Hackintosh bootloader
+		// 1. Rufus (UEFI:NTFS companion, Rufus EFI stub, or Rufus Windows bypass xml)
+		if pathExists(filepath.Join(mp, "rufus.efi")) ||
+			pathExists(filepath.Join(mp, "EFI", "rufus")) ||
+			(pathExists(filepath.Join(mp, "autounattend.xml")) && pathExists(filepath.Join(mp, "autorun.ico"))) {
+			return BootTypeRufus
+		}
+
+		// 2. 微PE (WePE)
+		if pathExists(filepath.Join(mp, "WEPE")) ||
+			pathExists(filepath.Join(mp, "EFI", "boot", "wepe.efi")) ||
+			pathExists(filepath.Join(mp, "wepe.efi")) {
+			return BootTypeWePE
+		}
+
+		// 3. 优启通 (EasyU / IT天空)
+		if pathExists(filepath.Join(mp, "EASYU")) ||
+			pathExists(filepath.Join(mp, "USBDATA")) ||
+			pathExists(filepath.Join(mp, "SKY")) ||
+			pathExists(filepath.Join(mp, "ITSKY")) {
+			return BootTypeEasyU
+		}
+
+		// 4. YUMI / Universal USB Installer
+		if pathExists(filepath.Join(mp, "multiboot", "menu", "yumi.cfg")) ||
+			pathExists(filepath.Join(mp, "multiboot")) {
+			return BootTypeYUMI
+		}
+
+		// 5. OpenCore Hackintosh bootloader
 		if pathExists(filepath.Join(mp, "EFI", "OC", "OpenCore.efi")) ||
 			pathExists(filepath.Join(mp, "EFI", "OC", "config.plist")) {
 			return BootTypeOpenCore
 		}
 
-		// 2. Clover Hackintosh bootloader
+		// 6. Clover Hackintosh bootloader
 		if pathExists(filepath.Join(mp, "EFI", "CLOVER", "CloverX64.efi")) ||
 			pathExists(filepath.Join(mp, "EFI", "CLOVER", "config.plist")) {
 			return BootTypeClover
 		}
+	}
 
-		// 3. WinPE Maintenance Disk (WePE, USBDATA, PETOOLS, winpe.ini, pe.cfg)
-		if pathExists(filepath.Join(mp, "WEPE")) ||
-			pathExists(filepath.Join(mp, "USBDATA")) ||
-			pathExists(filepath.Join(mp, "PETOOLS")) ||
+	// Second pass: standard OS installer media and generic WinPE
+	for _, mp := range mountPoints {
+		if mp == "" {
+			continue
+		}
+
+		// 7. Windows Official Installation Media
+		if pathExists(filepath.Join(mp, "sources", "install.wim")) ||
+			pathExists(filepath.Join(mp, "sources", "install.esd")) ||
+			pathExists(filepath.Join(mp, "sources", "install.swm")) {
+			return BootTypeWindowsInstaller
+		}
+
+		// 8. Generic WinPE Maintenance Disk
+		if pathExists(filepath.Join(mp, "PETOOLS")) ||
 			pathExists(filepath.Join(mp, "winpe.ini")) ||
 			pathExists(filepath.Join(mp, "pe.cfg")) ||
 			(pathExists(filepath.Join(mp, "sources", "boot.wim")) &&
@@ -577,14 +621,7 @@ func IdentifyThirdPartyBoot(mountPoints []string) ThirdPartyBootType {
 			return BootTypeWinPE
 		}
 
-		// 4. Windows Official Installation Media
-		if pathExists(filepath.Join(mp, "sources", "install.wim")) ||
-			pathExists(filepath.Join(mp, "sources", "install.esd")) ||
-			pathExists(filepath.Join(mp, "sources", "install.swm")) {
-			return BootTypeWindowsInstaller
-		}
-
-		// 5. Linux Live USB (casper, LiveOS, arch, isolinux, grub.cfg)
+		// 9. Linux Live USB (casper, LiveOS, arch, isolinux, grub.cfg)
 		if pathExists(filepath.Join(mp, "casper")) ||
 			pathExists(filepath.Join(mp, "LiveOS")) ||
 			pathExists(filepath.Join(mp, "arch", "boot")) ||
@@ -594,7 +631,7 @@ func IdentifyThirdPartyBoot(mountPoints []string) ThirdPartyBootType {
 		}
 	}
 
-	// Second pass: standard fallback UEFI bootloaders
+	// Third pass: standard fallback UEFI bootloaders
 	for _, mp := range mountPoints {
 		if mp == "" {
 			continue

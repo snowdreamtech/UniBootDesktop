@@ -107,10 +107,14 @@
 **Fingerprint Specifications & Detection:**
 | Target Type | Path Fingerprints | `thirdPartyBootType` | `bootStatus` |
 | :--- | :--- | :--- | :--- |
+| **Rufus Disk** | `rufus.efi`, `EFI/rufus/`, or `autounattend.xml` + `autorun.ico` | `"Rufus 制作盘"` | `"第三方引导: Rufus 制作盘"` |
+| **微PE (WePE)** | `WEPE/` directory, `wepe.efi` | `"微PE (WePE) 维护盘"` | `"第三方引导: 微PE (WePE) 维护盘"` |
+| **优启通 (EasyU)** | `EASYU/`, `USBDATA/`, `SKY/`, or `ITSKY/` | `"优启通 (EasyU) 维护盘"` | `"第三方引导: 优启通 (EasyU) 维护盘"` |
+| **YUMI Multiboot** | `multiboot/menu/yumi.cfg`, or `multiboot/` | `"YUMI 多系统引导盘"` | `"第三方引导: YUMI 多系统引导盘"` |
 | **OpenCore Hackintosh** | `EFI/OC/OpenCore.efi` or `EFI/OC/config.plist` | `"OpenCore 黑苹果引导盘"` | `"第三方引导: OpenCore 黑苹果引导盘"` |
 | **Clover Hackintosh** | `EFI/CLOVER/CloverX64.efi` or `EFI/CLOVER/config.plist` | `"Clover 黑苹果引导盘"` | `"第三方引导: Clover 黑苹果引导盘"` |
-| **Windows Official Installer** | `sources/install.wim` or `sources/install.esd` or `sources/install.swm` | `"Windows 安装介质"` | `"第三方引导: Windows 安装介质"` |
-| **WinPE Maintenance Disk** | `WEPE/`, `USBDATA/`, `PETOOLS/`, `winpe.ini`, `pe.cfg`, or standalone `sources/boot.wim` | `"WinPE 装机维护盘"` | `"第三方引导: WinPE 装机维护盘"` |
+| **Windows Official Installer** | `sources/install.wim`, `sources/install.esd`, or `sources/install.swm` | `"Windows 官方安装介质"` | `"第三方引导: Windows 官方安装介质"` |
+| **Generic WinPE Disk** | `PETOOLS/`, `winpe.ini`, `pe.cfg`, or standalone `sources/boot.wim` | `"通用 WinPE 维护盘"` | `"第三方引导: 通用 WinPE 维护盘"` |
 | **Linux Live USB** | `casper/`, `LiveOS/`, `arch/boot/`, `isolinux/`, or `boot/grub/grub.cfg` | `"Linux Live 安装盘"` | `"第三方引导: Linux Live 安装盘"` |
 | **Generic UEFI USB** | `EFI/BOOT/BOOTX64.EFI`, `BOOTAA64.EFI`, `bootmgr`, `boot/bcd` | `"通用 UEFI 引导盘"` | `"第三方引导: 通用 UEFI 引导盘"` |
 

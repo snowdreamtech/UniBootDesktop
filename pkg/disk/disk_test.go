@@ -201,6 +201,42 @@ func TestIdentifyThirdPartyBoot_Fingerprints(t *testing.T) {
 		expected     ThirdPartyBootType
 	}{
 		{
+			name:          "Rufus Disk with rufus.efi",
+			relativeDirs:  []string{"EFI/BOOT"},
+			relativeFiles: []string{"rufus.efi", "EFI/BOOT/BOOTX64.EFI"},
+			expected:      BootTypeRufus,
+		},
+		{
+			name:          "Rufus Disk with autounattend.xml bypass",
+			relativeDirs:  []string{"sources"},
+			relativeFiles: []string{"autounattend.xml", "autorun.ico", "sources/boot.wim"},
+			expected:      BootTypeRufus,
+		},
+		{
+			name:          "WePE Maintenance Disk with WEPE directory",
+			relativeDirs:  []string{"WEPE"},
+			relativeFiles: []string{"WEPE/WEPE64.WIM"},
+			expected:      BootTypeWePE,
+		},
+		{
+			name:          "EasyU Maintenance Disk with EASYU directory",
+			relativeDirs:  []string{"EASYU"},
+			relativeFiles: []string{"EASYU/EasyU64.wim"},
+			expected:      BootTypeEasyU,
+		},
+		{
+			name:          "EasyU Maintenance Disk with USBDATA directory",
+			relativeDirs:  []string{"USBDATA"},
+			relativeFiles: []string{"USBDATA/SKY.wim"},
+			expected:      BootTypeEasyU,
+		},
+		{
+			name:          "YUMI Multiboot USB",
+			relativeDirs:  []string{"multiboot/menu"},
+			relativeFiles: []string{"multiboot/menu/yumi.cfg"},
+			expected:      BootTypeYUMI,
+		},
+		{
 			name:          "OpenCore Hackintosh Bootloader",
 			relativeDirs:  []string{"EFI/OC"},
 			relativeFiles: []string{"EFI/OC/OpenCore.efi", "EFI/OC/config.plist"},
@@ -213,13 +249,7 @@ func TestIdentifyThirdPartyBoot_Fingerprints(t *testing.T) {
 			expected:      BootTypeClover,
 		},
 		{
-			name:          "WinPE Maintenance Disk with WEPE folder",
-			relativeDirs:  []string{"WEPE", "sources"},
-			relativeFiles: []string{"sources/boot.wim"},
-			expected:      BootTypeWinPE,
-		},
-		{
-			name:          "WinPE Maintenance Disk with winpe.ini",
+			name:          "Generic WinPE Maintenance Disk with winpe.ini",
 			relativeDirs:  []string{"sources"},
 			relativeFiles: []string{"winpe.ini", "sources/boot.wim"},
 			expected:      BootTypeWinPE,
@@ -294,9 +324,13 @@ func TestDetectBootStatus_Classification(t *testing.T) {
 	// 3. Genuine Ventoy Disk (no UniBoot manifest)
 	assert.Equal(t, "原生 Ventoy 启动盘 (可无损升级)", DetectBootStatus("", "GPT", true, false, BootTypeNone, nil))
 
-	// 4. Third-party boot disks
-	assert.Equal(t, "第三方引导: Windows 安装介质", DetectBootStatus("", "GPT", false, false, BootTypeWindowsInstaller, nil))
-	assert.Equal(t, "第三方引导: WinPE 装机维护盘", DetectBootStatus("", "GPT", false, false, BootTypeWinPE, nil))
+	// 4. Third-party popular tools & boot disks
+	assert.Equal(t, "第三方引导: Rufus 制作盘", DetectBootStatus("", "GPT", false, false, BootTypeRufus, nil))
+	assert.Equal(t, "第三方引导: 微PE (WePE) 维护盘", DetectBootStatus("", "GPT", false, false, BootTypeWePE, nil))
+	assert.Equal(t, "第三方引导: 优启通 (EasyU) 维护盘", DetectBootStatus("", "GPT", false, false, BootTypeEasyU, nil))
+	assert.Equal(t, "第三方引导: YUMI 多系统引导盘", DetectBootStatus("", "GPT", false, false, BootTypeYUMI, nil))
+	assert.Equal(t, "第三方引导: Windows 官方安装介质", DetectBootStatus("", "GPT", false, false, BootTypeWindowsInstaller, nil))
+	assert.Equal(t, "第三方引导: 通用 WinPE 维护盘", DetectBootStatus("", "GPT", false, false, BootTypeWinPE, nil))
 	assert.Equal(t, "第三方引导: Linux Live 安装盘", DetectBootStatus("", "GPT", false, false, BootTypeLinuxLive, nil))
 	assert.Equal(t, "第三方引导: OpenCore 黑苹果引导盘", DetectBootStatus("", "GPT", false, false, BootTypeOpenCore, nil))
 	assert.Equal(t, "第三方引导: 通用 UEFI 引导盘", DetectBootStatus("", "GPT", false, false, BootTypeGenericUEFI, nil))
