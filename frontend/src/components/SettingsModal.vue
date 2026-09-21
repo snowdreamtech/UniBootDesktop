@@ -542,35 +542,56 @@ function getFinalProxyUrl(): string {
   return proxyInputUrl.value.trim();
 }
 
+function buildConfigPayload() {
+  const isDirect = proxyProtocol.value === 'direct';
+  const hasHost = Boolean(proxyHost.value.trim());
+  const finalPort = (!isDirect && hasHost) ? (Number(proxyPort.value) || 0) : 0;
+
+  return {
+    githubProxy: getFinalProxyUrl(),
+    proxyProtocol: proxyProtocol.value,
+    proxyHost: proxyHost.value.trim(),
+    proxyPort: finalPort,
+    proxyUser: proxyUser.value.trim(),
+    proxyPassword: proxyPassword.value,
+    mode: defaultMode.value,
+    fileSystem: defaultFs.value,
+    autoCheckUpdate: autoCheckUpdate.value,
+    autoEjectAfterDeploy: autoEjectAfterDeploy.value,
+    theme: appTheme.value,
+    language: appLanguage.value,
+    ventoyPath: ventoyPath.value.trim(),
+    ventoySecureBoot: ventoySecureBoot.value,
+    ventoyPartitionStyle: ventoyPartitionStyle.value,
+    ventoyReserveSpace: Number(ventoyReserveSpace.value) || 0,
+    ventoyWin11Bypass: ventoyWin11Bypass.value === true,
+    ventoyMenuTimeout: Number(ventoyMenuTimeout.value) || 0,
+  };
+}
+
+async function saveConfigImmediate() {
+  if (isInitializing) return;
+  if (saveTimer) {
+    clearTimeout(saveTimer);
+    saveTimer = null;
+  }
+  const payload = buildConfigPayload();
+  emit('save', payload);
+  if (window.go && window.go.main && window.go.main.App) {
+    try {
+      await window.go.main.App.SaveConfig(payload as any);
+    } catch (e: any) {
+      console.error('Failed to save config:', e);
+    }
+  }
+}
+
 function triggerAutoSave() {
   if (isInitializing) return;
   if (saveTimer) clearTimeout(saveTimer);
 
-  saveTimer = setTimeout(() => {
-    const payload = {
-      githubProxy: getFinalProxyUrl(),
-      proxyProtocol: proxyProtocol.value,
-      proxyHost: proxyHost.value.trim(),
-      proxyPort: Number(proxyPort.value) || 0,
-      proxyUser: proxyUser.value.trim(),
-      proxyPassword: proxyPassword.value,
-      mode: defaultMode.value,
-      fileSystem: defaultFs.value,
-      autoCheckUpdate: autoCheckUpdate.value,
-      autoEjectAfterDeploy: autoEjectAfterDeploy.value,
-      theme: appTheme.value,
-      language: appLanguage.value,
-      ventoyPath: ventoyPath.value.trim(),
-      ventoySecureBoot: ventoySecureBoot.value,
-      ventoyPartitionStyle: ventoyPartitionStyle.value,
-      ventoyReserveSpace: Number(ventoyReserveSpace.value) || 0,
-      ventoyWin11Bypass: ventoyWin11Bypass.value === true,
-      ventoyMenuTimeout: Number(ventoyMenuTimeout.value) || 0,
-    };
-    emit('save', payload);
-    if (window.go && window.go.main && window.go.main.App) {
-      window.go.main.App.SaveConfig(payload as any).catch((e: any) => console.error(e));
-    }
+  saveTimer = setTimeout(async () => {
+    await saveConfigImmediate();
     isAutoSaving.value = true;
     setTimeout(() => {
       isAutoSaving.value = false;
@@ -583,9 +604,9 @@ function onLanguageChange(val: string) {
   triggerAutoSave();
 }
 
-function onThemeChange(val: string) {
+async function onThemeChange(val: string) {
   applyTheme(val);
-  triggerAutoSave();
+  await saveConfigImmediate();
 }
 
 watch(appTheme, (newTheme) => {
@@ -679,7 +700,7 @@ async function loadFullConfig() {
         proxyInputUrl.value = cfg.githubProxy || '';
         proxyProtocol.value = cfg.proxyProtocol || 'direct';
         proxyHost.value = cfg.proxyHost || '';
-        proxyPort.value = cfg.proxyPort || 1080;
+        proxyPort.value = cfg.proxyPort > 0 ? cfg.proxyPort : 1080;
         proxyUser.value = cfg.proxyUser || '';
         proxyPassword.value = cfg.proxyPassword || '';
         ventoyPath.value = cfg.ventoyPath || '';
@@ -825,6 +846,9 @@ async function syncFirmware() {
 }
 
 function close() {
+  if (saveTimer) {
+    saveConfigImmediate();
+  }
   emit('close');
 }
 

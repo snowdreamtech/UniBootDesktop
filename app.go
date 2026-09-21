@@ -568,29 +568,78 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		return fmt.Errorf("proxy port must be between 0 and 65535 (got %d)", cfg.ProxyPort)
 	}
 
-	// Validate ProxyHost format (basic validation - not empty if port is set)
-	if cfg.ProxyPort > 0 && cfg.ProxyHost == "" {
+	// Normalize proxy configuration: if direct or host is empty, reset port to 0
+	if cfg.ProxyProtocol == "direct" || cfg.ProxyHost == "" {
+		cfg.ProxyPort = 0
+	} else if cfg.ProxyPort > 0 && cfg.ProxyHost == "" {
 		logger.Error("Proxy host is empty but port is set", "port", cfg.ProxyPort)
 		return fmt.Errorf("proxy host cannot be empty when proxy port is configured")
 	}
 
-	// Validate Language enum
+	// Validate Language enum (supporting all 52 internationalized locales + auto)
 	validLanguages := map[string]bool{
-		"auto":   true,
-		"en-US":  true,
-		"zh-CN":  true,
-		"zh-TW":  true,
-		"ja-JP":  true,
-		"ko-KR":  true,
-		"de-DE":  true,
-		"fr-FR":  true,
-		"es-ES":  true,
-		"pt-BR":  true,
-		"ru-RU":  true,
+		"auto":    true,
+		"zh-CN":   true,
+		"en-US":   true,
+		"zh-TW":   true,
+		"ja-JP":   true,
+		"ko-KR":   true,
+		"de-DE":   true,
+		"fr-FR":   true,
+		"es-ES":   true,
+		"es-LA":   true,
+		"ru-RU":   true,
+		"pt-BR":   true,
+		"pt-PT":   true,
+		"it-IT":   true,
+		"tr-TR":   true,
+		"pl-PL":   true,
+		"vi-VN":   true,
+		"ar-SA":   true,
+		"ur-PK":   true,
+		"az-AZ":   true,
+		"da-DK":   true,
+		"ka-GE":   true,
+		"fa-IR":   true,
+		"sl-SI":   true,
+		"oc-FR":   true,
+		"cs-CZ":   true,
+		"sk-SK":   true,
+		"bn-BD":   true,
+		"hi-IN":   true,
+		"nl-NL":   true,
+		"ro-RO":   true,
+		"hr-HR":   true,
+		"hu-HU":   true,
+		"sr-Latn": true,
+		"sr-Cyrl": true,
+		"th-TH":   true,
+		"lt-LT":   true,
+		"mk-MK":   true,
+		"he-IL":   true,
+		"id-ID":   true,
+		"nb-NO":   true,
+		"uk-UA":   true,
+		"el-GR":   true,
+		"sv-SE":   true,
+		"bg-BG":   true,
+		"hy-AM":   true,
+		"fi-FI":   true,
+		"gl-ES":   true,
+		"ca-ES":   true,
+		"ta-IN":   true,
+		"be-BY":   true,
+		"ml-IN":   true,
+		"et-EE":   true,
 	}
 	if !validLanguages[cfg.Language] {
 		logger.Error("Invalid language code", "language", cfg.Language)
-		return fmt.Errorf("invalid language code: %s (must be one of: auto, en-US, zh-CN, zh-TW, etc.)", cfg.Language)
+		return fmt.Errorf("invalid language code: %s", cfg.Language)
+	}
+
+	// Normalize theme preference
+	if cfg.Theme != "light" && cfg.Theme != "dark" {
+		cfg.Theme = "dark"
 	}
 
 	// Validate FileSystem enum

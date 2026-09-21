@@ -113,6 +113,10 @@ export function useAppSettings(options: UseAppSettingsOptions) {
 
     if (window.go && window.go.main && window.go.main.App) {
       try {
+        const isDirect = (payload.proxyProtocol || 'direct') === 'direct';
+        const host = payload.proxyHost ? payload.proxyHost.trim() : '';
+        const port = (!isDirect && host) ? (Number(payload.proxyPort) || 0) : 0;
+
         const configObj = typeof payload === 'object' && payload !== null ? {
           mode: payload.mode || activeMode.value,
           autoCheckUpdate: payload.autoCheckUpdate !== false,
@@ -121,8 +125,8 @@ export function useAppSettings(options: UseAppSettingsOptions) {
           githubProxy: proxyUrl,
           fileSystem: payload.fileSystem || selectedFsType.value,
           proxyProtocol: payload.proxyProtocol || 'direct',
-          proxyHost: payload.proxyHost || '',
-          proxyPort: Number(payload.proxyPort) || 0,
+          proxyHost: host,
+          proxyPort: port,
           proxyUser: payload.proxyUser || '',
           proxyPassword: payload.proxyPassword || '',
           ventoyPath: payload.ventoyPath || '',
