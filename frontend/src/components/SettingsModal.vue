@@ -1447,10 +1447,19 @@ onMounted(() => {
   gap: 0.5rem;
 }
 
+.firmware-sync-card {
+  margin-top: 1.25rem;
+  padding: 0.85rem;
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+}
+
 .sync-status {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   font-size: 0.825rem;
   color: var(--text-muted);
 }
@@ -1492,7 +1501,7 @@ onMounted(() => {
 .btn-primary-sm {
   background: var(--accent-cyan);
   color: #070a12;
-  border: none;
+  border: 1px solid var(--accent-cyan);
   padding: 0.35rem 0.75rem;
   border-radius: 6px;
   font-size: 0.8rem;
@@ -1503,6 +1512,22 @@ onMounted(() => {
 
 .btn-primary-sm:hover {
   box-shadow: 0 0 12px var(--accent-cyan-glow);
+}
+
+.btn-primary-sm:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+[data-theme="light"] .btn-primary-sm {
+  background: #0369a1;
+  border-color: #0369a1;
+  color: #ffffff;
+}
+
+[data-theme="light"] .btn-primary-sm:hover {
+  background: #075985;
+  border-color: #075985;
 }
 
 .sync-progress {
