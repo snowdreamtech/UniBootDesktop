@@ -66,7 +66,7 @@ export const srCyrl: TranslationDict = {
   "settings.testVentoyCli": "Тестирај Ventoy CLI",
   "settings.select_ventoy_dir": "Изаберите директоријум инсталације Ventoy",
 
-  "settings.cliFormattingFlags": "Вентои ЦЛИ заставице за форматирање",
+  "settings.cliFormattingFlags": "Ventoy CLI заставице за форматирање",
   "settings.ventoyPlugins": "Ventoy додаци за аутоматизацију (ventoy.json)",
   "app.title": "UniBoot Desktop",
   "app.subtitle": "Алат за креирање покретачких уређаја са двоструким мотором UEFI/Legacy BIOS за све архитектуре",
@@ -179,7 +179,7 @@ export const srCyrl: TranslationDict = {
   "deploy.macos_alert_title": "Ново форматирање помоћу Ventoy CLI није подржано на macOS-у",
   "deploy.macos_alert_desc":
     "Званични Ventoy још не подржава покретање програма за форматирање на macOS-у. За израду новог [Хибридног диска] потребан је Ventoy CLI. Препоручује се употреба [Режима у облаку (1s покретачки диск у облаку)]!",
-  "deploy.no_ventoy_title": "Вентои ЦЛИ извршни фајл није откривен",
+  "deploy.no_ventoy_title": "Ventoy CLI извршна датотека није пронађена",
   "deploy.no_ventoy_desc":
     "Израда [Хибридног диска] захтева локално инсталиран Ventoy CLI. Молимо изаберите подржани [Режим у облаку]!",
   "deploy.result_batch_success": "1-секундни инсталациони диск у облаку успешно је распоређен на {count} диск(ова)!",

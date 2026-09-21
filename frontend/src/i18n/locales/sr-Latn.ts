@@ -66,7 +66,7 @@ export const srLatn: TranslationDict = {
   "settings.testVentoyCli": "Testiraj Ventoy CLI",
   "settings.select_ventoy_dir": "Izaberite direktorijum instalacije Ventoy",
 
-  "settings.cliFormattingFlags": "Вентои ЦЛИ заставице за форматирање",
+  "settings.cliFormattingFlags": "Ventoy CLI zastavice za formatiranje",
   "settings.ventoyPlugins": "Ventoy dodaci za automatizaciju (ventoy.json)",
   "app.title": "UniBoot Desktop",
   "app.subtitle": "Alat za kreiranje pokretačkih uređaja sa dvostrukim motorom UEFI/Legacy BIOS za sve arhitekture",
