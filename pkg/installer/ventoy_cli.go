@@ -23,7 +23,7 @@ type VentoyCliValidationResult struct {
 	Version        string `json:"version"`
 	Code           string `json:"code"`
 	Detail         string `json:"detail"`
-	Message        string `json:"message"`
+	Message        string `json:"-"`
 	ExecutablePath string `json:"executablePath"`
 }
 

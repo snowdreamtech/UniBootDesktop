@@ -5,7 +5,7 @@ export interface VentoyValidation {
   version: string;
   code: string;
   detail?: string;
-  message: string;
+  message?: string;
   executablePath: string;
 }
 

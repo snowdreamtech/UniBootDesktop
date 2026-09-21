@@ -4,6 +4,7 @@
 package installer
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -21,6 +22,26 @@ func TestValidateVentoyCliEmptyPath(t *testing.T) {
 	}
 	if res.Code != "path_empty" {
 		t.Errorf("Expected empty path code, got %q", res.Code)
+	}
+}
+
+func TestVentoyCliValidationMessageIsNotSerialized(t *testing.T) {
+	result := &VentoyCliValidationResult{
+		Valid:   false,
+		Code:    "path_missing",
+		Detail:  "/tmp/ventoy",
+		Message: "backend-only diagnostic",
+	}
+
+	encoded, err := json.Marshal(result)
+	if err != nil {
+		t.Fatalf("json.Marshal() error = %v", err)
+	}
+	if string(encoded) == "" || string(encoded) == "{}" {
+		t.Fatalf("expected validation fields in JSON, got %s", encoded)
+	}
+	if string(encoded) != `{"valid":false,"version":"","code":"path_missing","detail":"/tmp/ventoy","executablePath":""}` {
+		t.Fatalf("unexpected validation JSON: %s", encoded)
 	}
 }
 
