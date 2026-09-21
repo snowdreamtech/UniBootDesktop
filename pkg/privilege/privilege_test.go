@@ -48,3 +48,24 @@ func TestRunElevatedRejectsEmptyCommand(t *testing.T) {
 		t.Fatal("expected empty command string to be rejected")
 	}
 }
+
+func TestValidateRawDevicePathRejectsUnsafeInputs(t *testing.T) {
+	if err := ValidateRawDevicePath("/dev/sda"); err == nil {
+		t.Fatal("expected system disk path to be rejected")
+	}
+	if err := ValidateRawDevicePath("/dev/sdb"); err != nil {
+		t.Fatal("expected valid removable device path to be accepted")
+	}
+	if err := ValidateRawDevicePath("/dev/sdb;rm -rf /"); err == nil {
+		t.Fatal("expected injected command string to be rejected")
+	}
+}
+
+func TestValidateCommandNameRejectsDangerousInput(t *testing.T) {
+	if err := ValidateCommandName("sh"); err == nil {
+		t.Fatal("expected shell command to be rejected by policy")
+	}
+	if err := ValidateCommandName("diskutil"); err != nil {
+		t.Fatal("expected allowed system command to pass validation")
+	}
+}

@@ -4,9 +4,12 @@
 package privilege
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 	"sync"
@@ -86,6 +89,97 @@ func validateElevatedCommand(cmdLine string) error {
 	return nil
 }
 
+// ValidateCommandName enforces a narrow allowlist for system commands that can be invoked
+// by the application. This prevents arbitrary shell execution from spreading across the codebase.
+func ValidateCommandName(name string) error {
+	trimmed := strings.TrimSpace(name)
+	if trimmed == "" {
+		return fmt.Errorf("command name is empty")
+	}
+
+	base := filepath.Base(trimmed)
+	base = strings.TrimSpace(base)
+	if base == "" {
+		return fmt.Errorf("command name is empty")
+	}
+	if strings.ContainsAny(base, "\x00\r\n;|`$&<> ") {
+		return fmt.Errorf("command name contains unsafe characters: %q", base)
+	}
+
+	allowlist := map[string]struct{}{
+		"diskutil": {}, "lsblk": {}, "umount": {}, "udisksctl": {}, "mount": {}, "mount_msdos": {},
+		"chmod": {}, "dd": {}, "sudo": {}, "pkexec": {}, "osascript": {}, "net": {}, "true": {},
+		"cmd.exe": {}, "powershell": {}, "powershell.exe": {}, "wmic": {}, "open": {}, "diskpart": {},
+		"cmd": {}, "echo": {},
+	}
+	lower := strings.ToLower(base)
+	if _, ok := allowlist[lower]; !ok {
+		return fmt.Errorf("command %q is not in the allowlist", base)
+	}
+	return nil
+}
+
+// ValidateCommandArgument ensures argument values do not embed shell syntax or path traversal patterns.
+func ValidateCommandArgument(arg string) error {
+	trimmed := strings.TrimSpace(arg)
+	if trimmed == "" {
+		return fmt.Errorf("command argument is empty")
+	}
+	if strings.ContainsAny(trimmed, "\x00\r\n;|`$&<>") {
+		return fmt.Errorf("command argument contains unsafe shell syntax")
+	}
+	if strings.Contains(trimmed, "..") {
+		return fmt.Errorf("command argument contains path traversal")
+	}
+	return nil
+}
+
+// SafeExecCommandContext runs a system command only after validating the command name and arguments.
+func SafeExecCommandContext(ctx context.Context, name string, args ...string) (*exec.Cmd, error) {
+	if err := ValidateCommandName(name); err != nil {
+		return nil, err
+	}
+	for _, arg := range args {
+		if err := ValidateCommandArgument(arg); err != nil {
+			return nil, fmt.Errorf("unsafe argument for %q: %w", name, err)
+		}
+	}
+	return exec.CommandContext(ctx, name, args...), nil
+}
+
+// ValidateRawDevicePath rejects unsafe or clearly system-owned device paths before OS access.
+func ValidateRawDevicePath(devicePath string) error {
+	trimmed := strings.TrimSpace(devicePath)
+	if trimmed == "" {
+		return fmt.Errorf("device path is empty")
+	}
+	if strings.ContainsAny(trimmed, "\x00\r\n;|`$&<>") {
+		return fmt.Errorf("device path contains unsafe shell syntax")
+	}
+
+	blocked := map[string]struct{}{
+		"/": {}, "C:": {}, "/dev/sda": {}, "/dev/nvme0n1": {}, "/dev/disk0": {}, "disk0": {},
+	}
+	if _, ok := blocked[trimmed]; ok {
+		return fmt.Errorf("device path %q is blocked as a system-owned path", trimmed)
+	}
+
+	patterns := []*regexp.Regexp{
+		regexp.MustCompile(`^/dev/(?:r?disk\d+(?:s\d+)?|sd[a-z]+|nvme\d+n\d+|mmcblk\d+|vd[a-z]+)$`),
+		regexp.MustCompile(`^/Volumes/[A-Za-z0-9_\.\-\s]+$`),
+		regexp.MustCompile(`^\\\\\.\\PhysicalDrive\d+$`),
+		regexp.MustCompile(`^PhysicalDrive\d+$`),
+		regexp.MustCompile(`^disk\d+$`),
+		regexp.MustCompile(`^[A-Za-z]:$`),
+	}
+	for _, pattern := range patterns {
+		if pattern.MatchString(trimmed) {
+			return nil
+		}
+	}
+	return fmt.Errorf("unsupported raw device path: %q", trimmed)
+}
+
 func RunElevated(prompt string, cmdLine string) (string, error) {
 	if err := validateElevatedCommand(cmdLine); err != nil {
 		return "", fmt.Errorf("unsafe elevated command: %w", err)
@@ -143,6 +237,9 @@ func ReadSector(devicePath string, numBytes int) ([]byte, error) {
 	if devicePath == "" {
 		return nil, fmt.Errorf("empty device path")
 	}
+	if err := ValidateRawDevicePath(devicePath); err != nil {
+		return nil, fmt.Errorf("unsafe raw device path: %w", err)
+	}
 	if numBytes <= 0 {
 		numBytes = 512
 	}
@@ -182,6 +279,9 @@ func ReadSector(devicePath string, numBytes int) ([]byte, error) {
 func MountHiddenESP(partitionDevice string) (string, func(), error) {
 	if partitionDevice == "" {
 		return "", func() {}, fmt.Errorf("empty partition device")
+	}
+	if err := ValidateRawDevicePath(partitionDevice); err != nil {
+		return "", func() {}, fmt.Errorf("unsafe partition device: %w", err)
 	}
 
 	tempDir, err := os.MkdirTemp("", "uniboot_esp_*")

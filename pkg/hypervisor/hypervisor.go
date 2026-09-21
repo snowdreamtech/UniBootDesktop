@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
 )
 
 // HypervisorType defines supported virtualization engines.
@@ -270,6 +271,14 @@ func (m *Manager) CleanupAllUnmountedDisks() {
 func runCommandWithTimeout(timeout time.Duration, name string, args ...string) error {
 	if timeout <= 0 {
 		timeout = 3 * time.Second
+	}
+	if err := privilege.ValidateCommandName(name); err != nil {
+		return fmt.Errorf("unsafe hypervisor command: %w", err)
+	}
+	for _, arg := range args {
+		if err := privilege.ValidateCommandArgument(arg); err != nil {
+			return fmt.Errorf("unsafe hypervisor argument: %w", err)
+		}
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
