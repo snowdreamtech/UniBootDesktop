@@ -35,7 +35,6 @@
         :selectedDisk="selectedDisk"
         :selectedDevices="selectedDevices"
         :isScanningDisks="isScanningDisks"
-        :isPostDeployEjected="Boolean(showDeploySuccessBanner && deploySuccessBanner.autoEjected)"
         :customIcons="customIcons"
         @set-selection-mode="setSelectionMode"
         @select-all="selectAllDisks"
