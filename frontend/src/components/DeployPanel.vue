@@ -337,14 +337,16 @@
       </div>
 
       <div v-if="isDeploying" class="deploy-active-container">
-        <!-- Batch deployment info (when deploying multiple disks) -->
-        <div v-if="batchDeployInfo && batchDeployInfo.totalDisks > 1" class="batch-deploy-info">
-          <div class="batch-current-disk">
+        <!-- Unified deployment stage & disk card -->
+        <div class="batch-deploy-info">
+          <div class="batch-current-disk" v-if="batchDeployInfo && batchDeployInfo.totalDisks > 1">
             {{ t('deploy.batch_current') }}: {{ batchDeployInfo.currentDiskIndex }}/{{ batchDeployInfo.totalDisks }}
           </div>
-          <div class="batch-disk-name">{{ batchDeployInfo.currentDisk }}</div>
-          <div v-if="batchDeployInfo.currentStage" class="batch-current-stage">
-            {{ batchDeployInfo.currentStage }}
+          <div class="batch-disk-name" v-if="batchDeployInfo?.currentDisk">
+            {{ batchDeployInfo.currentDisk }}
+          </div>
+          <div class="batch-current-stage">
+            {{ batchDeployInfo?.currentStage || t('deploy.stage_preparing') }}
           </div>
         </div>
 

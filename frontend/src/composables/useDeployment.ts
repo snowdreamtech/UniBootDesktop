@@ -359,14 +359,24 @@ export function useDeployment(options: UseDeploymentOptions) {
     }
 
     isDeploying.value = true;
-    deployProgress.value = 5;
-    batchDeployInfo.value = null;
+    deployProgress.value = 0;
+    batchDeployInfo.value = {
+      totalDisks: targets.length,
+      currentDiskIndex: 1,
+      currentDisk: targets[0],
+      currentStage: t("deploy.stage_preparing"),
+      diskProgress: 0,
+      overallProgress: 0,
+      speedMBps: 0,
+      elapsedSec: 0,
+      etaSec: 0,
+    };
 
     let unsubCloudProgress: (() => void) | null = null;
     let unsubBatchProgress: (() => void) | null = null;
 
     if (window.runtime && window.runtime.EventsOn) {
-      // Listen for batch deployment progress (multi-disk, unified across modes)
+      // Listen for unified batch deployment progress (unified across modes)
       const onBatchProgress = (progress: BatchDeployProgress) => {
         deployProgress.value = progress.overallProgress;
         batchDeployInfo.value = progress;
@@ -386,11 +396,9 @@ export function useDeployment(options: UseDeploymentOptions) {
         }
       };
 
-      // Listen for single disk progress (for backward compatibility)
+      // Listen for single disk progress fallback
       window.runtime.EventsOn("cloud-deploy-progress", (progress: number) => {
-        if (!batchDeployInfo.value) {
-          deployProgress.value = progress;
-        }
+        deployProgress.value = progress;
       });
       unsubCloudProgress = () => {
         if (window.runtime && window.runtime.EventsOff) {
@@ -413,13 +421,14 @@ export function useDeployment(options: UseDeploymentOptions) {
       if (targets.length === 1) {
         const expected = pendingTargetSnapshots.value[0];
         if (!expected) throw new Error(t("deploy.toast_target_changed"));
-        let res: any;
+        let resList: any[];
         if (activeMode.value === "cloud") {
-          res = await app.DeployCloudMode(targets[0], selectedFsType.value, expected);
+          resList = await app.DeployCloudModeBatch(targets, selectedFsType.value, [expected]);
         } else {
-          res = await app.DeployHybridMode(targets[0], selectedFsType.value, isoPaths, expected);
+          resList = await app.DeployHybridModeBatch(targets, selectedFsType.value, isoPaths, [expected]);
         }
-        if (res) {
+        if (resList && resList.length > 0) {
+          const res = resList[0];
           success = res.success;
           resultMsg = res.message || "";
           if (res.diagnostics) {

@@ -10,7 +10,7 @@ export interface UseAppRuntimeEventsOptions {
   setInitialLogs: (logs: any[]) => void;
   appendLogEntry: (entry: any) => void;
   isoCopyStatus: Ref<string>;
-  deployProgress: Ref<number>;
+  deployProgress?: Ref<number>;
   deploySpeedMBps: Ref<number>;
   deployElapsedSec: Ref<number>;
   deployEtaSec: Ref<number>;
@@ -30,7 +30,6 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
     setInitialLogs,
     appendLogEntry,
     isoCopyStatus,
-    deployProgress,
     deploySpeedMBps,
     deployElapsedSec,
     deployEtaSec,
@@ -65,9 +64,8 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
             currentFile: data.currentFile,
             progress: data.progress.toFixed(1)
           });
-          // Only allow single-disk ISO progress to control deployProgress if not in batch deployment mode
-          if (!batchDeployInfo?.value) {
-            deployProgress.value = Math.min(99, Math.max(50, Math.floor(50 + data.progress / 2)));
+          if (batchDeployInfo?.value) {
+            batchDeployInfo.value.currentStage = `${t('deploy.stage_iso_copy')} (${data.currentFile} ${data.progress.toFixed(0)}%)`;
           }
           if (data.speedMBps !== undefined) deploySpeedMBps.value = data.speedMBps;
           if (data.elapsedSec !== undefined) deployElapsedSec.value = data.elapsedSec;
