@@ -671,4 +671,49 @@ function closeModal() {
   color: #1e3a8a;
   font-weight: 500;
 }
+
+[data-theme="light"] .spec-val.pass-val {
+  color: #15803d;
+}
+
+[data-theme="light"] .spec-val.warn-val {
+  color: #b91c1c;
+}
+
+[data-theme="light"] .badge-val.usb2 {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  font-weight: 600;
+}
+
+[data-theme="light"] .badge-val.usb3_0 {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #7dd3fc;
+  font-weight: 700;
+}
+
+[data-theme="light"] .badge-val.usb3_1,
+[data-theme="light"] .badge-val.usb3_2 {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #d8b4fe;
+  font-weight: 700;
+}
+
+[data-theme="light"] .badge-val.usb4 {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  font-weight: 700;
+}
+
+[data-theme="light"] .speed-val {
+  color: #0284c7;
+}
+
+[data-theme="light"] .speed-val.slow-speed {
+  color: #b91c1c;
+}
 </style>

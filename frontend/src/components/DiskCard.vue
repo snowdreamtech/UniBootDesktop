@@ -640,6 +640,12 @@ const diskTagLabel = computed(() => {
   color: #d97706;
 }
 
+[data-theme="light"] .fake-badge {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
 /* Light Theme Badge Overrides - High Contrast & Clear Legibility */
 [data-theme="light"] .disk-badge.boot-hybrid {
   background: #fef3c7;

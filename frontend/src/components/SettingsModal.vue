@@ -1377,4 +1377,22 @@ onMounted(() => {
   gap: 1.25rem;
   margin-top: 0.35rem;
 }
+
+[data-theme="light"] .badge.warning {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+[data-theme="light"] .badge.info {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #7dd3fc;
+}
+
+[data-theme="light"] .badge.success {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
 </style>

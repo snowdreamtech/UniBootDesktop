@@ -746,6 +746,18 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   border-color: #0284c7;
 }
 
+[data-theme="light"] .privilege-status-badge.elevated {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #86efac;
+}
+
+[data-theme="light"] .privilege-status-badge.standard {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+
 /* Smooth transition for disk cards */
 .disk-item-move,
 .disk-item-enter-active,
