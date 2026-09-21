@@ -238,7 +238,7 @@ func (a *App) SelectDirectory(title string) (string, error) {
 	}
 	logger.Info("Opening native directory picker dialog", "title", title, "defaultDir", defaultDir)
 	dir, err := wailsRuntime.OpenDirectoryDialog(a.ctx, wailsRuntime.OpenDialogOptions{
-		Title: title,
+		Title:            title,
 		DefaultDirectory: defaultDir,
 	})
 	if err != nil {
@@ -365,6 +365,7 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 	if strings.TrimSpace(ventoyPath) == "" {
 		return &installer.VentoyCliValidationResult{
 			Valid:   false,
+			Code:    "path_empty",
 			Message: "Ventoy CLI path cannot be empty",
 		}
 	}
@@ -373,6 +374,7 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 	if len(ventoyPath) > 4096 {
 		return &installer.VentoyCliValidationResult{
 			Valid:   false,
+			Code:    "path_too_long",
 			Message: "Ventoy CLI path too long (max 4096 characters)",
 		}
 	}
@@ -481,11 +483,11 @@ func (a *App) LaunchVM(targetDisk string, vmType string, bootMode string) error 
 
 	// 验证vmType
 	validVMTypes := map[string]bool{
-		"":          true, // 空表示auto
-		"auto":      true,
-		"qemu":      true,
-		"utm":       true,
-		"vmware":    true,
+		"":           true, // 空表示auto
+		"auto":       true,
+		"qemu":       true,
+		"utm":        true,
+		"vmware":     true,
 		"virtualbox": true,
 	}
 	vmTypeLower := strings.ToLower(strings.TrimSpace(vmType))
@@ -974,4 +976,3 @@ func (a *App) RequestPrivilegeElevation() (bool, error) {
 	logger.Info("Administrator privilege successfully granted by user, disk cache invalidated")
 	return true, nil
 }
-

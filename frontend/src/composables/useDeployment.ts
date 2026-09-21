@@ -2,6 +2,7 @@ import { computed, ref, watch, type Ref } from "vue";
 import type { InstallDiagnosticsData } from "../components/DiagnosticsModal.vue";
 import type { DiskInfo } from "../components/DiskPanel.vue";
 import { logUserAction } from "../utils/logger";
+import { getVentoyValidationMessage, type VentoyValidation } from "../utils/ventoyValidation";
 
 export interface DeployBannerState {
   visible: boolean;
@@ -70,7 +71,13 @@ export function useDeployment(options: UseDeploymentOptions) {
   const ventoyAlertTitle = ref("");
   const ventoyAlertMessage = ref("");
   const ventoyAlertAction = ref<"open_settings" | "switch_b">("open_settings");
-  const ventoyStatus = ref({ valid: true, version: "", message: "", executablePath: "" });
+  const ventoyStatus = ref<VentoyValidation>({
+    valid: true,
+    version: "",
+    code: "validated",
+    message: "",
+    executablePath: "",
+  });
 
   const isDiagnosticsOpen = ref(false);
   const currentDiagnostics = ref<InstallDiagnosticsData | null>(null);
@@ -178,7 +185,7 @@ export function useDeployment(options: UseDeploymentOptions) {
       if (isMacOs.value) {
         return t("deploy.tip_macos_unsupported");
       }
-      return ventoyStatus.value.message || t("deploy.tip_need_ventoy");
+      return getVentoyValidationMessage(ventoyStatus.value) || t("deploy.tip_need_ventoy");
     }
     if (selectionMode.value === "batch") {
       const total = selectedDevices.value.size;
@@ -324,7 +331,7 @@ export function useDeployment(options: UseDeploymentOptions) {
         } else {
           openVentoyAlert(
             t("deploy.no_ventoy_title"),
-            ventoyStatus.value.message || t("deploy.no_ventoy_desc"),
+            getVentoyValidationMessage(ventoyStatus.value) || t("deploy.no_ventoy_desc"),
             "open_settings"
           );
         }

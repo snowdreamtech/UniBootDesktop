@@ -22,6 +22,7 @@ type VentoyCliValidationResult struct {
 	Valid          bool   `json:"valid"`
 	Version        string `json:"version"`
 	Code           string `json:"code"`
+	Detail         string `json:"detail"`
 	Message        string `json:"message"`
 	ExecutablePath string `json:"executablePath"`
 }
@@ -60,6 +61,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:          true,
 			Version:        "v1.0.99 (Dry-Run)",
+			Code:           "validated",
 			Message:        "✅ Ventoy CLI validated successfully (Dry-Run)",
 			ExecutablePath: "/mock/path/Ventoy2Disk",
 		}
@@ -71,6 +73,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 			Valid:          false,
 			Version:        "",
 			Code:           "macos_unsupported",
+			Detail:         "macOS",
 			Message:        "❌ macOS Limitation: Official Ventoy CLI does not support running direct disk formatting on macOS.",
 			ExecutablePath: normalizeVentoyCliInput(ventoyPath),
 		}
@@ -81,6 +84,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:   false,
 			Version: "",
+			Code:    "path_empty",
 			Message: fmt.Sprintf("❌ Ventoy directory not configured: Fresh Hybrid Mode deployment requires local Ventoy CLI executable for %s.", runtime.GOOS),
 		}
 	}
@@ -90,6 +94,8 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:   false,
 			Version: "",
+			Code:    "path_missing",
+			Detail:  cleanPath,
 			Message: fmt.Sprintf("❌ Configured Ventoy directory does not exist: %s", cleanPath),
 		}
 	}
@@ -101,6 +107,8 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 			return &VentoyCliValidationResult{
 				Valid:   false,
 				Version: "",
+				Code:    "executable_missing",
+				Detail:  cleanPath,
 				Message: fmt.Sprintf("❌ No compatible Ventoy CLI executable found for %s in directory: %s", runtime.GOOS, cleanPath),
 			}
 		}
@@ -113,6 +121,8 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:          false,
 			Version:        "",
+			Code:           "os_mismatch",
+			Detail:         execPath,
 			Message:        fmt.Sprintf("❌ OS architecture mismatch: Current OS is %s, cannot run Windows .exe binary directly", runtime.GOOS),
 			ExecutablePath: execPath,
 		}
@@ -131,6 +141,8 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 			return &VentoyCliValidationResult{
 				Valid:          false,
 				Version:        "",
+				Code:           "execution_failed",
+				Detail:         execPath,
 				Message:        fmt.Sprintf("❌ Failed to execute Ventoy command: %v (%s)", err, strings.TrimSpace(outputStr)),
 				ExecutablePath: execPath,
 			}
@@ -147,6 +159,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 	return &VentoyCliValidationResult{
 		Valid:          true,
 		Version:        version,
+		Code:           "validated",
 		Message:        fmt.Sprintf("✅ Ventoy CLI validated successfully (v%s)", version),
 		ExecutablePath: execPath,
 	}

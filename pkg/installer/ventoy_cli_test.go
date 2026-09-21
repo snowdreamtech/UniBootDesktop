@@ -11,16 +11,30 @@ import (
 )
 
 func TestValidateVentoyCliEmptyPath(t *testing.T) {
+	if runtime.GOOS == "darwin" {
+		t.Skip("macOS validation stops before path validation")
+	}
+
 	res := ValidateVentoyCli("")
 	if res.Valid {
 		t.Errorf("Expected invalid result for empty path, got valid")
 	}
+	if res.Code != "path_empty" {
+		t.Errorf("Expected empty path code, got %q", res.Code)
+	}
 }
 
 func TestValidateVentoyCliNonExistentPath(t *testing.T) {
+	if runtime.GOOS == "darwin" {
+		t.Skip("macOS validation stops before path validation")
+	}
+
 	res := ValidateVentoyCli("/path/to/nonexistent/ventoy")
 	if res.Valid {
 		t.Errorf("Expected invalid result for nonexistent path, got valid")
+	}
+	if res.Code != "path_missing" {
+		t.Errorf("Expected missing path code, got %q", res.Code)
 	}
 }
 

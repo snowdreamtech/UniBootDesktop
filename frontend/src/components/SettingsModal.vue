@@ -340,14 +340,14 @@
                     {{ ventoyValidation.valid ? "✓" : "!" }}
                   </span>
                   <span class="status-title">
-                    {{ ventoyValidation.valid ? t("settings.testVentoyCli") : ventoyValidation.code === "macos_unsupported" ? t("deploy.macos_alert_title") : t("deploy.alert_fail") }}
+                    {{ getVentoyValidationTitle(ventoyValidation) }}
                   </span>
                   <span v-if="ventoyValidation.valid && ventoyValidation.version" class="version-badge-green">
                     {{ ventoyValidation.version }}
                   </span>
                 </div>
                 <div class="status-message">
-                  {{ ventoyValidation.code === "macos_unsupported" ? t("deploy.macos_alert_desc") : ventoyValidation.message }}
+                  {{ getVentoyValidationMessage(ventoyValidation) }}
                 </div>
                 <div v-if="ventoyValidation.executablePath" class="exec-path">
                   <code>{{ ventoyValidation.executablePath }}</code>
@@ -444,6 +444,7 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useTheme } from "../composables/useTheme";
 import { setLanguage, SUPPORTED_LANGUAGES, t } from "../i18n";
+import { getVentoyValidationMessage, getVentoyValidationTitle, type VentoyValidation } from "../utils/ventoyValidation";
 import CustomSelect from "./CustomSelect.vue";
 
 const { applyTheme, getActiveTheme } = useTheme();
@@ -559,7 +560,7 @@ const ventoyReserveSpace = ref(0);
 const ventoyWin11Bypass = ref(false);
 const ventoyMenuTimeout = ref(0);
 const isValidatingVentoy = ref(false);
-const ventoyValidation = ref<{ valid: boolean; version: string; code?: string; message: string; executablePath: string } | null>(null);
+const ventoyValidation = ref<VentoyValidation | null>(null);
 
 // Auto save state
 let isInitializing = true;
