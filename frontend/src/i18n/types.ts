@@ -329,6 +329,18 @@ export interface TranslationDict {
   "inspector.val_boot_hybrid": string;
   "inspector.val_boot_cloud": string;
   "inspector.val_boot_thirdparty": string;
+  "inspector.val_boot_ventoy_pure": string;
+  "inspector.prefix_third_party": string;
+  "inspector.tool_rufus": string;
+  "inspector.tool_wepe": string;
+  "inspector.tool_easyu": string;
+  "inspector.tool_yumi": string;
+  "inspector.tool_opencore": string;
+  "inspector.tool_clover": string;
+  "inspector.tool_windows_installer": string;
+  "inspector.tool_winpe_generic": string;
+  "inspector.tool_linux_live": string;
+  "inspector.tool_generic_uefi": string;
   "inspector.val_boot_gpt_data": string;
   "inspector.val_boot_mbr_data": string;
   "inspector.lbl_smart": string;

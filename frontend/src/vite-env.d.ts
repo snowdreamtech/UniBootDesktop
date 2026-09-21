@@ -25,12 +25,17 @@ declare global {
     sectorSize?: string;
     transportProtocol?: string;
     bootStatus?: string;
+    bootStatusCode?: string;
     controllerVendor?: string;
     isFakeUsb3?: boolean;
     protocolCode?: string;
     isRealVentoy?: boolean;
     isCloudMode?: boolean;
     isGenericBoot?: boolean;
+    thirdPartyBootType?: string;
+    thirdPartyBootCode?: string;
+    unibootVersion?: string;
+    unibootMode?: string;
     mountPoint?: string;
   }
 

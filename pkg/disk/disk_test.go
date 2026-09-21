@@ -315,28 +315,46 @@ func TestIdentifyThirdPartyBoot_Fingerprints(t *testing.T) {
 
 func TestDetectBootStatus_Classification(t *testing.T) {
 	// 1. UniBoot Cloud Mode
-	assert.Equal(t, "UniBoot (1秒极速云引导盘)", DetectBootStatus("", "GPT", false, true, BootTypeNone, nil))
+	status, code := DetectBootStatus("", "GPT", false, true, BootTypeNone, nil)
+	assert.Equal(t, "UniBoot (1秒极速云引导盘)", status)
+	assert.Equal(t, "uniboot_cloud", code)
 
 	// 2. UniBoot Hybrid Mode
 	hybridManifest := &UniBootManifest{Magic: MagicUniBootDisk, Mode: "hybrid", Version: "1.0.0"}
-	assert.Equal(t, "UniBoot (混合模式引导盘)", DetectBootStatus("", "GPT", true, false, BootTypeNone, hybridManifest))
+	status, code = DetectBootStatus("", "GPT", true, false, BootTypeNone, hybridManifest)
+	assert.Equal(t, "UniBoot (混合模式引导盘)", status)
+	assert.Equal(t, "uniboot_hybrid", code)
 
 	// 3. Genuine Ventoy Disk (no UniBoot manifest)
-	assert.Equal(t, "原生 Ventoy 启动盘 (可无损升级)", DetectBootStatus("", "GPT", true, false, BootTypeNone, nil))
+	status, code = DetectBootStatus("", "GPT", true, false, BootTypeNone, nil)
+	assert.Equal(t, "原生 Ventoy 启动盘 (可无损升级)", status)
+	assert.Equal(t, "ventoy_pure", code)
 
 	// 4. Third-party popular tools & boot disks
-	assert.Equal(t, "第三方引导: Rufus 制作盘", DetectBootStatus("", "GPT", false, false, BootTypeRufus, nil))
-	assert.Equal(t, "第三方引导: 微PE (WePE) 维护盘", DetectBootStatus("", "GPT", false, false, BootTypeWePE, nil))
-	assert.Equal(t, "第三方引导: 优启通 (EasyU) 维护盘", DetectBootStatus("", "GPT", false, false, BootTypeEasyU, nil))
-	assert.Equal(t, "第三方引导: YUMI 多系统引导盘", DetectBootStatus("", "GPT", false, false, BootTypeYUMI, nil))
-	assert.Equal(t, "第三方引导: Windows 官方安装介质", DetectBootStatus("", "GPT", false, false, BootTypeWindowsInstaller, nil))
-	assert.Equal(t, "第三方引导: 通用 WinPE 维护盘", DetectBootStatus("", "GPT", false, false, BootTypeWinPE, nil))
-	assert.Equal(t, "第三方引导: Linux Live 安装盘", DetectBootStatus("", "GPT", false, false, BootTypeLinuxLive, nil))
-	assert.Equal(t, "第三方引导: OpenCore 黑苹果引导盘", DetectBootStatus("", "GPT", false, false, BootTypeOpenCore, nil))
-	assert.Equal(t, "第三方引导: 通用 UEFI 引导盘", DetectBootStatus("", "GPT", false, false, BootTypeGenericUEFI, nil))
+	status, code = DetectBootStatus("", "GPT", false, false, BootTypeRufus, nil)
+	assert.Equal(t, "第三方引导: Rufus 制作盘", status)
+	assert.Equal(t, "third_party_boot", code)
+	assert.Equal(t, "rufus", MapThirdPartyBootCode(BootTypeRufus))
+	assert.Equal(t, "wepe", MapThirdPartyBootCode(BootTypeWePE))
+	assert.Equal(t, "easyu", MapThirdPartyBootCode(BootTypeEasyU))
+	assert.Equal(t, "yumi", MapThirdPartyBootCode(BootTypeYUMI))
+	assert.Equal(t, "opencore", MapThirdPartyBootCode(BootTypeOpenCore))
+	assert.Equal(t, "clover", MapThirdPartyBootCode(BootTypeClover))
+	assert.Equal(t, "windows_installer", MapThirdPartyBootCode(BootTypeWindowsInstaller))
+	assert.Equal(t, "winpe_generic", MapThirdPartyBootCode(BootTypeWinPE))
+	assert.Equal(t, "linux_live", MapThirdPartyBootCode(BootTypeLinuxLive))
+	assert.Equal(t, "generic_uefi", MapThirdPartyBootCode(BootTypeGenericUEFI))
 
 	// 5. Normal data disks
-	assert.Equal(t, "GPT 数据盘", DetectBootStatus("", "GPT", false, false, BootTypeNone, nil))
-	assert.Equal(t, "MBR 数据盘", DetectBootStatus("", "MBR", false, false, BootTypeNone, nil))
-	assert.Equal(t, "数据存储盘 (未检测到引导包)", DetectBootStatus("", "", false, false, BootTypeNone, nil))
+	status, code = DetectBootStatus("", "GPT", false, false, BootTypeNone, nil)
+	assert.Equal(t, "GPT 数据盘", status)
+	assert.Equal(t, "gpt_data", code)
+
+	status, code = DetectBootStatus("", "MBR", false, false, BootTypeNone, nil)
+	assert.Equal(t, "MBR 数据盘", status)
+	assert.Equal(t, "mbr_data", code)
+
+	status, code = DetectBootStatus("", "", false, false, BootTypeNone, nil)
+	assert.Equal(t, "数据存储盘 (未检测到引导包)", status)
+	assert.Equal(t, "data_storage", code)
 }

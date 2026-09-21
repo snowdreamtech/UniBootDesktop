@@ -229,6 +229,16 @@ const bootTooltip = computed(() => {
     if (props.disk.isCloudMode) {
       return t('disk.tooltip_uniboot_cloud');
     }
+    if (props.disk.thirdPartyBootCode) {
+      const toolKey = `inspector.tool_${props.disk.thirdPartyBootCode}` as any;
+      const toolName = t(toolKey);
+      if (toolName && toolName !== toolKey) {
+        return toolName;
+      }
+    }
+    if (props.disk.thirdPartyBootType) {
+      return props.disk.thirdPartyBootType;
+    }
     return t('disk.tooltip_third_party_boot');
   }
   return '';
@@ -245,6 +255,16 @@ const diskTagLabel = computed(() => {
   if (diskType.value === 'boot') {
     if (bootSubtype.value === 'hybrid') return t('disk.tag_boot_hybrid');
     if (bootSubtype.value === 'cloud') return t('disk.tag_boot_cloud');
+    if (props.disk.thirdPartyBootCode) {
+      const toolKey = `inspector.tool_${props.disk.thirdPartyBootCode}` as any;
+      const toolName = t(toolKey);
+      if (toolName && toolName !== toolKey) {
+        return toolName;
+      }
+    }
+    if (props.disk.thirdPartyBootType) {
+      return props.disk.thirdPartyBootType;
+    }
     return t('disk.tag_boot_thirdparty');
   }
   if (diskType.value === 'ssd') return t('disk.tag_ssd');

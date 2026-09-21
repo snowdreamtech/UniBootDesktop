@@ -455,5 +455,17 @@ export const hiIn: TranslationDict = {
   "vm.cfg_core_singular": "कोर",
   "vm.cfg_core_plural": "कोर",
   "common.on": "चालू",
-  "common.off": "बंद"
+  "common.off": "बंद",
+  "inspector.val_boot_ventoy_pure": "Native Ventoy Drive (Upgradable)",
+  "inspector.prefix_third_party": "3rd-Party Boot",
+  "inspector.tool_rufus": "Rufus Drive",
+  "inspector.tool_wepe": "WePE Maintenance Drive",
+  "inspector.tool_easyu": "EasyU Maintenance Drive",
+  "inspector.tool_yumi": "YUMI Multiboot Drive",
+  "inspector.tool_opencore": "OpenCore Bootloader",
+  "inspector.tool_clover": "Clover Bootloader",
+  "inspector.tool_windows_installer": "Windows Official Installer",
+  "inspector.tool_winpe_generic": "Generic WinPE Drive",
+  "inspector.tool_linux_live": "Linux Live USB",
+  "inspector.tool_generic_uefi": "Generic UEFI Bootloader"
 };

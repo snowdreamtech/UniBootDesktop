@@ -233,12 +233,15 @@ const targetDiskDetails = computed((): DiskInfo[] =>
         sectorSize: "",
         transportProtocol: "",
         bootStatus: "",
+        bootStatusCode: "",
         controllerVendor: "",
         isFakeUsb3: false,
         protocolCode: "",
         isRealVentoy: false,
         isCloudMode: false,
         isGenericBoot: false,
+        thirdPartyBootType: "",
+        thirdPartyBootCode: "",
         mountPoint: "",
       }
     );

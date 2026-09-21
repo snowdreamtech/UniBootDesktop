@@ -275,10 +275,13 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             sectorSize: '',
             transportProtocol: '',
             bootStatus: '',
+            bootStatusCode: '',
             controllerVendor: '',
             isRealVentoy: false,
             isCloudMode: false,
             isGenericBoot: false,
+            thirdPartyBootType: '',
+            thirdPartyBootCode: '',
             mountPoint: ''
           },
           {
@@ -307,10 +310,13 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             sectorSize: '',
             transportProtocol: '',
             bootStatus: '',
+            bootStatusCode: '',
             controllerVendor: '',
             isRealVentoy: false,
             isCloudMode: false,
             isGenericBoot: false,
+            thirdPartyBootType: '',
+            thirdPartyBootCode: '',
             mountPoint: ''
           },
           {
@@ -339,10 +345,13 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             sectorSize: '',
             transportProtocol: '',
             bootStatus: '',
+            bootStatusCode: '',
             controllerVendor: '',
             isRealVentoy: false,
             isCloudMode: false,
             isGenericBoot: false,
+            thirdPartyBootType: '',
+            thirdPartyBootCode: '',
             mountPoint: ''
           }
         ];
