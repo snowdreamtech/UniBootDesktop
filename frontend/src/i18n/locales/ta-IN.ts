@@ -64,6 +64,8 @@ export const taIn: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync தோல்வி: {error}",
   "settings.ventoyToolchain": "Ventoy டூல்செயின்",
   "settings.testVentoyCli": "Ventoy CLI சோதிக்கவும்",
+  "settings.select_ventoy_dir": "Ventoy நிறுவல் அடைவைத் தேர்ந்தெடுக்கவும்",
+
   "settings.cliFormattingFlags": "வென்டோய் சிஎல்ஐ வடிவமைத்தல் கொடிகள்",
   "settings.ventoyPlugins": "Ventoy தானியங்கி செருகுநிரல்கள் (ventoy.json)",
   "app.title": "UniBoot டெஸ்க்டாப்",

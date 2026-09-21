@@ -64,6 +64,8 @@ export const caEs: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Ha fallat: {error}",
   "settings.ventoyToolchain": "Cadena d'eines Ventoy",
   "settings.testVentoyCli": "Provar CLI de Ventoy",
+  "settings.select_ventoy_dir": "Seleccioneu el directori d'instal\·lació de Ventoy",
+
   "settings.cliFormattingFlags": "Banderes de format de la CLI de Ventoy",
   "settings.ventoyPlugins": "Connectors d'automatització Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

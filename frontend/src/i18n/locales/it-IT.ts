@@ -64,6 +64,8 @@ export const itIt: TranslationDict = {
   "settings.syncFailedAlert": "Sincronizzazione Firmware Riuscita Fallita: {error}",
   "settings.ventoyToolchain": "Toolchain Ventoy",
   "settings.testVentoyCli": "Testa Ventoy CLI",
+  "settings.select_ventoy_dir": "Seleziona la directory di installazione di Ventoy",
+
   "settings.cliFormattingFlags": "Parametri di Formattazione Ventoy CLI",
   "settings.ventoyPlugins": "Plugin di automazione Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

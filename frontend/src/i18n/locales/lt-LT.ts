@@ -64,6 +64,8 @@ export const ltLt: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Nepavyko: {error}",
   "settings.ventoyToolchain": "Ventoy įrankių rinkinys",
   "settings.testVentoyCli": "Testuoti Ventoy CLI",
+  "settings.select_ventoy_dir": "Pasirinkite Ventoy diegimo katalogą",
+
   "settings.cliFormattingFlags": "Ventoy CLI formatavimo vėliavėlės",
   "settings.ventoyPlugins": "Ventoy automatizavimo papildiniai (ventoy.json)",
   "app.title": "UniBoot Desktop",

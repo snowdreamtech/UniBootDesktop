@@ -64,6 +64,8 @@ export const elGr: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Αποτυχία: {error}",
   "settings.ventoyToolchain": "Εργαλειοθήκη Ventoy",
   "settings.testVentoyCli": "Δοκιμή Ventoy CLI",
+  "settings.select_ventoy_dir": "Επιλέξτε τον κατάλογο εγκατάστασης του Ventoy",
+
   "settings.cliFormattingFlags": "Σημαίες μορφοποίησης Ventoy CLI",
   "settings.ventoyPlugins": "Πρόσθετα αυτοματοποίησης Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

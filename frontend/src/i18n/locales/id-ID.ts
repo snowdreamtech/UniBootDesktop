@@ -64,6 +64,8 @@ export const idId: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Gagal: {error}",
   "settings.ventoyToolchain": "Rangkaian Alat Ventoy",
   "settings.testVentoyCli": "Uji Ventoy CLI",
+  "settings.select_ventoy_dir": "Pilih direktori instalasi Ventoy",
+
   "settings.cliFormattingFlags": "Bendera Pemformatan Ventoy CLI",
   "settings.ventoyPlugins": "Plugin Otomatisasi Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

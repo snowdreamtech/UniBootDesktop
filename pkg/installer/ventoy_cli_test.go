@@ -43,6 +43,28 @@ func TestExtractVentoyVersion(t *testing.T) {
 	}
 }
 
+func TestNormalizeVentoyCliInput(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{name: "trim spaces", input: "  /opt/ventoy/  ", expected: "/opt/ventoy"},
+		{name: "strip trailing separator", input: "/opt/ventoy/", expected: "/opt/ventoy"},
+		{name: "keep executable path", input: " /opt/ventoy/Ventoy2Disk.sh ", expected: "/opt/ventoy/Ventoy2Disk.sh"},
+		{name: "windows dir", input: `C:\\Ventoy\\`, expected: `C:\Ventoy`},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := normalizeVentoyCliInput(tt.input)
+			if got != tt.expected {
+				t.Fatalf("normalizeVentoyCliInput(%q) = %q, want %q", tt.input, got, tt.expected)
+			}
+		})
+	}
+}
+
 func TestValidateVentoyCliDummyScript(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Skipping bash script test on Windows")

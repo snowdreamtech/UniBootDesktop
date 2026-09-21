@@ -64,6 +64,8 @@ export const viVn: TranslationDict = {
   "settings.syncFailedAlert": "Đồng bộ firmware thất bại: {error}",
   "settings.ventoyToolchain": "Bộ công cụ Ventoy",
   "settings.testVentoyCli": "Kiểm tra Ventoy CLI",
+  "settings.select_ventoy_dir": "Chọn thư mục cài đặt Ventoy",
+
   "settings.cliFormattingFlags": "Tham số định dạng Ventoy CLI",
   "settings.ventoyPlugins": "Plugin tự động hóa Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

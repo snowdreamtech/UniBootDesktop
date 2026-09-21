@@ -64,6 +64,8 @@ export const fiFi: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Epäonnistui: {error}",
   "settings.ventoyToolchain": "Ventoy-työkaluketju",
   "settings.testVentoyCli": "Testaa Ventoy CLI",
+  "settings.select_ventoy_dir": "Valitse Ventoy-asennushakemisto",
+
   "settings.cliFormattingFlags": "Ventoy CLI -muotoiluliput",
   "settings.ventoyPlugins": "Ventoy automaatiolaajennukset (ventoy.json)",
   "app.title": "UniBoot Desktop",

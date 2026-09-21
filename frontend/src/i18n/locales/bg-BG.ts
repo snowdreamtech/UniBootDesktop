@@ -64,6 +64,8 @@ export const bgBg: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Неуспешно: {error}",
   "settings.ventoyToolchain": "Набор от инструменти Ventoy",
   "settings.testVentoyCli": "Тестване на Ventoy CLI",
+  "settings.select_ventoy_dir": "Изберете директория за инсталиране на Ventoy",
+
   "settings.cliFormattingFlags": "Флагове за форматиране на CLI на Ventoy",
   "settings.ventoyPlugins": "Ventoy плъгини за автоматизация (ventoy.json)",
   "app.title": "UniBoot Desktop",

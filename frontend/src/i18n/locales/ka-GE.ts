@@ -64,6 +64,8 @@ export const kaGe: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync შეცდომა: {error}",
   "settings.ventoyToolchain": "Ventoy ინსტრუმენტების ნაკრები",
   "settings.testVentoyCli": "Ventoy CLI-ს შემოწმება",
+  "settings.select_ventoy_dir": "აირჩიეთ Ventoy-ის ინსტალაციის დირექტორია",
+
   "settings.cliFormattingFlags": "Ventoy CLI ფორმატირების დროშები",
   "settings.ventoyPlugins": "Ventoy ავტომატიზაციის პლაგინები (ventoy.json)",
   "app.title": "UniBoot Desktop",

@@ -64,6 +64,8 @@ export const esEs: TranslationDict = {
   "settings.syncFailedAlert": "Error en la sincronización del firmware: {error}",
   "settings.ventoyToolchain": "Cadena de herramientas Ventoy",
   "settings.testVentoyCli": "Probar Ventoy CLI",
+  "settings.select_ventoy_dir": "Seleccionar directorio de instalación de Ventoy",
+
   "settings.cliFormattingFlags": "Parámetros de formateo Ventoy CLI",
   "settings.ventoyPlugins": "Complementos de automatización Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

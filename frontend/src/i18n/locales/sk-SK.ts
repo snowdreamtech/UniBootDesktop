@@ -64,6 +64,8 @@ export const skSk: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Zlyhalo: {error}",
   "settings.ventoyToolchain": "Sada nástrojov Ventoy",
   "settings.testVentoyCli": "Testovať Ventoy CLI",
+  "settings.select_ventoy_dir": "Vyberte inštalačný adresár Ventoy",
+
   "settings.cliFormattingFlags": "Príznaky formátovania Ventoy CLI",
   "settings.ventoyPlugins": "Automatizačné zásuvné moduly Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

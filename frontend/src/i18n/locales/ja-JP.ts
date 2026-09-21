@@ -64,6 +64,8 @@ export const jaJp: TranslationDict = {
   "settings.syncFailedAlert": "ファームウェアの同期に失敗しました: {error}",
   "settings.ventoyToolchain": "Ventoy ツールチェーン",
   "settings.testVentoyCli": "Ventoy CLI をテスト",
+  "settings.select_ventoy_dir": "Ventoy インストール先を選択",
+
   "settings.cliFormattingFlags": "Ventoy CLI フォーマットパラメータ設定",
   "settings.ventoyPlugins": "Ventoy 自動化プラグイン (ventoy.json)",
   "app.title": "UniBoot デスクトップ",

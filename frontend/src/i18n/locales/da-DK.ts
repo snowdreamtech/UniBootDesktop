@@ -64,6 +64,8 @@ export const daDk: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Mislykkedes: {error}",
   "settings.ventoyToolchain": "Ventoy-værktøjskæde",
   "settings.testVentoyCli": "Test Ventoy-kommandolinje",
+  "settings.select_ventoy_dir": "Vælg Ventoy-installationsmappe",
+
   "settings.cliFormattingFlags": "Ventoy CLI-formateringsflag",
   "settings.ventoyPlugins": "Ventoy automatiseringsplugins (ventoy.json)",
   "app.title": "UniBoot Desktop",

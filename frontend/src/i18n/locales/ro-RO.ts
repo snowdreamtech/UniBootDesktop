@@ -64,6 +64,8 @@ export const roRo: TranslationDict = {
   "settings.syncFailedAlert": "Sincronizarea firmware-ului a eșuat: {error}",
   "settings.ventoyToolchain": "Set de instrumente Ventoy",
   "settings.testVentoyCli": "Testează Ventoy CLI",
+  "settings.select_ventoy_dir": "Selectați directorul de instalare Ventoy",
+
   "settings.cliFormattingFlags": "Ventoy CLI Formating Flags",
   "settings.ventoyPlugins": "Module de automatizare Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

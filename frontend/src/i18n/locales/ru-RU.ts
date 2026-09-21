@@ -64,6 +64,8 @@ export const ruRu: TranslationDict = {
   "settings.syncFailedAlert": "Ошибка синхронизации прошивки: {error}",
   "settings.ventoyToolchain": "Набор инструментов Ventoy",
   "settings.testVentoyCli": "Проверить Ventoy CLI",
+  "settings.select_ventoy_dir": "Выбрать каталог установки Ventoy",
+
   "settings.cliFormattingFlags": "Параметры форматирования Ventoy CLI",
   "settings.ventoyPlugins": "Плагины автоматизации Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

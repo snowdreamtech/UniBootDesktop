@@ -64,6 +64,8 @@ export const huHu: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Sikertelen: {error}",
   "settings.ventoyToolchain": "Ventoy eszközkészlet",
   "settings.testVentoyCli": "Ventoy CLI tesztelése",
+  "settings.select_ventoy_dir": "Válassza ki a Ventoy telepítési könyvtárát",
+
   "settings.cliFormattingFlags": "Ventoy CLI formázási zászlók",
   "settings.ventoyPlugins": "Ventoy automatizálási bővítmények (ventoy.json)",
   "app.title": "UniBoot Desktop",

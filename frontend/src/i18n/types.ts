@@ -250,6 +250,7 @@ export interface TranslationDict {
   "settings.browse_btn": string;
   "settings.reset_default": string;
   "settings.select_uniboot_dir": string;
+  "settings.select_ventoy_dir": string;
   "settings.ventoy_secboot": string;
   "settings.ventoy_part_style": string;
   "settings.ventoy_reserve": string;

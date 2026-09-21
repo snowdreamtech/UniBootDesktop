@@ -64,6 +64,8 @@ export const heIl: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync נכשל: {error}",
   "settings.ventoyToolchain": "ערכת כלי Ventoy",
   "settings.testVentoyCli": "בדיקת Ventoy CLI",
+  "settings.select_ventoy_dir": "בחר את תיקיית ההתקנה של Ventoy",
+
   "settings.cliFormattingFlags": "עיצוב דגלים של Ventoy CLI",
   "settings.ventoyPlugins": "תוספי אוטומציה של Ventoy (ventoy.json)",
   "app.title": "UniBoot שולחן עבודה",

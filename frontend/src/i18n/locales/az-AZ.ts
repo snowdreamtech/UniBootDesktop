@@ -64,6 +64,8 @@ export const azAz: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Uğursuz: {error}",
   "settings.ventoyToolchain": "Ventoy Alətlər Dəsti",
   "settings.testVentoyCli": "Ventoy CLI Yoxlayın",
+  "settings.select_ventoy_dir": "Ventoy quraşdırma kataloqunu seçin",
+
   "settings.cliFormattingFlags": "Ventoy CLI Formatlaşdırma Bayraqları",
   "settings.ventoyPlugins": "Ventoy avtomatlaşdırma qoşmaları (ventoy.json)",
   "app.title": "UniBoot Masaüstü",

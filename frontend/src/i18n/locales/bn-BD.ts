@@ -64,6 +64,8 @@ export const bnBd: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync ব্যর্থ: {error}",
   "settings.ventoyToolchain": "Ventoy টুলচেইন",
   "settings.testVentoyCli": "Ventoy CLI পরীক্ষা করুন",
+  "settings.select_ventoy_dir": "Ventoy ইনস্টল ডিরেক্টরি নির্বাচন করুন",
+
   "settings.cliFormattingFlags": "Ventoy CLI ফরম্যাটিং পতাকা",
   "settings.ventoyPlugins": "Ventoy অটোমেশন প্লাগইন (ventoy.json)",
   "app.title": "UniBoot ডেস্কটপ",

@@ -64,6 +64,8 @@ export const arSa: TranslationDict = {
   "settings.syncFailedAlert": "فشل مزامنة البرنامج الثابت: {error}",
   "settings.ventoyToolchain": "حزمة أدوات Ventoy",
   "settings.testVentoyCli": "اختبار Ventoy CLI",
+  "settings.select_ventoy_dir": "حدد دليل تثبيت Ventoy",
+
   "settings.cliFormattingFlags": "معلمات تهيئة Ventoy CLI",
   "settings.ventoyPlugins": "مكونات أتمتة Ventoy (ventoy.json)",
   "app.title": "UniBoot سطح المكتب",

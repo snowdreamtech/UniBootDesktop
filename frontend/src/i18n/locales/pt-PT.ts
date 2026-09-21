@@ -64,6 +64,8 @@ export const ptPt: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Falhou: {error}",
   "settings.ventoyToolchain": "Cadeia de ferramentas Ventoy",
   "settings.testVentoyCli": "Testar Ventoy CLI",
+  "settings.select_ventoy_dir": "Selecionar diretório de instalação do Ventoy",
+
   "settings.cliFormattingFlags": "Sinalizadores de formatação Ventoy CLI",
   "settings.ventoyPlugins": "Plugins de automatização Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

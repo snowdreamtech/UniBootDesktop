@@ -64,6 +64,8 @@ export const hyAm: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Ձախողվեց: {error}",
   "settings.ventoyToolchain": "Ventoy գործիքակազմ",
   "settings.testVentoyCli": "Փորձարկել Ventoy CLI",
+  "settings.select_ventoy_dir": "Ընտրեք Ventoy-ի տեղադրման թղթապանակը",
+
   "settings.cliFormattingFlags": "Ventoy CLI ֆորմատավորող դրոշակներ",
   "settings.ventoyPlugins": "Ventoy ավտոմատացման հավելումներ (ventoy.json)",
   "app.title": "UniBoot Desktop",

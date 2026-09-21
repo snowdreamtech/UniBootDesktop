@@ -64,6 +64,8 @@ export const svSe: TranslationDict = {
   "settings.syncFailedAlert": "Firmware-synkronisering misslyckades: {error}",
   "settings.ventoyToolchain": "Ventoy-verktygskedja",
   "settings.testVentoyCli": "Testa Ventoy CLI",
+  "settings.select_ventoy_dir": "Välj Ventoy installationskatalog",
+
   "settings.cliFormattingFlags": "Ventoy CLI-formateringsflaggor",
   "settings.ventoyPlugins": "Ventoy automatiseringsinsticksmoduler (ventoy.json)",
   "app.title": "UniBoot Desktop",

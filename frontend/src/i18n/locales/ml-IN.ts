@@ -64,6 +64,8 @@ export const mlIn: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync പരാജയപ്പെട്ടു: {error}",
   "settings.ventoyToolchain": "Ventoy ടൂൾചെയിൻ",
   "settings.testVentoyCli": "Ventoy CLI പരിശോധിക്കുക",
+  "settings.select_ventoy_dir": "Ventoy ഇൻസ്റ്റാളേഷൻ ഡയറക്ടറി തിരഞ്ഞെടുക്കുക",
+
   "settings.cliFormattingFlags": "വെൻ്റോയ് CLI ഫോർമാറ്റിംഗ് ഫ്ലാഗുകൾ",
   "settings.ventoyPlugins": "Ventoy ഓട്ടോമേഷൻ പ്ലഗിനുകൾ (ventoy.json)",
   "app.title": "UniBoot ഡെസ്ക്ടോപ്പ്",

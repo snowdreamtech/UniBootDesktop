@@ -64,6 +64,8 @@ export const mkMk: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Неуспешно: {error}",
   "settings.ventoyToolchain": "Комплет алатки Ventoy",
   "settings.testVentoyCli": "Тестирај Ventoy CLI",
+  "settings.select_ventoy_dir": "Избери ја папката за инсталација на Ventoy",
+
   "settings.cliFormattingFlags": "Знамиња за форматирање на Ventoy CLI",
   "settings.ventoyPlugins": "Ventoy додатоци за автоматизација (ventoy.json)",
   "app.title": "UniBoot Desktop",

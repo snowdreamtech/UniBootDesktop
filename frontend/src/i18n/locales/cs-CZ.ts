@@ -64,6 +64,8 @@ export const csCz: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Selhalo: {error}",
   "settings.ventoyToolchain": "Sada nástrojů Ventoy",
   "settings.testVentoyCli": "Testovat Ventoy CLI",
+  "settings.select_ventoy_dir": "Vyberte instalační adresář Ventoy",
+
   "settings.cliFormattingFlags": "Příznaky formátování Ventoy CLI",
   "settings.ventoyPlugins": "Automatizační zásuvné moduly Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

@@ -64,6 +64,8 @@ export const hrHr: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Neuspješno: {error}",
   "settings.ventoyToolchain": "Skup alata Ventoy",
   "settings.testVentoyCli": "Testiraj Ventoy CLI",
+  "settings.select_ventoy_dir": "Odaberite Ventoy instalacijski direktorij",
+
   "settings.cliFormattingFlags": "Ventoy CLI zastavice za oblikovanje",
   "settings.ventoyPlugins": "Ventoy dodaci za automatizaciju (ventoy.json)",
   "app.title": "UniBoot Desktop",

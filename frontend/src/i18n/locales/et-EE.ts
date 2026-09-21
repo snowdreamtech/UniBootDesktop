@@ -64,6 +64,8 @@ export const etEe: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Ebaõnnestus: {error}",
   "settings.ventoyToolchain": "Ventoy tööriistakomplekt",
   "settings.testVentoyCli": "Testi Ventoy CLI-d",
+  "settings.select_ventoy_dir": "Vali Ventoy installikataloog",
+
   "settings.cliFormattingFlags": "Ventoy CLI vormindamise lipud",
   "settings.ventoyPlugins": "Ventoy automatiseerimispistikprogrammid (ventoy.json)",
   "app.title": "UniBoot Desktop",

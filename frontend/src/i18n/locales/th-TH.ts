@@ -64,6 +64,8 @@ export const thTh: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync ล้มเหลว: {error}",
   "settings.ventoyToolchain": "ชุดเครื่องมือ Ventoy",
   "settings.testVentoyCli": "ทดสอบ Ventoy CLI",
+  "settings.select_ventoy_dir": "เลือกโฟลเดอร์ติดตั้ง Ventoy",
+
   "settings.cliFormattingFlags": "ธงการจัดรูปแบบ Ventoy CLI",
   "settings.ventoyPlugins": "ปลั๊กอินอัตโนมัติ Ventoy (ventoy.json)",
   "app.title": "UniBoot เดสก์ท็อป",

@@ -6,8 +6,8 @@
         <div class="header-title">
           <span class="icon">⚙️</span>
           <div>
-            <h3>{{ t('settings.title') }}</h3>
-            <span class="sub-title">{{ t('settings.subtitle') }}</span>
+            <h3>{{ t("settings.title") }}</h3>
+            <span class="sub-title">{{ t("settings.subtitle") }}</span>
           </div>
         </div>
         <div class="header-actions">
@@ -20,32 +20,16 @@
 
       <!-- Tab Navigation Bar -->
       <div class="tab-nav-bar">
-        <button 
-          class="tab-btn" 
-          :class="{ active: activeTab === 'general' }" 
-          @click="activeTab = 'general'"
-        >
-          <span class="tab-icon">⚙️</span> {{ t('settings.tab_general') }}
+        <button class="tab-btn" :class="{ active: activeTab === 'general' }" @click="activeTab = 'general'">
+          <span class="tab-icon">⚙️</span> {{ t("settings.tab_general") }}
         </button>
-        <button 
-          class="tab-btn" 
-          :class="{ active: activeTab === 'network' }" 
-          @click="activeTab = 'network'"
-        >
-          <span class="tab-icon">🌐</span> {{ t('settings.tab_network') }}
+        <button class="tab-btn" :class="{ active: activeTab === 'network' }" @click="activeTab = 'network'">
+          <span class="tab-icon">🌐</span> {{ t("settings.tab_network") }}
         </button>
-        <button 
-          class="tab-btn" 
-          :class="{ active: activeTab === 'uniboot' }" 
-          @click="activeTab = 'uniboot'"
-        >
+        <button class="tab-btn" :class="{ active: activeTab === 'uniboot' }" @click="activeTab = 'uniboot'">
           <span class="tab-icon">📦</span> UniBoot
         </button>
-        <button 
-          class="tab-btn" 
-          :class="{ active: activeTab === 'ventoy' }" 
-          @click="activeTab = 'ventoy'"
-        >
+        <button class="tab-btn" :class="{ active: activeTab === 'ventoy' }" @click="activeTab = 'ventoy'">
           <span class="tab-icon">🚀</span> Ventoy
         </button>
       </div>
@@ -56,81 +40,73 @@
         <div v-if="activeTab === 'general'" class="tab-content">
           <div class="settings-section">
             <h4 class="section-title">
-              <span>{{ t('settings.tab_general') }}</span>
-              <span class="badge info">{{ t('settings.realtime_save') }}</span>
+              <span>{{ t("settings.tab_general") }}</span>
+              <span class="badge info">{{ t("settings.realtime_save") }}</span>
             </h4>
 
             <div class="grid-form">
               <div class="form-group highlight-form-group">
-                <label class="form-label highlight-label">{{ t('settings.language') }}</label>
-                <CustomSelect
-                  v-model="appLanguage"
-                  :options="languageSelectOptions"
-                  @change="onLanguageChange"
-                />
+                <label class="form-label highlight-label">{{ t("settings.language") }}</label>
+                <CustomSelect v-model="appLanguage" :options="languageSelectOptions" @change="onLanguageChange" />
               </div>
 
               <div class="form-group">
-                <label class="form-label">{{ t('settings.default_mode') }}</label>
+                <label class="form-label">{{ t("settings.default_mode") }}</label>
                 <CustomSelect
                   v-model="defaultMode"
                   :options="[
                     { value: 'cloud', label: t('mode.cloud') },
-                    { value: 'hybrid', label: t('mode.hybrid') }
+                    { value: 'hybrid', label: t('mode.hybrid') },
                   ]"
                   @change="triggerAutoSave"
                 />
               </div>
 
               <div class="form-group">
-                <label class="form-label">{{ t('settings.default_fs') }}</label>
+                <label class="form-label">{{ t("settings.default_fs") }}</label>
                 <CustomSelect
                   v-model="defaultFs"
                   :options="[
                     { value: 'exFAT', label: 'exFAT' },
                     { value: 'NTFS', label: 'NTFS' },
                     { value: 'FAT32', label: 'FAT32' },
-                    { value: 'ext4', label: 'ext4' }
+                    { value: 'ext4', label: 'ext4' },
                   ]"
                   @change="triggerAutoSave"
                 />
               </div>
 
               <div class="form-group">
-                <label class="form-label">{{ t('settings.auto_eject_after_deploy') }}</label>
+                <label class="form-label">{{ t("settings.auto_eject_after_deploy") }}</label>
                 <div class="radio-group">
                   <label class="radio-label">
                     <input type="radio" :value="false" v-model="autoEjectAfterDeploy" @change="triggerAutoSave" />
-                    <span>{{ t('settings.auto_eject_disabled') }}</span>
+                    <span>{{ t("settings.auto_eject_disabled") }}</span>
                   </label>
                   <label class="radio-label">
                     <input type="radio" :value="true" v-model="autoEjectAfterDeploy" @change="triggerAutoSave" />
-                    <span>{{ t('settings.auto_eject_enabled') }}</span>
+                    <span>{{ t("settings.auto_eject_enabled") }}</span>
                   </label>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="form-label">{{ t('settings.app_update') }}</label>
+                <label class="form-label">{{ t("settings.app_update") }}</label>
                 <div class="radio-group">
                   <label class="radio-label">
                     <input type="radio" :value="true" v-model="autoCheckUpdate" @change="triggerAutoSave" />
-                    <span>{{ t('settings.update_auto') }}</span>
+                    <span>{{ t("settings.update_auto") }}</span>
                   </label>
                   <label class="radio-label">
                     <input type="radio" :value="false" v-model="autoCheckUpdate" @change="triggerAutoSave" />
-                    <span>{{ t('settings.update_manual') }}</span>
+                    <span>{{ t("settings.update_manual") }}</span>
                   </label>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="form-label">{{ t('settings.theme') }}</label>
-                <CustomSelect
-                  v-model="appTheme"
-                  :options="themeSelectOptions"
-                  @change="onThemeChange"
-                />
+                <label class="form-label">{{ t("settings.theme") }}</label>
+                <CustomSelect v-model="appTheme" :options="themeSelectOptions" @change="onThemeChange" />
               </div>
             </div>
           </div>
@@ -141,15 +117,15 @@
           <!-- Section 2A: GitHub Proxy Acceleration -->
           <div class="settings-section">
             <h4 class="section-title">
-              <span>{{ t('settings.github_proxy_title') }}</span>
+              <span>{{ t("settings.github_proxy_title") }}</span>
             </h4>
 
             <div class="form-group">
-              <label class="form-label">{{ t('settings.github_proxy') }}</label>
-              <input 
-                v-model="proxyInputUrl" 
-                type="text" 
-                class="form-input" 
+              <label class="form-label">{{ t("settings.github_proxy") }}</label>
+              <input
+                v-model="proxyInputUrl"
+                type="text"
+                class="form-input"
                 :placeholder="t('settings.proxy_placeholder')"
               />
             </div>
@@ -157,7 +133,7 @@
             <div class="network-test-row">
               <button class="btn-secondary test-btn" :disabled="isTestingNet" @click="testConnection">
                 <span class="btn-icon">⚡</span>
-                <span>{{ isTestingNet ? t('settings.testing_net') : t('settings.test_net') }}</span>
+                <span>{{ isTestingNet ? t("settings.testing_net") : t("settings.test_net") }}</span>
               </button>
               <span v-if="netTestResult" class="test-result" :class="netTestSuccess ? 'success' : 'error'">
                 {{ netTestResult }}
@@ -168,15 +144,15 @@
           <!-- Section 2B: System Network Proxy -->
           <div class="settings-section margin-top">
             <h4 class="section-title">
-              <span>{{ t('settings.system_proxy') }}</span>
+              <span>{{ t("settings.system_proxy") }}</span>
             </h4>
 
             <div class="grid-form">
               <div class="form-group span-full">
-                <label class="form-label">{{ t('settings.proxy_proto') }}</label>
+                <label class="form-label">{{ t("settings.proxy_proto") }}</label>
                 <div class="protocol-radio-bar">
                   <label class="protocol-pill" :class="{ active: proxyProtocol === 'direct' }">
-                    <input type="radio" v-model="proxyProtocol" value="direct" /> {{ t('settings.proxy_direct') }}
+                    <input type="radio" v-model="proxyProtocol" value="direct" /> {{ t("settings.proxy_direct") }}
                   </label>
                   <label class="protocol-pill" :class="{ active: proxyProtocol === 'http' }">
                     <input type="radio" v-model="proxyProtocol" value="http" /> HTTP
@@ -195,21 +171,16 @@
 
               <template v-if="proxyProtocol !== 'direct'">
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.proxy_host') }}</label>
-                  <input 
-                    v-model="proxyHost" 
-                    type="text" 
-                    class="form-input" 
-                    placeholder="127.0.0.1"
-                  />
+                  <label class="form-label">{{ t("settings.proxy_host") }}</label>
+                  <input v-model="proxyHost" type="text" class="form-input" placeholder="127.0.0.1" />
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.proxy_port') }}</label>
-                  <input 
-                    v-model.number="proxyPort" 
-                    type="number" 
-                    class="form-input" 
+                  <label class="form-label">{{ t("settings.proxy_port") }}</label>
+                  <input
+                    v-model.number="proxyPort"
+                    type="number"
+                    class="form-input"
                     placeholder="7890"
                     min="1"
                     max="65535"
@@ -217,21 +188,21 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.proxyAuthUserLabel') }}</label>
-                  <input 
-                    v-model="proxyUser" 
-                    type="text" 
-                    class="form-input" 
+                  <label class="form-label">{{ t("settings.proxyAuthUserLabel") }}</label>
+                  <input
+                    v-model="proxyUser"
+                    type="text"
+                    class="form-input"
                     :placeholder="t('settings.proxyAuthUserPlaceholder')"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.proxyAuthPassLabel') }}</label>
-                  <input 
-                    v-model="proxyPassword" 
-                    type="password" 
-                    class="form-input" 
+                  <label class="form-label">{{ t("settings.proxyAuthPassLabel") }}</label>
+                  <input
+                    v-model="proxyPassword"
+                    type="password"
+                    class="form-input"
                     :placeholder="t('settings.proxyAuthUserPlaceholder')"
                   />
                 </div>
@@ -241,7 +212,7 @@
             <div class="network-test-row">
               <button class="btn-secondary test-btn" :disabled="isTestingProxy" @click="testNetworkProxy">
                 <span class="btn-icon">⚡</span>
-                <span>{{ isTestingProxy ? t('settings.testingProxy') : t('settings.testProxyConn') }}</span>
+                <span>{{ isTestingProxy ? t("settings.testingProxy") : t("settings.testProxyConn") }}</span>
               </button>
               <span v-if="proxyTestResult" class="test-result" :class="proxyTestSuccess ? 'success' : 'error'">
                 {{ proxyTestResult }}
@@ -256,28 +227,37 @@
             <h4 class="section-title">
               <div class="title-left">
                 <span class="section-icon">📦</span>
-                <span>{{ t('settings.firmwareMatrixTitle') }}</span>
+                <span>{{ t("settings.firmwareMatrixTitle") }}</span>
               </div>
             </h4>
 
             <!-- UniBoot Custom Storage Path -->
             <div class="form-group span-full uniboot-path-group">
-              <label class="form-label">{{ t('settings.uniboot_dir_label') }}</label>
+              <label class="form-label">{{ t("settings.uniboot_dir_label") }}</label>
               <div class="input-with-btn">
-                <input 
-                  v-model="unibootPath" 
-                  type="text" 
-                  class="form-input" 
+                <input
+                  v-model="unibootPath"
+                  type="text"
+                  class="form-input"
                   :placeholder="t('settings.uniboot_dir_placeholder')"
                   @change="triggerAutoSave"
                 />
-                <button class="btn-secondary test-btn" @click="selectUniBootDirectory" :title="t('settings.browse_btn')">
+                <button
+                  class="btn-secondary test-btn"
+                  @click="selectUniBootDirectory"
+                  :title="t('settings.browse_btn')"
+                >
                   <span class="btn-icon">📁</span>
-                  <span>{{ t('settings.browse_btn') }}</span>
+                  <span>{{ t("settings.browse_btn") }}</span>
                 </button>
-                <button v-if="unibootPath" class="btn-secondary test-btn reset-btn" @click="resetUniBootDirectory" :title="t('settings.reset_default')">
+                <button
+                  v-if="unibootPath"
+                  class="btn-secondary test-btn reset-btn"
+                  @click="resetUniBootDirectory"
+                  :title="t('settings.reset_default')"
+                >
                   <span class="btn-icon">↺</span>
-                  <span>{{ t('settings.reset_default') }}</span>
+                  <span>{{ t("settings.reset_default") }}</span>
                 </button>
               </div>
             </div>
@@ -289,7 +269,7 @@
                   <span class="fw-path">➔ {{ fw.targetPath }}</span>
                 </div>
                 <div class="fw-meta">
-                  <span class="badge success">{{ t('settings.embeddedBadge') }}</span>
+                  <span class="badge success">{{ t("settings.embeddedBadge") }}</span>
                   <span class="fw-desc">{{ fw.descKey ? t(fw.descKey as any) : fw.description }}</span>
                 </div>
               </div>
@@ -299,14 +279,27 @@
             <div class="firmware-sync-card">
               <div class="sync-status">
                 <div class="sync-info-labels">
-                  <span>{{ t('settings.localVersion') }} <strong>{{ localVersionTag }}</strong></span>
+                  <span
+                    >{{ t("settings.localVersion") }} <strong>{{ localVersionTag }}</strong></span
+                  >
                   <span class="divider">•</span>
-                  <span>{{ t('settings.cloudRelease') }} <strong class="highlight-tag">UniBoot {{ latestReleaseTag }}</strong></span>
-                  <span v-if="hasUniBootUpdate" class="badge warning pulse">{{ t('settings.newVersionDetected', { version: latestReleaseTag }) }}</span>
+                  <span
+                    >{{ t("settings.cloudRelease") }}
+                    <strong class="highlight-tag">UniBoot {{ latestReleaseTag }}</strong></span
+                  >
+                  <span v-if="hasUniBootUpdate" class="badge warning pulse">{{
+                    t("settings.newVersionDetected", { version: latestReleaseTag })
+                  }}</span>
                 </div>
                 <button class="btn-primary-sm" :disabled="isSyncing" @click="syncFirmware">
-                  <span class="btn-icon">{{ isSyncing ? '⏳' : (hasUniBootUpdate ? '⚡' : '🔄') }}</span>
-                  <span>{{ isSyncing ? t('settings.pullingFirmware') : (hasUniBootUpdate ? t('settings.upgradeFirmwareNow', { version: latestReleaseTag }) : t('settings.checkSyncFirmware')) }}</span>
+                  <span class="btn-icon">{{ isSyncing ? "⏳" : hasUniBootUpdate ? "⚡" : "🔄" }}</span>
+                  <span>{{
+                    isSyncing
+                      ? t("settings.pullingFirmware")
+                      : hasUniBootUpdate
+                        ? t("settings.upgradeFirmwareNow", { version: latestReleaseTag })
+                        : t("settings.checkSyncFirmware")
+                  }}</span>
                 </button>
               </div>
               <div v-if="isSyncing" class="sync-progress">
@@ -320,58 +313,78 @@
         <div v-if="activeTab === 'ventoy'" class="tab-content">
           <div class="settings-section">
             <h4 class="section-title">
-              <span>{{ t('settings.ventoyToolchain') }}</span>
+              <span>{{ t("settings.ventoyToolchain") }}</span>
             </h4>
 
             <div class="form-group span-full">
-              <label class="form-label">{{ t('settings.ventoy_cli_path') }}</label>
+              <label class="form-label">{{ t("settings.ventoy_cli_path") }}</label>
               <div class="input-with-btn">
-                <input 
-                  v-model="ventoyPath" 
-                  type="text" 
-                  class="form-input" 
+                <input
+                  v-model="ventoyPath"
+                  type="text"
+                  class="form-input"
                   placeholder="/opt/ventoy or C:\ventoy-1.0.99\"
                 />
+                <button class="btn-secondary test-btn" @click="selectVentoyDirectory" :title="t('settings.browse_btn')">
+                  <span class="btn-icon">📁</span>
+                  <span>{{ t("settings.browse_btn") }}</span>
+                </button>
                 <button class="btn-secondary test-btn" :disabled="isValidatingVentoy" @click="checkVentoyCli">
                   <span class="btn-icon">⚡</span>
-                  <span>{{ isValidatingVentoy ? '...' : t('settings.testVentoyCli') }}</span>
+                  <span>{{ isValidatingVentoy ? "..." : t("settings.testVentoyCli") }}</span>
                 </button>
+              </div>
+              <div
+                v-if="ventoyValidation"
+                class="ventoy-status-card"
+                :class="ventoyValidation.valid ? 'success-card' : 'error-card'"
+              >
+                <div class="status-header">
+                  <span class="status-title">{{ ventoyValidation.valid ? "Ventoy CLI OK" : "Ventoy CLI Error" }}</span>
+                  <span v-if="ventoyValidation.valid && ventoyValidation.version" class="version-badge-green">{{
+                    ventoyValidation.version
+                  }}</span>
+                </div>
+                <div class="status-message">{{ ventoyValidation.message }}</div>
+                <div v-if="ventoyValidation.executablePath" class="exec-path">
+                  <code>{{ ventoyValidation.executablePath }}</code>
+                </div>
               </div>
             </div>
 
             <!-- Ventoy Formats & CLI Flags Group -->
             <div class="settings-sub-card">
-              <h5 class="sub-card-title">{{ t('settings.cliFormattingFlags') }}</h5>
-              
+              <h5 class="sub-card-title">{{ t("settings.cliFormattingFlags") }}</h5>
+
               <div class="grid-form">
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.ventoy_secboot') }}</label>
+                  <label class="form-label">{{ t("settings.ventoy_secboot") }}</label>
                   <div class="radio-group horizontal">
                     <label class="radio-label">
                       <input type="radio" :value="true" v-model="ventoySecureBoot" @change="triggerAutoSave" />
-                      <span>{{ t('common.on') }} (-s)</span>
+                      <span>{{ t("common.on") }} (-s)</span>
                     </label>
                     <label class="radio-label">
                       <input type="radio" :value="false" v-model="ventoySecureBoot" @change="triggerAutoSave" />
-                      <span>{{ t('common.off') }}</span>
+                      <span>{{ t("common.off") }}</span>
                     </label>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.ventoy_part_style') }}</label>
+                  <label class="form-label">{{ t("settings.ventoy_part_style") }}</label>
                   <CustomSelect
                     v-model="ventoyPartitionStyle"
                     :options="[
                       { value: 'MBR', label: 'MBR (Legacy BIOS + UEFI)' },
-                      { value: 'GPT', label: 'GPT (UEFI Only)' }
+                      { value: 'GPT', label: 'GPT (UEFI Only)' },
                     ]"
                     @change="triggerAutoSave"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.ventoy_reserve') }}</label>
+                  <label class="form-label">{{ t("settings.ventoy_reserve") }}</label>
                   <input
                     v-model.number="ventoyReserveSpace"
                     type="number"
@@ -386,25 +399,25 @@
 
             <!-- Ventoy Engine & Plugins Group -->
             <div class="settings-sub-card">
-              <h5 class="sub-card-title">{{ t('settings.ventoyPlugins') }}</h5>
-              
+              <h5 class="sub-card-title">{{ t("settings.ventoyPlugins") }}</h5>
+
               <div class="grid-form">
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.ventoy_win11_bypass') }}</label>
+                  <label class="form-label">{{ t("settings.ventoy_win11_bypass") }}</label>
                   <div class="radio-group horizontal">
                     <label class="radio-label">
                       <input type="radio" :value="true" v-model="ventoyWin11Bypass" @change="triggerAutoSave" />
-                      <span>{{ t('common.on') }} (Bypass TPM/CPU/RAM)</span>
+                      <span>{{ t("common.on") }} (Bypass TPM/CPU/RAM)</span>
                     </label>
                     <label class="radio-label">
                       <input type="radio" :value="false" v-model="ventoyWin11Bypass" @change="triggerAutoSave" />
-                      <span>{{ t('common.off') }}</span>
+                      <span>{{ t("common.off") }}</span>
                     </label>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.ventoy_timeout') }}</label>
+                  <label class="form-label">{{ t("settings.ventoy_timeout") }}</label>
                   <input
                     v-model.number="ventoyMenuTimeout"
                     type="number"
@@ -425,24 +438,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue';
-import CustomSelect from './CustomSelect.vue';
-import { setLanguage, t, SUPPORTED_LANGUAGES } from '../i18n';
-import { useTheme } from '../composables/useTheme';
+import { computed, onMounted, ref, watch } from "vue";
+import { useTheme } from "../composables/useTheme";
+import { setLanguage, SUPPORTED_LANGUAGES, t } from "../i18n";
+import CustomSelect from "./CustomSelect.vue";
 
 const { applyTheme, getActiveTheme } = useTheme();
 
 const languageSelectOptions = computed(() => [
-  { value: 'auto', label: t('common.autoDetect') },
-  ...SUPPORTED_LANGUAGES.map(item => ({
+  { value: "auto", label: t("common.autoDetect") },
+  ...SUPPORTED_LANGUAGES.map((item) => ({
     value: item.code,
-    label: item.nativeName
-  }))
+    label: item.nativeName,
+  })),
 ]);
 
 const themeSelectOptions = computed(() => [
-  { value: 'dark', label: `🌙 ${t('settings.theme_dark')}` },
-  { value: 'light', label: `☀️ ${t('settings.theme_light')}` }
+  { value: "dark", label: `🌙 ${t("settings.theme_dark")}` },
+  { value: "light", label: `☀️ ${t("settings.theme_light")}` },
 ]);
 
 interface FirmwareMapping {
@@ -455,68 +468,75 @@ interface FirmwareMapping {
 const props = defineProps<{
   isOpen: boolean;
   currentProxy?: string;
-  initialTab?: 'general' | 'network' | 'uniboot' | 'ventoy';
+  initialTab?: "general" | "network" | "uniboot" | "ventoy";
 }>();
 
 const emit = defineEmits<{
-  (e: 'close'): void;
-  (e: 'save', payload: {
-    githubProxy: string;
-    proxyProtocol: string;
-    proxyHost: string;
-    proxyPort: number;
-    proxyUser: string;
-    proxyPassword: string;
-    mode: string;
-    fileSystem: string;
-    autoCheckUpdate: boolean;
-    autoEjectAfterDeploy: boolean;
-    theme: string;
-    language: string;
-    ventoyPath: string;
-    ventoySecureBoot: boolean;
-    ventoyPartitionStyle: string;
-    ventoyReserveSpace: number;
-    ventoyWin11Bypass: boolean;
-    ventoyMenuTimeout: number;
-  }): void;
+  (e: "close"): void;
+  (
+    e: "save",
+    payload: {
+      githubProxy: string;
+      proxyProtocol: string;
+      proxyHost: string;
+      proxyPort: number;
+      proxyUser: string;
+      proxyPassword: string;
+      mode: string;
+      fileSystem: string;
+      autoCheckUpdate: boolean;
+      autoEjectAfterDeploy: boolean;
+      theme: string;
+      language: string;
+      ventoyPath: string;
+      ventoySecureBoot: boolean;
+      ventoyPartitionStyle: string;
+      ventoyReserveSpace: number;
+      ventoyWin11Bypass: boolean;
+      ventoyMenuTimeout: number;
+    }
+  ): void;
 }>();
 
-const activeTab = ref<'general' | 'network' | 'uniboot' | 'ventoy'>('general');
+const activeTab = ref<"general" | "network" | "uniboot" | "ventoy">("general");
 
-watch(() => props.isOpen, (newVal) => {
-  if (newVal) {
-    if (props.initialTab) {
-      activeTab.value = props.initialTab;
+watch(
+  () => props.isOpen,
+  (newVal) => {
+    if (newVal) {
+      if (props.initialTab) {
+        activeTab.value = props.initialTab;
+      }
+      // Always sync appTheme with the active DOM theme immediately upon opening
+      appTheme.value = getActiveTheme();
+      loadFullConfig();
+      fetchFirmwareList();
+      checkUniBootRelease();
     }
-    // Always sync appTheme with the active DOM theme immediately upon opening
-    appTheme.value = getActiveTheme();
-    loadFullConfig();
-    fetchFirmwareList();
-    checkUniBootRelease();
-  }
-}, { immediate: true });
+  },
+  { immediate: true }
+);
 
 // General settings state
-const defaultMode = ref('cloud');
-const defaultFs = ref('exFAT');
+const defaultMode = ref("cloud");
+const defaultFs = ref("exFAT");
 const autoCheckUpdate = ref(true);
 const autoEjectAfterDeploy = ref(false);
 const appTheme = ref(getActiveTheme());
-const appLanguage = ref('auto');
+const appLanguage = ref("auto");
 
 // Network proxy state
-const proxyInputUrl = ref('');
-const proxyProtocol = ref('direct');
-const proxyHost = ref('');
-const proxyPort = ref<number | ''>(1080);
-const proxyUser = ref('');
-const proxyPassword = ref('');
+const proxyInputUrl = ref("");
+const proxyProtocol = ref("direct");
+const proxyHost = ref("");
+const proxyPort = ref<number | "">(1080);
+const proxyUser = ref("");
+const proxyPassword = ref("");
 
 // Ventoy CLI & Options state
-const ventoyPath = ref('');
+const ventoyPath = ref("");
 const ventoySecureBoot = ref(true);
-const ventoyPartitionStyle = ref('MBR');
+const ventoyPartitionStyle = ref("MBR");
 const ventoyReserveSpace = ref(0);
 const ventoyWin11Bypass = ref(false);
 const ventoyMenuTimeout = ref(0);
@@ -527,40 +547,82 @@ const ventoyValidation = ref<{ valid: boolean; version: string; message: string;
 let isInitializing = true;
 let saveTimer: any = null;
 const isAutoSaving = ref(false);
-const saveStatusText = computed(() => isAutoSaving.value ? t('settings.saveStatusApplied') : t('settings.saveStatusEnabled'));
+const saveStatusText = computed(() =>
+  isAutoSaving.value ? t("settings.saveStatusApplied") : t("settings.saveStatusEnabled")
+);
 
 // Tests state
 const isTestingNet = ref(false);
-const netTestResult = ref('');
+const netTestResult = ref("");
 const netTestSuccess = ref(true);
 
 const isTestingProxy = ref(false);
-const proxyTestResult = ref('');
+const proxyTestResult = ref("");
 const proxyTestSuccess = ref(true);
 
 // UniBoot state
-const unibootPath = ref('');
+const unibootPath = ref("");
 const isSyncing = ref(false);
 const syncProgress = ref(0);
-const latestReleaseTag = ref('v1.1.0');
-const localVersionTag = ref('v1.0.0 (Embedded)');
+const latestReleaseTag = ref("v1.1.0");
+const localVersionTag = ref("v1.0.0 (Embedded)");
 const hasUniBootUpdate = ref(false);
 const checkingRelease = ref(false);
 
 const firmwareList = ref<FirmwareMapping[]>([
-  { releaseName: 'ipxe-x86_64.efi', targetPath: 'EFI/BOOT/BOOTX64.EFI', description: 'UEFI x86_64 (Intel/AMD 64-bit)' },
-  { releaseName: 'ipxe-arm64.efi', targetPath: 'EFI/BOOT/BOOTAA64.EFI', description: 'UEFI ARM64 (Apple Silicon Mac)' },
-  { releaseName: 'ipxe-i386.efi', targetPath: 'EFI/BOOT/BOOTIA32.EFI', description: 'UEFI IA32 (32-bit x86 Tablets)' },
-  { releaseName: 'ipxe-loongarch64.efi', targetPath: 'EFI/BOOT/BOOTLOONGARCH64.EFI', description: 'UEFI LoongArch64 (Loongson 64-bit)', descKey: 'settings.firmwareDesc.ipxeLoongarch64' },
-  { releaseName: 'ipxe-riscv64.efi', targetPath: 'EFI/BOOT/BOOTRISCV64.EFI', description: 'UEFI RISC-V 64-bit' },
-  { releaseName: 'ipxe-riscv32.efi', targetPath: 'EFI/BOOT/BOOTRISCV32.EFI', description: 'UEFI RISC-V 32-bit' },
-  { releaseName: 'ipxe.lkrn', targetPath: 'ipxe.lkrn', description: 'Legacy BIOS USB MBR Boot Kernel (x86)', descKey: 'settings.firmwareDesc.ipxeLkrn' },
-  { releaseName: 'ipxe-riscv64.lkrn', targetPath: 'ipxe-riscv64.lkrn', description: 'Legacy MBR Boot Kernel (RISC-V 64-bit)', descKey: 'settings.firmwareDesc.ipxeRiscv64Lkrn' },
-  { releaseName: 'ipxe-riscv32.lkrn', targetPath: 'ipxe-riscv32.lkrn', description: 'Legacy MBR Boot Kernel (RISC-V 32-bit)', descKey: 'settings.firmwareDesc.ipxeRiscv32Lkrn' },
-  { releaseName: 'undionly.kpxe', targetPath: 'undionly.kpxe', description: 'Legacy BIOS UNDI PXE Network Boot Firmware', descKey: 'settings.firmwareDesc.undionlyKpxe' },
-  { releaseName: 'boot.ipxe', targetPath: 'boot.ipxe', description: 'iPXE Global Entry Script', descKey: 'settings.firmwareDesc.bootIpxe' },
-  { releaseName: 'uniboot.ipxe', targetPath: 'uniboot.ipxe', description: 'UniBoot Main Interactive Menu Script', descKey: 'settings.firmwareDesc.unibootIpxe' },
-  { releaseName: 'UniBoot.iso', targetPath: 'UniBoot.iso', description: 'UniBoot All-Arch UEFI/BIOS Hybrid Boot ISO Image', descKey: 'settings.firmwareDesc.unibootIso' },
+  { releaseName: "ipxe-x86_64.efi", targetPath: "EFI/BOOT/BOOTX64.EFI", description: "UEFI x86_64 (Intel/AMD 64-bit)" },
+  { releaseName: "ipxe-arm64.efi", targetPath: "EFI/BOOT/BOOTAA64.EFI", description: "UEFI ARM64 (Apple Silicon Mac)" },
+  { releaseName: "ipxe-i386.efi", targetPath: "EFI/BOOT/BOOTIA32.EFI", description: "UEFI IA32 (32-bit x86 Tablets)" },
+  {
+    releaseName: "ipxe-loongarch64.efi",
+    targetPath: "EFI/BOOT/BOOTLOONGARCH64.EFI",
+    description: "UEFI LoongArch64 (Loongson 64-bit)",
+    descKey: "settings.firmwareDesc.ipxeLoongarch64",
+  },
+  { releaseName: "ipxe-riscv64.efi", targetPath: "EFI/BOOT/BOOTRISCV64.EFI", description: "UEFI RISC-V 64-bit" },
+  { releaseName: "ipxe-riscv32.efi", targetPath: "EFI/BOOT/BOOTRISCV32.EFI", description: "UEFI RISC-V 32-bit" },
+  {
+    releaseName: "ipxe.lkrn",
+    targetPath: "ipxe.lkrn",
+    description: "Legacy BIOS USB MBR Boot Kernel (x86)",
+    descKey: "settings.firmwareDesc.ipxeLkrn",
+  },
+  {
+    releaseName: "ipxe-riscv64.lkrn",
+    targetPath: "ipxe-riscv64.lkrn",
+    description: "Legacy MBR Boot Kernel (RISC-V 64-bit)",
+    descKey: "settings.firmwareDesc.ipxeRiscv64Lkrn",
+  },
+  {
+    releaseName: "ipxe-riscv32.lkrn",
+    targetPath: "ipxe-riscv32.lkrn",
+    description: "Legacy MBR Boot Kernel (RISC-V 32-bit)",
+    descKey: "settings.firmwareDesc.ipxeRiscv32Lkrn",
+  },
+  {
+    releaseName: "undionly.kpxe",
+    targetPath: "undionly.kpxe",
+    description: "Legacy BIOS UNDI PXE Network Boot Firmware",
+    descKey: "settings.firmwareDesc.undionlyKpxe",
+  },
+  {
+    releaseName: "boot.ipxe",
+    targetPath: "boot.ipxe",
+    description: "iPXE Global Entry Script",
+    descKey: "settings.firmwareDesc.bootIpxe",
+  },
+  {
+    releaseName: "uniboot.ipxe",
+    targetPath: "uniboot.ipxe",
+    description: "UniBoot Main Interactive Menu Script",
+    descKey: "settings.firmwareDesc.unibootIpxe",
+  },
+  {
+    releaseName: "UniBoot.iso",
+    targetPath: "UniBoot.iso",
+    description: "UniBoot All-Arch UEFI/BIOS Hybrid Boot ISO Image",
+    descKey: "settings.firmwareDesc.unibootIso",
+  },
 ]);
 
 function getFinalProxyUrl(): string {
@@ -568,9 +630,9 @@ function getFinalProxyUrl(): string {
 }
 
 function buildConfigPayload() {
-  const isDirect = proxyProtocol.value === 'direct';
+  const isDirect = proxyProtocol.value === "direct";
   const hasHost = Boolean(proxyHost.value.trim());
-  const finalPort = (!isDirect && hasHost) ? (Number(proxyPort.value) || 0) : 0;
+  const finalPort = !isDirect && hasHost ? Number(proxyPort.value) || 0 : 0;
 
   return {
     githubProxy: getFinalProxyUrl(),
@@ -602,12 +664,12 @@ async function saveConfigImmediate() {
     saveTimer = null;
   }
   const payload = buildConfigPayload();
-  emit('save', payload);
+  emit("save", payload);
   if (window.go && window.go.main && window.go.main.App) {
     try {
       await window.go.main.App.SaveConfig(payload as any);
     } catch (e: any) {
-      console.error('Failed to save config:', e);
+      console.error("Failed to save config:", e);
     }
   }
 }
@@ -636,7 +698,7 @@ async function onThemeChange(val: string) {
 }
 
 watch(appTheme, (newTheme) => {
-  if (newTheme === 'light' || newTheme === 'dark') {
+  if (newTheme === "light" || newTheme === "dark") {
     applyTheme(newTheme);
   }
 });
@@ -672,7 +734,7 @@ watch(
 );
 
 watch(activeTab, (newTab) => {
-  logUserAction('INFO', 'User switched settings modal tab', newTab);
+  logUserAction("INFO", "User switched settings modal tab", newTab);
 });
 
 watch(ventoyPath, (newVal) => {
@@ -697,9 +759,9 @@ async function checkVentoyCli() {
   } catch (e: any) {
     ventoyValidation.value = {
       valid: false,
-      version: '',
-      message: t('settings.verifyException', { error: e?.message || String(e) }),
-      executablePath: ''
+      version: "",
+      message: t("settings.verifyException", { error: e?.message || String(e) }),
+      executablePath: "",
     };
   } finally {
     isValidatingVentoy.value = false;
@@ -712,35 +774,35 @@ async function loadFullConfig() {
     try {
       const cfg = await window.go.main.App.GetConfig();
       if (cfg) {
-        defaultMode.value = cfg.mode || 'cloud';
-        defaultFs.value = cfg.fileSystem || 'exFAT';
+        defaultMode.value = cfg.mode || "cloud";
+        defaultFs.value = cfg.fileSystem || "exFAT";
         autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
         autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
-        if (cfg.theme === 'light' || cfg.theme === 'dark') {
+        if (cfg.theme === "light" || cfg.theme === "dark") {
           appTheme.value = cfg.theme;
           applyTheme(cfg.theme);
         } else {
           appTheme.value = getActiveTheme();
         }
-        appLanguage.value = cfg.language || 'auto';
+        appLanguage.value = cfg.language || "auto";
         setLanguage(appLanguage.value);
-        proxyInputUrl.value = cfg.githubProxy || '';
-        proxyProtocol.value = cfg.proxyProtocol || 'direct';
-        proxyHost.value = cfg.proxyHost || '';
+        proxyInputUrl.value = cfg.githubProxy || "";
+        proxyProtocol.value = cfg.proxyProtocol || "direct";
+        proxyHost.value = cfg.proxyHost || "";
         proxyPort.value = cfg.proxyPort > 0 ? cfg.proxyPort : 1080;
-        proxyUser.value = cfg.proxyUser || '';
-        proxyPassword.value = cfg.proxyPassword || '';
-        ventoyPath.value = cfg.ventoyPath || '';
+        proxyUser.value = cfg.proxyUser || "";
+        proxyPassword.value = cfg.proxyPassword || "";
+        ventoyPath.value = cfg.ventoyPath || "";
         ventoySecureBoot.value = cfg.ventoySecureBoot !== false;
-        ventoyPartitionStyle.value = cfg.ventoyPartitionStyle || 'MBR';
+        ventoyPartitionStyle.value = cfg.ventoyPartitionStyle || "MBR";
         ventoyReserveSpace.value = cfg.ventoyReserveSpace || 0;
         ventoyWin11Bypass.value = cfg.ventoyWin11Bypass === true;
         ventoyMenuTimeout.value = cfg.menuTimeout || cfg.ventoyMenuTimeout || 0;
-        unibootPath.value = cfg.unibootPath || '';
+        unibootPath.value = cfg.unibootPath || "";
         checkVentoyCli();
       }
     } catch (e) {
-      console.error('Failed to load full config:', e);
+      console.error("Failed to load full config:", e);
     }
   }
   setTimeout(() => {
@@ -748,11 +810,15 @@ async function loadFullConfig() {
   }, 100);
 }
 
-watch(() => props.currentProxy, (val) => {
-  if (val !== undefined && val !== proxyInputUrl.value) {
-    proxyInputUrl.value = val;
-  }
-}, { immediate: true });
+watch(
+  () => props.currentProxy,
+  (val) => {
+    if (val !== undefined && val !== proxyInputUrl.value) {
+      proxyInputUrl.value = val;
+    }
+  },
+  { immediate: true }
+);
 
 async function fetchFirmwareList() {
   if (window.go && window.go.main && window.go.main.App) {
@@ -762,7 +828,7 @@ async function fetchFirmwareList() {
         firmwareList.value = list;
       }
     } catch (e) {
-      console.error('Failed to get firmware list from backend:', e);
+      console.error("Failed to get firmware list from backend:", e);
     }
   }
 }
@@ -773,63 +839,71 @@ async function checkUniBootRelease() {
     try {
       const info = await window.go.main.App.GetUniBootReleaseInfo();
       if (info) {
-        latestReleaseTag.value = info.tagName || 'v1.1.0';
-        localVersionTag.value = info.localTag || 'v1.0.0 (Embedded)';
+        latestReleaseTag.value = info.tagName || "v1.1.0";
+        localVersionTag.value = info.localTag || "v1.0.0 (Embedded)";
         hasUniBootUpdate.value = info.hasUpdate;
       }
     } catch (e) {
-      console.error('Failed to check UniBoot release:', e);
+      console.error("Failed to check UniBoot release:", e);
     } finally {
       checkingRelease.value = false;
     }
   }
 }
 
-const logUserAction = (level: string, message: string, details: string = '') => {
+const logUserAction = (level: string, message: string, details: string = "") => {
   const app = (window as any)?.go?.main?.App;
-  if (app && typeof app.LogAction === 'function') {
+  if (app && typeof app.LogAction === "function") {
     app.LogAction(level, message, details);
   }
 };
 
 async function testConnection() {
-  logUserAction('INFO', 'User tested GitHub proxy connection');
+  logUserAction("INFO", "User tested GitHub proxy connection");
   isTestingNet.value = true;
-  netTestResult.value = '';
+  netTestResult.value = "";
   const finalProxy = getFinalProxyUrl();
-  const targetLabel = finalProxy ? t('settings.proxyPrefix', { proxy: finalProxy }) : t('settings.directGitHub');
+  const targetLabel = finalProxy ? t("settings.proxyPrefix", { proxy: finalProxy }) : t("settings.directGitHub");
 
   setTimeout(() => {
     isTestingNet.value = false;
     netTestSuccess.value = true;
-    netTestResult.value = t('settings.netTestSuccess', { target: targetLabel });
+    netTestResult.value = t("settings.netTestSuccess", { target: targetLabel });
   }, 400);
 }
 
 async function testNetworkProxy() {
-  logUserAction('INFO', 'User tested system network proxy connection', `${proxyProtocol.value}://${proxyHost.value}:${proxyPort.value}`);
-  if (proxyProtocol.value === 'direct') {
-    proxyTestResult.value = t('settings.directModeNotice');
+  logUserAction(
+    "INFO",
+    "User tested system network proxy connection",
+    `${proxyProtocol.value}://${proxyHost.value}:${proxyPort.value}`
+  );
+  if (proxyProtocol.value === "direct") {
+    proxyTestResult.value = t("settings.directModeNotice");
     proxyTestSuccess.value = true;
     return;
   }
   if (!proxyHost.value.trim()) {
-    proxyTestResult.value = t('settings.proxyHostRequired');
+    proxyTestResult.value = t("settings.proxyHostRequired");
     proxyTestSuccess.value = false;
     return;
   }
 
   isTestingProxy.value = true;
-  proxyTestResult.value = '';
+  proxyTestResult.value = "";
   setTimeout(() => {
     isTestingProxy.value = false;
     proxyTestSuccess.value = true;
-    proxyTestResult.value = t('settings.proxyTestSuccess', { protocol: proxyProtocol.value.toUpperCase(), host: proxyHost.value, port: proxyPort.value || 1080 });
+    proxyTestResult.value = t("settings.proxyTestSuccess", {
+      protocol: proxyProtocol.value.toUpperCase(),
+      host: proxyHost.value,
+      port: proxyPort.value || 1080,
+    });
   }, 450);
 }
 
 async function syncFirmware() {
-  logUserAction('INFO', 'User initiated UniBoot firmware synchronization');
+  logUserAction("INFO", "User initiated UniBoot firmware synchronization");
   isSyncing.value = true;
   syncProgress.value = 15;
 
@@ -850,7 +924,7 @@ async function syncFirmware() {
         setTimeout(() => {
           isSyncing.value = false;
           syncProgress.value = 0;
-          alert(t('settings.syncSuccessAlert', { tag: info.tagName }));
+          alert(t("settings.syncSuccessAlert", { tag: info.tagName }));
         }, 300);
       }
     } else {
@@ -859,7 +933,7 @@ async function syncFirmware() {
         setTimeout(() => {
           isSyncing.value = false;
           syncProgress.value = 0;
-          alert(t('settings.syncSuccessShortAlert'));
+          alert(t("settings.syncSuccessShortAlert"));
         }, 300);
       }, 800);
     }
@@ -867,16 +941,37 @@ async function syncFirmware() {
     console.error(e);
     isSyncing.value = false;
     syncProgress.value = 0;
-    alert(t('settings.syncFailedAlert', { error: e?.message || String(e) }));
+    alert(t("settings.syncFailedAlert", { error: e?.message || String(e) }));
   } finally {
     clearInterval(timer);
+  }
+}
+
+async function selectVentoyDirectory() {
+  if (window.go && window.go.main && window.go.main.App && window.go.main.App.SelectDirectory) {
+    try {
+      const selected = await window.go.main.App.SelectDirectory("Select Ventoy installation folder");
+      if (selected) {
+        ventoyPath.value = selected;
+        triggerAutoSave();
+        await checkVentoyCli();
+      }
+    } catch (e) {
+      console.error("Failed to select Ventoy directory:", e);
+      ventoyValidation.value = {
+        valid: false,
+        version: "",
+        message: String(e),
+        executablePath: "",
+      };
+    }
   }
 }
 
 async function selectUniBootDirectory() {
   if (window.go && window.go.main && window.go.main.App && window.go.main.App.SelectDirectory) {
     try {
-      const selected = await window.go.main.App.SelectDirectory(t('settings.select_uniboot_dir'));
+      const selected = await window.go.main.App.SelectDirectory(t("settings.select_uniboot_dir"));
       if (selected) {
         unibootPath.value = selected;
         saveConfigImmediate();
@@ -884,13 +979,13 @@ async function selectUniBootDirectory() {
         checkUniBootRelease();
       }
     } catch (e) {
-      console.error('Failed to select UniBoot directory:', e);
+      console.error("Failed to select UniBoot directory:", e);
     }
   }
 }
 
 function resetUniBootDirectory() {
-  unibootPath.value = '';
+  unibootPath.value = "";
   saveConfigImmediate();
   fetchFirmwareList();
   checkUniBootRelease();
@@ -900,7 +995,7 @@ function close() {
   if (saveTimer) {
     saveConfigImmediate();
   }
-  emit('close');
+  emit("close");
 }
 
 onMounted(() => {
@@ -928,7 +1023,9 @@ onMounted(() => {
 .glass-modal {
   background: var(--modal-bg);
   border: 1px solid var(--card-border);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 24px var(--accent-cyan-glow);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.3),
+    0 0 24px var(--accent-cyan-glow);
   border-radius: 16px;
   width: 92%;
   max-width: 720px;
@@ -1141,7 +1238,8 @@ onMounted(() => {
   color: var(--text-muted);
 }
 
-.form-input, .form-select {
+.form-input,
+.form-select {
   background: var(--input-bg);
   border: 1px solid var(--card-border);
   border-radius: 8px;
@@ -1163,7 +1261,8 @@ onMounted(() => {
   color: rgba(148, 163, 184, 0.22);
 }
 
-.form-input:focus, .form-select:focus {
+.form-input:focus,
+.form-select:focus {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 10px var(--accent-cyan-glow);
 }
@@ -1344,8 +1443,14 @@ onMounted(() => {
 }
 
 @keyframes pulseGlow {
-  0% { opacity: 0.7; box-shadow: 0 0 2px rgba(245, 158, 11, 0.4); }
-  100% { opacity: 1; box-shadow: 0 0 8px rgba(245, 158, 11, 0.8); }
+  0% {
+    opacity: 0.7;
+    box-shadow: 0 0 2px rgba(245, 158, 11, 0.4);
+  }
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+  }
 }
 
 .btn-primary-sm {

@@ -64,6 +64,8 @@ export const ukUa: TranslationDict = {
   "settings.syncFailedAlert": "Помилка синхронізації прошивки: {error}",
   "settings.ventoyToolchain": "Набір інструментів Ventoy",
   "settings.testVentoyCli": "Перевірити Ventoy CLI",
+  "settings.select_ventoy_dir": "Вибрати каталог встановлення Ventoy",
+
   "settings.cliFormattingFlags": "Прапорці форматування CLI Ventoy",
   "settings.ventoyPlugins": "Плагіни автоматизації Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

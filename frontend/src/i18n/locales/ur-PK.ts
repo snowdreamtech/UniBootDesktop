@@ -64,6 +64,8 @@ export const urPk: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync ناکام: {error}",
   "settings.ventoyToolchain": "Ventoy ٹول چین",
   "settings.testVentoyCli": "Ventoy CLI ٹیسٹ کریں",
+  "settings.select_ventoy_dir": "Ventoy انسٹال ڈائرکٹری منتخب کریں",
+
   "settings.cliFormattingFlags": "Ventoy CLI فارمیٹنگ کے جھنڈے",
   "settings.ventoyPlugins": "Ventoy آٹومیشن پلگ انز (ventoy.json)",
   "app.title": "UniBoot ڈیسک ٹاپ",

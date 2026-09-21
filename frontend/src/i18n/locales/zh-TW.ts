@@ -64,6 +64,8 @@ export const zhTw: TranslationDict = {
   "settings.syncFailedAlert": "韌體同步失敗: {error}",
   "settings.ventoyToolchain": "Ventoy 工具鏈",
   "settings.testVentoyCli": "測試 Ventoy CLI",
+  "settings.select_ventoy_dir": "選擇 Ventoy 安裝目錄",
+
   "settings.cliFormattingFlags": "Ventoy CLI 格式化參數配置",
   "settings.ventoyPlugins": "Ventoy 自動化插件配置 (ventoy.json)",
   "app.title": "UniBoot 桌面端",

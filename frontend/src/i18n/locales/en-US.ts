@@ -1,4 +1,4 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const enUs: TranslationDict = {
   "menu.app": "UniGoDesktop",
@@ -64,6 +64,7 @@ export const enUs: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Failed: {error}",
   "settings.ventoyToolchain": "Ventoy Toolchain",
   "settings.testVentoyCli": "Test Ventoy CLI",
+  "settings.select_ventoy_dir": "Select Ventoy installation directory",
   "settings.cliFormattingFlags": "Ventoy CLI Formatting Flags",
   "settings.ventoyPlugins": "Ventoy Automation Plugins (ventoy.json)",
   "app.title": "UniBoot Desktop",
@@ -98,7 +99,8 @@ export const enUs: TranslationDict = {
   "disk.tag_boot_hybrid": "Hybrid Boot",
   "disk.tag_boot_thirdparty": "3rd-Party Boot",
   "confirm.cloud_to_hybrid_warn_title": "Notice: Switching to Hybrid Mode requires full format",
-  "confirm.cloud_to_hybrid_warn_desc": "This disk is in pure Cloud Boot mode. Ventoy Hybrid mode requires rebuilding MBR and partition table, which will ERASE all data and ISOs!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "This disk is in pure Cloud Boot mode. Ventoy Hybrid mode requires rebuilding MBR and partition table, which will ERASE all data and ISOs!",
   "disk.tag_ssd": "Portable SSD",
   "disk.tag_typec": "Type-C Drive",
   "disk.tag_secure": "Encrypted Drive",
@@ -126,9 +128,11 @@ export const enUs: TranslationDict = {
   "log.level_error": "ERROR",
   "log.level_debug": "DEBUG",
   "safe.title_cloud": "Existing Ventoy/UniBoot Drive Detected (Cloud Mode refreshes ESP partition only)",
-  "safe.desc_cloud": "Cloud Mode preserves UNIBOOT dual-partition layout. Refreshing ESP partition leaves all ISOs and user files in Partition 1 intact!",
+  "safe.desc_cloud":
+    "Cloud Mode preserves UNIBOOT dual-partition layout. Refreshing ESP partition leaves all ISOs and user files in Partition 1 intact!",
   "safe.title_hybrid": "Existing Ventoy Drive Detected (Hybrid Mode in-place update)",
-  "safe.desc_hybrid": "Hybrid Mode preserves all existing ISO files without formatting, injecting UniBoot dark theme and cloud boot menu safely!",
+  "safe.desc_hybrid":
+    "Hybrid Mode preserves all existing ISO files without formatting, injecting UniBoot dark theme and cloud boot menu safely!",
   "common.optional": "Optional",
   "common.optional_test": "Optional Test",
   "iso.title": "Local OS ISO Images (ISO / IMG / WIM / VHD)",
@@ -147,8 +151,10 @@ export const enUs: TranslationDict = {
   "deploy.target_device": "Target Device:",
   "deploy.batch_target": "Selected {count} Disk(s)",
   "deploy.start_create": "Start Creating Boot Disk",
-  "deploy.tip_batch_update_all": "Batch non-destructive update: All {count} selected disk(s) will be updated in-place (data and ISOs preserved)",
-  "deploy.tip_batch_mixed": "Batch mixed deployment: {bootCount} disk(s) in-place update (data preserved), {blankCount} disk(s) fresh format",
+  "deploy.tip_batch_update_all":
+    "Batch non-destructive update: All {count} selected disk(s) will be updated in-place (data and ISOs preserved)",
+  "deploy.tip_batch_mixed":
+    "Batch mixed deployment: {bootCount} disk(s) in-place update (data preserved), {blankCount} disk(s) fresh format",
   "deploy.start_update": "Start In-Place Update (Data Safe)",
   "deploy.batch_create": "Start Batch Deployment ({count} Drive(s))",
   "deploy.writing": "Writing bootloader and firmware packages...",
@@ -163,10 +169,12 @@ export const enUs: TranslationDict = {
   "deploy.tip_writing": "Writing boot firmware...",
   "deploy.tip_select_single": "Please select a target disk first",
   "deploy.tip_select_batch": "Please select target disks first",
-  "deploy.tip_macos_unsupported": "macOS does not support Hybrid Mode fresh formatting (use Cloud Mode or initialize on Win/Linux first)",
+  "deploy.tip_macos_unsupported":
+    "macOS does not support Hybrid Mode fresh formatting (use Cloud Mode or initialize on Win/Linux first)",
   "deploy.tip_need_ventoy": "Hybrid Mode fresh formatting requires local Ventoy CLI",
   "deploy.macos_alert_title": "macOS Ventoy CLI Formatting Limitation",
-  "deploy.macos_alert_desc": "Ventoy does not support macOS formatting directly. Use Cloud Mode for native support, or initialize Ventoy on Windows/Linux first then perform in-place upgrade on macOS.",
+  "deploy.macos_alert_desc":
+    "Ventoy does not support macOS formatting directly. Use Cloud Mode for native support, or initialize Ventoy on Windows/Linux first then perform in-place upgrade on macOS.",
   "deploy.no_ventoy_title": "Ventoy CLI Executable Not Detected",
   "deploy.no_ventoy_desc": "Hybrid Mode requires local Ventoy CLI toolchain. We recommend Cloud Mode!",
   "deploy.result_batch_success": "Successfully deployed 1-Sec Cloud Install Disk to {count} disk(s)!",
@@ -175,9 +183,11 @@ export const enUs: TranslationDict = {
   "deploy.safely_eject_btn": "Safely Eject Disk",
   "deploy.success_banner_title": "Boot Drive Created Successfully!",
   "deploy.success_banner_desc": "Boot files & firmware written. Safely eject before unplugging to prevent data loss.",
-  "deploy.toast_auto_ejected": "Creation complete! Automatically safely ejected {count} disk(s). All data flushed; safe to remove.",
+  "deploy.toast_auto_ejected":
+    "Creation complete! Automatically safely ejected {count} disk(s). All data flushed; safe to remove.",
   "deploy.confirm_auto_eject_title": "Write Complete — Safely Eject?",
-  "deploy.confirm_auto_eject_desc": "All data has been written successfully. Would you like to safely eject the disk now?",
+  "deploy.confirm_auto_eject_desc":
+    "All data has been written successfully. Would you like to safely eject the disk now?",
   "deploy.confirm_auto_eject_yes": "Safely Remove",
   "deploy.confirm_auto_eject_no": "Not Now",
   "deploy.alert_fail": "Deployment Failed: ",
@@ -254,7 +264,8 @@ export const enUs: TranslationDict = {
   "settings.ventoy_timeout": "Ventoy Menu Timeout (Seconds):",
   "confirm.title": "High-Risk Format Warning",
   "confirm.warning_title": "Warning: Formatting will erase all data!",
-  "confirm.warning_desc": "The selected disk will be re-partitioned and formatted. All existing files will be erased completely. Ensure you have backed up important data!",
+  "confirm.warning_desc":
+    "The selected disk will be re-partitioned and formatted. All existing files will be erased completely. Ensure you have backed up important data!",
   "confirm.mode_title": "Deployment Mode:",
   "confirm.fs_title": "Target File System:",
   "confirm.disks_title": "Drives to be Formatted ({count}):",
@@ -264,11 +275,14 @@ export const enUs: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Confirmation",
   "confirm.title_danger": "Format Warning: Disk Initialization",
   "confirm.safe_banner_title": "In-Place Incremental Update Notice (Data Safe)",
-  "confirm.safe_banner_desc": "Ventoy / UniBoot boot structure detected on target drive. System will perform an incremental update skipping format. All existing files & ISOs are 100% preserved!",
+  "confirm.safe_banner_desc":
+    "Ventoy / UniBoot boot structure detected on target drive. System will perform an incremental update skipping format. All existing files & ISOs are 100% preserved!",
   "confirm.mixed_banner_title": "Smart Mixed Mode: In-Place Update for Boot Drives, Format for Blank Drives",
-  "confirm.mixed_banner_desc": "Selected {ventoyCount} boot drive(s) (In-place update) and {blankCount} blank drive(s) (Full format).",
+  "confirm.mixed_banner_desc":
+    "Selected {ventoyCount} boot drive(s) (In-place update) and {blankCount} blank drive(s) (Full format).",
   "confirm.danger_banner_title": "Warning: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Writing will re-partition and format the target device (MBR/GPT). All existing files on selected drive(s) will be completely erased!",
+  "confirm.danger_banner_desc":
+    "Writing will re-partition and format the target device (MBR/GPT). All existing files on selected drive(s) will be completely erased!",
   "confirm.summary_title": "Target Drives for Boot Deployment:",
   "confirm.smart_safe_tag": "Smart Safe",
   "confirm.ventoy_group_title": "In-Place Upgrade Drives (All ISOs Preserved):",
@@ -309,7 +323,8 @@ export const enUs: TranslationDict = {
   "inspector.smart": "SMART Health:",
   "inspector.sector": "Sector Size:",
   "inspector.fake_title": "Fake USB 3.0 Warning Alert!",
-  "inspector.fake_desc": "Device advertises USB 3.0/3.1, but actual physical layer speed is negotiated at only {speed} (USB 2.0 High-Speed PHY). This drive likely has spoofed firmware or a fake blue port.",
+  "inspector.fake_desc":
+    "Device advertises USB 3.0/3.1, but actual physical layer speed is negotiated at only {speed} (USB 2.0 High-Speed PHY). This drive likely has spoofed firmware or a fake blue port.",
   "inspector.genuine_title": "Physical Hardware Verification Passed (Genuine USB 3.0+ Device)",
   "inspector.genuine_desc": "Physical PHY link negotiated genuine SuperSpeed/SuperSpeed+ rate at {speed}.",
   "inspector.usb2_title": "Standard USB 2.0 Interface",
@@ -417,7 +432,8 @@ export const enUs: TranslationDict = {
   "diag.action_reformat_title": "Reformat (reformat)",
   "diag.action_remount_title": "Remount (remount)",
   "diag.action_retry_title": "Retry (retry)",
-  "diag.action_reformat_desc": "Deployment interruption corrupted partition table or file system. Fresh formatting is recommended.",
+  "diag.action_reformat_desc":
+    "Deployment interruption corrupted partition table or file system. Fresh formatting is recommended.",
   "diag.action_remount_desc": "Target mount path disconnected during writing. Please re-insert disk or remount volume.",
   "diag.action_retry_desc": "Environment and device state are intact. You can safely retry deployment.",
   "about.updating": "Updating ({progress}%)",
@@ -435,7 +451,8 @@ export const enUs: TranslationDict = {
   "dialog.textFilesFilter": "Text Files (*.txt)",
   "dialog.allFilesFilter": "All Files (*.*)",
   "dialog.selectIsoTitle": "Select System Image Files (*.iso, *.wim, *.img, etc.)",
-  "dialog.ventoyFilter": "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy Source Images (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Calculate Hash",
   "checksum.calculating": "Calculating Hash...",
   "checksum.algo_label": "Algorithm",
@@ -468,8 +485,8 @@ export const enUs: TranslationDict = {
   "checksum.auto_algo_switched": "Automatically detected and switched algorithm to {algo}",
   "checksum.expand": "Verify Hash",
   "checksum.collapse": "Collapse Checksum",
-    "checksum.card_title": "Image Hash Verification",
-"progress.speed": "Write Speed",
+  "checksum.card_title": "Image Hash Verification",
+  "progress.speed": "Write Speed",
   "progress.eta": "ETA",
   "vm.cfg_core_singular": "Core",
   "vm.cfg_core_plural": "Cores",
@@ -481,9 +498,11 @@ export const enUs: TranslationDict = {
   "privilege.modal_title": "Administrator Permission Required",
   "privilege.modal_subtitle": "Authorization required to read boot data and write disks",
   "privilege.reason_title": "Why is Administrator Privilege Required?",
-  "privilege.reason_desc": "The OS isolates raw disk sectors and EFI partitions. Authorization unlocks direct detection and safe disk creation.",
+  "privilege.reason_desc":
+    "The OS isolates raw disk sectors and EFI partitions. Authorization unlocks direct detection and safe disk creation.",
   "privilege.scope_title": "Scope of Access",
-  "privilege.scope_desc": "Privileges are strictly restricted to selected external USB drives. Internal disks are never touched.",
+  "privilege.scope_desc":
+    "Privileges are strictly restricted to selected external USB drives. Internal disks are never touched.",
   "privilege.safety_title": "Safety & Transparency",
   "privilege.safety_desc": "Inspection is strictly read-only and non-destructive; source code is fully open.",
   "privilege.confirm_btn": "Authorize Now",

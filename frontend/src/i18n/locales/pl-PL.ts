@@ -64,6 +64,8 @@ export const plPl: TranslationDict = {
   "settings.syncFailedAlert": "Synchronizacja oprogramowania układowego nie powiodła się: {error}",
   "settings.ventoyToolchain": "Zestaw narzędzi Ventoy",
   "settings.testVentoyCli": "Testuj Ventoy CLI",
+  "settings.select_ventoy_dir": "Wybierz katalog instalacji Ventoy",
+
   "settings.cliFormattingFlags": "Parametry formatowania Ventoy CLI",
   "settings.ventoyPlugins": "Wtyczki automatyzacji Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

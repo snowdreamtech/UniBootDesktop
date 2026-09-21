@@ -27,6 +27,33 @@ type VentoyCliValidationResult struct {
 
 // ValidateVentoyCli verifies if the provided directory or executable path contains a valid Ventoy CLI binary,
 // checks OS architecture compatibility, attempts execution, and extracts the Ventoy version.
+func normalizeVentoyCliInput(ventoyPath string) string {
+	cleanPath := strings.TrimSpace(ventoyPath)
+	if cleanPath == "" {
+		return ""
+	}
+
+	isWindowsPath := strings.Contains(cleanPath, "\\") || regexp.MustCompile(`^[A-Za-z]:[\\/]`).MatchString(cleanPath)
+	if isWindowsPath {
+		cleanPath = regexp.MustCompile(`\\+`).ReplaceAllString(cleanPath, "\\")
+		if len(cleanPath) > 3 && strings.HasSuffix(cleanPath, "\\") {
+			cleanPath = strings.TrimRight(cleanPath, "\\")
+		}
+		if cleanPath == "" {
+			return ""
+		}
+		return cleanPath
+	}
+
+	if len(cleanPath) > 1 && strings.HasSuffix(cleanPath, "/") {
+		cleanPath = strings.TrimRight(cleanPath, "/")
+	}
+	if cleanPath == "" {
+		return "/"
+	}
+	return cleanPath
+}
+
 func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" {
 		return &VentoyCliValidationResult{
@@ -43,11 +70,11 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 			Valid:          false,
 			Version:        "",
 			Message:        "❌ macOS Limitation: Official Ventoy CLI does not support running direct disk formatting on macOS.",
-			ExecutablePath: ventoyPath,
+			ExecutablePath: normalizeVentoyCliInput(ventoyPath),
 		}
 	}
 
-	cleanPath := strings.TrimSpace(ventoyPath)
+	cleanPath := normalizeVentoyCliInput(ventoyPath)
 	if cleanPath == "" {
 		return &VentoyCliValidationResult{
 			Valid:   false,

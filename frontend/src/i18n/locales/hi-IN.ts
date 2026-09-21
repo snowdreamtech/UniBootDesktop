@@ -64,6 +64,8 @@ export const hiIn: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync विफल: {error}",
   "settings.ventoyToolchain": "Ventoy टूलचेन",
   "settings.testVentoyCli": "Ventoy CLI परीक्षण करें",
+  "settings.select_ventoy_dir": "Ventoy इंस्टॉलेशन निर्देशिका चुनें",
+
   "settings.cliFormattingFlags": "वेंटॉय सीएलआई फ़ॉर्मेटिंग फ़्लैग",
   "settings.ventoyPlugins": "Ventoy स्वचालन प्लगइन्स (ventoy.json)",
   "app.title": "UniBoot डेस्कटॉप",

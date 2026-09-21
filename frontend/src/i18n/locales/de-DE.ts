@@ -64,6 +64,8 @@ export const deDe: TranslationDict = {
   "settings.syncFailedAlert": "Firmware-Synchronisierung fehlgeschlagen: {error}",
   "settings.ventoyToolchain": "Ventoy-Toolchain",
   "settings.testVentoyCli": "Ventoy CLI testen",
+  "settings.select_ventoy_dir": "Ventoy-Installationsverzeichnis auswählen",
+
   "settings.cliFormattingFlags": "Ventoy-CLI-Formatierungsparameter",
   "settings.ventoyPlugins": "Ventoy Automatisierungs-Plugins (ventoy.json)",
   "app.title": "UniBoot Desktop",

@@ -64,6 +64,8 @@ export const glEs: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync Fallou: {error}",
   "settings.ventoyToolchain": "Cadena de ferramentas Ventoy",
   "settings.testVentoyCli": "Probar Ventoy CLI",
+  "settings.select_ventoy_dir": "Seleccione o directorio de instalación de Ventoy",
+
   "settings.cliFormattingFlags": "Bandeiras de formato da CLI de Ventoy",
   "settings.ventoyPlugins": "Complementos de automatización Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

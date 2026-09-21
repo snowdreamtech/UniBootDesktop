@@ -64,6 +64,8 @@ export const faIr: TranslationDict = {
   "settings.syncFailedAlert": "Firmware Sync ناموفق: {error}",
   "settings.ventoyToolchain": "زنجیره ابزار Ventoy",
   "settings.testVentoyCli": "تست Ventoy CLI",
+  "settings.select_ventoy_dir": "انتخاب مسیر نصب Ventoy",
+
   "settings.cliFormattingFlags": "پرچم های قالب بندی Ventoy CLI",
   "settings.ventoyPlugins": "افزونه‌های اتوماسیون Ventoy (ventoy.json)",
   "app.title": "UniBoot دسکتاپ",

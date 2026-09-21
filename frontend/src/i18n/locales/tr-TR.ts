@@ -64,6 +64,8 @@ export const trTr: TranslationDict = {
   "settings.syncFailedAlert": "Bellenim senkronizasyonu başarısız: {error}",
   "settings.ventoyToolchain": "Ventoy Araç Zinciri",
   "settings.testVentoyCli": "Ventoy CLI Test Et",
+  "settings.select_ventoy_dir": "Ventoy kurulum dizinini seç",
+
   "settings.cliFormattingFlags": "Ventoy CLI Biçimlendirme Parametreleri",
   "settings.ventoyPlugins": "Ventoy otomasyon eklentileri (ventoy.json)",
   "app.title": "UniBoot Masaüstü",

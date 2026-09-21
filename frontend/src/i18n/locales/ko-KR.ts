@@ -64,6 +64,8 @@ export const koKr: TranslationDict = {
   "settings.syncFailedAlert": "펌웨어 동기화 실패: {error}",
   "settings.ventoyToolchain": "Ventoy 툴체인",
   "settings.testVentoyCli": "Ventoy CLI 테스트",
+  "settings.select_ventoy_dir": "Ventoy 설치 경로 선택",
+
   "settings.cliFormattingFlags": "Ventoy CLI 포맷 매개변수 구성",
   "settings.ventoyPlugins": "Ventoy 자동화 플러그인 (ventoy.json)",
   "app.title": "UniBoot 데스크톱",

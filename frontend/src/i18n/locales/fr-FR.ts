@@ -64,6 +64,8 @@ export const frFr: TranslationDict = {
   "settings.syncFailedAlert": "Échec de la synchronisation du firmware : {error}",
   "settings.ventoyToolchain": "Chaîne d'outils Ventoy",
   "settings.testVentoyCli": "Tester Ventoy CLI",
+  "settings.select_ventoy_dir": "Sélectionner le dossier d'installation de Ventoy",
+
   "settings.cliFormattingFlags": "Paramètres de formatage Ventoy CLI",
   "settings.ventoyPlugins": "Plugins d'automatisation Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",

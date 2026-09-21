@@ -1,4 +1,4 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const zhCn: TranslationDict = {
   "menu.app": "UniGoDesktop",
@@ -64,6 +64,7 @@ export const zhCn: TranslationDict = {
   "settings.syncFailedAlert": "固件同步失败: {error}",
   "settings.ventoyToolchain": "Ventoy 工具链",
   "settings.testVentoyCli": "测试 Ventoy CLI",
+  "settings.select_ventoy_dir": "选择 Ventoy 安装目录",
   "settings.cliFormattingFlags": "Ventoy CLI 格式化参数配置",
   "settings.ventoyPlugins": "Ventoy 自动化插件配置 (ventoy.json)",
   "app.title": "UniBoot 桌面端",
@@ -98,7 +99,8 @@ export const zhCn: TranslationDict = {
   "disk.tag_boot_hybrid": "混合引导盘",
   "disk.tag_boot_thirdparty": "第三方引导",
   "confirm.cloud_to_hybrid_warn_title": "注意：从纯云端转为混合模式需全盘格式化",
-  "confirm.cloud_to_hybrid_warn_desc": "当前磁盘为纯云引导模式。Ventoy 混合引导需重建 MBR 与分区表，将清空盘内所有数据与镜像！",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "当前磁盘为纯云引导模式。Ventoy 混合引导需重建 MBR 与分区表，将清空盘内所有数据与镜像！",
   "disk.tag_ssd": "移动固态硬盘",
   "disk.tag_typec": "Type-C 盘",
   "disk.tag_secure": "加密盘",
@@ -126,9 +128,11 @@ export const zhCn: TranslationDict = {
   "log.level_error": "错误",
   "log.level_debug": "调试",
   "safe.title_cloud": "检测到现有 Ventoy/UniBoot 盘 (云端模式仅刷新 ESP 引导区)",
-  "safe.desc_cloud": "云端模式坚持标准 UNIBOOT 双分区架构。部署将自动无损刷新 ESP 引导区直达 iPXE 云菜单，绝不抹擦或挪动主数据区原有文件与 ISO！",
+  "safe.desc_cloud":
+    "云端模式坚持标准 UNIBOOT 双分区架构。部署将自动无损刷新 ESP 引导区直达 iPXE 云菜单，绝不抹擦或挪动主数据区原有文件与 ISO！",
   "safe.title_hybrid": "检测到现有的 Ventoy 启动盘 (混合模式无损更新)",
-  "safe.desc_hybrid": "无需选择主数据区格式。混合模式自动保留所有现有文件与 ISO 镜像，全自动无损注入 UniBoot 暗色主题与 iPXE 云引导！",
+  "safe.desc_hybrid":
+    "无需选择主数据区格式。混合模式自动保留所有现有文件与 ISO 镜像，全自动无损注入 UniBoot 暗色主题与 iPXE 云引导！",
   "common.optional": "可选",
   "common.optional_test": "可选测试",
   "iso.title": "本地系统镜像源 (ISO / IMG / WIM / VHD)",
@@ -148,7 +152,8 @@ export const zhCn: TranslationDict = {
   "deploy.batch_target": "已选中 {count} 块磁盘",
   "deploy.start_create": "开始制作启动盘",
   "deploy.tip_batch_update_all": "批量无损更新：全选的 {count} 块磁盘均将执行原位更新 (保留盘内数据与 ISO)",
-  "deploy.tip_batch_mixed": "批量混合部署：{bootCount} 块磁盘执行原位无损更新 (保留数据)，{blankCount} 块磁盘执行全新格式化制作",
+  "deploy.tip_batch_mixed":
+    "批量混合部署：{bootCount} 块磁盘执行原位无损更新 (保留数据)，{blankCount} 块磁盘执行全新格式化制作",
   "deploy.start_update": "开始无损更新 (保留数据)",
   "deploy.batch_create": "开始批量制作 ({count} 块磁盘)",
   "deploy.writing": "正在写入引导与固件包...",
@@ -166,9 +171,11 @@ export const zhCn: TranslationDict = {
   "deploy.tip_macos_unsupported": "macOS 暂不支持混合模式全新盘格式化 (建议选择云端模式或先在 Win/Linux 上初始化)",
   "deploy.tip_need_ventoy": "制作【混合模式】全新盘需依赖 Ventoy CLI 环境",
   "deploy.macos_alert_title": "macOS 暂不支持 Ventoy CLI 全新格式化",
-  "deploy.macos_alert_desc": "官方 Ventoy 暂不支持在 macOS 上直接运行格式化程序。制作【混合模式】全新盘需依赖 Ventoy CLI；建议直接选择原生支持的【云端模式 (1秒极速云引导盘)】！如需使用混合模式，请先在 Win/Linux 上完成 Ventoy 盘初始化后插入 macOS 无损升级。",
+  "deploy.macos_alert_desc":
+    "官方 Ventoy 暂不支持在 macOS 上直接运行格式化程序。制作【混合模式】全新盘需依赖 Ventoy CLI；建议直接选择原生支持的【云端模式 (1秒极速云引导盘)】！如需使用混合模式，请先在 Win/Linux 上完成 Ventoy 盘初始化后插入 macOS 无损升级。",
   "deploy.no_ventoy_title": "未检测到 Ventoy CLI 执行程序",
-  "deploy.no_ventoy_desc": "制作【混合模式】(Ventoy 混合盘) 需本地安装 Ventoy CLI；建议直接选择原生支持的【云端模式 (1秒极速云引导盘)】！",
+  "deploy.no_ventoy_desc":
+    "制作【混合模式】(Ventoy 混合盘) 需本地安装 Ventoy CLI；建议直接选择原生支持的【云端模式 (1秒极速云引导盘)】！",
   "deploy.result_batch_success": "成功批量部署 1秒极速云端引导盘 到 {count} 个磁盘！",
   "deploy.result_success": "成功部署模式 {mode} 到目标：{targets}",
   "deploy.alert_success": "部署成功！",
@@ -264,7 +271,8 @@ export const zhCn: TranslationDict = {
   "confirm.title_mixed": "智能混合部署确认",
   "confirm.title_danger": "格式化警告：磁盘初始化",
   "confirm.safe_banner_title": "原位增量升级通知（数据安全）",
-  "confirm.safe_banner_desc": "检测到目标磁盘已有 Ventoy / UniBoot 引导结构。系统将执行增量升级，跳过格式化。现有的所有文件与 ISO 镜像均 100% 完整保留！",
+  "confirm.safe_banner_desc":
+    "检测到目标磁盘已有 Ventoy / UniBoot 引导结构。系统将执行增量升级，跳过格式化。现有的所有文件与 ISO 镜像均 100% 完整保留！",
   "confirm.mixed_banner_title": "智能混合模式：引导盘原位增量升级，空白盘全量格式化",
   "confirm.mixed_banner_desc": "已选择 {ventoyCount} 个引导盘（增量升级）与 {blankCount} 个空白盘（全量格式化）。",
   "confirm.danger_banner_title": "警告：格式化操作不可逆！",
@@ -309,7 +317,8 @@ export const zhCn: TranslationDict = {
   "inspector.smart": "SMART 健康度：",
   "inspector.sector": "扇区大小：",
   "inspector.fake_title": "伪 USB 3.0 扩容/降级预警！",
-  "inspector.fake_desc": "设备标称为 USB 3.0/3.1，但物理层实际协商速率仅为 {speed} (USB 2.0 High-Speed PHY)。该磁盘可能存在主控伪造或劣质蓝口。",
+  "inspector.fake_desc":
+    "设备标称为 USB 3.0/3.1，但物理层实际协商速率仅为 {speed} (USB 2.0 High-Speed PHY)。该磁盘可能存在主控伪造或劣质蓝口。",
   "inspector.genuine_title": "物理硬件校验通过 (原生真 USB 3.0+ 设备)",
   "inspector.genuine_desc": "物理 PHY 层握手协商为真实 SuperSpeed/SuperSpeed+ 链路，实测速率达 {speed}。",
   "inspector.usb2_title": "标准 USB 2.0 接口",
@@ -329,7 +338,7 @@ export const zhCn: TranslationDict = {
   "inspector.val_rw": "可读可写 (Read-Write)",
   "inspector.val_ro": "只读保护 (Read-Only)",
   "inspector.lbl_boot_status": "引导盘状态",
-   "inspector.val_data_disk": "数据存储盘 (未检测到引导包)",
+  "inspector.val_data_disk": "数据存储盘 (未检测到引导包)",
   "inspector.val_boot_hybrid": "UniBoot (混合模式引导盘)",
   "inspector.val_boot_cloud": "UniBoot (1秒极速云引导盘)",
   "inspector.val_boot_thirdparty": "第三方引导盘 (Rufus / PE / 原生系统)",
@@ -435,7 +444,8 @@ export const zhCn: TranslationDict = {
   "dialog.textFilesFilter": "文本文件 (*.txt)",
   "dialog.allFilesFilter": "所有文件 (*.*)",
   "dialog.selectIsoTitle": "选择系统镜像文件 (*.iso, *.wim, *.img 等)",
-  "dialog.ventoyFilter": "Ventoy 源镜像文件 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy 源镜像文件 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "计算 Hash",
   "checksum.calculating": "正在计算 Hash...",
   "checksum.algo_label": "算法",
@@ -468,8 +478,8 @@ export const zhCn: TranslationDict = {
   "checksum.auto_algo_switched": "已自动识别并切换算法为 {algo}",
   "checksum.expand": "校验 Hash",
   "checksum.collapse": "收起校验",
-    "checksum.card_title": "镜像 Hash 校验",
-"progress.speed": "写入速度",
+  "checksum.card_title": "镜像 Hash 校验",
+  "progress.speed": "写入速度",
   "progress.eta": "预计剩余",
   "vm.cfg_core_singular": "核",
   "vm.cfg_core_plural": "核",
