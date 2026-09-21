@@ -182,9 +182,11 @@ func deployHybridModeWithStage(ctx context.Context, targetDisk string, fsType st
 		logger.Error("Writing firmware assets failed", "target", targetDisk, "error", errExtract)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errExtract.Error(), Diagnostics: diag}, errExtract
 	}
+	_ = disk.WriteUniBootManifest(mountPoint, "hybrid", "1.0.0")
 	tracker.AddWrittenFiles([]string{
 		filepath.Join(mountPoint, "EFI", "BOOT"),
 		filepath.Join(mountPoint, "ipxe"),
+		filepath.Join(mountPoint, "ipxe", "uniboot.json"),
 	})
 
 	// Step 4: Write Ventoy Configuration
@@ -521,9 +523,11 @@ func deployCloudModeWithStage(ctx context.Context, targetDisk string, fsType str
 		logger.Error("Extracting iPXE cloud firmware assets failed", "target", targetDisk, "error", errExtract)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errExtract.Error(), Diagnostics: diag}, errExtract
 	}
+	_ = disk.WriteUniBootManifest(efiMountPoint, "cloud", "1.0.0")
 	tracker.AddWrittenFiles([]string{
 		filepath.Join(efiMountPoint, "EFI", "BOOT"),
 		filepath.Join(efiMountPoint, "ipxe"),
+		filepath.Join(efiMountPoint, "ipxe", "uniboot.json"),
 	})
 
 	// Step 3 completed

@@ -291,9 +291,13 @@ func CheckVentoyMbrSignature(targetDisk string) bool {
 }
 
 // HasUniBootCloudFiles verifies physical presence of UniBoot Cloud iPXE firmware files inside ESP partition.
+// Prioritizes checking the official UniBoot manifest (ipxe/uniboot.json), with fallback to legacy boot scripts.
 func HasUniBootCloudFiles(mountPoint string) bool {
 	if mountPoint == "" || IsEmptyDirectory(mountPoint) {
 		return false
+	}
+	if HasUniBootManifest(mountPoint) {
+		return true
 	}
 	bootIpxe := filepath.Join(mountPoint, "boot.ipxe")
 	unibootIpxe := filepath.Join(mountPoint, "ipxe", "uniboot.ipxe")
