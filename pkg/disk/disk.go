@@ -2198,6 +2198,43 @@ func ValidateLiveTargetDisk(targetDevice string) error {
 	return fmt.Errorf("target disk is no longer present as a removable disk: %s", targetDevice)
 }
 
+// ValidateUserEjectTarget ensures the selected disk is a currently present, removable,
+// non-system disk before a user explicitly requests ejection. This gate keeps shutdown
+// cleanup and user-initiated ejects separate, preventing automatic mass ejection.
+func ValidateUserEjectTarget(targetDevice string) error {
+	if err := ValidateTargetDisk(targetDevice); err != nil {
+		return err
+	}
+
+	disks, err := GetRemovableDisks()
+	if err != nil {
+		return fmt.Errorf("failed to refresh removable disk inventory before ejection: %w", err)
+	}
+	for _, candidate := range disks {
+		if candidate.Device != targetDevice {
+			continue
+		}
+		if candidate.IsSystem {
+			return fmt.Errorf("CRITICAL: Safety block triggered! %s is a system disk and cannot be ejected", targetDevice)
+		}
+		if !candidate.IsRemovable {
+			return fmt.Errorf("CRITICAL: Safety block triggered! %s is not a removable disk", targetDevice)
+		}
+		return nil
+	}
+
+	return fmt.Errorf("target disk is not present in the current removable-disk inventory: %s", targetDevice)
+}
+
+// SafeUserEjectDisk performs the user-initiated eject only after the target has passed the
+// explicit removable-disk validation gate. This is intentionally separate from shutdown cleanup.
+func SafeUserEjectDisk(device string) error {
+	if err := ValidateUserEjectTarget(device); err != nil {
+		return err
+	}
+	return EjectDisk(device)
+}
+
 // EjectDisk safely unmounts and ejects the target removable USB storage drive.
 func EjectDisk(device string) error {
 	if device == "" {

@@ -248,16 +248,41 @@ func TrackDiskRemounted(targetPath string) {
 	}
 }
 
-// CleanupAllUnmountedDisks ensures all target disks unmounted by hypervisors are safely remounted back to host OS.
+// CleanupAllUnmountedDisks remounts only the disks previously tracked by the VM lifecycle.
+// This intentionally does NOT enumerate all removable media or eject arbitrary USB devices.
+// The shutdown policy is: best-effort remount of tracked VM targets, never mass-eject all U disks.
 func (m *Manager) CleanupAllUnmountedDisks() {
+	var paths []string
 	unmountedDisksTracker.Range(func(key, value any) bool {
-		if path, ok := key.(string); ok {
-			logger.Info("Emergency cleanup: remounting target disk back to host OS", "targetPath", path)
-			remountTargetDisk(path)
-			unmountedDisksTracker.Delete(key)
+		if path, ok := key.(string); ok && path != "" {
+			paths = append(paths, path)
 		}
 		return true
 	})
+
+	for _, path := range paths {
+		logger.Info("Emergency cleanup: remounting tracked target disk back to host OS", "targetPath", path)
+		remountTargetDisk(path)
+		unmountedDisksTracker.Delete(path)
+	}
+}
+
+func runCommandWithTimeout(timeout time.Duration, name string, args ...string) error {
+	if timeout <= 0 {
+		timeout = 3 * time.Second
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	cmd := exec.CommandContext(ctx, name, args...)
+	if err := cmd.Run(); err != nil {
+		if ctx.Err() == context.DeadlineExceeded {
+			return fmt.Errorf("command timed out after %s: %w", timeout, ctx.Err())
+		}
+		return err
+	}
+	return nil
 }
 
 // unmountTargetDisk safely unmounts disk partitions across macOS, Linux, and Windows before hypervisor launch.
@@ -274,22 +299,20 @@ func unmountTargetDisk(targetPath string) {
 		if !strings.HasPrefix(diskNode, "disk") {
 			diskNode = "disk" + diskNode
 		}
-		cmd := exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode))
-		_ = cmd.Run()
+		cmdPath := fmt.Sprintf("/dev/%s", diskNode)
+		_ = runCommandWithTimeout(3*time.Second, "diskutil", "unmountDisk", "force", cmdPath)
 
-		// Poll up to 3s for macOS diskarbitrationd to finish unmounting all partitions on diskNode
 		deadline := time.Now().Add(3000 * time.Millisecond)
 		for time.Now().Before(deadline) {
 			if !isDiskMounted(diskNode) {
 				break
 			}
 			time.Sleep(150 * time.Millisecond)
-			_ = exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode)).Run()
+			_ = runCommandWithTimeout(3*time.Second, "diskutil", "unmountDisk", "force", cmdPath)
 		}
 	} else if runtime.GOOS == "linux" {
-		cmd := exec.Command("udisksctl", "unmount", "-b", targetPath)
-		if err := cmd.Run(); err != nil {
-			_ = exec.Command("umount", targetPath).Run()
+		if err := runCommandWithTimeout(3*time.Second, "udisksctl", "unmount", "-b", targetPath); err != nil {
+			_ = runCommandWithTimeout(3*time.Second, "umount", targetPath)
 		}
 		time.Sleep(300 * time.Millisecond)
 	} else if runtime.GOOS == "windows" {
@@ -301,7 +324,7 @@ func unmountTargetDisk(targetPath string) {
 		safePath = strings.ReplaceAll(safePath, "\"", "`\"")   // 双引号转义
 
 		psCmd := fmt.Sprintf(`Get-Volume | Where-DriveLetter | Where-Object { $_.Path -like '*%s*' } | Dismount-Volume -Confirm:$false`, safePath)
-		_ = exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd).Run()
+		_ = runCommandWithTimeout(3*time.Second, "powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd)
 		time.Sleep(300 * time.Millisecond)
 	}
 }
@@ -320,11 +343,9 @@ func remountTargetDisk(targetPath string) {
 		if !strings.HasPrefix(diskNode, "disk") {
 			diskNode = "disk" + diskNode
 		}
-		cmd := exec.Command("diskutil", "mountDisk", fmt.Sprintf("/dev/%s", diskNode))
-		_ = cmd.Run()
+		_ = runCommandWithTimeout(3*time.Second, "diskutil", "mountDisk", fmt.Sprintf("/dev/%s", diskNode))
 	} else if runtime.GOOS == "linux" {
-		cmd := exec.Command("udisksctl", "mount", "-b", targetPath)
-		_ = cmd.Run()
+		_ = runCommandWithTimeout(3*time.Second, "udisksctl", "mount", "-b", targetPath)
 	} else if runtime.GOOS == "windows" {
 		// 安全地转义PowerShell参数，防止命令注入
 		safePath := strings.ReplaceAll(targetPath, "'", "''") // PowerShell单引号转义
@@ -333,7 +354,7 @@ func remountTargetDisk(targetPath string) {
 		safePath = strings.ReplaceAll(safePath, "\"", "`\"")   // 双引号转义
 
 		psCmd := fmt.Sprintf(`Get-Volume | Where-DriveLetter | Where-Object { $_.Path -like '*%s*' } | Mount-Volume`, safePath)
-		_ = exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd).Run()
+		_ = runCommandWithTimeout(3*time.Second, "powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd)
 	}
 }
 

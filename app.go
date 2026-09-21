@@ -101,8 +101,20 @@ func (a *App) startup(ctx context.Context) {
 
 // shutdown is called automatically when the Wails application is closing.
 func (a *App) shutdown(ctx context.Context) {
-	logger.Info("UniGoDesktop Wails GUI runtime shutting down, performing hypervisor disk cleanup")
-	hypervisor.GetManager().CleanupAllUnmountedDisks()
+	logger.Info("UniGoDesktop Wails GUI runtime shutting down; safe policy is to only remount tracked VM disks, never eject arbitrary USB media")
+
+	cleanupDone := make(chan struct{})
+	go func() {
+		defer close(cleanupDone)
+		hypervisor.GetManager().CleanupAllUnmountedDisks()
+	}()
+
+	select {
+	case <-cleanupDone:
+		logger.Info("Tracked hypervisor disk cleanup completed before shutdown timeout")
+	case <-time.After(5 * time.Second):
+		logger.Warn("Tracked hypervisor disk cleanup hit shutdown timeout; continuing app exit without forcing arbitrary USB ejection")
+	}
 }
 
 // GetRecentLogs returns recent log entries from the memory buffer.
@@ -174,14 +186,14 @@ func (a *App) EjectDisk(targetDisk string) error {
 		return fmt.Errorf("target disk path too long (max 512 characters)")
 	}
 
-	logger.Info("Requesting safe ejection for disk", "disk", targetDisk)
+	logger.Info("Requesting explicit user-initiated safe ejection for selected disk", "disk", targetDisk)
 	disk.InvalidateDiskCache()
-	err := disk.EjectDisk(targetDisk)
+	err := disk.SafeUserEjectDisk(targetDisk)
 	if err != nil {
-		logger.Error("Failed to eject target disk", "disk", targetDisk, "error", err)
+		logger.Error("Failed to eject target disk via explicit safety gate", "disk", targetDisk, "error", err)
 		return err
 	}
-	logger.Info("Target disk safely ejected", "disk", targetDisk)
+	logger.Info("Target disk safely ejected after explicit removable-disk validation", "disk", targetDisk)
 	return nil
 }
 

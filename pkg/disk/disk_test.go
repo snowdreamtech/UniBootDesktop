@@ -79,6 +79,13 @@ func TestValidateTargetDisk(t *testing.T) {
 	assert.NoError(t, ValidateTargetDisk("/Volumes/MyUSBKey"))
 }
 
+func TestValidateUserEjectTarget(t *testing.T) {
+	assert.Error(t, ValidateUserEjectTarget(""))
+	assert.Error(t, ValidateUserEjectTarget("/"))
+	assert.Error(t, ValidateUserEjectTarget("C:"))
+	assert.Error(t, ValidateUserEjectTarget("/dev/sda"))
+}
+
 func TestValidateTargetDiskSnapshot(t *testing.T) {
 	expected := DiskInfo{
 		Device:       "/dev/disk4",

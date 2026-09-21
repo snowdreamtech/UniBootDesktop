@@ -6,7 +6,9 @@ package hypervisor
 import (
 	"context"
 	"os"
+	"runtime"
 	"testing"
+	"time"
 )
 
 func TestHypervisorManager_DetectAll(t *testing.T) {
@@ -67,6 +69,24 @@ func TestHypervisorManager_LaunchBest_DryRun(t *testing.T) {
 	err := mgr.LaunchBest(context.Background(), "dummy_disk", BootModeAuto)
 	if err != nil {
 		t.Fatalf("unexpected error during dry-run launch: %v", err)
+	}
+}
+
+func TestRunCommandWithTimeout(t *testing.T) {
+	name := "sh"
+	args := []string{"-c", "sleep 30"}
+	if runtime.GOOS == "windows" {
+		name = "powershell"
+		args = []string{"-NoProfile", "-NonInteractive", "-Command", "Start-Sleep -Seconds 30"}
+	}
+
+	start := time.Now()
+	err := runCommandWithTimeout(200*time.Millisecond, name, args...)
+	if err == nil {
+		t.Fatalf("expected command timeout error but got nil")
+	}
+	if elapsed := time.Since(start); elapsed > 5*time.Second {
+		t.Fatalf("command exceeded timeout budget: %v", elapsed)
 	}
 }
 
