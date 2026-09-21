@@ -200,6 +200,15 @@ func TestGetRemovableDisksCaching(t *testing.T) {
 	assert.Less(t, elapsed, 10*time.Millisecond, "Cached GetRemovableDisks took too long: %v", elapsed)
 }
 
+func TestDiskCacheShouldReuse(t *testing.T) {
+	diskCacheSnapshot = "A|B"
+	assert.True(t, diskCacheShouldReuse("A|B", time.Now().Add(-2*time.Second)))
+	assert.True(t, diskCacheShouldReuse("A|B", time.Now().Add(-4*time.Second)))
+	assert.False(t, diskCacheShouldReuse("A|B|C", time.Now().Add(-2*time.Second)))
+	assert.False(t, diskCacheShouldReuse("A|B", time.Now().Add(-10*time.Second)))
+	diskCacheSnapshot = ""
+}
+
 func TestIdentifyThirdPartyBoot_Fingerprints(t *testing.T) {
 	tests := []struct {
 		name         string

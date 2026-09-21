@@ -886,14 +886,25 @@ func FormatBytesDual(bytes uint64) string {
 }
 
 var (
-	diskCacheMutex sync.Mutex
-	diskCacheList  []DiskInfo
-	diskCacheTime  time.Time
+	diskCacheMutex    sync.Mutex
+	diskCacheList     []DiskInfo
+	diskCacheTime     time.Time
+	diskCacheSnapshot string
 
 	darwinDiskutilCacheMutex sync.Mutex
 	darwinDiskutilCacheMap   = make(map[string]string)
 	darwinDiskutilCacheTime  time.Time
 )
+
+func diskCacheShouldReuse(snapshot string, cachedAt time.Time) bool {
+	if snapshot == "" {
+		return false
+	}
+	if time.Since(cachedAt) > 5*time.Second {
+		return false
+	}
+	return diskCacheSnapshot == snapshot
+}
 
 func getDarwinDiskutilInfo(node string) string {
 	node = strings.TrimSpace(node)
@@ -936,6 +947,8 @@ func invalidateDarwinDiskutilCache() {
 func InvalidateDiskCache() {
 	diskCacheMutex.Lock()
 	diskCacheList = nil
+	diskCacheTime = time.Time{}
+	diskCacheSnapshot = ""
 	diskCacheMutex.Unlock()
 
 	darwinUSBCacheMutex.Lock()
@@ -1010,8 +1023,10 @@ func getVolumeSnapshot() string {
 
 // GetRemovableDisks lists removable USB drives safely while protecting system drives.
 func GetRemovableDisks() ([]DiskInfo, error) {
+	currentSnapshot := getVolumeSnapshot()
+
 	diskCacheMutex.Lock()
-	if diskCacheList != nil && time.Since(diskCacheTime) < 5*time.Second {
+	if diskCacheList != nil && diskCacheShouldReuse(currentSnapshot, diskCacheTime) {
 		cached := make([]DiskInfo, len(diskCacheList))
 		copy(cached, diskCacheList)
 		diskCacheMutex.Unlock()
@@ -1035,6 +1050,7 @@ func GetRemovableDisks() ([]DiskInfo, error) {
 		diskCacheMutex.Lock()
 		diskCacheList = disks
 		diskCacheTime = time.Now()
+		diskCacheSnapshot = getVolumeSnapshot()
 		diskCacheMutex.Unlock()
 	}
 
