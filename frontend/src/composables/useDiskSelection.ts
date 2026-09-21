@@ -202,10 +202,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
     isScanningDisks.value = true;
 
     const previousSelectedDevice = selectedDisk.value?.device;
-    // 1. Immediately clear the disk list and selection for instant UI feedback
-    diskList.value = [];
-    selectedDisk.value = null;
-    selectedDevices.value.clear();
+    const previousSelectedDevices = new Set(selectedDevices.value);
 
     try {
       if (window.go && window.go.main && window.go.main.App) {
@@ -226,16 +223,27 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             return true;
           });
           diskList.value = fetched;
+
+          // Preserve single selection if the disk is still connected
           if (previousSelectedDevice) {
             const stillExists = diskList.value.find(d => d.device === previousSelectedDevice);
             selectedDisk.value = stillExists || (diskList.value.length > 0 ? diskList.value[0] : null);
           } else if (diskList.value.length > 0) {
             selectedDisk.value = diskList.value[0];
+          } else {
+            selectedDisk.value = null;
           }
+
+          // Preserve batch selections, filtering out only disks that were legitimately ejected/unplugged
+          const newSelectedDevices = new Set<string>();
+          for (const dev of previousSelectedDevices) {
+            if (diskList.value.some(d => d.device === dev)) {
+              newSelectedDevices.add(dev);
+            }
+          }
+          selectedDevices.value = newSelectedDevices;
         } catch (e) {
-          console.error(e);
-          diskList.value = [];
-          selectedDisk.value = null;
+          console.error('Error refreshing disk list:', e);
         }
       } else {
         // Fallback mock for browser preview demonstrating genuine vs fake USB 3.0
