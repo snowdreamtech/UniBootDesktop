@@ -24,6 +24,20 @@ func TestValidateVentoyCliNonExistentPath(t *testing.T) {
 	}
 }
 
+func TestValidateVentoyCliMacOSReturnsLocalizedStatusCode(t *testing.T) {
+	if runtime.GOOS != "darwin" {
+		t.Skip("macOS-specific Ventoy validation")
+	}
+
+	res := ValidateVentoyCli("/tmp/ventoy")
+	if res.Valid {
+		t.Fatal("Expected macOS Ventoy validation to be invalid")
+	}
+	if res.Code != "macos_unsupported" {
+		t.Fatalf("Expected macOS unsupported status code, got %q", res.Code)
+	}
+}
+
 func TestExtractVentoyVersion(t *testing.T) {
 	tests := []struct {
 		input    string

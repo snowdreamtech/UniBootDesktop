@@ -21,6 +21,7 @@ import (
 type VentoyCliValidationResult struct {
 	Valid          bool   `json:"valid"`
 	Version        string `json:"version"`
+	Code           string `json:"code"`
 	Message        string `json:"message"`
 	ExecutablePath string `json:"executablePath"`
 }
@@ -69,6 +70,7 @@ func ValidateVentoyCli(ventoyPath string) *VentoyCliValidationResult {
 		return &VentoyCliValidationResult{
 			Valid:          false,
 			Version:        "",
+			Code:           "macos_unsupported",
 			Message:        "❌ macOS Limitation: Official Ventoy CLI does not support running direct disk formatting on macOS.",
 			ExecutablePath: normalizeVentoyCliInput(ventoyPath),
 		}
