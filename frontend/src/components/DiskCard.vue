@@ -181,8 +181,10 @@ const diskType = computed<'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd'
                    controllerUpper.includes('CARD') || controllerUpper.includes('READER') || controllerUpper.includes('读卡器') || controllerUpper.includes('CHIPSBANK') || controllerUpper.includes('CHIPSBRAND') ||
                    vidUpper.includes('0X1E3D') || vidUpper.includes('0X0BDA') || vidUpper.includes('0X05E3');
 
-  const isVentoyName = nameUpper.includes('VENTOY') || nameUpper.includes('UNIBOOT');
-  if (props.disk.isRealVentoy || props.disk.isCloudMode || props.disk.isGenericBoot || isVentoyName) {
+  const isBoot = props.disk.isRealVentoy || props.disk.isCloudMode || props.disk.isGenericBoot ||
+                 props.disk.bootStatusCode === 'uniboot_cloud' || props.disk.bootStatusCode === 'uniboot_hybrid' ||
+                 props.disk.bootStatusCode === 'ventoy_pure' || props.disk.bootStatusCode === 'third_party_boot';
+  if (isBoot) {
     return 'boot';
   }
   if (isReader) {
@@ -239,19 +241,24 @@ const bootTooltip = computed(() => {
     if (props.disk.thirdPartyBootType) {
       return props.disk.thirdPartyBootType;
     }
+    if (props.disk.bootStatusCode === 'needs_privilege') {
+      return props.disk.bootStatus || '底层存在未挂载引导分区，请点击顶部盾牌授权以深度读取校验';
+    }
     return t('disk.tooltip_third_party_boot');
   }
   return '';
 });
 
-const bootSubtype = computed<'hybrid' | 'cloud' | 'thirdparty' | null>(() => {
+const bootSubtype = computed<'hybrid' | 'cloud' | 'thirdparty' | 'needs_privilege' | null>(() => {
   if (diskType.value !== 'boot') return null;
+  if (props.disk.bootStatusCode === 'needs_privilege') return 'needs_privilege';
   if (props.disk.isRealVentoy) return 'hybrid';
   if (props.disk.isCloudMode) return 'cloud';
   return 'thirdparty';
 });
 
 const diskTagLabel = computed(() => {
+  if (props.disk.bootStatusCode === 'needs_privilege') return props.disk.bootStatus || '待提权校验';
   if (diskType.value === 'boot') {
     if (bootSubtype.value === 'hybrid') return t('disk.tag_boot_hybrid');
     if (bootSubtype.value === 'cloud') return t('disk.tag_boot_cloud');

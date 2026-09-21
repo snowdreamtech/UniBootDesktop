@@ -315,28 +315,28 @@ func TestIdentifyThirdPartyBoot_Fingerprints(t *testing.T) {
 
 func TestDetectBootStatus_Classification(t *testing.T) {
 	// 1. UniBoot Cloud Mode
-	status, code := DetectBootStatus("", "GPT", false, true, BootTypeNone, nil)
+	status, code := DetectBootStatus("GPT", false, true, BootTypeNone, nil, false)
 	assert.Equal(t, "UniBoot (1秒极速云引导盘)", status)
 	assert.Equal(t, "uniboot_cloud", code)
 
 	// 2. UniBoot Hybrid Mode
 	hybridManifest := &UniBootManifest{Magic: MagicUniBootDisk, Mode: "hybrid", Version: "1.0.0"}
-	status, code = DetectBootStatus("", "GPT", true, false, BootTypeNone, hybridManifest)
+	status, code = DetectBootStatus("GPT", true, false, BootTypeNone, hybridManifest, false)
 	assert.Equal(t, "UniBoot (混合模式引导盘)", status)
 	assert.Equal(t, "uniboot_hybrid", code)
 
 	// 2b. UniBoot Hybrid Mode even if isRealVentoy is temporarily false (e.g. unprivileged raw MBR read)
-	status, code = DetectBootStatus("", "GPT", false, false, BootTypeNone, hybridManifest)
+	status, code = DetectBootStatus("GPT", false, false, BootTypeNone, hybridManifest, false)
 	assert.Equal(t, "UniBoot (混合模式引导盘)", status)
 	assert.Equal(t, "uniboot_hybrid", code)
 
 	// 3. Genuine Ventoy Disk (no UniBoot manifest)
-	status, code = DetectBootStatus("", "GPT", true, false, BootTypeNone, nil)
+	status, code = DetectBootStatus("GPT", true, false, BootTypeNone, nil, false)
 	assert.Equal(t, "原生 Ventoy 启动盘 (可无损升级)", status)
 	assert.Equal(t, "ventoy_pure", code)
 
 	// 4. Third-party popular tools & boot disks
-	status, code = DetectBootStatus("", "GPT", false, false, BootTypeRufus, nil)
+	status, code = DetectBootStatus("GPT", false, false, BootTypeRufus, nil, false)
 	assert.Equal(t, "第三方引导: Rufus 制作盘", status)
 	assert.Equal(t, "third_party_boot", code)
 	assert.Equal(t, "rufus", MapThirdPartyBootCode(BootTypeRufus))
@@ -350,16 +350,21 @@ func TestDetectBootStatus_Classification(t *testing.T) {
 	assert.Equal(t, "linux_live", MapThirdPartyBootCode(BootTypeLinuxLive))
 	assert.Equal(t, "generic_uefi", MapThirdPartyBootCode(BootTypeGenericUEFI))
 
-	// 5. Normal data disks
-	status, code = DetectBootStatus("", "GPT", false, false, BootTypeNone, nil)
+	// 5. Unmounted ESP partition detected in unprivileged mode
+	status, code = DetectBootStatus("MBR", false, false, BootTypeNone, nil, true)
+	assert.Equal(t, "未知引导结构 (需提权深度读取)", status)
+	assert.Equal(t, "needs_privilege", code)
+
+	// 6. Normal data disks
+	status, code = DetectBootStatus("GPT", false, false, BootTypeNone, nil, false)
 	assert.Equal(t, "GPT 数据盘", status)
 	assert.Equal(t, "gpt_data", code)
 
-	status, code = DetectBootStatus("", "MBR", false, false, BootTypeNone, nil)
+	status, code = DetectBootStatus("MBR", false, false, BootTypeNone, nil, false)
 	assert.Equal(t, "MBR 数据盘", status)
 	assert.Equal(t, "mbr_data", code)
 
-	status, code = DetectBootStatus("", "", false, false, BootTypeNone, nil)
+	status, code = DetectBootStatus("", false, false, BootTypeNone, nil, false)
 	assert.Equal(t, "数据存储盘 (未检测到引导包)", status)
 	assert.Equal(t, "data_storage", code)
 }

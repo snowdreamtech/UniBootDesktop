@@ -237,6 +237,9 @@ function formatBootStatus(disk?: any): string {
   if (code === 'mbr_data') {
     return t('inspector.val_boot_mbr_data');
   }
+  if (code === 'needs_privilege') {
+    return disk.bootStatus || '未知引导结构 (需提权深度读取)';
+  }
   if (code === 'data_storage') {
     return t('inspector.val_data_disk');
   }

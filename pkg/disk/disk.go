@@ -241,8 +241,47 @@ func MapThirdPartyBootCode(t ThirdPartyBootType) string {
 	}
 }
 
-// DetectBootStatus evaluates the boot status text and standard machine code based on partition scheme, volume label, Ventoy/Cloud Mode, 3rd-party boot type, and UniBoot manifest.
-func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isCloudMode bool, thirdPartyBoot ThirdPartyBootType, manifest *UniBootManifest) (string, string) {
+// HasUnmountedEspPartition checks whether targetDisk contains an unmounted EFI/ESP/0xEF partition.
+// Strictly inspects raw partition scheme types without relying on volume labels.
+func HasUnmountedEspPartition(targetDisk string) bool {
+	if targetDisk == "" {
+		return false
+	}
+
+	if runtime.GOOS == "darwin" {
+		baseDisk := NormalizeDarwinDiskNode(targetDisk)
+		if strings.HasPrefix(baseDisk, "disk") {
+			p2 := baseDisk + "s2"
+			strP2 := getDarwinDiskutilInfo(p2)
+			if strP2 != "" {
+				content := extractPlistValue(strP2, "Content")
+				mountPoint := extractPlistValue(strP2, "MountPoint")
+				// 0xEF is the standard hex partition type for ESP on MBR disks
+				if (content == "0xEF" || strings.Contains(strings.ToUpper(content), "EFI")) && mountPoint == "" {
+					return true
+				}
+			}
+		}
+	} else if runtime.GOOS == "linux" {
+		if strings.HasPrefix(targetDisk, "/dev/") {
+			out, err := execCommand("lsblk", "-o", "NAME,PARTTYPE,MOUNTPOINT", "-n", "-l", targetDisk).Output()
+			if err == nil {
+				for _, line := range strings.Split(string(out), "\n") {
+					upper := strings.ToUpper(line)
+					if (strings.Contains(upper, "C12A7328-F81F-11D2-BA4B-00A0C93EC93B") || strings.Contains(upper, "0XEF")) && !strings.Contains(line, "/") {
+						return true
+					}
+				}
+			}
+		}
+	}
+	return false
+}
+
+// DetectBootStatus evaluates the boot status text and standard machine code based on partition scheme,
+// Ventoy/Cloud Mode, 3rd-party boot type, UniBoot manifest, and unmounted ESP partition status.
+// Strictly avoids relying on user-modifiable volume labels.
+func DetectBootStatus(partitionScheme string, isRealVentoy bool, isCloudMode bool, thirdPartyBoot ThirdPartyBootType, manifest *UniBootManifest, hasUnmountedEsp bool) (string, string) {
 	// 1. Highest priority: Official UniBoot Manifest (Magic: UNIBOOT_DISK)
 	if manifest != nil {
 		if manifest.Mode == "cloud" {
@@ -253,22 +292,27 @@ func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool,
 		}
 	}
 
-	// 2. Pure Cloud Mode flag fallback
+	// 2. Pure Cloud Mode flag fallback (physical presence of cloud boot files)
 	if isCloudMode {
 		return "UniBoot (1秒极速云引导盘)", "uniboot_cloud"
 	}
 
-	// 3. Ventoy base drive (Native Ventoy bootloader)
+	// 3. Ventoy base drive (verified via physical MBR Sector 0 signature or physical ventoy engine files)
 	if isRealVentoy {
 		return "原生 Ventoy 启动盘 (可无损升级)", "ventoy_pure"
 	}
 
-	// 4. Specific 3rd-party boot creation tools
+	// 4. Specific 3rd-party boot creation tools (verified via physical payload fingerprints)
 	if thirdPartyBoot != BootTypeNone {
 		return fmt.Sprintf("第三方引导: %s", thirdPartyBoot), "third_party_boot"
 	}
 
-	// 5. Plain data partition fallback
+	// 5. Unmounted ESP partition detected in unprivileged mode (cannot inspect payload without root)
+	if hasUnmountedEsp && !privilege.IsElevated() {
+		return "未知引导结构 (需提权深度读取)", "needs_privilege"
+	}
+
+	// 6. Plain data partition fallback (verified no boot partition or code detected)
 	if strings.Contains(strings.ToUpper(partitionScheme), "GPT") {
 		return "GPT 数据盘", "gpt_data"
 	}
@@ -415,25 +459,15 @@ func IsVentoyDisk(targetDisk string) bool {
 		}
 	}
 
-	// 4. Platform-specific target partition inspection with physical file presence and partition topology
-	if runtime.GOOS == "darwin" {
+	// 4. If running with elevated privileges, temporarily mount unmounted ESP to verify physical engine files
+	if privilege.IsElevated() {
 		baseDisk := NormalizeDarwinDiskNode(targetDisk)
 		if strings.HasPrefix(baseDisk, "disk") {
-			p1 := baseDisk + "s1"
-			p2 := baseDisk + "s2"
-
-			// Check Partition 2 (ESP Partition) Content and Size
-			strP2 := getDarwinDiskutilInfo(p2)
-			if strP2 != "" {
-				content := extractPlistValue(strP2, "Content")
-				totalSize := extractPlistUint(strP2, "TotalSize")
-				// 0xEF partition around 32MB is the unique signature of Ventoy/UniBoot EFI partition
-				if content == "0xEF" && totalSize >= 30*1024*1024 && totalSize <= 70*1024*1024 {
-					strP1 := getDarwinDiskutilInfo(p1)
-					volP1 := extractPlistValue(strP1, "VolumeName")
-					if volP1 == "UNIBOOT" || volP1 == "Ventoy" || volP1 == "VTOYEFI" || strings.HasPrefix(volP1, "UNIBOOT") {
-						return true
-					}
+			espPart := "/dev/" + baseDisk + "s2"
+			if espDir, cleanup, err := privilege.MountHiddenESP(espPart); err == nil && espDir != "" {
+				defer cleanup()
+				if HasVentoyEngineFiles(espDir) {
+					return true
 				}
 			}
 		}
@@ -1460,7 +1494,8 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			isGenericBoot = thirdPartyBoot != BootTypeNone
 		}
 
-		bootStatusStr, bootStatusCode := DetectBootStatus(volName, partitionScheme, isRealVentoy, isCloudMode, thirdPartyBoot, manifest)
+		hasUnmountedEsp := HasUnmountedEspPartition(devNode)
+		bootStatusStr, bootStatusCode := DetectBootStatus(partitionScheme, isRealVentoy, isCloudMode, thirdPartyBoot, manifest, hasUnmountedEsp)
 		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
 
 		// Detect if this is a system disk
@@ -1702,7 +1737,8 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			}
 			isGenBootLinux = thirdPartyBootLinux != BootTypeNone
 		}
-		bootStatusLinux, bootStatusCodeLinux := DetectBootStatus(label, partitionScheme, isRealVentoyLinux, isCloudModeLinux, thirdPartyBootLinux, manifestLinux)
+		hasUnmountedEspLinux := HasUnmountedEspPartition(devPath)
+		bootStatusLinux, bootStatusCodeLinux := DetectBootStatus(partitionScheme, isRealVentoyLinux, isCloudModeLinux, thirdPartyBootLinux, manifestLinux, hasUnmountedEspLinux)
 
 		disks = append(disks, DiskInfo{
 			Device:             mountPath,
@@ -1823,7 +1859,7 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			thirdPartyBootWin = GetDiskThirdPartyBoot(driveLetter)
 			isGenBootWin = thirdPartyBootWin != BootTypeNone
 		}
-		bootStatusWin, bootStatusCodeWin := DetectBootStatus(displayName, "GPT / MBR", isRealVentoyWin, isCloudModeWin, thirdPartyBootWin, manifestWin)
+		bootStatusWin, bootStatusCodeWin := DetectBootStatus("GPT / MBR", isRealVentoyWin, isCloudModeWin, thirdPartyBootWin, manifestWin, false)
 
 		disks = append(disks, DiskInfo{
 			Device:             driveLetter,
