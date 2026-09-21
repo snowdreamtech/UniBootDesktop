@@ -17,6 +17,7 @@ import (
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
+	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
 )
 
 // QEMUStatus contains detection metadata for QEMU installation.
@@ -133,6 +134,10 @@ func extractPlistString(plistStr string, key string) string {
 	return strings.TrimSpace(rest[:endStr])
 }
 
+func safeExecCommand(name string, args ...string) (*exec.Cmd, error) {
+	return privilege.SafeExecCommandContext(context.Background(), name, args...)
+}
+
 // ResolveRawDiskDevice resolves volume mount paths (e.g. /Volumes/Ventoy, E:\, /mnt/UNIBOOT)
 // or partition paths (e.g. /dev/disk2s1, /dev/sdb1) to raw block device paths suitable for QEMU across macOS, Linux, and Windows.
 func ResolveRawDiskDevice(diskPath string) string {
@@ -155,7 +160,13 @@ func ResolveRawDiskDevice(diskPath string) string {
 		}
 
 		// Case 3: Volume mount path (e.g. /Volumes/Ventoy, /Volumes/UNIBOOT)
-		cmd := exec.Command("diskutil", "info", "-plist", diskPath)
+		if err := privilege.ValidateRawDevicePath(diskPath); err == nil {
+			diskPath = strings.TrimSpace(diskPath)
+		}
+		cmd, cmdErr := safeExecCommand("diskutil", "info", "-plist", diskPath)
+		if cmdErr != nil {
+			return diskPath
+		}
 		output, err := cmd.Output()
 		if err == nil {
 			plistStr := string(output)
@@ -207,6 +218,10 @@ func ensureDiskPermissions(targetPath string) {
 	if targetPath == "" {
 		return
 	}
+	if err := privilege.ValidateRawDevicePath(targetPath); err != nil {
+		logger.Warn("Rejecting unsafe disk permission change target", "targetPath", targetPath, "error", err)
+		return
+	}
 	f, err := os.OpenFile(targetPath, os.O_RDWR, 0)
 	if err == nil {
 		_ = f.Close()
@@ -223,13 +238,19 @@ func ensureDiskPermissions(targetPath string) {
 
 		logger.Info("Elevating disk node permissions for QEMU GUI session via osascript", "diskNode", diskNode)
 		script := fmt.Sprintf(`do shell script "chmod 666 /dev/%s /dev/%s" with administrator privileges`, rawNode, diskNode)
-		cmd := exec.Command("osascript", "-e", script)
-		if err := cmd.Run(); err != nil {
-			logger.Warn("Failed to elevate disk node permissions via osascript", "error", err)
+		cmd, err := safeExecCommand("osascript", "-e", script)
+		if err == nil {
+			if err := cmd.Run(); err != nil {
+				logger.Warn("Failed to elevate disk node permissions via osascript", "error", err)
+			}
+		} else {
+			logger.Warn("Rejected unsafe osascript permission escalation", "error", err)
 		}
 	} else if runtime.GOOS == "linux" {
-		cmd := exec.Command("pkexec", "chmod", "666", targetPath)
-		_ = cmd.Run()
+		cmd, err := safeExecCommand("pkexec", "chmod", "666", targetPath)
+		if err == nil {
+			_ = cmd.Run()
+		}
 	}
 }
 
@@ -265,13 +286,17 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 			diskNode = "disk" + diskNode
 		}
 		// 1. Force unmount target disk volumes to release macOS disk arbitration lock
-		unmountCmd := exec.Command("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode))
-		_ = unmountCmd.Run()
+		unmountCmd, err := safeExecCommand("diskutil", "unmountDisk", "force", fmt.Sprintf("/dev/%s", diskNode))
+		if err == nil {
+			_ = unmountCmd.Run()
+		}
 		time.Sleep(300 * time.Millisecond)
 	} else if runtime.GOOS == "linux" {
 		// Try udisksctl unmount for Linux volume partitions
-		unmountCmd := exec.Command("udisksctl", "unmount", "-b", diskPath)
-		_ = unmountCmd.Run()
+		unmountCmd, err := safeExecCommand("udisksctl", "unmount", "-b", diskPath)
+		if err == nil {
+			_ = unmountCmd.Run()
+		}
 	}
 
 	// Ensure target disk node has read/write permissions for current user GUI process

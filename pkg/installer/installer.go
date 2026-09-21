@@ -7,7 +7,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -16,6 +15,7 @@ import (
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 	"github.com/snowdreamtech/unigodesktop/pkg/firmware"
+	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
 )
 
 // ProgressCallback is a function type for reporting deployment progress (0-100)
@@ -400,6 +400,10 @@ func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []s
 // preserving bytes 446-511 (Partition Table & MBR Signature) 100% intact.
 // This neutralizes stale Ventoy MBR hooks when converting Hybrid Mode to Cloud Mode, preventing Legacy BIOS boot crashes.
 func CleanMbrBootstrapCode(targetDisk string) error {
+	if err := privilege.ValidateRawDevicePath(targetDisk); err != nil {
+		return fmt.Errorf("unsafe target disk for MBR cleanup: %w", err)
+	}
+
 	diskNode := disk.NormalizeDarwinDiskNode(targetDisk)
 
 	var rawDev string
@@ -412,7 +416,10 @@ func CleanMbrBootstrapCode(targetDisk string) error {
 		rawDev = "/dev/" + diskNode
 	}
 
-	cmd := exec.Command("dd", "if=/dev/zero", "of="+rawDev, "bs=446", "count=1", "conv=notrunc")
+	cmd, err := privilege.SafeExecCommandContext(context.Background(), "dd", "if=/dev/zero", "of="+rawDev, "bs=446", "count=1", "conv=notrunc")
+	if err != nil {
+		return err
+	}
 	return cmd.Run()
 }
 
