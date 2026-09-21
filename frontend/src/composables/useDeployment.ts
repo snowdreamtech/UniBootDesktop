@@ -1,14 +1,14 @@
-import { computed, ref, watch, type Ref } from 'vue';
-import type { InstallDiagnosticsData } from '../components/DiagnosticsModal.vue';
-import type { DiskInfo } from '../components/DiskPanel.vue';
-import { logUserAction } from '../utils/logger';
+import { computed, ref, watch, type Ref } from "vue";
+import type { InstallDiagnosticsData } from "../components/DiagnosticsModal.vue";
+import type { DiskInfo } from "../components/DiskPanel.vue";
+import { logUserAction } from "../utils/logger";
 
 export interface DeployBannerState {
   visible: boolean;
   msg: string;
   targets: string[];
   autoEjected?: boolean;
-  mode?: 'cloud' | 'hybrid';
+  mode?: "cloud" | "hybrid";
   dismissed?: boolean;
 }
 
@@ -26,14 +26,14 @@ export interface BatchDeployProgress {
 
 export interface UseDeploymentOptions {
   t: (key: any, named?: Record<string, any>) => string;
-  showToast: (msg: string, type?: 'info' | 'success' | 'warning' | 'error') => void;
-  selectionMode: Ref<'single' | 'batch'>;
+  showToast: (msg: string, type?: "info" | "success" | "warning" | "error") => void;
+  selectionMode: Ref<"single" | "batch">;
   selectedDisk: Ref<DiskInfo | null>;
   selectedDevices: Ref<Set<string>>;
   diskList: Ref<DiskInfo[]>;
   selectedIsoFiles: Ref<Array<{ path: string }>>;
   refreshDisks: () => Promise<void>;
-  openSettings?: (tab?: 'general' | 'network' | 'uniboot' | 'ventoy') => void;
+  openSettings?: (tab?: "general" | "network" | "uniboot" | "ventoy") => void;
 }
 
 export function useDeployment(options: UseDeploymentOptions) {
@@ -49,8 +49,8 @@ export function useDeployment(options: UseDeploymentOptions) {
     openSettings,
   } = options;
 
-  const activeMode = ref<'cloud' | 'hybrid'>('cloud');
-  const selectedFsType = ref<'exFAT' | 'NTFS' | 'FAT32' | 'ext4'>('exFAT');
+  const activeMode = ref<"cloud" | "hybrid">("cloud");
+  const selectedFsType = ref<"exFAT" | "NTFS" | "FAT32" | "ext4">("exFAT");
   const autoEjectAfterDeploy = ref(false);
 
   const isDeploying = ref(false);
@@ -67,52 +67,47 @@ export function useDeployment(options: UseDeploymentOptions) {
   const pendingTargetSnapshots = ref<DiskInfo[]>([]);
 
   const isVentoyAlertOpen = ref(false);
-  const ventoyAlertTitle = ref('');
-  const ventoyAlertMessage = ref('');
-  const ventoyAlertAction = ref<'open_settings' | 'switch_b'>('open_settings');
-  const ventoyStatus = ref({ valid: true, version: '', message: '', executablePath: '' });
+  const ventoyAlertTitle = ref("");
+  const ventoyAlertMessage = ref("");
+  const ventoyAlertAction = ref<"open_settings" | "switch_b">("open_settings");
+  const ventoyStatus = ref({ valid: true, version: "", message: "", executablePath: "" });
 
   const isDiagnosticsOpen = ref(false);
   const currentDiagnostics = ref<InstallDiagnosticsData | null>(null);
-  const currentDiagErrorMsg = ref('');
+  const currentDiagErrorMsg = ref("");
 
   const deploySuccessBanner = ref<DeployBannerState>({
     visible: false,
-    msg: '',
+    msg: "",
     targets: [],
     autoEjected: false,
     dismissed: false,
   });
 
-  const isMacOs = computed(() => navigator.userAgent.includes('Mac') || navigator.platform.includes('Mac'));
+  const isMacOs = computed(() => navigator.userAgent.includes("Mac") || navigator.platform.includes("Mac"));
 
   watch(activeMode, (newMode) => {
-    logUserAction('INFO', 'User switched deployment mode', newMode);
+    logUserAction("INFO", "User switched deployment mode", newMode);
   });
 
   watch(selectedFsType, (newFs) => {
-    logUserAction('INFO', 'User selected target file system', newFs);
+    logUserAction("INFO", "User selected target file system", newFs);
   });
 
   const showDeploySuccessBanner = computed(() => {
     const b = deploySuccessBanner.value;
-    return Boolean(
-      !isDeploying.value &&
-      b.visible &&
-      !b.dismissed &&
-      b.mode === activeMode.value
-    );
+    return Boolean(!isDeploying.value && b.visible && !b.dismissed && b.mode === activeMode.value);
   });
 
   function dismissDeploySuccessBanner() {
     deploySuccessBanner.value.dismissed = true;
     deploySuccessBanner.value.visible = false;
-    logUserAction('DEBUG', 'User dismissed deployment success banner');
+    logUserAction("DEBUG", "User dismissed deployment success banner");
   }
 
-  function checkDiskCanUpdateNonDestructively(d: DiskInfo, mode: 'cloud' | 'hybrid'): boolean {
+  function checkDiskCanUpdateNonDestructively(d: DiskInfo, mode: "cloud" | "hybrid"): boolean {
     if (!d) return false;
-    if (mode === 'cloud') {
+    if (mode === "cloud") {
       // Cloud boot mode: both existing cloud boot and Ventoy hybrid disks can be updated non-destructively without wiping user partitions
       return Boolean(d.isCloudMode || d.isRealVentoy);
     } else {
@@ -123,14 +118,14 @@ export function useDeployment(options: UseDeploymentOptions) {
   }
 
   const isSelectedVentoyDisk = computed(() => {
-    if (selectionMode.value === 'single' && selectedDisk.value) {
+    if (selectionMode.value === "single" && selectedDisk.value) {
       return checkDiskCanUpdateNonDestructively(selectedDisk.value, activeMode.value);
     }
     return false;
   });
 
   const isNonDestructive = computed(() => {
-    if (selectionMode.value === 'single') {
+    if (selectionMode.value === "single") {
       return isSelectedVentoyDisk.value;
     }
     if (selectedDevices.value.size === 0) return false;
@@ -141,7 +136,7 @@ export function useDeployment(options: UseDeploymentOptions) {
   });
 
   const ventoyCountInBatch = computed(() => {
-    if (selectionMode.value !== 'batch' || selectedDevices.value.size === 0) return 0;
+    if (selectionMode.value !== "batch" || selectedDevices.value.size === 0) return 0;
     let count = 0;
     selectedDevices.value.forEach((dev: string) => {
       const d = diskList.value.find((disk: DiskInfo) => disk.device === dev);
@@ -153,13 +148,13 @@ export function useDeployment(options: UseDeploymentOptions) {
   });
 
   const deployBtnText = computed(() => {
-    if (isDeploying.value) return t('deploy.writing');
+    if (isDeploying.value) return t("deploy.writing");
 
-    if (selectionMode.value === 'single') {
+    if (selectionMode.value === "single") {
       if (isNonDestructive.value) {
-        return t('deploy.start_update');
+        return t("deploy.start_update");
       }
-      return activeMode.value === 'cloud' ? t('deploy.start_cloud_create') : t('deploy.start_create');
+      return activeMode.value === "cloud" ? t("deploy.start_cloud_create") : t("deploy.start_create");
     }
 
     const total = selectedDevices.value.size;
@@ -167,88 +162,88 @@ export function useDeployment(options: UseDeploymentOptions) {
     const blankCount = total - bootCount;
 
     if (bootCount === total && total > 0) {
-      return t('deploy.batch_update', { count: total });
+      return t("deploy.batch_update", { count: total });
     } else if (blankCount === total && total > 0) {
-      return t('deploy.batch_create', { count: total });
+      return t("deploy.batch_create", { count: total });
     } else {
-      return t('deploy.batch_mixed', { count: total });
+      return t("deploy.batch_mixed", { count: total });
     }
   });
 
   const deployDisabledReason = computed(() => {
-    if (isDeploying.value) return t('deploy.tip_writing');
-    if (selectionMode.value === 'single' && !selectedDisk.value) return t('deploy.tip_select_single');
-    if (selectionMode.value === 'batch' && selectedDevices.value.size === 0) return t('deploy.tip_select_batch');
-    if (activeMode.value === 'hybrid' && !isNonDestructive.value && !ventoyStatus.value.valid) {
+    if (isDeploying.value) return t("deploy.tip_writing");
+    if (selectionMode.value === "single" && !selectedDisk.value) return t("deploy.tip_select_single");
+    if (selectionMode.value === "batch" && selectedDevices.value.size === 0) return t("deploy.tip_select_batch");
+    if (activeMode.value === "hybrid" && !isNonDestructive.value && !ventoyStatus.value.valid) {
       if (isMacOs.value) {
-        return t('deploy.tip_macos_unsupported');
+        return t("deploy.tip_macos_unsupported");
       }
-      return ventoyStatus.value.message || t('deploy.tip_need_ventoy');
+      return ventoyStatus.value.message || t("deploy.tip_need_ventoy");
     }
-    if (selectionMode.value === 'batch') {
+    if (selectionMode.value === "batch") {
       const total = selectedDevices.value.size;
       const bootCount = ventoyCountInBatch.value;
       const blankCount = total - bootCount;
       if (bootCount > 0 && blankCount > 0) {
-        return t('deploy.tip_batch_mixed', { bootCount, blankCount });
+        return t("deploy.tip_batch_mixed", { bootCount, blankCount });
       }
       if (bootCount === total && total > 0) {
-        return t('deploy.tip_batch_update_all', { count: total });
+        return t("deploy.tip_batch_update_all", { count: total });
       }
     }
-    return '';
+    return "";
   });
 
   const activeVmTargetDevice = computed(() => {
-    if (selectionMode.value === 'single') {
-      return selectedDisk.value?.device || '';
+    if (selectionMode.value === "single") {
+      return selectedDisk.value?.device || "";
     }
     if (selectedDevices.value.size > 0) {
       return Array.from(selectedDevices.value)[0];
     }
-    return '';
+    return "";
   });
 
   const activeVmTargetName = computed(() => {
-    if (selectionMode.value === 'single') {
-      return selectedDisk.value?.name || selectedDisk.value?.device || '';
+    if (selectionMode.value === "single") {
+      return selectedDisk.value?.name || selectedDisk.value?.device || "";
     }
     if (selectedDevices.value.size > 0) {
       const firstDev = Array.from(selectedDevices.value)[0];
-      const found = diskList.value.find(d => d.device === firstDev);
+      const found = diskList.value.find((d) => d.device === firstDev);
       return found?.name || firstDev;
     }
-    return '';
+    return "";
   });
 
   async function checkVentoyStatus() {
     if (window.go && window.go.main && window.go.main.App && window.go.main.App.ValidateVentoyCli) {
       try {
-        const res = await window.go.main.App.ValidateVentoyCli('');
+        const res = await window.go.main.App.ValidateVentoyCli("");
         if (res) {
           ventoyStatus.value = res;
         }
       } catch (e) {
-        console.error('Failed to validate Ventoy status:', e);
+        console.error("Failed to validate Ventoy status:", e);
       }
     }
   }
 
-  async function selectMode(mode: 'cloud' | 'hybrid') {
+  async function selectMode(mode: "cloud" | "hybrid") {
     activeMode.value = mode;
-    if (mode === 'hybrid') {
+    if (mode === "hybrid") {
       await checkVentoyStatus();
       if (!isNonDestructive.value && !ventoyStatus.value.valid) {
         if (isMacOs.value) {
-          showToast(t('deploy.tip_macos_unsupported'), 'warning');
+          showToast(t("deploy.tip_macos_unsupported"), "warning");
         } else {
-          showToast(t('deploy.tip_need_ventoy'), 'warning');
+          showToast(t("deploy.tip_need_ventoy"), "warning");
         }
       }
     }
   }
 
-  function openVentoyAlert(title: string, message: string, action: 'open_settings' | 'switch_b') {
+  function openVentoyAlert(title: string, message: string, action: "open_settings" | "switch_b") {
     ventoyAlertTitle.value = title;
     ventoyAlertMessage.value = message;
     ventoyAlertAction.value = action;
@@ -258,29 +253,29 @@ export function useDeployment(options: UseDeploymentOptions) {
   function handleVentoyAlertAction() {
     isVentoyAlertOpen.value = false;
     if (openSettings) {
-      openSettings('ventoy');
+      openSettings("ventoy");
     }
   }
 
   function handleVentoyAlertSwitchB() {
     isVentoyAlertOpen.value = false;
-    activeMode.value = 'cloud';
-    showToast(t('deploy.toast_switched_b'), 'success');
+    activeMode.value = "cloud";
+    showToast(t("deploy.toast_switched_b"), "success");
   }
 
   function openDiagnosticsModal(diag: InstallDiagnosticsData | null, msg: string) {
     currentDiagnostics.value = diag;
-    currentDiagErrorMsg.value = msg || t('deploy.alert_fail', { msg: '' });
+    currentDiagErrorMsg.value = msg || t("deploy.alert_fail", { msg: "" });
     isDiagnosticsOpen.value = true;
   }
 
   function handleCopyReport() {
-    logUserAction('INFO', 'User copied diagnostics report to clipboard');
-    showToast(t('diag.toast_copied'), 'info');
+    logUserAction("INFO", "User copied diagnostics report to clipboard");
+    showToast(t("diag.toast_copied"), "info");
   }
 
   function handleRetryDeploy() {
-    logUserAction('INFO', 'User clicked retry deployment from diagnostics modal');
+    logUserAction("INFO", "User clicked retry deployment from diagnostics modal");
     isDiagnosticsOpen.value = false;
     openDeployConfirm();
   }
@@ -289,7 +284,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     dismissDeploySuccessBanner();
 
     let targets: string[] = [];
-    if (selectionMode.value === 'single') {
+    if (selectionMode.value === "single") {
       if (!selectedDisk.value) return;
       targets = [selectedDisk.value.device];
     } else {
@@ -299,7 +294,7 @@ export function useDeployment(options: UseDeploymentOptions) {
 
     const refreshedSnapshots = targets.map((device) => diskList.value.find((disk) => disk.device === device));
     if (refreshedSnapshots.some((disk) => !disk)) {
-      showToast(t('deploy.toast_target_changed'), 'error');
+      showToast(t("deploy.toast_target_changed"), "error");
       return;
     }
 
@@ -313,28 +308,24 @@ export function useDeployment(options: UseDeploymentOptions) {
 
     dismissDeploySuccessBanner();
 
-    if (selectionMode.value === 'single' && !selectedDisk.value) {
-      showToast(t('deploy.toast_select_target'), 'warning');
+    if (selectionMode.value === "single" && !selectedDisk.value) {
+      showToast(t("deploy.toast_select_target"), "warning");
       return;
     }
-    if (selectionMode.value === 'batch' && selectedDevices.value.size === 0) {
-      showToast(t('deploy.toast_select_batch'), 'warning');
+    if (selectionMode.value === "batch" && selectedDevices.value.size === 0) {
+      showToast(t("deploy.toast_select_batch"), "warning");
       return;
     }
 
-    if (activeMode.value === 'hybrid' && !isNonDestructive.value) {
+    if (activeMode.value === "hybrid" && !isNonDestructive.value) {
       if (!ventoyStatus.value.valid) {
         if (isMacOs.value) {
-          openVentoyAlert(
-            t('deploy.macos_alert_title'),
-            t('deploy.macos_alert_desc'),
-            'switch_b'
-          );
+          openVentoyAlert(t("deploy.macos_alert_title"), t("deploy.macos_alert_desc"), "switch_b");
         } else {
           openVentoyAlert(
-            t('deploy.no_ventoy_title'),
-            ventoyStatus.value.message || t('deploy.no_ventoy_desc'),
-            'open_settings'
+            t("deploy.no_ventoy_title"),
+            ventoyStatus.value.message || t("deploy.no_ventoy_desc"),
+            "open_settings"
           );
         }
         return;
@@ -350,8 +341,16 @@ export function useDeployment(options: UseDeploymentOptions) {
 
     dismissDeploySuccessBanner();
 
+    const hasNativeRuntime = Boolean(window.go && window.go.main && window.go.main.App);
+    if (!hasNativeRuntime) {
+      deployProgress.value = 0;
+      batchDeployInfo.value = null;
+      showToast("Desktop runtime is unavailable in browser preview mode", "warning");
+      return;
+    }
+
     let targets: string[] = [];
-    if (selectionMode.value === 'single') {
+    if (selectionMode.value === "single") {
       if (!selectedDisk.value) return;
       targets = [selectedDisk.value.device];
     } else {
@@ -377,80 +376,83 @@ export function useDeployment(options: UseDeploymentOptions) {
         deployEtaSec.value = progress.etaSec;
       };
 
-      window.runtime.EventsOn('deploy-batch-progress', onBatchProgress);
-      window.runtime.EventsOn('cloud-deploy-batch-progress', onBatchProgress);
+      window.runtime.EventsOn("deploy-batch-progress", onBatchProgress);
+      window.runtime.EventsOn("cloud-deploy-batch-progress", onBatchProgress);
 
       unsubBatchProgress = () => {
         if (window.runtime && window.runtime.EventsOff) {
-          window.runtime.EventsOff('deploy-batch-progress');
-          window.runtime.EventsOff('cloud-deploy-batch-progress');
+          window.runtime.EventsOff("deploy-batch-progress");
+          window.runtime.EventsOff("cloud-deploy-batch-progress");
         }
       };
 
       // Listen for single disk progress (for backward compatibility)
-      window.runtime.EventsOn('cloud-deploy-progress', (progress: number) => {
+      window.runtime.EventsOn("cloud-deploy-progress", (progress: number) => {
         if (!batchDeployInfo.value) {
           deployProgress.value = progress;
         }
       });
       unsubCloudProgress = () => {
         if (window.runtime && window.runtime.EventsOff) {
-          window.runtime.EventsOff('cloud-deploy-progress');
+          window.runtime.EventsOff("cloud-deploy-progress");
         }
       };
     }
 
     let success = true;
-    let resultMsg = '';
+    let resultMsg = "";
     let latestDiagnostics: any = null;
 
     try {
-      if (window.go && window.go.main && window.go.main.App) {
-        const isoPaths = selectedIsoFiles.value.map(f => f.path);
-        if (targets.length === 1) {
-          const expected = pendingTargetSnapshots.value[0];
-          if (!expected) throw new Error(t('deploy.toast_target_changed'));
-          let res: any;
-          if (activeMode.value === 'cloud') {
-            res = await window.go.main.App.DeployCloudMode(targets[0], selectedFsType.value, expected);
-          } else {
-            res = await window.go.main.App.DeployHybridMode(targets[0], selectedFsType.value, isoPaths, expected);
-          }
-          if (res) {
-            success = res.success;
-            resultMsg = res.message || '';
-            if (res.diagnostics) {
-              latestDiagnostics = res.diagnostics;
-            }
-          }
+      const app = window.go && window.go.main && window.go.main.App;
+      if (!app) {
+        throw new Error("Desktop runtime is unavailable in browser preview mode");
+      }
+
+      const isoPaths = selectedIsoFiles.value.map((f) => f.path);
+      if (targets.length === 1) {
+        const expected = pendingTargetSnapshots.value[0];
+        if (!expected) throw new Error(t("deploy.toast_target_changed"));
+        let res: any;
+        if (activeMode.value === "cloud") {
+          res = await app.DeployCloudMode(targets[0], selectedFsType.value, expected);
         } else {
-          if (pendingTargetSnapshots.value.length !== targets.length) {
-            throw new Error(t('deploy.toast_target_changed'));
-          }
-          let resList: any[];
-          if (activeMode.value === 'cloud') {
-            resList = await window.go.main.App.DeployCloudModeBatch(targets, selectedFsType.value, pendingTargetSnapshots.value);
-          } else {
-            resList = await window.go.main.App.DeployHybridModeBatch(targets, selectedFsType.value, isoPaths, pendingTargetSnapshots.value);
-          }
-          if (resList && resList.length > 0) {
-            const failed = resList.filter(r => !r.success);
-            if (failed.length > 0) {
-              success = false;
-              resultMsg = failed.map(f => `${f.target}: ${f.message}`).join('\n');
-              if (failed[0].diagnostics) {
-                latestDiagnostics = failed[0].diagnostics;
-              }
-            } else {
-              resultMsg = t('deploy.result_batch_success', { count: resList.length });
-            }
+          res = await app.DeployHybridMode(targets[0], selectedFsType.value, isoPaths, expected);
+        }
+        if (res) {
+          success = res.success;
+          resultMsg = res.message || "";
+          if (res.diagnostics) {
+            latestDiagnostics = res.diagnostics;
           }
         }
       } else {
-        // Mock execution for browser demo
-        await new Promise(r => setTimeout(r, 800));
-        const modeLabel = activeMode.value === 'cloud' ? 'B' : 'A';
-        resultMsg = t('deploy.result_success', { mode: modeLabel, targets: targets.join(', ') });
+        if (pendingTargetSnapshots.value.length !== targets.length) {
+          throw new Error(t("deploy.toast_target_changed"));
+        }
+        let resList: any[];
+        if (activeMode.value === "cloud") {
+          resList = await app.DeployCloudModeBatch(targets, selectedFsType.value, pendingTargetSnapshots.value);
+        } else {
+          resList = await app.DeployHybridModeBatch(
+            targets,
+            selectedFsType.value,
+            isoPaths,
+            pendingTargetSnapshots.value
+          );
+        }
+        if (resList && resList.length > 0) {
+          const failed = resList.filter((r) => !r.success);
+          if (failed.length > 0) {
+            success = false;
+            resultMsg = failed.map((f) => `${f.target}: ${f.message}`).join("\n");
+            if (failed[0].diagnostics) {
+              latestDiagnostics = failed[0].diagnostics;
+            }
+          } else {
+            resultMsg = t("deploy.result_batch_success", { count: resList.length });
+          }
+        }
       }
     } catch (e: any) {
       console.error(e);
@@ -500,7 +502,7 @@ export function useDeployment(options: UseDeploymentOptions) {
         };
 
         if (autoEjectedCount > 0) {
-          showToast(t('deploy.toast_auto_ejected', { count: autoEjectedCount }), 'success');
+          showToast(t("deploy.toast_auto_ejected", { count: autoEjectedCount }), "success");
         }
       }, 200);
     } else {
@@ -515,14 +517,14 @@ export function useDeployment(options: UseDeploymentOptions) {
   }
 
   async function handleCancelDeploy() {
-    logUserAction('WARN', 'User clicked cancel deployment button');
+    logUserAction("WARN", "User clicked cancel deployment button");
     const app = (window as any)?.go?.main?.App;
-    if (app && typeof app.CancelDeployment === 'function') {
+    if (app && typeof app.CancelDeployment === "function") {
       try {
         const cancelled = await app.CancelDeployment();
         if (cancelled) {
-          showToast(t('deploy.toast_cancelled'), 'info');
-          logUserAction('INFO', 'Deployment task cancelled successfully');
+          showToast(t("deploy.toast_cancelled"), "info");
+          logUserAction("INFO", "Deployment task cancelled successfully");
 
           // Clean up deployment state
           isDeploying.value = false;
@@ -533,7 +535,7 @@ export function useDeployment(options: UseDeploymentOptions) {
           deployEtaSec.value = 0;
         }
       } catch (e: any) {
-        console.error('Failed to cancel deployment:', e);
+        console.error("Failed to cancel deployment:", e);
       }
     }
   }
