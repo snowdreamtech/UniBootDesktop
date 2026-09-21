@@ -106,6 +106,35 @@ func TestConfigSaveAndLoad(t *testing.T) {
 	}
 }
 
+func TestLoadMigratesEmptyFirmwareDirectories(t *testing.T) {
+	tmpDir := t.TempDir()
+	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", filepath.Join(tmpDir, "data"))
+
+	legacyConfig := "mode = 'cloud'\nventoyPath = ''\nunibootPath = ''\n"
+	configPath := filepath.Join(tmpDir, "unibootdesktop.toml")
+	if err := os.WriteFile(configPath, []byte(legacyConfig), 0600); err != nil {
+		t.Fatalf("write legacy config failed: %v", err)
+	}
+
+	loaded, err := Load()
+	if err != nil {
+		t.Fatalf("load legacy config failed: %v", err)
+	}
+	if loaded.VentoyPath == "" || loaded.UniBootPath == "" {
+		t.Fatalf("expected migrated firmware directories, got Ventoy=%q UniBoot=%q", loaded.VentoyPath, loaded.UniBootPath)
+	}
+
+	migrated, err := os.ReadFile(configPath)
+	if err != nil {
+		t.Fatalf("read migrated config failed: %v", err)
+	}
+	if !strings.Contains(string(migrated), "ventoyPath = '") || !strings.Contains(string(migrated), "unibootPath = '") {
+		t.Fatalf("expected migrated paths in config: %s", migrated)
+	}
+}
+
 func TestProxyPasswordStore(t *testing.T) {
 	previousStore := proxyPasswordStore
 	store := newMemorySecretStore()

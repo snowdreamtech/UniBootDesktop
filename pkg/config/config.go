@@ -68,11 +68,19 @@ func Load() (*AppConfig, error) {
 		if err := toml.Unmarshal(data, cfg); err != nil {
 			return nil, fmt.Errorf("parse config error: %w", err)
 		}
+		needsMigration := false
 		if cfg.VentoyPath == "" {
 			cfg.VentoyPath = env.GetVentoyDir()
+			needsMigration = true
 		}
 		if cfg.UniBootPath == "" {
 			cfg.UniBootPath = env.GetFirmwareDir()
+			needsMigration = true
+		}
+		if needsMigration {
+			if err := cfg.Save(); err != nil {
+				return nil, fmt.Errorf("migrate default firmware directories: %w", err)
+			}
 		}
 		return cfg, nil
 	}
