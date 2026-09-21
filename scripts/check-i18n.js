@@ -5,16 +5,16 @@
  * Validates interface definitions in types.ts against locales and code usage.
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const workspaceRoot = path.resolve(__dirname, '..');
-const frontendDir = path.join(workspaceRoot, 'frontend');
-const typesFile = path.join(frontendDir, 'src/i18n/types.ts');
-const localesDir = path.join(frontendDir, 'src/i18n/locales');
-const srcDir = path.join(frontendDir, 'src');
+const workspaceRoot = path.resolve(__dirname, "..");
+const frontendDir = path.join(workspaceRoot, "frontend");
+const typesFile = path.join(frontendDir, "src/i18n/types.ts");
+const localesDir = path.join(frontendDir, "src/i18n/locales");
+const srcDir = path.join(frontendDir, "src");
 
-console.log('🔍 [i18n Check] Running i18n Key & Type Integrity Validation...');
+console.log("🔍 [i18n Check] Running i18n Key & Type Integrity Validation...");
 
 let hasErrors = false;
 
@@ -24,7 +24,7 @@ if (!fs.existsSync(typesFile)) {
   process.exit(1);
 }
 
-const typesContent = fs.readFileSync(typesFile, 'utf8');
+const typesContent = fs.readFileSync(typesFile, "utf8");
 const declaredKeys = new Set();
 const typeKeyRegex = /"([^"]+)":\s*string;/g;
 let match;
@@ -38,7 +38,7 @@ console.log(`ℹ️  Found ${declaredKeys.size} declared keys in TranslationDict
 function getLocaleKeys(localeFileName) {
   const filePath = path.join(localesDir, localeFileName);
   if (!fs.existsSync(filePath)) return new Set();
-  const content = fs.readFileSync(filePath, 'utf8');
+  const content = fs.readFileSync(filePath, "utf8");
   const keys = new Set();
   const keyRegex = /"([^"]+)":\s*"/g;
   let m;
@@ -48,52 +48,54 @@ function getLocaleKeys(localeFileName) {
   return keys;
 }
 
-const zhCnKeys = getLocaleKeys('zh-CN.ts');
-const enUsKeys = getLocaleKeys('en-US.ts');
+const zhCnKeys = getLocaleKeys("zh-CN.ts");
+const enUsKeys = getLocaleKeys("en-US.ts");
 
 console.log(`ℹ️  Found ${zhCnKeys.size} keys in zh-CN.ts, ${enUsKeys.size} keys in en-US.ts.`);
 
 // Check for keys in zh-CN missing in types.ts
-const missingInTypesFromZh = [...zhCnKeys].filter(k => !declaredKeys.has(k));
+const missingInTypesFromZh = [...zhCnKeys].filter((k) => !declaredKeys.has(k));
 if (missingInTypesFromZh.length > 0) {
   hasErrors = true;
-  console.error(`\n❌ Found ${missingInTypesFromZh.length} key(s) in zh-CN.ts NOT declared in TranslationDict (types.ts):`);
-  missingInTypesFromZh.forEach(k => console.error(`   - "${k}"`));
+  console.error(
+    `\n❌ Found ${missingInTypesFromZh.length} key(s) in zh-CN.ts NOT declared in TranslationDict (types.ts):`
+  );
+  missingInTypesFromZh.forEach((k) => console.error(`   - "${k}"`));
 }
 
 // Check for keys in types.ts missing in zh-CN.ts
-const missingInZhFromTypes = [...declaredKeys].filter(k => !zhCnKeys.has(k));
+const missingInZhFromTypes = [...declaredKeys].filter((k) => !zhCnKeys.has(k));
 if (missingInZhFromTypes.length > 0) {
   hasErrors = true;
   console.error(`\n❌ Found ${missingInZhFromTypes.length} key(s) in TranslationDict NOT present in zh-CN.ts:`);
-  missingInZhFromTypes.forEach(k => console.error(`   - "${k}"`));
+  missingInZhFromTypes.forEach((k) => console.error(`   - "${k}"`));
 }
 
 // Check for keys in types.ts missing in en-US.ts
-const missingInEnFromTypes = [...declaredKeys].filter(k => !enUsKeys.has(k));
+const missingInEnFromTypes = [...declaredKeys].filter((k) => !enUsKeys.has(k));
 if (missingInEnFromTypes.length > 0) {
   hasErrors = true;
   console.error(`\n❌ Found ${missingInEnFromTypes.length} key(s) in TranslationDict NOT present in en-US.ts:`);
-  missingInEnFromTypes.forEach(k => console.error(`   - "${k}"`));
+  missingInEnFromTypes.forEach((k) => console.error(`   - "${k}"`));
 }
 
 // Check every locale to prevent non-default languages from silently falling back to English.
-const localeFiles = fs.readdirSync(localesDir).filter(fileName => fileName.endsWith('.ts'));
+const localeFiles = fs.readdirSync(localesDir).filter((fileName) => fileName.endsWith(".ts"));
 for (const localeFile of localeFiles) {
   const localeKeys = getLocaleKeys(localeFile);
-  const missingKeys = [...declaredKeys].filter(key => !localeKeys.has(key));
-  const extraKeys = [...localeKeys].filter(key => !declaredKeys.has(key));
+  const missingKeys = [...declaredKeys].filter((key) => !localeKeys.has(key));
+  const extraKeys = [...localeKeys].filter((key) => !declaredKeys.has(key));
 
   if (missingKeys.length > 0) {
     hasErrors = true;
     console.error(`\n❌ ${localeFile} is missing ${missingKeys.length} declared key(s):`);
-    missingKeys.forEach(key => console.error(`   - "${key}"`));
+    missingKeys.forEach((key) => console.error(`   - "${key}"`));
   }
 
   if (extraKeys.length > 0) {
     hasErrors = true;
     console.error(`\n❌ ${localeFile} contains ${extraKeys.length} undeclared key(s):`);
-    extraKeys.forEach(key => console.error(`   - "${key}"`));
+    extraKeys.forEach((key) => console.error(`   - "${key}"`));
   }
 }
 
@@ -104,19 +106,22 @@ function scanDirectory(dir) {
   for (const entry of entries) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (entry.name !== 'locales') {
+      if (entry.name !== "locales") {
         codeUsed = codeUsed.concat(scanDirectory(fullPath));
       }
-    } else if (entry.isFile() && (entry.name.endsWith('.vue') || entry.name.endsWith('.ts') || entry.name.endsWith('.js'))) {
-      if (fullPath.includes('types.ts')) continue;
-      const content = fs.readFileSync(fullPath, 'utf8');
-      const lines = content.split('\n');
+    } else if (
+      entry.isFile() &&
+      (entry.name.endsWith(".vue") || entry.name.endsWith(".ts") || entry.name.endsWith(".js"))
+    ) {
+      if (fullPath.includes("types.ts")) continue;
+      const content = fs.readFileSync(fullPath, "utf8");
+      const lines = content.split("\n");
       const tRegex = /\b(?:t|\$t)\(\s*['"]([a-zA-Z0-9_.-]+)['"]/g;
       lines.forEach((lineText, idx) => {
         let m;
         while ((m = tRegex.exec(lineText)) !== null) {
           const key = m[1];
-          if (key.includes('.')) {
+          if (key.includes(".")) {
             codeUsed.push({ key, file: path.relative(frontendDir, fullPath), line: idx + 1 });
           }
         }
@@ -127,18 +132,20 @@ function scanDirectory(dir) {
 }
 
 const usedInCode = scanDirectory(srcDir);
-const undeclaredUsedInCode = usedInCode.filter(item => !declaredKeys.has(item.key));
+const undeclaredUsedInCode = usedInCode.filter((item) => !declaredKeys.has(item.key));
 
 if (undeclaredUsedInCode.length > 0) {
   hasErrors = true;
-  console.error(`\n❌ Found ${undeclaredUsedInCode.length} i18n key(s) used in frontend code but NOT declared in TranslationDict:`);
-  undeclaredUsedInCode.forEach(item => console.error(`   - "${item.key}" at ${item.file}:${item.line}`));
+  console.error(
+    `\n❌ Found ${undeclaredUsedInCode.length} i18n key(s) used in frontend code but NOT declared in TranslationDict:`
+  );
+  undeclaredUsedInCode.forEach((item) => console.error(`   - "${item.key}" at ${item.file}:${item.line}`));
 }
 
 if (hasErrors) {
-  console.error('\n💥 [i18n Check Failed] Please fix the above key misalignments!');
+  console.error("\n💥 [i18n Check Failed] Please fix the above key misalignments!");
   process.exit(1);
 } else {
-  console.log('\n✅ [i18n Check Passed] All i18n keys are 100% declared, defined, and aligned!');
+  console.log("\n✅ [i18n Check Passed] All i18n keys are 100% declared, defined, and aligned!");
   process.exit(0);
 }

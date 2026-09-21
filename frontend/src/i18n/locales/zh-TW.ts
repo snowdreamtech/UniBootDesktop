@@ -1,4 +1,4 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const zhTw: TranslationDict = {
   "menu.app": "UniGoDesktop",
@@ -100,7 +100,8 @@ export const zhTw: TranslationDict = {
   "disk.tag_boot_hybrid": "混合開機碟",
   "disk.tag_boot_thirdparty": "第三方開機",
   "confirm.cloud_to_hybrid_warn_title": "注意：切換至混合模式需要全盤格式化",
-  "confirm.cloud_to_hybrid_warn_desc": "當前磁碟為純雲開機模式。Ventoy 混合模式需要重建 MBR 及分割區表，這將會清空全部現有資料和 ISO 映像！",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "當前磁碟為純雲開機模式。Ventoy 混合模式需要重建 MBR 及分割區表，這將會清空全部現有資料和 ISO 映像！",
   "disk.tag_ssd": "外接固態硬碟",
   "disk.tag_typec": "Type-C 盤",
   "disk.tag_secure": "加密碟",
@@ -128,9 +129,11 @@ export const zhTw: TranslationDict = {
   "log.level_error": "錯誤",
   "log.level_debug": "調試",
   "safe.title_cloud": "檢測到現有 Ventoy/UniBoot 盤 (雲端模式僅刷新 ESP 引導區)",
-  "safe.desc_cloud": "雲端模式堅持標準 UNIBOOT 雙分割區架構。部署將自動無損刷新 ESP 引導區直達 iPXE 雲菜單，絕不抹擦或挪動主資料區原有檔案與 ISO！",
+  "safe.desc_cloud":
+    "雲端模式堅持標準 UNIBOOT 雙分割區架構。部署將自動無損刷新 ESP 引導區直達 iPXE 雲菜單，絕不抹擦或挪動主資料區原有檔案與 ISO！",
   "safe.title_hybrid": "檢測到現有的 Ventoy 啟動盤 (混合模式無損更新)",
-  "safe.desc_hybrid": "無需選擇主資料區格式。混合模式自動保留所有現有檔案與 ISO 鏡像，全自動無損注入 UniBoot 暗色主題與 iPXE 雲引導！",
+  "safe.desc_hybrid":
+    "無需選擇主資料區格式。混合模式自動保留所有現有檔案與 ISO 鏡像，全自動無損注入 UniBoot 暗色主題與 iPXE 雲引導！",
   "common.optional": "可選",
   "common.optional_test": "可選測試",
   "iso.title": "本地系統鏡像源 (ISO / IMG / WIM / VHD)",
@@ -150,7 +153,8 @@ export const zhTw: TranslationDict = {
   "deploy.batch_target": "已選中 {count} 塊磁碟",
   "deploy.start_create": "開始製作啟動碟",
   "deploy.tip_batch_update_all": "批量無損更新：全選的 {count} 塊磁碟均將執行原位更新 (保留盤內數據與 ISO)",
-  "deploy.tip_batch_mixed": "批量混合部署：{bootCount} 塊磁碟執行原位無損更新 (保留數據)，{blankCount} 塊磁碟執行全新格式化製作",
+  "deploy.tip_batch_mixed":
+    "批量混合部署：{bootCount} 塊磁碟執行原位無損更新 (保留數據)，{blankCount} 塊磁碟執行全新格式化製作",
   "deploy.start_update": "開始無損更新 (保留資料)",
   "deploy.batch_create": "開始批量製作 ({count} 塊磁碟)",
   "deploy.writing": "正在寫入引導與韌體包...",
@@ -168,9 +172,11 @@ export const zhTw: TranslationDict = {
   "deploy.tip_macos_unsupported": "macOS 暫不支援混合模式全新盤格式化 (建議選擇雲端模式或先在 Win/Linux 上初始化)",
   "deploy.tip_need_ventoy": "製作【混合模式】全新盤需依賴 Ventoy CLI 環境",
   "deploy.macos_alert_title": "macOS 暫不支援 Ventoy CLI 全新格式化",
-  "deploy.macos_alert_desc": "官方 Ventoy 暫不支援在 macOS 上直接執行格式化程式。製作【混合模式】全新盤需依賴 Ventoy CLI；建議直接選擇原生支援的【雲端模式 (1秒極速雲引導盤)】！如需使用混合模式，請先在 Win/Linux 上完成 Ventoy 盤初始化後插入 macOS 無損升級。",
+  "deploy.macos_alert_desc":
+    "官方 Ventoy 暫不支援在 macOS 上直接執行格式化程式。製作【混合模式】全新盤需依賴 Ventoy CLI；建議直接選擇原生支援的【雲端模式 (1秒極速雲引導盤)】！如需使用混合模式，請先在 Win/Linux 上完成 Ventoy 盤初始化後插入 macOS 無損升級。",
   "deploy.no_ventoy_title": "找不到 Ventoy CLI 執行檔",
-  "deploy.no_ventoy_desc": "製作【混合模式】(Ventoy 混合磁碟) 需要在本機安裝 Ventoy CLI；建議直接選擇原生支援的【雲端模式 (1 秒極速雲端開機磁碟)】！",
+  "deploy.no_ventoy_desc":
+    "製作【混合模式】(Ventoy 混合磁碟) 需要在本機安裝 Ventoy CLI；建議直接選擇原生支援的【雲端模式 (1 秒極速雲端開機磁碟)】！",
   "deploy.result_batch_success": "成功批次部署 1秒極速雲端開機碟 到 {count} 個磁碟！",
   "deploy.result_success": "成功部署模式 {mode} 到目標：{targets}",
   "deploy.alert_success": "部署成功！",
@@ -266,7 +272,8 @@ export const zhTw: TranslationDict = {
   "confirm.title_mixed": "智能混合部署確認",
   "confirm.title_danger": "格式化警告：磁碟初始化",
   "confirm.safe_banner_title": "原位增量升級通知（資料安全）",
-  "confirm.safe_banner_desc": "檢測到目標磁碟已有 Ventoy / UniBoot 引導結構。系統將執行增量升級，跳過格式化。現有的所有文件與 ISO 鏡像均 100% 完整保留！",
+  "confirm.safe_banner_desc":
+    "檢測到目標磁碟已有 Ventoy / UniBoot 引導結構。系統將執行增量升級，跳過格式化。現有的所有文件與 ISO 鏡像均 100% 完整保留！",
   "confirm.mixed_banner_title": "智能混合模式：引導碟原位增量升級，空白碟全量格式化",
   "confirm.mixed_banner_desc": "已選擇 {ventoyCount} 個引導碟（增量升級）與 {blankCount} 個空白碟（全量格式化）。",
   "confirm.danger_banner_title": "警告：格式化操作不可逆！",
@@ -311,7 +318,8 @@ export const zhTw: TranslationDict = {
   "inspector.smart": "SMART 健康度：",
   "inspector.sector": "扇區大小：",
   "inspector.fake_title": "偽 USB 3.0 擴容/降級預警！",
-  "inspector.fake_desc": "裝置標稱為 USB 3.0/3.1，但物理層實際協商速率僅為 {speed} (USB 2.0 High-Speed PHY)。該磁碟可能存在主控偽造或劣質藍口。",
+  "inspector.fake_desc":
+    "裝置標稱為 USB 3.0/3.1，但物理層實際協商速率僅為 {speed} (USB 2.0 High-Speed PHY)。該磁碟可能存在主控偽造或劣質藍口。",
   "inspector.genuine_title": "物理硬體校驗通過 (原生真 USB 3.0+ 裝置)",
   "inspector.genuine_desc": "物理 PHY 層交握協議為真實 SuperSpeed/SuperSpeed+ 鏈路，實測速率達 {speed}。",
   "inspector.usb2_title": "標準 USB 2.0 接口",
@@ -425,7 +433,8 @@ export const zhTw: TranslationDict = {
   "dialog.textFilesFilter": "文字檔案 (*.txt)",
   "dialog.allFilesFilter": "所有檔案 (*.*)",
   "dialog.selectIsoTitle": "選擇系統鏡像檔案 (*.iso, *.wim, *.img 等)",
-  "dialog.ventoyFilter": "Ventoy 源鏡像檔案 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy 源鏡像檔案 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "計算 Hash",
   "checksum.calculating": "正在計算 Hash...",
   "checksum.algo_label": "演算法",
@@ -456,8 +465,8 @@ export const zhTw: TranslationDict = {
   "checksum.auto_algo_switched": "已自動識別並切換演算法為 {algo}",
   "checksum.expand": "校驗 Hash",
   "checksum.collapse": "收起校驗",
-    "checksum.card_title": "鏡像 Hash 校驗",
-"progress.speed": "寫入速度",
+  "checksum.card_title": "鏡像 Hash 校驗",
+  "progress.speed": "寫入速度",
   "progress.eta": "預計剩餘",
   "checksum.import_file": "匯入校驗檔案",
   "checksum.import_file_title": "匯入並剖析官方 SHA256SUMS / CHECKSUM 校驗檔案",
