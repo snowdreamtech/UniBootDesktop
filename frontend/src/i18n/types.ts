@@ -245,6 +245,11 @@ export interface TranslationDict {
   "settings.proxy_host": string;
   "settings.proxy_port": string;
   "settings.ventoy_cli_path": string;
+  "settings.uniboot_dir_label": string;
+  "settings.uniboot_dir_placeholder": string;
+  "settings.browse_btn": string;
+  "settings.reset_default": string;
+  "settings.select_uniboot_dir": string;
   "settings.ventoy_secboot": string;
   "settings.ventoy_part_style": string;
   "settings.ventoy_reserve": string;

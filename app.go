@@ -87,6 +87,9 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	logger.SetWailsContext(ctx)
 	logger.Info(fmt.Sprintf("UniGoDesktop Wails GUI runtime started successfully (%s/%s)", runtime.GOOS, runtime.GOARCH))
+	if cfg, err := config.Load(); err == nil && cfg != nil && cfg.UniBootPath != "" {
+		firmware.SetCustomUniBootDir(cfg.UniBootPath)
+	}
 	disk.StartHotplugMonitor(ctx, func() {
 		logger.Info("Removable disk change detected, refreshing drive list")
 		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
@@ -213,6 +216,25 @@ func (a *App) SelectIsoFiles(title string, ventoyFilter string, allFilter string
 		logger.Info(fmt.Sprintf("Selected %d system image file(s)", len(paths)))
 	}
 	return paths, nil
+}
+
+// SelectDirectory opens a native single folder selection dialog.
+func (a *App) SelectDirectory(title string) (string, error) {
+	if title == "" {
+		title = "Select Folder"
+	}
+	logger.Info("Opening native directory picker dialog", "title", title)
+	dir, err := wailsRuntime.OpenDirectoryDialog(a.ctx, wailsRuntime.OpenDialogOptions{
+		Title: title,
+	})
+	if err != nil {
+		logger.Error("Failed to open directory picker", "error", err)
+		return "", err
+	}
+	if dir != "" {
+		logger.Info("Selected directory", "path", dir)
+	}
+	return dir, nil
 }
 
 // CalculateFileChecksum computes MD5, SHA256, or SHA512 hash for the specified image file.
@@ -686,6 +708,7 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		logger.Error("Failed to save application config", "error", err)
 		return err
 	}
+	firmware.SetCustomUniBootDir(cfg.UniBootPath)
 	logger.Info("Application preferences saved successfully")
 	return nil
 }

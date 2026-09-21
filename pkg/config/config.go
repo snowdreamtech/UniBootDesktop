@@ -26,6 +26,7 @@ type AppConfig struct {
 	ProxyPassword        string `json:"proxyPassword" toml:"-"`                           // Transient input; persisted in the OS credential store
 	Language             string `json:"language" toml:"language"`                         // UI Language (auto/zh-CN/en-US/zh-TW)
 	VentoyPath           string `json:"ventoyPath" toml:"ventoyPath"`                     // Path to official Ventoy CLI directory / executable
+	UniBootPath          string `json:"unibootPath" toml:"unibootPath"`                   // Custom local UniBoot firmware directory path (empty uses system default)
 	VentoySecureBoot     bool   `json:"ventoySecureBoot" toml:"ventoySecureBoot"`         // Enable Ventoy Secure Boot support (-s)
 	VentoyPartitionStyle string `json:"ventoyPartitionStyle" toml:"ventoyPartitionStyle"` // Ventoy partition style: GPT or MBR
 	VentoyReserveSpace   int    `json:"ventoyReserveSpace" toml:"ventoyReserveSpace"`     // Reserved space at end of disk (MB)
@@ -49,6 +50,7 @@ func GetDefaultConfig() *AppConfig {
 		ProxyUser:            "",
 		ProxyPassword:        "",
 		VentoyPath:           "",
+		UniBootPath:          "",
 		VentoySecureBoot:     true,  // Official Ventoy default: Enabled (Checked)
 		VentoyPartitionStyle: "MBR", // Official Ventoy default: MBR
 		VentoyReserveSpace:   0,     // Official Ventoy default: 0 MB

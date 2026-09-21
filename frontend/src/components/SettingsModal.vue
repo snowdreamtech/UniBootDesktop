@@ -260,6 +260,28 @@
               </div>
             </h4>
 
+            <!-- UniBoot Custom Storage Path -->
+            <div class="form-group span-full uniboot-path-group">
+              <label class="form-label">{{ t('settings.uniboot_dir_label') }}</label>
+              <div class="input-with-btn">
+                <input 
+                  v-model="unibootPath" 
+                  type="text" 
+                  class="form-input" 
+                  :placeholder="t('settings.uniboot_dir_placeholder')"
+                  @change="triggerAutoSave"
+                />
+                <button class="btn-secondary test-btn" @click="selectUniBootDirectory" :title="t('settings.browse_btn')">
+                  <span class="btn-icon">📁</span>
+                  <span>{{ t('settings.browse_btn') }}</span>
+                </button>
+                <button v-if="unibootPath" class="btn-secondary test-btn reset-btn" @click="resetUniBootDirectory" :title="t('settings.reset_default')">
+                  <span class="btn-icon">↺</span>
+                  <span>{{ t('settings.reset_default') }}</span>
+                </button>
+              </div>
+            </div>
+
             <div class="firmware-list">
               <div v-for="fw in firmwareList" :key="fw.releaseName" class="firmware-item">
                 <div class="fw-info">
@@ -517,6 +539,7 @@ const proxyTestResult = ref('');
 const proxyTestSuccess = ref(true);
 
 // UniBoot state
+const unibootPath = ref('');
 const isSyncing = ref(false);
 const syncProgress = ref(0);
 const latestReleaseTag = ref('v1.1.0');
@@ -568,6 +591,7 @@ function buildConfigPayload() {
     ventoyReserveSpace: Number(ventoyReserveSpace.value) || 0,
     ventoyWin11Bypass: ventoyWin11Bypass.value === true,
     ventoyMenuTimeout: Number(ventoyMenuTimeout.value) || 0,
+    unibootPath: unibootPath.value.trim(),
   };
 }
 
@@ -633,6 +657,7 @@ watch(
     proxyPort,
     proxyUser,
     proxyPassword,
+    unibootPath,
     ventoyPath,
     ventoySecureBoot,
     ventoyPartitionStyle,
@@ -710,7 +735,8 @@ async function loadFullConfig() {
         ventoyPartitionStyle.value = cfg.ventoyPartitionStyle || 'MBR';
         ventoyReserveSpace.value = cfg.ventoyReserveSpace || 0;
         ventoyWin11Bypass.value = cfg.ventoyWin11Bypass === true;
-        ventoyMenuTimeout.value = cfg.ventoyMenuTimeout || 0;
+        ventoyMenuTimeout.value = cfg.menuTimeout || cfg.ventoyMenuTimeout || 0;
+        unibootPath.value = cfg.unibootPath || '';
         checkVentoyCli();
       }
     } catch (e) {
@@ -845,6 +871,29 @@ async function syncFirmware() {
   } finally {
     clearInterval(timer);
   }
+}
+
+async function selectUniBootDirectory() {
+  if (window.go && window.go.main && window.go.main.App && window.go.main.App.SelectDirectory) {
+    try {
+      const selected = await window.go.main.App.SelectDirectory(t('settings.select_uniboot_dir'));
+      if (selected) {
+        unibootPath.value = selected;
+        saveConfigImmediate();
+        fetchFirmwareList();
+        checkUniBootRelease();
+      }
+    } catch (e) {
+      console.error('Failed to select UniBoot directory:', e);
+    }
+  }
+}
+
+function resetUniBootDirectory() {
+  unibootPath.value = '';
+  saveConfigImmediate();
+  fetchFirmwareList();
+  checkUniBootRelease();
 }
 
 function close() {
@@ -1332,6 +1381,10 @@ onMounted(() => {
   display: flex;
   gap: 0.5rem;
   align-items: center;
+}
+
+.uniboot-path-group {
+  margin-bottom: 1rem;
 }
 
 .input-with-btn .form-input {

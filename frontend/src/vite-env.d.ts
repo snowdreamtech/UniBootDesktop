@@ -69,6 +69,7 @@ declare global {
           GetFirmwareList(): Promise<any[]>;
           GetUniBootReleaseInfo(): Promise<any>;
           SyncUniBootFirmware(): Promise<any>;
+          SelectDirectory?(title?: string): Promise<string>;
           ValidateVentoyCli(ventoyPath: string): Promise<any>;
           EjectDisk(targetDisk: string): Promise<void>;
           ReloadAppMenu(lang: string): Promise<void>;

@@ -16,6 +16,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/env"
@@ -23,15 +24,40 @@ import (
 	"github.com/snowdreamtech/unigodesktop/pkg/updater"
 )
 
+var (
+	customFirmwareDir   string
+	customFirmwareMutex sync.RWMutex
+)
+
+// SetCustomUniBootDir sets user-specified custom UniBoot firmware directory.
+func SetCustomUniBootDir(dir string) {
+	customFirmwareMutex.Lock()
+	defer customFirmwareMutex.Unlock()
+	customFirmwareDir = strings.TrimSpace(dir)
+}
+
+// GetCustomUniBootDir returns user-specified custom UniBoot firmware directory.
+func GetCustomUniBootDir() string {
+	customFirmwareMutex.RLock()
+	defer customFirmwareMutex.RUnlock()
+	return customFirmwareDir
+}
+
+// GetEffectiveFirmwareDir returns user-customized firmware directory if set and accessible, otherwise GetDataDir()/firmware.
+func GetEffectiveFirmwareDir() string {
+	custom := GetCustomUniBootDir()
+	if custom != "" {
+		if fi, err := os.Stat(custom); err == nil && fi.IsDir() {
+			return custom
+		}
+	}
+	return filepath.Join(env.GetDataDir(), "firmware")
+}
+
 //go:embed assets/*
 var embeddedAssets embed.FS
 
-func firmwareChecksumManifest() (map[string]string, error) {
-	manifest, err := embeddedAssets.ReadFile("assets/checksums.sha256")
-	if err != nil {
-		return nil, fmt.Errorf("failed to read UniBoot checksum manifest: %w", err)
-	}
-
+func parseChecksumManifest(manifest []byte) (map[string]string, error) {
 	checksums := make(map[string]string)
 	scanner := bufio.NewScanner(strings.NewReader(string(manifest)))
 	for scanner.Scan() {
@@ -51,6 +77,24 @@ func firmwareChecksumManifest() (map[string]string, error) {
 	}
 
 	return checksums, nil
+}
+
+func firmwareChecksumManifest() (map[string]string, error) {
+	// Priority 1: Check effective firmware directory for custom/downloaded checksums
+	customManifestPath := filepath.Join(GetEffectiveFirmwareDir(), "checksums.sha256")
+	if manifest, err := os.ReadFile(customManifestPath); err == nil {
+		if checksums, err := parseChecksumManifest(manifest); err == nil && len(checksums) > 0 {
+			return checksums, nil
+		}
+	}
+
+	// Priority 2: Fallback to embedded checksums
+	manifest, err := embeddedAssets.ReadFile("assets/checksums.sha256")
+	if err != nil {
+		return nil, fmt.Errorf("failed to read UniBoot checksum manifest: %w", err)
+	}
+
+	return parseChecksumManifest(manifest)
 }
 
 func validateFirmwareAssetData(releaseName string, data []byte) error {
@@ -159,7 +203,7 @@ func TargetPathForReleaseAsset(name string) string {
 
 // GetLocalUniBootVersion returns current local/cached UniBoot version tag.
 func GetLocalUniBootVersion() string {
-	versionFile := filepath.Join(env.GetDataDir(), "firmware", "version.json")
+	versionFile := filepath.Join(GetEffectiveFirmwareDir(), "version.json")
 	if data, err := os.ReadFile(versionFile); err == nil {
 		var ver struct {
 			TagName string `json:"tagName"`
@@ -289,7 +333,7 @@ func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootRelea
 		return nil, err
 	}
 
-	firmwareDir := filepath.Join(env.GetDataDir(), "firmware")
+	firmwareDir := GetEffectiveFirmwareDir()
 	if err := os.MkdirAll(firmwareDir, 0755); err != nil {
 		return nil, fmt.Errorf("failed to create firmware cache dir: %w", err)
 	}
@@ -341,18 +385,20 @@ func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootRelea
 }
 
 // GetFirmwareData retrieves binary data for a firmware asset based on priority:
-// Priority 1: User downloaded / cached firmware in GetDataDir()/firmware/<releaseName>
+// Priority 1: User specified custom directory / cached firmware in GetEffectiveFirmwareDir()/<releaseName>
 // Priority 2: Built-in embedded binary (embed.FS)
 func GetFirmwareData(releaseName string) ([]byte, string, error) {
-	// Check user data directory for manually downloaded / updated firmware
-	localPath := filepath.Join(env.GetDataDir(), "firmware", releaseName)
+	// Check user data directory or custom directory for firmware
+	localPath := filepath.Join(GetEffectiveFirmwareDir(), releaseName)
 	if info, err := os.Stat(localPath); err == nil && !info.IsDir() && info.Size() > 0 {
 		data, err := os.ReadFile(localPath)
 		if err == nil {
 			if err := validateFirmwareAssetData(releaseName, data); err == nil {
-				return data, fmt.Sprintf("Local Cache (%s)", localPath), nil
+				return data, fmt.Sprintf("Local Firmware (%s)", localPath), nil
 			}
-			_ = os.Remove(localPath)
+			if GetCustomUniBootDir() == "" {
+				_ = os.Remove(localPath)
+			}
 		}
 	}
 
