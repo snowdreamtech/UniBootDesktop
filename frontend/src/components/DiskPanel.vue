@@ -103,12 +103,13 @@
     </div>
 
     <button
+      v-if="!isScanningDisks || diskList.length > 0"
       class="btn-secondary refresh-btn"
       :disabled="isScanningDisks"
       @click="emit('refresh-disks')"
     >
       <span :class="['refresh-icon', { 'spin-icon': isScanningDisks }]">🔄</span>
-      <span>{{ diskList.length === 0 && isScanningDisks ? t('disk.rescan') : (isScanningDisks ? t('disk.scanning') : t('disk.rescan')) }}</span>
+      <span>{{ isScanningDisks ? t('disk.scanning') : t('disk.rescan') }}</span>
     </button>
 
     <!-- Privilege Trust Modal -->
