@@ -7,10 +7,134 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sync"
 
 	"github.com/pelletier/go-toml/v2"
 	"github.com/snowdreamtech/unigodesktop/internal/env"
 )
+
+var configWriteMutex sync.Mutex
+
+func isEmptyConfig(cfg *AppConfig) bool {
+	if cfg == nil {
+		return true
+	}
+	return cfg.Mode == "" &&
+		cfg.AutoCheckUpdate == false &&
+		cfg.Theme == "" &&
+		cfg.GithubProxy == "" &&
+		cfg.FileSystem == "" &&
+		cfg.ProxyProtocol == "" &&
+		cfg.ProxyHost == "" &&
+		cfg.ProxyPort == 0 &&
+		cfg.ProxyUser == "" &&
+		cfg.ProxyPassword == "" &&
+		cfg.Language == "" &&
+		cfg.VentoyPath == "" &&
+		cfg.UniBootPath == "" &&
+		cfg.VentoySecureBoot == false &&
+		cfg.VentoyPartitionStyle == "" &&
+		cfg.VentoyReserveSpace == 0 &&
+		cfg.VentoyWin11Bypass == false &&
+		cfg.VentoyMenuTimeout == 0 &&
+		cfg.AutoEjectAfterDeploy == false
+}
+
+func normalizePersistedDefaults(cfg *AppConfig) bool {
+	if cfg == nil {
+		return false
+	}
+	updated := false
+	if cfg.VentoyPath == "" {
+		cfg.VentoyPath = env.GetVentoyDir()
+		updated = true
+	}
+	if cfg.UniBootPath == "" {
+		cfg.UniBootPath = env.GetFirmwareDir()
+		updated = true
+	}
+	return updated
+}
+
+func validateTOMLData(data []byte) error {
+	var parsed AppConfig
+	if err := toml.Unmarshal(data, &parsed); err != nil {
+		return fmt.Errorf("toml unmarshal: %w", err)
+	}
+	return nil
+}
+
+func restoreConfigBackup(cfgPath, backupPath string) error {
+	if backupPath == "" {
+		return fmt.Errorf("no config backup available")
+	}
+	if err := os.Remove(cfgPath); err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("remove failed config: %w", err)
+	}
+	if err := os.Rename(backupPath, cfgPath); err != nil {
+		return fmt.Errorf("restore backup: %w", err)
+	}
+	return nil
+}
+
+func backupExistingConfig(cfgPath string) (string, bool, error) {
+	if _, err := os.Stat(cfgPath); err != nil {
+		if os.IsNotExist(err) {
+			return "", false, nil
+		}
+		return "", false, fmt.Errorf("stat current config: %w", err)
+	}
+	backupPath := cfgPath + ".corrupt"
+	if err := os.Remove(backupPath); err != nil && !os.IsNotExist(err) {
+		return "", false, fmt.Errorf("remove stale backup: %w", err)
+	}
+	if err := os.Rename(cfgPath, backupPath); err != nil {
+		return "", false, fmt.Errorf("backup config: %w", err)
+	}
+	return backupPath, true, nil
+}
+
+func writeConfigAtomically(cfgPath string, data []byte) error {
+	if err := os.MkdirAll(filepath.Dir(cfgPath), 0o755); err != nil {
+		return fmt.Errorf("create config dir: %w", err)
+	}
+	file, err := os.CreateTemp(filepath.Dir(cfgPath), ".unibootdesktop-*.toml")
+	if err != nil {
+		return fmt.Errorf("create temp config: %w", err)
+	}
+	tmpPath := file.Name()
+	defer func() { _ = os.Remove(tmpPath) }()
+	if _, err := file.Write(data); err != nil {
+		_ = file.Close()
+		return fmt.Errorf("write temp config: %w", err)
+	}
+	if err := file.Sync(); err != nil {
+		_ = file.Close()
+		return fmt.Errorf("sync temp config: %w", err)
+	}
+	if err := file.Close(); err != nil {
+		return fmt.Errorf("close temp config: %w", err)
+	}
+	if err := os.Rename(tmpPath, cfgPath); err != nil {
+		return fmt.Errorf("replace config file: %w", err)
+	}
+	if err := os.Chmod(cfgPath, 0o600); err != nil {
+		return fmt.Errorf("set config permissions: %w", err)
+	}
+	return nil
+}
+
+func atomicRestoreDefaultConfig(cfgPath string) error {
+	defaultCfg := GetDefaultConfig()
+	data, err := toml.Marshal(defaultCfg)
+	if err != nil {
+		return fmt.Errorf("marshal default config: %w", err)
+	}
+	if err := writeConfigAtomically(cfgPath, data); err != nil {
+		return fmt.Errorf("write default config: %w", err)
+	}
+	return nil
+}
 
 // AppConfig represents application-wide configuration parameters.
 type AppConfig struct {
@@ -76,57 +200,142 @@ func Load() (*AppConfig, error) {
 			}
 			return cfg, nil
 		}
-		needsMigration := false
-		if cfg.VentoyPath == "" {
-			cfg.VentoyPath = env.GetVentoyDir()
-			needsMigration = true
-		}
-		if cfg.UniBootPath == "" {
-			cfg.UniBootPath = env.GetFirmwareDir()
-			needsMigration = true
-		}
-		if needsMigration {
+		if normalizePersistedDefaults(cfg) {
 			if err := cfg.Save(); err != nil {
 				return nil, fmt.Errorf("migrate default firmware directories: %w", err)
 			}
 		}
 		return cfg, nil
 	}
-	return GetDefaultConfig(), nil
+	defaultCfg := GetDefaultConfig()
+	if err := defaultCfg.Save(); err != nil {
+		return nil, fmt.Errorf("initialize default config: %w", err)
+	}
+	return defaultCfg, nil
 }
 
 // Save writes application configuration to disk.
 func (c *AppConfig) Save() error {
-	cfgPath := env.GetGlobalConfigPath()
-	if err := os.MkdirAll(filepath.Dir(cfgPath), 0755); err != nil {
-		return fmt.Errorf("create config dir error: %w", err)
+	if c == nil {
+		return fmt.Errorf("config is nil")
 	}
+	configWriteMutex.Lock()
+	defer configWriteMutex.Unlock()
+
+	cfgPath := env.GetGlobalConfigPath()
+	lockFile, unlockLock, err := acquireConfigLock(cfgPath)
+	if err != nil {
+		return fmt.Errorf("acquire config lock: %w", err)
+	}
+	defer unlockLock()
+	defer func() {
+		if lockFile != nil {
+			_ = lockFile.Close()
+		}
+	}()
+
+	if isEmptyConfig(c) {
+		if _, statErr := os.Stat(cfgPath); statErr != nil && os.IsNotExist(statErr) {
+			return nil
+		}
+		return nil
+	}
+
 	data, err := toml.Marshal(c)
 	if err != nil {
 		return fmt.Errorf("marshal config error: %w", err)
 	}
-	tmpFile, err := os.CreateTemp(filepath.Dir(cfgPath), ".unibootdesktop-*.toml")
-	if err != nil {
-		return fmt.Errorf("create temporary config file: %w", err)
+	if err := validateTOMLData(data); err != nil {
+		return fmt.Errorf("validate config payload: %w", err)
 	}
-	tmpPath := tmpFile.Name()
-	defer os.Remove(tmpPath)
-	if _, err := tmpFile.Write(data); err != nil {
-		tmpFile.Close()
-		return fmt.Errorf("write temporary config file: %w", err)
+
+	backupFile, _, backupErr := backupExistingConfig(cfgPath)
+	if backupErr != nil {
+		return fmt.Errorf("prepare backup for config write: %w", backupErr)
 	}
-	if err := tmpFile.Chmod(0600); err != nil {
-		tmpFile.Close()
-		return fmt.Errorf("set temporary config permissions: %w", err)
+	if writeErr := writeConfigAtomically(cfgPath, data); writeErr != nil {
+		if backupFile != "" {
+			if restoreErr := restoreConfigBackup(cfgPath, backupFile); restoreErr != nil {
+				return fmt.Errorf("save failed and backup restore failed: %w (restoreErr=%v)", writeErr, restoreErr)
+			}
+		}
+		return fmt.Errorf("write config file: %w", writeErr)
 	}
-	if err := tmpFile.Close(); err != nil {
-		return fmt.Errorf("close temporary config file: %w", err)
+
+	if err := validateTOMLDataFromFile(cfgPath); err != nil {
+		if backupFile != "" {
+			if restoreErr := restoreConfigBackup(cfgPath, backupFile); restoreErr != nil {
+				return fmt.Errorf("post-write validation failed and backup restore failed: %w (restoreErr=%v)", err, restoreErr)
+			}
+		} else if restoreErr := atomicRestoreDefaultConfig(cfgPath); restoreErr != nil {
+			return fmt.Errorf("post-write validation failed and default restore failed: %w (restoreErr=%v)", err, restoreErr)
+		}
+		return fmt.Errorf("post-write validation failed: %w", err)
 	}
-	if err := os.Rename(tmpPath, cfgPath); err != nil {
-		return fmt.Errorf("replace config file: %w", err)
-	}
-	if err := os.Chmod(cfgPath, 0600); err != nil {
-		return fmt.Errorf("set config file permissions: %w", err)
+
+	if backupFile != "" {
+		_ = os.Remove(backupFile)
 	}
 	return nil
+}
+
+func validateTOMLDataFromFile(cfgPath string) error {
+	data, err := os.ReadFile(cfgPath)
+	if err != nil {
+		return fmt.Errorf("read config file: %w", err)
+	}
+	return validateTOMLData(data)
+}
+
+// ConfigHealth describes the current health of the persisted config state.
+type ConfigHealth struct {
+	ConfigPath      string
+	Exists          bool
+	Valid           bool
+	HasBackup       bool
+	DefaultPathsSet bool
+	Issue           string
+}
+
+// HealthCheck inspects the persisted config file and reports whether it is readable,
+// whether a backup exists, and whether default UniBoot/Ventoy paths are available.
+func HealthCheck() (*ConfigHealth, error) {
+	cfgPath := env.GetGlobalConfigPath()
+	status := &ConfigHealth{
+		ConfigPath:      cfgPath,
+		Exists:          false,
+		Valid:           true,
+		HasBackup:       false,
+		DefaultPathsSet: true,
+		Issue:           "",
+	}
+
+	if _, err := os.Stat(cfgPath); err == nil {
+		status.Exists = true
+		data, readErr := os.ReadFile(cfgPath)
+		if readErr != nil {
+			status.Valid = false
+			status.Issue = fmt.Sprintf("config file unreadable: %v", readErr)
+			return status, nil
+		}
+		if unmarshalErr := validateTOMLData(data); unmarshalErr != nil {
+			status.Valid = false
+			status.Issue = fmt.Sprintf("invalid TOML: %v", unmarshalErr)
+		}
+	} else if !os.IsNotExist(err) {
+		status.Valid = false
+		status.Issue = fmt.Sprintf("config path check failed: %v", err)
+		return status, nil
+	}
+
+	if _, err := os.Stat(cfgPath + ".corrupt"); err == nil {
+		status.HasBackup = true
+	}
+
+	defaults := GetDefaultConfig()
+	status.DefaultPathsSet = defaults.VentoyPath != "" && defaults.UniBootPath != ""
+	if !status.Valid {
+		status.DefaultPathsSet = status.DefaultPathsSet && defaults.VentoyPath != "" && defaults.UniBootPath != ""
+	}
+	return status, nil
 }

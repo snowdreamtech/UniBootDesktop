@@ -106,6 +106,26 @@ func TestConfigSaveAndLoad(t *testing.T) {
 	}
 }
 
+func TestSaveSkipsEmptyConfigDuringInitialization(t *testing.T) {
+	tmpDir := t.TempDir()
+	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", filepath.Join(tmpDir, "data"))
+
+	cfg := &AppConfig{}
+	if err := cfg.Save(); err != nil {
+		t.Fatalf("empty config save should be a no-op during initialization: %v", err)
+	}
+
+	configPath := filepath.Join(tmpDir, "unibootdesktop.toml")
+	if _, err := os.Stat(configPath); !os.IsNotExist(err) {
+		t.Fatalf("expected empty config to skip writing defaults, but %s exists", configPath)
+	}
+	if cfg.VentoyPath != "" || cfg.UniBootPath != "" {
+		t.Fatalf("expected empty config to remain unset, got Ventoy=%q UniBoot=%q", cfg.VentoyPath, cfg.UniBootPath)
+	}
+}
+
 func TestLoadMigratesEmptyFirmwareDirectories(t *testing.T) {
 	tmpDir := t.TempDir()
 	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
@@ -155,6 +175,35 @@ func TestLoadRestoresCorruptConfig(t *testing.T) {
 	}
 	if _, err := os.Stat(configPath + ".corrupt"); err != nil {
 		t.Fatalf("expected corrupt config backup: %v", err)
+	}
+}
+
+func TestHealthCheckReportsCorruptConfig(t *testing.T) {
+	tmpDir := t.TempDir()
+	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", filepath.Join(tmpDir, "data"))
+
+	configPath := filepath.Join(tmpDir, "unibootdesktop.toml")
+	if err := os.WriteFile(configPath, []byte("bad =\n"), 0o600); err != nil {
+		t.Fatalf("write corrupt config: %v", err)
+	}
+	if err := os.WriteFile(configPath+".corrupt", []byte("mode = 'cloud'\n"), 0o600); err != nil {
+		t.Fatalf("write stale backup file: %v", err)
+	}
+
+	health, err := HealthCheck()
+	if err != nil {
+		t.Fatalf("health check failed: %v", err)
+	}
+	if health.Valid {
+		t.Fatal("expected invalid config to be reported unhealthy")
+	}
+	if !strings.Contains(health.Issue, "invalid TOML") {
+		t.Fatalf("expected invalid TOML issue, got %q", health.Issue)
+	}
+	if !health.HasBackup {
+		t.Fatal("expected backup flag to be true when a corrupt backup exists")
 	}
 }
 
