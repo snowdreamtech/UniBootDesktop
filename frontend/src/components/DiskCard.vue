@@ -639,4 +639,75 @@ const diskTagLabel = computed(() => {
 [data-theme="light"] .speed-tag.usb4 {
   color: #d97706;
 }
+
+/* Light Theme Badge Overrides - High Contrast & Clear Legibility */
+[data-theme="light"] .disk-badge.boot-hybrid {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  font-weight: 700;
+}
+
+[data-theme="light"] .disk-badge.boot-cloud {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #7dd3fc;
+  font-weight: 700;
+}
+
+[data-theme="light"] .disk-badge.boot-thirdparty {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.needs_privilege {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px dashed #f59e0b;
+  font-weight: 700;
+}
+
+[data-theme="light"] .disk-badge.ssd {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #d8b4fe;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.typec {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.secure {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.reader {
+  background: #e0e7ff;
+  color: #3730a3;
+  border: 1px solid #a5b4fc;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.hdd {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #7dd3fc;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.usb4 {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  font-weight: 700;
+}
 </style>
