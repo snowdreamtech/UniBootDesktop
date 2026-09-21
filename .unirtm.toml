@@ -77,21 +77,24 @@ python = "3.14.7"
 [tasks.dev]
 description = "Launch Wails GUI application in development mode"
 run = '''
+  mkdir -p .cache/go .cache/go-tmp
   lsof -ti :34115,5173 | xargs kill -9 2>/dev/null || true
   pkill -f "unigodesktop" 2>/dev/null || true
-  unirtm exec -- wails dev
+  GOCACHE="$PWD/.cache/go" GOTMPDIR="$PWD/.cache/go-tmp" unirtm exec -- wails dev
 '''
 output = "interleaved"
 
 [tasks.build]
 description = "Build Wails GUI application binary with version injection"
 run = '''
+  rm -rf .cache
+  mkdir -p .cache/go .cache/go-tmp
   TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "dev")
   COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
   COMMITFULL=$(git rev-parse HEAD 2>/dev/null || echo "unknown")
   DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
   PKG="github.com/snowdreamtech/unigodesktop/internal/env"
-  unirtm exec -- wails build \
+  GOCACHE="$PWD/.cache/go" GOTMPDIR="$PWD/.cache/go-tmp" unirtm exec -- wails build \
     -ldflags "-s -w \
       -X '${PKG}.GitTag=${TAG}' \
       -X '${PKG}.CommitHash=${COMMIT}' \
