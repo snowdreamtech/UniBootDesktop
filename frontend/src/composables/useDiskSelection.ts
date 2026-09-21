@@ -222,7 +222,22 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             }
             return true;
           });
-          diskList.value = fetched;
+
+          // Smoothly update existing disks in-place to avoid layout flashes
+          const currentMap = new Map(diskList.value.map(d => [d.device, d]));
+          const updatedList: DiskInfo[] = [];
+
+          for (const newDisk of fetched) {
+            const oldDisk = currentMap.get(newDisk.device);
+            if (oldDisk) {
+              // Mutate in-place so Vue reactivity smoothly transitions badges and fields without DOM teardown
+              Object.assign(oldDisk, newDisk);
+              updatedList.push(oldDisk);
+            } else {
+              updatedList.push(newDisk);
+            }
+          }
+          diskList.value = updatedList;
 
           // Preserve single selection if the disk is still connected
           if (previousSelectedDevice) {

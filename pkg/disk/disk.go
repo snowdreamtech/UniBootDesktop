@@ -282,6 +282,11 @@ func HasUnmountedEspPartition(targetDisk string) bool {
 // Ventoy/Cloud Mode, 3rd-party boot type, UniBoot manifest, and unmounted ESP partition status.
 // Strictly avoids relying on user-modifiable volume labels.
 func DetectBootStatus(partitionScheme string, isRealVentoy bool, isCloudMode bool, thirdPartyBoot ThirdPartyBootType, manifest *UniBootManifest, hasUnmountedEsp bool) (string, string) {
+	return DetectBootStatusWithElevation(partitionScheme, isRealVentoy, isCloudMode, thirdPartyBoot, manifest, hasUnmountedEsp, privilege.IsElevated())
+}
+
+// DetectBootStatusWithElevation evaluates the boot status with explicit elevation state.
+func DetectBootStatusWithElevation(partitionScheme string, isRealVentoy bool, isCloudMode bool, thirdPartyBoot ThirdPartyBootType, manifest *UniBootManifest, hasUnmountedEsp bool, isElevated bool) (string, string) {
 	// 1. Highest priority: Official UniBoot Manifest (Magic: UNIBOOT_DISK)
 	if manifest != nil {
 		if manifest.Mode == "cloud" {
@@ -308,8 +313,8 @@ func DetectBootStatus(partitionScheme string, isRealVentoy bool, isCloudMode boo
 	}
 
 	// 5. Unmounted ESP partition detected in unprivileged mode (cannot inspect payload without root)
-	if hasUnmountedEsp && !privilege.IsElevated() {
-		return "未知引导结构 (需提权深度读取)", "needs_privilege"
+	if hasUnmountedEsp && !isElevated {
+		return "待授权", "needs_privilege"
 	}
 
 	// 6. Plain data partition fallback (verified no boot partition or code detected)

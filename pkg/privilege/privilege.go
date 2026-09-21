@@ -56,7 +56,13 @@ func checkIsElevated() bool {
 	}
 
 	// On Unix-like systems (macOS, Linux), EUID == 0 indicates root privilege
-	return os.Geteuid() == 0
+	if os.Geteuid() == 0 {
+		return true
+	}
+
+	// Check if active non-interactive sudo session exists
+	cmd := exec.Command("sudo", "-n", "true")
+	return cmd.Run() == nil
 }
 
 // RunElevated runs a command line with administrator/root privileges across operating systems.
@@ -138,6 +144,14 @@ func ReadSector(devicePath string, numBytes int) ([]byte, error) {
 		}
 	}
 
+	// If direct open failed but process has elevation or sudo access, try sudo dd
+	if IsElevated() && (runtime.GOOS == "darwin" || runtime.GOOS == "linux") {
+		out, errDd := exec.Command("sudo", "-n", "dd", fmt.Sprintf("if=%s", rawDevice), fmt.Sprintf("bs=%d", numBytes), "count=1").Output()
+		if errDd == nil && len(out) >= numBytes {
+			return out[:numBytes], nil
+		}
+	}
+
 	return nil, fmt.Errorf("raw sector read failed: %w", err)
 }
 
@@ -158,9 +172,17 @@ func MountHiddenESP(partitionDevice string) (string, func(), error) {
 		switch runtime.GOOS {
 		case "darwin":
 			_ = exec.Command("diskutil", "unmount", tempDir).Run()
-			_ = exec.Command("umount", "-f", tempDir).Run()
+			if os.Geteuid() == 0 {
+				_ = exec.Command("umount", "-f", tempDir).Run()
+			} else {
+				_ = exec.Command("sudo", "-n", "umount", "-f", tempDir).Run()
+			}
 		case "linux":
-			_ = exec.Command("umount", "-f", tempDir).Run()
+			if os.Geteuid() == 0 {
+				_ = exec.Command("umount", "-f", tempDir).Run()
+			} else {
+				_ = exec.Command("sudo", "-n", "umount", "-f", tempDir).Run()
+			}
 		}
 		_ = os.RemoveAll(tempDir)
 	}
@@ -173,9 +195,15 @@ func MountHiddenESP(partitionDevice string) (string, func(), error) {
 			return tempDir, cleanup, nil
 		}
 
-		// If running with root/elevated privilege, use mount_msdos directly
+		// If running with root/elevated privilege, use mount_msdos directly or via sudo
 		if IsElevated() {
-			outMount, errMount := exec.Command("mount_msdos", "-o", "rdonly", partitionDevice, tempDir).CombinedOutput()
+			var cmd *exec.Cmd
+			if os.Geteuid() == 0 {
+				cmd = exec.Command("mount_msdos", "-o", "rdonly", partitionDevice, tempDir)
+			} else {
+				cmd = exec.Command("sudo", "-n", "mount_msdos", "-o", "rdonly", partitionDevice, tempDir)
+			}
+			outMount, errMount := cmd.CombinedOutput()
 			if errMount == nil {
 				return tempDir, cleanup, nil
 			}
@@ -186,8 +214,13 @@ func MountHiddenESP(partitionDevice string) (string, func(), error) {
 	case "linux":
 		// On Linux, attempt standard mount if elevated
 		if IsElevated() {
-			errMount := exec.Command("mount", "-o", "ro", partitionDevice, tempDir).Run()
-			if errMount == nil {
+			var cmd *exec.Cmd
+			if os.Geteuid() == 0 {
+				cmd = exec.Command("mount", "-o", "ro", partitionDevice, tempDir)
+			} else {
+				cmd = exec.Command("sudo", "-n", "mount", "-o", "ro", partitionDevice, tempDir)
+			}
+			if errMount := cmd.Run(); errMount == nil {
 				return tempDir, cleanup, nil
 			}
 		}

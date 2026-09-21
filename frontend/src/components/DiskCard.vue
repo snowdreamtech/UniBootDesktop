@@ -242,7 +242,7 @@ const bootTooltip = computed(() => {
       return props.disk.thirdPartyBootType;
     }
     if (props.disk.bootStatusCode === 'needs_privilege') {
-      return props.disk.bootStatus || '底层存在未挂载引导分区，请点击顶部盾牌授权以深度读取校验';
+      return props.disk.bootStatus || '需要系统授权以读取引导信息';
     }
     return t('disk.tooltip_third_party_boot');
   }
@@ -258,7 +258,7 @@ const bootSubtype = computed<'hybrid' | 'cloud' | 'thirdparty' | 'needs_privileg
 });
 
 const diskTagLabel = computed(() => {
-  if (props.disk.bootStatusCode === 'needs_privilege') return props.disk.bootStatus || '待提权校验';
+  if (props.disk.bootStatusCode === 'needs_privilege') return props.disk.bootStatus || '待授权';
   if (diskType.value === 'boot') {
     if (bootSubtype.value === 'hybrid') return t('disk.tag_boot_hybrid');
     if (bootSubtype.value === 'cloud') return t('disk.tag_boot_cloud');
@@ -516,6 +516,13 @@ const diskTagLabel = computed(() => {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.5px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.disk-badge.needs_privilege {
+  background: rgba(245, 158, 11, 0.14);
+  color: #f59e0b;
+  border: 1px dashed rgba(245, 158, 11, 0.45);
 }
 
 .disk-badge.boot {

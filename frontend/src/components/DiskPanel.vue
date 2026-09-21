@@ -75,7 +75,7 @@
       </div>
     </transition>
 
-    <div class="disk-list">
+    <transition-group name="disk-item" tag="div" class="disk-list">
       <DiskCard
         v-for="disk in diskList"
         :key="disk.device"
@@ -89,13 +89,14 @@
         @inspect="emit('inspect-disk', disk)"
         @eject="emit('eject-disk', disk)"
       />
-      <div v-if="diskList.length === 0" class="empty-state">
-        <div v-if="isScanningDisks" class="scanning-state">
-          <span class="spin-icon">🔄</span>
-          <span>{{ t('disk.scanning') }}</span>
-        </div>
-        <span v-else>⚠️ {{ t('disk.empty_list') }}</span>
+    </transition-group>
+
+    <div v-if="diskList.length === 0" class="empty-state">
+      <div v-if="isScanningDisks" class="scanning-state">
+        <span class="spin-icon">🔄</span>
+        <span>{{ t('disk.scanning') }}</span>
       </div>
+      <span v-else>⚠️ {{ t('disk.empty_list') }}</span>
     </div>
 
     <button
@@ -150,11 +151,16 @@ const emit = defineEmits<{
 const isPrivileged = ref(false);
 const showPrivilegeModal = ref(false);
 
-const checkPrivilegeStatus = async () => {
+const checkPrivilegeStatus = async (retryCount = 0) => {
   try {
     const wailsAny = window as any;
     if (wailsAny.go?.main?.App?.IsPrivileged) {
       isPrivileged.value = await wailsAny.go.main.App.IsPrivileged();
+      if (!isPrivileged.value) {
+        showPrivilegeModal.value = true;
+      }
+    } else if (retryCount < 10) {
+      setTimeout(() => checkPrivilegeStatus(retryCount + 1), 200);
     }
   } catch (e) {
     console.debug('Privilege check error:', e);
@@ -469,5 +475,17 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   background: #f8fafc;
   border-color: #cbd5e1;
   color: #64748b;
+}
+
+/* Smooth transition for disk cards */
+.disk-item-move,
+.disk-item-enter-active,
+.disk-item-leave-active {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.disk-item-enter-from,
+.disk-item-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
 }
 </style>

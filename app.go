@@ -862,6 +862,7 @@ func (a *App) IsPrivileged() bool {
 // RequestPrivilegeElevation prompts the user for administrator privileges across operating systems.
 func (a *App) RequestPrivilegeElevation() (bool, error) {
 	if privilege.IsElevated() {
+		disk.InvalidateDiskCache()
 		return true, nil
 	}
 
@@ -869,7 +870,7 @@ func (a *App) RequestPrivilegeElevation() (bool, error) {
 	var cmdLine string
 	switch runtime.GOOS {
 	case "darwin", "linux":
-		cmdLine = "id -u"
+		cmdLine = "sudo -v"
 	case "windows":
 		cmdLine = "net session"
 	default:
@@ -883,7 +884,8 @@ func (a *App) RequestPrivilegeElevation() (bool, error) {
 	}
 
 	privilege.ResetElevationCache()
-	logger.Info("Administrator privilege successfully granted by user")
+	disk.InvalidateDiskCache()
+	logger.Info("Administrator privilege successfully granted by user, disk cache invalidated")
 	return true, nil
 }
 

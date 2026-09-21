@@ -351,8 +351,8 @@ func TestDetectBootStatus_Classification(t *testing.T) {
 	assert.Equal(t, "generic_uefi", MapThirdPartyBootCode(BootTypeGenericUEFI))
 
 	// 5. Unmounted ESP partition detected in unprivileged mode
-	status, code = DetectBootStatus("MBR", false, false, BootTypeNone, nil, true)
-	assert.Equal(t, "未知引导结构 (需提权深度读取)", status)
+	status, code = DetectBootStatusWithElevation("MBR", false, false, BootTypeNone, nil, true, false)
+	assert.Equal(t, "待授权", status)
 	assert.Equal(t, "needs_privilege", code)
 
 	// 6. Normal data disks
