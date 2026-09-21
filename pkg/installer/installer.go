@@ -45,6 +45,7 @@ type DeployResult struct {
 	Success     bool                `json:"success"`
 	Mode        string              `json:"mode"`
 	Target      string              `json:"target"`
+	Code        string              `json:"code,omitempty"`
 	Message     string              `json:"message"`
 	Diagnostics *InstallDiagnostics `json:"diagnostics,omitempty"`
 }
@@ -155,7 +156,7 @@ func deployHybridModeWithStage(ctx context.Context, targetDisk string, fsType st
 			errVentoy := fmt.Errorf("cannot create Hybrid Mode: target disk drive is clean and no valid Ventoy directory detected. Please configure Ventoy directory in Settings first (%s)", val.Message)
 			diag := tracker.BuildDiagnostics(errVentoy)
 			logger.Error("Valid Ventoy CLI environment not found", "target", targetDisk, "error", errVentoy)
-			return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errVentoy.Error(), Diagnostics: diag}, errVentoy
+			return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Code: val.Code, Message: errVentoy.Error(), Diagnostics: diag}, errVentoy
 		}
 		mountPoint, err = FormatDiskWithVentoyCli(ctx, ventoyPath, targetDisk, fsType)
 		if err == nil {

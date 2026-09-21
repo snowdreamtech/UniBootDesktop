@@ -25,6 +25,18 @@ export interface BatchDeployProgress {
   etaSec: number;
 }
 
+function getDeployResultMessage(result: { code?: string; message?: string }): string {
+  if (result.code) {
+    return getVentoyValidationMessage({
+      valid: false,
+      version: "",
+      code: result.code,
+      executablePath: "",
+    });
+  }
+  return result.message || "";
+}
+
 export interface UseDeploymentOptions {
   t: (key: any, named?: Record<string, any>) => string;
   showToast: (msg: string, type?: "info" | "success" | "warning" | "error") => void;
@@ -437,7 +449,7 @@ export function useDeployment(options: UseDeploymentOptions) {
         if (resList && resList.length > 0) {
           const res = resList[0];
           success = res.success;
-          resultMsg = res.message || "";
+          resultMsg = getDeployResultMessage(res);
           if (res.diagnostics) {
             latestDiagnostics = res.diagnostics;
           }
@@ -461,7 +473,7 @@ export function useDeployment(options: UseDeploymentOptions) {
           const failed = resList.filter((r) => !r.success);
           if (failed.length > 0) {
             success = false;
-            resultMsg = failed.map((f) => `${f.target}: ${f.message}`).join("\n");
+            resultMsg = failed.map((f) => `${f.target}: ${getDeployResultMessage(f)}`).join("\n");
             if (failed[0].diagnostics) {
               latestDiagnostics = failed[0].diagnostics;
             }
