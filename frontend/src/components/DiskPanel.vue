@@ -33,6 +33,8 @@
           <button
             class="privilege-status-badge"
             :class="{ elevated: isPrivileged, standard: !isPrivileged }"
+            :disabled="isPrivileged"
+            :aria-disabled="isPrivileged"
             :title="isPrivileged ? t('privilege.status_elevated') : t('privilege.btn_elevate')"
             @click="handlePrivilegeBadgeClick"
           >
@@ -230,6 +232,9 @@ onMounted(() => {
 });
 
 const handlePrivilegeBadgeClick = () => {
+  if (isPrivileged.value) {
+    return;
+  }
   showPrivilegeModal.value = true;
 };
 
@@ -287,15 +292,18 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   background: rgba(16, 185, 129, 0.12);
   color: #10b981;
   border-color: rgba(16, 185, 129, 0.3);
+  cursor: default;
+  pointer-events: none;
 }
 
 .privilege-status-badge.standard {
   background: rgba(245, 158, 11, 0.12);
   color: #f59e0b;
   border-color: rgba(245, 158, 11, 0.3);
+  cursor: pointer;
 }
 
-.privilege-status-badge:hover {
+.privilege-status-badge.standard:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
