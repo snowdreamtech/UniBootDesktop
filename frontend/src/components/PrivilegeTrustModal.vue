@@ -1,24 +1,25 @@
 <template>
-  <div v-if="visible" class="privilege-modal-overlay" @click.self="handleCancel">
-    <div class="privilege-modal-card">
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <div class="shield-badge">
-          <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-          </svg>
+  <Teleport to="body">
+    <div v-if="visible" class="privilege-modal-overlay" @click.self="handleCancel">
+      <div class="privilege-modal-card">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <div class="shield-badge">
+            <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <div class="header-text">
+            <h2 class="title">{{ t('privilege.modal_title') }}</h2>
+            <p class="subtitle">{{ t('privilege.modal_subtitle') }}</p>
+          </div>
+          <button class="close-btn" @click="handleCancel" aria-label="Close">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
-        <div class="header-text">
-          <h2 class="title">{{ t('privilege.modal_title') }}</h2>
-          <p class="subtitle">{{ t('privilege.modal_subtitle') }}</p>
-        </div>
-        <button class="close-btn" @click="handleCancel" aria-label="Close">
-          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
 
       <!-- Trust Pillars -->
       <div class="trust-pillars">
@@ -76,8 +77,9 @@
           <span v-else>{{ t('privilege.confirm_btn') }}</span>
         </button>
       </div>
+      </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -132,7 +134,7 @@ const handleConfirm = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 100000;
   padding: 1.5rem;
   animation: fadeIn 0.2s ease-out;
 }
@@ -140,6 +142,7 @@ const handleConfirm = async () => {
 .privilege-modal-card {
   width: 100%;
   max-width: 580px;
+  max-height: 90vh;
   background: var(--color-bg-card, #1a2233);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 1rem;
@@ -214,6 +217,8 @@ const handleConfirm = async () => {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  overflow-y: auto;
+  max-height: calc(90vh - 160px);
 }
 
 .pillar-card {

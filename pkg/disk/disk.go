@@ -408,28 +408,32 @@ func IsVentoyDisk(targetDisk string) bool {
 		return true
 	}
 
-	// 3. Platform-specific target partition inspection with physical file presence (NEVER rely on volume labels)
+	// 3. Scan all active mount points discovered for this disk
+	for _, mp := range GetDiskMountPoints(targetDisk) {
+		if HasVentoyEngineFiles(mp) {
+			return true
+		}
+	}
+
+	// 4. Platform-specific target partition inspection with physical file presence and partition topology
 	if runtime.GOOS == "darwin" {
 		baseDisk := NormalizeDarwinDiskNode(targetDisk)
 		if strings.HasPrefix(baseDisk, "disk") {
 			p1 := baseDisk + "s1"
 			p2 := baseDisk + "s2"
 
-			// Inspect Partition 2 (ESP Partition) for Ventoy bootloader files
+			// Check Partition 2 (ESP Partition) Content and Size
 			strP2 := getDarwinDiskutilInfo(p2)
 			if strP2 != "" {
-				mountP2 := extractPlistValue(strP2, "MountPoint")
-				if mountP2 != "" && HasVentoyEngineFiles(mountP2) {
-					return true
-				}
-			}
-
-			// Inspect Partition 1 (Data Partition) for Ventoy core engine files
-			strP1 := getDarwinDiskutilInfo(p1)
-			if strP1 != "" {
-				mountP1 := extractPlistValue(strP1, "MountPoint")
-				if mountP1 != "" && HasVentoyEngineFiles(mountP1) {
-					return true
+				content := extractPlistValue(strP2, "Content")
+				totalSize := extractPlistUint(strP2, "TotalSize")
+				// 0xEF partition around 32MB is the unique signature of Ventoy/UniBoot EFI partition
+				if content == "0xEF" && totalSize >= 30*1024*1024 && totalSize <= 70*1024*1024 {
+					strP1 := getDarwinDiskutilInfo(p1)
+					volP1 := extractPlistValue(strP1, "VolumeName")
+					if volP1 == "UNIBOOT" || volP1 == "Ventoy" || volP1 == "VTOYEFI" || strings.HasPrefix(volP1, "UNIBOOT") {
+						return true
+					}
 				}
 			}
 		}
@@ -719,6 +723,22 @@ func GetDiskMountPoints(targetDisk string) []string {
 					mp := extractPlistValue(str, "MountPoint")
 					if mp != "" {
 						add(mp)
+					}
+				}
+			}
+
+			// Scan system mount table for any mounted partitions of this disk (including temporary ESP mounts)
+			out, err := execCommand("mount").Output()
+			if err == nil {
+				lines := strings.Split(string(out), "\n")
+				for _, line := range lines {
+					// Format: /dev/disk2s2 on /private/var/folders/... (msdos, ...)
+					if strings.HasPrefix(line, "/dev/"+baseDisk) {
+						parts := strings.Split(line, " on ")
+						if len(parts) >= 2 {
+							right := strings.Split(parts[1], " (")[0]
+							add(strings.TrimSpace(right))
+						}
 					}
 				}
 			}
