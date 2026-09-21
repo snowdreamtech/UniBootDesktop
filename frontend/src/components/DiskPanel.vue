@@ -6,19 +6,42 @@
         <p class="section-desc">{{ t('disk.select_desc') }}</p>
       </div>
 
-      <!-- Privilege Status Shield Badge -->
-      <div class="privilege-badge-wrapper">
+      <div class="header-actions">
+        <!-- Minimalist Header Refresh Action -->
         <button
-          class="privilege-status-badge"
-          :class="{ elevated: isPrivileged, standard: !isPrivileged }"
-          :title="isPrivileged ? t('privilege.status_elevated') : t('privilege.btn_elevate')"
-          @click="handlePrivilegeBadgeClick"
+          class="header-action-btn"
+          :disabled="isScanningDisks"
+          :title="isScanningDisks ? t('disk.scanning') : t('disk.rescan')"
+          @click="emit('refresh-disks')"
         >
-          <svg class="badge-shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          <svg
+            class="header-refresh-svg"
+            :class="{ 'spin-active': isScanningDisks }"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
           </svg>
-          <span>{{ isPrivileged ? t('privilege.status_elevated') : t('privilege.btn_elevate') }}</span>
         </button>
+
+        <!-- Privilege Status Shield Badge -->
+        <div class="privilege-badge-wrapper">
+          <button
+            class="privilege-status-badge"
+            :class="{ elevated: isPrivileged, standard: !isPrivileged }"
+            :title="isPrivileged ? t('privilege.status_elevated') : t('privilege.btn_elevate')"
+            @click="handlePrivilegeBadgeClick"
+          >
+            <svg class="badge-shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            <span>{{ isPrivileged ? t('privilege.status_elevated') : t('privilege.btn_elevate') }}</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -75,6 +98,7 @@
       </div>
     </transition>
 
+    <!-- Disks List -->
     <transition-group v-if="diskList.length > 0" name="disk-item" tag="div" class="disk-list">
       <DiskCard
         v-for="disk in diskList"
@@ -91,26 +115,45 @@
       />
     </transition-group>
 
-    <div v-else class="empty-state">
-      <div v-if="isScanningDisks" class="scanning-state">
-        <span class="spin-icon">🔄</span>
-        <span class="scanning-text">{{ t('disk.scanning') }}</span>
+    <!-- Premium Native Empty & Scanning Canvas -->
+    <div v-else class="empty-state-canvas">
+      <div v-if="isScanningDisks" class="scanner-container">
+        <div class="radar-scan-box">
+          <div class="radar-wave wave-1"></div>
+          <div class="radar-wave wave-2"></div>
+          <div class="radar-core">
+            <svg class="radar-usb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 2v7M14 2v7M8 9h8v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V9z" />
+              <path d="M10 5h4" />
+            </svg>
+          </div>
+        </div>
+        <div class="canvas-text">
+          <h3 class="canvas-title pulse-text">{{ t('disk.scanning') }}</h3>
+          <p class="canvas-desc">{{ t('disk.select_desc') }}</p>
+        </div>
       </div>
-      <div v-else class="no-disks-state">
-        <span class="empty-icon">⚠️</span>
-        <span>{{ t('disk.empty_list') }}</span>
+
+      <div v-else class="empty-notice-box">
+        <div class="empty-icon-wrapper">
+          <svg class="empty-usb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="7" y="2" width="10" height="20" rx="3" />
+            <path d="M10 6h4M10 10h4" />
+            <circle cx="12" cy="16" r="1.5" fill="currentColor" />
+          </svg>
+        </div>
+        <div class="canvas-text">
+          <h3 class="canvas-title">{{ t('disk.empty_list') }}</h3>
+          <p class="canvas-desc">{{ t('disk.select_desc') }}</p>
+        </div>
+        <button class="btn-rescan-subtle" @click="emit('refresh-disks')">
+          <svg class="rescan-subtle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+          </svg>
+          <span>{{ t('disk.rescan') }}</span>
+        </button>
       </div>
     </div>
-
-    <button
-      v-if="!isScanningDisks || diskList.length > 0"
-      class="btn-secondary refresh-btn"
-      :disabled="isScanningDisks"
-      @click="emit('refresh-disks')"
-    >
-      <span :class="['refresh-icon', { 'spin-icon': isScanningDisks }]">🔄</span>
-      <span>{{ isScanningDisks ? t('disk.scanning') : t('disk.rescan') }}</span>
-    </button>
 
     <!-- Privilege Trust Modal -->
     <PrivilegeTrustModal
@@ -373,6 +416,55 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   transform: translateY(-6px);
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.header-action-btn:hover:not(:disabled) {
+  background: var(--subtab-container-bg);
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.header-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.header-refresh-svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.3s ease;
+}
+
+.header-refresh-svg.spin-active {
+  animation: smooth-spin 0.9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  color: var(--accent-cyan);
+}
+
+@keyframes smooth-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .disk-list {
   display: flex;
   flex-direction: column;
@@ -381,72 +473,168 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   min-height: 200px;
   max-height: 480px;
   overflow-y: auto;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
-.empty-state {
+/* Premium Native Empty & Scanning Canvas */
+.empty-state-canvas {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
   flex: 1;
-  min-height: 240px;
+  min-height: 280px;
   background: var(--subtab-container-bg);
-  border: 2px dashed var(--card-border);
-  border-radius: 12px;
-  color: var(--text-muted);
-  font-size: 0.875rem;
-  margin-bottom: 1rem;
-  padding: 2rem;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 2.5rem 1.5rem;
+  margin-bottom: 0.5rem;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.spin-icon {
-  display: inline-block;
-  animation: spin 0.8s linear infinite;
-}
-
-.scanning-state {
+.scanner-container,
+.empty-notice-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  color: var(--accent-cyan);
-  font-weight: 600;
+  justify-content: center;
+  gap: 1.25rem;
+  max-width: 320px;
 }
 
-.scanning-state .spin-icon {
-  font-size: 1.6rem;
-}
-
-.no-disks-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-muted);
-}
-
-.no-disks-state .empty-icon {
-  font-size: 1.6rem;
-}
-
-.refresh-btn {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 0.9rem;
-  font-weight: 700;
-  border-radius: 10px;
+/* Radar pulse animation */
+.radar-scan-box {
+  position: relative;
+  width: 72px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.radar-wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent-cyan);
+  opacity: 0;
+  animation: radar-expand 2.2s cubic-bezier(0.1, 0.2, 0.4, 1) infinite;
+}
+
+.radar-wave.wave-2 {
+  animation-delay: 1.1s;
+}
+
+@keyframes radar-expand {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.radar-core {
+  position: relative;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.2);
+}
+
+.radar-usb-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.empty-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.empty-usb-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.canvas-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.canvas-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.canvas-title.pulse-text {
+  color: var(--accent-cyan);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+.canvas-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.btn-rescan-subtle {
+  display: inline-flex;
+  align-items: center;
   gap: 0.4rem;
+  margin-top: 0.25rem;
+  padding: 0.45rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text-main);
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-rescan-subtle:hover {
+  background: var(--accent-cyan);
+  color: #fff;
+  border-color: var(--accent-cyan);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+}
+
+.rescan-subtle-icon {
+  width: 14px;
+  height: 14px;
 }
 
 /* Light Theme Overrides for DiskPanel */
@@ -498,10 +686,35 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   color: #475569;
 }
 
-[data-theme="light"] .empty-state {
-  background: #f8fafc;
+[data-theme="light"] .header-action-btn {
+  background: #ffffff;
   border-color: #cbd5e1;
   color: #64748b;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="light"] .header-action-btn:hover:not(:disabled) {
+  background: #f8fafc;
+  color: #0284c7;
+  border-color: #0284c7;
+}
+
+[data-theme="light"] .empty-state-canvas {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .btn-rescan-subtle {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="light"] .btn-rescan-subtle:hover {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
 }
 
 /* Smooth transition for disk cards */
