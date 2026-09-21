@@ -77,6 +77,26 @@ if (missingInEnFromTypes.length > 0) {
   missingInEnFromTypes.forEach(k => console.error(`   - "${k}"`));
 }
 
+// Check every locale to prevent non-default languages from silently falling back to English.
+const localeFiles = fs.readdirSync(localesDir).filter(fileName => fileName.endsWith('.ts'));
+for (const localeFile of localeFiles) {
+  const localeKeys = getLocaleKeys(localeFile);
+  const missingKeys = [...declaredKeys].filter(key => !localeKeys.has(key));
+  const extraKeys = [...localeKeys].filter(key => !declaredKeys.has(key));
+
+  if (missingKeys.length > 0) {
+    hasErrors = true;
+    console.error(`\n❌ ${localeFile} is missing ${missingKeys.length} declared key(s):`);
+    missingKeys.forEach(key => console.error(`   - "${key}"`));
+  }
+
+  if (extraKeys.length > 0) {
+    hasErrors = true;
+    console.error(`\n❌ ${localeFile} contains ${extraKeys.length} undeclared key(s):`);
+    extraKeys.forEach(key => console.error(`   - "${key}"`));
+  }
+}
+
 // 3. Scan src/ for t('...') usages in code
 function scanDirectory(dir) {
   let codeUsed = [];
