@@ -168,7 +168,36 @@ func GetLocalUniBootVersion() string {
 			return ver.TagName
 		}
 	}
+
+	// Priority 2: Read baseline version declared in embedded assets
+	if data, err := embeddedAssets.ReadFile("assets/version.json"); err == nil {
+		var ver struct {
+			TagName string `json:"tagName"`
+			Version string `json:"version"`
+		}
+		if err := json.Unmarshal(data, &ver); err == nil {
+			if ver.TagName != "" {
+				return ver.TagName + " (Embedded)"
+			}
+			if ver.Version != "" {
+				return "v" + ver.Version + " (Embedded)"
+			}
+		}
+	}
+
 	return "v1.0.0 (Embedded)"
+}
+
+// GetCleanUniBootVersion returns a normalized SemVer string (e.g. "1.0.0") without 'v' prefix or "(Embedded)" suffix.
+func GetCleanUniBootVersion() string {
+	raw := GetLocalUniBootVersion()
+	raw = strings.TrimSpace(strings.TrimSuffix(raw, "(Embedded)"))
+	raw = strings.TrimPrefix(raw, "v")
+	raw = strings.TrimPrefix(raw, "V")
+	if raw == "" {
+		return "1.0.0"
+	}
+	return raw
 }
 
 // FetchLatestUniBootRelease queries https://api.github.com/repos/snowdreamtech/UniBoot/releases/latest.

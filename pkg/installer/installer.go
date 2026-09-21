@@ -182,7 +182,7 @@ func deployHybridModeWithStage(ctx context.Context, targetDisk string, fsType st
 		logger.Error("Writing firmware assets failed", "target", targetDisk, "error", errExtract)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errExtract.Error(), Diagnostics: diag}, errExtract
 	}
-	_ = disk.WriteUniBootManifest(mountPoint, "hybrid", "1.0.0")
+	_ = disk.WriteUniBootManifest(mountPoint, "hybrid", firmware.GetCleanUniBootVersion())
 	tracker.AddWrittenFiles([]string{
 		filepath.Join(mountPoint, "EFI", "BOOT"),
 		filepath.Join(mountPoint, "ipxe"),
@@ -523,7 +523,7 @@ func deployCloudModeWithStage(ctx context.Context, targetDisk string, fsType str
 		logger.Error("Extracting iPXE cloud firmware assets failed", "target", targetDisk, "error", errExtract)
 		return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errExtract.Error(), Diagnostics: diag}, errExtract
 	}
-	_ = disk.WriteUniBootManifest(efiMountPoint, "cloud", "1.0.0")
+	_ = disk.WriteUniBootManifest(efiMountPoint, "cloud", firmware.GetCleanUniBootVersion())
 	tracker.AddWrittenFiles([]string{
 		filepath.Join(efiMountPoint, "EFI", "BOOT"),
 		filepath.Join(efiMountPoint, "ipxe"),
@@ -538,7 +538,7 @@ func deployCloudModeWithStage(ctx context.Context, targetDisk string, fsType str
 	// Step 4: Ensure Main Data Partition Volume Label is UNIBOOT and sync manifest for zero-privilege recognition
 	if mainMountPoint, errResolve := ResolveMountPoint(targetDisk); errResolve == nil && mainMountPoint != "" {
 		_ = UpdateVolumeLabel(targetDisk, mainMountPoint, "UNIBOOT")
-		_ = disk.WriteUniBootManifest(mainMountPoint, "cloud", "1.0.0")
+		_ = disk.WriteUniBootManifest(mainMountPoint, "cloud", firmware.GetCleanUniBootVersion())
 	}
 
 	msg := fmt.Sprintf("Successfully deployed Cloud Mode to ESP EFI Partition (%s)", efiMountPoint)

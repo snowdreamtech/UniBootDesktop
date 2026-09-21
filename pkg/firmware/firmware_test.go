@@ -262,9 +262,34 @@ func TestGetFirmwareData_RejectsTamperedLocalAsset(t *testing.T) {
 func TestGetLocalUniBootVersion(t *testing.T) {
 	envMutex.Lock()
 	defer envMutex.Unlock()
-	ver := GetLocalUniBootVersion()
-	if ver == "" {
-		t.Errorf("expected non-empty version string")
+
+	// 1. Without local cached version.json, should read from embedded assets/version.json
+	emptyDataDir := t.TempDir()
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", emptyDataDir)
+
+	embeddedVer := GetLocalUniBootVersion()
+	if embeddedVer != "v1.0.0 (Embedded)" {
+		t.Errorf("expected embedded version 'v1.0.0 (Embedded)', got '%s'", embeddedVer)
+	}
+
+	cleanVer := GetCleanUniBootVersion()
+	if cleanVer != "1.0.0" {
+		t.Errorf("expected clean version '1.0.0', got '%s'", cleanVer)
+	}
+
+	// 2. With local cached version.json (simulating online sync)
+	fwDir := filepath.Join(emptyDataDir, "firmware")
+	_ = os.MkdirAll(fwDir, 0755)
+	_ = os.WriteFile(filepath.Join(fwDir, "version.json"), []byte(`{"tagName":"v1.2.5"}`), 0644)
+
+	cachedVer := GetLocalUniBootVersion()
+	if cachedVer != "v1.2.5" {
+		t.Errorf("expected cached version 'v1.2.5', got '%s'", cachedVer)
+	}
+
+	cleanCachedVer := GetCleanUniBootVersion()
+	if cleanCachedVer != "1.2.5" {
+		t.Errorf("expected clean cached version '1.2.5', got '%s'", cleanCachedVer)
 	}
 }
 
@@ -320,6 +345,4 @@ func TestSyncUniBootFirmware(t *testing.T) {
 		t.Errorf("expected TagName to be set")
 	}
 }
-
-
 
