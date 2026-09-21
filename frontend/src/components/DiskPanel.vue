@@ -115,9 +115,26 @@
       />
     </transition-group>
 
-    <!-- Native Calm Empty Canvas (Stable, no layout jumping, silent refresh) -->
+    <!-- Native Empty & Scanning Canvas -->
     <div v-else class="empty-state-canvas">
-      <div class="empty-notice-box">
+      <div v-if="isScanningDisks" class="scanner-container">
+        <div class="radar-scan-box">
+          <div class="radar-wave wave-1"></div>
+          <div class="radar-wave wave-2"></div>
+          <div class="radar-core">
+            <svg class="radar-usb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 2v7M14 2v7M8 9h8v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V9z" />
+              <path d="M10 5h4" />
+            </svg>
+          </div>
+        </div>
+        <div class="canvas-text">
+          <h3 class="canvas-title pulse-text">{{ t('disk.scanning') }}</h3>
+          <p class="canvas-desc">{{ t('disk.select_desc') }}</p>
+        </div>
+      </div>
+
+      <div v-else class="empty-notice-box">
         <div class="empty-icon-wrapper">
           <svg class="empty-usb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <rect x="7" y="2" width="10" height="20" rx="3" />
@@ -131,12 +148,10 @@
         </div>
         <button
           class="btn-rescan-subtle"
-          :disabled="isScanningDisks"
           @click="emit('refresh-disks')"
         >
           <svg
             class="rescan-subtle-icon"
-            :class="{ spinning: isScanningDisks }"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -146,7 +161,7 @@
           >
             <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
           </svg>
-          <span>{{ isScanningDisks ? t('disk.scanning') : t('disk.rescan') }}</span>
+          <span>{{ t('disk.rescan') }}</span>
         </button>
       </div>
     </div>
@@ -500,6 +515,63 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   max-width: 320px;
 }
 
+/* Radar pulse animation */
+.radar-scan-box {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radar-wave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent-cyan);
+  opacity: 0;
+  animation: radar-expand 2.2s cubic-bezier(0.1, 0.2, 0.4, 1) infinite;
+}
+
+.radar-wave.wave-2 {
+  animation-delay: 1.1s;
+}
+
+@keyframes radar-expand {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.radar-core {
+  position: relative;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.2);
+}
+
+.radar-usb-icon {
+  width: 22px;
+  height: 22px;
+}
+
 .empty-icon-wrapper {
   width: 48px;
   height: 48px;
@@ -528,6 +600,20 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   font-weight: 600;
   color: var(--text-main);
   margin: 0;
+}
+
+.canvas-title.pulse-text {
+  color: var(--accent-cyan);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .canvas-desc {
