@@ -75,7 +75,7 @@
       </div>
     </transition>
 
-    <transition-group name="disk-item" tag="div" class="disk-list">
+    <transition-group v-if="diskList.length > 0" name="disk-item" tag="div" class="disk-list">
       <DiskCard
         v-for="disk in diskList"
         :key="disk.device"
@@ -91,12 +91,15 @@
       />
     </transition-group>
 
-    <div v-if="diskList.length === 0" class="empty-state">
+    <div v-else class="empty-state">
       <div v-if="isScanningDisks" class="scanning-state">
         <span class="spin-icon">🔄</span>
-        <span>{{ t('disk.scanning') }}</span>
+        <span class="scanning-text">{{ t('disk.scanning') }}</span>
       </div>
-      <span v-else>⚠️ {{ t('disk.empty_list') }}</span>
+      <div v-else class="no-disks-state">
+        <span class="empty-icon">⚠️</span>
+        <span>{{ t('disk.empty_list') }}</span>
+      </div>
     </div>
 
     <button
@@ -104,8 +107,8 @@
       :disabled="isScanningDisks"
       @click="emit('refresh-disks')"
     >
-      <span class="refresh-icon">🔄</span>
-      <span>{{ isScanningDisks ? t('disk.scanning') : t('disk.rescan') }}</span>
+      <span :class="['refresh-icon', { 'spin-icon': isScanningDisks }]">🔄</span>
+      <span>{{ diskList.length === 0 && isScanningDisks ? t('disk.rescan') : (isScanningDisks ? t('disk.scanning') : t('disk.rescan')) }}</span>
     </button>
 
     <!-- Privilege Trust Modal -->
@@ -382,14 +385,20 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
 
 .empty-state {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 180px;
-  background: var(--btn-sec-bg);
+  gap: 0.75rem;
+  flex: 1;
+  min-height: 240px;
+  background: var(--subtab-container-bg);
   border: 2px dashed var(--card-border);
   border-radius: 12px;
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  padding: 2rem;
+  text-align: center;
 }
 
 @keyframes spin {
@@ -404,10 +413,27 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
 
 .scanning-state {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   color: var(--accent-cyan);
   font-weight: 600;
+}
+
+.scanning-state .spin-icon {
+  font-size: 1.6rem;
+}
+
+.no-disks-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+}
+
+.no-disks-state .empty-icon {
+  font-size: 1.6rem;
 }
 
 .refresh-btn {
