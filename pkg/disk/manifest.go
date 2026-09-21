@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
+	"strings"
 	"time"
 )
 
@@ -126,3 +128,65 @@ func WriteUniBootManifest(mountPoint string, mode string, version string) error 
 
 	return nil
 }
+
+// GetDiskUniBootManifest inspects mounted partitions of targetDisk and returns the valid UniBoot manifest if present.
+func GetDiskUniBootManifest(targetDisk string) *UniBootManifest {
+	if targetDisk == "" {
+		return nil
+	}
+
+	// 1. Direct mount point check
+	if m, err := ReadUniBootManifest(targetDisk); err == nil && m != nil {
+		return m
+	}
+
+	// 2. Darwin multi-partition check (p1 and p2)
+	if runtime.GOOS == "darwin" {
+		baseDisk := NormalizeDarwinDiskNode(targetDisk)
+		if strings.HasPrefix(baseDisk, "disk") {
+			for _, p := range []string{baseDisk + "s1", baseDisk + "s2"} {
+				str := getDarwinDiskutilInfo(p)
+				if str != "" {
+					mp := extractPlistValue(str, "MountPoint")
+					if mp != "" {
+						if m, err := ReadUniBootManifest(mp); err == nil && m != nil {
+							return m
+						}
+					}
+				}
+			}
+		}
+	} else if runtime.GOOS == "linux" {
+		if strings.HasPrefix(targetDisk, "/dev/") {
+			out, err := execCommand("lsblk", "-o", "MOUNTPOINT", "-n", "-l", targetDisk).Output()
+			if err == nil {
+				for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
+					mp := strings.TrimSpace(line)
+					if mp != "" {
+						if m, err := ReadUniBootManifest(mp); err == nil && m != nil {
+							return m
+						}
+					}
+				}
+			}
+		}
+	} else if runtime.GOOS == "windows" {
+		baseDisk := filepath.Base(targetDisk)
+		safeDisk := strings.ReplaceAll(baseDisk, "'", "''")
+		out, err := execCommand("powershell", "-NoProfile", "-Command",
+			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber | Get-Volume | Select-Object -ExpandProperty DriveLetter", safeDisk)).Output()
+		if err == nil {
+			for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
+				letter := strings.TrimSpace(line)
+				if letter != "" {
+					if m, err := ReadUniBootManifest(letter + ":\\"); err == nil && m != nil {
+						return m
+					}
+				}
+			}
+		}
+	}
+
+	return nil
+}
+

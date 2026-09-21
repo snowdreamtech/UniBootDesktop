@@ -109,6 +109,8 @@ type DiskInfo struct {
 	IsRealVentoy      bool   `json:"isRealVentoy"`      // True ONLY if drive contains Ventoy MBR Sector 0 signature
 	IsCloudMode           bool   `json:"isCloudMode"`           // True if drive is formatted in Cloud Mode (iPXE ESP Cloud Pure)
 	IsGenericBoot     bool   `json:"isGenericBoot"`     // True if drive contains generic 3rd-party bootloader (Rufus/PE/ISO)
+	UniBootVersion    string `json:"unibootVersion,omitempty"` // Official UniBoot firmware version (e.g. 1.0.0)
+	UniBootMode       string `json:"unibootMode,omitempty"`    // Official UniBoot deployment mode ("cloud" or "hybrid")
 	MountPoint        string `json:"mountPoint"`        // Mount point or volume path (e.g. /Volumes/UNTITLED, E:\)
 }
 
@@ -190,13 +192,16 @@ func InferControllerVendor(vendorID string, productID string, vendor string) str
 	return "Standard Controller"
 }
 
-// DetectBootStatus evaluates the boot status text based on partition scheme, volume label, Ventoy/Cloud Mode, and generic boot flags.
-func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isCloudMode bool, isGenericBoot bool) string {
-	if isRealVentoy {
-		return "Ventoy / UniBoot (混合模式)"
-	}
+// DetectBootStatus evaluates the boot status text based on partition scheme, volume label, Ventoy/Cloud Mode, generic boot flags, and UniBoot manifest.
+func DetectBootStatus(volName string, partitionScheme string, isRealVentoy bool, isCloudMode bool, isGenericBoot bool, manifest *UniBootManifest) string {
 	if isCloudMode {
 		return "UniBoot (1秒极速云引导盘)"
+	}
+	if isRealVentoy {
+		if manifest != nil && manifest.Mode == "hybrid" {
+			return "UniBoot (混合模式引导盘)"
+		}
+		return "原生 Ventoy 启动盘 (可无损升级)"
 	}
 	if isGenericBoot {
 		return "第三方引导盘 (Rufus / PE / ISO)"
@@ -1217,14 +1222,22 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		}
 
 		// Use IsRealVentoyDisk which correctly handles hybrid mode detection
+		manifest := GetDiskUniBootManifest(devNode)
 		isRealVentoy := IsRealVentoyDisk(devNode)
 		isCloudMode := IsCloudModeDisk(devNode)
+		if manifest != nil {
+			if manifest.Mode == "cloud" {
+				isCloudMode = true
+			} else if manifest.Mode == "hybrid" {
+				isRealVentoy = true
+			}
+		}
 		isGenericBoot := false
 		if !isCloudMode && !isRealVentoy {
 			isGenericBoot = IsGenericBootDisk(devNode)
 		}
 
-		bootStatusStr := DetectBootStatus(volName, partitionScheme, isRealVentoy, isCloudMode, isGenericBoot)
+		bootStatusStr := DetectBootStatus(volName, partitionScheme, isRealVentoy, isCloudMode, isGenericBoot, manifest)
 		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
 
 		// Detect if this is a system disk
@@ -1258,8 +1271,10 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
 			IsRealVentoy:      isRealVentoy,
-			IsCloudMode:           isCloudMode,
+			IsCloudMode:       isCloudMode,
 			IsGenericBoot:     isGenericBoot,
+			UniBootVersion:    func() string { if manifest != nil { return manifest.Version }; return "" }(),
+			UniBootMode:       func() string { if manifest != nil { return manifest.Mode }; return "" }(),
 			MountPoint:        volPath,
 		})
 	}
@@ -1438,6 +1453,23 @@ func getLinuxDisks() ([]DiskInfo, error) {
 		// Detect if this is a system disk
 		isSystemDisk, _ := isSystemDiskLinux("/dev/" + dev.Name)
 
+		// Use devPath for disk type detection (MBR check), mountPath for file checks
+		manifestLinux := GetDiskUniBootManifest(devPath)
+		if manifestLinux == nil && mountPath != "" {
+			manifestLinux = GetDiskUniBootManifest(mountPath)
+		}
+		isRealVentoyLinux := IsRealVentoyDisk(devPath)
+		isCloudModeLinux := IsCloudModeDisk(devPath)
+		if manifestLinux != nil {
+			if manifestLinux.Mode == "cloud" {
+				isCloudModeLinux = true
+			} else if manifestLinux.Mode == "hybrid" {
+				isRealVentoyLinux = true
+			}
+		}
+		isGenBootLinux := IsGenericBootDisk(mountPath)
+		bootStatusLinux := DetectBootStatus(label, partitionScheme, isRealVentoyLinux, isCloudModeLinux, isGenBootLinux, manifestLinux)
+
 		disks = append(disks, DiskInfo{
 			Device:            mountPath,
 			Name:              label,
@@ -1458,14 +1490,15 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      "500 mA",
 			SectorSize:        "512 Bytes (512n/512e)",
 			TransportProtocol: "BOT (Bulk-Only Transport)",
-			// Use devPath for disk type detection (MBR check), mountPath for file checks
-			BootStatus:        DetectBootStatus(label, partitionScheme, IsRealVentoyDisk(devPath), IsCloudModeDisk(devPath), IsGenericBootDisk(mountPath)),
+			BootStatus:        bootStatusLinux,
 			ControllerVendor:  InferControllerVendor("", "", vendor),
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
-			IsRealVentoy:      IsRealVentoyDisk(devPath),
-			IsCloudMode:       IsCloudModeDisk(devPath),
-			IsGenericBoot:     IsGenericBootDisk(mountPath),
+			IsRealVentoy:      isRealVentoyLinux,
+			IsCloudMode:       isCloudModeLinux,
+			IsGenericBoot:     isGenBootLinux,
+			UniBootVersion:    func() string { if manifestLinux != nil { return manifestLinux.Version }; return "" }(),
+			UniBootMode:       func() string { if manifestLinux != nil { return manifestLinux.Mode }; return "" }(),
 			MountPoint:        mountPath,
 		})
 	}
@@ -1537,6 +1570,19 @@ func getWindowsDisks() ([]DiskInfo, error) {
 		// Detect if this is a system disk
 		isSystemDisk, _ := isSystemDiskWindows(driveLetter)
 
+		manifestWin := GetDiskUniBootManifest(driveLetter)
+		isRealVentoyWin := IsRealVentoyDisk(driveLetter)
+		isCloudModeWin := IsCloudModeDisk(driveLetter)
+		if manifestWin != nil {
+			if manifestWin.Mode == "cloud" {
+				isCloudModeWin = true
+			} else if manifestWin.Mode == "hybrid" {
+				isRealVentoyWin = true
+			}
+		}
+		isGenBootWin := IsGenericBootDisk(driveLetter)
+		bootStatusWin := DetectBootStatus(displayName, "GPT / MBR", isRealVentoyWin, isCloudModeWin, isGenBootWin, manifestWin)
+
 		disks = append(disks, DiskInfo{
 			Device:            driveLetter,
 			Name:              displayName,
@@ -1557,13 +1603,15 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			BusPowerUsed:      "500 mA",
 			SectorSize:        "512 Bytes (512n/512e)",
 			TransportProtocol: "BOT (Bulk-Only Transport)",
-			BootStatus:        DetectBootStatus(displayName, "GPT / MBR", IsRealVentoyDisk(driveLetter), IsCloudModeDisk(driveLetter), IsGenericBootDisk(driveLetter)),
+			BootStatus:        bootStatusWin,
 			ControllerVendor:  InferControllerVendor("", "", "Generic"),
 			IsFakeUsb3:        isFake,
 			ProtocolCode:      protoCode,
-			IsRealVentoy:      IsRealVentoyDisk(driveLetter),
-			IsCloudMode:           IsCloudModeDisk(driveLetter),
-			IsGenericBoot:     IsGenericBootDisk(driveLetter),
+			IsRealVentoy:      isRealVentoyWin,
+			IsCloudMode:       isCloudModeWin,
+			IsGenericBoot:     isGenBootWin,
+			UniBootVersion:    func() string { if manifestWin != nil { return manifestWin.Version }; return "" }(),
+			UniBootMode:       func() string { if manifestWin != nil { return manifestWin.Mode }; return "" }(),
 			MountPoint:        driveLetter,
 		})
 	}
