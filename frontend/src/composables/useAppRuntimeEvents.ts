@@ -17,6 +17,7 @@ export interface UseAppRuntimeEventsOptions {
   isDeploying: Ref<boolean>;
   isAboutOpen: Ref<boolean>;
   addIsoFilesByPaths: (paths: string[]) => void;
+  batchDeployInfo?: Ref<any>;
 }
 
 export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
@@ -36,6 +37,7 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
     isDeploying,
     isAboutOpen,
     addIsoFilesByPaths,
+    batchDeployInfo,
   } = options;
 
   onMounted(() => {
@@ -63,7 +65,10 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
             currentFile: data.currentFile,
             progress: data.progress.toFixed(1)
           });
-          deployProgress.value = Math.min(99, Math.max(50, Math.floor(50 + data.progress / 2)));
+          // Only allow single-disk ISO progress to control deployProgress if not in batch deployment mode
+          if (!batchDeployInfo?.value) {
+            deployProgress.value = Math.min(99, Math.max(50, Math.floor(50 + data.progress / 2)));
+          }
           if (data.speedMBps !== undefined) deploySpeedMBps.value = data.speedMBps;
           if (data.elapsedSec !== undefined) deployElapsedSec.value = data.elapsedSec;
           if (data.etaSec !== undefined) deployEtaSec.value = data.etaSec;

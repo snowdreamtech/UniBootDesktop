@@ -357,7 +357,10 @@ func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPath
 	progressCb := func(p installer.IsoCopyProgress) {
 		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
 	}
-	return installer.DeployHybridModeBatchWithExpectedDisks(deployCtx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected)
+	batchProgressCb := func(p installer.BatchDeployProgress) {
+		wailsRuntime.EventsEmit(a.ctx, "deploy-batch-progress", p)
+	}
+	return installer.DeployHybridModeBatchWithAllProgress(deployCtx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected, batchProgressCb)
 }
 
 // DeployCloudMode triggers Cloud Mode (Cloud Pure Mode) with customizable file system.
@@ -386,6 +389,7 @@ func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected
 
 	// Create batch progress callback to emit real-time progress events with disk-level details
 	progressCallback := func(progress installer.BatchDeployProgress) {
+		wailsRuntime.EventsEmit(a.ctx, "deploy-batch-progress", progress)
 		wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-batch-progress", progress)
 	}
 

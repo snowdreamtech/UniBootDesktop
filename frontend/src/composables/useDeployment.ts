@@ -366,18 +366,23 @@ export function useDeployment(options: UseDeploymentOptions) {
     let unsubCloudProgress: (() => void) | null = null;
     let unsubBatchProgress: (() => void) | null = null;
 
-    if (activeMode.value === 'cloud' && window.runtime && window.runtime.EventsOn) {
-      // Listen for batch deployment progress (multi-disk)
-      window.runtime.EventsOn('cloud-deploy-batch-progress', (progress: BatchDeployProgress) => {
+    if (window.runtime && window.runtime.EventsOn) {
+      // Listen for batch deployment progress (multi-disk, unified across modes)
+      const onBatchProgress = (progress: BatchDeployProgress) => {
         deployProgress.value = progress.overallProgress;
         batchDeployInfo.value = progress;
         // Update speed and time information from batch progress
         deploySpeedMBps.value = progress.speedMBps;
         deployElapsedSec.value = progress.elapsedSec;
         deployEtaSec.value = progress.etaSec;
-      });
+      };
+
+      window.runtime.EventsOn('deploy-batch-progress', onBatchProgress);
+      window.runtime.EventsOn('cloud-deploy-batch-progress', onBatchProgress);
+
       unsubBatchProgress = () => {
         if (window.runtime && window.runtime.EventsOff) {
+          window.runtime.EventsOff('deploy-batch-progress');
           window.runtime.EventsOff('cloud-deploy-batch-progress');
         }
       };

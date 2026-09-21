@@ -87,6 +87,11 @@ func CopyIsoFilesToDiskWithContext(ctx context.Context, mountPoint string, isoPa
 		var copiedTotal int64
 		startTime := time.Now()
 
+		windowStartTime := startTime
+		windowStartBytes := int64(0)
+		currentInstantSpeed := 0.0
+		currentEtaSec := int64(0)
+
 		for {
 			select {
 			case <-ctx.Done():
@@ -111,14 +116,33 @@ func CopyIsoFilesToDiskWithContext(ctx context.Context, mountPoint string, isoPa
 					pct := (float64(copiedTotal) / float64(totalSize)) * 100.0
 					elapsedDuration := time.Since(startTime)
 					elapsedSec := int64(elapsedDuration.Seconds())
-					
-					speedMBps := 0.0
-					etaSec := int64(0)
-					if elapsedDuration.Seconds() > 0.1 {
-						speedMBps = (float64(copiedTotal) / (1024 * 1024)) / elapsedDuration.Seconds()
-						if speedMBps > 0 {
+
+					// Update instantaneous speed using a 500ms sliding window
+					windowDuration := time.Since(windowStartTime)
+					if windowDuration >= 500*time.Millisecond {
+						windowBytes := copiedTotal - windowStartBytes
+						instantSpeed := (float64(windowBytes) / (1024 * 1024)) / windowDuration.Seconds()
+
+						// Lightly smooth with previous reading to prevent wild spikes while keeping it responsive
+						if currentInstantSpeed > 0 {
+							currentInstantSpeed = 0.7*instantSpeed + 0.3*currentInstantSpeed
+						} else {
+							currentInstantSpeed = instantSpeed
+						}
+
+						if currentInstantSpeed > 0 {
 							remainingBytes := totalSize - copiedTotal
-							etaSec = int64((float64(remainingBytes) / (1024 * 1024)) / speedMBps)
+							currentEtaSec = int64((float64(remainingBytes) / (1024 * 1024)) / currentInstantSpeed)
+						}
+
+						windowStartTime = time.Now()
+						windowStartBytes = copiedTotal
+					} else if currentInstantSpeed == 0 && elapsedDuration.Seconds() > 0.1 {
+						// Initial fallback before first 500ms window completes
+						currentInstantSpeed = (float64(copiedTotal) / (1024 * 1024)) / elapsedDuration.Seconds()
+						if currentInstantSpeed > 0 {
+							remainingBytes := totalSize - copiedTotal
+							currentEtaSec = int64((float64(remainingBytes) / (1024 * 1024)) / currentInstantSpeed)
 						}
 					}
 
@@ -129,9 +153,9 @@ func CopyIsoFilesToDiskWithContext(ctx context.Context, mountPoint string, isoPa
 						CopiedBytes:   copiedTotal,
 						FileSizeBytes: totalSize,
 						Progress:      pct,
-						SpeedMBps:     speedMBps,
+						SpeedMBps:     currentInstantSpeed,
 						ElapsedSec:    elapsedSec,
-						EtaSec:        etaSec,
+						EtaSec:        currentEtaSec,
 					})
 				}
 			}

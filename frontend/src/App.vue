@@ -377,6 +377,7 @@ useAppRuntimeEvents({
   isDeploying,
   isAboutOpen,
   addIsoFilesByPaths,
+  batchDeployInfo,
 });
 </script>
 
