@@ -4,6 +4,7 @@
 package disk
 
 import (
+	"io/fs"
 	"os"
 	"path/filepath"
 	"testing"
@@ -11,6 +12,15 @@ import (
 
 	"github.com/stretchr/testify/assert"
 )
+
+type fakeDirEntry struct {
+	name string
+}
+
+func (f fakeDirEntry) Name() string { return f.name }
+func (f fakeDirEntry) IsDir() bool { return false }
+func (f fakeDirEntry) Type() fs.FileMode { return 0 }
+func (f fakeDirEntry) Info() (os.FileInfo, error) { return nil, nil }
 
 func TestIsIgnoredVolume(t *testing.T) {
 	tests := []struct {

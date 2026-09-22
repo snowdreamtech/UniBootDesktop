@@ -82,7 +82,7 @@ func IsIgnoredVolume(name string) bool {
 // DiskInfo represents metadata about an available disk drive.
 type DiskInfo struct {
 	Device            string `json:"device"`            // Device path (e.g., /dev/disk2, E:)
-	Name              string `json:"name"`              // Friendly label / vendor model
+	Name              string `json:"name"`              // Friendly display name only; not a trusted device identity
 	Size              uint64 `json:"size"`              // Total capacity in bytes
 	Formatted         string `json:"formatted"`         // Human readable size string
 	FreeSpace         uint64 `json:"freeSpace"`         // Free available space in bytes
@@ -1061,6 +1061,15 @@ func getVolumeSnapshot() string {
 
 // GetRemovableDisks lists removable USB drives safely while protecting system drives.
 func GetRemovableDisks() ([]DiskInfo, error) {
+	diskCacheMutex.Lock()
+	if diskCacheList != nil && !diskCacheTime.IsZero() && time.Since(diskCacheTime) < 5*time.Second {
+		cached := make([]DiskInfo, len(diskCacheList))
+		copy(cached, diskCacheList)
+		diskCacheMutex.Unlock()
+		return cached, nil
+	}
+	diskCacheMutex.Unlock()
+
 	currentSnapshot := getVolumeSnapshot()
 
 	diskCacheMutex.Lock()
@@ -1703,7 +1712,6 @@ func getLinuxDisks() ([]DiskInfo, error) {
 
 		devPath := "/dev/" + dev.Name
 		mountPath := devPath
-		label := dev.Label
 		fileSystem := dev.Fstype
 		freeSpace := dev.Fsavail
 		partitionScheme := "GPT / MBR"
@@ -1713,30 +1721,36 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			partitionScheme = "MBR (Master Boot Record)"
 		}
 
-		if label == "" {
-			label = strings.TrimSpace(dev.Vendor + " " + dev.Model)
+		displayName := strings.TrimSpace(dev.Vendor + " " + dev.Model)
+		if displayName == "" {
+			displayName = dev.Name
 		}
-		if label == "" {
-			label = dev.Name
+		if displayName == "" {
+			displayName = "USB Storage Device"
 		}
 
+		// Labels are UI metadata only. They must never be used as device identity,
+		// cache key, or safety gate. Prefer the real block device path instead.
 		for _, child := range dev.Children {
-			if child.MountPoint != "" && !IsIgnoredVolume(child.Label) {
+			if child.MountPoint != "" {
 				mountPath = child.MountPoint
-				if child.Label != "" {
-					label = child.Label
-				}
 				if child.Fstype != "" {
 					fileSystem = child.Fstype
 				}
 				if child.Fsavail > 0 {
 					freeSpace = child.Fsavail
 				}
+				if displayName == "USB Storage Device" || displayName == dev.Name {
+					baseMount := filepath.Base(child.MountPoint)
+					if baseMount != "" && !IsIgnoredVolume(baseMount) {
+						displayName = baseMount
+					}
+				}
 				break
 			}
 		}
 
-		if IsIgnoredVolume(label) {
+		if IsIgnoredVolume(filepath.Base(mountPath)) {
 			continue
 		}
 
@@ -1773,7 +1787,7 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			freeFormatted = formattedSize
 		}
 
-		isFake := CheckFakeUsb3(label, usbVer, usbSpeed)
+		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
 		protoCode := MapProtocolCode(usbVer, usbSpeed)
 
 		// Detect if this is a system disk
@@ -1807,7 +1821,7 @@ func getLinuxDisks() ([]DiskInfo, error) {
 
 		disks = append(disks, DiskInfo{
 			Device:             mountPath,
-			Name:               label,
+			Name:               displayName,
 			Size:               dev.Size,
 			Formatted:          formattedSize,
 			FreeSpace:          freeSpace,
