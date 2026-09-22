@@ -122,7 +122,6 @@
       }
 
       .startup-progress {
-        position: relative;
         width: 148px;
         height: 3px;
         margin-top: 5px;
@@ -131,14 +130,12 @@
         border-radius: 99px;
       }
 
-      .startup-progress::after {
-        position: absolute;
-        inset: 0;
-        width: 42%;
+      .startup-progress-fill {
+        width: var(--startup-progress, 8%);
+        height: 100%;
         border-radius: inherit;
-        background: linear-gradient(90deg, transparent, #38bdf8, transparent);
-        content: "";
-        animation: startup-progress 1.25s ease-in-out infinite;
+        background: linear-gradient(90deg, #38bdf8, #2563eb);
+        transition: width 260ms ease-out;
       }
 
       @keyframes startup-rise {
@@ -164,20 +161,12 @@
         }
       }
 
-      @keyframes startup-progress {
-        from {
-          transform: translateX(-120%);
-        }
-        to {
-          transform: translateX(360%);
-        }
-      }
-
       @media (prefers-reduced-motion: reduce) {
         .startup-content,
         .startup-mark::after,
-        .startup-progress::after {
+        .startup-progress-fill {
           animation: none;
+          transition: none;
         }
       }
     </style>
@@ -202,7 +191,9 @@
           </svg>
         </div>
         <h1 class="startup-title">UniGoDesktop</h1>
-        <div class="startup-progress" aria-hidden="true"></div>
+        <div class="startup-progress" aria-hidden="true">
+          <div class="startup-progress-fill"></div>
+        </div>
       </div>
     </div>
     <div id="app"></div>
