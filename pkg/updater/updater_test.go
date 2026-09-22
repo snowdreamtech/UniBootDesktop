@@ -38,3 +38,13 @@ func TestCopyWithLimitRejectsOversizedResponse(t *testing.T) {
 		t.Fatal("expected oversized response to be rejected")
 	}
 }
+
+func TestFindSHA256Checksum(t *testing.T) {
+	checksum, err := findSHA256Checksum([]byte("abc123  UniGoDesktop.dmg\n"), "UniGoDesktop.dmg")
+	if err != nil {
+		t.Fatalf("findSHA256Checksum returned error: %v", err)
+	}
+	if checksum != "abc123" {
+		t.Fatalf("findSHA256Checksum = %q, want %q", checksum, "abc123")
+	}
+}

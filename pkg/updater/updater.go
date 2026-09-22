@@ -5,6 +5,8 @@ package updater
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"net/http"
@@ -235,9 +237,33 @@ func PerformGuiUpdate(ctx context.Context, proxyPrefix string, progressCb func(p
 		return nil, fmt.Errorf("no suitable GUI release package found for %s/%s", goos, goarch)
 	}
 
+	var checksumAsset *updater.ReleaseAsset
+	for _, asset := range rel.Assets {
+		if strings.EqualFold(asset.Name, "checksums.txt") {
+			checksumAsset = &asset
+			break
+		}
+	}
+	if checksumAsset == nil {
+		return nil, fmt.Errorf("release does not contain checksums.txt")
+	}
+
 	downloadDir := filepath.Join(env.GetDataDir(), "downloads")
 	_ = os.MkdirAll(downloadDir, 0755)
 	destPath := filepath.Join(downloadDir, bestAsset.Name)
+	checksumPath := destPath + ".checksums"
+	defer os.Remove(checksumPath)
+	if err := DownloadFileWithProxy(ctx, checksumAsset.BrowserDownloadURL, checksumPath, proxyPrefix); err != nil {
+		return nil, fmt.Errorf("download checksums: %w", err)
+	}
+	checksumData, err := os.ReadFile(checksumPath)
+	if err != nil {
+		return nil, fmt.Errorf("read checksums: %w", err)
+	}
+	expectedChecksum, err := findSHA256Checksum(checksumData, bestAsset.Name)
+	if err != nil {
+		return nil, err
+	}
 
 	if progressCb != nil {
 		progressCb(GuiUpdateProgress{
@@ -265,6 +291,10 @@ func PerformGuiUpdate(ctx context.Context, proxyPrefix string, progressCb func(p
 
 	if err != nil {
 		return nil, err
+	}
+	if err := verifySHA256File(destPath, expectedChecksum); err != nil {
+		_ = os.Remove(destPath)
+		return nil, fmt.Errorf("verify GUI update package: %w", err)
 	}
 
 	return &GuiUpdateResult{
@@ -335,4 +365,40 @@ func copyWithLimit(dst io.Writer, src io.Reader, maxBytes int64) (int64, error) 
 		return bytesCopied, fmt.Errorf("download exceeds maximum size of %d bytes", maxBytes)
 	}
 	return bytesCopied, nil
+}
+
+func findSHA256Checksum(data []byte, assetName string) (string, error) {
+	for _, line := range strings.Split(string(data), "\n") {
+		fields := strings.Fields(line)
+		if len(fields) < 2 || strings.TrimPrefix(fields[1], "*") != assetName {
+			continue
+		}
+		return fields[0], nil
+	}
+	return "", fmt.Errorf("checksum for %s not found", assetName)
+}
+
+func verifySHA256File(filePath string, expected string) error {
+	expected = strings.TrimSpace(expected)
+	if len(expected) != sha256.Size*2 {
+		return fmt.Errorf("invalid SHA-256 checksum length")
+	}
+	if _, err := hex.DecodeString(expected); err != nil {
+		return fmt.Errorf("invalid SHA-256 checksum: %w", err)
+	}
+
+	file, err := os.Open(filePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	hasher := sha256.New()
+	if _, err := io.Copy(hasher, file); err != nil {
+		return err
+	}
+	actual := hex.EncodeToString(hasher.Sum(nil))
+	if !strings.EqualFold(actual, expected) {
+		return fmt.Errorf("checksum mismatch: expected %s, got %s", expected, actual)
+	}
+	return nil
 }
