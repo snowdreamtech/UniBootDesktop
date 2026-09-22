@@ -1666,7 +1666,6 @@ type linuxBlockDevice struct {
 	Ro         bool               `json:"ro"`
 	Type       string             `json:"type"`
 	MountPoint string             `json:"mountpoint"`
-	Label      string             `json:"label"`
 	Model      string             `json:"model"`
 	Vendor     string             `json:"vendor"`
 	Tran       string             `json:"tran"`
@@ -1681,7 +1680,7 @@ type linuxLsblkOutput struct {
 
 func getLinuxDisks() ([]DiskInfo, error) {
 	var disks []DiskInfo
-	cmd := execCommand("lsblk", "-J", "-b", "-o", "NAME,SIZE,FSAVAIL,RM,RO,TYPE,MOUNTPOINT,LABEL,MODEL,VENDOR,TRAN,FSTYPE,PTTYPE")
+	cmd := execCommand("lsblk", "-J", "-b", "-o", "NAME,SIZE,FSAVAIL,RM,RO,TYPE,MOUNTPOINT,MODEL,VENDOR,TRAN,FSTYPE,PTTYPE")
 	output, err := cmd.Output()
 	if err != nil {
 		return disks, nil
