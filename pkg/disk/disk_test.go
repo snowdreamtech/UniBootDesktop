@@ -89,6 +89,33 @@ func TestValidateTargetDisk(t *testing.T) {
 	assert.NoError(t, ValidateTargetDisk("/Volumes/MyUSBKey"))
 }
 
+func TestParseWindowsDiskNumber(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   string
+		want    int
+		wantErr bool
+	}{
+		{name: "physicaldrive prefix", input: `\\.\PhysicalDrive3`, want: 3},
+		{name: "disk prefix", input: "disk7", want: 7},
+		{name: "numeric disk id", input: "12", want: 12},
+		{name: "unsafe label", input: "MyUSBKey", wantErr: true},
+		{name: "system path", input: "C:", wantErr: true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := parseWindowsDiskNumber(tt.input)
+			if tt.wantErr {
+				assert.Error(t, err)
+				return
+			}
+			assert.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
 func TestValidateUserEjectTarget(t *testing.T) {
 	assert.Error(t, ValidateUserEjectTarget(""))
 	assert.Error(t, ValidateUserEjectTarget("/"))

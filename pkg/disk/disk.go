@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -77,6 +78,40 @@ func IsIgnoredVolume(name string) bool {
 		}
 	}
 	return false
+}
+
+// ParseWindowsDiskNumber validates and extracts a numeric Windows disk index from a raw device path.
+// It accepts values like \\.\PhysicalDrive3, PhysicalDrive3, disk7, and 12, but rejects labels and unsafe strings.
+func ParseWindowsDiskNumber(targetDisk string) (int, error) {
+	trimmed := strings.TrimSpace(targetDisk)
+	if trimmed == "" {
+		return 0, fmt.Errorf("empty windows disk identifier")
+	}
+
+	normalized := filepath.Base(trimmed)
+	normalized = strings.TrimPrefix(normalized, `\\.\`)
+	normalized = strings.TrimPrefix(normalized, `\\?\`)
+	normalized = strings.TrimPrefix(normalized, "PhysicalDrive")
+	normalized = strings.TrimPrefix(normalized, "physicaldrive")
+	normalized = strings.TrimPrefix(normalized, "Disk")
+	normalized = strings.TrimPrefix(normalized, "disk")
+	normalized = strings.TrimSpace(normalized)
+	if normalized == "" {
+		return 0, fmt.Errorf("missing windows disk index in %q", targetDisk)
+	}
+	if strings.ContainsAny(normalized, "\"'`$;&|()[]{}<>\\") {
+		return 0, fmt.Errorf("unsafe windows disk identifier: %q", targetDisk)
+	}
+
+	num, err := strconv.Atoi(normalized)
+	if err != nil || num < 0 {
+		return 0, fmt.Errorf("invalid windows disk index %q", targetDisk)
+	}
+	return num, nil
+}
+
+func parseWindowsDiskNumber(targetDisk string) (int, error) {
+	return ParseWindowsDiskNumber(targetDisk)
 }
 
 // DiskInfo represents metadata about an available disk drive.
@@ -492,10 +527,12 @@ func IsVentoyDisk(targetDisk string) bool {
 			}
 		}
 	} else if runtime.GOOS == "windows" {
-		baseDisk := filepath.Base(targetDisk)
-		safeDisk := strings.ReplaceAll(baseDisk, "'", "''")
-		out, err := exec.Command("powershell", "-NoProfile", "-Command",
-			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber | Get-Volume | Select-Object -ExpandProperty DriveLetter", safeDisk)).Output()
+		diskNum, err := parseWindowsDiskNumber(targetDisk)
+		if err != nil {
+			return false
+		}
+		out, err := exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command",
+			fmt.Sprintf("Get-Partition -DiskNumber %d | Get-Volume | Select-Object -ExpandProperty DriveLetter", diskNum)).Output()
 		if err == nil {
 			lines := strings.Split(strings.TrimSpace(string(out)), "\n")
 			for _, l := range lines {
@@ -798,10 +835,12 @@ func GetDiskMountPoints(targetDisk string) []string {
 			}
 		}
 	} else if runtime.GOOS == "windows" {
-		baseDisk := filepath.Base(targetDisk)
-		safeDisk := strings.ReplaceAll(baseDisk, "'", "''")
-		out, err := execCommand("powershell", "-NoProfile", "-Command",
-			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber | Get-Volume | Select-Object -ExpandProperty DriveLetter", safeDisk)).Output()
+		diskNum, err := parseWindowsDiskNumber(targetDisk)
+		if err != nil {
+			return results
+		}
+		out, err := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command",
+			fmt.Sprintf("Get-Partition -DiskNumber %d | Get-Volume | Select-Object -ExpandProperty DriveLetter", diskNum)).Output()
 		if err == nil {
 			for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
 				letter := strings.TrimSpace(line)
@@ -2033,8 +2072,25 @@ func isValidDiskPath(path string) bool {
 		// macOS: /dev/diskN or /dev/rdiskN or diskN or /Volumes/...
 		return regexp.MustCompile(`^((/dev/)?(r)?disk\d+|/Volumes/[a-zA-Z0-9_\-\.\s]+)$`).MatchString(path)
 	case "windows":
-		// Windows: C:, PhysicalDriveN, \\.\PhysicalDriveN, or diskN
-		return regexp.MustCompile(`^([A-Z]:|([\\]{2}\.[\\])?PhysicalDrive\d+|disk\d+)$`).MatchString(path)
+		// Windows: C:, PhysicalDriveN, \\.\PhysicalDriveN, or diskN. Match case-insensitively.
+		upper := strings.ToUpper(path)
+		if regexp.MustCompile(`^([A-Z]:)$`).MatchString(upper) {
+			return true
+		}
+		if strings.HasPrefix(upper, `\\.\PHYSICALDRIVE`) {
+			suffix := strings.TrimPrefix(upper, `\\.\`)
+			suffix = strings.TrimPrefix(suffix, `PHYSICALDRIVE`)
+			return regexp.MustCompile(`^\d+$`).MatchString(suffix)
+		}
+		if strings.HasPrefix(upper, `PHYSICALDRIVE`) {
+			suffix := strings.TrimPrefix(upper, `PHYSICALDRIVE`)
+			return regexp.MustCompile(`^\d+$`).MatchString(suffix)
+		}
+		if strings.HasPrefix(upper, `DISK`) {
+			suffix := strings.TrimPrefix(upper, `DISK`)
+			return regexp.MustCompile(`^\d+$`).MatchString(suffix)
+		}
+		return false
 	case "linux":
 		// Linux: /dev/sdX, /dev/nvmeXnY, /dev/mmcblkX, /dev/vdX
 		return regexp.MustCompile(`^/dev/(sd[a-z]+|nvme\d+n\d+|mmcblk\d+|vd[a-z]+)$`).MatchString(path)

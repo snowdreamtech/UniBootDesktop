@@ -466,10 +466,12 @@ func ResolveMountPoint(targetDisk string) (string, error) {
 
 	// Windows target partition resolution
 	if runtime.GOOS == "windows" {
-		baseDisk := filepath.Base(targetDisk)
-		safeDisk := strings.ReplaceAll(baseDisk, "'", "''")
-		cmd := execCommand("powershell", "-NoProfile", "-Command",
-			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber -PartitionNumber 1 | Get-Volume | Select-Object -ExpandProperty DriveLetter", safeDisk))
+		diskNum, err := disk.ParseWindowsDiskNumber(targetDisk)
+		if err != nil {
+			return "", fmt.Errorf("invalid Windows target disk %s: %w", targetDisk, err)
+		}
+		cmd := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command",
+			fmt.Sprintf("Get-Partition -DiskNumber %d -PartitionNumber 1 | Get-Volume | Select-Object -ExpandProperty DriveLetter", diskNum))
 		if out, err := cmd.Output(); err == nil {
 			letter := strings.TrimSpace(string(out))
 			if letter != "" {
@@ -557,10 +559,12 @@ func MountAndResolveEFIPartition(targetDisk string) (string, error) {
 	}
 
 	if runtime.GOOS == "windows" {
-		baseDisk := filepath.Base(targetDisk)
-		safeDisk := strings.ReplaceAll(baseDisk, "'", "''")
-		cmd := execCommand("powershell", "-NoProfile", "-Command",
-			fmt.Sprintf("Get-Partition -DiskNumber (Get-Disk | Where-Object {$_.Path -like '*%s*'}).DiskNumber -PartitionNumber 2 | Get-Volume | Select-Object -ExpandProperty DriveLetter", safeDisk))
+		diskNum, err := disk.ParseWindowsDiskNumber(targetDisk)
+		if err != nil {
+			return "", fmt.Errorf("invalid Windows target disk %s: %w", targetDisk, err)
+		}
+		cmd := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command",
+			fmt.Sprintf("Get-Partition -DiskNumber %d -PartitionNumber 2 | Get-Volume | Select-Object -ExpandProperty DriveLetter", diskNum))
 		if out, err := cmd.Output(); err == nil {
 			letter := strings.TrimSpace(string(out))
 			if letter != "" {
