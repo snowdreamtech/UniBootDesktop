@@ -239,7 +239,13 @@
 
     <div class="disk-details">
       <div class="disk-name-row">
-        <span class="disk-name">{{ disk.name || disk.device }}</span>
+        <span class="disk-name" :title="disk.name || disk.device">
+          <template v-if="diskNameParts.suffix">
+            <span class="disk-name-prefix">{{ diskNameParts.prefix }}</span>
+            <span class="disk-name-suffix"> {{ diskNameParts.suffix }}</span>
+          </template>
+          <template v-else>{{ diskNameParts.prefix }}</template>
+        </span>
         <span v-if="disk.isFakeUsb3" class="fake-badge" :title="t('disk.fake_usb3_warning')"> ⚠️ Fake USB 3.0 </span>
       </div>
       <div class="disk-meta">
@@ -458,6 +464,17 @@ const diskTagLabel = computed(() => {
   if (diskType.value === "usb4") return "USB4";
   return "USB 3.0";
 });
+
+const diskNameParts = computed(() => {
+  const name = props.disk.name || props.disk.device;
+  const suffixMatch = name.match(/^(.*?)(\s+\d+)$/);
+
+  if (!suffixMatch || suffixMatch[1].length < 8) {
+    return { prefix: name, suffix: "" };
+  }
+
+  return { prefix: suffixMatch[1], suffix: suffixMatch[2].trim() };
+});
 </script>
 
 <style scoped>
@@ -582,9 +599,22 @@ const diskTagLabel = computed(() => {
 }
 
 .disk-name {
+  display: flex;
+  min-width: 0;
   font-weight: 600;
   font-size: 1rem;
   color: var(--text-main);
+  white-space: nowrap;
+}
+
+.disk-name-prefix {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.disk-name-suffix {
+  flex-shrink: 0;
 }
 
 .fake-badge {
