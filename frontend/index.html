@@ -39,6 +39,31 @@
         color: #0f172a;
       }
 
+      html::before {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483646;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at 50% 38%, rgba(56, 189, 248, 0.12), transparent 30%), #0b0f19;
+        color: #f8fafc;
+        content: "UniGoDesktop";
+        font:
+          700 22px/1.2 -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+
+      [data-theme="light"]::before {
+        background: radial-gradient(circle at 50% 38%, rgba(2, 132, 199, 0.1), transparent 30%), #f8fafc;
+        color: #0f172a;
+      }
+
+      html.app-ready::before {
+        display: none;
+      }
+
       #startup-loader {
         position: fixed;
         inset: 0;
