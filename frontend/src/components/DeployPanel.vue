@@ -1198,14 +1198,23 @@ function getFileIcon(filename: string): string {
 .fs-selector {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 12px;
   margin-bottom: 1rem;
 }
 
 .fs-label {
+  flex: 0 0 auto;
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-main);
+  white-space: nowrap;
+}
+
+.fs-selector :deep(.custom-select-container) {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
 }
 
 .safe-mode-notice {
