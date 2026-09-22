@@ -6,6 +6,7 @@ package main
 import (
 	"context"
 	"embed"
+	"errors"
 	"fmt"
 	"os"
 	"runtime"
@@ -13,6 +14,7 @@ import (
 
 	"github.com/snowdreamtech/unigodesktop/cmd"
 	"github.com/snowdreamtech/unigodesktop/internal/i18n"
+	"github.com/snowdreamtech/unigodesktop/internal/singleinstance"
 	"github.com/snowdreamtech/unigodesktop/pkg/config"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/menu"
@@ -30,6 +32,20 @@ var assets embed.FS
 func RunWails() error {
 	fmt.Println(">>> Starting Wails GUI Runtime...")
 	app := NewApp()
+	instanceGuard, err := singleinstance.Acquire("d6f1a8c0-87a4-4a24-9b57-unigodesktop-single-instance")
+	if errors.Is(err, singleinstance.ErrAlreadyRunning) {
+		return nil
+	}
+	if err != nil {
+		return fmt.Errorf("acquire single-instance guard: %w", err)
+	}
+	defer instanceGuard.Close()
+	instanceGuard.SetActivate(func() {
+		if app.ctx != nil {
+			wailsRuntime.WindowUnminimise(app.ctx)
+			wailsRuntime.WindowShow(app.ctx)
+		}
+	})
 
 	appMenu := BuildAppMenu(app, "auto")
 
@@ -70,15 +86,6 @@ func RunWails() error {
 		DragAndDrop: &options.DragAndDrop{
 			EnableFileDrop:     true,
 			DisableWebViewDrop: false,
-		},
-		SingleInstanceLock: &options.SingleInstanceLock{
-			UniqueId: "d6f1a8c0-87a4-4a24-9b57-unigodesktop-single-instance",
-			OnSecondInstanceLaunch: func(secondInstanceData options.SecondInstanceData) {
-				if app.ctx != nil {
-					wailsRuntime.WindowUnminimise(app.ctx)
-					wailsRuntime.WindowShow(app.ctx)
-				}
-			},
 		},
 		Mac: &mac.Options{
 			TitleBar: &mac.TitleBar{
