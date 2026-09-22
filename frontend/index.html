@@ -15,6 +15,12 @@
         }
       })();
     </script>
+    <style>
+      /* Critical inline CSS: prevent flash of white background before theme.css loads */
+      html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
+      :root, [data-theme="dark"] { background-color: #0b0f19; }
+      [data-theme="light"] { background-color: #f8fafc; }
+    </style>
   </head>
   <body>
     <div id="app"></div>
