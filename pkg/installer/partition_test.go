@@ -85,6 +85,33 @@ func TestFormatDiskHybridMode_SafetyValidation(t *testing.T) {
 	}
 }
 
+func TestValidateFilesystemType(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   string
+		want    string
+		wantErr bool
+	}{
+		{name: "default", input: "", want: "exFAT"},
+		{name: "case insensitive", input: "ntfs", want: "NTFS"},
+		{name: "fat32", input: "FAT32", want: "FAT32"},
+		{name: "reject command injection", input: "exFAT\nclean", wantErr: true},
+		{name: "reject unsupported", input: "btrfs", wantErr: true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := validateFilesystemType(tt.input)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("validateFilesystemType() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if !tt.wantErr && got != tt.want {
+				t.Fatalf("validateFilesystemType() = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestFormatDiskHybridMode_DryRun(t *testing.T) {
 	ctx := context.Background()
 	os.Setenv("UNIBOOT_DRY_RUN", "true")
@@ -129,4 +156,3 @@ func TestFormatDiskHybridMode_DryRun(t *testing.T) {
 		t.Errorf("Expected background.png to exist at %s", bgPath)
 	}
 }
-

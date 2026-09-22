@@ -225,9 +225,11 @@ func FormatDiskHybridMode(ctx context.Context, targetDisk string, fsType string)
 		return "", fmt.Errorf("disk validation failed: %w", err)
 	}
 
-	if fsType == "" {
-		fsType = "exFAT"
+	validatedFilesystem, err := validateFilesystemType(fsType)
+	if err != nil {
+		return "", err
 	}
+	fsType = validatedFilesystem
 
 	// Dry-run mode for tests or safe simulation
 	if os.Getenv("UNIBOOT_DRY_RUN") != "" || strings.HasPrefix(targetDisk, "dummy") || strings.HasPrefix(targetDisk, "test") {
@@ -240,7 +242,6 @@ func FormatDiskHybridMode(ctx context.Context, targetDisk string, fsType string)
 		}
 		return tempMount, nil
 	}
-
 	switch runtime.GOOS {
 	case "darwin":
 		return formatDiskHybridModeMacOS(ctx, targetDisk, fsType)
@@ -250,6 +251,21 @@ func FormatDiskHybridMode(ctx context.Context, targetDisk string, fsType string)
 		return formatDiskHybridModeLinux(ctx, targetDisk, fsType)
 	default:
 		return "", fmt.Errorf("unsupported operating system: %s", runtime.GOOS)
+	}
+}
+
+func validateFilesystemType(fsType string) (string, error) {
+	switch strings.ToLower(strings.TrimSpace(fsType)) {
+	case "", "exfat":
+		return "exFAT", nil
+	case "ntfs":
+		return "NTFS", nil
+	case "fat32":
+		return "FAT32", nil
+	case "ext4":
+		return "ext4", nil
+	default:
+		return "", fmt.Errorf("unsupported filesystem type %q", fsType)
 	}
 }
 
@@ -752,4 +768,3 @@ func UpdateVolumeLabel(targetDisk string, mountPoint string, newLabel string) st
 
 	return mountPoint
 }
-
