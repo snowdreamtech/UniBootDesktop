@@ -112,6 +112,10 @@ jobs:
           cd frontend
           npm run build
 
+      - name: Prepare UniBoot App Icon
+        shell: bash
+        run: node scripts/prepare-app-icon.mjs
+
       - name: Build Wails native bundle
         shell: bash
         env:
