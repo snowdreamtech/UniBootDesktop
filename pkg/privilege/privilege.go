@@ -206,6 +206,22 @@ func ValidateRawDevicePath(devicePath string) error {
 	return fmt.Errorf("unsupported raw device path: %q", trimmed)
 }
 
+func escapePowerShellSingleQuotedString(value string) string {
+	return strings.ReplaceAll(value, "'", "''")
+}
+
+func buildPowerShellStartProcessCommand(filePath string, args []string) string {
+	escapedPath := escapePowerShellSingleQuotedString(filePath)
+	quotedArgs := make([]string, 0, len(args))
+	for _, arg := range args {
+		quotedArgs = append(quotedArgs, "'"+escapePowerShellSingleQuotedString(arg)+"'")
+	}
+	if len(quotedArgs) == 0 {
+		return fmt.Sprintf("Start-Process -FilePath '%s' -Verb RunAs -Wait", escapedPath)
+	}
+	return fmt.Sprintf("Start-Process -FilePath '%s' -ArgumentList @(%s) -Verb RunAs -Wait", escapedPath, strings.Join(quotedArgs, ", "))
+}
+
 func RunElevated(prompt string, cmdLine string) (string, error) {
 	fields, err := splitElevatedCommand(cmdLine)
 	if err != nil {
@@ -243,7 +259,7 @@ func RunElevated(prompt string, cmdLine string) (string, error) {
 		return string(out), err
 
 	case "windows":
-		psCmd := fmt.Sprintf(`Start-Process %s -ArgumentList '%s' -Verb RunAs -Wait`, cmdName, strings.Join(args, " "))
+		psCmd := buildPowerShellStartProcessCommand(cmdName, args)
 		cmd := exec.Command("powershell.exe", "-NoProfile", "-Command", psCmd)
 		out, err := cmd.CombinedOutput()
 		return string(out), err

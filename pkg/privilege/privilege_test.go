@@ -94,3 +94,13 @@ func TestSplitElevatedCommandRejectsUnsupportedShellSyntax(t *testing.T) {
 		t.Fatal("expected a simple approved command to pass validation")
 	}
 }
+
+func TestBuildPowerShellStartProcessCommandEscapesQuotes(t *testing.T) {
+	cmd := buildPowerShellStartProcessCommand("net", []string{"session", "user'admin", "value with spaces"})
+	if !strings.Contains(cmd, "user''admin") {
+		t.Fatalf("expected apostrophes to be escaped in PowerShell arguments, got %q", cmd)
+	}
+	if !strings.Contains(cmd, "-ArgumentList @('") {
+		t.Fatalf("expected PowerShell argument list array format, got %q", cmd)
+	}
+}
