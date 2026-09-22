@@ -113,6 +113,28 @@
             </div>
           </div>
 
+          <!-- Batch Disks Pure Non-destructive Summary -->
+          <div v-else-if="isAllVentoy" class="batch-summary">
+            <div class="mixed-group">
+              <div class="group-title safe-title"><span class="group-icon">🛡️</span> {{ t("confirm.ventoy_group_title") }}</div>
+              <div class="batch-device-list">
+                <div v-for="disk in ventoyDiskDetails" :key="disk.device" class="batch-device-detail safe-dev-tag">
+                  <div class="batch-dev-header">
+                    <strong>🛡️ {{ disk.name || disk.device }}</strong>
+                    <span class="batch-dev-path">{{ disk.device }}</span>
+                  </div>
+                  <div class="batch-dev-info-grid">
+                    <div><span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
+                    <div><strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}</div>
+                    <div><strong>{{ t("confirm.system_disk") }}:</strong> {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
+                    <div><strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}</div>
+                    <div class="full-width action-text safe-action"><strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.no_format") }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Batch Disks Pure Summary -->
           <div v-else class="batch-summary">
             <div class="batch-count">{{ t("confirm.batch_summary_title", { count: targetDisks.length }) }}</div>
