@@ -7,8 +7,8 @@ import (
 	"bufio"
 	"context"
 	"crypto/sha256"
-	"encoding/hex"
 	"embed"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -366,8 +366,11 @@ func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootRelea
 		}
 	}
 
-	if downloadedCount == 0 && firstErr != nil {
-		return nil, fmt.Errorf("firmware upgrade failed: %w", firstErr)
+	if !firmwareSyncComplete(downloadedCount, len(expectedAssets)) {
+		if firstErr != nil {
+			return nil, fmt.Errorf("firmware upgrade incomplete: %w", firstErr)
+		}
+		return nil, fmt.Errorf("firmware upgrade incomplete: downloaded %d of %d required assets", downloadedCount, len(expectedAssets))
 	}
 
 	versionFile := filepath.Join(firmwareDir, "version.json")
@@ -382,6 +385,10 @@ func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootRelea
 	rel.HasUpdate = false
 
 	return rel, nil
+}
+
+func firmwareSyncComplete(downloadedCount int, expectedCount int) bool {
+	return expectedCount > 0 && downloadedCount == expectedCount
 }
 
 // GetFirmwareData retrieves binary data for a firmware asset based on priority:
@@ -543,4 +550,3 @@ func ExtractFirmwareCloudMode(efiMountDir string) error {
 	}
 	return nil
 }
-

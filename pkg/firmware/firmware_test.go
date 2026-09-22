@@ -53,6 +53,15 @@ func TestGetMappingByReleaseName(t *testing.T) {
 	}
 }
 
+func TestFirmwareSyncCompleteness(t *testing.T) {
+	if firmwareSyncComplete(1, 2) {
+		t.Fatal("partial firmware downloads must not be committed as a complete version")
+	}
+	if !firmwareSyncComplete(2, 2) {
+		t.Fatal("all required firmware downloads should be committed")
+	}
+}
+
 func TestTargetPathForReleaseAsset(t *testing.T) {
 	tests := []struct {
 		releaseName string
@@ -345,4 +354,3 @@ func TestSyncUniBootFirmware(t *testing.T) {
 		t.Errorf("expected TagName to be set")
 	}
 }
-
