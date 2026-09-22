@@ -39,14 +39,6 @@ func RunWails() error {
 		macAppearance = mac.NSAppearanceNameAqua
 	}
 
-	// Choose a background colour matching the active CSS theme so the
-	// Wails window never flashes white while the WebView boots.
-	// Alpha MUST be 255 (fully opaque); 1 would be nearly transparent.
-	backgroundColour := &options.RGBA{R: 11, G: 15, B: 25, A: 255}
-	if cfg, err := config.Load(); err == nil && cfg != nil && cfg.Theme == "light" {
-		backgroundColour = &options.RGBA{R: 248, G: 250, B: 252, A: 255}
-	}
-
 	return wails.Run(&options.App{
 		Title:       "UniGoDesktop",
 		Width:       1180,
@@ -58,7 +50,8 @@ func RunWails() error {
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
-		BackgroundColour: backgroundColour,
+		// Keep the native surface fixed while the HTML loader resolves the final theme.
+		BackgroundColour: &options.RGBA{R: 11, G: 15, B: 25, A: 255},
 		OnStartup:        app.startup,
 		OnDomReady: func(ctx context.Context) {
 			wailsRuntime.Show(ctx)

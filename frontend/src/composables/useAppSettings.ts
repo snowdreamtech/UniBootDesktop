@@ -54,42 +54,46 @@ export function useAppSettings(options: UseAppSettingsOptions) {
   async function loadConfig() {
     let cfg: any = null;
 
-    if (window.go && window.go.main && window.go.main.App) {
-      try {
-        cfg = await window.go.main.App.GetConfig();
-      } catch (e) {
-        console.error("Failed to load config:", e);
+    try {
+      if (window.go && window.go.main && window.go.main.App) {
+        try {
+          cfg = await window.go.main.App.GetConfig();
+        } catch (e) {
+          console.error("Failed to load config:", e);
+        }
       }
-    }
 
-    if (!cfg) {
-      // Retry in case Wails IPC is still initializing when Vue mounts
-      for (let i = 0; i < 15; i++) {
-        await new Promise((resolve) => setTimeout(resolve, 60));
-        if (window.go && window.go.main && window.go.main.App) {
-          try {
-            cfg = await window.go.main.App.GetConfig();
-            if (cfg) break;
-          } catch (e) {
-            // Wait for next attempt
+      if (!cfg) {
+        // Retry in case Wails IPC is still initializing when Vue mounts
+        for (let i = 0; i < 15; i++) {
+          await new Promise((resolve) => setTimeout(resolve, 60));
+          if (window.go && window.go.main && window.go.main.App) {
+            try {
+              cfg = await window.go.main.App.GetConfig();
+              if (cfg) break;
+            } catch (e) {
+              // Wait for next attempt
+            }
           }
         }
       }
-    }
 
-    if (cfg) {
-      if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
-      if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
-      if (cfg.language) {
-        setLanguage(cfg.language);
-        if (window.go?.main?.App?.ReloadAppMenu) {
-          window.go.main.App.ReloadAppMenu(cfg.language).catch(() => {});
+      if (cfg) {
+        if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
+        if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
+        if (cfg.language) {
+          setLanguage(cfg.language);
+          if (window.go?.main?.App?.ReloadAppMenu) {
+            window.go.main.App.ReloadAppMenu(cfg.language).catch(() => {});
+          }
         }
+        if (cfg.theme === "light" || cfg.theme === "dark") {
+          applyTheme(cfg.theme);
+        }
+        autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
       }
-      if (cfg.theme === "light" || cfg.theme === "dark") {
-        applyTheme(cfg.theme);
-      }
-      autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
+    } finally {
+      window.dispatchEvent(new Event("unigo:config-ready"));
     }
   }
 
