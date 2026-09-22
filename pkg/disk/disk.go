@@ -984,6 +984,38 @@ func StartHotplugMonitor(ctx context.Context, onChange func()) {
 	}()
 }
 
+func buildDarwinVolumeSnapshot(entries []os.DirEntry, infoByPath map[string]string) string {
+	if len(entries) == 0 {
+		return ""
+	}
+
+	var ids []string
+	seen := make(map[string]struct{})
+	for _, e := range entries {
+		if e == nil || IsIgnoredVolume(e.Name()) {
+			continue
+		}
+		volPath := filepath.Join("/Volumes", e.Name())
+		id := e.Name()
+		if info, ok := infoByPath[volPath]; ok {
+			if device := extractPlistValue(info, "ParentWholeDisk"); device != "" {
+				id = device
+			} else if device := extractPlistValue(info, "DeviceIdentifier"); device != "" {
+				id = device
+			}
+		}
+		if id == "" {
+			id = e.Name()
+		}
+		if _, exists := seen[id]; exists {
+			continue
+		}
+		seen[id] = struct{}{}
+		ids = append(ids, fmt.Sprintf("%s:%s", e.Name(), id))
+	}
+	return strings.Join(ids, "|")
+}
+
 func getVolumeSnapshot() string {
 	switch runtime.GOOS {
 	case "darwin":
@@ -991,13 +1023,19 @@ func getVolumeSnapshot() string {
 		if err != nil {
 			return ""
 		}
-		var names []string
+		infoByPath := make(map[string]string)
 		for _, e := range entries {
-			if !IsIgnoredVolume(e.Name()) {
-				names = append(names, e.Name())
+			if e == nil || IsIgnoredVolume(e.Name()) {
+				continue
+			}
+			volPath := filepath.Join("/Volumes", e.Name())
+			if cmd := execCommand("diskutil", "info", "-plist", volPath); cmd != nil {
+				if out, err := cmd.Output(); err == nil {
+					infoByPath[volPath] = string(out)
+				}
 			}
 		}
-		return strings.Join(names, "|")
+		return buildDarwinVolumeSnapshot(entries, infoByPath)
 	case "windows":
 		var letters []string
 		for c := 'C'; c <= 'Z'; c++ {

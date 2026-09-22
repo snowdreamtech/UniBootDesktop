@@ -209,6 +209,23 @@ func TestDiskCacheShouldReuse(t *testing.T) {
 	diskCacheSnapshot = ""
 }
 
+func TestDarwinVolumeSnapshotUsesDeviceIdentity(t *testing.T) {
+	infoMap := map[string]string{
+		"/Volumes/UNTITLED":    "<key>DeviceIdentifier</key><string>disk2</string>",
+		"/Volumes/UNTITLED 1": "<key>DeviceIdentifier</key><string>disk3</string>",
+	}
+
+	entries := []os.DirEntry{
+		fakeDirEntry{name: "UNTITLED"},
+		fakeDirEntry{name: "UNTITLED 1"},
+	}
+
+	snapshot := buildDarwinVolumeSnapshot(entries, infoMap)
+	assert.Contains(t, snapshot, "disk2")
+	assert.Contains(t, snapshot, "disk3")
+	assert.NotEqual(t, "UNTITLED|UNTITLED 1", snapshot)
+}
+
 func TestIdentifyThirdPartyBoot_Fingerprints(t *testing.T) {
 	tests := []struct {
 		name         string
