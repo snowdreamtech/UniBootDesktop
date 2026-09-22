@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"time"
 
 	"github.com/snowdreamtech/unigodesktop/cmd"
 	"github.com/snowdreamtech/unigodesktop/internal/i18n"
@@ -35,8 +36,10 @@ func RunWails() error {
 	// Determine Mac native appearance from saved user theme preference so the
 	// native title bar matches the WebView content theme on first launch.
 	macAppearance := mac.NSAppearanceNameDarkAqua
+	backgroundColour := &options.RGBA{R: 11, G: 15, B: 25, A: 255}
 	if cfg, err := config.Load(); err == nil && cfg != nil && cfg.Theme == "light" {
 		macAppearance = mac.NSAppearanceNameAqua
+		backgroundColour = &options.RGBA{R: 248, G: 250, B: 252, A: 255}
 	}
 
 	return wails.Run(&options.App{
@@ -50,12 +53,15 @@ func RunWails() error {
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
-		// Keep the native surface fixed while the HTML loader resolves the final theme.
-		BackgroundColour: &options.RGBA{R: 11, G: 15, B: 25, A: 255},
+		// Match the native surface to the cached theme while the HTML loader paints.
+		BackgroundColour: backgroundColour,
 		OnStartup:        app.startup,
 		OnDomReady: func(ctx context.Context) {
-			wailsRuntime.Show(ctx)
-			wailsRuntime.WindowShow(ctx)
+			// Let the static loader render one frame before exposing the native window.
+			time.AfterFunc(50*time.Millisecond, func() {
+				wailsRuntime.Show(ctx)
+				wailsRuntime.WindowShow(ctx)
+			})
 		},
 		OnShutdown: app.shutdown,
 		Bind: []interface{}{
