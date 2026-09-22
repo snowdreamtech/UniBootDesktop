@@ -620,6 +620,7 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  width: 100%;
 }
 
 .canvas-title {
@@ -649,6 +650,7 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
   color: var(--text-muted);
   line-height: 1.4;
   margin: 0;
+  white-space: nowrap;
 }
 
 .btn-rescan-subtle {
