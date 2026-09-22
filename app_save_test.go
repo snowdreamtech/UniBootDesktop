@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/snowdreamtech/unigodesktop/pkg/config"
+	"github.com/snowdreamtech/unigodesktop/pkg/hypervisor"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -28,6 +29,13 @@ func TestAppSaveConfig_DirectWithEmptyHost(t *testing.T) {
 	err := app.SaveConfig(cfg)
 	assert.NoError(t, err)
 	assert.Equal(t, 0, cfg.ProxyPort, "ProxyPort should be normalized to 0 when direct or host is empty")
+}
+
+func TestLaunchVMWithConfigRejectsUnsafeTargetDisk(t *testing.T) {
+	t.Setenv("UNIBOOT_DRY_RUN", "1")
+	app := &App{}
+	err := app.LaunchVMWithConfig("/", "qemu", hypervisor.VMConfig{})
+	assert.Error(t, err)
 }
 
 func TestAppSaveConfig_All52Languages(t *testing.T) {

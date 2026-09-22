@@ -473,6 +473,9 @@ func (a *App) DetectBestHypervisor() *hypervisor.VMStatus {
 
 // LaunchQEMU triggers virtual machine test instance using highest priority available hypervisor (QEMU, UTM, VMware, VirtualBox).
 func (a *App) LaunchQEMU(targetDisk string) error {
+	if err := disk.ValidateUserEjectTarget(targetDisk); err != nil {
+		return fmt.Errorf("unsafe VM target disk: %w", err)
+	}
 	logger.Info("Requesting hypervisor preview test launch", "disk", targetDisk)
 	err := hypervisor.GetManager().LaunchBest(a.ctx, targetDisk, hypervisor.BootModeAuto)
 	if err != nil {
@@ -545,6 +548,9 @@ func (a *App) LaunchVMWithConfig(targetDisk string, vmType string, cfg hyperviso
 	}
 	if len(targetDisk) > 512 {
 		return fmt.Errorf("target disk path too long")
+	}
+	if err := disk.ValidateUserEjectTarget(targetDisk); err != nil {
+		return fmt.Errorf("unsafe VM target disk: %w", err)
 	}
 
 	// 验证VMConfig参数范围
