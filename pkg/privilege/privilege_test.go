@@ -77,3 +77,20 @@ func TestValidateCommandNameRejectsDangerousInput(t *testing.T) {
 		t.Fatal("expected allowed system command to pass validation")
 	}
 }
+
+func TestValidateCommandArgumentRejectsShellMetacharacters(t *testing.T) {
+	for _, bad := range []string{"a; rm -rf /", "a&&b", "$(id)", "`whoami`", "../etc/passwd"} {
+		if err := ValidateCommandArgument(bad); err == nil {
+			t.Fatalf("expected shell injection-like argument %q to be rejected", bad)
+		}
+	}
+}
+
+func TestSplitElevatedCommandRejectsUnsupportedShellSyntax(t *testing.T) {
+	if _, err := splitElevatedCommand("diskutil list; echo pwned"); err == nil {
+		t.Fatal("expected semicolon-based command chaining to be rejected")
+	}
+	if _, err := splitElevatedCommand("diskutil list"); err != nil {
+		t.Fatal("expected a simple approved command to pass validation")
+	}
+}

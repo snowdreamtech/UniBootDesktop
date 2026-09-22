@@ -724,7 +724,10 @@ func UpdateVolumeLabel(targetDisk string, mountPoint string, newLabel string) st
 		driveLetter := strings.TrimSuffix(mountPoint, "\\")
 		driveLetter = strings.TrimSuffix(driveLetter, "/")
 		if len(driveLetter) >= 2 && driveLetter[1] == ':' {
-			cmd := execCommand("cmd", "/c", "label", driveLetter, newLabel)
+			safeDrive := strings.ReplaceAll(driveLetter, "'", "''")
+			safeLabel := strings.ReplaceAll(newLabel, "'", "''")
+			psCmd := fmt.Sprintf("Get-Volume -DriveLetter '%s' | Set-Volume -NewFileSystemLabel '%s'", safeDrive, safeLabel)
+			cmd := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd)
 			_ = cmd.Run()
 		}
 		return mountPoint

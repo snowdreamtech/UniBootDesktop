@@ -18,6 +18,7 @@ import (
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
+	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
 )
 
 type QEMUDriver struct{}
@@ -211,18 +212,14 @@ func ensureDiskPermissions(targetPath string) {
 		}
 		rawNode := "r" + diskNode
 
-		logger.Info("Elevating disk node permissions for QEMU GUI session via osascript", "diskNode", diskNode)
-		// 安全地构建osascript参数，防止脚本注入
-		// 验证diskNode只包含合法字符（数字和字母）
+		logger.Info("Elevating disk node permissions for QEMU GUI session via validated elevated command", "diskNode", diskNode)
 		if !regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(rawNode) || !regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(diskNode) {
 			logger.Warn("Invalid disk node format, skipping permission elevation", "rawNode", rawNode, "diskNode", diskNode)
 			return
 		}
-
-		script := fmt.Sprintf(`do shell script "chmod 666 /dev/%s /dev/%s" with administrator privileges`, rawNode, diskNode)
-		cmd := exec.Command("osascript", "-e", script)
-		if err := cmd.Run(); err != nil {
-			logger.Warn("Failed to elevate disk node permissions via osascript", "error", err)
+		cmdLine := fmt.Sprintf("chmod 666 /dev/%s /dev/%s", rawNode, diskNode)
+		if _, err := privilege.RunElevated("Adjust raw disk permissions for QEMU access", cmdLine); err != nil {
+			logger.Warn("Failed to elevate disk node permissions via validated command path", "error", err)
 		}
 	} else if runtime.GOOS == "linux" {
 		cmd := exec.Command("pkexec", "chmod", "666", targetPath)

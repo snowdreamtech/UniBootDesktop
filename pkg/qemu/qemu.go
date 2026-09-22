@@ -236,15 +236,10 @@ func ensureDiskPermissions(targetPath string) {
 		}
 		rawNode := "r" + diskNode
 
-		logger.Info("Elevating disk node permissions for QEMU GUI session via osascript", "diskNode", diskNode)
-		script := fmt.Sprintf(`do shell script "chmod 666 /dev/%s /dev/%s" with administrator privileges`, rawNode, diskNode)
-		cmd, err := safeExecCommand("osascript", "-e", script)
-		if err == nil {
-			if err := cmd.Run(); err != nil {
-				logger.Warn("Failed to elevate disk node permissions via osascript", "error", err)
-			}
-		} else {
-			logger.Warn("Rejected unsafe osascript permission escalation", "error", err)
+		logger.Info("Elevating disk node permissions for QEMU GUI session via validated elevated command", "diskNode", diskNode)
+		cmdLine := fmt.Sprintf("chmod 666 /dev/%s /dev/%s", rawNode, diskNode)
+		if _, err := privilege.RunElevated("Adjust raw disk permissions for QEMU access", cmdLine); err != nil {
+			logger.Warn("Failed to elevate disk node permissions via validated command path", "error", err)
 		}
 	} else if runtime.GOOS == "linux" {
 		cmd, err := safeExecCommand("pkexec", "chmod", "666", targetPath)
