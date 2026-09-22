@@ -4,23 +4,32 @@ package singleinstance
 
 import (
 	"fmt"
-	"os"
+
+	"golang.org/x/sys/windows"
 )
 
 func processAlive(pid int) bool {
 	if pid <= 0 {
 		return false
 	}
-	process, err := os.FindProcess(pid)
-	return err == nil && process != nil
+	handle, err := windows.OpenProcess(windows.PROCESS_QUERY_LIMITED_INFORMATION, false, uint32(pid))
+	if err != nil {
+		return false
+	}
+	defer windows.CloseHandle(handle)
+	return true
 }
 
 func terminateStaleProcess(pid int) error {
-	process, err := os.FindProcess(pid)
+	if pid <= 0 {
+		return nil
+	}
+	handle, err := windows.OpenProcess(windows.PROCESS_TERMINATE, false, uint32(pid))
 	if err != nil {
 		return nil
 	}
-	if err := process.Kill(); err != nil {
+	defer windows.CloseHandle(handle)
+	if err := windows.TerminateProcess(handle, 1); err != nil {
 		return fmt.Errorf("kill stale instance: %w", err)
 	}
 	return nil
