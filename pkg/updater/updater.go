@@ -21,6 +21,8 @@ import (
 	internalVersion "github.com/snowdreamtech/unigodesktop/internal/version"
 )
 
+const maxDownloadSize int64 = 512 * 1024 * 1024
+
 // UpdateStatus represents release update metadata.
 type UpdateStatus struct {
 	HasUpdate   bool   `json:"hasUpdate"`
@@ -127,7 +129,7 @@ func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, 
 				return fmt.Errorf("failed to create temp destination file: %w", err)
 			}
 
-			_, copyErr := io.Copy(out, resp.Body)
+			_, copyErr := copyWithLimit(out, resp.Body, maxDownloadSize)
 			resp.Body.Close()
 			out.Close()
 			cancel()
@@ -306,7 +308,7 @@ func DownloadFileWithProgress(ctx context.Context, rawURL string, destPath strin
 		onProgress: onProgress,
 	}
 
-	if _, err := io.Copy(out, io.TeeReader(resp.Body, pw)); err != nil {
+	if _, err := copyWithLimit(out, io.TeeReader(resp.Body, pw), maxDownloadSize); err != nil {
 		os.Remove(tmpPath)
 		return fmt.Errorf("failed during download: %w", err)
 	}
@@ -318,4 +320,19 @@ func DownloadFileWithProgress(ctx context.Context, rawURL string, destPath strin
 	}
 
 	return nil
+}
+
+func copyWithLimit(dst io.Writer, src io.Reader, maxBytes int64) (int64, error) {
+	if maxBytes <= 0 {
+		return 0, fmt.Errorf("download size limit must be positive")
+	}
+
+	bytesCopied, err := io.Copy(dst, io.LimitReader(src, maxBytes+1))
+	if err != nil {
+		return bytesCopied, err
+	}
+	if bytesCopied > maxBytes {
+		return bytesCopied, fmt.Errorf("download exceeds maximum size of %d bytes", maxBytes)
+	}
+	return bytesCopied, nil
 }

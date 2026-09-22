@@ -4,6 +4,7 @@
 package updater
 
 import (
+	"bytes"
 	"testing"
 )
 
@@ -27,5 +28,13 @@ func TestBuildProxyURL(t *testing.T) {
 		if got != tt.expected {
 			t.Errorf("BuildProxyURL(%q, %q) = %q; want %q", rawURL, tt.proxyPrefix, got, tt.expected)
 		}
+	}
+}
+
+func TestCopyWithLimitRejectsOversizedResponse(t *testing.T) {
+	var destination bytes.Buffer
+	_, err := copyWithLimit(&destination, bytes.NewReader([]byte("12345")), 4)
+	if err == nil {
+		t.Fatal("expected oversized response to be rejected")
 	}
 }
