@@ -4,6 +4,7 @@
 package privilege
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -39,6 +40,13 @@ func TestRunElevatedRejectsUnsafeShellInput(t *testing.T) {
 	_, err := RunElevated("prompt", "echo ok; rm -rf /")
 	if err == nil {
 		t.Fatal("expected unsafe command string to be rejected")
+	}
+}
+
+func TestRunElevatedAllowsSimpleCommand(t *testing.T) {
+	_, err := RunElevated("prompt", "net session")
+	if err != nil && strings.Contains(err.Error(), "unsafe elevated command") {
+		t.Fatal("expected a simple approved command to pass validation")
 	}
 }
 

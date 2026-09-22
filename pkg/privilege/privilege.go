@@ -72,21 +72,41 @@ func checkIsElevated() bool {
 // On macOS, it invokes AppleScript 'with administrator privileges'.
 // On Linux, it leverages 'pkexec'.
 // On Windows, it invokes PowerShell with 'RunAs' verb.
-func validateElevatedCommand(cmdLine string) error {
+func splitElevatedCommand(cmdLine string) ([]string, error) {
 	trimmed := strings.TrimSpace(cmdLine)
 	if trimmed == "" {
-		return fmt.Errorf("command is empty")
+		return nil, fmt.Errorf("command is empty")
 	}
 	for _, ch := range trimmed {
 		if ch < 32 || ch == 127 {
-			return fmt.Errorf("command contains control characters")
+			return nil, fmt.Errorf("command contains control characters")
 		}
 	}
-
 	if strings.ContainsAny(trimmed, ";|`$><") {
-		return fmt.Errorf("command contains shell metacharacters that are not allowed")
+		return nil, fmt.Errorf("command contains shell metacharacters that are not allowed")
 	}
-	return nil
+	if strings.ContainsAny(trimmed, "&()[]{}\\\"") {
+		return nil, fmt.Errorf("command contains unsupported shell syntax")
+	}
+
+	fields := strings.Fields(trimmed)
+	if len(fields) == 0 {
+		return nil, fmt.Errorf("command is empty")
+	}
+	if err := ValidateCommandName(fields[0]); err != nil {
+		return nil, err
+	}
+	for _, arg := range fields[1:] {
+		if err := ValidateCommandArgument(arg); err != nil {
+			return nil, fmt.Errorf("unsafe argument for %q: %w", fields[0], err)
+		}
+	}
+	return fields, nil
+}
+
+func validateElevatedCommand(cmdLine string) error {
+	_, err := splitElevatedCommand(cmdLine)
+	return err
 }
 
 // ValidateCommandName enforces a narrow allowlist for system commands that can be invoked
@@ -187,18 +207,15 @@ func ValidateRawDevicePath(devicePath string) error {
 }
 
 func RunElevated(prompt string, cmdLine string) (string, error) {
-	if err := validateElevatedCommand(cmdLine); err != nil {
+	fields, err := splitElevatedCommand(cmdLine)
+	if err != nil {
 		return "", fmt.Errorf("unsafe elevated command: %w", err)
 	}
+	cmdName := fields[0]
+	args := fields[1:]
 
 	if IsElevated() {
-		// Already elevated, run directly via shell
-		var cmd *exec.Cmd
-		if runtime.GOOS == "windows" {
-			cmd = exec.Command("cmd.exe", "/C", cmdLine)
-		} else {
-			cmd = exec.Command("sh", "-c", cmdLine)
-		}
+		cmd := exec.Command(cmdName, args...)
 		out, err := cmd.CombinedOutput()
 		return string(out), err
 	}
@@ -209,25 +226,24 @@ func RunElevated(prompt string, cmdLine string) (string, error) {
 
 	switch runtime.GOOS {
 	case "darwin":
-		// Escape double quotes and backslashes for AppleScript
-		escapedCmd := strings.ReplaceAll(cmdLine, `\`, `\\`)
-		escapedCmd = strings.ReplaceAll(escapedCmd, `"`, `\"`)
+		quotedArgs := make([]string, 0, len(fields))
+		for _, field := range fields {
+			quotedArgs = append(quotedArgs, "'"+strings.ReplaceAll(field, "'", "'\"'\"'")+"'")
+		}
+		safeCommand := strings.Join(append([]string{cmdName}, quotedArgs[1:]...), " ")
 		escapedPrompt := strings.ReplaceAll(prompt, `"`, `\"`)
-
-		appleScript := fmt.Sprintf(`do shell script "%s" with prompt "%s" with administrator privileges`, escapedCmd, escapedPrompt)
+		appleScript := fmt.Sprintf(`do shell script "%s" with prompt "%s" with administrator privileges`, safeCommand, escapedPrompt)
 		cmd := exec.Command("osascript", "-e", appleScript)
 		out, err := cmd.CombinedOutput()
 		return string(out), err
 
 	case "linux":
-		// Leverage pkexec on Linux desktops
-		cmd := exec.Command("pkexec", "sh", "-c", cmdLine)
+		cmd := exec.Command("pkexec", append([]string{cmdName}, args...)...)
 		out, err := cmd.CombinedOutput()
 		return string(out), err
 
 	case "windows":
-		// Run via PowerShell Start-Process -Verb RunAs
-		psCmd := fmt.Sprintf(`Start-Process cmd.exe -ArgumentList '/c %s' -Verb RunAs -Wait`, cmdLine)
+		psCmd := fmt.Sprintf(`Start-Process %s -ArgumentList '%s' -Verb RunAs -Wait`, cmdName, strings.Join(args, " "))
 		cmd := exec.Command("powershell.exe", "-NoProfile", "-Command", psCmd)
 		out, err := cmd.CombinedOutput()
 		return string(out), err
