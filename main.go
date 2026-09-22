@@ -4,6 +4,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"fmt"
 	"os"
@@ -39,18 +40,23 @@ func RunWails() error {
 	}
 
 	return wails.Run(&options.App{
-		Title:    "UniGoDesktop",
-		Width:    1180,
-		Height:   820,
-		MinWidth: 1024,
-		MinHeight: 728,
-		Menu:   appMenu,
+		Title:       "UniGoDesktop",
+		Width:       1180,
+		Height:      820,
+		MinWidth:    1024,
+		MinHeight:   728,
+		StartHidden: true,
+		Menu:        appMenu,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup:        app.startup,
-		OnShutdown:       app.shutdown,
+		OnDomReady: func(ctx context.Context) {
+			wailsRuntime.Show(ctx)
+			wailsRuntime.WindowShow(ctx)
+		},
+		OnShutdown: app.shutdown,
 		Bind: []interface{}{
 			app,
 		},
@@ -156,4 +162,3 @@ func BuildAppMenu(app *App, lang string) *menu.Menu {
 	}
 	return appMenu
 }
-
