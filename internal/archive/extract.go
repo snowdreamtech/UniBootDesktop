@@ -173,23 +173,26 @@ func ExtractArchive(archiveData []byte, destDir string) error {
 
 // validateExtractPath checks for path traversal attacks (Zip Slip vulnerability)
 func validateExtractPath(destDir, targetPath string) error {
-	// Clean and normalize both paths
-	cleanDest := filepath.Clean(destDir)
-	cleanTarget := filepath.Clean(targetPath)
+	cleanDest, err := filepath.Abs(filepath.Clean(destDir))
+	if err != nil {
+		return fmt.Errorf("invalid destination directory: %w", err)
+	}
+	cleanTarget, err := filepath.Abs(filepath.Clean(targetPath))
+	if err != nil {
+		return fmt.Errorf("invalid extraction path: %w", err)
+	}
 
-	// Ensure the target path is within destDir
-	if !strings.HasPrefix(cleanTarget, cleanDest) {
+	relativeTarget, err := filepath.Rel(cleanDest, cleanTarget)
+	if err != nil {
+		return fmt.Errorf("cannot determine extraction path boundary: %w", err)
+	}
+	if relativeTarget == ".." || strings.HasPrefix(relativeTarget, ".."+string(os.PathSeparator)) {
 		return fmt.Errorf("illegal path traversal: %s escapes destination %s", targetPath, destDir)
 	}
 
 	// Check for dangerous patterns
 	if strings.Contains(targetPath, "..") {
 		return fmt.Errorf("illegal path contains '..': %s", targetPath)
-	}
-
-	// Reject absolute paths in archive
-	if filepath.IsAbs(filepath.ToSlash(targetPath)) {
-		return fmt.Errorf("illegal absolute path in archive: %s", targetPath)
 	}
 
 	return nil

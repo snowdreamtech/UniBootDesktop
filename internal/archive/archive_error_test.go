@@ -26,6 +26,13 @@ func TestExtractArchive_Errors(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestValidateExtractPathUsesPathBoundary(t *testing.T) {
+	destDir := t.TempDir()
+	validTarget := filepath.Join(destDir, "file.txt")
+	assert.NoError(t, validateExtractPath(destDir, validTarget))
+	assert.Error(t, validateExtractPath(destDir, destDir+"-sibling/file.txt"))
+}
+
 func TestExtractBinary_Errors(t *testing.T) {
 	// Zip with invalid data
 	zipMagic := []byte{0x50, 0x4b, 0x03, 0x04}
