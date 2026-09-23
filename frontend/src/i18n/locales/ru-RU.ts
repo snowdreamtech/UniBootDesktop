@@ -165,6 +165,7 @@ export const ruRu: TranslationDict = {
   "deploy.start_update": "Обновление на месте (Без потери данных)",
   "deploy.batch_create": "Начать пакетное создание ({count} накопителей)",
   "deploy.writing": "Запись пакетов прошивки загрузчика...",
+  "deploy.checking": "Проверка...",
   "deploy.batch_current": "Текущий диск",
   "deploy.batch_overall_progress": "Общий прогресс",
   "deploy.toast_switched_b": "Успешно переключено в облачный режим!",

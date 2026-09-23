@@ -165,6 +165,7 @@ export const caEs: TranslationDict = {
   "deploy.start_update": "Actualització in situ (Seguretat de dades)",
   "deploy.batch_create": "Inicia el desplegament per lots ({count} unitats)",
   "deploy.writing": "Escrivint paquets de firmware d'arrencada...",
+  "deploy.checking": "Comprovant...",
   "deploy.batch_current": "Disc actual",
   "deploy.batch_overall_progress": "Progrés general",
   "deploy.toast_switched_b": "Canviat al mode Núvol amb èxit!",

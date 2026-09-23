@@ -165,6 +165,7 @@ export const nlNl: TranslationDict = {
   "deploy.start_update": "In-place upgrade (gegevenskluis)",
   "deploy.batch_create": "Start batchaanmaak ({count} stations)",
   "deploy.writing": "Opstartfirmwarepakketten schrijven...",
+  "deploy.checking": "Controleren...",
   "deploy.batch_current": "Huidige schijf",
   "deploy.batch_overall_progress": "Totale voortgang",
   "deploy.toast_switched_b": "Opgeschakeld naar Cloudmodus!",

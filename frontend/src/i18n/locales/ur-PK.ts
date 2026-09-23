@@ -165,6 +165,7 @@ export const urPk: TranslationDict = {
   "deploy.start_update": "ان پلیس اپ گریڈ (ڈیٹا سیف)",
   "deploy.batch_create": "بیچ کی تعیناتی شروع کریں ({count} ڈرائیوز)",
   "deploy.writing": "بوٹ فرم ویئر پیکجز لکھنا...",
+  "deploy.checking": "جانچ ہو رہی ہے...",
   "deploy.batch_current": "موجودہ ڈسک",
   "deploy.batch_overall_progress": "مجموعی پیشرفت",
   "deploy.toast_switched_b": "کامیابی کے ساتھ کلاؤڈ موڈ پر سوئچ ہو گیا!",

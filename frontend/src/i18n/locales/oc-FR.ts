@@ -165,6 +165,7 @@ export const ocFr: TranslationDict = {
   "deploy.start_update": "Mesa a jorn en plaça (Data Safe)",
   "deploy.batch_create": "Aviar lo desplegament per lots ({count} discs)",
   "deploy.writing": "Escriure de paquets de micrologicial d'arrenjament...",
+  "deploy.checking": "Verificacion en cors...",
   "deploy.batch_current": "Disc actual",
   "deploy.batch_overall_progress": "Progression globala",
   "deploy.toast_switched_b": "Cambiament cap al mòde Cloud reüssit !",

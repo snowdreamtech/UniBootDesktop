@@ -165,6 +165,7 @@ export const jaJp: TranslationDict = {
   "deploy.start_update": "インプレース更新開始 (データ保護)",
   "deploy.batch_create": "一括作成を開始 ({count} 個の ディスク)",
   "deploy.writing": "ブートファームウェアを書き込み中...",
+  "deploy.checking": "確認中...",
   "deploy.batch_current": "現在のディスク",
   "deploy.batch_overall_progress": "全体の進行状況",
   "deploy.toast_switched_b": "クラウドモードに切り替えました！",

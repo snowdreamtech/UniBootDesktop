@@ -163,6 +163,7 @@ export interface TranslationDict {
   "deploy.batch_update": string;
   "deploy.batch_mixed": string;
   "deploy.writing": string;
+  "deploy.checking": string;
   "deploy.batch_current": string;
   "deploy.batch_overall_progress": string;
   "deploy.toast_switched_b": string;

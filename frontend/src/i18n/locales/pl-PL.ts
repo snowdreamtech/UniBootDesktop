@@ -165,6 +165,7 @@ export const plPl: TranslationDict = {
   "deploy.start_update": "Aktualizacja w miejscu (Dane bezpieczne)",
   "deploy.batch_create": "Rozpocznij tworzenie zbiorcze ({count} dysków)",
   "deploy.writing": "Zapisywanie pakietów oprogramowania rozruchowego...",
+  "deploy.checking": "Sprawdzanie...",
   "deploy.batch_current": "Bieżący dysk",
   "deploy.batch_overall_progress": "Całkowity postęp",
   "deploy.toast_switched_b": "Przełączono na tryb chmury!",

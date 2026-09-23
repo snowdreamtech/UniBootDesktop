@@ -165,6 +165,7 @@ export const hyAm: TranslationDict = {
   "deploy.start_update": "Տեղում թարմացում (տվյալների անվտանգություն)",
   "deploy.batch_create": "Սկսեք խմբաքանակի տեղակայումը ({count} սկավառակ)",
   "deploy.writing": "Boot ծրագրակազմի փաթեթներ գրելը...",
+  "deploy.checking": "Ստուգում...",
   "deploy.batch_current": "Ընթացիկ սկավառակ",
   "deploy.batch_overall_progress": "Ընդհանուր առաջընթաց",
   "deploy.toast_switched_b": "Հաջողությամբ անցավ ամպային ռեժիմի:",

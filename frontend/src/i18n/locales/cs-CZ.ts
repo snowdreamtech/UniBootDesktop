@@ -165,6 +165,7 @@ export const csCz: TranslationDict = {
   "deploy.start_update": "Aktualizace na místě (Bezpečná pro data)",
   "deploy.batch_create": "Spustit hromadné vytváření ({count} disků)",
   "deploy.writing": "Zápis balíčků bootovacího firmwaru...",
+  "deploy.checking": "Kontroluji...",
   "deploy.batch_current": "Aktuální disk",
   "deploy.batch_overall_progress": "Celkový postup",
   "deploy.toast_switched_b": "Přejito do cloudového režimu!",

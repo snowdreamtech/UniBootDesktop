@@ -165,6 +165,7 @@ export const bnBd: TranslationDict = {
   "deploy.start_update": "ইন-প্লেস আপগ্রেড (ডেটা নিরাপদ)",
   "deploy.batch_create": "ব্যাচ স্থাপন শুরু করুন ({count} ড্রাইভ)",
   "deploy.writing": "বুট ফার্মওয়্যার প্যাকেজ লেখা হচ্ছে...",
+  "deploy.checking": "পরীক্ষা করা হচ্ছে...",
   "deploy.batch_current": "বর্তমান ডিস্ক",
   "deploy.batch_overall_progress": "সামগ্রিক অগ্রগতি",
   "deploy.toast_switched_b": "সফলভাবে ক্লাউড মোডে সুইচ করা হয়েছে!",

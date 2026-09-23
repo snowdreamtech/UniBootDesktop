@@ -165,6 +165,7 @@ export const frFr: TranslationDict = {
   "deploy.start_update": "Mise à niveau sur place (Données sécurisées)",
   "deploy.batch_create": "Démarrer le déploiement par lot ({count} clé(s))",
   "deploy.writing": "Écriture des paquets de micrologiciel d'amorçage...",
+  "deploy.checking": "Vérification en cours...",
   "deploy.batch_current": "Disque actuel",
   "deploy.batch_overall_progress": "Progression globale",
   "deploy.toast_switched_b": "Bascule vers le mode Cloud réussie !",

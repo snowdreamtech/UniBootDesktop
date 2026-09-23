@@ -325,13 +325,18 @@ export function useDeployment(options: UseDeploymentOptions) {
   function openDeployConfirm() {
     dismissDeploySuccessBanner();
 
-    let targets: string[] = [];
-    if (selectionMode.value === "single") {
-      if (!selectedDisk.value) return;
-      targets = [selectedDisk.value.device];
-    } else {
-      targets = Array.from(selectedDevices.value);
-      if (targets.length === 0) return;
+    // pendingTargets must be locked before this function is called.
+    // We intentionally do NOT re-derive targets from the current UI selection:
+    // - For the no-conflict deploy path, targets are locked by handleDeployBtnClick
+    //   before the async preflight call, so they always match pendingIsoPlans.
+    // - For the retry path, we reuse the original targets from the failed deploy,
+    //   ensuring the ISO plans (built for those targets) remain consistent.
+    // This function's only job is to take a fresh disk-state snapshot of the
+    // already-decided targets and open the confirmation dialog.
+    const targets = pendingTargets.value;
+    if (targets.length === 0) {
+      showToast(t("deploy.toast_target_changed"), "error");
+      return;
     }
 
     const refreshedSnapshots = targets.map((device) => diskList.value.find((disk) => disk.device === device));
@@ -340,7 +345,6 @@ export function useDeployment(options: UseDeploymentOptions) {
       return;
     }
 
-    pendingTargets.value = targets;
     pendingTargetSnapshots.value = refreshedSnapshots as DiskInfo[];
     isDeployConfirmOpen.value = true;
   }
@@ -364,11 +368,24 @@ export function useDeployment(options: UseDeploymentOptions) {
     if (!app?.PreflightIsoCopy) return true;
 
     try {
-      const conflicts = (await app.PreflightIsoCopy(
+      const conflicts = ((await app.PreflightIsoCopy(
         targets,
         selectedIsoFiles.value.map((file) => file.path),
-      )) as IsoCopyConflict[];
+      )) ?? []) as IsoCopyConflict[];
       if (conflicts.length > 0) {
+        // Snapshot disk state before showing the conflict dialog so the entire
+        // preflight → conflict → confirm → deploy chain uses a single consistent
+        // disk state captured at this exact moment.
+        const snapshots = targets.map((device) => diskList.value.find((disk) => disk.device === device));
+        if (snapshots.some((d) => !d)) {
+          // At least one target disk disappeared during preflight — abort.
+          // Opening the conflict dialog with a stale/missing snapshot would
+          // risk deploying to the wrong disk after the user resolves conflicts.
+          showToast(t("deploy.toast_target_changed"), "error");
+          return false;
+        }
+        pendingTargets.value = targets;
+        pendingTargetSnapshots.value = snapshots as DiskInfo[];
         isoConflicts.value = conflicts;
         isIsoConflictOpen.value = true;
         return false;
@@ -384,6 +401,11 @@ export function useDeployment(options: UseDeploymentOptions) {
     isIsoConflictOpen.value = false;
     isoConflicts.value = [];
     pendingIsoPlans.value = [];
+    // Clear the snapshot captured during preflight so stale data cannot
+    // accidentally be reused if the next deploy attempt hits the silent
+    // snapshot-failure branch before overwriting these refs.
+    pendingTargets.value = [];
+    pendingTargetSnapshots.value = [];
   }
 
   function confirmIsoConflictPreflight(
@@ -401,7 +423,18 @@ export function useDeployment(options: UseDeploymentOptions) {
     }));
     isIsoConflictOpen.value = false;
     isoConflicts.value = [];
-    openDeployConfirm();
+    // Do NOT call openDeployConfirm() here — it would re-fetch disk snapshots
+    // from diskList, which may have changed since the user started deciding.
+    // pendingTargets and pendingTargetSnapshots were already captured in
+    // preflightIsoCopies when the conflicts were first discovered.
+    if (pendingTargets.value.length === 0) {
+      // Should not normally happen, but guard against the silent snapshot-failure
+      // edge case where pendingTargets was never populated.
+      showToast(t("deploy.toast_target_changed"), "error");
+      return;
+    }
+    dismissDeploySuccessBanner();
+    isDeployConfirmOpen.value = true;
   }
 
   async function handleDeployBtnClick() {
@@ -443,6 +476,15 @@ export function useDeployment(options: UseDeploymentOptions) {
       if (targets.length === 0) return;
     }
 
+    // Lock pendingTargets NOW, before the async preflight call.
+    // buildDefaultIsoPlans (inside preflightIsoCopies) stamps each plan with
+    // plan.targetDisk from this exact targets array. If we waited until
+    // openDeployConfirm to set pendingTargets, a selection change during the
+    // async Go call would cause pendingIsoPlans[i].targetDisk (T1) to diverge
+    // from pendingTargets[i] (T2), routing ISO plans to the wrong disks.
+    pendingTargets.value = targets;
+    pendingTargetSnapshots.value = [];
+
     isPreflight.value = true;
     try {
       if (!(await preflightIsoCopies(targets))) return;
@@ -465,13 +507,16 @@ export function useDeployment(options: UseDeploymentOptions) {
       return;
     }
 
-    let targets: string[] = [];
-    if (selectionMode.value === "single") {
-      if (!selectedDisk.value) return;
-      targets = [selectedDisk.value.device];
-    } else {
-      targets = Array.from(selectedDevices.value);
-      if (targets.length === 0) return;
+    // Use pendingTargets as the single authoritative source of truth.
+    // These were locked in either by openDeployConfirm() or by preflightIsoCopies()
+    // (when conflicts were found) at the moment the user initiated the deploy flow.
+    // Re-deriving targets from the current selection here would allow a changed
+    // selection to silently mismatch the pendingIsoPlans that were built for the
+    // original targets, potentially writing ISO plans to the wrong disks.
+    const targets = pendingTargets.value;
+    if (targets.length === 0) {
+      showToast(t("deploy.toast_target_changed"), "error");
+      return;
     }
 
     isDeploying.value = true;
@@ -558,6 +603,11 @@ export function useDeployment(options: UseDeploymentOptions) {
           if (res.diagnostics) {
             latestDiagnostics = res.diagnostics;
           }
+        } else {
+          // Backend returned null or an empty result list — treat as failure
+          // so the user sees a diagnostics modal instead of a false success banner.
+          success = false;
+          resultMsg = t("deploy.alert_fail", { msg: "no result returned" });
         }
       } else {
         if (pendingTargetSnapshots.value.length !== targets.length) {
@@ -593,6 +643,9 @@ export function useDeployment(options: UseDeploymentOptions) {
           } else {
             resultMsg = t("deploy.result_batch_success", { count: resList.length });
           }
+        } else {
+          success = false;
+          resultMsg = t("deploy.alert_fail", { msg: "no result returned" });
         }
       }
     } catch (e: any) {

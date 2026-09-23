@@ -165,6 +165,7 @@ export const elGr: TranslationDict = {
   "deploy.start_update": "Επιτόπια αναβάθμιση (ασφαλές δεδομένων)",
   "deploy.batch_create": "Έναρξη μαζικής ανάπτυξης ({count} δίσκοι)",
   "deploy.writing": "Σύνταξη πακέτων υλικολογισμικού εκκίνησης...",
+  "deploy.checking": "Έλεγχος...",
   "deploy.batch_current": "Τρέχων δίσκος",
   "deploy.batch_overall_progress": "Συνολική πρόοδος",
   "deploy.toast_switched_b": "Επιτυχής μετάβαση σε λειτουργία Cloud!",

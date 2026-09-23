@@ -165,6 +165,7 @@ export const huHu: TranslationDict = {
   "deploy.start_update": "Helybeni frissítés (Adatbiztos)",
   "deploy.batch_create": "Több lemezes létrehozás indítása ({count} meghajtó)",
   "deploy.writing": "Indító belső vezérlőprogram csomagok írása...",
+  "deploy.checking": "Ellenőrzés...",
   "deploy.batch_current": "Aktuális lemez",
   "deploy.batch_overall_progress": "Összesített folyamat",
   "deploy.toast_switched_b": "Sikeresen átváltva Felhő módra!",

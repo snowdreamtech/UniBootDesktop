@@ -165,6 +165,7 @@ export const thTh: TranslationDict = {
   "deploy.start_update": "อัปเกรดแบบแทนที่ (ปลอดภัยข้อมูล)",
   "deploy.batch_create": "เริ่มการปรับใช้เป็นกลุ่ม (ไดรฟ์ {count})",
   "deploy.writing": "กำลังเขียนแพ็คเกจเฟิร์มแวร์บูต...",
+  "deploy.checking": "กำลังตรวจสอบ...",
   "deploy.batch_current": "ดิสก์ปัจจุบัน",
   "deploy.batch_overall_progress": "ความคืบหน้ารวม",
   "deploy.toast_switched_b": "สลับเป็นโหมดคลาวด์สำเร็จแล้ว!",

@@ -165,6 +165,7 @@ export const ptPt: TranslationDict = {
   "deploy.start_update": "Atualização local (dados seguros)",
   "deploy.batch_create": "Iniciar implantação em lote ({count} unidades)",
   "deploy.writing": "Escrevendo pacotes de firmware de inicialização...",
+  "deploy.checking": "A verificar...",
   "deploy.batch_current": "Disco atual",
   "deploy.batch_overall_progress": "Progresso geral",
   "deploy.toast_switched_b": "Alternado para o Modo Nuvem com sucesso!",

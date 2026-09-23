@@ -165,6 +165,7 @@ export const viVn: TranslationDict = {
   "deploy.start_update": "Nâng cấp tại chỗ (An toàn dữ liệu)",
   "deploy.batch_create": "Bắt đầu tạo hàng loạt ({count} ổ đĩa)",
   "deploy.writing": "Đang ghi các gói firmware khởi động...",
+  "deploy.checking": "Đang kiểm tra...",
   "deploy.batch_current": "Ổ đĩa hiện tại",
   "deploy.batch_overall_progress": "Tiến trình tổng thể",
   "deploy.toast_switched_b": "Đã chuyển sang chế độ đám mây!",

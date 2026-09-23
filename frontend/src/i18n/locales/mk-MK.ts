@@ -165,6 +165,7 @@ export const mkMk: TranslationDict = {
   "deploy.start_update": "Надградба на место (безбедно за податоци)",
   "deploy.batch_create": "Започнете со сериско распоредување ({count} дискови)",
   "deploy.writing": "Пишување пакети со фирмвер за подигање...",
+  "deploy.checking": "Проверување...",
   "deploy.batch_current": "Тековен диск",
   "deploy.batch_overall_progress": "Вкупен напредок",
   "deploy.toast_switched_b": "Успешно префрлено во облачен режим!",

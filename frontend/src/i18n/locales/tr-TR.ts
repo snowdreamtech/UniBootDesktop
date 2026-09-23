@@ -165,6 +165,7 @@ export const trTr: TranslationDict = {
   "deploy.start_update": "Yerinde Yükseltmeyi Başlat (Veri Güvenli)",
   "deploy.batch_create": "Toplu Oluşturmayı Başlat ({count} Sürücü)",
   "deploy.writing": "Önyükleme Ürün Yazılımı Paketleri Yazılıyor...",
+  "deploy.checking": "Kontrol ediliyor...",
   "deploy.batch_current": "Geçerli Disk",
   "deploy.batch_overall_progress": "Genel İlerleme",
   "deploy.toast_switched_b": "Bulut Moduna Geçildi!",

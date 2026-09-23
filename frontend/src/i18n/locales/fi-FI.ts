@@ -165,6 +165,7 @@ export const fiFi: TranslationDict = {
   "deploy.start_update": "Paikkapäivitys (tietoturvallinen)",
   "deploy.batch_create": "Aloita eräkäyttöönotto ({count} asemaa)",
   "deploy.writing": "Kirjoitetaan käynnistysohjelmistopaketteja...",
+  "deploy.checking": "Tarkistetaan...",
   "deploy.batch_current": "Nykyinen levy",
   "deploy.batch_overall_progress": "Kokonaisedistyminen",
   "deploy.toast_switched_b": "Vaihdettu pilvitilaan!",

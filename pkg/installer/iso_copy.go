@@ -261,10 +261,13 @@ func FindIsoCopyConflictsInDirectory(targetDisk string, targetIsoDir string, iso
 	for _, sourcePath := range isoPaths {
 		fileName := filepath.Base(sourcePath)
 		_, targetExists := targetFiles[fileName]
-		if !targetExists && sourceNames[fileName] < 2 {
+		isDuplicate := sourceNames[fileName] > 1
+		if !targetExists && !isDuplicate {
 			continue
 		}
-		if sourceNames[fileName] > 1 {
+		// Mark the original name as taken in existing so subsequent duplicates
+		// are assigned unique suggested names.
+		if isDuplicate {
 			existing[fileName] = struct{}{}
 		}
 		suggestedName := fileName
@@ -276,9 +279,14 @@ func FindIsoCopyConflictsInDirectory(targetDisk string, targetIsoDir string, iso
 			baseName := strings.TrimSuffix(fileName, extension)
 			suggestedName = fmt.Sprintf("%s (%d)%s", baseName, suffix, extension)
 		}
-		conflictType := "source_duplicate"
-		if targetExists {
+		var conflictType string
+		switch {
+		case isDuplicate && targetExists:
 			conflictType = "source_duplicate_target_exists"
+		case isDuplicate:
+			conflictType = "source_duplicate"
+		default:
+			conflictType = "target_exists"
 		}
 		conflicts = append(conflicts, IsoCopyConflict{
 			TargetDisk:    targetDisk,

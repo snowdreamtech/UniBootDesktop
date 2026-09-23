@@ -165,6 +165,7 @@ export const itIt: TranslationDict = {
   "deploy.start_update": "Aggiornamento sul Posto (Dati Sicuri)",
   "deploy.batch_create": "Avvia Creazione in Lotto ({count} Unità)",
   "deploy.writing": "Scrittura Pacchetti Firmware di Avvio...",
+  "deploy.checking": "Verifica in corso...",
   "deploy.batch_current": "Disco corrente",
   "deploy.batch_overall_progress": "Avanzamento generale",
   "deploy.toast_switched_b": "Passato alla modalità Cloud!",

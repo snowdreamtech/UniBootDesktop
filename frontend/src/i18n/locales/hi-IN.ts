@@ -165,6 +165,7 @@ export const hiIn: TranslationDict = {
   "deploy.start_update": "इन-प्लेस अपग्रेड (डेटा सुरक्षित)",
   "deploy.batch_create": "बैच निर्माण शुरू करें ({count} ड्राइव)",
   "deploy.writing": "बूट फ़र्मवेयर पैकेज़ लिखना...",
+  "deploy.checking": "जाँच हो रही है...",
   "deploy.batch_current": "वर्तमान डिस्क",
   "deploy.batch_overall_progress": "कुल प्रगति",
   "deploy.toast_switched_b": "सफलतापूर्वक क्लाउड मोड में स्विच किया गया!",

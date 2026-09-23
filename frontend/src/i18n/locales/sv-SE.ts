@@ -165,6 +165,7 @@ export const svSe: TranslationDict = {
   "deploy.start_update": "Uppgradering på plats (Datasäker)",
   "deploy.batch_create": "Starta gruppskapande ({count} enheter)",
   "deploy.writing": "Skriver boot-firmwarepaket...",
+  "deploy.checking": "Kontrollerar...",
   "deploy.batch_current": "Aktuell disk",
   "deploy.batch_overall_progress": "Övergripande förlopp",
   "deploy.toast_switched_b": "Växlat till molnläge!",

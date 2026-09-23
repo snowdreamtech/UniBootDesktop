@@ -165,6 +165,7 @@ export const idId: TranslationDict = {
   "deploy.start_update": "Peningkatan di Tempat (Data Aman)",
   "deploy.batch_create": "Mulai Penerapan Batch ({count} Drive)",
   "deploy.writing": "Menulis Paket Boot Firmware...",
+  "deploy.checking": "Memeriksa...",
   "deploy.batch_current": "Disk saat ini",
   "deploy.batch_overall_progress": "Kemajuan keseluruhan",
   "deploy.toast_switched_b": "Berhasil beralih ke Mode Cloud!",

@@ -165,6 +165,7 @@ export const etEe: TranslationDict = {
   "deploy.start_update": "Kohane versiooniuuendus (andmete turvaline)",
   "deploy.batch_create": "Alusta pakettjuurutust ({count} draivi)",
   "deploy.writing": "Alglaadimispüsivarapakettide kirjutamine...",
+  "deploy.checking": "Kontrollimine...",
   "deploy.batch_current": "Praegune ketas",
   "deploy.batch_overall_progress": "Üldine edenemine",
   "deploy.toast_switched_b": "Üle viidud pilverežiimi!",

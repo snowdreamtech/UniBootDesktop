@@ -165,6 +165,7 @@ export const faIr: TranslationDict = {
   "deploy.start_update": "ارتقاء در محل (ایمن داده)",
   "deploy.batch_create": "شروع استقرار دسته ای ({count} درایو)",
   "deploy.writing": "نوشتن بسته های سفت افزار بوت...",
+  "deploy.checking": "در حال بررسی...",
   "deploy.batch_current": "دیسک فعلی",
   "deploy.batch_overall_progress": "پیشرفت کلی",
   "deploy.toast_switched_b": "با موفقیت به حالت ابری تغییر یافت!",

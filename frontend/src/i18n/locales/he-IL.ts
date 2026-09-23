@@ -165,6 +165,7 @@ export const heIl: TranslationDict = {
   "deploy.start_update": "שדרוג במקום (בטוח לנתונים)",
   "deploy.batch_create": "התחל פריסה אצווה ({count} כוננים)",
   "deploy.writing": "כתיבת חבילות קושחת אתחול...",
+  "deploy.checking": "בודק...",
   "deploy.batch_current": "דיסק נוכחי",
   "deploy.batch_overall_progress": "התקדמות כוללת",
   "deploy.toast_switched_b": "עבר למצב ענן בהצלחה!",

@@ -165,6 +165,7 @@ export const azAz: TranslationDict = {
   "deploy.start_update": "Yerində Təkmilləşdirmə (Data Təhlükəsizliyi)",
   "deploy.batch_create": "Toplu Yerləşdirməyə başlayın ({count} Disk)",
   "deploy.writing": "Yükləmə Mikro Proqramı Paketləri Yazılır...",
+  "deploy.checking": "Yoxlanılır...",
   "deploy.batch_current": "Cari Disk",
   "deploy.batch_overall_progress": "Ümumi Tərəqqi",
   "deploy.toast_switched_b": "Uğurla bulud rejiminə keçdi!",

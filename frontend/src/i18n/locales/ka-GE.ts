@@ -165,6 +165,7 @@ export const kaGe: TranslationDict = {
   "deploy.start_update": "ადგილზე განახლება (მონაცემთა უსაფრთხო)",
   "deploy.batch_create": "ჯგუფური დანერგვის დაწყება ({count} დისკი)",
   "deploy.writing": "ჩატვირთვის პროგრამული უზრუნველყოფის პაკეტების ჩაწერა...",
+  "deploy.checking": "შემოწმება...",
   "deploy.batch_current": "მიმდინარე დისკი",
   "deploy.batch_overall_progress": "საერთო პროგრესი",
   "deploy.toast_switched_b": "წარმატებით გადაერთო ღრუბლოვან რეჟიმზე!",

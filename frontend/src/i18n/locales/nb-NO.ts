@@ -165,6 +165,7 @@ export const nbNo: TranslationDict = {
   "deploy.start_update": "Sømløs oppgradering (Datagarantert)",
   "deploy.batch_create": "Start batch-opprettelse ({count} stasjoner)",
   "deploy.writing": "Skriver oppstartsfastvarepakker...",
+  "deploy.checking": "Sjekker...",
   "deploy.batch_current": "Gjeldende disk",
   "deploy.batch_overall_progress": "Samlet fremdrift",
   "deploy.toast_switched_b": "Byttet til skymodus!",

@@ -165,6 +165,7 @@ export const mlIn: TranslationDict = {
   "deploy.start_update": "ഇൻ-പ്ലേസ് അപ്‌ഗ്രേഡ് (ഡാറ്റ സുരക്ഷിതം)",
   "deploy.batch_create": "ബാച്ച് വിന്യാസം ആരംഭിക്കുക ({count} ഡ്രൈവുകൾ)",
   "deploy.writing": "ബൂട്ട് ഫേംവെയർ പാക്കേജുകൾ എഴുതുന്നു...",
+  "deploy.checking": "പരിശോധിക്കുന്നു...",
   "deploy.batch_current": "നിലവിലെ ഡിസ്ക്",
   "deploy.batch_overall_progress": "മൊത്തത്തിലുള്ള പുരോഗതി",
   "deploy.toast_switched_b": "ക്ലൗഡ് മോഡിലേക്ക് വിജയകരമായി മാറി!",

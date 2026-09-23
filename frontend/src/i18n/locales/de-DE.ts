@@ -165,6 +165,7 @@ export const deDe: TranslationDict = {
   "deploy.start_update": "In-Place-Upgrade starten (Daten sicher)",
   "deploy.batch_create": "Stapel-Erstellung starten ({count} Laufwerke)",
   "deploy.writing": "Boot-Firmware-Pakete werden geschrieben...",
+  "deploy.checking": "Wird geprüft...",
   "deploy.batch_current": "Aktueller Datenträger",
   "deploy.batch_overall_progress": "Gesamtfortschritt",
   "deploy.toast_switched_b": "Erfolgreich in den Cloud-Modus gewechselt!",

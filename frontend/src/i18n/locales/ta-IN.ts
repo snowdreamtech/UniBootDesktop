@@ -165,6 +165,7 @@ export const taIn: TranslationDict = {
   "deploy.start_update": "இன்-ப்ளேஸ் அப்கிரேட் (டேட்டா சேஃப்)",
   "deploy.batch_create": "தொகுதி வரிசைப்படுத்தலைத் தொடங்கு ({count} இயக்கிகள்)",
   "deploy.writing": "துவக்க நிலைபொருள் தொகுப்புகளை எழுதுதல்...",
+  "deploy.checking": "சரிபார்க்கிறது...",
   "deploy.batch_current": "தற்போதைய வட்டு",
   "deploy.batch_overall_progress": "ஒட்டுமொத்த முன்னேற்றம்",
   "deploy.toast_switched_b": "கிளவுட் பயன்முறைக்கு വിജയകരமாக மாற்றப்பட்டது!",

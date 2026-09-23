@@ -165,6 +165,7 @@ export const hrHr: TranslationDict = {
   "deploy.start_update": "Nadogradnja na licu mjesta (sigurno za podatke)",
   "deploy.batch_create": "Započni skupnu implementaciju ({count} diskova)",
   "deploy.writing": "Pisanje paketa firmvera za pokretanje...",
+  "deploy.checking": "Provjera...",
   "deploy.batch_current": "Trenutni disk",
   "deploy.batch_overall_progress": "Ukupni napredak",
   "deploy.toast_switched_b": "Prebačeno na cloud način!",

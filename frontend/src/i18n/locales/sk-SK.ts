@@ -165,6 +165,7 @@ export const skSk: TranslationDict = {
   "deploy.start_update": "In-place Upgrade (Data Safe)",
   "deploy.batch_create": "Spustiť dávkové nasadenie ({count} diskov)",
   "deploy.writing": "Zapisujú sa balíčky bootovacieho firmvéru...",
+  "deploy.checking": "Kontrolujem...",
   "deploy.batch_current": "Aktuálny disk",
   "deploy.batch_overall_progress": "Celkový postup",
   "deploy.toast_switched_b": "Prepnuté do cloudového režimu!",

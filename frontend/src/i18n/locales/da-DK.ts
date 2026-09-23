@@ -165,6 +165,7 @@ export const daDk: TranslationDict = {
   "deploy.start_update": "Opgradering på stedet (Datasikker)",
   "deploy.batch_create": "Start batch-oprettelse ({count} drev)",
   "deploy.writing": "Skriver boot-firmwarepakker...",
+  "deploy.checking": "Kontrollerer...",
   "deploy.batch_current": "Aktuel disk",
   "deploy.batch_overall_progress": "Samlet fremgang",
   "deploy.toast_switched_b": "Skiftet til Cloud-tilstand!",

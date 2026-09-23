@@ -173,6 +173,7 @@ export const srCyrl: TranslationDict = {
   "deploy.start_update": "Надоградња на месту (безбедно за податке)",
   "deploy.batch_create": "Започни групно креирање ({count} уређаја)",
   "deploy.writing": "Писање пакета фирмвера за покретање...",
+  "deploy.checking": "Провера...",
   "deploy.batch_current": "Тренутни диск",
   "deploy.batch_overall_progress": "Укупан напредак",
   "deploy.toast_switched_b": "Успешно пребачено у облачни режим!",

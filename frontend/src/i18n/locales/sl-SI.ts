@@ -165,6 +165,7 @@ export const slSi: TranslationDict = {
   "deploy.start_update": "Nadgradnja na mestu (varno za podatke)",
   "deploy.batch_create": "Začni paketno uvajanje ({count} pogonov)",
   "deploy.writing": "Pisanje zagonskih paketov vdelane programske opreme ...",
+  "deploy.checking": "Preverjanje...",
   "deploy.batch_current": "Trenutni disk",
   "deploy.batch_overall_progress": "Celoten napredek",
   "deploy.toast_switched_b": "Preklopljeno v način oblaka!",

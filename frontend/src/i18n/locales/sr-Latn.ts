@@ -174,6 +174,7 @@ export const srLatn: TranslationDict = {
   "deploy.start_update": "Надоградња на месту (безбедно за податке)",
   "deploy.batch_create": "Započni grupno kreiranje ({count} uređaja)",
   "deploy.writing": "Писање пакета фирмвера за покретање...",
+  "deploy.checking": "Provera...",
   "deploy.batch_current": "Trenutni disk",
   "deploy.batch_overall_progress": "Ukupan napredak",
   "deploy.toast_switched_b": "Uspešno prebačeno u oblačni režim!",

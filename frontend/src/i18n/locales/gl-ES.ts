@@ -165,6 +165,7 @@ export const glEs: TranslationDict = {
   "deploy.start_update": "Actualización local (seguro de datos)",
   "deploy.batch_create": "Iniciar a implantación por lotes ({count} unidades)",
   "deploy.writing": "Escribindo paquetes de firmware de arranque...",
+  "deploy.checking": "Comprobando...",
   "deploy.batch_current": "Disco actual",
   "deploy.batch_overall_progress": "Progreso xeral",
   "deploy.toast_switched_b": "Cambiado ao modo Nube con éxito!",

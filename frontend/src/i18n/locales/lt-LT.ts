@@ -165,6 +165,7 @@ export const ltLt: TranslationDict = {
   "deploy.start_update": "Atnaujinimas vietoje (saugus duomenis)",
   "deploy.batch_create": "Pradėti paketinį diegimą ({count} diskai)",
   "deploy.writing": "Rašomi įkrovos programinės įrangos paketai...",
+  "deploy.checking": "Tikrinama...",
   "deploy.batch_current": "Dabartinis diskas",
   "deploy.batch_overall_progress": "Bendra eiga",
   "deploy.toast_switched_b": "Sėkmingai perjungta į debesies režimą!",

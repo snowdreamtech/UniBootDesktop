@@ -165,6 +165,7 @@ export const esEs: TranslationDict = {
   "deploy.start_update": "Actualización in situ (Datos seguros)",
   "deploy.batch_create": "Iniciar creación por lotes ({count} unidades)",
   "deploy.writing": "Escribiendo paquetes de firmware de arranque...",
+  "deploy.checking": "Verificando...",
   "deploy.batch_current": "Disco actual",
   "deploy.batch_overall_progress": "Progreso general",
   "deploy.toast_switched_b": "¡Cambiado al modo Nube con éxito!",

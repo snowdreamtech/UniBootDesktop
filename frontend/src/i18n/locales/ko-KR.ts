@@ -165,6 +165,7 @@ export const koKr: TranslationDict = {
   "deploy.start_update": "무손실 업데이트 시작 (데이터 보존)",
   "deploy.batch_create": "일괄 제작 시작 ({count}개 드라이브)",
   "deploy.writing": "부팅 펌웨어 패키지 작성 중...",
+  "deploy.checking": "확인 중...",
   "deploy.batch_current": "현재 디스크",
   "deploy.batch_overall_progress": "전체 진행률",
   "deploy.toast_switched_b": "클라우드 모드로 전환되었습니다!",

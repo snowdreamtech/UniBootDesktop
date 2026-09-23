@@ -165,6 +165,7 @@ export const roRo: TranslationDict = {
   "deploy.start_update": "Upgrade la loc (sigur pentru date)",
   "deploy.batch_create": "Porniți crearea în lot ({count} unități)",
   "deploy.writing": "Se scrie pachete de firmware de pornire...",
+  "deploy.checking": "Se verifică...",
   "deploy.batch_current": "Disc curent",
   "deploy.batch_overall_progress": "Progres general",
   "deploy.toast_switched_b": "S-a comutat la modul Cloud!",

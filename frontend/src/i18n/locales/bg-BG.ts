@@ -165,6 +165,7 @@ export const bgBg: TranslationDict = {
   "deploy.start_update": "Надграждане на място (безопасно за данни)",
   "deploy.batch_create": "Старт на пакетно внедряване ({count} дискове)",
   "deploy.writing": "Писане на стартиращи фърмуерни пакети...",
+  "deploy.checking": "Проверка...",
   "deploy.batch_current": "Текущ диск",
   "deploy.batch_overall_progress": "Общ напредък",
   "deploy.toast_switched_b": "Успешно превключване към облачен режим!",

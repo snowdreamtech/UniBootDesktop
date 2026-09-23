@@ -165,6 +165,7 @@ export const arSa: TranslationDict = {
   "deploy.start_update": "الترقية في المكان (أمان البيانات)",
   "deploy.batch_create": "بدء إنشاء التجميعه ({count} محرك قرص)",
   "deploy.writing": "جاري كتابة حزم البرامج الثابتة للإقلاع...",
+  "deploy.checking": "جارٍ التحقق...",
   "deploy.batch_current": "القرص الحالي",
   "deploy.batch_overall_progress": "التقدم العام",
   "deploy.toast_switched_b": "تم التبديل إلى وضع السحابة بنجاح!",

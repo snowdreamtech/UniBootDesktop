@@ -165,6 +165,7 @@ export const beBy: TranslationDict = {
   "deploy.start_update": "Абнаўленне на месцы (бяспечнасць даных)",
   "deploy.batch_create": "Пачаць пакетнае разгортванне ({count} дыскаў)",
   "deploy.writing": "Запіс загрузных пакетаў прашыўкі...",
+  "deploy.checking": "Праверка...",
   "deploy.batch_current": "Бягучы дыск",
   "deploy.batch_overall_progress": "Агульны прагрэс",
   "deploy.toast_switched_b": "Папярэдне пераключана ў воблачны рэжым!",

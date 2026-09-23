@@ -165,6 +165,7 @@ export const ukUa: TranslationDict = {
   "deploy.start_update": "Оновлення на місці (безпека даних)",
   "deploy.batch_create": "Розпочати пакетне створення ({count} дисків)",
   "deploy.writing": "Запис завантажувальних пакетів прошивки...",
+  "deploy.checking": "Перевірка...",
   "deploy.batch_current": "Поточний диск",
   "deploy.batch_overall_progress": "Загальний прогрес",
   "deploy.toast_switched_b": "Успішно переключено в хмарний режим!",

@@ -165,6 +165,7 @@ export const esLa: TranslationDict = {
   "deploy.start_update": "Actualización in situ (datos seguros)",
   "deploy.batch_create": "Iniciar implementación por lotes ({count} unidades)",
   "deploy.writing": "Escribiendo paquetes de firmware de arranque...",
+  "deploy.checking": "Verificando...",
   "deploy.batch_current": "Disco actual",
   "deploy.batch_overall_progress": "Progreso general",
   "deploy.toast_switched_b": "¡Cambiado al modo Nube con éxito!",
