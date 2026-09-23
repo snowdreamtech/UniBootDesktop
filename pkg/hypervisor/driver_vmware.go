@@ -111,8 +111,9 @@ func (d *VMwareDriver) Launch(ctx context.Context, diskPath string, bootMode str
 	if targetPath == "" {
 		targetPath = diskPath
 	}
-	ensureDiskPermissions(targetPath)
+	restoreDiskPerms := ensureDiskPermissions(targetPath)
 	unmountTargetDisk(targetPath)
+	defer scheduleDiskPermissionRestore(restoreDiskPerms, nil)
 
 	if err := launchVMwareVM(status, targetPath, bootMode); err == nil {
 		return nil
@@ -256,7 +257,7 @@ func getDiskSectorCount(diskDev string) int64 {
 				startInt := strings.Index(rest, "<integer>")
 				endInt := strings.Index(rest, "</integer>")
 				if startInt != -1 && endInt != -1 && startInt < endInt {
-					valStr := rest[startInt+len("<integer>"):endInt]
+					valStr := rest[startInt+len("<integer>") : endInt]
 					var size int64
 					if _, fmtErr := fmt.Sscanf(strings.TrimSpace(valStr), "%d", &size); fmtErr == nil && size > 0 {
 						return size / 512

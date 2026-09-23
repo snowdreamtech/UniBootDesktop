@@ -120,15 +120,17 @@ func (d *KVMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 		targetPath = diskPath
 	}
 	unmountTargetDisk(targetPath)
-	ensureDiskPermissions(targetPath)
+	restoreDiskPerms := ensureDiskPermissions(targetPath)
 
 	cmd := exec.Command(status.Path)
 	if err := cmd.Start(); err != nil {
+		restoreDiskPerms()
 		return fmt.Errorf("failed to launch KVM tool: %w", err)
 	}
 
 	go func() {
 		_ = cmd.Wait()
+		restoreDiskPerms()
 		remountTargetDisk(targetPath)
 	}()
 

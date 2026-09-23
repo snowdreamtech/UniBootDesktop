@@ -109,7 +109,8 @@ func (d *VirtualBoxDriver) Launch(ctx context.Context, diskPath string, bootMode
 		targetPath = diskPath
 	}
 	unmountTargetDisk(targetPath)
-	ensureDiskPermissions(targetPath)
+	restoreDiskPerms := ensureDiskPermissions(targetPath)
+	defer scheduleDiskPermissionRestore(restoreDiskPerms, nil)
 
 	vboxManage, _ := exec.LookPath("VBoxManage")
 	if vboxManage == "" && runtime.GOOS == "darwin" {

@@ -96,15 +96,17 @@ func (d *ParallelsDriver) Launch(ctx context.Context, diskPath string, bootMode 
 		targetPath = diskPath
 	}
 	unmountTargetDisk(targetPath)
-	ensureDiskPermissions(targetPath)
+	restoreDiskPerms := ensureDiskPermissions(targetPath)
 
 	cmd := exec.Command("open", "-W", "-a", "Parallels Desktop")
 	if err := cmd.Start(); err != nil {
+		restoreDiskPerms()
 		return fmt.Errorf("failed to open Parallels Desktop application: %w", err)
 	}
 
 	go func() {
 		_ = cmd.Wait()
+		restoreDiskPerms()
 		remountTargetDisk(targetPath)
 	}()
 

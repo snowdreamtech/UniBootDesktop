@@ -352,6 +352,7 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		}
 		return nil
 	case <-time.After(800 * time.Millisecond):
+		restoreDiskPerms()
 		return nil
 	}
 }

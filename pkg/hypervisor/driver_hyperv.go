@@ -101,15 +101,17 @@ func (d *HyperVDriver) Launch(ctx context.Context, diskPath string, bootMode str
 		targetPath = diskPath
 	}
 	unmountTargetDisk(targetPath)
-	ensureDiskPermissions(targetPath)
+	restoreDiskPerms := ensureDiskPermissions(targetPath)
 
 	cmd := exec.Command(status.Path)
 	if err := cmd.Start(); err != nil {
+		restoreDiskPerms()
 		return fmt.Errorf("failed to launch Hyper-V connection tool: %w", err)
 	}
 
 	go func() {
 		_ = cmd.Wait()
+		restoreDiskPerms()
 		remountTargetDisk(targetPath)
 	}()
 

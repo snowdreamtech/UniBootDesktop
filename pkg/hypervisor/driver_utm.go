@@ -95,8 +95,9 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	if targetPath == "" {
 		targetPath = diskPath
 	}
-	ensureDiskPermissions(targetPath)
+	restoreDiskPerms := ensureDiskPermissions(targetPath)
 	unmountTargetDisk(targetPath)
+	defer scheduleDiskPermissionRestore(restoreDiskPerms, nil)
 
 	// macOS App Sandbox (com.utmapp.UTM) strictly forbids UTM.app from reading raw host block devices (/dev/rdiskN).
 	// If system QEMU is installed, delegate physical disk preview testing to host QEMU engine.
