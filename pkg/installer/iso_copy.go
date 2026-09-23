@@ -9,6 +9,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -233,6 +234,17 @@ func CopyIsoFilesToDiskWithPlan(ctx context.Context, mountPoint string, entries 
 	return nil
 }
 
+// normalizeForFS returns name lowercased on case-insensitive file systems
+// (macOS, Windows) so that conflict detection is accurate regardless of
+// how the target disk chose to capitalize existing filenames.
+// On Linux (typically case-sensitive) the original name is returned unchanged.
+func normalizeForFS(name string) string {
+	if runtime.GOOS == "darwin" || runtime.GOOS == "windows" {
+		return strings.ToLower(name)
+	}
+	return name
+}
+
 // FindIsoCopyConflictsInDirectory returns filename conflicts without reading file contents.
 func FindIsoCopyConflictsInDirectory(targetDisk string, targetIsoDir string, isoPaths []string) ([]IsoCopyConflict, error) {
 	entries, err := os.ReadDir(targetIsoDir)
@@ -245,34 +257,37 @@ func FindIsoCopyConflictsInDirectory(targetDisk string, targetIsoDir string, iso
 	existing := make(map[string]struct{}, len(entries))
 	for _, entry := range entries {
 		if !entry.IsDir() {
-			existing[entry.Name()] = struct{}{}
+			// Use normalizeForFS as the map key so that lookups on case-insensitive
+			// file systems (macOS, Windows) correctly match names like "Ubuntu.iso"
+			// against a source file named "ubuntu.iso".
+			existing[normalizeForFS(entry.Name())] = struct{}{}
 		}
 	}
 	targetFiles := make(map[string]struct{}, len(existing))
-	for fileName := range existing {
-		targetFiles[fileName] = struct{}{}
+	for key := range existing {
+		targetFiles[key] = struct{}{}
 	}
 
 	conflicts := make([]IsoCopyConflict, 0)
 	sourceNames := make(map[string]int, len(isoPaths))
 	for _, sourcePath := range isoPaths {
-		sourceNames[filepath.Base(sourcePath)]++
+		sourceNames[normalizeForFS(filepath.Base(sourcePath))]++
 	}
 	for _, sourcePath := range isoPaths {
 		fileName := filepath.Base(sourcePath)
-		_, targetExists := targetFiles[fileName]
-		isDuplicate := sourceNames[fileName] > 1
+		_, targetExists := targetFiles[normalizeForFS(fileName)]
+		isDuplicate := sourceNames[normalizeForFS(fileName)] > 1
 		if !targetExists && !isDuplicate {
 			continue
 		}
 		// Mark the original name as taken in existing so subsequent duplicates
 		// are assigned unique suggested names.
 		if isDuplicate {
-			existing[fileName] = struct{}{}
+			existing[normalizeForFS(fileName)] = struct{}{}
 		}
 		suggestedName := fileName
 		for suffix := 1; ; suffix++ {
-			if _, ok := existing[suggestedName]; !ok {
+			if _, ok := existing[normalizeForFS(suggestedName)]; !ok {
 				break
 			}
 			extension := filepath.Ext(fileName)
@@ -295,7 +310,7 @@ func FindIsoCopyConflictsInDirectory(targetDisk string, targetIsoDir string, iso
 			SuggestedName: suggestedName,
 			ConflictType:  conflictType,
 		})
-		existing[suggestedName] = struct{}{}
+		existing[normalizeForFS(suggestedName)] = struct{}{}
 	}
 	return conflicts, nil
 }

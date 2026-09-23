@@ -384,7 +384,8 @@ export function useDeployment(options: UseDeploymentOptions) {
           showToast(t("deploy.toast_target_changed"), "error");
           return false;
         }
-        pendingTargets.value = targets;
+        // pendingTargets was already locked by handleDeployBtnClick before
+        // the async preflight call, so we only need the snapshot here.
         pendingTargetSnapshots.value = snapshots as DiskInfo[];
         isoConflicts.value = conflicts;
         isIsoConflictOpen.value = true;
@@ -438,7 +439,12 @@ export function useDeployment(options: UseDeploymentOptions) {
   }
 
   async function handleDeployBtnClick() {
-    if (isDeploying.value || isPreflight.value) return;
+    // Guard against concurrent deploy flows. isPreflight covers the async Go
+    // preflight call, but once preflightIsoCopies returns the flag is cleared
+    // even if a dialog is still open. isIsoConflictOpen / isDeployConfirmOpen
+    // guard the remaining window so a second click cannot corrupt pendingTargets
+    // while the user is resolving a conflict or reviewing the confirmation.
+    if (isDeploying.value || isPreflight.value || isIsoConflictOpen.value || isDeployConfirmOpen.value) return;
 
     dismissDeploySuccessBanner();
 
