@@ -301,6 +301,7 @@ export const roRo: TranslationDict = {
   "confirm.will_format": "Formatare completă",
   "confirm.no_format": "Actualizare inteligentă pe loc",
   "deploy.toast_target_changed": "Discul țintă selectat s-a schimbat sau nu mai este disponibil. Scanați din nou.",
+  "deploy.toast_some_disks_removed": "{count} disc(uri) indisponibil(e) eliminat(e) automat, continuând cu discurile rămase",
   "deploy.start_cloud_create": "Creați disc de bootare în Cloud",
   "deploy.batch_update": "Porniți actualizarea fără pierdere de date ({count} unități)",
   "deploy.batch_mixed": "Porniți desfășurarea mixtă ({count} unități)",

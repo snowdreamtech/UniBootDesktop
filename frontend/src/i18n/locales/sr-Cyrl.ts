@@ -320,6 +320,7 @@ export const srCyrl: TranslationDict = {
   "confirm.will_format": "Потпуно форматирање",
   "confirm.no_format": "Паметно ажурирање на лицу места",
   "deploy.toast_target_changed": "Изабрани циљни диск се променио или више није доступан. Молимо поново скенирајте.",
+  "deploy.toast_some_disks_removed": "{count} недоступних дискова аутоматски уклоњено, настављање са преосталим дисковима",
   "deploy.start_cloud_create": "Направи облачни покретачки диск",
   "deploy.batch_update": "Покрени групно ажурирање без губитка података ({count} УСБ уређаја)",
   "deploy.batch_mixed": "Покрени групно мешовито распоређивање ({count} УСБ уређаја)",

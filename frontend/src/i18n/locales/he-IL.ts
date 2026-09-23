@@ -301,6 +301,7 @@ export const heIl: TranslationDict = {
   "confirm.will_format": "פרמוט מלא",
   "confirm.no_format": "שדרוג מקומי חכם",
   "deploy.toast_target_changed": "כונן היעד שנבחר השתנה או אינו זמין עוד. אנא סרוק שוב.",
+  "deploy.toast_some_disks_removed": "{count} דיסקים לא זמינים הוסרו באופן אוטומטי, ממשיך עם הדיסקים הנותרים",
   "deploy.start_cloud_create": "צור דיסק אתחול ענן",
   "deploy.batch_update": "התחל עדכון אצווה ללא אובדן נתונים ({count} כונני דיסק)",
   "deploy.batch_mixed": "התחל הפצת אצווה מעורבת ({count} כונני דיסק)",

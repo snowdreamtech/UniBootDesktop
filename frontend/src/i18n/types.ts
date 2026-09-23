@@ -306,6 +306,7 @@ export interface TranslationDict {
   "confirm.will_format": string;
   "confirm.no_format": string;
   "deploy.toast_target_changed": string;
+  "deploy.toast_some_disks_removed": string;
   "confirm.batch_safe_confirm": string;
   "confirm.batch_mixed_confirm": string;
   "confirm.batch_danger_confirm": string;

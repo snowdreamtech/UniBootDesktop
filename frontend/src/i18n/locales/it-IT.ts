@@ -301,6 +301,7 @@ export const itIt: TranslationDict = {
   "confirm.will_format": "Formattazione completa",
   "confirm.no_format": "Aggiornamento intelligente in-place",
   "deploy.toast_target_changed": "Il disco di destinazione selezionato è cambiato o non è più disponibile. Rieffettuare la scansione.",
+  "deploy.toast_some_disks_removed": "{count} disco/i non disponibile/i rimosso/i automaticamente, continuazione con i dischi rimanenti",
   "deploy.start_cloud_create": "Crea disco di avvio Cloud",
   "deploy.batch_update": "Avvia aggiornamento in batch senza perdita di dati ({count} dischi)",
   "deploy.batch_mixed": "Avvia distribuzione mista in batch ({count} dischi)",

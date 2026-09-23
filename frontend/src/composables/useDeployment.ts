@@ -490,7 +490,27 @@ export function useDeployment(options: UseDeploymentOptions) {
       }
       targets = [currentDisk.device];
     } else {
-      targets = Array.from(selectedDevices.value);
+      // Verify all selected devices still exist in the current disk list
+      const allSelectedDevices = Array.from(selectedDevices.value);
+      const validTargets = allSelectedDevices.filter((device) =>
+        diskList.value.some((d) => d.device === device)
+      );
+
+      if (validTargets.length === 0) {
+        showToast(t("deploy.toast_target_changed"), "error");
+        return;
+      }
+
+      // Warn user if some disks were removed
+      if (validTargets.length < allSelectedDevices.length) {
+        const removedCount = allSelectedDevices.length - validTargets.length;
+        showToast(
+          t("deploy.toast_some_disks_removed", { count: removedCount }),
+          "warning"
+        );
+      }
+
+      targets = validTargets;
       if (targets.length === 0) return;
     }
 

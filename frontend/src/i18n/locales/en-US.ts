@@ -313,6 +313,7 @@ export const enUs: TranslationDict = {
   "confirm.will_format": "Full Format",
   "confirm.no_format": "Smart In-Place Update",
   "deploy.toast_target_changed": "The selected target disk changed or is no longer available. Please scan again.",
+  "deploy.toast_some_disks_removed": "{count} unavailable disk(s) removed automatically, continuing with remaining disks",
   "deploy.start_cloud_create": "Start Creating Cloud Boot Disk",
   "deploy.batch_update": "Start Batch In-Place Update ({count} disks)",
   "deploy.batch_mixed": "Start Batch Mixed Deploy ({count} disks)",

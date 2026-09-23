@@ -301,6 +301,7 @@ export const fiFi: TranslationDict = {
   "confirm.will_format": "Täysi alustus",
   "confirm.no_format": "Älykäs päivitys paikallaan",
   "deploy.toast_target_changed": "Valittu kohdelevy on muuttunut tai se ei ole enää käytettävissä. Skannaa uudelleen.",
+  "deploy.toast_some_disks_removed": "{count} ei-saatavilla olevaa levyä poistettu automaattisesti, jatketaan jäljellä olevilla levyillä",
   "deploy.start_cloud_create": "Luot pilvikäynnistyslevy",
   "deploy.batch_update": "Aloita eräpäivitys ilman tietojen menetystä ({count} USB-asemaa)",
   "deploy.batch_mixed": "Aloita sekamuotoinen eräasennus ({count} USB-asemaa)",

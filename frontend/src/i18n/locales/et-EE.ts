@@ -301,6 +301,7 @@ export const etEe: TranslationDict = {
   "confirm.will_format": "Täielik vormindamine",
   "confirm.no_format": "Nutikas kohapealne värskendus",
   "deploy.toast_target_changed": "Valitud sihtketas on muutunud või pole enam saadaval. Palun skannige uuesti.",
+  "deploy.toast_some_disks_removed": "{count} kättesaamatut ketast eemaldatud automaatselt, jätkatakse ülejäänud kettadega",
   "deploy.start_cloud_create": "Loo pilve alglaadimisketas",
   "deploy.batch_update": "Käivita hulgivärskendus ilma andmekaota ({count} USB-seadet)",
   "deploy.batch_mixed": "Käivita segatüüpi hulgipaigaldus ({count} USB-seadet)",

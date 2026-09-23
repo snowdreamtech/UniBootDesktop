@@ -301,6 +301,7 @@ export const svSe: TranslationDict = {
   "confirm.will_format": "Fullständig formatering",
   "confirm.no_format": "Intelligent uppgradering på plats",
   "deploy.toast_target_changed": "Den valda måldisken har ändrats eller är inte längre tillgänglig. Skanna igen.",
+  "deploy.toast_some_disks_removed": "{count} otillgängliga diskar borttagna automatiskt, fortsätter med återstående diskar",
   "deploy.start_cloud_create": "Skapa molnstartdisk",
   "deploy.batch_update": "Starta säker gruppuppdatering ({count} enheter)",
   "deploy.batch_mixed": "Starta blandad gruppinstallation ({count} enheter)",

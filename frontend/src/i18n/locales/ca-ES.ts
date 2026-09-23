@@ -301,6 +301,7 @@ export const caEs: TranslationDict = {
   "confirm.will_format": "Formatació completa",
   "confirm.no_format": "Actualització in-situ intel·ligent",
   "deploy.toast_target_changed": "El disc de destinació seleccionat ha canviat o ja no està disponible. Torneu a escannejar.",
+  "deploy.toast_some_disks_removed": "{count} disc(s) no disponible(s) eliminat(s) automàticament, continuant amb els discs restants",
   "deploy.start_cloud_create": "Crear disc d'arrencada al Núvol",
   "deploy.batch_update": "Inicia l'actualització en lot sense pèrdua de dades ({count} unitats USB)",
   "deploy.batch_mixed": "Inicia el desplegament mixt en lot ({count} unitats USB)",

@@ -301,6 +301,7 @@ export const hiIn: TranslationDict = {
   "confirm.will_format": "पूर्ण स्वरूपण",
   "confirm.no_format": "स्मार्ट इन-प्लेस अपडेट",
   "deploy.toast_target_changed": "चयनित लक्ष्य डिस्क बदल गई है या अब उपलब्ध नहीं है। कृपया फिर से स्कैन करें।",
+  "deploy.toast_some_disks_removed": "{count} अनुपलब्ध डिस्क स्वचालित रूप से हटा दी गई, शेष डिस्क के साथ जारी रखना",
   "deploy.start_cloud_create": "क्लाउड बूट डिस्क बनाएं",
   "deploy.batch_update": "बिना डेटा हानि के बैच अपडेट शुरू करें ({count} USB ड्राइव)",
   "deploy.batch_mixed": "मिश्रित बैच परिनियोजन शुरू करें ({count} USB ड्राइव)",

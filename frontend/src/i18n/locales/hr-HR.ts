@@ -301,6 +301,7 @@ export const hrHr: TranslationDict = {
   "confirm.will_format": "Potpuno formatiranje",
   "confirm.no_format": "Pametno ažuriranje na licu mjesta",
   "deploy.toast_target_changed": "Odabrani ciljni disk se promijenio ili više nije dostupan. Molimo ponovno skenirajte.",
+  "deploy.toast_some_disks_removed": "{count} nedostupnih diskova automatski uklonjeno, nastavljanje s preostalim diskovima",
   "deploy.start_cloud_create": "Stvori cloud pokretački disk",
   "deploy.batch_update": "Pokreni skupno ažuriranje bez gubitka podataka ({count} USB pogona)",
   "deploy.batch_mixed": "Pokreni mješovitu skupnu primjenu ({count} USB pogona)",

@@ -301,6 +301,7 @@ export const idId: TranslationDict = {
   "confirm.will_format": "Format Penuh",
   "confirm.no_format": "Pembaruan Pintar di Tempat",
   "deploy.toast_target_changed": "Disk target yang dipilih berubah atau tidak lagi tersedia. Silakan pindai ulang.",
+  "deploy.toast_some_disks_removed": "{count} disk tidak tersedia dihapus secara otomatis, melanjutkan dengan disk yang tersisa",
   "deploy.start_cloud_create": "Buat Diska Booting Cloud",
   "deploy.batch_update": "Mulai Pembaruan Massal Tanpa Kehilangan Data ({count} drive USB)",
   "deploy.batch_mixed": "Mulai Penyebaran Massal Campuran ({count} drive USB)",

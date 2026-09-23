@@ -301,6 +301,7 @@ export const ltLt: TranslationDict = {
   "confirm.will_format": "Pilnas formatavimas",
   "confirm.no_format": "Išmanusis atnaujinimas vietoje",
   "deploy.toast_target_changed": "Pasirinktas tikslinis diskas pasikeitė arba nebeegzistuoja. Nuskaitykite iš naujo.",
+  "deploy.toast_some_disks_removed": "{count} nepasiekiamas(-i) diskas(-ai) automatiškai pašalintas(-i), tęsiama su likusiais diskais",
   "deploy.start_cloud_create": "Sukurti debesies paleidimo diską",
   "deploy.batch_update": "Pradėti grupinį atnaujinimą be duomenų praradimo ({count} USB laikmenos)",
   "deploy.batch_mixed": "Pradėti grupinį mišrų diegimą ({count} USB laikmenos)",

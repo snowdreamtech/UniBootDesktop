@@ -301,6 +301,7 @@ export const ptPt: TranslationDict = {
   "confirm.will_format": "Formatação completa",
   "confirm.no_format": "Atualização inteligente in-place",
   "deploy.toast_target_changed": "O disco alvo selecionado mudou ou já não está disponível. Por favor, volte a procurar.",
+  "deploy.toast_some_disks_removed": "{count} disco(s) indisponível(is) removido(s) automaticamente, continuando com os discos restantes",
   "deploy.start_cloud_create": "Criar disco de arranque na Nuvem",
   "deploy.batch_update": "Iniciar atualização em lote sem perda de dados ({count} discos)",
   "deploy.batch_mixed": "Iniciar implantação mista em lote ({count} discos)",

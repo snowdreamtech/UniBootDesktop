@@ -301,6 +301,7 @@ export const bgBg: TranslationDict = {
   "confirm.will_format": "Пълно форматиране",
   "confirm.no_format": "Интелигентно обновяване на място",
   "deploy.toast_target_changed": "Избраният целеви диск се промени или вече не е достъпен. Моля, сканирайте отново.",
+  "deploy.toast_some_disks_removed": "{count} недостъпни диска премахнати автоматично, продължаване с останалите дискове",
   "deploy.start_cloud_create": "Създаване на облачен зареждащ диск",
   "deploy.batch_update": "Стартиране на групово обновяване без загуба на данни ({count} USB)",
   "deploy.batch_mixed": "Стартиране на групово смесено внедряване ({count} USB)",

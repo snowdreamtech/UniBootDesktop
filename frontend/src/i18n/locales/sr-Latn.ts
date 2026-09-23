@@ -321,6 +321,7 @@ export const srLatn: TranslationDict = {
   "confirm.will_format": "Potpuno formatiranje",
   "confirm.no_format": "Pametno ažuriranje na licu mesta",
   "deploy.toast_target_changed": "Izabrani ciljni disk se promenio ili više nije dostupan. Molimo ponovo skenirajte.",
+  "deploy.toast_some_disks_removed": "{count} nedostupnih diskova automatski uklonjeno, nastavljanje sa preostalim diskovima",
   "deploy.start_cloud_create": "Napravi oblačni pokretački disk",
   "deploy.batch_update": "Pokreni grupno ažuriranje bez gubitka podataka ({count} USB uređaja)",
   "deploy.batch_mixed": "Pokreni grupno mešovito raspoređivanje ({count} USB uređaja)",

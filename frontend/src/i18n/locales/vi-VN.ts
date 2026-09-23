@@ -301,6 +301,7 @@ export const viVn: TranslationDict = {
   "confirm.will_format": "Định dạng toàn bộ",
   "confirm.no_format": "Cập nhật tại chỗ thông minh",
   "deploy.toast_target_changed": "Ổ đĩa mục tiêu đã thay đổi hoặc không còn khả dụng. Vui lòng quét lại.",
+  "deploy.toast_some_disks_removed": "{count} đĩa không khả dụng đã được xóa tự động, tiếp tục với các đĩa còn lại",
   "deploy.start_cloud_create": "Tạo đĩa khởi động đám mây",
   "deploy.batch_update": "Bắt đầu cập nhật hàng loạt không mất dữ liệu ({count} ổ USB)",
   "deploy.batch_mixed": "Bắt đầu triển khai hỗn hợp hàng loạt ({count} ổ USB)",

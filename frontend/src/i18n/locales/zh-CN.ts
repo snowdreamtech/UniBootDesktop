@@ -307,6 +307,7 @@ export const zhCn: TranslationDict = {
   "confirm.will_format": "全量格式化",
   "confirm.no_format": "智能原位升级",
   "deploy.toast_target_changed": "所选目标磁盘已发生变化或不再可用，请重新扫描后再试。",
+  "deploy.toast_some_disks_removed": "已自动移除 {count} 个不可用磁盘，继续部署到剩余磁盘",
   "deploy.start_cloud_create": "开始制作云启动盘",
   "deploy.batch_update": "开始批量无损更新 ({count} 块磁盘)",
   "deploy.batch_mixed": "开始批量混合部署 ({count} 块磁盘)",

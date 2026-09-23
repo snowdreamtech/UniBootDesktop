@@ -301,6 +301,7 @@ export const esLa: TranslationDict = {
   "confirm.will_format": "Formateo completo",
   "confirm.no_format": "Actualización inteligente in situ",
   "deploy.toast_target_changed": "El disco de destino seleccionado cambió o ya no está disponible. Por favor, escanea de nuevo.",
+  "deploy.toast_some_disks_removed": "{count} disco(s) no disponible(s) eliminado(s) automáticamente, continuando con los discos restantes",
   "deploy.start_cloud_create": "Crear disco de arranque en la Nube",
   "deploy.batch_update": "Iniciar actualización por lotes sin pérdida de datos ({count} unidades de disco)",
   "deploy.batch_mixed": "Iniciar despliegue mixto por lotes ({count} unidades de disco)",

@@ -301,6 +301,7 @@ export const trTr: TranslationDict = {
   "confirm.will_format": "Tam format",
   "confirm.no_format": "Akıllı yerinde güncelleme",
   "deploy.toast_target_changed": "Seçilen hedef disk değişti veya artık mevcut değil. Lütfen tekrar tarayın.",
+  "deploy.toast_some_disks_removed": "{count} kullanılamayan disk otomatik olarak kaldırıldı, kalan disklerle devam ediliyor",
   "deploy.start_cloud_create": "Bulut Önyükleme Diski Oluştur",
   "deploy.batch_update": "Kayıpsız Toplu Güncellemeyi Başlat ({count} Sürücü)",
   "deploy.batch_mixed": "Karma Toplu Dağıtımı Başlat ({count} Sürücü)",
