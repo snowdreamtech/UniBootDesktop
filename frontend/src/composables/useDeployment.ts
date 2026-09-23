@@ -330,27 +330,26 @@ export function useDeployment(options: UseDeploymentOptions) {
   function openDeployConfirm() {
     dismissDeploySuccessBanner();
 
-    // pendingTargets must be locked before this function is called.
-    // We intentionally do NOT re-derive targets from the current UI selection:
-    // - For the no-conflict deploy path, targets are locked by handleDeployBtnClick
+    // pendingTargets and pendingTargetSnapshots must be locked before this
+    // function is called. We intentionally do NOT re-derive targets from the
+    // current UI selection or re-capture snapshots:
+    // - For the no-conflict deploy path, both were locked by handleDeployBtnClick
     //   before the async preflight call, so they always match pendingIsoPlans.
-    // - For the retry path, we reuse the original targets from the failed deploy,
-    //   ensuring the ISO plans (built for those targets) remain consistent.
-    // This function's only job is to take a fresh disk-state snapshot of the
-    // already-decided targets and open the confirmation dialog.
+    // - For the retry path, we reuse the original targets and snapshots from
+    //   the failed deploy, ensuring the ISO plans remain consistent.
+    // This function's only job is to validate and open the confirmation dialog.
     const targets = pendingTargets.value;
     if (targets.length === 0) {
       showToast(t("deploy.toast_target_changed"), "error");
       return;
     }
 
-    const refreshedSnapshots = targets.map((device) => diskList.value.find((disk) => disk.device === device));
-    if (refreshedSnapshots.some((disk) => !disk)) {
+    // Validate that we have snapshots for all targets
+    if (pendingTargetSnapshots.value.length !== targets.length) {
       showToast(t("deploy.toast_target_changed"), "error");
       return;
     }
 
-    pendingTargetSnapshots.value = refreshedSnapshots as DiskInfo[];
     isDeployConfirmOpen.value = true;
   }
 
@@ -378,20 +377,10 @@ export function useDeployment(options: UseDeploymentOptions) {
         selectedIsoFiles.value.map((file) => file.path),
       )) ?? []) as IsoCopyConflict[];
       if (conflicts.length > 0) {
-        // Snapshot disk state before showing the conflict dialog so the entire
-        // preflight → conflict → confirm → deploy chain uses a single consistent
-        // disk state captured at this exact moment.
-        const snapshots = targets.map((device) => diskList.value.find((disk) => disk.device === device));
-        if (snapshots.some((d) => !d)) {
-          // At least one target disk disappeared during preflight — abort.
-          // Opening the conflict dialog with a stale/missing snapshot would
-          // risk deploying to the wrong disk after the user resolves conflicts.
-          showToast(t("deploy.toast_target_changed"), "error");
-          return false;
-        }
-        // pendingTargets was already locked by handleDeployBtnClick before
-        // the async preflight call, so we only need the snapshot here.
-        pendingTargetSnapshots.value = snapshots as DiskInfo[];
+        // pendingTargets and pendingTargetSnapshots were already locked by
+        // handleDeployBtnClick before this async call, ensuring the entire
+        // preflight → conflict → confirm → deploy chain uses a single
+        // consistent snapshot captured before the preflight started.
         isoConflicts.value = conflicts;
         isIsoConflictOpen.value = true;
         return false;
@@ -565,8 +554,21 @@ export function useDeployment(options: UseDeploymentOptions) {
     // Similarly, selectedIsoFiles is locked so that the isoPaths sent to the
     // backend in startDeployment always match the entries in pendingIsoPlans.
     pendingTargets.value = targets;
-    pendingTargetSnapshots.value = [];
     pendingIsoFiles.value = [...selectedIsoFiles.value];
+
+    // Capture disk state snapshots NOW, before the async preflight call.
+    // This ensures both the conflict and no-conflict paths use the same
+    // consistent snapshot captured at this exact moment, avoiding race
+    // conditions where diskList changes between preflight and openDeployConfirm.
+    const currentSnapshots = targets.map((device) =>
+      diskList.value.find((disk) => disk.device === device)
+    );
+    if (currentSnapshots.some((disk) => !disk)) {
+      // At least one target disk disappeared after validation — abort.
+      showToast(t("deploy.toast_target_changed"), "error");
+      return;
+    }
+    pendingTargetSnapshots.value = currentSnapshots as DiskInfo[];
 
     isPreflight.value = true;
     try {
