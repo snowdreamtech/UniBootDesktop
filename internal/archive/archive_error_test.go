@@ -107,3 +107,9 @@ func TestExtractZipFile_MkdirError(t *testing.T) {
 	err = extractZipFile(zr.File[1], tempDir)
 	assert.Error(t, err) // File MkdirAll fails
 }
+
+func TestSanitizeExtractModeStripsSetuidBits(t *testing.T) {
+	got := sanitizeExtractMode(os.ModeSetuid | os.ModeSetgid | os.ModeSticky | 0777)
+	assert.Equal(t, os.FileMode(0777), got)
+	assert.Equal(t, os.FileMode(0), got&(os.ModeSetuid|os.ModeSetgid|os.ModeSticky))
+}

@@ -210,7 +210,7 @@ func extractZipFile(f *zip.File, destDir string) error {
 	}
 
 	if f.FileInfo().IsDir() {
-		return os.MkdirAll(targetPath, f.Mode())
+		return os.MkdirAll(targetPath, sanitizeExtractMode(f.Mode()))
 	}
 
 	// Handle symlinks in ZIP
@@ -250,7 +250,7 @@ func extractZipFile(f *zip.File, destDir string) error {
 	}
 
 	// Preserve permissions and modified time
-	if err := os.Chmod(targetPath, f.Mode()); err != nil {
+	if err := os.Chmod(targetPath, sanitizeExtractMode(f.Mode())); err != nil {
 		return fmt.Errorf("failed to chmod: %w", err)
 	}
 	if err := os.Chtimes(targetPath, f.Modified, f.Modified); err != nil {
@@ -274,7 +274,7 @@ func extractTarFile(tr *tar.Reader, hdr *tar.Header, destDir string) error {
 
 	switch hdr.Typeflag {
 	case tar.TypeDir:
-		if err := os.MkdirAll(targetPath, mode); err != nil {
+		if err := os.MkdirAll(targetPath, sanitizeExtractMode(mode)); err != nil {
 			return err
 		}
 		// Best effort chown
@@ -309,7 +309,7 @@ func extractTarFile(tr *tar.Reader, hdr *tar.Header, destDir string) error {
 		}
 
 		// Preserve permissions, times, and ownership
-		if err := os.Chmod(targetPath, mode); err != nil {
+		if err := os.Chmod(targetPath, sanitizeExtractMode(mode)); err != nil {
 			return fmt.Errorf("failed to chmod: %w", err)
 		}
 		if err := os.Chtimes(targetPath, hdr.AccessTime, hdr.ModTime); err != nil {
@@ -324,12 +324,25 @@ func extractTarFile(tr *tar.Reader, hdr *tar.Header, destDir string) error {
 	}
 }
 
+const maxExtractFileBytes int64 = 512 * 1024 * 1024
+
+func sanitizeExtractMode(mode os.FileMode) os.FileMode {
+	return mode &^ (os.ModeSetuid | os.ModeSetgid | os.ModeSticky) & os.ModePerm
+}
+
 func writeToFile(path string, r io.Reader) error {
 	out, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666) // Actual mode set by Chmod later
 	if err != nil {
 		return err
 	}
 	defer out.Close()
-	_, err = io.Copy(out, r)
-	return err
+	written, err := io.Copy(out, io.LimitReader(r, maxExtractFileBytes+1))
+	if err != nil {
+		return err
+	}
+	if written > maxExtractFileBytes {
+		_ = os.Remove(path)
+		return fmt.Errorf("extracted file %s exceeds %d bytes", path, maxExtractFileBytes)
+	}
+	return nil
 }
