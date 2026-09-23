@@ -33,7 +33,7 @@
           <div class="choice-panel" :class="`choice-${group.action}`">
             <div v-if="group.hasSourceDuplicate" class="decision-block">
               <div class="choice-heading">
-                <span class="choice-label-title">ISO×2</span>
+                <span class="choice-label-title">{{ fileExtLabel(group.sourcePath) }}×2</span>
                 <span class="choice-current">{{ group.sourceAction === "rename" ? t("iso.conflict_keep_both") : t("iso.conflict_skip") }}</span>
               </div>
               <div class="action-options compact-options" role="group">
@@ -171,15 +171,23 @@ const conflictGroups = computed<IsoConflictGroup[]>(() => {
   return [...groups.values()];
 });
 
+/** Extracts the uppercased extension label (e.g. "ISO", "IMG", "WIM") from a source path. */
+function fileExtLabel(sourcePath: string): string {
+  const dotIndex = sourcePath.lastIndexOf(".");
+  if (dotIndex === -1) return "IMG";
+  return sourcePath.slice(dotIndex + 1).toUpperCase();
+}
+
 const conflictGroupsWithBadges = computed<IsoConflictDisplayGroup[]>(() =>
-  conflictGroups.value.map((group) => ({
-    ...group,
-    kindBadge: group.conflictTypes.has("source_duplicate_target_exists")
-      ? "ISO×2 · USB"
+  conflictGroups.value.map((group) => {
+    const ext = fileExtLabel(group.sourcePath);
+    const kindBadge = group.conflictTypes.has("source_duplicate_target_exists")
+      ? `${ext}×2 · USB`
       : group.conflictTypes.has("source_duplicate")
-        ? "ISO×2"
-        : "USB",
-  })),
+        ? `${ext}×2`
+        : "USB";
+    return { ...group, kindBadge };
+  }),
 );
 
 function defaultDecision(conflict: IsoConflictItem): IsoConflictDecision {
