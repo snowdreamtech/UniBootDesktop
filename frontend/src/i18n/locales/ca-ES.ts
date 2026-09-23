@@ -303,6 +303,7 @@ export const caEs: TranslationDict = {
   "deploy.toast_target_changed": "El disc de destinació seleccionat ha canviat o ja no està disponible. Torneu a escannejar.",
   "deploy.toast_some_disks_removed": "{count} disc(s) no disponible(s) eliminat(s) automàticament, continuant amb els discs restants",
   "deploy.error_system_disk_blocked": "⛔ Bloquejat: {disks} és un disc del sistema. No es pot desplegar un disc d'arrencada USB en una unitat del sistema!",
+  "deploy.error_readonly_disk": "🔒 Protegit contra escriptura: {disks} és només de lectura. Elimineu la protecció contra escriptura o utilitzeu un USB diferent",
   "deploy.start_cloud_create": "Crear disc d'arrencada al Núvol",
   "deploy.batch_update": "Inicia l'actualització en lot sense pèrdua de dades ({count} unitats USB)",
   "deploy.batch_mixed": "Inicia el desplegament mixt en lot ({count} unitats USB)",

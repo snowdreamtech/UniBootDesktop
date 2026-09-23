@@ -303,6 +303,7 @@ export const ocFr: TranslationDict = {
   "deploy.toast_target_changed": "Lo disque de destinacion seleccionat a cambiat o es pas mai disponible. Tornatz scanar.",
   "deploy.toast_some_disks_removed": "{count} disc(s) indisponible(s) levat(s) automaticament, contunhament amb los disques restants",
   "deploy.error_system_disk_blocked": "⛔ Blocat : {disks} es un disc del sistèma. Impossible de desplegar un disc d'aviada USB sul disc del sistèma !",
+  "deploy.error_readonly_disk": "🔒 Protegit en escritura : {disks} es en lectura sola. Levatz la proteccion en escritura o utilizatz una clau USB diferenta",
   "deploy.start_cloud_create": "Crear un disc de darrancament en la Nívol",
   "deploy.batch_update": "Començar la mesa a jorn en lòt sens pèrda de donadas ({count} claus USB)",
   "deploy.batch_mixed": "Començar lo desplaçament mixte en lòt ({count} claus USB)",

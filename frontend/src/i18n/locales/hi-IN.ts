@@ -303,6 +303,7 @@ export const hiIn: TranslationDict = {
   "deploy.toast_target_changed": "चयनित लक्ष्य डिस्क बदल गई है या अब उपलब्ध नहीं है। कृपया फिर से स्कैन करें।",
   "deploy.toast_some_disks_removed": "{count} अनुपलब्ध डिस्क स्वचालित रूप से हटा दी गई, शेष डिस्क के साथ जारी रखना",
   "deploy.error_system_disk_blocked": "⛔ अवरोधित: {disks} एक सिस्टम डिस्क है। सिस्टम ड्राइव पर USB बूट डिस्क तैनात नहीं की जा सकती!",
+  "deploy.error_readonly_disk": "🔒 लेखन-सुरक्षित: {disks} केवल पठनीय है। कृपया लेखन सुरक्षा हटाएं या एक अलग USB का उपयोग करें",
   "deploy.start_cloud_create": "क्लाउड बूट डिस्क बनाएं",
   "deploy.batch_update": "बिना डेटा हानि के बैच अपडेट शुरू करें ({count} USB ड्राइव)",
   "deploy.batch_mixed": "मिश्रित बैच परिनियोजन शुरू करें ({count} USB ड्राइव)",

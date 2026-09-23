@@ -303,6 +303,7 @@ export const etEe: TranslationDict = {
   "deploy.toast_target_changed": "Valitud sihtketas on muutunud või pole enam saadaval. Palun skannige uuesti.",
   "deploy.toast_some_disks_removed": "{count} kättesaamatut ketast eemaldatud automaatselt, jätkatakse ülejäänud kettadega",
   "deploy.error_system_disk_blocked": "⛔ Blokeeritud: {disks} on süsteemiketas. USB-alglaadimiskettast ei saa süsteemikettale paigaldada!",
+  "deploy.error_readonly_disk": "🔒 Kirjutuskaitstud: {disks} on ainult lugemiseks. Eemaldage kirjutuskaitse või kasutage teist USB-d",
   "deploy.start_cloud_create": "Loo pilve alglaadimisketas",
   "deploy.batch_update": "Käivita hulgivärskendus ilma andmekaota ({count} USB-seadet)",
   "deploy.batch_mixed": "Käivita segatüüpi hulgipaigaldus ({count} USB-seadet)",

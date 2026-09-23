@@ -303,6 +303,7 @@ export const ptBr: TranslationDict = {
   "deploy.toast_target_changed": "O disco alvo selecionado mudou ou não está mais disponível. Por favor, faça uma nova varredura.",
   "deploy.toast_some_disks_removed": "{count} disco(s) indisponível(is) removido(s) automaticamente, continuando com os discos restantes",
   "deploy.error_system_disk_blocked": "⛔ Bloqueado: {disks} é um disco do sistema. Não é possível implantar disco de inicialização USB na unidade do sistema!",
+  "deploy.error_readonly_disk": "🔒 Protegido contra gravação: {disks} é somente leitura. Remova a proteção contra gravação ou use um USB diferente",
   "deploy.start_cloud_create": "Criar disco de inicialização na Nuvem",
   "deploy.batch_update": "Iniciar atualização sem perda de dados ({count} unidades)",
   "deploy.batch_mixed": "Iniciar implantação mista ({count} unidades)",

@@ -303,6 +303,7 @@ export const nbNo: TranslationDict = {
   "deploy.toast_target_changed": "Den valgte måldisken har endret seg eller er ikke lenger tilgjengelig. Skann på nytt.",
   "deploy.toast_some_disks_removed": "{count} utilgjengelige disker fjernet automatisk, fortsetter med gjenværende disker",
   "deploy.error_system_disk_blocked": "⛔ Blokkert: {disks} er en systemdisk. Kan ikke distribuere USB-oppstartsdisk til systemstasjonen!",
+  "deploy.error_readonly_disk": "🔒 Skrivebeskyttet: {disks} er skrivebeskyttet. Fjern skrivebeskyttelsen eller bruk en annen USB",
   "deploy.start_cloud_create": "Opprett skyoppstartsdisk",
   "deploy.batch_update": "Start batch-oppdatering uten datatap ({count} USB-stasjoner)",
   "deploy.batch_mixed": "Start blandet batch-distribusjon ({count} USB-stasjoner)",

@@ -303,6 +303,7 @@ export const fiFi: TranslationDict = {
   "deploy.toast_target_changed": "Valittu kohdelevy on muuttunut tai se ei ole enää käytettävissä. Skannaa uudelleen.",
   "deploy.toast_some_disks_removed": "{count} ei-saatavilla olevaa levyä poistettu automaattisesti, jatketaan jäljellä olevilla levyillä",
   "deploy.error_system_disk_blocked": "⛔ Estetty: {disks} on järjestelmälevy. USB-käynnistyslevyä ei voi ottaa käyttöön järjestelmäasemalle!",
+  "deploy.error_readonly_disk": "🔒 Kirjoitussuojattu: {disks} on vain luku -tilassa. Poista kirjoitussuojaus tai käytä eri USB-laitetta",
   "deploy.start_cloud_create": "Luot pilvikäynnistyslevy",
   "deploy.batch_update": "Aloita eräpäivitys ilman tietojen menetystä ({count} USB-asemaa)",
   "deploy.batch_mixed": "Aloita sekamuotoinen eräasennus ({count} USB-asemaa)",

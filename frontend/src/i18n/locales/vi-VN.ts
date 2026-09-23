@@ -303,6 +303,7 @@ export const viVn: TranslationDict = {
   "deploy.toast_target_changed": "Ổ đĩa mục tiêu đã thay đổi hoặc không còn khả dụng. Vui lòng quét lại.",
   "deploy.toast_some_disks_removed": "{count} đĩa không khả dụng đã được xóa tự động, tiếp tục với các đĩa còn lại",
   "deploy.error_system_disk_blocked": "⛔ Đã chặn: {disks} là đĩa hệ thống. Không thể triển khai đĩa khởi động USB vào ổ đĩa hệ thống!",
+  "deploy.error_readonly_disk": "🔒 Được bảo vệ chống ghi: {disks} ở chế độ chỉ đọc. Vui lòng gỡ bảo vệ chống ghi hoặc sử dụng USB khác",
   "deploy.start_cloud_create": "Tạo đĩa khởi động đám mây",
   "deploy.batch_update": "Bắt đầu cập nhật hàng loạt không mất dữ liệu ({count} ổ USB)",
   "deploy.batch_mixed": "Bắt đầu triển khai hỗn hợp hàng loạt ({count} ổ USB)",

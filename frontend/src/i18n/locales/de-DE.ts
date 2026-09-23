@@ -303,6 +303,7 @@ export const deDe: TranslationDict = {
   "deploy.toast_target_changed": "Der ausgewählte Zieldatenträger hat sich geändert oder ist nicht mehr verfügbar. Bitte erneut scannen.",
   "deploy.toast_some_disks_removed": "{count} nicht verfügbare Festplatte(n) automatisch entfernt, fahre mit verbleibenden Festplatten fort",
   "deploy.error_system_disk_blocked": "⛔ Blockiert: {disks} ist eine Systemfestplatte. USB-Startdisk kann nicht auf Systemlaufwerk bereitgestellt werden!",
+  "deploy.error_readonly_disk": "🔒 Schreibgeschützt: {disks} ist schreibgeschützt. Bitte entfernen Sie den Schreibschutz oder verwenden Sie ein anderes USB-Gerät",
   "deploy.start_cloud_create": "Cloud-Boot-Disk erstellen",
   "deploy.batch_update": "Stapel-Update ohne Datenverlust starten ({count} Laufwerke)",
   "deploy.batch_mixed": "Gemischte Stapel-Bereitstellung starten ({count} Laufwerke)",

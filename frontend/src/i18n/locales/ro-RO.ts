@@ -303,6 +303,7 @@ export const roRo: TranslationDict = {
   "deploy.toast_target_changed": "Discul țintă selectat s-a schimbat sau nu mai este disponibil. Scanați din nou.",
   "deploy.toast_some_disks_removed": "{count} disc(uri) indisponibil(e) eliminat(e) automat, continuând cu discurile rămase",
   "deploy.error_system_disk_blocked": "⛔ Blocat: {disks} este un disc de sistem. Nu se poate implementa un disc de pornire USB pe unitatea de sistem!",
+  "deploy.error_readonly_disk": "🔒 Protejat la scriere: {disks} este doar citire. Eliminați protecția la scriere sau utilizați un USB diferit",
   "deploy.start_cloud_create": "Creați disc de bootare în Cloud",
   "deploy.batch_update": "Porniți actualizarea fără pierdere de date ({count} unități)",
   "deploy.batch_mixed": "Porniți desfășurarea mixtă ({count} unități)",

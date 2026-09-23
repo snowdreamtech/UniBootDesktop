@@ -303,6 +303,7 @@ export const heIl: TranslationDict = {
   "deploy.toast_target_changed": "כונן היעד שנבחר השתנה או אינו זמין עוד. אנא סרוק שוב.",
   "deploy.toast_some_disks_removed": "{count} דיסקים לא זמינים הוסרו באופן אוטומטי, ממשיך עם הדיסקים הנותרים",
   "deploy.error_system_disk_blocked": "⛔ חסום: {disks} הוא דיסק מערכת. לא ניתן לפרוס דיסק אתחול USB לכונן המערכת!",
+  "deploy.error_readonly_disk": "🔒 מוגן מפני כתיבה: {disks} הוא לקריאה בלבד. אנא הסר את ההגנה מפני כתיבה או השתמש ב-USB אחר",
   "deploy.start_cloud_create": "צור דיסק אתחול ענן",
   "deploy.batch_update": "התחל עדכון אצווה ללא אובדן נתונים ({count} כונני דיסק)",
   "deploy.batch_mixed": "התחל הפצת אצווה מעורבת ({count} כונני דיסק)",

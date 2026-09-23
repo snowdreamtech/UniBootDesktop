@@ -303,6 +303,7 @@ export const urPk: TranslationDict = {
   "deploy.toast_target_changed": "منتخب کردہ ہدف ڈسک تبدیل ہو گئی ہے یا اب دستیاب نہیں ہے۔ براہ کرم دوبارہ اسکین کریں۔",
   "deploy.toast_some_disks_removed": "{count} غیر دستیاب ڈسک خودکار طور پر ہٹا دی گئی، باقی ڈسک کے ساتھ جاری رکھنا",
   "deploy.error_system_disk_blocked": "⛔ مسدود: {disks} ایک سسٹم ڈسک ہے۔ سسٹم ڈرائیو پر USB بوٹ ڈسک تعینات نہیں کی جا سکتی!",
+  "deploy.error_readonly_disk": "🔒 تحریر سے محفوظ: {disks} صرف پڑھنے کے لیے ہے۔ براہ کرم تحریر کی حفاظت کو ہٹائیں یا مختلف USB استعمال کریں",
   "deploy.start_cloud_create": "کلاؤڈ بوٹ ڈسک بنائیں",
   "deploy.batch_update": "ڈیٹا کے نقصان کے بغیر بیچ اپ ڈیٹ شروع کریں ({count} ڈسک ڈرائیوز)",
   "deploy.batch_mixed": "بیچ مخلوط ڈیپلائمنٹ شروع کریں ({count} ڈسک ڈرائیوز)",

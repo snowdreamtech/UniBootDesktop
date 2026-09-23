@@ -303,6 +303,7 @@ export const azAz: TranslationDict = {
   "deploy.toast_target_changed": "Seçilmiş hədəf disk dəyişdi və ya artıq əlçatan deyil. Yenidən skan edin.",
   "deploy.toast_some_disks_removed": "{count} əlçatmaz disk avtomatik silindi, qalan disklərlə davam edilir",
   "deploy.error_system_disk_blocked": "⛔ Qadağandır: {disks} sistem diskidir. USB yükləmə diskini sistem sürücüsünə yerləşdirmək olmaz!",
+  "deploy.error_readonly_disk": "🔒 Yazma qoruması: {disks} yalnız oxumaq üçündür. Yazma qorumasını silin və ya fərqli USB istifadə edin",
   "deploy.start_cloud_create": "Bulud yükləmə diski yaradın",
   "deploy.batch_update": "Toplu İtkisiz Yeniləməni Başlat ({count} USB disk)",
   "deploy.batch_mixed": "Toplu Qarışıq Yerləşdirməni Başlat ({count} USB disk)",

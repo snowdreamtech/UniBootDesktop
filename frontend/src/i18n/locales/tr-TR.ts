@@ -303,6 +303,7 @@ export const trTr: TranslationDict = {
   "deploy.toast_target_changed": "Seçilen hedef disk değişti veya artık mevcut değil. Lütfen tekrar tarayın.",
   "deploy.toast_some_disks_removed": "{count} kullanılamayan disk otomatik olarak kaldırıldı, kalan disklerle devam ediliyor",
   "deploy.error_system_disk_blocked": "⛔ Engellendi: {disks} bir sistem diskidir. USB önyükleme diski sistem sürücüsüne dağıtılamaz!",
+  "deploy.error_readonly_disk": "🔒 Yazma korumalı: {disks} salt okunur. Yazma korumasını kaldırın veya farklı bir USB kullanın",
   "deploy.start_cloud_create": "Bulut Önyükleme Diski Oluştur",
   "deploy.batch_update": "Kayıpsız Toplu Güncellemeyi Başlat ({count} Sürücü)",
   "deploy.batch_mixed": "Karma Toplu Dağıtımı Başlat ({count} Sürücü)",

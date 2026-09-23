@@ -303,6 +303,7 @@ export const arSa: TranslationDict = {
   "deploy.toast_target_changed": "القرص الهدف المحدد تغير أو لم يعد متاحاً. يرجى المسح مجدداً.",
   "deploy.toast_some_disks_removed": "{count} قرص غير متاح تمت إزالته تلقائيًا، الاستمرار مع الأقراص المتبقية",
   "deploy.error_system_disk_blocked": "⛔ محظور: {disks} هو قرص نظام. لا يمكن نشر محرك إقلاع USB على محرك النظام!",
+  "deploy.error_readonly_disk": "🔒 محمي ضد الكتابة: {disks} للقراءة فقط. يرجى إزالة حماية الكتابة أو استخدام USB مختلف",
   "deploy.start_cloud_create": "إنشاء قرص الإقلاع السحابي",
   "deploy.batch_update": "بدء التحديث بدون فقدان البيانات ({count} محرك قرص)",
   "deploy.batch_mixed": "بدء النشر المختلط تجميعياً ({count} محرك قرص)",

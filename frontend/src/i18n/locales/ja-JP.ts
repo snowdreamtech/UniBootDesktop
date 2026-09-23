@@ -303,6 +303,7 @@ export const jaJp: TranslationDict = {
   "deploy.toast_target_changed": "選択したターゲットディスクが変化したか、使用できなくなりました。再度スキャンしてください。",
   "deploy.toast_some_disks_removed": "{count} 個の利用不可ディスクが自動削除されました。残りのディスクで続行します",
   "deploy.error_system_disk_blocked": "⛔ ブロック: {disks} はシステムディスクです。システムドライブに USB ブートディスクを展開できません!",
+  "deploy.error_readonly_disk": "🔒 書き込み保護: {disks} は読み取り専用です。書き込み保護を解除するか、別の USB を使用してください",
   "deploy.start_cloud_create": "クラウド起動ディスクの作成を開始",
   "deploy.batch_update": "一括非破壊更新を開始 ({count} 個の ディスク)",
   "deploy.batch_mixed": "一括混合展開を開始 ({count} 個の ディスク)",

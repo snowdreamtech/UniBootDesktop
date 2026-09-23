@@ -303,6 +303,7 @@ export const ptPt: TranslationDict = {
   "deploy.toast_target_changed": "O disco alvo selecionado mudou ou já não está disponível. Por favor, volte a procurar.",
   "deploy.toast_some_disks_removed": "{count} disco(s) indisponível(is) removido(s) automaticamente, continuando com os discos restantes",
   "deploy.error_system_disk_blocked": "⛔ Bloqueado: {disks} é um disco do sistema. Não é possível implementar disco de arranque USB na unidade do sistema!",
+  "deploy.error_readonly_disk": "🔒 Protegido contra escrita: {disks} é só de leitura. Remova a proteção contra escrita ou utilize um USB diferente",
   "deploy.start_cloud_create": "Criar disco de arranque na Nuvem",
   "deploy.batch_update": "Iniciar atualização em lote sem perda de dados ({count} discos)",
   "deploy.batch_mixed": "Iniciar implantação mista em lote ({count} discos)",

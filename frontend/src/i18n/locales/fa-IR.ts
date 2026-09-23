@@ -303,6 +303,7 @@ export const faIr: TranslationDict = {
   "deploy.toast_target_changed": "دیسک هدف انتخاب‌شده تغییر کرده یا دیگر در دسترس نیست. لطفاً دوباره اسکن کنید.",
   "deploy.toast_some_disks_removed": "{count} دیسک در دسترس نیست به طور خودکار حذف شد، ادامه با دیسک‌های باقی‌مانده",
   "deploy.error_system_disk_blocked": "⛔ مسدود شده: {disks} یک دیسک سیستم است. نمی‌توان دیسک بوت USB را روی درایو سیستم مستقر کرد!",
+  "deploy.error_readonly_disk": "🔒 محافظت در برابر نوشتن: {disks} فقط خواندنی است. لطفاً حفاظت از نوشتن را حذف کنید یا از USB دیگری استفاده کنید",
   "deploy.start_cloud_create": "ساخت دیسک بوت ابری",
   "deploy.batch_update": "شروع به‌روزرسانی گروهی بدون از دست رفتن داده ({count} درایو دیسک)",
   "deploy.batch_mixed": "شروع استقرار ترکیبی گروهی ({count} درایو دیسک)",

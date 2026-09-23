@@ -323,6 +323,7 @@ export const srLatn: TranslationDict = {
   "deploy.toast_target_changed": "Izabrani ciljni disk se promenio ili više nije dostupan. Molimo ponovo skenirajte.",
   "deploy.toast_some_disks_removed": "{count} nedostupnih diskova automatski uklonjeno, nastavljanje sa preostalim diskovima",
   "deploy.error_system_disk_blocked": "⛔ Blokirano: {disks} je sistemski disk. Nije moguće implementirati USB pokretački disk na sistemski disk!",
+  "deploy.error_readonly_disk": "🔒 Zaštićeno od upisivanja: {disks} je samo za čitanje. Uklonite zaštitu od upisivanja ili koristite drugi USB",
   "deploy.start_cloud_create": "Napravi oblačni pokretački disk",
   "deploy.batch_update": "Pokreni grupno ažuriranje bez gubitka podataka ({count} USB uređaja)",
   "deploy.batch_mixed": "Pokreni grupno mešovito raspoređivanje ({count} USB uređaja)",

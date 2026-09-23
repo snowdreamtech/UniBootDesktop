@@ -303,6 +303,7 @@ export const thTh: TranslationDict = {
   "deploy.toast_target_changed": "ดิสก์เป้าหมายที่เลือกเปลี่ยนไปหรือไม่พร้อมใช้งานแล้ว โปรดสแกนอีกครั้ง",
   "deploy.toast_some_disks_removed": "{count} ดิสก์ที่ไม่พร้อมใช้งานถูกลบโดยอัตโนมัติ กำลังดำเนินการต่อกับดิสก์ที่เหลือ",
   "deploy.error_system_disk_blocked": "⛔ ถูกบล็อก: {disks} เป็นดิสก์ระบบ ไม่สามารถติดตั้งดิสก์บูต USB บนไดรฟ์ระบบได้!",
+  "deploy.error_readonly_disk": "🔒 ป้องกันการเขียน: {disks} เป็นแบบอ่านอย่างเดียว โปรดลบการป้องกันการเขียนหรือใช้ USB อื่น",
   "deploy.start_cloud_create": "สร้างดิสก์บูตคลาวด์",
   "deploy.batch_update": "เริ่มการอัปเดตเป็นชุดโดยไม่สูญเสียข้อมูล ({count} ไดรฟ์ USB)",
   "deploy.batch_mixed": "เริ่มการปรับใช้แบบผสมเป็นชุด ({count} ไดรฟ์ USB)",

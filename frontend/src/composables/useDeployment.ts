@@ -535,6 +535,27 @@ export function useDeployment(options: UseDeploymentOptions) {
       return;
     }
 
+    // Write protection check: prevent deployment to read-only disks
+    const readOnlyDisks = targets.filter((device) => {
+      const disk = diskList.value.find((d) => d.device === device);
+      return disk && !disk.writable;
+    });
+
+    if (readOnlyDisks.length > 0) {
+      const diskNames = readOnlyDisks
+        .map((device) => {
+          const disk = diskList.value.find((d) => d.device === device);
+          return disk ? `${disk.name} (${device})` : device;
+        })
+        .join(", ");
+      showToast(
+        t("deploy.error_readonly_disk", { disks: diskNames }),
+        "error"
+      );
+      logUserAction("WARN", "Read-only disk deployment blocked", diskNames);
+      return;
+    }
+
     // Lock pendingTargets and pendingIsoFiles NOW, before the async preflight call.
     // buildDefaultIsoPlans (inside preflightIsoCopies) stamps each plan with
     // plan.targetDisk from this exact targets array. If we waited until

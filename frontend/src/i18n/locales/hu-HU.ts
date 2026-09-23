@@ -303,6 +303,7 @@ export const huHu: TranslationDict = {
   "deploy.toast_target_changed": "A kiválasztott céllemez megváltozott vagy már nem érhető el. Kérjük, szkenneljen újra.",
   "deploy.toast_some_disks_removed": "{count} nem elérhető lemez automatikusan eltávolítva, folytatás a fennmaradó lemezekkel",
   "deploy.error_system_disk_blocked": "⛔ Letiltva: A(z) {disks} rendszerlemez. USB rendszerindító lemez nem telepíthető rendszermeghajtóra!",
+  "deploy.error_readonly_disk": "🔒 Írásvédett: A(z) {disks} csak olvasható. Távolítsa el az írásvédelmet, vagy használjon másik USB-eszközt",
   "deploy.start_cloud_create": "Felhőalapú indítólemez létrehozása",
   "deploy.batch_update": "Kötegelt frissítés indítása adatvesztés nélkül ({count} USB-meghajtó)",
   "deploy.batch_mixed": "Kötegelt vegyes telepítés indítása ({count} USB-meghajtó)",

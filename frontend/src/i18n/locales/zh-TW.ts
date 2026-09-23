@@ -310,6 +310,7 @@ export const zhTw: TranslationDict = {
   "deploy.toast_target_changed": "所選目標磁盤已發生變化或不再可用，請重新掃描後再試。",
   "deploy.toast_some_disks_removed": "已自動移除 {count} 個不可用磁碟，繼續部署到剩餘磁碟",
   "deploy.error_system_disk_blocked": "⛔ 已阻止：{disks} 是系統碟。禁止向系統驅動器部署 USB 啟動碟！",
+  "deploy.error_readonly_disk": "🔒 寫入保護：{disks} 為唯讀狀態。請移除寫入保護或使用其他 USB 磁碟",
   "deploy.start_cloud_create": "開始製作雲啟動碟",
   "deploy.batch_update": "開始批量無損更新 ({count} 塊磁碟)",
   "deploy.batch_mixed": "開始批量混合部署 ({count} 塊磁碟)",

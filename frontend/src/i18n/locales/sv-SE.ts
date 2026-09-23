@@ -303,6 +303,7 @@ export const svSe: TranslationDict = {
   "deploy.toast_target_changed": "Den valda måldisken har ändrats eller är inte längre tillgänglig. Skanna igen.",
   "deploy.toast_some_disks_removed": "{count} otillgängliga diskar borttagna automatiskt, fortsätter med återstående diskar",
   "deploy.error_system_disk_blocked": "⛔ Blockerad: {disks} är en systemdisk. Det går inte att distribuera USB-startdisk till systemenheten!",
+  "deploy.error_readonly_disk": "🔒 Skrivskyddad: {disks} är skrivskyddad. Ta bort skrivskyddet eller använd en annan USB",
   "deploy.start_cloud_create": "Skapa molnstartdisk",
   "deploy.batch_update": "Starta säker gruppuppdatering ({count} enheter)",
   "deploy.batch_mixed": "Starta blandad gruppinstallation ({count} enheter)",

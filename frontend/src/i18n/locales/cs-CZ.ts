@@ -303,6 +303,7 @@ export const csCz: TranslationDict = {
   "deploy.toast_target_changed": "Vybraný cílový disk se změnil nebo již není dostupný. Proveďte nový sken.",
   "deploy.toast_some_disks_removed": "{count} nedostupných disků automaticky odstraněno, pokračování se zbývajícími disky",
   "deploy.error_system_disk_blocked": "⛔ Blokováno: {disks} je systémový disk. Na systémový disk nelze nasadit spouštěcí USB disk!",
+  "deploy.error_readonly_disk": "🔒 Chráněno proti zápisu: {disks} je pouze pro čtení. Odstraňte ochranu proti zápisu nebo použijte jiné USB",
   "deploy.start_cloud_create": "Vytvořit cloudový bootovací disk",
   "deploy.batch_update": "Spustit hromadnou aktualizaci bez ztráty dat ({count} USB disků)",
   "deploy.batch_mixed": "Spustit hromadné smíšené nasazení ({count} USB disků)",

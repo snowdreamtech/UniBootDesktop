@@ -303,6 +303,7 @@ export const idId: TranslationDict = {
   "deploy.toast_target_changed": "Disk target yang dipilih berubah atau tidak lagi tersedia. Silakan pindai ulang.",
   "deploy.toast_some_disks_removed": "{count} disk tidak tersedia dihapus secara otomatis, melanjutkan dengan disk yang tersisa",
   "deploy.error_system_disk_blocked": "⛔ Diblokir: {disks} adalah disk sistem. Tidak dapat menerapkan disk boot USB ke drive sistem!",
+  "deploy.error_readonly_disk": "🔒 Dilindungi tulis: {disks} hanya baca. Hapus proteksi tulis atau gunakan USB yang berbeda",
   "deploy.start_cloud_create": "Buat Diska Booting Cloud",
   "deploy.batch_update": "Mulai Pembaruan Massal Tanpa Kehilangan Data ({count} drive USB)",
   "deploy.batch_mixed": "Mulai Penyebaran Massal Campuran ({count} drive USB)",
