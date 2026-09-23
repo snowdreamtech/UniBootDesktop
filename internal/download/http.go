@@ -15,6 +15,7 @@ import (
 	"io"
 	"math/rand"
 
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -623,19 +624,26 @@ func parseURL(rawURL string) (*url.URL, error) {
 		return nil, err
 	}
 
-	// Validate scheme
-	if u.Scheme == "http" {
-		logger.Warn("Using insecure HTTP for download. This is vulnerable to man-in-the-middle attacks.", "url", rawURL)
-	} else if u.Scheme != "https" {
+	if u.Scheme != "http" && u.Scheme != "https" {
 		return nil, fmt.Errorf("unsupported URL scheme %q (only http and https are supported)", u.Scheme)
 	}
-
-	// Validate host
 	if u.Host == "" {
 		return nil, fmt.Errorf("missing host in URL")
 	}
+	if u.Scheme == "http" && !isLoopbackDownloadHost(u.Hostname()) {
+		return nil, fmt.Errorf("insecure HTTP is not allowed for host %q (use HTTPS)", u.Hostname())
+	}
 
 	return u, nil
+}
+
+func isLoopbackDownloadHost(host string) bool {
+	host = strings.ToLower(strings.TrimSpace(host))
+	if host == "localhost" || host == "localhost." || host == "::1" {
+		return true
+	}
+	ip := net.ParseIP(host)
+	return ip != nil && ip.IsLoopback()
 }
 
 // parseChecksum parses a checksum string in "algorithm:hash" or "hash" format.

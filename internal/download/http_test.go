@@ -268,6 +268,7 @@ func TestHTTPDownloader_Download_InvalidURL(t *testing.T) {
 		{"invalid scheme", "ftp://example.com/file.txt"},
 		{"no host", "http:///file.txt"},
 		{"malformed URL", "ht!tp://example.com"},
+		{"insecure remote HTTP", "http://example.com/file.txt"},
 	}
 
 	for _, tt := range tests {
