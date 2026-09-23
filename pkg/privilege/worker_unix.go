@@ -168,8 +168,8 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		return nil, fmt.Errorf("unsupported unix platform: %s", runtime.GOOS)
 	}
 
-	// Retry connection until socket appears or timeout (5 seconds)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	// Retry connection until socket appears or timeout (120 seconds to allow ample time for user authentication)
+	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 
 	var conn net.Conn

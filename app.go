@@ -992,6 +992,13 @@ func (a *App) RequestPrivilegeElevation() (bool, error) {
 	prompt := "UniGoDesktop requires administrator privileges to access raw storage devices and verify boot partitions."
 	_, err := privilege.StartOrConnectWorker(prompt)
 	if err != nil {
+		errStr := strings.ToLower(err.Error())
+		// If user actively cancelled the prompt, do not pop up a second prompt
+		if strings.Contains(errStr, "canceled") || strings.Contains(errStr, "cancelled") || strings.Contains(errStr, "user declined") || strings.Contains(errStr, "-128") {
+			logger.Info("User dismissed privilege elevation prompt")
+			return false, err
+		}
+
 		logger.Warn("Failed to start privileged worker, falling back to basic elevation", "error", err)
 		var cmdLine string
 		switch runtime.GOOS {
