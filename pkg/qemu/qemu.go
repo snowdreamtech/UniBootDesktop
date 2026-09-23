@@ -352,7 +352,8 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 		}
 		return nil
 	case <-time.After(800 * time.Millisecond):
-		restoreDiskPerms()
+		// QEMU has started successfully and is running in the background.
+		// Permissions will be safely restored when the process terminates via cmd.Wait().
 		return nil
 	}
 }

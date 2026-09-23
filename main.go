@@ -16,6 +16,7 @@ import (
 	"github.com/snowdreamtech/unigodesktop/internal/i18n"
 	"github.com/snowdreamtech/unigodesktop/internal/singleinstance"
 	"github.com/snowdreamtech/unigodesktop/pkg/config"
+	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/menu"
 	"github.com/wailsapp/wails/v2/pkg/menu/keys"
@@ -106,6 +107,16 @@ func RunWails() error {
 }
 
 func main() {
+	for i, arg := range os.Args {
+		if arg == "--privileged-worker" {
+			if err := privilege.RunWorkerFromArgs(os.Args[i+1:]); err != nil {
+				fmt.Fprintf(os.Stderr, "Privileged worker error: %v\n", err)
+				os.Exit(1)
+			}
+			return
+		}
+	}
+
 	if len(os.Args) <= 1 || (len(os.Args) > 1 && (os.Args[1] == "gui" || os.Args[1] == "desktop")) {
 		if err := RunWails(); err != nil {
 			fmt.Fprintf(os.Stderr, "Error launching Wails application: %v\n", err)

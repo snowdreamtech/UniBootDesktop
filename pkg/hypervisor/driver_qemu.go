@@ -378,9 +378,8 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 			}
 			return nil
 		case <-time.After(800 * time.Millisecond):
-			// QEMU has had time to open the device; do not leave 0666 in place
-			// for the lifetime of the VM.
-			restoreDiskPerms()
+			// QEMU has started successfully and is running in the background.
+			// Permissions will be safely restored when the process terminates via cmd.Wait().
 			return nil
 		}
 	}

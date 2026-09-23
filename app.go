@@ -982,20 +982,23 @@ func (a *App) RequestPrivilegeElevation() (bool, error) {
 	}
 
 	prompt := "UniGoDesktop requires administrator privileges to access raw storage devices and verify boot partitions."
-	var cmdLine string
-	switch runtime.GOOS {
-	case "darwin", "linux":
-		cmdLine = "sudo -v"
-	case "windows":
-		cmdLine = "net session"
-	default:
-		cmdLine = "echo 1"
-	}
-
-	_, err := privilege.RunElevated(prompt, cmdLine)
+	_, err := privilege.StartOrConnectWorker(prompt)
 	if err != nil {
-		logger.Warn("User declined or privilege elevation failed", "error", err)
-		return false, err
+		logger.Warn("Failed to start privileged worker, falling back to basic elevation", "error", err)
+		var cmdLine string
+		switch runtime.GOOS {
+		case "darwin", "linux":
+			cmdLine = "sudo -v"
+		case "windows":
+			cmdLine = "net session"
+		default:
+			cmdLine = "echo 1"
+		}
+
+		if _, err := privilege.RunElevated(prompt, cmdLine); err != nil {
+			logger.Warn("User declined or privilege elevation failed", "error", err)
+			return false, err
+		}
 	}
 
 	privilege.ResetElevationCache()

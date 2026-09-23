@@ -21,8 +21,13 @@ var (
 	cachedEvaluated  bool
 )
 
-// IsElevated checks whether the current process is running with root or administrator privileges.
+// IsElevated checks whether the current process is running with root or administrator privileges,
+// or possesses an active, authenticated privileged worker connection.
 func IsElevated() bool {
+	if worker := GetActiveWorkerClient(); worker != nil && worker.IsAlive() {
+		return true
+	}
+
 	elevationMutex.RLock()
 	if cachedEvaluated {
 		elevated := isCachedElevated
@@ -189,6 +194,26 @@ func chmodPath(path string, mode os.FileMode) error {
 // device nodes and returns a restore function that re-applies the original
 // permissions exactly once. Restore is a no-op when no mode change occurred.
 func RelaxRawDiskPermissionsTemporarily(paths ...string) func() {
+	if worker := GetActiveWorkerClient(); worker != nil && worker.IsAlive() {
+		var validPaths []string
+		for _, raw := range paths {
+			path := strings.TrimSpace(raw)
+			if path != "" && ValidateRawDevicePath(path) == nil {
+				validPaths = append(validPaths, path)
+			}
+		}
+		if len(validPaths) > 0 {
+			if err := worker.AcquireDiskAccess(validPaths); err == nil {
+				var once sync.Once
+				return func() {
+					once.Do(func() {
+						_ = worker.ReleaseDiskAccess(validPaths)
+					})
+				}
+			}
+		}
+	}
+
 	type snapshot struct {
 		path      string
 		perm      os.FileMode
