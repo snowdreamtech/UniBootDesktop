@@ -214,18 +214,19 @@ func ResolveRawDiskDevice(diskPath string) string {
 }
 
 // ensureDiskPermissions ensures the current GUI user has read/write permissions on the target raw disk node.
-func ensureDiskPermissions(targetPath string) {
+func ensureDiskPermissions(targetPath string) func() {
+	noop := func() {}
 	if targetPath == "" {
-		return
+		return noop
 	}
 	if err := privilege.ValidateRawDevicePath(targetPath); err != nil {
 		logger.Warn("Rejecting unsafe disk permission change target", "targetPath", targetPath, "error", err)
-		return
+		return noop
 	}
 	f, err := os.OpenFile(targetPath, os.O_RDWR, 0)
 	if err == nil {
 		_ = f.Close()
-		return
+		return noop
 	}
 
 	if runtime.GOOS == "darwin" {
@@ -235,18 +236,13 @@ func ensureDiskPermissions(targetPath string) {
 			diskNode = "disk" + diskNode
 		}
 		rawNode := "r" + diskNode
-
-		logger.Info("Elevating disk node permissions for QEMU GUI session via validated elevated command", "diskNode", diskNode)
-		cmdLine := fmt.Sprintf("chmod 666 /dev/%s /dev/%s", rawNode, diskNode)
-		if _, err := privilege.RunElevated("Adjust raw disk permissions for QEMU access", cmdLine); err != nil {
-			logger.Warn("Failed to elevate disk node permissions via validated command path", "error", err)
-		}
-	} else if runtime.GOOS == "linux" {
-		cmd, err := safeExecCommand("pkexec", "chmod", "666", targetPath)
-		if err == nil {
-			_ = cmd.Run()
-		}
+		logger.Info("Temporarily relaxing disk node permissions for QEMU GUI session", "diskNode", diskNode)
+		return privilege.RelaxRawDiskPermissionsTemporarily("/dev/"+rawNode, "/dev/"+diskNode)
 	}
+	if runtime.GOOS == "linux" {
+		return privilege.RelaxRawDiskPermissionsTemporarily(targetPath)
+	}
+	return noop
 }
 
 // LaunchTest executes a non-blocking QEMU preview test instance on the target disk drive safely across macOS, Windows and Linux.
@@ -295,7 +291,7 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 	}
 
 	// Ensure target disk node has read/write permissions for current user GUI process
-	ensureDiskPermissions(targetPath)
+	restoreDiskPerms := ensureDiskPermissions(targetPath)
 
 	ovmfFw := DetectOVMF()
 
@@ -333,13 +329,16 @@ func LaunchTest(ctx context.Context, diskPath string) error {
 	}
 
 	if err := cmd.Start(); err != nil {
+		restoreDiskPerms()
 		return fmt.Errorf("failed to start QEMU process: %w", err)
 	}
 
 	// Wait up to 800ms to catch startup errors (e.g. missing files or invalid args)
 	done := make(chan error, 1)
 	go func() {
-		done <- cmd.Wait()
+		err := cmd.Wait()
+		restoreDiskPerms()
+		done <- err
 	}()
 
 	select {

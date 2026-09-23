@@ -173,6 +173,60 @@ func SafeExecCommandContext(ctx context.Context, name string, args ...string) (*
 	return exec.CommandContext(ctx, name, args...), nil
 }
 
+const (
+	// temporaryRawDiskPerm is the mode applied so a non-root GUI hypervisor can
+	// open a root-owned raw device. Callers MUST restore the original mode.
+	temporaryRawDiskPerm os.FileMode = 0666
+	defaultRawDiskPerm   os.FileMode = 0640
+)
+
+func chmodPath(path string, mode os.FileMode) error {
+	if err := os.Chmod(path, mode); err == nil {
+		return nil
+	}
+	octal := fmt.Sprintf("%o", mode.Perm())
+	_, err := RunElevated("Restore or adjust raw disk permissions", "chmod "+octal+" "+path)
+	return err
+}
+
+// RelaxRawDiskPermissionsTemporarily sets a temporary mode on validated raw
+// device nodes and returns a restore function that re-applies the original
+// permissions exactly once. Restore is a no-op when no mode change occurred.
+func RelaxRawDiskPermissionsTemporarily(paths ...string) func() {
+	type snapshot struct {
+		path string
+		perm os.FileMode
+	}
+	var changed []snapshot
+	for _, raw := range paths {
+		path := strings.TrimSpace(raw)
+		if path == "" {
+			continue
+		}
+		if err := ValidateRawDevicePath(path); err != nil {
+			continue
+		}
+		info, err := os.Stat(path)
+		orig := defaultRawDiskPerm
+		if err == nil {
+			orig = info.Mode().Perm()
+		}
+		if err := chmodPath(path, temporaryRawDiskPerm); err != nil {
+			continue
+		}
+		changed = append(changed, snapshot{path: path, perm: orig})
+	}
+
+	var once sync.Once
+	return func() {
+		once.Do(func() {
+			for _, item := range changed {
+				_ = chmodPath(item.path, item.perm)
+			}
+		})
+	}
+}
+
 // ValidateRawDevicePath rejects unsafe or clearly system-owned device paths before OS access.
 func ValidateRawDevicePath(devicePath string) error {
 	trimmed := strings.TrimSpace(devicePath)

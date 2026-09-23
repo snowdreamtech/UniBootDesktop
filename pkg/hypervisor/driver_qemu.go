@@ -191,17 +191,18 @@ func extractPlistString(plistStr string, key string) string {
 	return strings.TrimSpace(rest[:endStr])
 }
 
-func ensureDiskPermissions(targetPath string) {
+func ensureDiskPermissions(targetPath string) func() {
+	noop := func() {}
 	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" || !strings.HasPrefix(targetPath, "/dev/") {
-		return
+		return noop
 	}
 	if _, err := os.Stat(targetPath); err != nil {
-		return
+		return noop
 	}
 	f, err := os.OpenFile(targetPath, os.O_RDWR, 0)
 	if err == nil {
 		_ = f.Close()
-		return
+		return noop
 	}
 
 	if runtime.GOOS == "darwin" {
@@ -212,19 +213,21 @@ func ensureDiskPermissions(targetPath string) {
 		}
 		rawNode := "r" + diskNode
 
-		logger.Info("Elevating disk node permissions for QEMU GUI session via validated elevated command", "diskNode", diskNode)
+		logger.Info("Temporarily relaxing disk node permissions for hypervisor GUI session", "diskNode", diskNode)
 		if !regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(rawNode) || !regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(diskNode) {
 			logger.Warn("Invalid disk node format, skipping permission elevation", "rawNode", rawNode, "diskNode", diskNode)
-			return
+			return noop
 		}
-		cmdLine := fmt.Sprintf("chmod 666 /dev/%s /dev/%s", rawNode, diskNode)
-		if _, err := privilege.RunElevated("Adjust raw disk permissions for QEMU access", cmdLine); err != nil {
-			logger.Warn("Failed to elevate disk node permissions via validated command path", "error", err)
-		}
-	} else if runtime.GOOS == "linux" {
-		cmd := exec.Command("pkexec", "chmod", "666", targetPath)
-		_ = cmd.Run()
+		return privilege.RelaxRawDiskPermissionsTemporarily("/dev/"+rawNode, "/dev/"+diskNode)
 	}
+	if runtime.GOOS == "linux" {
+		if err := privilege.ValidateRawDevicePath(targetPath); err != nil {
+			logger.Warn("Rejecting unsafe disk permission change target", "targetPath", targetPath, "error", err)
+			return noop
+		}
+		return privilege.RelaxRawDiskPermissionsTemporarily(targetPath)
+	}
+	return noop
 }
 
 // getOrCreateVarsFile finds or generates an EFI VARS file for QEMU dual pflash drives.
@@ -282,7 +285,6 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 	}
 	logger.Info("Executing QEMU preview simulation test", "disk", targetPath, "qemuPath", status.Path, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB, "accel", cfg.DisplayAccel)
 
-	ensureDiskPermissions(targetPath)
 	unmountTargetDisk(targetPath)
 
 	ovmfFw := DetectOVMF()
@@ -343,6 +345,7 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 	args = append(args, "-drive", fmt.Sprintf("file=%s,format=raw,file.locking=off", targetPath))
 
 	runQEMU := func() error {
+		restoreDiskPerms := ensureDiskPermissions(targetPath)
 		cmd := exec.Command(status.Path, args...)
 		var stderr bytes.Buffer
 		cmd.Stderr = &stderr
@@ -352,12 +355,14 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 		}
 
 		if err := cmd.Start(); err != nil {
+			restoreDiskPerms()
 			return fmt.Errorf("failed to start QEMU process: %w", err)
 		}
 
 		done := make(chan error, 1)
 		go func() {
 			err := cmd.Wait()
+			restoreDiskPerms()
 			remountTargetDisk(targetPath)
 			done <- err
 		}()

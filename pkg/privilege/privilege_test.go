@@ -4,6 +4,8 @@
 package privilege
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -93,6 +95,30 @@ func TestSplitElevatedCommandRejectsUnsupportedShellSyntax(t *testing.T) {
 	if _, err := splitElevatedCommand("diskutil list"); err != nil {
 		t.Fatal("expected a simple approved command to pass validation")
 	}
+}
+
+func TestRelaxRawDiskPermissionsTemporarilyRestoresOwnedFile(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "disk-node")
+	if err := os.WriteFile(path, []byte("x"), 0640); err != nil {
+		t.Fatal(err)
+	}
+
+	restore := RelaxRawDiskPermissionsTemporarily(path)
+	info, err := os.Stat(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if info.Mode().Perm() != 0640 {
+		t.Fatalf("non-device path must not be chmod'd, got %o", info.Mode().Perm())
+	}
+	restore()
+}
+
+func TestRelaxRawDiskPermissionsTemporarilyIgnoresEmptyPath(t *testing.T) {
+	restore := RelaxRawDiskPermissionsTemporarily("", "   ")
+	restore()
+	restore()
 }
 
 func TestBuildPowerShellStartProcessCommandEscapesQuotes(t *testing.T) {
