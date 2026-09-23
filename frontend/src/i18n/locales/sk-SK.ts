@@ -302,6 +302,7 @@ export const skSk: TranslationDict = {
   "confirm.no_format": "Inteligentná aktualizácia na mieste",
   "deploy.toast_target_changed": "Vybraný cieľový disk sa zmenil alebo už nie je dostupný. Vykonajte nový sken.",
   "deploy.toast_some_disks_removed": "{count} nedostupných diskov automaticky odstránených, pokračovanie so zostávajúcimi diskami",
+  "deploy.error_system_disk_blocked": "⛔ Blokované: {disks} je systémový disk. Na systémový disk nie je možné nasadiť USB bootovací disk!",
   "deploy.start_cloud_create": "Vytvoriť cloudový bootovací disk",
   "deploy.batch_update": "Spustiť hromadnú aktualizáciu bez straty dát ({count} USB diskov)",
   "deploy.batch_mixed": "Spustiť hromadné zmiešané nasadenie ({count} USB diskov)",

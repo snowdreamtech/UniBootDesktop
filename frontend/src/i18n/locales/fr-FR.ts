@@ -302,6 +302,7 @@ export const frFr: TranslationDict = {
   "confirm.no_format": "Mise à jour intelligente sur place",
   "deploy.toast_target_changed": "Le disque cible sélectionné a changé ou n'est plus disponible. Veuillez relancer l'analyse.",
   "deploy.toast_some_disks_removed": "{count} disque(s) indisponible(s) supprimé(s) automatiquement, poursuite avec les disques restants",
+  "deploy.error_system_disk_blocked": "⛔ Bloqué : {disks} est un disque système. Impossible de déployer un disque de démarrage USB sur le lecteur système !",
   "deploy.start_cloud_create": "Créer un disque de démarrage Cloud",
   "deploy.batch_update": "Démarrer la mise à jour sans perte ({count} disques)",
   "deploy.batch_mixed": "Démarrer le déploiement mixte ({count} disques)",

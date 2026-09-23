@@ -302,6 +302,7 @@ export const glEs: TranslationDict = {
   "confirm.no_format": "Actualización in-situ intelixente",
   "deploy.toast_target_changed": "O disco de destino seleccionado mudou ou xa non está dispoñible. Volva a escanear.",
   "deploy.toast_some_disks_removed": "{count} disco(s) non dispoñible(s) eliminado(s) automaticamente, continuando cos discos restantes",
+  "deploy.error_system_disk_blocked": "⛔ Bloqueado: {disks} é un disco do sistema. Non se pode implementar un disco de arranque USB na unidade do sistema!",
   "deploy.start_cloud_create": "Crear disco de arranque na Nube",
   "deploy.batch_update": "Iniciar actualización en lote sen perda de datos ({count} unidades USB)",
   "deploy.batch_mixed": "Iniciar despregamento mixto en lote ({count} unidades USB)",

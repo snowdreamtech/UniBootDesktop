@@ -302,6 +302,7 @@ export const beBy: TranslationDict = {
   "confirm.no_format": "Разумнае абнаўленне на месцы",
   "deploy.toast_target_changed": "Выбраны мэтавы дыск змяніўся або больш недаступны. Сканаваць зноў.",
   "deploy.toast_some_disks_removed": "{count} недаступны дыск аўтаматычна выдалены, працягваць з астатнімі дыскамі",
+  "deploy.error_system_disk_blocked": "⛔ Забаронена: {disks} - гэта сістэмны дыск. Немагчыма разгарнуць USB-загрузчык на сістэмны дыск!",
   "deploy.start_cloud_create": "Пачаць стварэнне воблачнага загрузачнага дыска",
   "deploy.batch_update": "Пачаць пакетнае абнаўленне без страты даных ({count} USB)",
   "deploy.batch_mixed": "Пачаць пакетнае змяшанае разгортванне ({count} USB)",

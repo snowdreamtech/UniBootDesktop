@@ -302,6 +302,7 @@ export const koKr: TranslationDict = {
   "confirm.no_format": "스마트 제자리 업데이트",
   "deploy.toast_target_changed": "선택한 대상 디스크가 변경되었거나 더 이상 사용할 수 없습니다. 다시 스캔하세요.",
   "deploy.toast_some_disks_removed": "{count}개의 사용 불가 디스크가 자동으로 제거되었습니다. 남은 디스크로 계속 진행합니다",
+  "deploy.error_system_disk_blocked": "⛔ 차단됨: {disks}은(는) 시스템 디스크입니다. 시스템 드라이브에 USB 부팅 디스크를 배포할 수 없습니다!",
   "deploy.start_cloud_create": "클라우드 부팅 디스크 제작 시작",
   "deploy.batch_update": "일괄 무손실 업데이트 시작 ({count}개 드라이브)",
   "deploy.batch_mixed": "일괄 혼합 배포 시작 ({count}개 드라이브)",

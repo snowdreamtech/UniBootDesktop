@@ -302,6 +302,7 @@ export const taIn: TranslationDict = {
   "confirm.no_format": "ஸ்மார்ட் உள்ளூர் புதுப்பிப்பு",
   "deploy.toast_target_changed": "தேர்ந்தெடுக்கப்பட்ட இலக்கு டிஸ்க் மாறியுள்ளது அல்லது இனி கிடைக்காது. மீண்டும் ஸ்கேன் செய்யவும்.",
   "deploy.toast_some_disks_removed": "{count} கிடைக்காத வட்டு(கள்) தானாகவே நீக்கப்பட்டது, மீதமுள்ள வட்டுகளுடன் தொடர்கிறது",
+  "deploy.error_system_disk_blocked": "⛔ தடுக்கப்பட்டது: {disks} ஒரு கணினி வட்டு. கணினி இயக்ககத்தில் USB துவக்க வட்டை பயன்படுத்த முடியாது!",
   "deploy.start_cloud_create": "கிளவுட் பூட் டிஸ்க் உருவாக்கவும்",
   "deploy.batch_update": "தரவு இழப்பின்றி தொகுதி புதுப்பித்தலைத் தொடங்கு ({count} USB இயக்கிகள்)",
   "deploy.batch_mixed": "கலப்பு தொகுதி வரிசைப்படுத்தலைத் தொடங்கு ({count} USB இயக்கிகள்)",

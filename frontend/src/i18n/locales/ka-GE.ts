@@ -302,6 +302,7 @@ export const kaGe: TranslationDict = {
   "confirm.no_format": "ჭკვიანი ადგილობრივი განახლება",
   "deploy.toast_target_changed": "არჩეული სამიზნე დისკი შეიცვალა ან აღარ არის ხელმისაწვდომი. გთხოვთ ხელახლა დაასკანიროთ.",
   "deploy.toast_some_disks_removed": "{count} მიუწვდომელი დისკი ავტომატურად წაიშალა, გაგრძელება დარჩენილი დისკებით",
+  "deploy.error_system_disk_blocked": "⛔ დაბლოკილია: {disks} სისტემის დისკია. USB ჩატვირთვის დისკის განლაგება სისტემურ დისკზე შეუძლებელია!",
   "deploy.start_cloud_create": "ღრუბლოვანი ჩამტვირთავი დისკის შექმნა",
   "deploy.batch_update": "მონაცემთა დაკარგვის გარეშე ჯგუფური განახლების დაწყება ({count} USB დისკი)",
   "deploy.batch_mixed": "ჯგუფური შერეული განთავსების დაწყება ({count} USB დისკი)",

@@ -302,6 +302,7 @@ export const nlNl: TranslationDict = {
   "confirm.no_format": "Slimme in-place upgrade",
   "deploy.toast_target_changed": "De geselecteerde doelschijf is gewijzigd of niet meer beschikbaar. Scan opnieuw.",
   "deploy.toast_some_disks_removed": "{count} niet-beschikbare schijf/schijven automatisch verwijderd, doorgaan met resterende schijven",
+  "deploy.error_system_disk_blocked": "⛔ Geblokkeerd: {disks} is een systeemschijf. USB-opstartschijf kan niet worden geïmplementeerd op systeemstation!",
   "deploy.start_cloud_create": "Cloud-opstartschijf maken",
   "deploy.batch_update": "Start update zonder gegevensverlies ({count} stations)",
   "deploy.batch_mixed": "Start gemengde batchuitrol ({count} stations)",

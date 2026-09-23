@@ -302,6 +302,7 @@ export const daDk: TranslationDict = {
   "confirm.no_format": "Intelligent opgradering på stedet",
   "deploy.toast_target_changed": "Det valgte måldrev har ændret sig eller er ikke længere tilgængeligt. Scan venligst igen.",
   "deploy.toast_some_disks_removed": "{count} utilgængelige diske fjernet automatisk, fortsætter med resterende diske",
+  "deploy.error_system_disk_blocked": "⛔ Blokeret: {disks} er en systemdisk. Kan ikke implementere USB-opstartsdisk til systemdrevet!",
   "deploy.start_cloud_create": "Opret cloud-bootdisk",
   "deploy.batch_update": "Start batch-opdatering uden datatab ({count} USB-drev)",
   "deploy.batch_mixed": "Start blandet batch-implementering ({count} USB-drev)",

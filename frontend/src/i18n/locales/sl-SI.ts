@@ -302,6 +302,7 @@ export const slSi: TranslationDict = {
   "confirm.no_format": "Pametna nadgradnja na mestu",
   "deploy.toast_target_changed": "Izbrani ciljni disk se je spremenil ali ni več na voljo. Prosimo, ponovno poskenirajte.",
   "deploy.toast_some_disks_removed": "{count} nedostopnih diskov samodejno odstranjenih, nadaljevanje z preostalimi diski",
+  "deploy.error_system_disk_blocked": "⛔ Blokirano: {disks} je sistemski disk. USB zagonskega diska ni mogoče namestiti na sistemski pogon!",
   "deploy.start_cloud_create": "Ustvari oblačni zagonski disk",
   "deploy.batch_update": "Zaženi skupinsko posodobitev brez izgube podatkov ({count} USB pogonov)",
   "deploy.batch_mixed": "Zaženi mešano skupinsko namestitev ({count} USB pogonov)",

@@ -302,6 +302,7 @@ export const bnBd: TranslationDict = {
   "confirm.no_format": "স্মার্ট ইন-প্লেস আপডেট",
   "deploy.toast_target_changed": "নির্বাচিত টার্গেট ডিস্ক পরিবর্তিত হয়েছে বা আর উপলব্ধ নেই। দয়া করে আবার স্ক্যান করুন।",
   "deploy.toast_some_disks_removed": "{count}টি অনুপলব্ধ ডিস্ক স্বয়ংক্রিয়ভাবে সরানো হয়েছে, অবশিষ্ট ডিস্ক দিয়ে অব্যাহত রাখা হচ্ছে",
+  "deploy.error_system_disk_blocked": "⛔ নিষিদ্ধ: {disks} একটি সিস্টেম ডিস্ক। সিস্টেম ড্রাইভে USB বুট ডিস্ক স্থাপন করা যাবে না!",
   "deploy.start_cloud_create": "ক্লাউড বুট ডিস্ক তৈরি করুন",
   "deploy.batch_update": "ব্যাচ তথ্য-সুরক্ষিত আপডেট শুরু করুন ({count}টি USB)",
   "deploy.batch_mixed": "ব্যাচ মিশ্র ডিপ্লয়মেন্ট শুরু করুন ({count}টি USB)",

@@ -514,6 +514,27 @@ export function useDeployment(options: UseDeploymentOptions) {
       if (targets.length === 0) return;
     }
 
+    // Critical safety check: prevent system disk deployment
+    const systemDisks = targets.filter((device) => {
+      const disk = diskList.value.find((d) => d.device === device);
+      return disk?.isSystem;
+    });
+
+    if (systemDisks.length > 0) {
+      const diskNames = systemDisks
+        .map((device) => {
+          const disk = diskList.value.find((d) => d.device === device);
+          return disk ? `${disk.name} (${device})` : device;
+        })
+        .join(", ");
+      showToast(
+        t("deploy.error_system_disk_blocked", { disks: diskNames }),
+        "error"
+      );
+      logUserAction("CRITICAL", "System disk deployment blocked", diskNames);
+      return;
+    }
+
     // Lock pendingTargets and pendingIsoFiles NOW, before the async preflight call.
     // buildDefaultIsoPlans (inside preflightIsoCopies) stamps each plan with
     // plan.targetDisk from this exact targets array. If we waited until

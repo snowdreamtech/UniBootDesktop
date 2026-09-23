@@ -302,6 +302,7 @@ export const hyAm: TranslationDict = {
   "confirm.no_format": "Խելացի տեղական թարմացում",
   "deploy.toast_target_changed": "Ընտրված թիրախային սկավառակը փոխվել է կամ այլևս հասանելի չէ: Խնդրում ենք կրկին սկանավորել:",
   "deploy.toast_some_disks_removed": "{count} անհասանելի սկավառակ ինքնաշխատ հեռացվել է, շարունակում մնացած սկավառակներով",
+  "deploy.error_system_disk_blocked": "⛔ Արգելափակված է: {disks}-ը համակարգային սկավառակ է: Չի կարող տեղադրել USB բեռնավորման սկավառակը համակարգային սկավառակին:",
   "deploy.start_cloud_create": "Ստեղծել ամպային բեռնավորման սկավառակ",
   "deploy.batch_update": "Սկսել խմբային թարմացումը առանց տվյալների կորստի ({count} USB կրիչ)",
   "deploy.batch_mixed": "Սկսել խմբային խառը տեղադրումը ({count} USB կրիչ)",

@@ -302,6 +302,7 @@ export const ukUa: TranslationDict = {
   "confirm.no_format": "Розумне оновлення на місці",
   "deploy.toast_target_changed": "Вибраний цільовий диск змінився або більше недоступний. Будь ласка, виконайте сканування знову.",
   "deploy.toast_some_disks_removed": "{count} недоступних дисків автоматично видалено, продовження з іншими дисками",
+  "deploy.error_system_disk_blocked": "⛔ Заблоковано: {disks} — це системний диск. Неможливо розгорнути завантажувальний USB-диск на системний диск!",
   "deploy.start_cloud_create": "Створити хмарний завантажувальний диск",
   "deploy.batch_update": "Розпочати оновлення без втрати даних ({count} дисків)",
   "deploy.batch_mixed": "Розпочати змішане розгортання ({count} дисків)",
