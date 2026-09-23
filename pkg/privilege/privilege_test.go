@@ -6,6 +6,7 @@ package privilege
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -20,6 +21,20 @@ func TestIsElevated(t *testing.T) {
 	elevated2 := IsElevated()
 	if elevated != elevated2 {
 		t.Fatalf("elevation status changed after cache reset: %v != %v", elevated, elevated2)
+	}
+}
+
+func TestIsElevatedIgnoresCachedSudoTicket(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Windows elevation uses Administrator token, not sudo")
+	}
+	if os.Geteuid() == 0 {
+		t.Skip("process is already root")
+	}
+
+	ResetElevationCache()
+	if IsElevated() {
+		t.Fatal("non-root process must not report elevation from a sudo timestamp")
 	}
 }
 
@@ -60,8 +75,10 @@ func TestRunElevatedRejectsEmptyCommand(t *testing.T) {
 }
 
 func TestValidateRawDevicePathRejectsUnsafeInputs(t *testing.T) {
-	if err := ValidateRawDevicePath("/dev/sda"); err == nil {
-		t.Fatal("expected system disk path to be rejected")
+	for _, blocked := range []string{"/dev/sda", "/dev/nvme0n1", "/dev/disk0", `\\.\PhysicalDrive0`, "PhysicalDrive0", "C:"} {
+		if err := ValidateRawDevicePath(blocked); err == nil {
+			t.Fatalf("expected system disk path %q to be rejected", blocked)
+		}
 	}
 	if err := ValidateRawDevicePath("/dev/sdb"); err != nil {
 		t.Fatal("expected valid removable device path to be accepted")
@@ -77,6 +94,9 @@ func TestValidateCommandNameRejectsDangerousInput(t *testing.T) {
 	}
 	if err := ValidateCommandName("diskutil"); err != nil {
 		t.Fatal("expected allowed system command to pass validation")
+	}
+	if err := ValidateCommandName("chown"); err != nil {
+		t.Fatal("expected chown to be allowlisted for ownership restore")
 	}
 }
 

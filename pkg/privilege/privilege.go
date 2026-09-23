@@ -58,14 +58,9 @@ func checkIsElevated() bool {
 		return err == nil
 	}
 
-	// On Unix-like systems (macOS, Linux), EUID == 0 indicates root privilege
-	if os.Geteuid() == 0 {
-		return true
-	}
-
-	// Check if active non-interactive sudo session exists
-	cmd := exec.Command("sudo", "-n", "true")
-	return cmd.Run() == nil
+	// Unix elevation is the process EUID only. A cached `sudo -n` ticket must
+	// not be treated as root, or later sudo -n dd/mount paths run without a prompt.
+	return os.Geteuid() == 0
 }
 
 // RunElevated runs a command line with administrator/root privileges across operating systems.
@@ -130,7 +125,7 @@ func ValidateCommandName(name string) error {
 		"diskutil": {}, "lsblk": {}, "umount": {}, "udisksctl": {}, "mount": {}, "mount_msdos": {},
 		"chmod": {}, "dd": {}, "sudo": {}, "pkexec": {}, "osascript": {}, "net": {}, "true": {},
 		"cmd.exe": {}, "powershell": {}, "powershell.exe": {}, "wmic": {}, "open": {}, "diskpart": {},
-		"cmd": {}, "echo": {},
+		"cmd": {}, "echo": {}, "chown": {},
 	}
 	lower := strings.ToLower(base)
 	if _, ok := allowlist[lower]; !ok {
@@ -174,9 +169,10 @@ func SafeExecCommandContext(ctx context.Context, name string, args ...string) (*
 }
 
 const (
-	// temporaryRawDiskPerm is the mode applied so a non-root GUI hypervisor can
-	// open a root-owned raw device. Callers MUST restore the original mode.
-	temporaryRawDiskPerm os.FileMode = 0666
+	// temporaryRawDiskPerm is owner-only access after the node is chown'd to the
+	// current user. World-writable 0666 is never applied. Callers MUST restore
+	// the original owner and mode.
+	temporaryRawDiskPerm os.FileMode = 0600
 	defaultRawDiskPerm   os.FileMode = 0640
 )
 
@@ -194,8 +190,11 @@ func chmodPath(path string, mode os.FileMode) error {
 // permissions exactly once. Restore is a no-op when no mode change occurred.
 func RelaxRawDiskPermissionsTemporarily(paths ...string) func() {
 	type snapshot struct {
-		path string
-		perm os.FileMode
+		path      string
+		perm      os.FileMode
+		uid       int
+		gid       int
+		haveOwner bool
 	}
 	var changed []snapshot
 	for _, raw := range paths {
@@ -208,19 +207,34 @@ func RelaxRawDiskPermissionsTemporarily(paths ...string) func() {
 		}
 		info, err := os.Stat(path)
 		orig := defaultRawDiskPerm
+		uid, gid := 0, 0
+		haveOwner := false
 		if err == nil {
 			orig = info.Mode().Perm()
+			uid, gid, haveOwner = snapshotOwner(info)
 		}
-		if err := chmodPath(path, temporaryRawDiskPerm); err != nil {
+
+		// Fail closed: never fall back to world-writable modes. If we cannot
+		// assign the node to the current user, skip the path.
+		if err := chownPath(path, os.Getuid(), os.Getgid()); err != nil {
 			continue
 		}
-		changed = append(changed, snapshot{path: path, perm: orig})
+		if err := chmodPath(path, temporaryRawDiskPerm); err != nil {
+			if haveOwner {
+				_ = chownPath(path, uid, gid)
+			}
+			continue
+		}
+		changed = append(changed, snapshot{path: path, perm: orig, uid: uid, gid: gid, haveOwner: haveOwner})
 	}
 
 	var once sync.Once
 	return func() {
 		once.Do(func() {
 			for _, item := range changed {
+				if item.haveOwner {
+					_ = chownPath(item.path, item.uid, item.gid)
+				}
 				_ = chmodPath(item.path, item.perm)
 			}
 		})
@@ -238,7 +252,10 @@ func ValidateRawDevicePath(devicePath string) error {
 	}
 
 	blocked := map[string]struct{}{
-		"/": {}, "C:": {}, "/dev/sda": {}, "/dev/nvme0n1": {}, "/dev/disk0": {}, "disk0": {},
+		"/": {}, "C:": {}, "C:\\": {},
+		"/dev/sda": {}, "/dev/nvme0n1": {}, "/dev/mmcblk0": {}, "/dev/vda": {},
+		"/dev/disk0": {}, "disk0": {},
+		`\\.\PhysicalDrive0`: {}, "PhysicalDrive0": {},
 	}
 	if _, ok := blocked[trimmed]; ok {
 		return fmt.Errorf("device path %q is blocked as a system-owned path", trimmed)
@@ -354,7 +371,7 @@ func ReadSector(devicePath string, numBytes int) ([]byte, error) {
 		}
 	}
 
-	// If direct open failed but process has elevation or sudo access, try sudo dd.
+	// If the process is actually root, retry via sudo dd as a last resort.
 	// The dd arguments are tightly structured and validated so they remain usable for
 	// legitimate raw-disk reads without allowing shell command injection.
 	if IsElevated() && (runtime.GOOS == "darwin" || runtime.GOOS == "linux") {
