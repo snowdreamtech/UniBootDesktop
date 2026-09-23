@@ -117,28 +117,28 @@ func parseWindowsDiskNumber(targetDisk string) (int, error) {
 
 // DiskInfo represents metadata about an available disk drive.
 type DiskInfo struct {
-	Device            string `json:"device"`            // Device path (e.g., /dev/disk2, E:)
-	Name              string `json:"name"`              // Friendly display name only; not a trusted device identity
-	Size              uint64 `json:"size"`              // Total capacity in bytes
-	Formatted         string `json:"formatted"`         // Human readable size string
-	FreeSpace         uint64 `json:"freeSpace"`         // Free available space in bytes
-	FreeFormatted     string `json:"freeFormatted"`     // Human readable free space string
-	IsRemovable       bool   `json:"isRemovable"`       // Removable disk flag
-	IsSystem          bool   `json:"isSystem"`          // System disk safety flag
-	UsbVersion        string `json:"usbVersion"`        // Protocol version (USB 2.0, USB 3.0, USB 3.1, USB 3.2, USB4)
-	UsbSpeed          string `json:"usbSpeed"`          // Physical bus speed (480 Mb/s, 5 Gb/s, 10 Gb/s, 20 Gb/s)
-	Vendor            string `json:"vendor"`            // Device manufacturer / vendor
-	FileSystem        string `json:"fileSystem"`        // File system format (e.g., ExFAT, FAT32, NTFS, APFS, ext4)
-	PartitionScheme   string `json:"partitionScheme"`   // Partition scheme (e.g., GPT, MBR)
-	Writable          bool   `json:"writable"`          // Read-Write status (true = Read-Write, false = Read-Only)
-	SerialNumber      string `json:"serialNumber"`      // Hardware Serial Number
-	VendorId          string `json:"vendorId"`          // USB Vendor ID (e.g., 0x21c4)
-	ProductId         string `json:"productId"`         // USB Product ID (e.g., 0x0cd1)
-	SmartStatus       string `json:"smartStatus"`       // S.M.A.R.T. health status (e.g. Verified, Not Supported, Failing)
-	BusPower          string `json:"busPower"`          // Bus power available (e.g. 500 mA, 900 mA)
-	BusPowerUsed      string `json:"busPowerUsed"`      // Bus power required/used (e.g. 500 mA, 224 mA)
-	SectorSize        string `json:"sectorSize"`        // Sector block size (e.g. 512 Bytes, 4096 Bytes / 4Kn)
-	TransportProtocol string `json:"transportProtocol"` // USB Transport Protocol (e.g. UASP, BOT)
+	Device             string             `json:"device"`                       // Device path (e.g., /dev/disk2, E:)
+	Name               string             `json:"name"`                         // Friendly display name only; not a trusted device identity
+	Size               uint64             `json:"size"`                         // Total capacity in bytes
+	Formatted          string             `json:"formatted"`                    // Human readable size string
+	FreeSpace          uint64             `json:"freeSpace"`                    // Free available space in bytes
+	FreeFormatted      string             `json:"freeFormatted"`                // Human readable free space string
+	IsRemovable        bool               `json:"isRemovable"`                  // Removable disk flag
+	IsSystem           bool               `json:"isSystem"`                     // System disk safety flag
+	UsbVersion         string             `json:"usbVersion"`                   // Protocol version (USB 2.0, USB 3.0, USB 3.1, USB 3.2, USB4)
+	UsbSpeed           string             `json:"usbSpeed"`                     // Physical bus speed (480 Mb/s, 5 Gb/s, 10 Gb/s, 20 Gb/s)
+	Vendor             string             `json:"vendor"`                       // Device manufacturer / vendor
+	FileSystem         string             `json:"fileSystem"`                   // File system format (e.g., ExFAT, FAT32, NTFS, APFS, ext4)
+	PartitionScheme    string             `json:"partitionScheme"`              // Partition scheme (e.g., GPT, MBR)
+	Writable           bool               `json:"writable"`                     // Read-Write status (true = Read-Write, false = Read-Only)
+	SerialNumber       string             `json:"serialNumber"`                 // Hardware Serial Number
+	VendorId           string             `json:"vendorId"`                     // USB Vendor ID (e.g., 0x21c4)
+	ProductId          string             `json:"productId"`                    // USB Product ID (e.g., 0x0cd1)
+	SmartStatus        string             `json:"smartStatus"`                  // S.M.A.R.T. health status (e.g. Verified, Not Supported, Failing)
+	BusPower           string             `json:"busPower"`                     // Bus power available (e.g. 500 mA, 900 mA)
+	BusPowerUsed       string             `json:"busPowerUsed"`                 // Bus power required/used (e.g. 500 mA, 224 mA)
+	SectorSize         string             `json:"sectorSize"`                   // Sector block size (e.g. 512 Bytes, 4096 Bytes / 4Kn)
+	TransportProtocol  string             `json:"transportProtocol"`            // USB Transport Protocol (e.g. UASP, BOT)
 	BootStatus         string             `json:"bootStatus"`                   // Boot sector status (e.g. UniBoot/Ventoy Ready, MBR Bootable, Standard Data)
 	BootStatusCode     string             `json:"bootStatusCode"`               // Standard machine code for i18n localization
 	ControllerVendor   string             `json:"controllerVendor"`             // Inferred USB Controller Vendor (e.g. Phison, SMI, Alcor)
@@ -447,11 +447,12 @@ func HasUniBootCloudFiles(mountPoint string) bool {
 
 // NormalizeDarwinDiskNode extracts the parent physical disk node (e.g. "disk2") from a macOS disk or partition path.
 // Examples:
-//   "/dev/disk2"    -> "disk2"
-//   "/dev/rdisk2"   -> "disk2"
-//   "/dev/disk2s1"  -> "disk2"
-//   "disk2s2"       -> "disk2"
-//   "/dev/disk12s3" -> "disk12"
+//
+//	"/dev/disk2"    -> "disk2"
+//	"/dev/rdisk2"   -> "disk2"
+//	"/dev/disk2s1"  -> "disk2"
+//	"disk2s2"       -> "disk2"
+//	"/dev/disk12s3" -> "disk12"
 func NormalizeDarwinDiskNode(targetDisk string) string {
 	node := filepath.Base(targetDisk)
 	node = strings.TrimPrefix(node, "r") // Remove raw disk prefix if present (rdisk2 -> disk2)
@@ -517,7 +518,7 @@ func IsVentoyDisk(targetDisk string) bool {
 		}
 	} else if runtime.GOOS == "linux" {
 		// Linux: query mounted partitions and check physical engine files
-		out, err := exec.Command("lsblk", "-o", "MOUNTPOINT", "-n", "-l", targetDisk).Output()
+		out, err := execCommand("lsblk", "-o", "MOUNTPOINT", "-n", "-l", targetDisk).Output()
 		if err == nil {
 			mountPoints := strings.Split(strings.TrimSpace(string(out)), "\n")
 			for _, mp := range mountPoints {
@@ -532,7 +533,7 @@ func IsVentoyDisk(targetDisk string) bool {
 		if err != nil {
 			return false
 		}
-		out, err := exec.Command("powershell", "-NoProfile", "-NonInteractive", "-Command",
+		out, err := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command",
 			fmt.Sprintf("Get-Partition -DiskNumber %d | Get-Volume | Select-Object -ExpandProperty DriveLetter", diskNum)).Output()
 		if err == nil {
 			lines := strings.Split(strings.TrimSpace(string(out)), "\n")
@@ -601,7 +602,7 @@ func IsCloudModeDisk(targetDisk string) bool {
 		// Linux: targetDisk is typically a device path like /dev/sdb
 		if strings.HasPrefix(targetDisk, "/dev/") {
 			// Query partitions and their mount points using lsblk
-			out, err := exec.Command("lsblk", "-o", "MOUNTPOINT", "-n", "-l", targetDisk).Output()
+			out, err := execCommand("lsblk", "-o", "MOUNTPOINT", "-n", "-l", targetDisk).Output()
 			if err == nil {
 				mountPoints := strings.Split(strings.TrimSpace(string(out)), "\n")
 
@@ -1677,9 +1678,19 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			IsGenericBoot:      isGenericBoot,
 			ThirdPartyBootType: thirdPartyBoot,
 			ThirdPartyBootCode: MapThirdPartyBootCode(thirdPartyBoot),
-			UniBootVersion:     func() string { if manifest != nil { return manifest.Version }; return "" }(),
-			UniBootMode:        func() string { if manifest != nil { return manifest.Mode }; return "" }(),
-			MountPoint:         volPath,
+			UniBootVersion: func() string {
+				if manifest != nil {
+					return manifest.Version
+				}
+				return ""
+			}(),
+			UniBootMode: func() string {
+				if manifest != nil {
+					return manifest.Mode
+				}
+				return ""
+			}(),
+			MountPoint: volPath,
 		})
 	}
 
@@ -1917,9 +1928,19 @@ func getLinuxDisks() ([]DiskInfo, error) {
 			IsGenericBoot:      isGenBootLinux,
 			ThirdPartyBootType: thirdPartyBootLinux,
 			ThirdPartyBootCode: MapThirdPartyBootCode(thirdPartyBootLinux),
-			UniBootVersion:     func() string { if manifestLinux != nil { return manifestLinux.Version }; return "" }(),
-			UniBootMode:        func() string { if manifestLinux != nil { return manifestLinux.Mode }; return "" }(),
-			MountPoint:         mountPath,
+			UniBootVersion: func() string {
+				if manifestLinux != nil {
+					return manifestLinux.Version
+				}
+				return ""
+			}(),
+			UniBootMode: func() string {
+				if manifestLinux != nil {
+					return manifestLinux.Mode
+				}
+				return ""
+			}(),
+			MountPoint: mountPath,
 		})
 	}
 
@@ -2038,9 +2059,19 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			IsGenericBoot:      isGenBootWin,
 			ThirdPartyBootType: thirdPartyBootWin,
 			ThirdPartyBootCode: MapThirdPartyBootCode(thirdPartyBootWin),
-			UniBootVersion:     func() string { if manifestWin != nil { return manifestWin.Version }; return "" }(),
-			UniBootMode:        func() string { if manifestWin != nil { return manifestWin.Mode }; return "" }(),
-			MountPoint:         driveLetter,
+			UniBootVersion: func() string {
+				if manifestWin != nil {
+					return manifestWin.Version
+				}
+				return ""
+			}(),
+			UniBootMode: func() string {
+				if manifestWin != nil {
+					return manifestWin.Mode
+				}
+				return ""
+			}(),
+			MountPoint: driveLetter,
 		})
 	}
 
@@ -2060,7 +2091,12 @@ func ValidateTargetDisk(targetDevice string) error {
 	}
 
 	// Static blacklist check for common system disk paths - always blocked even in tests
-	staticBlacklist := []string{"/", "C:", "/dev/sda", "/dev/nvme0n1", "/dev/disk0", "disk0"}
+	staticBlacklist := []string{
+		"/", "C:", `C:\`,
+		"/dev/sda", "/dev/nvme0n1", "/dev/mmcblk0", "/dev/vda",
+		"/dev/disk0", "disk0",
+		`\\.\PhysicalDrive0`, "PhysicalDrive0",
+	}
 	for _, blocked := range staticBlacklist {
 		if targetDevice == blocked {
 			return fmt.Errorf("CRITICAL: Safety block triggered! %s is a known system drive", targetDevice)
