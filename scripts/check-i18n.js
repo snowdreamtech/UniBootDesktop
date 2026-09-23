@@ -153,6 +153,41 @@ for (const localeFile of localeFiles) {
       }
     }
   }
+
+  // Detect machine-translation corruption / English-leak patterns on critical alert keys.
+  const corruptionChecks = [
+    { key: "deploy.alert_success", patterns: [/ful!/, /nn\{/, /\bDeployment\b/] },
+    { key: "deploy.alert_fail", patterns: [/nn\{/, /\bDeployment\b/] },
+    { key: "vm.startFailed", patterns: [/to start QEMU simulator/] },
+    { key: "settings.syncFailedAlert", patterns: [/^Firmware Sync\b/] },
+  ];
+  if (localeFile !== "en-US.ts") {
+    for (const check of corruptionChecks) {
+      const localeValue = localeEntries.get(check.key);
+      if (!localeValue) continue;
+      for (const pattern of check.patterns) {
+        if (pattern.test(localeValue)) {
+          hasErrors = true;
+          console.error(`\n❌ ${localeFile} has non-native / corrupted copy for "${check.key}": ${localeValue}`);
+          break;
+        }
+      }
+    }
+  }
+
+  // Placeholder parity for all keys vs en-US (not only qualityKeys).
+  for (const [key, localeValue] of localeEntries) {
+    const sourceValue = enUsEntries.get(key);
+    if (!sourceValue) continue;
+    const srcPh = getPlaceholders(sourceValue);
+    const locPh = getPlaceholders(localeValue);
+    if (JSON.stringify(srcPh) !== JSON.stringify(locPh)) {
+      hasErrors = true;
+      console.error(`\n❌ ${localeFile} has placeholder mismatch for "${key}":`);
+      console.error(`   - English: ${srcPh.join(", ") || "(none)"}`);
+      console.error(`   - ${localeFile}: ${locPh.join(", ") || "(none)"}`);
+    }
+  }
 }
 
 // 3. Scan src/ for t('...') usages in code

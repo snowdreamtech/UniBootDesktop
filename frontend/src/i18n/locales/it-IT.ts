@@ -72,7 +72,7 @@ export const itIt: TranslationDict = {
   "settings.proxyTestSuccess": "Connettività Proxy {protocol} OK ({host}:{port})",
   "settings.syncSuccessAlert": "Firmware e script di avvio UniBoot {tag} sincronizzati e scaricati nella cache locale!",
   "settings.syncSuccessShortAlert": "Firmware UniBoot sincronizzato con successo!",
-  "settings.syncFailedAlert": "Sincronizzazione Firmware Riuscita Fallita: {error}",
+  "settings.syncFailedAlert": "Sincronizzazione firmware non riuscita: {error}",
   "settings.ventoyToolchain": "Toolchain Ventoy",
   "settings.testVentoyCli": "Testa Ventoy CLI",
   "settings.select_ventoy_dir": "Seleziona la directory di installazione di Ventoy",
