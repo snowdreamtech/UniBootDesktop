@@ -22,9 +22,8 @@ var (
 )
 
 var vmCmd = &cobra.Command{
-	Use:     "vm",
-	Aliases: []string{"qemu"},
-	Short:   "Launch virtual machine to test target bootable disk drive",
+	Use:   "vm",
+	Short: "Launch virtual machine to test target bootable disk drive",
 	Long: `Launch an isolated virtual machine window (QEMU, UTM, VMware, VirtualBox, KVM, Hyper-V, Parallels)
 to test the bootability of a disk drive or ISO image without rebooting your computer.
 
@@ -33,10 +32,7 @@ Examples:
   unigodesktop vm --disk /dev/disk2
 
   # Test disk drive specifically in QEMU with 4GB RAM in UEFI mode
-  unigodesktop vm -d /dev/disk2 -e qemu -m 4096 -b uefi
-
-  # Test using legacy command alias
-  unigodesktop qemu -d /dev/disk2`,
+  unigodesktop vm -d /dev/disk2 -e qemu -m 4096 -b uefi`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		target := strings.TrimSpace(vmDisk)
 		if target == "" {

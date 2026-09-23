@@ -97,18 +97,6 @@ func TestVmCmdHelp(t *testing.T) {
 	}
 }
 
-func TestQemuCmdHelp(t *testing.T) {
-	buf := new(bytes.Buffer)
-	rootCmd.SetOut(buf)
-	rootCmd.SetErr(buf)
-	rootCmd.SetArgs([]string{"qemu", "--help"})
-
-	err := rootCmd.Execute()
-	if err != nil {
-		t.Fatalf("expected no error running qemu (alias) --help, got: %v", err)
-	}
-}
-
 func TestConfigCmdHelp(t *testing.T) {
 	buf := new(bytes.Buffer)
 	rootCmd.SetOut(buf)
