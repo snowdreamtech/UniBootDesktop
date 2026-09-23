@@ -15,12 +15,24 @@ import (
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
+	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
 )
 
 var (
 	// execCommand allows overriding exec.Command in tests
 	execCommand = exec.Command
 )
+
+func runPartitionCommand(name string, args ...string) ([]byte, error) {
+	if privilege.IsElevated() {
+		if worker := privilege.GetActiveWorkerClient(); worker != nil && worker.IsAlive() {
+			out, err := worker.RunCommand(name, args...)
+			return []byte(out), err
+		}
+	}
+	cmd := execCommand(name, args...)
+	return cmd.CombinedOutput()
+}
 
 // FormatDiskCloudMode formats the target physical disk to FAT32 with MBR partition table
 // and volume label "UNIBOOT" for Cloud Mode (1-sec Cloud Pure Mode).
@@ -142,8 +154,7 @@ func formatDiskWindows(ctx context.Context, targetDisk string) (string, error) {
 	}
 	tmpFile.Close()
 
-	cmd := execCommand("diskpart", "/s", tmpFile.Name())
-	output, err := cmd.CombinedOutput()
+	output, err := runPartitionCommand("diskpart", "/s", tmpFile.Name())
 	if err != nil {
 		return "", fmt.Errorf("diskpart failed (%v): %s", err, string(output))
 	}
@@ -160,21 +171,21 @@ func formatDiskLinux(ctx context.Context, targetDisk string) (string, error) {
 	}
 
 	// 1. Create MBR partition table
-	cmd := execCommand("parted", "-s", targetDisk, "mklabel", "msdos")
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err := runPartitionCommand("parted", "-s", targetDisk, "mklabel", "msdos")
+	if err != nil {
 		return "", fmt.Errorf("parted mklabel failed (%v): %s", err, string(output))
 	}
 
 	// 2. Create Partition 1 (Primary Data) leaving 64MiB at the end
-	cmd = execCommand("parted", "-s", targetDisk, "mkpart", "primary", "fat32", "1MiB", "-65MiB")
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err = runPartitionCommand("parted", "-s", targetDisk, "mkpart", "primary", "fat32", "1MiB", "-65MiB")
+	if err != nil {
 		return "", fmt.Errorf("parted mkpart P1 failed (%v): %s", err, string(output))
 	}
-	_ = execCommand("parted", "-s", targetDisk, "set", "1", "boot", "on").Run()
+	_, _ = runPartitionCommand("parted", "-s", targetDisk, "set", "1", "boot", "on")
 
 	// 3. Create Partition 2 (64MiB ESP Partition)
-	cmd = execCommand("parted", "-s", targetDisk, "mkpart", "primary", "fat32", "-64MiB", "100%")
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err = runPartitionCommand("parted", "-s", targetDisk, "mkpart", "primary", "fat32", "-64MiB", "100%")
+	if err != nil {
 		return "", fmt.Errorf("parted mkpart P2 failed (%v): %s", err, string(output))
 	}
 
@@ -187,15 +198,14 @@ func formatDiskLinux(ctx context.Context, targetDisk string) (string, error) {
 	}
 
 	// 4. Format Partition 1 as FAT32 with label Ventoy
-	cmd = execCommand("mkfs.vfat", "-F", "32", "-n", "Ventoy", part1)
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err = runPartitionCommand("mkfs.vfat", "-F", "32", "-n", "Ventoy", part1)
+	if err != nil {
 		return "", fmt.Errorf("mkfs.vfat P1 failed (%v): %s", err, string(output))
 	}
 
 	// 5. Format Partition 2 as FAT32 with label VTOYEFI
-	cmd = execCommand("mkfs.vfat", "-F", "32", "-n", "VTOYEFI", part2)
-	if _, err := cmd.CombinedOutput(); err != nil {
-		_ = execCommand("mkfs.vfat", "-F", "16", "-n", "VTOYEFI", part2).Run()
+	if _, err := runPartitionCommand("mkfs.vfat", "-F", "32", "-n", "VTOYEFI", part2); err != nil {
+		_, _ = runPartitionCommand("mkfs.vfat", "-F", "16", "-n", "VTOYEFI", part2)
 	}
 
 	// 6. Create mount directory and mount Partition 1
@@ -204,15 +214,15 @@ func formatDiskLinux(ctx context.Context, targetDisk string) (string, error) {
 		return "", fmt.Errorf("failed to create mount dir %s: %w", mountPoint, err)
 	}
 
-	cmd = execCommand("mount", part1, mountPoint)
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err = runPartitionCommand("mount", part1, mountPoint)
+	if err != nil {
 		return "", fmt.Errorf("mount partition failed (%v): %s", err, string(output))
 	}
 
 	// 7. Create mount directory and mount Partition 2 (VTOYEFI)
 	efiMountPoint := "/mnt/VTOYEFI"
 	_ = os.MkdirAll(efiMountPoint, 0755)
-	_ = execCommand("mount", part2, efiMountPoint).Run()
+	_, _ = runPartitionCommand("mount", part2, efiMountPoint)
 
 	return mountPoint, nil
 }
@@ -345,8 +355,7 @@ func formatDiskHybridModeWindows(ctx context.Context, targetDisk string, fsType 
 	}
 	tmpFile.Close()
 
-	cmd := execCommand("diskpart", "/s", tmpFile.Name())
-	output, err := cmd.CombinedOutput()
+	output, err := runPartitionCommand("diskpart", "/s", tmpFile.Name())
 	if err != nil {
 		return "", fmt.Errorf("diskpart for Hybrid Mode failed (%v): %s", err, string(output))
 	}
@@ -355,19 +364,19 @@ func formatDiskHybridModeWindows(ctx context.Context, targetDisk string, fsType 
 }
 
 func formatDiskHybridModeLinux(ctx context.Context, targetDisk string, fsType string) (string, error) {
-	cmd := execCommand("parted", "-s", targetDisk, "mklabel", "msdos")
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err := runPartitionCommand("parted", "-s", targetDisk, "mklabel", "msdos")
+	if err != nil {
 		return "", fmt.Errorf("parted mklabel failed (%v): %s", err, string(output))
 	}
 
-	cmd = execCommand("parted", "-s", targetDisk, "mkpart", "primary", "1MiB", "-65MiB")
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err = runPartitionCommand("parted", "-s", targetDisk, "mkpart", "primary", "1MiB", "-65MiB")
+	if err != nil {
 		return "", fmt.Errorf("parted mkpart P1 failed (%v): %s", err, string(output))
 	}
-	_ = execCommand("parted", "-s", targetDisk, "set", "1", "boot", "on").Run()
+	_, _ = runPartitionCommand("parted", "-s", targetDisk, "set", "1", "boot", "on")
 
-	cmd = execCommand("parted", "-s", targetDisk, "mkpart", "primary", "fat32", "-64MiB", "100%")
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err = runPartitionCommand("parted", "-s", targetDisk, "mkpart", "primary", "fat32", "-64MiB", "100%")
+	if err != nil {
 		return "", fmt.Errorf("parted mkpart P2 failed (%v): %s", err, string(output))
 	}
 
@@ -388,14 +397,13 @@ func formatDiskHybridModeLinux(ctx context.Context, targetDisk string, fsType st
 		mkfsCmd = "mkfs.ext4"
 	}
 
-	cmd = execCommand(mkfsCmd, "-n", "Ventoy", part1)
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err = runPartitionCommand(mkfsCmd, "-n", "Ventoy", part1)
+	if err != nil {
 		return "", fmt.Errorf("%s P1 failed (%v): %s", mkfsCmd, err, string(output))
 	}
 
-	cmd = execCommand("mkfs.vfat", "-F", "32", "-n", "VTOYEFI", part2)
-	if _, err := cmd.CombinedOutput(); err != nil {
-		_ = execCommand("mkfs.vfat", "-F", "16", "-n", "VTOYEFI", part2).Run()
+	if _, err := runPartitionCommand("mkfs.vfat", "-F", "32", "-n", "VTOYEFI", part2); err != nil {
+		_, _ = runPartitionCommand("mkfs.vfat", "-F", "16", "-n", "VTOYEFI", part2)
 	}
 
 	mountPoint := "/mnt/Ventoy"
@@ -403,14 +411,14 @@ func formatDiskHybridModeLinux(ctx context.Context, targetDisk string, fsType st
 		return "", fmt.Errorf("failed to create mount dir %s: %w", mountPoint, err)
 	}
 
-	cmd = execCommand("mount", part1, mountPoint)
-	if output, err := cmd.CombinedOutput(); err != nil {
+	output, err = runPartitionCommand("mount", part1, mountPoint)
+	if err != nil {
 		return "", fmt.Errorf("mount partition failed (%v): %s", err, string(output))
 	}
 
 	efiMountPoint := "/mnt/VTOYEFI"
 	_ = os.MkdirAll(efiMountPoint, 0755)
-	_ = execCommand("mount", part2, efiMountPoint).Run()
+	_, _ = runPartitionCommand("mount", part2, efiMountPoint)
 
 	return mountPoint, nil
 }

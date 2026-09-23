@@ -12,6 +12,8 @@ import (
 	"io"
 	"net"
 	"os"
+	"os/exec"
+	"strings"
 	"sync"
 	"time"
 
@@ -23,6 +25,7 @@ const (
 	WorkerActionAcquireDisk = "acquire_disk"
 	WorkerActionReleaseDisk = "release_disk"
 	WorkerActionReadSector  = "read_sector"
+	WorkerActionRunCommand  = "run_command"
 	WorkerActionExit        = "exit"
 
 	defaultWorkerIdleTimeout = 30 * time.Minute
@@ -34,6 +37,8 @@ type WorkerRequest struct {
 	Action   string   `json:"action"`
 	Paths    []string `json:"paths,omitempty"`
 	Path     string   `json:"path,omitempty"`
+	Command  string   `json:"command,omitempty"`
+	Args     []string `json:"args,omitempty"`
 	NumBytes int      `json:"num_bytes,omitempty"`
 	UID      int      `json:"uid,omitempty"`
 	GID      int      `json:"gid,omitempty"`
@@ -44,6 +49,7 @@ type WorkerResponse struct {
 	Success bool   `json:"success"`
 	Error   string `json:"error,omitempty"`
 	Data    []byte `json:"data,omitempty"`
+	Output  string `json:"output,omitempty"`
 }
 
 // diskSnapshot stores original ownership and permissions for automatic restoration.
@@ -251,6 +257,46 @@ func (c *WorkerClient) ReadSector(devicePath string, numBytes int) ([]byte, erro
 	return resp.Data, nil
 }
 
+// RunCommand executes a validated allowlisted system command inside the privileged worker process.
+func (c *WorkerClient) RunCommand(name string, args ...string) (string, error) {
+	if c == nil {
+		return "", errors.New("worker client is not connected")
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.closed || c.conn == nil {
+		return "", errors.New("worker connection is closed")
+	}
+
+	req := WorkerRequest{
+		Token:   c.token,
+		Action:  WorkerActionRunCommand,
+		Command: name,
+		Args:    args,
+	}
+
+	_ = c.conn.SetDeadline(time.Now().Add(60 * time.Second))
+	defer func() {
+		if c.conn != nil {
+			_ = c.conn.SetDeadline(time.Time{})
+		}
+	}()
+
+	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		return "", fmt.Errorf("failed to send run command request: %w", err)
+	}
+
+	var resp WorkerResponse
+	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		return "", fmt.Errorf("failed to read run command response: %w", err)
+	}
+	if !resp.Success {
+		return resp.Output, fmt.Errorf("worker command failed: %s", resp.Error)
+	}
+	return resp.Output, nil
+}
+
 // Close closes the connection to the worker.
 func (c *WorkerClient) Close() error {
 	if c == nil {
@@ -320,6 +366,14 @@ func handleWorkerConnection(conn net.Conn, expectedToken string, snapshots map[s
 				_ = encoder.Encode(WorkerResponse{Success: true, Data: data})
 			}
 
+		case WorkerActionRunCommand:
+			out, err := applyRunCommand(req.Command, req.Args)
+			if err != nil {
+				_ = encoder.Encode(WorkerResponse{Success: false, Error: err.Error(), Output: out})
+			} else {
+				_ = encoder.Encode(WorkerResponse{Success: true, Output: out})
+			}
+
 		case WorkerActionExit:
 			mu.Lock()
 			restoreAllSnapshots(snapshots)
@@ -352,6 +406,28 @@ func applyReadSector(devicePath string, numBytes int) ([]byte, error) {
 		return nil, fmt.Errorf("failed to read from device %s: %w", devicePath, err)
 	}
 	return buf[:n], nil
+}
+
+func applyRunCommand(name string, args []string) (string, error) {
+	if err := ValidateCommandName(name); err != nil {
+		return "", fmt.Errorf("invalid command name: %w", err)
+	}
+	for _, arg := range args {
+		if err := ValidateCommandArgument(arg); err != nil {
+			return "", fmt.Errorf("invalid command argument: %w", err)
+		}
+		if strings.HasPrefix(arg, "/dev/") || strings.HasPrefix(arg, `\\.\PhysicalDrive`) {
+			if err := ValidateRawDevicePath(arg); err != nil {
+				return "", fmt.Errorf("unsafe disk device argument %q: %w", arg, err)
+			}
+		}
+	}
+	cmd := exec.Command(name, args...)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return string(out), fmt.Errorf("%w: %s", err, strings.TrimSpace(string(out)))
+	}
+	return string(out), nil
 }
 
 func applyDiskAcquisition(paths []string, targetUID, targetGID int, snapshots map[string]diskSnapshot) error {

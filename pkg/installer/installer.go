@@ -445,11 +445,25 @@ func CleanMbrBootstrapCode(targetDisk string) error {
 		rawDev = "/dev/" + diskNode
 	}
 
-	cmd, err := privilege.SafeExecCommandContext(context.Background(), "dd", "if=/dev/zero", "of="+rawDev, "bs=446", "count=1", "conv=notrunc")
-	if err != nil {
-		return err
+	// 1. Temporarily acquire disk permissions (delegating to privileged worker)
+	restore := privilege.RelaxRawDiskPermissionsTemporarily(rawDev)
+	defer restore()
+
+	// 2. Try direct file write first
+	f, errOpen := os.OpenFile(rawDev, os.O_WRONLY, 0)
+	if errOpen == nil {
+		zeroes := make([]byte, 446)
+		_, errWrite := f.Write(zeroes)
+		_ = f.Close()
+		if errWrite == nil {
+			return nil
+		}
 	}
-	return cmd.Run()
+
+	// 3. Fallback to RunElevated (which delegates directly to privileged worker)
+	cmdLine := fmt.Sprintf("dd if=/dev/zero of=%s bs=446 count=1 conv=notrunc", rawDev)
+	_, err := privilege.RunElevated("Clean MBR bootstrap code", cmdLine)
+	return err
 }
 
 // DeployCloudMode executes Cloud Mode: Cloud Pure Mode (1-sec native format & multi-arch iPXE firmware) with customizable file system.

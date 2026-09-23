@@ -172,3 +172,55 @@ func TestWorkerAcquireDiskRejectsBlockedDevices(t *testing.T) {
 	}
 	fmt.Printf("Successfully rejected blocked disk: %v\n", err)
 }
+
+func TestWorkerClientRunCommand(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Unix domain socket tests run on unix-like platforms")
+	}
+
+	socketPath := fmt.Sprintf("/tmp/test-worker-%d-4.sock", os.Getpid())
+	_ = os.Remove(socketPath)
+	defer os.Remove(socketPath)
+	token := "runcmd-token"
+
+	go func() {
+		_ = RunWorkerServer(socketPath, token)
+	}()
+
+	var conn net.Conn
+	for i := 0; i < 20; i++ {
+		c, err := net.Dial("unix", socketPath)
+		if err == nil {
+			conn = c
+			break
+		}
+		time.Sleep(50 * time.Millisecond)
+	}
+	if conn == nil {
+		t.Fatal("failed to connect to test worker")
+	}
+
+	client := &WorkerClient{
+		conn:  conn,
+		token: token,
+	}
+	defer client.Close()
+
+	// Test 1: Disallowed command should be rejected immediately
+	_, err := client.RunCommand("rm", "-rf", "/tmp/nonexistent")
+	if err == nil {
+		t.Fatal("expected RunCommand with 'rm' to be rejected by allowlist")
+	}
+
+	// Test 2: Shell injection or dangerous argument characters should be rejected
+	_, err = client.RunCommand("mount", ";", "rm", "-rf")
+	if err == nil {
+		t.Fatal("expected RunCommand with ';' to be rejected by argument validator")
+	}
+
+	// Test 3: Disallowed disk path in arguments should be rejected
+	_, err = client.RunCommand("chmod", "666", "/dev/disk0")
+	if err == nil {
+		t.Fatal("expected RunCommand on /dev/disk0 to be rejected by device path validator")
+	}
+}

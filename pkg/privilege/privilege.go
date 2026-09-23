@@ -130,7 +130,7 @@ func ValidateCommandName(name string) error {
 		"diskutil": {}, "lsblk": {}, "umount": {}, "udisksctl": {}, "mount": {}, "mount_msdos": {},
 		"chmod": {}, "dd": {}, "sudo": {}, "pkexec": {}, "osascript": {}, "net": {}, "true": {},
 		"cmd.exe": {}, "powershell": {}, "powershell.exe": {}, "wmic": {}, "open": {}, "diskpart": {},
-		"cmd": {}, "echo": {}, "chown": {},
+		"cmd": {}, "echo": {}, "chown": {}, "parted": {}, "mkfs.vfat": {}, "mkfs.ext4": {}, "mkfs.exfat": {}, "mkfs.ntfs": {},
 	}
 	lower := strings.ToLower(base)
 	if _, ok := allowlist[lower]; !ok {
@@ -326,10 +326,14 @@ func RunElevated(prompt string, cmdLine string) (string, error) {
 	cmdName := fields[0]
 	args := fields[1:]
 
-	if IsElevated() {
+	if (runtime.GOOS == "windows" && checkIsElevated()) || os.Geteuid() == 0 {
 		cmd := exec.Command(cmdName, args...)
 		out, err := cmd.CombinedOutput()
 		return string(out), err
+	}
+
+	if worker := GetActiveWorkerClient(); worker != nil && worker.IsAlive() {
+		return worker.RunCommand(cmdName, args...)
 	}
 
 	if prompt == "" {
@@ -451,6 +455,8 @@ func MountHiddenESP(partitionDevice string) (string, func(), error) {
 				if cmd, err := SafeExecCommandContext(context.Background(), "umount", "-f", tempDir); err == nil {
 					_ = cmd.Run()
 				}
+			} else if worker := GetActiveWorkerClient(); worker != nil && worker.IsAlive() {
+				_, _ = worker.RunCommand("umount", "-f", tempDir)
 			} else {
 				if cmd, err := SafeExecCommandContext(context.Background(), "sudo", "-n", "umount", "-f", tempDir); err == nil {
 					_ = cmd.Run()
@@ -461,6 +467,8 @@ func MountHiddenESP(partitionDevice string) (string, func(), error) {
 				if cmd, err := SafeExecCommandContext(context.Background(), "umount", "-f", tempDir); err == nil {
 					_ = cmd.Run()
 				}
+			} else if worker := GetActiveWorkerClient(); worker != nil && worker.IsAlive() {
+				_, _ = worker.RunCommand("umount", "-f", tempDir)
 			} else {
 				if cmd, err := SafeExecCommandContext(context.Background(), "sudo", "-n", "umount", "-f", tempDir); err == nil {
 					_ = cmd.Run()
@@ -481,35 +489,52 @@ func MountHiddenESP(partitionDevice string) (string, func(), error) {
 			}
 		}
 
-		// If running with root/elevated privilege, use mount_msdos directly or via sudo
+		// If running with root/elevated privilege, use mount_msdos directly or via worker
 		if IsElevated() {
-			var mountCmd *exec.Cmd
 			if os.Geteuid() == 0 {
-				mountCmd, err = SafeExecCommandContext(context.Background(), "mount_msdos", "-o", "rdonly", partitionDevice, tempDir)
-			} else {
-				mountCmd, err = SafeExecCommandContext(context.Background(), "sudo", "-n", "mount_msdos", "-o", "rdonly", partitionDevice, tempDir)
-			}
-			if err == nil {
-				outMount, errMount := mountCmd.CombinedOutput()
+				mountCmd, err := SafeExecCommandContext(context.Background(), "mount_msdos", "-o", "rdonly", partitionDevice, tempDir)
+				if err == nil {
+					if _, errMount := mountCmd.CombinedOutput(); errMount == nil {
+						return tempDir, cleanup, nil
+					}
+				}
+			} else if worker := GetActiveWorkerClient(); worker != nil && worker.IsAlive() {
+				outMount, errMount := worker.RunCommand("mount_msdos", "-o", "rdonly", partitionDevice, tempDir)
 				if errMount == nil {
 					return tempDir, cleanup, nil
 				}
 				cleanup()
-				return "", func() {}, fmt.Errorf("elevated mount failed: %s", string(outMount))
+				return "", func() {}, fmt.Errorf("worker mount failed: %s", outMount)
+			} else {
+				mountCmd, err := SafeExecCommandContext(context.Background(), "sudo", "-n", "mount_msdos", "-o", "rdonly", partitionDevice, tempDir)
+				if err == nil {
+					outMount, errMount := mountCmd.CombinedOutput()
+					if errMount == nil {
+						return tempDir, cleanup, nil
+					}
+					cleanup()
+					return "", func() {}, fmt.Errorf("elevated mount failed: %s", string(outMount))
+				}
 			}
 		}
 
 	case "linux":
 		// On Linux, attempt standard mount if elevated
 		if IsElevated() {
-			var mountCmd *exec.Cmd
 			if os.Geteuid() == 0 {
-				mountCmd, err = SafeExecCommandContext(context.Background(), "mount", "-o", "ro", partitionDevice, tempDir)
+				mountCmd, err := SafeExecCommandContext(context.Background(), "mount", "-o", "ro", partitionDevice, tempDir)
+				if err == nil && mountCmd.Run() == nil {
+					return tempDir, cleanup, nil
+				}
+			} else if worker := GetActiveWorkerClient(); worker != nil && worker.IsAlive() {
+				if _, errMount := worker.RunCommand("mount", "-o", "ro", partitionDevice, tempDir); errMount == nil {
+					return tempDir, cleanup, nil
+				}
 			} else {
-				mountCmd, err = SafeExecCommandContext(context.Background(), "sudo", "-n", "mount", "-o", "ro", partitionDevice, tempDir)
-			}
-			if err == nil && mountCmd.Run() == nil {
-				return tempDir, cleanup, nil
+				mountCmd, err := SafeExecCommandContext(context.Background(), "sudo", "-n", "mount", "-o", "ro", partitionDevice, tempDir)
+				if err == nil && mountCmd.Run() == nil {
+					return tempDir, cleanup, nil
+				}
 			}
 		}
 
