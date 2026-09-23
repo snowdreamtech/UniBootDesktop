@@ -98,6 +98,7 @@ export function useDeployment(options: UseDeploymentOptions) {
   const isIsoConflictOpen = ref(false);
   const isoConflicts = ref<IsoCopyConflict[]>([]);
   const pendingIsoPlans = ref<IsoCopyDiskPlan[]>([]);
+  const isPreflight = ref(false);
   const pendingTargets = ref<string[]>([]);
   const pendingTargetSnapshots = ref<DiskInfo[]>([]);
 
@@ -404,7 +405,7 @@ export function useDeployment(options: UseDeploymentOptions) {
   }
 
   async function handleDeployBtnClick() {
-    if (isDeploying.value) return;
+    if (isDeploying.value || isPreflight.value) return;
 
     dismissDeploySuccessBanner();
 
@@ -442,8 +443,13 @@ export function useDeployment(options: UseDeploymentOptions) {
       if (targets.length === 0) return;
     }
 
-    if (!(await preflightIsoCopies(targets))) return;
-    openDeployConfirm();
+    isPreflight.value = true;
+    try {
+      if (!(await preflightIsoCopies(targets))) return;
+      openDeployConfirm();
+    } finally {
+      isPreflight.value = false;
+    }
   }
 
   async function startDeployment() {
@@ -693,6 +699,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     isIsoConflictOpen,
     isoConflicts,
     pendingIsoPlans,
+    isPreflight,
     pendingTargets,
     pendingTargetSnapshots,
     isVentoyAlertOpen,

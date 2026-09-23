@@ -370,13 +370,19 @@
       <button
         v-else
         class="btn-primary deploy-btn"
-        :class="{ 'safe-btn': isNonDestructive, 'danger-disabled': activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid }"
+        :class="{ 'safe-btn': isNonDestructive, 'danger-disabled': activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid, 'preflight-btn': isPreflight }"
         :disabled="isDeployDisabled"
         :title="deployDisabledReason"
         @click="emit('deploy-click')"
       >
-        <span class="deploy-icon">{{ isNonDestructive ? '🛡️' : '🚀' }}</span>
-        <span>{{ deployBtnText }}</span>
+        <template v-if="isPreflight">
+          <span class="deploy-icon preflight-spinner">⏳</span>
+          <span>{{ t('deploy.checking') }}</span>
+        </template>
+        <template v-else>
+          <span class="deploy-icon">{{ isNonDestructive ? '🛡️' : '🚀' }}</span>
+          <span>{{ deployBtnText }}</span>
+        </template>
       </button>
 
       <!-- Deploy success banner with Safely Eject button -->
@@ -551,6 +557,7 @@ const props = defineProps<{
   ventoyStatus: { valid: boolean; version?: string; error?: string };
   selectedIsoFiles: { name: string; path: string }[];
   isDeploying: boolean;
+  isPreflight?: boolean;
   deployProgress: number;
   batchDeployInfo?: { totalDisks: number; currentDiskIndex: number; currentDisk: string; currentStage: string; diskProgress: number; overallProgress: number; speedMBps: number; elapsedSec: number; etaSec: number } | null;
   speedMBps?: number;
@@ -650,6 +657,7 @@ function handleDrop(e: DragEvent) {
 // Deploy state
 const isDeployDisabled = computed(() => {
   if (props.isDeploying) return true;
+  if (props.isPreflight) return true;
   if (props.selectionMode === 'single') {
     return !props.selectedDisk;
   }
@@ -2125,6 +2133,31 @@ function getFileIcon(filename: string): string {
   cursor: not-allowed;
   box-shadow: none !important;
   transform: none !important;
+}
+
+.deploy-btn.preflight-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+  color: #ffffff;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 4px 15px rgba(245, 158, 11, 0.3);
+  opacity: 0.85;
+  cursor: wait;
+  animation: preflight-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes preflight-pulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 0.65; }
+}
+
+.preflight-spinner {
+  display: inline-block;
+  animation: spinner-spin 1s linear infinite;
+}
+
+@keyframes spinner-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .deploy-btn.safe-btn {

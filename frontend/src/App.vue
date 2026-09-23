@@ -62,6 +62,7 @@
         :ventoyStatus="ventoyStatus"
         :selectedIsoFiles="selectedIsoFiles"
         :isDeploying="isDeploying"
+        :isPreflight="isPreflight"
         :deployProgress="deployProgress"
         :batchDeployInfo="batchDeployInfo"
         :speedMBps="deploySpeedMBps"
@@ -268,6 +269,7 @@ const {
   isDeployConfirmOpen,
   isIsoConflictOpen,
   isoConflicts,
+  isPreflight,
   pendingTargets,
   isVentoyAlertOpen,
   ventoyAlertTitle,

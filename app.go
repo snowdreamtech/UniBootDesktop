@@ -416,24 +416,41 @@ func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPath
 }
 
 // PreflightIsoCopy checks existing target filenames before any deployment writes begin.
+// Each disk is checked concurrently to minimize total latency in batch scenarios.
 func (a *App) PreflightIsoCopy(targetDisks []string, isoPaths []string) ([]installer.IsoCopyConflict, error) {
-	conflicts := make([]installer.IsoCopyConflict, 0)
+	type result struct {
+		conflicts []installer.IsoCopyConflict
+		err       error
+	}
+
+	ch := make(chan result, len(targetDisks))
 	for _, targetDisk := range targetDisks {
-		if !disk.IsRealVentoyDisk(targetDisk) {
-			continue
+		go func(td string) {
+			if !disk.IsRealVentoyDisk(td) {
+				ch <- result{}
+				return
+			}
+			mountPoint, err := installer.ResolveMountPoint(td)
+			if err != nil {
+				ch <- result{err: fmt.Errorf("preflight failed to resolve target disk %s: %w", td, err)}
+				return
+			}
+			current, err := installer.FindIsoCopyConflictsInDirectory(td, filepath.Join(mountPoint, "iso"), isoPaths)
+			ch <- result{conflicts: current, err: err}
+		}(targetDisk)
+	}
+
+	var conflicts []installer.IsoCopyConflict
+	for range targetDisks {
+		r := <-ch
+		if r.err != nil {
+			return nil, r.err
 		}
-		mountPoint, err := installer.ResolveMountPoint(targetDisk)
-		if err != nil {
-			return nil, fmt.Errorf("preflight failed to resolve target disk %s: %w", targetDisk, err)
-		}
-		current, err := installer.FindIsoCopyConflictsInDirectory(targetDisk, filepath.Join(mountPoint, "iso"), isoPaths)
-		if err != nil {
-			return nil, err
-		}
-		conflicts = append(conflicts, current...)
+		conflicts = append(conflicts, r.conflicts...)
 	}
 	return conflicts, nil
 }
+
 
 // DeployHybridModeBatchWithPlans executes Hybrid Mode using plans confirmed during preflight.
 func (a *App) DeployHybridModeBatchWithPlans(targetDisks []string, fsType string, isoPaths []string, plans []installer.IsoCopyDiskPlan, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {

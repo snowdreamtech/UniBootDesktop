@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -1058,23 +1059,23 @@ func buildDarwinVolumeSnapshot(entries []os.DirEntry, infoByPath map[string]stri
 func getVolumeSnapshot() string {
 	switch runtime.GOOS {
 	case "darwin":
+		// Fast path: only list /Volumes directory entries — no diskutil calls.
+		// The hotplug watcher only needs to detect when the set of mounted
+		// volumes changes; the actual disk details are fetched by GetRemovableDisks
+		// only when a change is detected.
 		entries, err := os.ReadDir("/Volumes")
 		if err != nil {
 			return ""
 		}
-		infoByPath := make(map[string]string)
+		var names []string
 		for _, e := range entries {
 			if e == nil || IsIgnoredVolume(e.Name()) {
 				continue
 			}
-			volPath := filepath.Join("/Volumes", e.Name())
-			if cmd := execCommand("diskutil", "info", "-plist", volPath); cmd != nil {
-				if out, err := cmd.Output(); err == nil {
-					infoByPath[volPath] = string(out)
-				}
-			}
+			names = append(names, e.Name())
 		}
-		return buildDarwinVolumeSnapshot(entries, infoByPath)
+		sort.Strings(names)
+		return strings.Join(names, "|")
 	case "windows":
 		var letters []string
 		for c := 'C'; c <= 'Z'; c++ {
@@ -1310,6 +1311,35 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		return disks, nil
 	}
 
+	// Step 3: Pre-fetch diskutil info for all visible volumes concurrently to
+	// avoid N serial subprocess calls (each ~80ms) blocking the scan.
+	type infoResult struct {
+		key string
+		val string
+	}
+	infoCh := make(chan infoResult, len(entries)*2) // *2 for both volPath and parentDisk
+	for _, entry := range entries {
+		if IsIgnoredVolume(entry.Name()) {
+			continue
+		}
+		volPath := filepath.Join("/Volumes", entry.Name())
+		go func(p string) {
+			infoCh <- infoResult{key: p, val: getDarwinDiskutilInfo(p)}
+		}(volPath)
+	}
+	// collect only the volume-level results; parentDisk results are fetched below with same concurrency
+	prefetchCount := 0
+	for _, entry := range entries {
+		if !IsIgnoredVolume(entry.Name()) {
+			prefetchCount++
+		}
+	}
+	prefetchedInfo := make(map[string]string, prefetchCount)
+	for i := 0; i < prefetchCount; i++ {
+		r := <-infoCh
+		prefetchedInfo[r.key] = r.val
+	}
+
 	for _, entry := range entries {
 		if IsIgnoredVolume(entry.Name()) {
 			continue
@@ -1318,8 +1348,8 @@ func getDarwinDisks() ([]DiskInfo, error) {
 		volPath := filepath.Join("/Volumes", entry.Name())
 		volName := entry.Name()
 
-		// Probe diskutil info for exact volume & whole disk node details
-		infoStr := getDarwinDiskutilInfo(volPath)
+		// Use pre-fetched diskutil info (collected concurrently above)
+		infoStr := prefetchedInfo[volPath]
 
 		var totalSize uint64
 		var freeSpace uint64

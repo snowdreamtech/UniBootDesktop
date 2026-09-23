@@ -205,6 +205,7 @@ export const zhTw: TranslationDict = {
   "deploy.stats_speed": "寫入速度",
   "deploy.toast_cancelled": "部署操作已主動安全取消",
   "deploy.btn_cancel": "取消部署",
+  "deploy.checking": "檢查中...",
   "vm.title": "引導模擬測試",
   "vm.box_title": "引導模擬測試",
   "vm.detected_single": "已檢測到 {name}",
