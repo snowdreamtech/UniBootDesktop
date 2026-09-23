@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/pterm/pterm"
-	"github.com/snowdreamtech/unigodesktop/pkg/qemu"
+	"github.com/snowdreamtech/unigodesktop/pkg/hypervisor"
 	"github.com/spf13/cobra"
 )
 
@@ -20,11 +20,11 @@ var (
 
 var qemuCmd = &cobra.Command{
 	Use:   "qemu",
-	Short: "Launch QEMU virtual machine to test target bootable disk drive",
-	Long: `Launch an isolated QEMU simulator virtual machine window to test the bootability of a disk drive or ISO image without rebooting your computer.
+	Short: "Launch virtual machine to test target bootable disk drive",
+	Long: `Launch an isolated virtual machine window (QEMU or other available hypervisors) to test the bootability of a disk drive or ISO image without rebooting your computer.
 
 Examples:
-  # Test disk drive /dev/disk2 in QEMU
+  # Test disk drive /dev/disk2 in virtual machine
   unigodesktop qemu --disk /dev/disk2
 
   # Test disk drive with 4GB RAM
@@ -35,27 +35,28 @@ Examples:
 			return fmt.Errorf("must specify --disk or -d target drive path. Use --help for usage details")
 		}
 
-		pterm.DefaultHeader.WithFullWidth().Println("🖥️  QEMU VIRTUAL MACHINE BOOT SIMULATOR")
+		pterm.DefaultHeader.WithFullWidth().Println("🖥️  VIRTUAL MACHINE BOOT SIMULATOR")
 
-		// 1. Detect QEMU status
-		status := qemu.Detect()
-		if !status.Installed {
-			pterm.Error.Println("QEMU is not installed on your system.")
-			pterm.Info.Println("Please install QEMU using Homebrew (macOS: 'brew install qemu') or your Linux package manager (e.g., 'apt install qemu-system-x86').")
-			return fmt.Errorf("qemu binary not found on system PATH")
+		// 1. Detect hypervisor status
+		mgr := hypervisor.GetManager()
+		status := mgr.DetectBest()
+		if status == nil || !status.Installed {
+			pterm.Error.Println("No supported virtual machine (QEMU, UTM, VMware, VirtualBox) is installed on your system.")
+			pterm.Info.Println("Please install QEMU using Homebrew (macOS: 'brew install qemu') or your system package manager.")
+			return fmt.Errorf("no supported hypervisor found on system PATH")
 		}
 
-		pterm.Success.Println(fmt.Sprintf("QEMU Detected: %s (%s)", status.Version, status.Path))
+		pterm.Success.Println(fmt.Sprintf("%s Detected: %s (%s)", status.Name, status.Version, status.Path))
 		pterm.Info.Println(fmt.Sprintf("Launching VM test window for target: %s ...", target))
 
-		// 2. Launch QEMU VM
+		// 2. Launch hypervisor VM
 		ctx := context.Background()
-		err := qemu.LaunchTest(ctx, target)
+		err := mgr.LaunchBest(ctx, target, hypervisor.BootModeAuto)
 		if err != nil {
-			return fmt.Errorf("failed to launch QEMU simulator: %w", err)
+			return fmt.Errorf("failed to launch VM simulator: %w", err)
 		}
 
-		pterm.Success.Println("🚀 QEMU simulator launched successfully!")
+		pterm.Success.Println("🚀 Virtual machine simulator launched successfully!")
 		return nil
 	},
 }

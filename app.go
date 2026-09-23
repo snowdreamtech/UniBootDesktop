@@ -23,7 +23,6 @@ import (
 	"github.com/snowdreamtech/unigodesktop/pkg/hypervisor"
 	"github.com/snowdreamtech/unigodesktop/pkg/installer"
 	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
-	"github.com/snowdreamtech/unigodesktop/pkg/qemu"
 	"github.com/snowdreamtech/unigodesktop/pkg/updater"
 	"github.com/snowdreamtech/unigodesktop/pkg/utils"
 	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
@@ -506,16 +505,25 @@ func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected
 }
 
 // CheckQEMU returns QEMU detection metadata for backward compatibility.
-func (a *App) CheckQEMU() *qemu.QEMUStatus {
+func (a *App) CheckQEMU() *hypervisor.VMStatus {
 	best := hypervisor.GetManager().DetectBest()
 	if best != nil && best.Installed {
-		return &qemu.QEMUStatus{
-			Installed: true,
-			Path:      best.Path,
-			Version:   best.Version,
+		return best
+	}
+	for _, drv := range hypervisor.GetManager().DetectAll() {
+		if drv.Type == hypervisor.TypeQEMU {
+			return drv
 		}
 	}
-	return qemu.Detect()
+	return &hypervisor.VMStatus{
+		Type:       hypervisor.TypeQEMU,
+		Name:       "QEMU",
+		Installed:  false,
+		Path:       "",
+		Version:    "Not Installed",
+		Priority:   1,
+		CanBootRaw: false,
+	}
 }
 
 // DetectHypervisors returns status of all installed virtual machine engines.

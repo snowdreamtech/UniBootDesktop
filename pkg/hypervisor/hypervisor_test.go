@@ -147,3 +147,10 @@ func TestLaunchSpecified_DryRun(t *testing.T) {
 		}
 	}
 }
+
+func TestResolveRawDiskDevice(t *testing.T) {
+	node := ResolveRawDiskDevice("/dev/disk2s1")
+	if node != "/dev/rdisk2" {
+		t.Errorf("expected /dev/rdisk2 for /dev/disk2s1, got %s", node)
+	}
+}

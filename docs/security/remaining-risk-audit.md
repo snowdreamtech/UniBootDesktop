@@ -13,7 +13,7 @@ These are the highest-risk areas because they can reach system resources directl
 1. Raw device path execution without a strict allowlist
    - Files involved:
      - [pkg/privilege/privilege.go](../../pkg/privilege/privilege.go)
-     - [pkg/qemu/qemu.go](../../pkg/qemu/qemu.go)
+     - [pkg/hypervisor/driver_qemu.go](../../pkg/hypervisor/driver_qemu.go)
      - [pkg/installer/installer.go](../../pkg/installer/installer.go)
    - Risk:
      - direct reads/writes to raw physical disks
