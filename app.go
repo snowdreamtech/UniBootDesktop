@@ -451,7 +451,6 @@ func (a *App) PreflightIsoCopy(targetDisks []string, isoPaths []string) ([]insta
 	return conflicts, nil
 }
 
-
 // DeployHybridModeBatchWithPlans executes Hybrid Mode using plans confirmed during preflight.
 func (a *App) DeployHybridModeBatchWithPlans(targetDisks []string, fsType string, isoPaths []string, plans []installer.IsoCopyDiskPlan, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
 	logger.Info("User confirmed batch Hybrid Mode deployment with ISO copy plans", "diskCount", len(targetDisks), "planCount", len(plans))
@@ -942,86 +941,32 @@ func (a *App) ReloadAppMenu(lang string) error {
 	return nil
 }
 
-// isPrivateOrLocalIP 检测给定的主机名或IP是否为私有/本地地址，防止SSRF攻击
+// isPrivateOrLocalIP reports whether host is loopback, link-local, or RFC1918/ULA.
+// host should come from url.Hostname() (no port). IPv4-mapped addresses are
+// checked via net.IP.IsPrivate, not via ip[0] on the 16-byte form.
 func isPrivateOrLocalIP(host string) bool {
-	// 移除端口号（如果有）
-	if strings.Contains(host, ":") {
-		var err error
-		host, _, err = net.SplitHostPort(host)
-		if err != nil {
-			return true // 解析失败，保守处理，拒绝访问
-		}
-	}
-
-	// 检查localhost和特殊主机名
 	host = strings.ToLower(strings.TrimSpace(host))
+	if host == "" {
+		return true
+	}
+	if strings.HasPrefix(host, "[") && strings.HasSuffix(host, "]") {
+		host = strings.TrimSuffix(strings.TrimPrefix(host, "["), "]")
+	}
 	if host == "localhost" || host == "localhost." ||
 		strings.HasSuffix(host, ".localhost") ||
 		strings.HasSuffix(host, ".local") {
 		return true
 	}
 
-	// 解析IP地址
 	ip := net.ParseIP(host)
 	if ip == nil {
-		// 无法解析为IP，可能是域名
-		// 对于域名，尝试解析DNS（注意：这可能有DNS rebinding风险）
-		// 为了安全，我们这里采用白名单策略，只允许已知的安全域名
-		// 对于无法识别的域名，返回false允许访问（因为我们已经检查了协议是HTTPS）
 		return false
 	}
-
-	// 检查私有IP地址段
-	// IPv4: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
-	// IPv6: fc00::/7 (ULA), fe80::/10 (Link-local)
-	// Loopback: 127.0.0.0/8 (IPv4), ::1 (IPv6)
-	// Link-local: 169.254.0.0/16 (IPv4)
-
-	if ip.IsLoopback() || ip.IsLinkLocalUnicast() || ip.IsLinkLocalMulticast() {
-		return true
-	}
-
-	// 检查IPv4私有地址
-	if ip.To4() != nil {
-		// 10.0.0.0/8
-		if ip[0] == 10 {
-			return true
-		}
-		// 172.16.0.0/12
-		if ip[0] == 172 && ip[1] >= 16 && ip[1] <= 31 {
-			return true
-		}
-		// 192.168.0.0/16
-		if ip[0] == 192 && ip[1] == 168 {
-			return true
-		}
-		// 169.254.0.0/16 (Link-local)
-		if ip[0] == 169 && ip[1] == 254 {
-			return true
-		}
-		// 127.0.0.0/8 (Loopback)
-		if ip[0] == 127 {
-			return true
-		}
-		// 0.0.0.0/8 (This network)
-		if ip[0] == 0 {
-			return true
-		}
-	}
-
-	// 检查IPv6私有地址
-	if ip.To16() != nil && ip.To4() == nil {
-		// fc00::/7 (ULA - Unique Local Address)
-		if ip[0] >= 0xfc && ip[0] <= 0xfd {
-			return true
-		}
-		// fe80::/10 (Link-local)
-		if ip[0] == 0xfe && (ip[1]&0xc0) == 0x80 {
-			return true
-		}
-	}
-
-	return false
+	return ip.IsLoopback() ||
+		ip.IsPrivate() ||
+		ip.IsLinkLocalUnicast() ||
+		ip.IsLinkLocalMulticast() ||
+		ip.IsUnspecified()
 }
 
 // IsPrivileged returns true if the app process or worker currently possesses administrator or root privileges.
