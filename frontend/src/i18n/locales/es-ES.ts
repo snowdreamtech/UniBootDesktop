@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const esEs: TranslationDict = {
+  "iso.preflight_title": "Comprobación previa a la escritura",
+  "iso.conflict_title": "Ya existe un archivo con ese nombre",
+  "iso.conflict_desc": "Ya existe un archivo con el mismo nombre en la carpeta iso del USB de destino. Elige cómo gestionarlo. No se comparan los hashes.",
+  "iso.conflict_action": "Acción",
+  "iso.conflict_keep_both": "Conservar",
+  "iso.conflict_replace": "Sobrescribir",
+  "iso.conflict_skip": "Omitir",
+  "iso.conflict_apply_all": "Aplicar a todos los conflictos de esta operación",
+  "iso.conflict_cancel": "Cancelar escritura",
+  "iso.conflict_confirm": "Confirmar y continuar",
+  "iso.preflight_failed": "La comprobación previa a la escritura ha fallado",
   "menu.app": "UniGoDesktop",
   "menu.about": "Acerca de UniGoDesktop",
   "menu.hide": "Ocultar UniGoDesktop",

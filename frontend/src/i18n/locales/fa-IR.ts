@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const faIr: TranslationDict = {
+  "iso.preflight_title": "بررسی پیش از نوشتن",
+  "iso.conflict_title": "نام فایل تکراری پیدا شد",
+  "iso.conflict_desc": "فایلی با همین نام از قبل در پوشه iso USB مقصد وجود دارد. روش برخورد را انتخاب کنید. Hashها مقایسه نمی‌شوند.",
+  "iso.conflict_action": "عملیات",
+  "iso.conflict_keep_both": "نگه‌داشتن",
+  "iso.conflict_replace": "بازنویسی",
+  "iso.conflict_skip": "رد کردن",
+  "iso.conflict_apply_all": "اعمال برای همه تعارض‌های این عملیات",
+  "iso.conflict_cancel": "لغو نوشتن",
+  "iso.conflict_confirm": "تأیید و ادامه",
+  "iso.preflight_failed": "بررسی پیش از نوشتن ناموفق بود",
   "menu.app": "UniGoDesktop",
   "menu.about": "درباره UniGoDesktop",
   "menu.hide": "پنهان کردن UniGoDesktop",

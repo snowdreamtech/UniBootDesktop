@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const hiIn: TranslationDict = {
+  "iso.preflight_title": "लिखने से पहले जाँच",
+  "iso.conflict_title": "एक ही नाम वाली फ़ाइल मिली",
+  "iso.conflict_desc": "लक्ष्य USB के iso फ़ोल्डर में इसी नाम की फ़ाइल पहले से मौजूद है। कार्रवाई चुनें। Hash की तुलना नहीं की जाएगी।",
+  "iso.conflict_action": "कार्रवाई",
+  "iso.conflict_keep_both": "रखें",
+  "iso.conflict_replace": "ओवरराइट",
+  "iso.conflict_skip": "छोड़ें",
+  "iso.conflict_apply_all": "इस कार्रवाई के सभी टकरावों पर लागू करें",
+  "iso.conflict_cancel": "लेखन रद्द करें",
+  "iso.conflict_confirm": "पुष्टि करें और जारी रखें",
+  "iso.preflight_failed": "लिखने से पहले की जाँच विफल रही",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop के बारे में",
   "menu.hide": "UniGoDesktop छिपाएं",

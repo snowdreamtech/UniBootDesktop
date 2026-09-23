@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const bnBd: TranslationDict = {
+  "iso.preflight_title": "লেখার আগে পরীক্ষা",
+  "iso.conflict_title": "একই নামের ফাইল পাওয়া গেছে",
+  "iso.conflict_desc": "লক্ষ্য USB-এর iso ফোল্ডারে একই নামের ফাইল আগে থেকেই আছে। করণীয় বেছে নিন। Hash তুলনা করা হবে না।",
+  "iso.conflict_action": "করণীয়",
+  "iso.conflict_keep_both": "রাখুন",
+  "iso.conflict_replace": "ওভাররাইট",
+  "iso.conflict_skip": "এড়িয়ে যান",
+  "iso.conflict_apply_all": "এই কাজের সব দ্বন্দ্বে প্রয়োগ করুন",
+  "iso.conflict_cancel": "লেখা বাতিল করুন",
+  "iso.conflict_confirm": "নিশ্চিত করে চালিয়ে যান",
+  "iso.preflight_failed": "লেখার আগের পরীক্ষা ব্যর্থ হয়েছে",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop সম্পর্কে",
   "menu.hide": "UniGoDesktop লুকান",

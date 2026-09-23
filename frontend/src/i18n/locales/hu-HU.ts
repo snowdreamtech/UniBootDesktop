@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const huHu: TranslationDict = {
+  "iso.preflight_title": "Írás előtti ellenőrzés",
+  "iso.conflict_title": "A fájlnév már létezik",
+  "iso.conflict_desc": "A cél USB iso mappájában már létezik ilyen nevű fájl. Válasszon műveletet. A hasheket nem hasonlítjuk össze.",
+  "iso.conflict_action": "Művelet",
+  "iso.conflict_keep_both": "Megtartás",
+  "iso.conflict_replace": "Felülírás",
+  "iso.conflict_skip": "Kihagyás",
+  "iso.conflict_apply_all": "Alkalmazás a művelet minden ütközésére",
+  "iso.conflict_cancel": "Írás megszakítása",
+  "iso.conflict_confirm": "Megerősítés és folytatás",
+  "iso.preflight_failed": "Az írás előtti ellenőrzés sikertelen",
   "menu.app": "UniGoDesktop",
   "menu.about": "A UniGoDesktop névjegye",
   "menu.hide": "A UniGoDesktop elrejtése",

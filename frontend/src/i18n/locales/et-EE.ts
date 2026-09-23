@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const etEe: TranslationDict = {
+  "iso.preflight_title": "Kirjutamiseelne kontroll",
+  "iso.conflict_title": "Sama failinimi on juba olemas",
+  "iso.conflict_desc": "Siht-USB iso-kaustas on sama nimega fail juba olemas. Valige toiming. räsi ei võrrelda.",
+  "iso.conflict_action": "Toiming",
+  "iso.conflict_keep_both": "Säilita",
+  "iso.conflict_replace": "Kirjuta üle",
+  "iso.conflict_skip": "Jäta vahele",
+  "iso.conflict_apply_all": "Rakenda selle toimingu kõigile konfliktidele",
+  "iso.conflict_cancel": "Tühista kirjutamine",
+  "iso.conflict_confirm": "Kinnita ja jätka",
+  "iso.preflight_failed": "Kirjutamiseelne kontroll nurjus",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop teave",
   "menu.hide": "Peida UniGoDesktop",

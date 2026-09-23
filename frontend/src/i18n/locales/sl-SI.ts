@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const slSi: TranslationDict = {
+  "iso.preflight_title": "Preverjanje pred zapisovanjem",
+  "iso.conflict_title": "Ime datoteke že obstaja",
+  "iso.conflict_desc": "V mapi iso ciljnega USB-ja že obstaja datoteka z enakim imenom. Izberite dejanje. Zgoščene vrednosti se ne primerjajo.",
+  "iso.conflict_action": "Dejanje",
+  "iso.conflict_keep_both": "Ohrani",
+  "iso.conflict_replace": "Prepiši",
+  "iso.conflict_skip": "Preskoči",
+  "iso.conflict_apply_all": "Uporabi za vse spore tega dejanja",
+  "iso.conflict_cancel": "Prekliči zapisovanje",
+  "iso.conflict_confirm": "Potrdi in nadaljuj",
+  "iso.preflight_failed": "Preverjanje pred zapisovanjem ni uspelo",
   "menu.app": "UniGoDesktop",
   "menu.about": "O programu UniGoDesktop",
   "menu.hide": "Skrij UniGoDesktop",

@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const heIl: TranslationDict = {
+  "iso.preflight_title": "בדיקה לפני כתיבה",
+  "iso.conflict_title": "נמצא שם קובץ כפול",
+  "iso.conflict_desc": "קובץ בשם זהה כבר קיים בתיקיית iso של ה-USB היעד. בחרו כיצד לטפל בו. ערכי Hash לא יושוו.",
+  "iso.conflict_action": "פעולה",
+  "iso.conflict_keep_both": "שמירה",
+  "iso.conflict_replace": "החלפה",
+  "iso.conflict_skip": "דילוג",
+  "iso.conflict_apply_all": "החלה על כל התנגשויות הפעולה הזו",
+  "iso.conflict_cancel": "ביטול הכתיבה",
+  "iso.conflict_confirm": "אישור והמשך",
+  "iso.preflight_failed": "הבדיקה לפני הכתיבה נכשלה",
   "menu.app": "UniGoDesktop",
   "menu.about": "על אודות UniGoDesktop",
   "menu.hide": "הסתר את UniGoDesktop",

@@ -29,6 +29,28 @@ type IsoCopyProgress struct {
 // CopyIsoProgressCallback defines the function signature for reporting ISO copy progress.
 type CopyIsoProgressCallback func(progress IsoCopyProgress)
 
+// IsoCopyPlanEntry describes one user-approved image copy decision.
+type IsoCopyPlanEntry struct {
+	SourcePath string `json:"sourcePath"`
+	TargetName string `json:"targetName"`
+	Action     string `json:"action"` // replace, skip, or rename
+}
+
+// IsoCopyConflict describes an existing target filename found during deployment preflight.
+type IsoCopyConflict struct {
+	TargetDisk    string `json:"targetDisk"`
+	SourcePath    string `json:"sourcePath"`
+	FileName      string `json:"fileName"`
+	SuggestedName string `json:"suggestedName"`
+	ConflictType  string `json:"conflictType"` // source_duplicate, target_exists, or source_duplicate_target_exists
+}
+
+// IsoCopyDiskPlan contains approved image copy decisions for one target disk.
+type IsoCopyDiskPlan struct {
+	TargetDisk string             `json:"targetDisk"`
+	Entries    []IsoCopyPlanEntry `json:"entries"`
+}
+
 // CopyIsoFilesToDisk copies selected local ISO/IMG files into <mountPoint>/iso/ directory on target drive.
 func CopyIsoFilesToDisk(mountPoint string, isoPaths []string, progressCb CopyIsoProgressCallback) error {
 	return CopyIsoFilesToDiskWithContext(context.Background(), mountPoint, isoPaths, progressCb)
@@ -36,7 +58,16 @@ func CopyIsoFilesToDisk(mountPoint string, isoPaths []string, progressCb CopyIso
 
 // CopyIsoFilesToDiskWithContext copies selected local ISO/IMG files with cancellation context support and live speed/ETA tracking.
 func CopyIsoFilesToDiskWithContext(ctx context.Context, mountPoint string, isoPaths []string, progressCb CopyIsoProgressCallback) error {
-	if len(isoPaths) == 0 {
+	entries := make([]IsoCopyPlanEntry, 0, len(isoPaths))
+	for _, sourcePath := range isoPaths {
+		entries = append(entries, IsoCopyPlanEntry{SourcePath: sourcePath, Action: "rename"})
+	}
+	return CopyIsoFilesToDiskWithPlan(ctx, mountPoint, entries, progressCb)
+}
+
+// CopyIsoFilesToDiskWithPlan executes a pre-approved image copy plan without prompting during writes.
+func CopyIsoFilesToDiskWithPlan(ctx context.Context, mountPoint string, entries []IsoCopyPlanEntry, progressCb CopyIsoProgressCallback) error {
+	if len(entries) == 0 {
 		return nil
 	}
 
@@ -51,7 +82,8 @@ func CopyIsoFilesToDiskWithContext(ctx context.Context, mountPoint string, isoPa
 
 	buffer := make([]byte, 1024*1024) // 1MB buffer for high throughput U-disk write
 
-	for idx, srcPath := range isoPaths {
+	for idx, entry := range entries {
+		srcPath := entry.SourcePath
 		select {
 		case <-ctx.Done():
 			return ctx.Err()
@@ -68,7 +100,24 @@ func CopyIsoFilesToDiskWithContext(ctx context.Context, mountPoint string, isoPa
 		}
 
 		fileName := filepath.Base(srcPath)
-		destPath := filepath.Join(targetIsoDir, fileName)
+		targetName := filepath.Base(entry.TargetName)
+		if targetName == "." || targetName == string(filepath.Separator) || targetName == "" {
+			targetName = fileName
+		}
+		if entry.Action == "skip" {
+			continue
+		}
+		var destPath string
+		if entry.Action == "replace" {
+			destPath = filepath.Join(targetIsoDir, targetName)
+		} else if entry.TargetName != "" {
+			destPath = filepath.Join(targetIsoDir, targetName)
+		} else {
+			destPath, err = reserveIsoDestination(targetIsoDir, targetName)
+			if err != nil {
+				return fmt.Errorf("failed to reserve target image file for %s: %w", srcPath, err)
+			}
+		}
 
 		// Open source file
 		srcFile, err := os.Open(srcPath)
@@ -77,7 +126,13 @@ func CopyIsoFilesToDiskWithContext(ctx context.Context, mountPoint string, isoPa
 		}
 
 		// Create destination file
-		destFile, err := os.Create(destPath)
+		flags := os.O_WRONLY | os.O_CREATE
+		if entry.Action == "replace" {
+			flags |= os.O_TRUNC
+		} else {
+			flags |= os.O_EXCL
+		}
+		destFile, err := os.OpenFile(destPath, flags, info.Mode().Perm())
 		if err != nil {
 			srcFile.Close()
 			return fmt.Errorf("failed to create target image file %s: %w", destPath, err)
@@ -149,7 +204,7 @@ func CopyIsoFilesToDiskWithContext(ctx context.Context, mountPoint string, isoPa
 					progressCb(IsoCopyProgress{
 						CurrentFile:   fileName,
 						FileIndex:     idx + 1,
-						TotalFiles:    len(isoPaths),
+						TotalFiles:    len(entries),
 						CopiedBytes:   copiedTotal,
 						FileSizeBytes: totalSize,
 						Progress:      pct,
@@ -176,6 +231,82 @@ func CopyIsoFilesToDiskWithContext(ctx context.Context, mountPoint string, isoPa
 	}
 
 	return nil
+}
+
+// FindIsoCopyConflictsInDirectory returns filename conflicts without reading file contents.
+func FindIsoCopyConflictsInDirectory(targetDisk string, targetIsoDir string, isoPaths []string) ([]IsoCopyConflict, error) {
+	entries, err := os.ReadDir(targetIsoDir)
+	if os.IsNotExist(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("failed to read target iso directory %s: %w", targetIsoDir, err)
+	}
+	existing := make(map[string]struct{}, len(entries))
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			existing[entry.Name()] = struct{}{}
+		}
+	}
+	targetFiles := make(map[string]struct{}, len(existing))
+	for fileName := range existing {
+		targetFiles[fileName] = struct{}{}
+	}
+
+	conflicts := make([]IsoCopyConflict, 0)
+	sourceNames := make(map[string]int, len(isoPaths))
+	for _, sourcePath := range isoPaths {
+		sourceNames[filepath.Base(sourcePath)]++
+	}
+	for _, sourcePath := range isoPaths {
+		fileName := filepath.Base(sourcePath)
+		_, targetExists := targetFiles[fileName]
+		if !targetExists && sourceNames[fileName] < 2 {
+			continue
+		}
+		if sourceNames[fileName] > 1 {
+			existing[fileName] = struct{}{}
+		}
+		suggestedName := fileName
+		for suffix := 1; ; suffix++ {
+			if _, ok := existing[suggestedName]; !ok {
+				break
+			}
+			extension := filepath.Ext(fileName)
+			baseName := strings.TrimSuffix(fileName, extension)
+			suggestedName = fmt.Sprintf("%s (%d)%s", baseName, suffix, extension)
+		}
+		conflictType := "source_duplicate"
+		if targetExists {
+			conflictType = "source_duplicate_target_exists"
+		}
+		conflicts = append(conflicts, IsoCopyConflict{
+			TargetDisk:    targetDisk,
+			SourcePath:    sourcePath,
+			FileName:      fileName,
+			SuggestedName: suggestedName,
+			ConflictType:  conflictType,
+		})
+		existing[suggestedName] = struct{}{}
+	}
+	return conflicts, nil
+}
+
+func reserveIsoDestination(targetDir string, fileName string) (string, error) {
+	for suffix := 0; ; suffix++ {
+		candidateName := fileName
+		if suffix > 0 {
+			extension := filepath.Ext(fileName)
+			baseName := strings.TrimSuffix(fileName, extension)
+			candidateName = fmt.Sprintf("%s (%d)%s", baseName, suffix, extension)
+		}
+		candidatePath := filepath.Join(targetDir, candidateName)
+		if _, err := os.Stat(candidatePath); os.IsNotExist(err) {
+			return candidatePath, nil
+		} else if err != nil {
+			return "", err
+		}
+	}
 }
 
 // ValidateIsoPath checks if a given file path is a valid supported system image file by Ventoy (.iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw).

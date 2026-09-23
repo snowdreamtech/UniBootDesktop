@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const arSa: TranslationDict = {
+  "iso.preflight_title": "فحص ما قبل الكتابة",
+  "iso.conflict_title": "تم العثور على اسم ملف مكرر",
+  "iso.conflict_desc": "يوجد ملف بالاسم نفسه في مجلد iso على USB الهدف. اختر الإجراء المناسب. لن تتم مقارنة قيم Hash.",
+  "iso.conflict_action": "الإجراء",
+  "iso.conflict_keep_both": "احتفاظ",
+  "iso.conflict_replace": "استبدال",
+  "iso.conflict_skip": "تخطي",
+  "iso.conflict_apply_all": "تطبيق على جميع تعارضات هذه العملية",
+  "iso.conflict_cancel": "إلغاء الكتابة",
+  "iso.conflict_confirm": "تأكيد ومتابعة",
+  "iso.preflight_failed": "فشل فحص ما قبل الكتابة",
   "menu.app": "UniGoDesktop",
   "menu.about": "حول UniGoDesktop",
   "menu.hide": "إخفاء UniGoDesktop",

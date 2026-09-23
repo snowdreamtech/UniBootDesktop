@@ -1,6 +1,17 @@
 import type { TranslationDict } from "../types";
 
 export const srCyrl: TranslationDict = {
+  "iso.preflight_title": "Провера пре уписа",
+  "iso.conflict_title": "Назив датотеке већ постоји",
+  "iso.conflict_desc": "Датотека са истим називом већ постоји у iso фасцикли циљног USB-а. Изаберите радњу. Хеш вредности се не пореде.",
+  "iso.conflict_action": "Радња",
+  "iso.conflict_keep_both": "Задржи",
+  "iso.conflict_replace": "Препиши",
+  "iso.conflict_skip": "Прескочи",
+  "iso.conflict_apply_all": "Примени на све сукобе ове радње",
+  "iso.conflict_cancel": "Откажи упис",
+  "iso.conflict_confirm": "Потврди и настави",
+  "iso.preflight_failed": "Провера пре уписа није успела",
   "menu.app": "UniGoDesktop",
   "menu.about": "О апликацији UniGoDesktop",
   "menu.hide": "Сакриј UniGoDesktop",

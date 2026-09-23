@@ -1,6 +1,17 @@
 import type { TranslationDict } from "../types";
 
 export const srLatn: TranslationDict = {
+  "iso.preflight_title": "Provera pre upisa",
+  "iso.conflict_title": "Naziv datoteke već postoji",
+  "iso.conflict_desc": "Datoteka sa istim nazivom već postoji u iso fascikli ciljnog USB-a. Izaberite radnju. Hash vrednosti se ne porede.",
+  "iso.conflict_action": "Radnja",
+  "iso.conflict_keep_both": "Zadrži",
+  "iso.conflict_replace": "Prepiši",
+  "iso.conflict_skip": "Preskoči",
+  "iso.conflict_apply_all": "Primeni na sve sukobe ove radnje",
+  "iso.conflict_cancel": "Otkaži upis",
+  "iso.conflict_confirm": "Potvrdi i nastavi",
+  "iso.preflight_failed": "Provera pre upisa nije uspela",
   "menu.app": "UniGoDesktop",
   "menu.about": "O aplikaciji UniGoDesktop",
   "menu.hide": "Sakrij UniGoDesktop",

@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const nbNo: TranslationDict = {
+  "iso.preflight_title": "Kontroll før skriving",
+  "iso.conflict_title": "Filnavnet finnes allerede",
+  "iso.conflict_desc": "Det finnes allerede en fil med samme navn i iso-mappen på mål-USB-enheten. Velg handling. Hashverdier sammenlignes ikke.",
+  "iso.conflict_action": "Handling",
+  "iso.conflict_keep_both": "Behold",
+  "iso.conflict_replace": "Overskriv",
+  "iso.conflict_skip": "Hopp over",
+  "iso.conflict_apply_all": "Bruk på alle konflikter i denne handlingen",
+  "iso.conflict_cancel": "Avbryt skriving",
+  "iso.conflict_confirm": "Bekreft og fortsett",
+  "iso.preflight_failed": "Kontrollen før skriving mislyktes",
   "menu.app": "UniGoDesktop",
   "menu.about": "Om UniGoDesktop",
   "menu.hide": "Skjul UniGoDesktop",

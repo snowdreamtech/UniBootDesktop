@@ -78,6 +78,121 @@ func TestCopyIsoFilesToDisk(t *testing.T) {
 	}
 }
 
+func TestCopyIsoFilesToDiskPreservesExistingNames(t *testing.T) {
+	tmpSrcDirA := t.TempDir()
+	tmpSrcDirB := t.TempDir()
+	tmpMountDir := t.TempDir()
+
+	isoA := filepath.Join(tmpSrcDirA, "ubuntu.iso")
+	isoB := filepath.Join(tmpSrcDirB, "ubuntu.iso")
+	existing := filepath.Join(tmpMountDir, "iso", "ubuntu.iso")
+
+	if err := os.MkdirAll(filepath.Dir(existing), 0755); err != nil {
+		t.Fatalf("failed to create target iso directory: %v", err)
+	}
+	if err := os.WriteFile(isoA, []byte("source A"), 0644); err != nil {
+		t.Fatalf("failed to write source A: %v", err)
+	}
+	if err := os.WriteFile(isoB, []byte("source B"), 0644); err != nil {
+		t.Fatalf("failed to write source B: %v", err)
+	}
+	if err := os.WriteFile(existing, []byte("existing target"), 0644); err != nil {
+		t.Fatalf("failed to write existing target: %v", err)
+	}
+
+	if err := CopyIsoFilesToDisk(tmpMountDir, []string{isoA, isoB}, nil); err != nil {
+		t.Fatalf("CopyIsoFilesToDisk failed: %v", err)
+	}
+
+	content, err := os.ReadFile(existing)
+	if err != nil {
+		t.Fatalf("failed to read existing target: %v", err)
+	}
+	if string(content) != "existing target" {
+		t.Fatalf("existing target was overwritten: %q", content)
+	}
+
+	for _, want := range []struct {
+		name    string
+		content string
+	}{
+		{name: "ubuntu (1).iso", content: "source A"},
+		{name: "ubuntu (2).iso", content: "source B"},
+	} {
+		copied, err := os.ReadFile(filepath.Join(tmpMountDir, "iso", want.name))
+		if err != nil {
+			t.Fatalf("failed to read preserved copy %s: %v", want.name, err)
+		}
+		if string(copied) != want.content {
+			t.Errorf("preserved copy %s has content %q, want %q", want.name, copied, want.content)
+		}
+	}
+}
+
+func TestFindIsoCopyConflictsInDirectory(t *testing.T) {
+	targetDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(targetDir, "ubuntu.iso"), []byte("existing"), 0644); err != nil {
+		t.Fatalf("failed to create existing image: %v", err)
+	}
+
+	conflicts, err := FindIsoCopyConflictsInDirectory("disk-1", targetDir, []string{
+		filepath.Join("source-a", "ubuntu.iso"),
+		filepath.Join("source-b", "ubuntu.iso"),
+		filepath.Join("source-c", "fedora.iso"),
+	})
+	if err != nil {
+		t.Fatalf("FindIsoCopyConflictsInDirectory failed: %v", err)
+	}
+	if len(conflicts) != 2 {
+		t.Fatalf("got %d conflicts, want 2", len(conflicts))
+	}
+	if conflicts[0].SuggestedName != "ubuntu (1).iso" || conflicts[1].SuggestedName != "ubuntu (2).iso" {
+		t.Fatalf("unexpected suggested names: %#v", conflicts)
+	}
+}
+
+func TestFindIsoCopyConflictsInDirectoryDetectsSourceDuplicates(t *testing.T) {
+	targetDir := t.TempDir()
+	conflicts, err := FindIsoCopyConflictsInDirectory("disk-1", targetDir, []string{
+		filepath.Join("source-a", "ubuntu.iso"),
+		filepath.Join("source-b", "ubuntu.iso"),
+	})
+	if err != nil {
+		t.Fatalf("FindIsoCopyConflictsInDirectory failed: %v", err)
+	}
+	if len(conflicts) != 2 {
+		t.Fatalf("got %d conflicts, want 2", len(conflicts))
+	}
+	for _, conflict := range conflicts {
+		if conflict.ConflictType != "source_duplicate" {
+			t.Errorf("got conflict type %q, want source_duplicate", conflict.ConflictType)
+		}
+	}
+	if conflicts[0].SuggestedName == conflicts[1].SuggestedName {
+		t.Fatalf("source duplicates got the same suggested name: %q", conflicts[0].SuggestedName)
+	}
+}
+
+func TestFindIsoCopyConflictsInDirectoryClassifiesCombinedConflict(t *testing.T) {
+	targetDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(targetDir, "ubuntu.iso"), []byte("existing"), 0644); err != nil {
+		t.Fatalf("failed to create existing image: %v", err)
+	}
+
+	conflicts, err := FindIsoCopyConflictsInDirectory("disk-1", targetDir, []string{
+		filepath.Join("source-a", "ubuntu.iso"),
+		filepath.Join("source-b", "ubuntu.iso"),
+	})
+	if err != nil {
+		t.Fatalf("FindIsoCopyConflictsInDirectory failed: %v", err)
+	}
+	for _, conflict := range conflicts {
+		if conflict.ConflictType != "source_duplicate_target_exists" {
+			t.Errorf("got conflict type %q, want source_duplicate_target_exists", conflict.ConflictType)
+		}
+	}
+}
+
 func TestCleanMbrBootstrapCode(t *testing.T) {
 	tmpDir := t.TempDir()
 	dummyFile := filepath.Join(tmpDir, "dummy_disk_node")

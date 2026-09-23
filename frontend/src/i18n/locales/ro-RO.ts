@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const roRo: TranslationDict = {
+  "iso.preflight_title": "Verificare înainte de scriere",
+  "iso.conflict_title": "Numele fișierului există deja",
+  "iso.conflict_desc": "În folderul iso al USB-ului țintă există deja un fișier cu același nume. Alegeți acțiunea. Hash-urile nu sunt comparate.",
+  "iso.conflict_action": "Acțiune",
+  "iso.conflict_keep_both": "Păstrează",
+  "iso.conflict_replace": "Suprascrie",
+  "iso.conflict_skip": "Omite",
+  "iso.conflict_apply_all": "Aplică tuturor conflictelor din această operațiune",
+  "iso.conflict_cancel": "Anulează scrierea",
+  "iso.conflict_confirm": "Confirmă și continuă",
+  "iso.preflight_failed": "Verificarea înainte de scriere a eșuat",
   "menu.app": "UniGoDesktop",
   "menu.about": "Despre UniGoDesktop",
   "menu.hide": "Ascunde UniGoDesktop",

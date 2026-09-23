@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const koKr: TranslationDict = {
+  "iso.preflight_title": "쓰기 전 확인",
+  "iso.conflict_title": "같은 이름의 파일이 있습니다",
+  "iso.conflict_desc": "대상 USB의 iso 폴더에 같은 이름의 파일이 있습니다. Hash는 비교하지 않으며 처리 방법을 선택해야 합니다.",
+  "iso.conflict_action": "처리 방법",
+  "iso.conflict_keep_both": "보관",
+  "iso.conflict_replace": "덮어쓰기",
+  "iso.conflict_skip": "건너뛰기",
+  "iso.conflict_apply_all": "이번 배포의 모든 충돌에 적용",
+  "iso.conflict_cancel": "쓰기 취소",
+  "iso.conflict_confirm": "확인 후 계속",
+  "iso.preflight_failed": "쓰기 전 확인에 실패했습니다",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop 정보",
   "menu.hide": "UniGoDesktop 가리기",

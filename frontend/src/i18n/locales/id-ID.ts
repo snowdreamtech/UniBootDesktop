@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const idId: TranslationDict = {
+  "iso.preflight_title": "Pemeriksaan sebelum penulisan",
+  "iso.conflict_title": "Nama file sudah ada",
+  "iso.conflict_desc": "File dengan nama yang sama sudah ada di folder iso USB tujuan. Pilih tindakan yang diinginkan. Hash tidak dibandingkan.",
+  "iso.conflict_action": "Tindakan",
+  "iso.conflict_keep_both": "Simpan",
+  "iso.conflict_replace": "Timpa",
+  "iso.conflict_skip": "Lewati",
+  "iso.conflict_apply_all": "Terapkan ke semua konflik dalam operasi ini",
+  "iso.conflict_cancel": "Batalkan penulisan",
+  "iso.conflict_confirm": "Konfirmasi dan lanjutkan",
+  "iso.preflight_failed": "Pemeriksaan sebelum penulisan gagal",
   "menu.app": "UniGoDesktop",
   "menu.about": "Tentang UniGoDesktop",
   "menu.hide": "Sembunyikan UniGoDesktop",

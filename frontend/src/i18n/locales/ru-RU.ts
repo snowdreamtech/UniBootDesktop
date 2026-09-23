@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const ruRu: TranslationDict = {
+  "iso.preflight_title": "Проверка перед записью",
+  "iso.conflict_title": "Файл с таким именем уже существует",
+  "iso.conflict_desc": "В папке iso целевого USB уже есть файл с таким именем. Выберите действие. Хеши не сравниваются.",
+  "iso.conflict_action": "Действие",
+  "iso.conflict_keep_both": "Сохранить",
+  "iso.conflict_replace": "Перезаписать",
+  "iso.conflict_skip": "Пропустить",
+  "iso.conflict_apply_all": "Применить ко всем конфликтам этой операции",
+  "iso.conflict_cancel": "Отменить запись",
+  "iso.conflict_confirm": "Подтвердить и продолжить",
+  "iso.preflight_failed": "Не удалось выполнить проверку перед записью",
   "menu.app": "UniGoDesktop",
   "menu.about": "О программе UniGoDesktop",
   "menu.hide": "Скрыть UniGoDesktop",

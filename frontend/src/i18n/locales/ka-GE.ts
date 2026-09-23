@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const kaGe: TranslationDict = {
+  "iso.preflight_title": "ჩაწერამდე შემოწმება",
+  "iso.conflict_title": "ნაპოვნია დუბლირებული ფაილის სახელი",
+  "iso.conflict_desc": "სამიზნე USB-ის iso საქაღალდეში იგივე სახელის ფაილი უკვე არსებობს. აირჩიეთ მოქმედება. Hash არ შედარდება.",
+  "iso.conflict_action": "მოქმედება",
+  "iso.conflict_keep_both": "შენახვა",
+  "iso.conflict_replace": "გადაწერა",
+  "iso.conflict_skip": "გამოტოვება",
+  "iso.conflict_apply_all": "გამოყენება ამ ოპერაციის ყველა კონფლიქტზე",
+  "iso.conflict_cancel": "ჩაწერის გაუქმება",
+  "iso.conflict_confirm": "დადასტურება და გაგრძელება",
+  "iso.preflight_failed": "ჩაწერამდე შემოწმება ვერ შესრულდა",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop-ის შესახებ",
   "menu.hide": "UniGoDesktop-ის დამალვა",

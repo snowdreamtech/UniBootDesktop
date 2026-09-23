@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const elGr: TranslationDict = {
+  "iso.preflight_title": "Έλεγχος πριν από την εγγραφή",
+  "iso.conflict_title": "Βρέθηκε διπλό όνομα αρχείου",
+  "iso.conflict_desc": "Υπάρχει ήδη αρχείο με το ίδιο όνομα στον φάκελο iso του USB προορισμού. Επιλέξτε ενέργεια. Δεν γίνεται σύγκριση Hash.",
+  "iso.conflict_action": "Ενέργεια",
+  "iso.conflict_keep_both": "Διατήρηση και των δύο",
+  "iso.conflict_replace": "Αντικατάσταση υπάρχοντος αρχείου",
+  "iso.conflict_skip": "Παράλειψη αυτού του αρχείου",
+  "iso.conflict_apply_all": "Εφαρμογή σε όλες τις διενέξεις ονομάτων",
+  "iso.conflict_cancel": "Ακύρωση εγγραφής",
+  "iso.conflict_confirm": "Επιβεβαίωση και συνέχεια",
+  "iso.preflight_failed": "Ο έλεγχος πριν από την εγγραφή απέτυχε",
   "menu.app": "UniGoDesktop",
   "menu.about": "Σχετικά με το UniGoDesktop",
   "menu.hide": "Απόκρυψη UniGoDesktop",

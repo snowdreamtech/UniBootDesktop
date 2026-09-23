@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const glEs: TranslationDict = {
+  "iso.preflight_title": "Comprobación antes de escribir",
+  "iso.conflict_title": "Xa existe un nome de ficheiro igual",
+  "iso.conflict_desc": "Xa existe un ficheiro co mesmo nome no cartafol iso do USB de destino. Escolle unha acción. Non se comparan os hash.",
+  "iso.conflict_action": "Acción",
+  "iso.conflict_keep_both": "Conservar",
+  "iso.conflict_replace": "Sobrescribir",
+  "iso.conflict_skip": "Omitir",
+  "iso.conflict_apply_all": "Aplicar a todos os conflitos desta operación",
+  "iso.conflict_cancel": "Cancelar a escritura",
+  "iso.conflict_confirm": "Confirmar e continuar",
+  "iso.preflight_failed": "Fallou a comprobación antes de escribir",
   "menu.app": "UniGoDesktop",
   "menu.about": "Sobre UniGoDesktop",
   "menu.hide": "Ocultar UniGoDesktop",

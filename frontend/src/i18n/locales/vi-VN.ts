@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const viVn: TranslationDict = {
+  "iso.preflight_title": "Kiểm tra trước khi ghi",
+  "iso.conflict_title": "Đã có tệp trùng tên",
+  "iso.conflict_desc": "Thư mục iso trên USB đích đã có tệp cùng tên. Hãy chọn cách xử lý. Không so sánh hash.",
+  "iso.conflict_action": "Hành động",
+  "iso.conflict_keep_both": "Giữ lại",
+  "iso.conflict_replace": "Ghi đè",
+  "iso.conflict_skip": "Bỏ qua",
+  "iso.conflict_apply_all": "Áp dụng cho mọi xung đột trong lần này",
+  "iso.conflict_cancel": "Hủy ghi",
+  "iso.conflict_confirm": "Xác nhận và tiếp tục",
+  "iso.preflight_failed": "Kiểm tra trước khi ghi không thành công",
   "menu.app": "UniGoDesktop",
   "menu.about": "Về UniGoDesktop",
   "menu.hide": "Ẩn UniGoDesktop",

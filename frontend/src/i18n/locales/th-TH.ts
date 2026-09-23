@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const thTh: TranslationDict = {
+  "iso.preflight_title": "ตรวจสอบก่อนเขียน",
+  "iso.conflict_title": "พบชื่อไฟล์ซ้ำ",
+  "iso.conflict_desc": "มีไฟล์ชื่อเดียวกันอยู่ในโฟลเดอร์ iso ของ USB ปลายทางแล้ว โปรดเลือกวิธีจัดการ ระบบจะไม่เปรียบเทียบแฮช",
+  "iso.conflict_action": "การดำเนินการ",
+  "iso.conflict_keep_both": "เก็บไว้",
+  "iso.conflict_replace": "เขียนทับ",
+  "iso.conflict_skip": "ข้าม",
+  "iso.conflict_apply_all": "ใช้กับข้อขัดแย้งทั้งหมดในการดำเนินการนี้",
+  "iso.conflict_cancel": "ยกเลิกการเขียน",
+  "iso.conflict_confirm": "ยืนยันและดำเนินการต่อ",
+  "iso.preflight_failed": "ตรวจสอบก่อนเขียนไม่สำเร็จ",
   "menu.app": "UniGoDesktop",
   "menu.about": "เกี่ยวกับ UniGoDesktop",
   "menu.hide": "ซ่อน UniGoDesktop",

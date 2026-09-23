@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const trTr: TranslationDict = {
+  "iso.preflight_title": "Yazma öncesi kontrol",
+  "iso.conflict_title": "Aynı ada sahip dosya bulundu",
+  "iso.conflict_desc": "Hedef USB’nin iso klasöründe aynı ada sahip bir dosya zaten var. Nasıl işleneceğini seçin. Hash karşılaştırılmaz.",
+  "iso.conflict_action": "İşlem",
+  "iso.conflict_keep_both": "Sakla",
+  "iso.conflict_replace": "Üzerine yaz",
+  "iso.conflict_skip": "Atla",
+  "iso.conflict_apply_all": "Bu işlemdeki tüm çakışmalara uygula",
+  "iso.conflict_cancel": "Yazmayı iptal et",
+  "iso.conflict_confirm": "Onayla ve devam et",
+  "iso.preflight_failed": "Yazma öncesi kontrol başarısız oldu",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop Hakkında",
   "menu.hide": "UniGoDesktop'ı Gizle",

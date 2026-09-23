@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/url"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"sync"
@@ -412,6 +413,46 @@ func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPath
 		wailsRuntime.EventsEmit(a.ctx, "deploy-batch-progress", p)
 	}
 	return installer.DeployHybridModeBatchWithAllProgress(deployCtx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected, batchProgressCb)
+}
+
+// PreflightIsoCopy checks existing target filenames before any deployment writes begin.
+func (a *App) PreflightIsoCopy(targetDisks []string, isoPaths []string) ([]installer.IsoCopyConflict, error) {
+	conflicts := make([]installer.IsoCopyConflict, 0)
+	for _, targetDisk := range targetDisks {
+		if !disk.IsRealVentoyDisk(targetDisk) {
+			continue
+		}
+		mountPoint, err := installer.ResolveMountPoint(targetDisk)
+		if err != nil {
+			return nil, fmt.Errorf("preflight failed to resolve target disk %s: %w", targetDisk, err)
+		}
+		current, err := installer.FindIsoCopyConflictsInDirectory(targetDisk, filepath.Join(mountPoint, "iso"), isoPaths)
+		if err != nil {
+			return nil, err
+		}
+		conflicts = append(conflicts, current...)
+	}
+	return conflicts, nil
+}
+
+// DeployHybridModeBatchWithPlans executes Hybrid Mode using plans confirmed during preflight.
+func (a *App) DeployHybridModeBatchWithPlans(targetDisks []string, fsType string, isoPaths []string, plans []installer.IsoCopyDiskPlan, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
+	logger.Info("User confirmed batch Hybrid Mode deployment with ISO copy plans", "diskCount", len(targetDisks), "planCount", len(plans))
+	deployCtx := a.initDeployContext()
+	defer a.clearDeployContext()
+
+	cfg, _ := config.Load()
+	ventoyPath := ""
+	if cfg != nil {
+		ventoyPath = cfg.VentoyPath
+	}
+	progressCb := func(p installer.IsoCopyProgress) {
+		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
+	}
+	batchProgressCb := func(p installer.BatchDeployProgress) {
+		wailsRuntime.EventsEmit(a.ctx, "deploy-batch-progress", p)
+	}
+	return installer.DeployHybridModeBatchWithIsoPlans(deployCtx, targetDisks, fsType, ventoyPath, isoPaths, plans, progressCb, expected, batchProgressCb)
 }
 
 // DeployCloudMode triggers Cloud Mode (Cloud Pure Mode) with customizable file system.

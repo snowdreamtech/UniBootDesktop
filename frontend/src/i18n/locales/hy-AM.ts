@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const hyAm: TranslationDict = {
+  "iso.preflight_title": "Գրելուց առաջ ստուգում",
+  "iso.conflict_title": "Նույն անունով ֆայլ գտնվեց",
+  "iso.conflict_desc": "Նպատակային USB-ի iso պանակում արդեն կա նույն անունով ֆայլ։ Ընտրեք գործողությունը։ Hash-ը չի համեմատվում։",
+  "iso.conflict_action": "Գործողություն",
+  "iso.conflict_keep_both": "Պահել",
+  "iso.conflict_replace": "Վերագրել",
+  "iso.conflict_skip": "Բաց թողնել",
+  "iso.conflict_apply_all": "Կիրառել այս գործողության բոլոր բախումների համար",
+  "iso.conflict_cancel": "Չեղարկել գրումը",
+  "iso.conflict_confirm": "Հաստատել և շարունակել",
+  "iso.preflight_failed": "Գրելուց առաջ ստուգումը ձախողվեց",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop-ի մասին",
   "menu.hide": "Թաքցնել UniGoDesktop",

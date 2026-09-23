@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const urPk: TranslationDict = {
+  "iso.preflight_title": "لکھنے سے پہلے جانچ",
+  "iso.conflict_title": "ایک ہی نام کی فائل موجود ہے",
+  "iso.conflict_desc": "ہدف USB کے iso فولڈر میں اسی نام کی فائل پہلے سے موجود ہے۔ کارروائی منتخب کریں۔ Hash کا موازنہ نہیں کیا جائے گا۔",
+  "iso.conflict_action": "کارروائی",
+  "iso.conflict_keep_both": "محفوظ رکھیں",
+  "iso.conflict_replace": "اووررائٹ",
+  "iso.conflict_skip": "نظرانداز",
+  "iso.conflict_apply_all": "اس کارروائی کے تمام تنازعات پر لاگو کریں",
+  "iso.conflict_cancel": "لکھنا منسوخ کریں",
+  "iso.conflict_confirm": "تصدیق کریں اور جاری رکھیں",
+  "iso.preflight_failed": "لکھنے سے پہلے کی جانچ ناکام رہی",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop کے بارے میں",
   "menu.hide": "UniGoDesktop چھپائیں",

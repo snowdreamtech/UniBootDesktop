@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const nlNl: TranslationDict = {
+  "iso.preflight_title": "Controle vóór schrijven",
+  "iso.conflict_title": "Bestandsnaam bestaat al",
+  "iso.conflict_desc": "In de iso-map van de doel-USB staat al een bestand met deze naam. Kies wat er moet gebeuren. Hashes worden niet vergeleken.",
+  "iso.conflict_action": "Actie",
+  "iso.conflict_keep_both": "Behouden",
+  "iso.conflict_replace": "Overschrijven",
+  "iso.conflict_skip": "Overslaan",
+  "iso.conflict_apply_all": "Toepassen op alle conflicten in deze bewerking",
+  "iso.conflict_cancel": "Schrijven annuleren",
+  "iso.conflict_confirm": "Bevestigen en doorgaan",
+  "iso.preflight_failed": "Controle vóór schrijven mislukt",
   "menu.app": "UniGoDesktop",
   "menu.about": "Over UniGoDesktop",
   "menu.hide": "Verberg UniGoDesktop",

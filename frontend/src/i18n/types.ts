@@ -140,6 +140,17 @@ export interface TranslationDict {
   "iso.remove": string;
   "iso.drag_drop_tip": string;
   "iso.drag_unsupported": string;
+  "iso.preflight_title": string;
+  "iso.conflict_title": string;
+  "iso.conflict_desc": string;
+  "iso.conflict_action": string;
+  "iso.conflict_keep_both": string;
+  "iso.conflict_replace": string;
+  "iso.conflict_skip": string;
+  "iso.conflict_apply_all": string;
+  "iso.conflict_cancel": string;
+  "iso.conflict_confirm": string;
+  "iso.preflight_failed": string;
   "deploy.title": string;
   "deploy.desc_cloud": string;
   "deploy.desc_hybrid": string;

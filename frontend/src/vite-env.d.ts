@@ -56,6 +56,8 @@ declare global {
           LogAction?(level: string, message: string, details?: string): Promise<void>;
           DeployHybridMode(targetDisk: string, fsType?: string, isoPaths?: string[], expected?: DiskInfo): Promise<any>;
           DeployHybridModeBatch(targetDisks: string[], fsType?: string, isoPaths?: string[], expected?: DiskInfo[]): Promise<any[]>;
+          DeployHybridModeBatchWithPlans?(targetDisks: string[], fsType?: string, isoPaths?: string[], plans?: any[], expected?: DiskInfo[]): Promise<any[]>;
+          PreflightIsoCopy?(targetDisks: string[], isoPaths: string[]): Promise<any[]>;
           DeployCloudMode(targetDisk: string, fsType?: string, expected?: DiskInfo): Promise<any>;
           DeployCloudModeBatch(targetDisks: string[], fsType?: string, expected?: DiskInfo[]): Promise<any[]>;
           CheckQEMU(): Promise<any>;

@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const ptBr: TranslationDict = {
+  "iso.preflight_title": "Verificação antes da gravação",
+  "iso.conflict_title": "Nome de arquivo já existente",
+  "iso.conflict_desc": "Já existe um arquivo com o mesmo nome na pasta iso do USB de destino. Escolha como tratá-lo. Os hashes não são comparados.",
+  "iso.conflict_action": "Ação",
+  "iso.conflict_keep_both": "Manter",
+  "iso.conflict_replace": "Sobrescrever",
+  "iso.conflict_skip": "Ignorar",
+  "iso.conflict_apply_all": "Aplicar a todos os conflitos desta operação",
+  "iso.conflict_cancel": "Cancelar gravação",
+  "iso.conflict_confirm": "Confirmar e continuar",
+  "iso.preflight_failed": "Falha na verificação antes da gravação",
   "menu.app": "UniGoDesktop",
   "menu.about": "Sobre o UniGoDesktop",
   "menu.hide": "Ocultar UniGoDesktop",

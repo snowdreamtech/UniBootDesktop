@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const svSe: TranslationDict = {
+  "iso.preflight_title": "Kontroll före skrivning",
+  "iso.conflict_title": "Filnamnet finns redan",
+  "iso.conflict_desc": "En fil med samma namn finns redan i mål-USB-enhetens iso-mapp. Välj åtgärd. Hashvärden jämförs inte.",
+  "iso.conflict_action": "Åtgärd",
+  "iso.conflict_keep_both": "Behåll",
+  "iso.conflict_replace": "Skriv över",
+  "iso.conflict_skip": "Hoppa över",
+  "iso.conflict_apply_all": "Använd på alla konflikter i denna åtgärd",
+  "iso.conflict_cancel": "Avbryt skrivning",
+  "iso.conflict_confirm": "Bekräfta och fortsätt",
+  "iso.preflight_failed": "Kontrollen före skrivning misslyckades",
   "menu.app": "UniGoDesktop",
   "menu.about": "Om UniGoDesktop",
   "menu.hide": "Göm UniGoDesktop",

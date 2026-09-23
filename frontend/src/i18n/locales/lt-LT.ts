@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const ltLt: TranslationDict = {
+  "iso.preflight_title": "Patikra prieš rašymą",
+  "iso.conflict_title": "Failo pavadinimas jau naudojamas",
+  "iso.conflict_desc": "Paskirties USB iso aplanke jau yra failas tokiu pačiu pavadinimu. Pasirinkite veiksmą. Maišos reikšmės nelyginamos.",
+  "iso.conflict_action": "Veiksmas",
+  "iso.conflict_keep_both": "Išsaugoti abu",
+  "iso.conflict_replace": "Pakeisti esamą failą",
+  "iso.conflict_skip": "Praleisti šį failą",
+  "iso.conflict_apply_all": "Taikyti pasirinkimą visiems pavadinimų konfliktams",
+  "iso.conflict_cancel": "Atšaukti rašymą",
+  "iso.conflict_confirm": "Patvirtinti ir tęsti",
+  "iso.preflight_failed": "Patikra prieš rašymą nepavyko",
   "menu.app": "UniGoDesktop",
   "menu.about": "Apie „UniGoDesktop“",
   "menu.hide": "Slėpti „UniGoDesktop“",

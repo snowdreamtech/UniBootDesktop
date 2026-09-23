@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const fiFi: TranslationDict = {
+  "iso.preflight_title": "Tarkistus ennen kirjoittamista",
+  "iso.conflict_title": "Tiedostonimi on jo käytössä",
+  "iso.conflict_desc": "Kohde-USB:n iso-kansiossa on jo samanniminen tiedosto. Valitse toiminto. Hajautusarvoja ei verrata.",
+  "iso.conflict_action": "Toiminto",
+  "iso.conflict_keep_both": "Säilytä",
+  "iso.conflict_replace": "Korvaa",
+  "iso.conflict_skip": "Ohita",
+  "iso.conflict_apply_all": "Käytä kaikkiin tämän toiminnon ristiriitoihin",
+  "iso.conflict_cancel": "Peruuta kirjoitus",
+  "iso.conflict_confirm": "Vahvista ja jatka",
+  "iso.preflight_failed": "Kirjoitusta edeltävä tarkistus epäonnistui",
   "menu.app": "UniGoDesktop",
   "menu.about": "Tietoja UniGoDesktopista",
   "menu.hide": "Kätke UniGoDesktop",

@@ -4,6 +4,25 @@ import type { DiskInfo } from "../components/DiskPanel.vue";
 import { logUserAction } from "../utils/logger";
 import { getVentoyValidationMessage, type VentoyValidation } from "../utils/ventoyValidation";
 
+export interface IsoCopyPlanEntry {
+  sourcePath: string;
+  targetName: string;
+  action: "replace" | "skip" | "rename";
+}
+
+export interface IsoCopyDiskPlan {
+  targetDisk: string;
+  entries: IsoCopyPlanEntry[];
+}
+
+export interface IsoCopyConflict {
+  targetDisk: string;
+  sourcePath: string;
+  fileName: string;
+  suggestedName: string;
+  conflictType?: "source_duplicate" | "target_exists" | "source_duplicate_target_exists";
+}
+
 export interface DeployBannerState {
   visible: boolean;
   msg: string;
@@ -76,6 +95,9 @@ export function useDeployment(options: UseDeploymentOptions) {
   const batchDeployInfo = ref<BatchDeployProgress | null>(null);
 
   const isDeployConfirmOpen = ref(false);
+  const isIsoConflictOpen = ref(false);
+  const isoConflicts = ref<IsoCopyConflict[]>([]);
+  const pendingIsoPlans = ref<IsoCopyDiskPlan[]>([]);
   const pendingTargets = ref<string[]>([]);
   const pendingTargetSnapshots = ref<DiskInfo[]>([]);
 
@@ -322,6 +344,65 @@ export function useDeployment(options: UseDeploymentOptions) {
     isDeployConfirmOpen.value = true;
   }
 
+  function buildDefaultIsoPlans(targets: string[]) {
+    return targets.map((targetDisk) => ({
+      targetDisk,
+      entries: selectedIsoFiles.value.map((file) => ({
+        sourcePath: file.path,
+        targetName: "",
+        action: "rename" as const,
+      })),
+    }));
+  }
+
+  async function preflightIsoCopies(targets: string[]): Promise<boolean> {
+    pendingIsoPlans.value = buildDefaultIsoPlans(targets);
+    if (activeMode.value !== "hybrid" || selectedIsoFiles.value.length === 0) return true;
+
+    const app = window.go?.main?.App;
+    if (!app?.PreflightIsoCopy) return true;
+
+    try {
+      const conflicts = (await app.PreflightIsoCopy(
+        targets,
+        selectedIsoFiles.value.map((file) => file.path),
+      )) as IsoCopyConflict[];
+      if (conflicts.length > 0) {
+        isoConflicts.value = conflicts;
+        isIsoConflictOpen.value = true;
+        return false;
+      }
+      return true;
+    } catch (err: any) {
+      showToast(err?.message || t("iso.preflight_failed"), "error");
+      return false;
+    }
+  }
+
+  function cancelIsoConflictPreflight() {
+    isIsoConflictOpen.value = false;
+    isoConflicts.value = [];
+    pendingIsoPlans.value = [];
+  }
+
+  function confirmIsoConflictPreflight(
+    decisions: Array<IsoCopyPlanEntry & { targetDisk: string }>,
+  ) {
+    const decisionByKey = new Map(
+      decisions.map((decision) => [`${decision.targetDisk}\n${decision.sourcePath}`, decision]),
+    );
+    pendingIsoPlans.value = pendingIsoPlans.value.map((plan) => ({
+      ...plan,
+      entries: plan.entries.map((entry) => {
+        const decision = decisionByKey.get(`${plan.targetDisk}\n${entry.sourcePath}`);
+        return decision ? { ...entry, ...decision } : entry;
+      }),
+    }));
+    isIsoConflictOpen.value = false;
+    isoConflicts.value = [];
+    openDeployConfirm();
+  }
+
   async function handleDeployBtnClick() {
     if (isDeploying.value) return;
 
@@ -352,6 +433,16 @@ export function useDeployment(options: UseDeploymentOptions) {
       checkVentoyStatus().catch(() => {});
     }
 
+    let targets: string[] = [];
+    if (selectionMode.value === "single") {
+      if (!selectedDisk.value) return;
+      targets = [selectedDisk.value.device];
+    } else {
+      targets = Array.from(selectedDevices.value);
+      if (targets.length === 0) return;
+    }
+
+    if (!(await preflightIsoCopies(targets))) return;
     openDeployConfirm();
   }
 
@@ -443,6 +534,14 @@ export function useDeployment(options: UseDeploymentOptions) {
         let resList: any[];
         if (activeMode.value === "cloud") {
           resList = await app.DeployCloudModeBatch(targets, selectedFsType.value, [expected]);
+        } else if (app.DeployHybridModeBatchWithPlans) {
+          resList = await app.DeployHybridModeBatchWithPlans(
+            targets,
+            selectedFsType.value,
+            isoPaths,
+            pendingIsoPlans.value,
+            [expected],
+          );
         } else {
           resList = await app.DeployHybridModeBatch(targets, selectedFsType.value, isoPaths, [expected]);
         }
@@ -461,6 +560,14 @@ export function useDeployment(options: UseDeploymentOptions) {
         let resList: any[];
         if (activeMode.value === "cloud") {
           resList = await app.DeployCloudModeBatch(targets, selectedFsType.value, pendingTargetSnapshots.value);
+        } else if (app.DeployHybridModeBatchWithPlans) {
+          resList = await app.DeployHybridModeBatchWithPlans(
+            targets,
+            selectedFsType.value,
+            isoPaths,
+            pendingIsoPlans.value,
+            pendingTargetSnapshots.value,
+          );
         } else {
           resList = await app.DeployHybridModeBatch(
             targets,
@@ -583,6 +690,9 @@ export function useDeployment(options: UseDeploymentOptions) {
     deployElapsedSec,
     deployEtaSec,
     isDeployConfirmOpen,
+    isIsoConflictOpen,
+    isoConflicts,
+    pendingIsoPlans,
     pendingTargets,
     pendingTargetSnapshots,
     isVentoyAlertOpen,
@@ -610,6 +720,8 @@ export function useDeployment(options: UseDeploymentOptions) {
     handleCopyReport,
     handleRetryDeploy,
     openDeployConfirm,
+    cancelIsoConflictPreflight,
+    confirmIsoConflictPreflight,
     handleDeployBtnClick,
     startDeployment,
     handleCancelDeploy,

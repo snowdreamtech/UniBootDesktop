@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const mlIn: TranslationDict = {
+  "iso.preflight_title": "എഴുതുന്നതിന് മുമ്പുള്ള പരിശോധന",
+  "iso.conflict_title": "ഒരേ പേരുള്ള ഫയൽ കണ്ടെത്തി",
+  "iso.conflict_desc": "ലക്ഷ്യ USB-യിലെ iso ഫോൾഡറിൽ ഇതേ പേരുള്ള ഫയൽ നിലവിലുണ്ട്. നടപടി തിരഞ്ഞെടുക്കുക. Hash താരതമ്യം ചെയ്യില്ല.",
+  "iso.conflict_action": "നടപടി",
+  "iso.conflict_keep_both": "സൂക്ഷിക്കുക",
+  "iso.conflict_replace": "തിരുത്തിയെഴുതുക",
+  "iso.conflict_skip": "ഒഴിവാക്കുക",
+  "iso.conflict_apply_all": "ഈ പ്രവർത്തനത്തിലെ എല്ലാ വൈരുദ്ധ്യങ്ങൾക്കും പ്രയോഗിക്കുക",
+  "iso.conflict_cancel": "എഴുത്ത് റദ്ദാക്കുക",
+  "iso.conflict_confirm": "സ്ഥിരീകരിച്ച് തുടരുക",
+  "iso.preflight_failed": "എഴുതുന്നതിന് മുമ്പുള്ള പരിശോധന പരാജയപ്പെട്ടു",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop നെ കുറിച്ച്",
   "menu.hide": "UniGoDesktop മറയ്ക്കുക",

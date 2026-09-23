@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const caEs: TranslationDict = {
+  "iso.preflight_title": "Comprovació abans d’escriure",
+  "iso.conflict_title": "El nom del fitxer ja existeix",
+  "iso.conflict_desc": "Ja existeix un fitxer amb el mateix nom a la carpeta iso de l’USB de destinació. Trieu una acció. No es comparen els hash.",
+  "iso.conflict_action": "Acció",
+  "iso.conflict_keep_both": "Conserva",
+  "iso.conflict_replace": "Sobreescriu",
+  "iso.conflict_skip": "Omet",
+  "iso.conflict_apply_all": "Aplica a tots els conflictes d’aquesta operació",
+  "iso.conflict_cancel": "Cancel·la l’escriptura",
+  "iso.conflict_confirm": "Confirma i continua",
+  "iso.preflight_failed": "La comprovació abans d’escriure ha fallat",
   "menu.app": "UniGoDesktop",
   "menu.about": "Quant a UniGoDesktop",
   "menu.hide": "Amaga UniGoDesktop",

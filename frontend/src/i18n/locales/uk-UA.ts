@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const ukUa: TranslationDict = {
+  "iso.preflight_title": "Перевірка перед записом",
+  "iso.conflict_title": "Файл із таким іменем уже існує",
+  "iso.conflict_desc": "У папці iso цільового USB уже є файл із таким іменем. Виберіть дію. Хеші не порівнюються.",
+  "iso.conflict_action": "Дія",
+  "iso.conflict_keep_both": "Зберегти",
+  "iso.conflict_replace": "Перезаписати",
+  "iso.conflict_skip": "Пропустити",
+  "iso.conflict_apply_all": "Застосувати до всіх конфліктів цієї операції",
+  "iso.conflict_cancel": "Скасувати запис",
+  "iso.conflict_confirm": "Підтвердити й продовжити",
+  "iso.preflight_failed": "Не вдалося виконати перевірку перед записом",
   "menu.app": "UniGoDesktop",
   "menu.about": "Про програму UniGoDesktop",
   "menu.hide": "Сховати UniGoDesktop",

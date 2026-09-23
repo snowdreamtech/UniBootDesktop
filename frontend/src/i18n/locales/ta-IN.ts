@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const taIn: TranslationDict = {
+  "iso.preflight_title": "எழுதுவதற்கு முன் சரிபார்ப்பு",
+  "iso.conflict_title": "நகல் கோப்புப் பெயர் கண்டறியப்பட்டது",
+  "iso.conflict_desc": "இலக்கு USB-யின் iso கோப்பகத்தில் இதே பெயருடைய கோப்பு ஏற்கனவே உள்ளது. செயல்பாட்டைத் தேர்ந்தெடுக்கவும். Hash ஒப்பிடப்படாது.",
+  "iso.conflict_action": "செயல்",
+  "iso.conflict_keep_both": "வைத்திரு",
+  "iso.conflict_replace": "மேலெழுது",
+  "iso.conflict_skip": "தவிர்",
+  "iso.conflict_apply_all": "இந்தச் செயலின் அனைத்து முரண்பாடுகளுக்கும் பயன்படுத்து",
+  "iso.conflict_cancel": "எழுதுவதை ரத்துசெய்",
+  "iso.conflict_confirm": "உறுதிசெய்து தொடர்க",
+  "iso.preflight_failed": "எழுதுவதற்கு முன் சரிபார்ப்பு தோல்வியடைந்தது",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop பற்றி",
   "menu.hide": "UniGoDesktop மறை",

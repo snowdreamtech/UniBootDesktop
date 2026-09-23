@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const daDk: TranslationDict = {
+  "iso.preflight_title": "Kontrol før skrivning",
+  "iso.conflict_title": "Filnavnet findes allerede",
+  "iso.conflict_desc": "Der findes allerede en fil med samme navn i mål-USB'ens iso-mappe. Vælg en handling. Hash sammenlignes ikke.",
+  "iso.conflict_action": "Handling",
+  "iso.conflict_keep_both": "Behold",
+  "iso.conflict_replace": "Overskriv",
+  "iso.conflict_skip": "Spring over",
+  "iso.conflict_apply_all": "Anvend på alle konflikter i denne handling",
+  "iso.conflict_cancel": "Annuller skrivning",
+  "iso.conflict_confirm": "Bekræft og fortsæt",
+  "iso.preflight_failed": "Kontrollen før skrivning mislykkedes",
   "menu.app": "UniGoDesktop",
   "menu.about": "Om UniGoDesktop",
   "menu.hide": "Skjul UniGoDesktop",

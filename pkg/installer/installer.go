@@ -94,19 +94,23 @@ func DeployHybridModeWithVentoyPath(ctx context.Context, targetDisk string, fsTy
 
 // DeployHybridModeWithIsoAndVentoyPath executes Hybrid Mode with customizable Ventoy CLI path, ISO file paths, and progress callback.
 func DeployHybridModeWithIsoAndVentoyPath(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) (*DeployResult, error) {
-	return deployHybridModeWithExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, nil)
+	return deployHybridModeWithPlanAndExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, nil, progressCb, nil)
 }
 
 // DeployHybridModeWithExpectedDisk deploys Hybrid Mode after confirming the target still matches the selected disk snapshot.
 func DeployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected disk.DiskInfo) (*DeployResult, error) {
-	return deployHybridModeWithExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, &expected)
+	return deployHybridModeWithPlanAndExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, nil, progressCb, &expected)
 }
 
 func deployHybridModeWithExpectedDisk(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected *disk.DiskInfo) (*DeployResult, error) {
-	return deployHybridModeWithStage(ctx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, expected, nil)
+	return deployHybridModeWithPlanAndExpectedDisk(ctx, targetDisk, fsType, ventoyPath, isoPaths, nil, progressCb, expected)
 }
 
-func deployHybridModeWithStage(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected *disk.DiskInfo, stageCb ProgressWithStageCallback) (*DeployResult, error) {
+func deployHybridModeWithPlanAndExpectedDisk(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, isoPlan []IsoCopyPlanEntry, progressCb CopyIsoProgressCallback, expected *disk.DiskInfo) (*DeployResult, error) {
+	return deployHybridModeWithStage(ctx, targetDisk, fsType, ventoyPath, isoPaths, isoPlan, progressCb, expected, nil)
+}
+
+func deployHybridModeWithStage(ctx context.Context, targetDisk string, fsType string, ventoyPath string, isoPaths []string, isoPlan []IsoCopyPlanEntry, progressCb CopyIsoProgressCallback, expected *disk.DiskInfo, stageCb ProgressWithStageCallback) (*DeployResult, error) {
 	if fsType == "" {
 		fsType = "exFAT"
 	}
@@ -221,14 +225,27 @@ func deployHybridModeWithStage(ctx context.Context, targetDisk string, fsType st
 				stageCb(int(50+p.Progress*0.45), stage)
 			}
 		}
-		if err := CopyIsoFilesToDisk(mountPoint, isoPaths, isoWrapper); err != nil {
+		copyEntries := isoPlan
+		if len(copyEntries) == 0 {
+			copyEntries = make([]IsoCopyPlanEntry, 0, len(isoPaths))
+			for _, sourcePath := range isoPaths {
+				copyEntries = append(copyEntries, IsoCopyPlanEntry{SourcePath: sourcePath, Action: "rename"})
+			}
+		}
+		if err := CopyIsoFilesToDiskWithPlan(ctx, mountPoint, copyEntries, isoWrapper); err != nil {
 			errCopy := fmt.Errorf("copying selected ISO/IMG files failed: %w", err)
 			diag := tracker.BuildDiagnostics(errCopy)
 			logger.Error("Copying ISO files failed", "target", targetDisk, "error", errCopy)
 			return &DeployResult{Success: false, Mode: modeLabel, Target: targetDisk, Message: errCopy.Error(), Diagnostics: diag}, errCopy
 		}
-		for _, iso := range isoPaths {
-			tracker.AddWrittenFile(filepath.Join(mountPoint, "iso", filepath.Base(iso)))
+		for _, entry := range copyEntries {
+			if entry.Action != "skip" {
+				name := entry.TargetName
+				if name == "" {
+					name = filepath.Base(entry.SourcePath)
+				}
+				tracker.AddWrittenFile(filepath.Join(mountPoint, "iso", filepath.Base(name)))
+			}
 		}
 	}
 
@@ -274,7 +291,7 @@ func DeployHybridModeBatchWithIso(ctx context.Context, targetDisks []string, fsT
 
 // DeployHybridModeBatchWithVentoyAndIso executes Hybrid Mode on multiple target disk drives with customizable Ventoy CLI path, ISO files, and progress reporting.
 func DeployHybridModeBatchWithVentoyAndIso(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback) ([]*DeployResult, error) {
-	return deployHybridModeBatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, nil, nil)
+	return deployHybridModeBatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, nil, progressCb, nil, nil)
 }
 
 // DeployHybridModeBatchWithExpectedDisks deploys Hybrid Mode only after all selected disk snapshots pass final validation.
@@ -284,10 +301,15 @@ func DeployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []s
 
 // DeployHybridModeBatchWithAllProgress executes Hybrid Mode on multiple target disk drives with comprehensive batch progress reporting.
 func DeployHybridModeBatchWithAllProgress(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected []disk.DiskInfo, batchProgressCb BatchProgressCallback) ([]*DeployResult, error) {
-	return deployHybridModeBatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected, batchProgressCb)
+	return deployHybridModeBatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, nil, progressCb, expected, batchProgressCb)
 }
 
-func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, progressCb CopyIsoProgressCallback, expected []disk.DiskInfo, batchProgressCb BatchProgressCallback) ([]*DeployResult, error) {
+// DeployHybridModeBatchWithIsoPlans executes a deployment using user-approved per-disk image plans.
+func DeployHybridModeBatchWithIsoPlans(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, plans []IsoCopyDiskPlan, progressCb CopyIsoProgressCallback, expected []disk.DiskInfo, batchProgressCb BatchProgressCallback) ([]*DeployResult, error) {
+	return deployHybridModeBatchWithExpectedDisks(ctx, targetDisks, fsType, ventoyPath, isoPaths, plans, progressCb, expected, batchProgressCb)
+}
+
+func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []string, fsType string, ventoyPath string, isoPaths []string, plans []IsoCopyDiskPlan, progressCb CopyIsoProgressCallback, expected []disk.DiskInfo, batchProgressCb BatchProgressCallback) ([]*DeployResult, error) {
 	if len(targetDisks) == 0 {
 		return nil, fmt.Errorf("no target disks specified for batch deployment")
 	}
@@ -375,7 +397,14 @@ func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []s
 			}
 		}
 
-		res, err := deployHybridModeWithStage(ctx, d, fsType, ventoyPath, isoPaths, isoWrapperCb, snapshotPtr, stageCallback)
+		var isoPlan []IsoCopyPlanEntry
+		for _, plan := range plans {
+			if plan.TargetDisk == d {
+				isoPlan = plan.Entries
+				break
+			}
+		}
+		res, err := deployHybridModeWithStage(ctx, d, fsType, ventoyPath, isoPaths, isoPlan, isoWrapperCb, snapshotPtr, stageCallback)
 		if err != nil {
 			if res != nil && res.Diagnostics != nil {
 				results = append(results, res)

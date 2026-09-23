@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const jaJp: TranslationDict = {
+  "iso.preflight_title": "書き込み前の確認",
+  "iso.conflict_title": "同名のファイルがあります",
+  "iso.conflict_desc": "対象 USB の iso フォルダーには同名のファイルがあります。Hash は比較せず、処理方法を選択してください。",
+  "iso.conflict_action": "処理方法",
+  "iso.conflict_keep_both": "保持",
+  "iso.conflict_replace": "上書き",
+  "iso.conflict_skip": "スキップ",
+  "iso.conflict_apply_all": "今回のすべての競合に適用",
+  "iso.conflict_cancel": "書き込みをキャンセル",
+  "iso.conflict_confirm": "確認して続行",
+  "iso.preflight_failed": "書き込み前の確認に失敗しました",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop について",
   "menu.hide": "UniGoDesktop を非表示",

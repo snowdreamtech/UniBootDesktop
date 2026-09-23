@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const plPl: TranslationDict = {
+  "iso.preflight_title": "Sprawdzenie przed zapisem",
+  "iso.conflict_title": "Plik o tej nazwie już istnieje",
+  "iso.conflict_desc": "W folderze iso docelowego USB znajduje się już plik o tej nazwie. Wybierz działanie. Sumy kontrolne nie są porównywane.",
+  "iso.conflict_action": "Działanie",
+  "iso.conflict_keep_both": "Zachowaj",
+  "iso.conflict_replace": "Nadpisz",
+  "iso.conflict_skip": "Pomiń",
+  "iso.conflict_apply_all": "Zastosuj do wszystkich konfliktów tej operacji",
+  "iso.conflict_cancel": "Anuluj zapis",
+  "iso.conflict_confirm": "Potwierdź i kontynuuj",
+  "iso.preflight_failed": "Sprawdzenie przed zapisem nie powiodło się",
   "menu.app": "UniGoDesktop",
   "menu.about": "O UniGoDesktop",
   "menu.hide": "Ukryj UniGoDesktop",

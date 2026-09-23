@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const bgBg: TranslationDict = {
+  "iso.preflight_title": "Проверка преди запис",
+  "iso.conflict_title": "Открито е дублирано име",
+  "iso.conflict_desc": "В папката iso на целевия USB вече има файл със същото име. Изберете действие. Hash не се сравнява.",
+  "iso.conflict_action": "Действие",
+  "iso.conflict_keep_both": "Запази",
+  "iso.conflict_replace": "Замени",
+  "iso.conflict_skip": "Пропусни",
+  "iso.conflict_apply_all": "Приложи към всички конфликти в тази операция",
+  "iso.conflict_cancel": "Отмени записа",
+  "iso.conflict_confirm": "Потвърди и продължи",
+  "iso.preflight_failed": "Проверката преди запис не бе успешна",
   "menu.app": "UniGoDesktop",
   "menu.about": "Относно UniGoDesktop",
   "menu.hide": "Скриване на UniGoDesktop",

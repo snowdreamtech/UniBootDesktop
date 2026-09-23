@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const skSk: TranslationDict = {
+  "iso.preflight_title": "Kontrola pred zápisom",
+  "iso.conflict_title": "Názov súboru už existuje",
+  "iso.conflict_desc": "V priečinku iso cieľového USB už existuje súbor s rovnakým názvom. Vyberte akciu. Hash sa neporovnáva.",
+  "iso.conflict_action": "Akcia",
+  "iso.conflict_keep_both": "Ponechať",
+  "iso.conflict_replace": "Prepísať",
+  "iso.conflict_skip": "Preskočiť",
+  "iso.conflict_apply_all": "Použiť na všetky konflikty tejto operácie",
+  "iso.conflict_cancel": "Zrušiť zápis",
+  "iso.conflict_confirm": "Potvrdiť a pokračovať",
+  "iso.preflight_failed": "Kontrola pred zápisom zlyhala",
   "menu.app": "UniGoDesktop",
   "menu.about": "O aplikácii UniGoDesktop",
   "menu.hide": "Skryť UniGoDesktop",

@@ -1,6 +1,17 @@
 import type { TranslationDict } from "../types";
 
 export const zhTw: TranslationDict = {
+  "iso.preflight_title": "寫入前檢查",
+  "iso.conflict_title": "發現同名檔案",
+  "iso.conflict_desc": "目標 USB 的 iso 資料夾已有同名檔案。請選擇處理方式，不會比較 Hash。",
+  "iso.conflict_action": "處理方式",
+  "iso.conflict_keep_both": "保留",
+  "iso.conflict_replace": "覆寫",
+  "iso.conflict_skip": "略過",
+  "iso.conflict_apply_all": "套用至本次全部衝突",
+  "iso.conflict_cancel": "取消寫入",
+  "iso.conflict_confirm": "確認並繼續",
+  "iso.preflight_failed": "寫入前檢查失敗",
   "menu.app": "UniGoDesktop",
   "menu.about": "關於 UniGoDesktop",
   "menu.hide": "隱藏 UniGoDesktop",

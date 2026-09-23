@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const mkMk: TranslationDict = {
+  "iso.preflight_title": "Проверка пред запишување",
+  "iso.conflict_title": "Пронајдена е датотека со исто име",
+  "iso.conflict_desc": "Во iso-папката на целниот USB веќе постои датотека со исто име. Изберете дејство. Hash не се споредува.",
+  "iso.conflict_action": "Дејство",
+  "iso.conflict_keep_both": "Задржи",
+  "iso.conflict_replace": "Презапиши",
+  "iso.conflict_skip": "Прескокни",
+  "iso.conflict_apply_all": "Примени на сите конфликти од оваа операција",
+  "iso.conflict_cancel": "Откажи запишување",
+  "iso.conflict_confirm": "Потврди и продолжи",
+  "iso.preflight_failed": "Проверката пред запишување не успеа",
   "menu.app": "UniGoDesktop",
   "menu.about": "За UniGoDesktop",
   "menu.hide": "Скриј го UniGoDesktop",

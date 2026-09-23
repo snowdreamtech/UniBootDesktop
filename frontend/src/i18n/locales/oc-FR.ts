@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const ocFr: TranslationDict = {
+  "iso.preflight_title": "Verificacion abans de l’escritura",
+  "iso.conflict_title": "Nom de fichièr ja present",
+  "iso.conflict_desc": "Un fichièr amb lo meteis nom existís ja dins lo repertòri iso de l’USB cibla. Causissètz una accion. Los hash son pas comparats.",
+  "iso.conflict_action": "Accion",
+  "iso.conflict_keep_both": "Conservar",
+  "iso.conflict_replace": "Remplaçar",
+  "iso.conflict_skip": "Ignorar",
+  "iso.conflict_apply_all": "Aplicar a totes los conflictes d’aquesta accion",
+  "iso.conflict_cancel": "Anullar l’escritura",
+  "iso.conflict_confirm": "Confirmar e contunhar",
+  "iso.preflight_failed": "La verificacion abans de l’escritura a fracassat",
   "menu.app": "UniGoDesktop",
   "menu.about": "A propòs de UniGoDesktop",
   "menu.hide": "Amagar UniGoDesktop",

@@ -48,8 +48,40 @@ function getLocaleKeys(localeFileName) {
   return keys;
 }
 
+function getLocaleEntries(localeFileName) {
+  const filePath = path.join(localesDir, localeFileName);
+  if (!fs.existsSync(filePath)) return new Map();
+  const content = fs.readFileSync(filePath, "utf8");
+  const entries = new Map();
+  const entryRegex = /"([^"\n]+)":\s*"((?:\\.|[^"\\])*)"/g;
+  let m;
+  while ((m = entryRegex.exec(content)) !== null) {
+    entries.set(m[1], m[2]);
+  }
+  return entries;
+}
+
+function getPlaceholders(value) {
+  return [...value.matchAll(/\{[^}]+\}/g)].map((match) => match[0]).sort();
+}
+
 const zhCnKeys = getLocaleKeys("zh-CN.ts");
 const enUsKeys = getLocaleKeys("en-US.ts");
+const enUsEntries = getLocaleEntries("en-US.ts");
+
+const qualityKeys = [
+  "iso.preflight_title",
+  "iso.conflict_title",
+  "iso.conflict_desc",
+  "iso.conflict_action",
+  "iso.conflict_keep_both",
+  "iso.conflict_replace",
+  "iso.conflict_skip",
+  "iso.conflict_apply_all",
+  "iso.conflict_cancel",
+  "iso.conflict_confirm",
+  "iso.preflight_failed",
+];
 
 console.log(`ℹ️  Found ${zhCnKeys.size} keys in zh-CN.ts, ${enUsKeys.size} keys in en-US.ts.`);
 
@@ -83,6 +115,7 @@ if (missingInEnFromTypes.length > 0) {
 const localeFiles = fs.readdirSync(localesDir).filter((fileName) => fileName.endsWith(".ts"));
 for (const localeFile of localeFiles) {
   const localeKeys = getLocaleKeys(localeFile);
+  const localeEntries = getLocaleEntries(localeFile);
   const missingKeys = [...declaredKeys].filter((key) => !localeKeys.has(key));
   const extraKeys = [...localeKeys].filter((key) => !declaredKeys.has(key));
 
@@ -96,6 +129,29 @@ for (const localeFile of localeFiles) {
     hasErrors = true;
     console.error(`\n❌ ${localeFile} contains ${extraKeys.length} undeclared key(s):`);
     extraKeys.forEach((key) => console.error(`   - "${key}"`));
+  }
+
+  for (const key of qualityKeys) {
+    const sourceValue = enUsEntries.get(key);
+    const localeValue = localeEntries.get(key);
+    if (sourceValue && localeValue && JSON.stringify(getPlaceholders(sourceValue)) !== JSON.stringify(getPlaceholders(localeValue))) {
+      hasErrors = true;
+      console.error(`\n❌ ${localeFile} has placeholder mismatch for "${key}":`);
+      console.error(`   - English: ${getPlaceholders(sourceValue).join(", ") || "(none)"}`);
+      console.error(`   - ${localeFile}: ${getPlaceholders(localeValue).join(", ") || "(none)"}`);
+    }
+  }
+
+  if (localeFile !== "en-US.ts") {
+    for (const key of qualityKeys) {
+      const sourceValue = enUsEntries.get(key);
+      const localeValue = localeEntries.get(key);
+      const sameTextAllowed = new Set(["iso.conflict_action"]);
+      if (sourceValue && localeValue && localeValue === sourceValue && !sameTextAllowed.has(key)) {
+        hasErrors = true;
+        console.error(`\n❌ ${localeFile} reuses English copy for localized key "${key}"`);
+      }
+    }
   }
 }
 

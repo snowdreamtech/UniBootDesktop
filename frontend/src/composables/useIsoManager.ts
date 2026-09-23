@@ -15,6 +15,10 @@ export const SUPPORTED_IMAGE_EXTS = [
   '.iso', '.img', '.wim', '.vhd', '.vhdx', '.vti', '.efi', '.bin', '.xz', '.gz', '.raw'
 ];
 
+export function normalizeIsoSourcePath(filePath: string): string {
+  return (filePath || '').trim().replace(/\\/g, '/').replace(/\/+/g, '/');
+}
+
 export function useIsoManager(showToast: (msg: string, type: 'info' | 'warning' | 'error' | 'success') => void) {
   const selectedIsoFiles = ref<IsoFileItem[]>([]);
   const isoCopyStatus = ref<string>('');
@@ -36,8 +40,9 @@ export function useIsoManager(showToast: (msg: string, type: 'info' | 'warning' 
         continue;
       }
       const name = p.split(/[/\\]/).pop() || p;
+      const normalizedPath = normalizeIsoSourcePath(p);
       const existingIndex = selectedIsoFiles.value.findIndex(
-        f => f.path === p || f.name === name
+        f => normalizeIsoSourcePath(f.path) === normalizedPath
       );
 
       if (existingIndex >= 0) {

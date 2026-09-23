@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const azAz: TranslationDict = {
+  "iso.preflight_title": "Yazmadan əvvəl yoxlama",
+  "iso.conflict_title": "Eyni adlı fayl tapıldı",
+  "iso.conflict_desc": "Hədəf USB-nin iso qovluğunda eyni adlı fayl artıq mövcuddur. Əməliyyat seçin. Hash müqayisə edilmir.",
+  "iso.conflict_action": "Əməliyyat",
+  "iso.conflict_keep_both": "Saxla",
+  "iso.conflict_replace": "Üzərinə yaz",
+  "iso.conflict_skip": "Keç",
+  "iso.conflict_apply_all": "Bu əməliyyatın bütün toqquşmalarına tətbiq et",
+  "iso.conflict_cancel": "Yazmanı ləğv et",
+  "iso.conflict_confirm": "Təsdiqlə və davam et",
+  "iso.preflight_failed": "Yazmadan əvvəl yoxlama uğursuz oldu",
   "menu.app": "UniGoDesktop",
   "menu.about": "UniGoDesktop haqqında",
   "menu.hide": "UniGoDesktop Gizlət",

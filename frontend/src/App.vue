@@ -137,6 +137,13 @@
       @confirm="startDeployment"
     />
 
+    <IsoConflictModal
+      :isOpen="isIsoConflictOpen"
+      :conflicts="isoConflicts"
+      @cancel="cancelIsoConflictPreflight"
+      @confirm="confirmIsoConflictPreflight"
+    />
+
     <!-- Settings & GitHub Proxy Modal -->
     <SettingsModal
       :isOpen="isSettingsOpen"
@@ -180,6 +187,7 @@ import DeployPanel from "./components/DeployPanel.vue";
 import DiagnosticsModal from "./components/DiagnosticsModal.vue";
 import DiskPanel from "./components/DiskPanel.vue";
 import IconPickerModal from "./components/IconPickerModal.vue";
+import IsoConflictModal from "./components/IsoConflictModal.vue";
 import LogPanel from "./components/LogPanel.vue";
 import SettingsModal from "./components/SettingsModal.vue";
 import UsbInspectorModal from "./components/UsbInspectorModal.vue";
@@ -258,6 +266,8 @@ const {
   deployElapsedSec,
   deployEtaSec,
   isDeployConfirmOpen,
+  isIsoConflictOpen,
+  isoConflicts,
   pendingTargets,
   isVentoyAlertOpen,
   ventoyAlertTitle,
@@ -282,6 +292,8 @@ const {
   handleCopyReport,
   handleRetryDeploy,
   handleDeployBtnClick,
+  cancelIsoConflictPreflight,
+  confirmIsoConflictPreflight,
   startDeployment,
   handleCancelDeploy,
   dismissDeploySuccessBanner,

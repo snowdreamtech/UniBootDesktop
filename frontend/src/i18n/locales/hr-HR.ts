@@ -1,6 +1,17 @@
 import type { TranslationDict } from '../types';
 
 export const hrHr: TranslationDict = {
+  "iso.preflight_title": "Provjera prije zapisivanja",
+  "iso.conflict_title": "Naziv datoteke već postoji",
+  "iso.conflict_desc": "U mapi iso ciljnog USB-a već postoji datoteka s istim nazivom. Odaberite radnju. Hash se ne uspoređuje.",
+  "iso.conflict_action": "Radnja",
+  "iso.conflict_keep_both": "Zadrži",
+  "iso.conflict_replace": "Prepiši",
+  "iso.conflict_skip": "Preskoči",
+  "iso.conflict_apply_all": "Primijeni na sve sukobe ove radnje",
+  "iso.conflict_cancel": "Otkaži zapisivanje",
+  "iso.conflict_confirm": "Potvrdi i nastavi",
+  "iso.preflight_failed": "Provjera prije zapisivanja nije uspjela",
   "menu.app": "UniGoDesktop",
   "menu.about": "O aplikaciji UniGoDesktop",
   "menu.hide": "Sakrij UniGoDesktop",
