@@ -396,6 +396,14 @@ func ReadSector(devicePath string, numBytes int) ([]byte, error) {
 		}
 	}
 
+	// If privileged worker is active, delegate directly to worker (zero sudo dependency)
+	if worker := GetActiveWorkerClient(); worker != nil && worker.IsAlive() {
+		workerBuf, workerErr := worker.ReadSector(rawDevice, numBytes)
+		if workerErr == nil && len(workerBuf) >= numBytes {
+			return workerBuf[:numBytes], nil
+		}
+	}
+
 	// If the process is actually root, retry via sudo dd as a last resort.
 	// The dd arguments are tightly structured and validated so they remain usable for
 	// legitimate raw-disk reads without allowing shell command injection.

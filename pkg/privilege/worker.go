@@ -22,6 +22,7 @@ const (
 	WorkerActionPing        = "ping"
 	WorkerActionAcquireDisk = "acquire_disk"
 	WorkerActionReleaseDisk = "release_disk"
+	WorkerActionReadSector  = "read_sector"
 	WorkerActionExit        = "exit"
 
 	defaultWorkerIdleTimeout = 30 * time.Minute
@@ -29,17 +30,20 @@ const (
 
 // WorkerRequest represents an RPC request from main application to privileged worker.
 type WorkerRequest struct {
-	Token  string   `json:"token"`
-	Action string   `json:"action"`
-	Paths  []string `json:"paths,omitempty"`
-	UID    int      `json:"uid,omitempty"`
-	GID    int      `json:"gid,omitempty"`
+	Token    string   `json:"token"`
+	Action   string   `json:"action"`
+	Paths    []string `json:"paths,omitempty"`
+	Path     string   `json:"path,omitempty"`
+	NumBytes int      `json:"num_bytes,omitempty"`
+	UID      int      `json:"uid,omitempty"`
+	GID      int      `json:"gid,omitempty"`
 }
 
 // WorkerResponse represents an RPC response from privileged worker.
 type WorkerResponse struct {
 	Success bool   `json:"success"`
 	Error   string `json:"error,omitempty"`
+	Data    []byte `json:"data,omitempty"`
 }
 
 // diskSnapshot stores original ownership and permissions for automatic restoration.
@@ -207,6 +211,46 @@ func (c *WorkerClient) ReleaseDiskAccess(paths []string) error {
 	return nil
 }
 
+// ReadSector requests the privileged worker to read raw bytes directly from a storage device.
+func (c *WorkerClient) ReadSector(devicePath string, numBytes int) ([]byte, error) {
+	if c == nil {
+		return nil, errors.New("worker client is not connected")
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.closed || c.conn == nil {
+		return nil, errors.New("worker connection is closed")
+	}
+
+	req := WorkerRequest{
+		Token:    c.token,
+		Action:   WorkerActionReadSector,
+		Path:     devicePath,
+		NumBytes: numBytes,
+	}
+
+	_ = c.conn.SetDeadline(time.Now().Add(5 * time.Second))
+	defer func() {
+		if c.conn != nil {
+			_ = c.conn.SetDeadline(time.Time{})
+		}
+	}()
+
+	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		return nil, fmt.Errorf("failed to send read sector request: %w", err)
+	}
+
+	var resp WorkerResponse
+	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		return nil, fmt.Errorf("failed to read read sector response: %w", err)
+	}
+	if !resp.Success {
+		return nil, fmt.Errorf("worker failed to read sector: %s", resp.Error)
+	}
+	return resp.Data, nil
+}
+
 // Close closes the connection to the worker.
 func (c *WorkerClient) Close() error {
 	if c == nil {
@@ -268,6 +312,14 @@ func handleWorkerConnection(conn net.Conn, expectedToken string, snapshots map[s
 			mu.Unlock()
 			_ = encoder.Encode(WorkerResponse{Success: true})
 
+		case WorkerActionReadSector:
+			data, err := applyReadSector(req.Path, req.NumBytes)
+			if err != nil {
+				_ = encoder.Encode(WorkerResponse{Success: false, Error: err.Error()})
+			} else {
+				_ = encoder.Encode(WorkerResponse{Success: true, Data: data})
+			}
+
 		case WorkerActionExit:
 			mu.Lock()
 			restoreAllSnapshots(snapshots)
@@ -279,6 +331,27 @@ func handleWorkerConnection(conn net.Conn, expectedToken string, snapshots map[s
 			_ = encoder.Encode(WorkerResponse{Success: false, Error: fmt.Sprintf("unknown action: %s", req.Action)})
 		}
 	}
+}
+
+func applyReadSector(devicePath string, numBytes int) ([]byte, error) {
+	if err := ValidateRawDevicePath(devicePath); err != nil {
+		return nil, fmt.Errorf("unsafe device path: %w", err)
+	}
+	if numBytes <= 0 || numBytes > 65536 {
+		return nil, fmt.Errorf("invalid byte count: %d", numBytes)
+	}
+	f, err := os.Open(devicePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open device %s: %w", devicePath, err)
+	}
+	defer f.Close()
+
+	buf := make([]byte, numBytes)
+	n, err := io.ReadFull(f, buf)
+	if err != nil && err != io.EOF && err != io.ErrUnexpectedEOF {
+		return nil, fmt.Errorf("failed to read from device %s: %w", devicePath, err)
+	}
+	return buf[:n], nil
 }
 
 func applyDiskAcquisition(paths []string, targetUID, targetGID int, snapshots map[string]diskSnapshot) error {

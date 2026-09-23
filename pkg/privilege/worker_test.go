@@ -81,6 +81,11 @@ func TestWorkerClientServerRoundTrip(t *testing.T) {
 		t.Fatalf("ReleaseDiskAccess failed: %v", err)
 	}
 
+	// Test ReadSector on blocked path
+	if _, err := client.ReadSector("/dev/disk0", 512); err == nil {
+		t.Fatal("expected ReadSector on /dev/disk0 to be rejected as system disk")
+	}
+
 	// Reset worker client and verify IsElevated reverts
 	SetActiveWorkerClient(nil)
 	ResetElevationCache()
