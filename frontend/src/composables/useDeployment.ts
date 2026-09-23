@@ -101,6 +101,11 @@ export function useDeployment(options: UseDeploymentOptions) {
   const isPreflight = ref(false);
   const pendingTargets = ref<string[]>([]);
   const pendingTargetSnapshots = ref<DiskInfo[]>([]);
+  // Lock the ISO file list at deploy-initiation time alongside pendingTargets.
+  // selectedIsoFiles is reactive and can change while conflict/confirm dialogs
+  // are open, which would cause isoPaths sent to the backend to diverge from
+  // the pendingIsoPlans entries that were built at T1.
+  const pendingIsoFiles = ref<typeof selectedIsoFiles.value>([]);
 
   const isVentoyAlertOpen = ref(false);
   const ventoyAlertTitle = ref("");
@@ -407,6 +412,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     // snapshot-failure branch before overwriting these refs.
     pendingTargets.value = [];
     pendingTargetSnapshots.value = [];
+    pendingIsoFiles.value = [];
   }
 
   function confirmIsoConflictPreflight(
@@ -482,14 +488,17 @@ export function useDeployment(options: UseDeploymentOptions) {
       if (targets.length === 0) return;
     }
 
-    // Lock pendingTargets NOW, before the async preflight call.
+    // Lock pendingTargets and pendingIsoFiles NOW, before the async preflight call.
     // buildDefaultIsoPlans (inside preflightIsoCopies) stamps each plan with
     // plan.targetDisk from this exact targets array. If we waited until
     // openDeployConfirm to set pendingTargets, a selection change during the
     // async Go call would cause pendingIsoPlans[i].targetDisk (T1) to diverge
     // from pendingTargets[i] (T2), routing ISO plans to the wrong disks.
+    // Similarly, selectedIsoFiles is locked so that the isoPaths sent to the
+    // backend in startDeployment always match the entries in pendingIsoPlans.
     pendingTargets.value = targets;
     pendingTargetSnapshots.value = [];
+    pendingIsoFiles.value = [...selectedIsoFiles.value];
 
     isPreflight.value = true;
     try {
@@ -502,7 +511,11 @@ export function useDeployment(options: UseDeploymentOptions) {
 
   async function startDeployment() {
     if (isDeploying.value) return;
-
+    // Close the confirm dialog immediately so that the isDeployConfirmOpen guard
+    // in handleDeployBtnClick does not permanently block subsequent deploys.
+    // (The dialog emits @confirm which calls this function, but does not emit
+    // @close, so isDeployConfirmOpen stays true unless we clear it here.)
+    isDeployConfirmOpen.value = false;
     dismissDeploySuccessBanner();
 
     const hasNativeRuntime = Boolean(window.go && window.go.main && window.go.main.App);
@@ -584,7 +597,7 @@ export function useDeployment(options: UseDeploymentOptions) {
         throw new Error("Desktop runtime is unavailable in browser preview mode");
       }
 
-      const isoPaths = selectedIsoFiles.value.map((f) => f.path);
+      const isoPaths = pendingIsoFiles.value.map((f) => f.path);
       if (targets.length === 1) {
         const expected = pendingTargetSnapshots.value[0];
         if (!expected) throw new Error(t("deploy.toast_target_changed"));
@@ -761,6 +774,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     isPreflight,
     pendingTargets,
     pendingTargetSnapshots,
+    pendingIsoFiles,
     isVentoyAlertOpen,
     ventoyAlertTitle,
     ventoyAlertMessage,
