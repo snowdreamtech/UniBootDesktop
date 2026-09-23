@@ -48,6 +48,9 @@ func RunWorkerServer(socketPath, token string) error {
 		return fmt.Errorf("socket path and token are required")
 	}
 
+	// Ensure SIGHUP from terminating parent shell does not kill the daemon worker
+	signal.Ignore(syscall.SIGHUP)
+
 	// Clean up stale socket if present
 	_ = os.Remove(socketPath)
 
@@ -66,9 +69,9 @@ func RunWorkerServer(socketPath, token string) error {
 	snapshots := make(map[string]diskSnapshot)
 	var mu sync.Mutex
 
-	// Clean up snapshots on termination signal
+	// Clean up snapshots on termination signal (SIGINT, SIGTERM)
 	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
 		<-sigChan
 		mu.Lock()
@@ -121,9 +124,12 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 	}
 
 	socketDir := "/tmp/unigo-ipc"
-	_ = os.MkdirAll(socketDir, 0700)
+	_ = os.MkdirAll(socketDir, 0755)
+	_ = os.Chmod(socketDir, 0755)
 	socketPath := filepath.Join(socketDir, fmt.Sprintf("w-%d.sock", os.Getpid()))
 	_ = os.Remove(socketPath)
+	workerLog := filepath.Join(socketDir, "worker.log")
+	_ = os.Remove(workerLog)
 
 	exe, err := os.Executable()
 	if err != nil {
@@ -134,70 +140,53 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		prompt = "UniGoDesktop requires administrator privileges to access raw storage devices and verify boot partitions."
 	}
 
-	// Launch worker in background with elevation
-	elevDone := make(chan error, 1)
-
 	switch runtime.GOOS {
 	case "darwin":
 		escapedExe := strings.ReplaceAll(exe, "'", "'\"'\"'")
 		escapedSocket := strings.ReplaceAll(socketPath, "'", "'\"'\"'")
 		escapedToken := strings.ReplaceAll(token, "'", "'\"'\"'")
 		escapedPrompt := strings.ReplaceAll(prompt, `"`, `\"`)
+		escapedLog := strings.ReplaceAll(workerLog, "'", "'\"'\"'")
+		escapedDir := strings.ReplaceAll(socketDir, "'", "'\"'\"'")
 
-		// macOS AppleScript requires all I/O descriptors (including stdin) to be closed
-		// via </dev/null >/dev/null 2>&1 & so that 'do shell script' returns immediately once spawned.
-		bgCmd := fmt.Sprintf("nohup '%s' --privileged-worker --socket '%s' --token '%s' </dev/null >/dev/null 2>&1 &",
-			escapedExe, escapedSocket, escapedToken)
+		// macOS AppleScript requires all I/O descriptors to be closed/redirected
+		// so that 'do shell script' returns immediately once child process is spawned in background.
+		bgCmd := fmt.Sprintf("cd '%s' && '%s' --privileged-worker --socket '%s' --token '%s' </dev/null >'%s' 2>&1 &",
+			escapedDir, escapedExe, escapedSocket, escapedToken, escapedLog)
 		appleScript := fmt.Sprintf(`do shell script "%s" with prompt "%s" with administrator privileges`,
 			bgCmd, escapedPrompt)
 
-		go func() {
-			cmd := exec.Command("osascript", "-e", appleScript)
-			out, err := cmd.CombinedOutput()
-			if err != nil {
-				elevDone <- fmt.Errorf("elevation failed: %s (%w)", strings.TrimSpace(string(out)), err)
-				return
-			}
-			elevDone <- nil
-		}()
+		cmd := exec.Command("osascript", "-e", appleScript)
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			return nil, fmt.Errorf("elevation failed: %s (%w)", strings.TrimSpace(string(out)), err)
+		}
 
 	case "linux":
-		// On Linux, use pkexec with background execution and closed descriptors
-		bgCmd := fmt.Sprintf("nohup %s --privileged-worker --socket %s --token %s </dev/null >/dev/null 2>&1 &",
-			exe, socketPath, token)
-		go func() {
-			cmd := exec.Command("pkexec", "sh", "-c", bgCmd)
-			out, err := cmd.CombinedOutput()
-			if err != nil {
-				elevDone <- fmt.Errorf("elevation failed: %s (%w)", strings.TrimSpace(string(out)), err)
-				return
-			}
-			elevDone <- nil
-		}()
+		bgCmd := fmt.Sprintf("cd %s && %s --privileged-worker --socket %s --token %s </dev/null >%s 2>&1 &",
+			socketDir, exe, socketPath, token, workerLog)
+		cmd := exec.Command("pkexec", "sh", "-c", bgCmd)
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			return nil, fmt.Errorf("elevation failed: %s (%w)", strings.TrimSpace(string(out)), err)
+		}
 
 	default:
 		return nil, fmt.Errorf("unsupported unix platform: %s", runtime.GOOS)
 	}
 
-	// Retry connection until socket appears or timeout (120 seconds for user authorization)
-	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
+	// Retry connection until socket appears or timeout (5 seconds after elevation granted)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	var conn net.Conn
 	for {
-		// First check if elevation command returned an error (e.g. user cancelled dialog)
-		select {
-		case elevErr := <-elevDone:
-			if elevErr != nil {
-				_ = os.Remove(socketPath)
-				return nil, elevErr
-			}
-		default:
-		}
-
 		select {
 		case <-ctx.Done():
 			_ = os.Remove(socketPath)
+			if logData, lErr := os.ReadFile(workerLog); lErr == nil && len(logData) > 0 {
+				return nil, fmt.Errorf("privileged worker failed to start: %s", strings.TrimSpace(string(logData)))
+			}
 			return nil, fmt.Errorf("timed out waiting for privileged worker to start")
 		default:
 			c, err := net.Dial("unix", socketPath)
@@ -205,7 +194,7 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 				conn = c
 				break
 			}
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(50 * time.Millisecond)
 		}
 		if conn != nil {
 			break

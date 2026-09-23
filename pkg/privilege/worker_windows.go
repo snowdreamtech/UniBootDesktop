@@ -124,7 +124,7 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		return nil, fmt.Errorf("elevation failed: %s (%w)", strings.TrimSpace(string(out)), err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
 	defer cancel()
 
 	var port int

@@ -61,9 +61,12 @@ func TestRunElevatedRejectsUnsafeShellInput(t *testing.T) {
 }
 
 func TestRunElevatedAllowsSimpleCommand(t *testing.T) {
-	_, err := RunElevated("prompt", "net session")
-	if err != nil && strings.Contains(err.Error(), "unsafe elevated command") {
-		t.Fatal("expected a simple approved command to pass validation")
+	fields, err := splitElevatedCommand("net session")
+	if err != nil {
+		t.Fatalf("expected a simple approved command to pass validation: %v", err)
+	}
+	if len(fields) != 2 || fields[0] != "net" || fields[1] != "session" {
+		t.Fatalf("unexpected fields: %v", fields)
 	}
 }
 
