@@ -85,6 +85,18 @@ func TestDoctorCmd(t *testing.T) {
 	}
 }
 
+func TestVmCmdHelp(t *testing.T) {
+	buf := new(bytes.Buffer)
+	rootCmd.SetOut(buf)
+	rootCmd.SetErr(buf)
+	rootCmd.SetArgs([]string{"vm", "--help"})
+
+	err := rootCmd.Execute()
+	if err != nil {
+		t.Fatalf("expected no error running vm --help, got: %v", err)
+	}
+}
+
 func TestQemuCmdHelp(t *testing.T) {
 	buf := new(bytes.Buffer)
 	rootCmd.SetOut(buf)
@@ -93,7 +105,7 @@ func TestQemuCmdHelp(t *testing.T) {
 
 	err := rootCmd.Execute()
 	if err != nil {
-		t.Fatalf("expected no error running qemu --help, got: %v", err)
+		t.Fatalf("expected no error running qemu (alias) --help, got: %v", err)
 	}
 }
 
