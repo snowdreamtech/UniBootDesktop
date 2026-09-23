@@ -482,7 +482,13 @@ export function useDeployment(options: UseDeploymentOptions) {
     let targets: string[] = [];
     if (selectionMode.value === "single") {
       if (!selectedDisk.value) return;
-      targets = [selectedDisk.value.device];
+      // Verify the selected disk still exists in the current disk list
+      const currentDisk = diskList.value.find((d) => d.device === selectedDisk.value!.device);
+      if (!currentDisk) {
+        showToast(t("deploy.toast_target_changed"), "error");
+        return;
+      }
+      targets = [currentDisk.device];
     } else {
       targets = Array.from(selectedDevices.value);
       if (targets.length === 0) return;
