@@ -140,6 +140,8 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		prompt = "UniGoDesktop requires administrator privileges to access raw storage devices and verify boot partitions."
 	}
 
+	elevDone := make(chan error, 1)
+
 	switch runtime.GOOS {
 	case "darwin":
 		escapedExe := strings.ReplaceAll(exe, "'", "'\"'\"'")
@@ -149,38 +151,56 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		escapedLog := strings.ReplaceAll(workerLog, "'", "'\"'\"'")
 		escapedDir := strings.ReplaceAll(socketDir, "'", "'\"'\"'")
 
-		// macOS AppleScript requires all I/O descriptors to be closed/redirected
-		// so that 'do shell script' returns immediately once child process is spawned in background.
-		bgCmd := fmt.Sprintf("cd '%s' && '%s' --privileged-worker --socket '%s' --token '%s' </dev/null >'%s' 2>&1 &",
+		// Wrap in parentheses subshell with full I/O redirection so AppleScript 'do shell script'
+		// detaches cleanly and returns in under 200ms without holding inherited pipe descriptors.
+		bgCmd := fmt.Sprintf("(cd '%s' && '%s' --privileged-worker --socket '%s' --token '%s') </dev/null >'%s' 2>&1 &",
 			escapedDir, escapedExe, escapedSocket, escapedToken, escapedLog)
 		appleScript := fmt.Sprintf(`do shell script "%s" with prompt "%s" with administrator privileges`,
 			bgCmd, escapedPrompt)
 
-		cmd := exec.Command("osascript", "-e", appleScript)
-		out, err := cmd.CombinedOutput()
-		if err != nil {
-			return nil, fmt.Errorf("elevation failed: %s (%w)", strings.TrimSpace(string(out)), err)
-		}
+		go func() {
+			cmd := exec.Command("osascript", "-e", appleScript)
+			out, err := cmd.CombinedOutput()
+			if err != nil {
+				elevDone <- fmt.Errorf("elevation failed: %s (%w)", strings.TrimSpace(string(out)), err)
+				return
+			}
+			elevDone <- nil
+		}()
 
 	case "linux":
-		bgCmd := fmt.Sprintf("cd %s && %s --privileged-worker --socket %s --token %s </dev/null >%s 2>&1 &",
+		bgCmd := fmt.Sprintf("(cd %s && %s --privileged-worker --socket %s --token %s) </dev/null >%s 2>&1 &",
 			socketDir, exe, socketPath, token, workerLog)
-		cmd := exec.Command("pkexec", "sh", "-c", bgCmd)
-		out, err := cmd.CombinedOutput()
-		if err != nil {
-			return nil, fmt.Errorf("elevation failed: %s (%w)", strings.TrimSpace(string(out)), err)
-		}
+		go func() {
+			cmd := exec.Command("pkexec", "sh", "-c", bgCmd)
+			out, err := cmd.CombinedOutput()
+			if err != nil {
+				elevDone <- fmt.Errorf("elevation failed: %s (%w)", strings.TrimSpace(string(out)), err)
+				return
+			}
+			elevDone <- nil
+		}()
 
 	default:
 		return nil, fmt.Errorf("unsupported unix platform: %s", runtime.GOOS)
 	}
 
-	// Retry connection until socket appears or timeout (5 seconds after elevation granted)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	// Retry connection until socket appears or timeout (60 seconds for user authorization)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
 	var conn net.Conn
 	for {
+		// If user explicitly dismissed or cancelled the authorization prompt, abort immediately
+		select {
+		case elevErr := <-elevDone:
+			if elevErr != nil {
+				_ = os.Remove(socketPath)
+				return nil, elevErr
+			}
+		default:
+		}
+
 		select {
 		case <-ctx.Done():
 			_ = os.Remove(socketPath)
