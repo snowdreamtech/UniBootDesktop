@@ -219,10 +219,10 @@ memsize = "%d"
 firmware = "%s"
 nvram = "UniBoot.nvram"
 floppy0.present = "FALSE"
-sata0.present = "TRUE"
-sata0:0.present = "TRUE"
-sata0:0.fileName = "uniboot_raw.vmdk"
-sata0:0.mode = "independent-nonpersistent"
+ide0.present = "TRUE"
+ide0:0.present = "TRUE"
+ide0:0.fileName = "uniboot_raw.vmdk"
+ide0:0.mode = "independent-nonpersistent"
 ethernet0.present = "TRUE"
 ethernet0.virtualDev = "e1000"
 ethernet0.connectionType = "nat"
@@ -323,6 +323,7 @@ func findVmrunPath() string {
 		return path
 	}
 	candidates := []string{
+		"/Applications/VMware Fusion.app/Contents/Public/vmrun",
 		"/Applications/VMware Fusion.app/Contents/Library/vmrun",
 		"/Applications/VMware Fusion Tech Preview.app/Contents/Library/vmrun",
 		`C:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe`,

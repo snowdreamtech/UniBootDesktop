@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 )
 
 type VirtualBoxDriver struct{}
@@ -166,7 +167,12 @@ func launchVirtualBoxVM(ctx context.Context, vboxManage string, targetPath strin
 	vmdkPath := filepath.Join(tmpDir, "uniboot_raw.vmdk")
 	_ = os.Remove(vmdkPath)
 
-	createCmd := exec.Command(vboxManage, "internalcommands", "createrawvmdk", "-filename", vmdkPath, "-rawdisk", targetPath)
+	diskDev := targetPath
+	if runtime.GOOS == "darwin" {
+		diskDev = "/dev/" + disk.NormalizeDarwinDiskNode(targetPath)
+	}
+
+	createCmd := exec.Command(vboxManage, "internalcommands", "createrawvmdk", "-filename", vmdkPath, "-rawdisk", diskDev)
 	if err := createCmd.Run(); err != nil {
 		logger.Warn("VBoxManage createrawvmdk failed, falling back to GUI app launch", "error", err)
 		return err

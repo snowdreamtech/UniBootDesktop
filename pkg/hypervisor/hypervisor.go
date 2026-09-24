@@ -217,10 +217,21 @@ func (m *Manager) LaunchBestConfigured(ctx context.Context, targetDisk string, c
 		status := drv.Detect()
 		if status != nil && status.Installed {
 			logger.Info("Selected best available hypervisor for preview launch", "hypervisor", drv.Name(), "disk", targetDisk, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB)
+			sessionCtx, cancel := context.WithCancel(ctx)
+			RegisterActiveVMSession(targetDisk, cancel)
+
+			var launchErr error
 			if cDrv, ok := drv.(ConfigurableDriver); ok {
-				return cDrv.LaunchWithConfig(ctx, targetDisk, cfg)
+				launchErr = cDrv.LaunchWithConfig(sessionCtx, targetDisk, cfg)
+			} else {
+				launchErr = drv.Launch(sessionCtx, targetDisk, cfg.BootMode)
 			}
-			return drv.Launch(ctx, targetDisk, cfg.BootMode)
+			if launchErr != nil {
+				cancel()
+				ClearActiveVMSession()
+				return launchErr
+			}
+			return nil
 		}
 	}
 
@@ -295,10 +306,18 @@ func (m *Manager) LaunchSpecifiedConfigured(ctx context.Context, targetDisk stri
 			sessionCtx, cancel := context.WithCancel(ctx)
 			RegisterActiveVMSession(targetDisk, cancel)
 
+			var launchErr error
 			if cDrv, ok := drv.(ConfigurableDriver); ok {
-				return cDrv.LaunchWithConfig(sessionCtx, targetDisk, cfg)
+				launchErr = cDrv.LaunchWithConfig(sessionCtx, targetDisk, cfg)
+			} else {
+				launchErr = drv.Launch(sessionCtx, targetDisk, cfg.BootMode)
 			}
-			return drv.Launch(sessionCtx, targetDisk, cfg.BootMode)
+			if launchErr != nil {
+				cancel()
+				ClearActiveVMSession()
+				return launchErr
+			}
+			return nil
 		}
 	}
 
@@ -330,6 +349,24 @@ func IsDiskInVMSession(diskPath string) bool {
 	if runtime.GOOS == "darwin" {
 		targetNode = disk.NormalizeDarwinDiskNode(diskPath)
 	}
+
+	activeSessionMu.Lock()
+	activeTarget := activeSessionTarget
+	activeSessionMu.Unlock()
+	if activeTarget != "" {
+		if activeTarget == diskPath {
+			return true
+		}
+		if runtime.GOOS == "darwin" {
+			activeNode := disk.NormalizeDarwinDiskNode(activeTarget)
+			if activeNode != "" && targetNode != "" && activeNode == targetNode {
+				return true
+			}
+		} else if strings.TrimPrefix(activeTarget, "/dev/") == strings.TrimPrefix(diskPath, "/dev/") {
+			return true
+		}
+	}
+
 	var inUse bool
 	unmountedDisksTracker.Range(func(key, value any) bool {
 		tracked, ok := key.(string)

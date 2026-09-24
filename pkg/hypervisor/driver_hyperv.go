@@ -110,6 +110,7 @@ func (d *HyperVDriver) Launch(ctx context.Context, diskPath string, bootMode str
 
 	cmd := exec.Command(status.Path)
 	if err := cmd.Start(); err != nil {
+		remountTargetDisk(targetPath)
 		restoreDiskPerms()
 		return fmt.Errorf("failed to launch Hyper-V connection tool: %w", err)
 	}
@@ -124,3 +125,9 @@ func (d *HyperVDriver) Launch(ctx context.Context, diskPath string, bootMode str
 
 	return nil
 }
+
+// LaunchWithConfig launches Hyper-V with custom VMConfig options.
+func (d *HyperVDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
+	return d.Launch(ctx, diskPath, cfg.BootMode)
+}
+

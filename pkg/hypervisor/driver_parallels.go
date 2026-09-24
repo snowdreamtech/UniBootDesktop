@@ -105,6 +105,7 @@ func (d *ParallelsDriver) Launch(ctx context.Context, diskPath string, bootMode 
 
 	cmd := exec.Command("open", "-W", "-a", "Parallels Desktop")
 	if err := cmd.Start(); err != nil {
+		remountTargetDisk(targetPath)
 		restoreDiskPerms()
 		return fmt.Errorf("failed to open Parallels Desktop application: %w", err)
 	}
@@ -119,3 +120,9 @@ func (d *ParallelsDriver) Launch(ctx context.Context, diskPath string, bootMode 
 
 	return nil
 }
+
+// LaunchWithConfig launches Parallels with custom VMConfig options.
+func (d *ParallelsDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
+	return d.Launch(ctx, diskPath, cfg.BootMode)
+}
+

@@ -125,7 +125,6 @@ func (d *UTMDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg V
 		return fmt.Errorf("failed to acquire target disk permissions: %w", err)
 	}
 	unmountTargetDisk(targetPath)
-	defer scheduleDiskPermissionRestore(restoreDiskPerms, nil)
 
 	// Generate native .utm bundle with raw disk mapping and launch via UTM app
 	tmpDir := "/tmp/uniboot_utm"
@@ -188,6 +187,8 @@ func (d *UTMDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg V
 	logger.Info("Opening UTM application with native raw disk bundle", "bundle", utmBundle, "targetPath", targetPath)
 	cmd := exec.Command("open", "-a", "UTM", utmBundle)
 	if err := cmd.Run(); err != nil {
+		remountTargetDisk(targetPath)
+		restoreDiskPerms()
 		return fmt.Errorf("failed to open UTM application: %w", err)
 	}
 
@@ -212,7 +213,9 @@ func (d *UTMDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg V
 		for {
 			select {
 			case <-timeout:
+				time.Sleep(300 * time.Millisecond)
 				remountTargetDisk(targetPath)
+				restoreDiskPerms()
 				NotifyVMExited(targetPath, nil)
 				return
 			case <-ticker.C:
@@ -221,7 +224,9 @@ func (d *UTMDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg V
 				if err := utmCheck.Run(); err != nil {
 					// UTM app process has exited!
 					logger.Info("UTM process terminated, auto-remounting target disk", "targetPath", targetPath)
+					time.Sleep(300 * time.Millisecond)
 					remountTargetDisk(targetPath)
+					restoreDiskPerms()
 					NotifyVMExited(targetPath, nil)
 					return
 				}
@@ -235,7 +240,9 @@ func (d *UTMDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg V
 						} else if started && (!strings.Contains(statusStr, "started") || err != nil) {
 							// VM was running and has now stopped
 							logger.Info("UTM VM stopped, auto-remounting target disk", "targetPath", targetPath)
+							time.Sleep(300 * time.Millisecond)
 							remountTargetDisk(targetPath)
+							restoreDiskPerms()
 							NotifyVMExited(targetPath, nil)
 							return
 						}

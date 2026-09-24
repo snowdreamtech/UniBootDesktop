@@ -661,6 +661,10 @@ func (a *App) LaunchQEMU(targetDisk string) error {
 		return err
 	}
 	logger.Info("Hypervisor preview test launched successfully", "disk", targetDisk)
+	disk.InvalidateDiskCache()
+	if a.ctx != nil {
+		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
+	}
 	return nil
 }
 
