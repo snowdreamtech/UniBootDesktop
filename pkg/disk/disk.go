@@ -1024,9 +1024,10 @@ func InvalidateDiskCache() {
 	diskCacheSnapshot = ""
 	diskCacheMutex.Unlock()
 
-	// Retain darwinUSBCacheMap across disk invalidations if within its 30s TTL window.
-	// This prevents excessive system_profiler CPU spikes while ensuring fresh disk inventory.
+	// Invalidate both diskutil and USB hardware caches on disk change events
+	// to ensure fresh disk serial numbers and hardware metadata after hotplug.
 	invalidateDarwinDiskutilCache()
+	InvalidateDarwinUSBCache()
 }
 
 // InvalidateDarwinUSBCache forces an immediate purge of the macOS USB hardware profile cache.

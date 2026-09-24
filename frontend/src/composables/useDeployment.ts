@@ -668,6 +668,17 @@ export function useDeployment(options: UseDeploymentOptions) {
       }
 
       const isoPaths = pendingIsoFiles.value.map((f) => f.path);
+
+      // Re-synchronize pendingTargetSnapshots with the latest diskList to guarantee
+      // that any recent re-enumeration, hotplug, or hardware serial refresh is faithfully reflected.
+      const freshSnapshots = targets.map((device) =>
+        diskList.value.find((d) => d.device === device)
+      );
+      if (freshSnapshots.some((d) => !d)) {
+        throw new Error(t("deploy.toast_target_changed"));
+      }
+      pendingTargetSnapshots.value = freshSnapshots as DiskInfo[];
+
       if (targets.length === 1) {
         const expected = pendingTargetSnapshots.value[0];
         if (!expected) throw new Error(t("deploy.toast_target_changed"));
