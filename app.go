@@ -229,7 +229,9 @@ type BatchEjectResult struct {
 	Failed  map[string]string `json:"failed"`
 }
 
-// BatchEjectDisks safely unmounts and ejects multiple removable storage disks concurrently in parallel goroutines.
+// BatchEjectDisks safely unmounts and ejects multiple removable storage disks.
+// Disks are verified up-front and ejected sequentially to prevent OS disk arbitration daemon
+// (e.g. macOS diskarbitrationd) lock contention and timeouts.
 func (a *App) BatchEjectDisks(targetDisks []string) BatchEjectResult {
 	result := BatchEjectResult{
 		Success: make([]string, 0, len(targetDisks)),
@@ -240,43 +242,60 @@ func (a *App) BatchEjectDisks(targetDisks []string) BatchEjectResult {
 		return result
 	}
 
-	type ejectOutcome struct {
-		device string
-		err    error
+	logger.Info("Requesting user-initiated safe batch ejection", "count", len(targetDisks), "disks", targetDisks)
+
+	// Step 1: Pre-validate all target disks up-front against current removable inventory
+	currentDisks, err := disk.GetRemovableDisks()
+	if err != nil {
+		logger.Error("Failed to fetch removable disk inventory for batch eject preflight", "error", err)
+		for _, dev := range targetDisks {
+			result.Failed[dev] = err.Error()
+		}
+		return result
 	}
 
-	outcomes := make(chan ejectOutcome, len(targetDisks))
-	var wg sync.WaitGroup
+	diskMap := make(map[string]disk.DiskInfo, len(currentDisks))
+	for _, d := range currentDisks {
+		diskMap[d.Device] = d
+	}
 
-	logger.Info("Requesting concurrent user-initiated safe batch ejection", "count", len(targetDisks), "disks", targetDisks)
-
+	validTargets := make([]string, 0, len(targetDisks))
 	for _, dev := range targetDisks {
 		devTrimmed := strings.TrimSpace(dev)
 		if devTrimmed == "" || len(devTrimmed) > 512 {
 			continue
 		}
-		wg.Add(1)
-		go func(target string) {
-			defer wg.Done()
-			err := disk.SafeUserEjectDisk(target)
-			outcomes <- ejectOutcome{device: target, err: err}
-		}(devTrimmed)
+		candidate, exists := diskMap[devTrimmed]
+		if !exists {
+			result.Failed[devTrimmed] = "target disk is not present in the current removable-disk inventory"
+			continue
+		}
+		if candidate.IsSystem {
+			result.Failed[devTrimmed] = "CRITICAL: Safety block triggered! Disk is a system disk and cannot be ejected"
+			continue
+		}
+		if !candidate.IsRemovable {
+			result.Failed[devTrimmed] = "CRITICAL: Safety block triggered! Disk is not a removable disk"
+			continue
+		}
+		validTargets = append(validTargets, devTrimmed)
 	}
 
-	wg.Wait()
-	close(outcomes)
-
-	for o := range outcomes {
-		if o.err == nil {
-			result.Success = append(result.Success, o.device)
-			logger.Info("Target disk safely ejected concurrently", "disk", o.device)
+	// Step 2: Eject valid targets sequentially to avoid OS disk arbitration collisions
+	for _, target := range validTargets {
+		err := disk.EjectDisk(target)
+		if err == nil {
+			result.Success = append(result.Success, target)
+			logger.Info("Target disk safely ejected", "disk", target)
 		} else {
-			result.Failed[o.device] = o.err.Error()
-			logger.Error("Failed to eject target disk concurrently", "disk", o.device, "error", o.err)
+			result.Failed[target] = err.Error()
+			logger.Error("Failed to eject target disk", "disk", target, "error", err)
 		}
 	}
 
 	if len(result.Success) > 0 {
+		// Allow macOS/Windows kernel brief window to complete IOKit/device node teardown
+		time.Sleep(300 * time.Millisecond)
 		disk.InvalidateDiskCache()
 	}
 

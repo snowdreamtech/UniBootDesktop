@@ -46,6 +46,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
   const selectedDisk = ref<DiskInfo | null>(null);
   const selectedDevices = ref<Set<string>>(new Set());
   const ejectingDevices = ref<Set<string>>(new Set());
+  const recentlyEjectedDevices = ref<Map<string, number>>(new Map());
   const customIcons = ref<Record<string, DiskIconType>>(loadCustomIcons());
   const isPickerOpen = ref(false);
   const targetPickerDisk = ref<DiskInfo | null>(null);
@@ -183,6 +184,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
       if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
         await window.go.main.App.EjectDisk(disk.device);
       }
+      recentlyEjectedDevices.value.set(disk.device, Date.now());
       removeDiskFromList(disk.device);
       if (onEjectSuccess) {
         onEjectSuccess(disk.device);
@@ -213,7 +215,9 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
         const res = await window.go.main.App.BatchEjectDisks(targets);
         ejectedCount = res.success ? res.success.length : 0;
         if (res.success) {
+          const now = Date.now();
           for (const dev of res.success) {
+            recentlyEjectedDevices.value.set(dev, now);
             removeDiskFromList(dev);
           }
         }
@@ -223,6 +227,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             try {
               if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
                 await window.go.main.App.EjectDisk(dev);
+                recentlyEjectedDevices.value.set(dev, Date.now());
                 removeDiskFromList(dev);
                 ejectedCount++;
               }
@@ -233,10 +238,10 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
         );
       }
     } finally {
+      await refreshDisks();
       for (const dev of targets) {
         unmarkEjecting(dev);
       }
-      await refreshDisks();
     }
     if (ejectedCount > 0) {
       showToast(t("deploy.toast_auto_ejected", { count: ejectedCount }), "success");
@@ -260,7 +265,9 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
         successCount = res.success ? res.success.length : 0;
         failCount = res.failed ? Object.keys(res.failed).length : 0;
         if (res.success) {
+          const now = Date.now();
           for (const dev of res.success) {
+            recentlyEjectedDevices.value.set(dev, now);
             removeDiskFromList(dev);
           }
         }
@@ -271,6 +278,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
               if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
                 await window.go.main.App.EjectDisk(device);
               }
+              recentlyEjectedDevices.value.set(device, Date.now());
               successCount++;
               removeDiskFromList(device);
             } catch (err) {
@@ -286,10 +294,10 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
         showToast(t("disk.toast_batch_eject_partial", { successCount, failCount }), "warning");
       }
     } finally {
+      await refreshDisks();
       for (const device of targets) {
         unmarkEjecting(device);
       }
-      await refreshDisks();
     }
   }
 
@@ -304,9 +312,18 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
     try {
       if (window.go && window.go.main && window.go.main.App) {
         try {
+          const now = Date.now();
+          for (const [dev, ts] of recentlyEjectedDevices.value.entries()) {
+            if (now - ts > 6000) {
+              recentlyEjectedDevices.value.delete(dev);
+            }
+          }
+
           const fetched = ((await window.go.main.App.GetDiskList()) || []).filter((d: DiskInfo) => {
             if (!d || d.isSystem) return false;
             if (d.writable === false) return false;
+            if (ejectingDevices.value.has(d.device)) return false;
+            if (recentlyEjectedDevices.value.has(d.device)) return false;
             const nameLower = (d.name || "").toLowerCase();
             const devLower = (d.device || "").toLowerCase();
             if (

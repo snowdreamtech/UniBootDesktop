@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+	"time"
 
 	"github.com/pelletier/go-toml/v2"
 	"github.com/snowdreamtech/unigodesktop/internal/env"
@@ -15,12 +16,12 @@ import (
 
 var configWriteMutex sync.Mutex
 
-// configCacheMu guards the in-memory config cache.
-var configCacheMu sync.RWMutex
-
-// configCache holds the last successfully loaded config to avoid redundant
-// os.ReadFile + TOML parse on each call to Load().
-var configCache *AppConfig
+var (
+	configCacheMu      sync.RWMutex
+	configCachePath    string
+	configCacheModTime time.Time
+	configCache        *AppConfig
+)
 
 // InvalidateConfigCache discards the in-memory config cache, forcing the next
 // Load() call to re-read the config file from disk. Useful in tests or
@@ -28,6 +29,8 @@ var configCache *AppConfig
 func InvalidateConfigCache() {
 	configCacheMu.Lock()
 	configCache = nil
+	configCachePath = ""
+	configCacheModTime = time.Time{}
 	configCacheMu.Unlock()
 }
 
@@ -201,20 +204,22 @@ func GetDefaultConfig() *AppConfig {
 }
 
 // Load reads application configuration from the user config directory.
-// Repeated calls return a cached copy without touching disk until the cache
-// is invalidated by a Save() or explicit InvalidateConfigCache() call.
+// Repeated calls return a cached copy without touching disk as long as the file
+// on disk has not been modified.
 func Load() (*AppConfig, error) {
-	// Fast path: return the cached config without any disk I/O.
-	configCacheMu.RLock()
-	if configCache != nil {
-		// Return a shallow copy so callers cannot mutate the shared cache.
-		copy := *configCache
-		configCacheMu.RUnlock()
-		return &copy, nil
-	}
-	configCacheMu.RUnlock()
-
 	cfgPath := env.GetGlobalConfigPath()
+
+	// Fast path: return the cached config without parsing TOML if file is unchanged.
+	if fi, statErr := os.Stat(cfgPath); statErr == nil {
+		configCacheMu.RLock()
+		if configCache != nil && configCachePath == cfgPath && fi.ModTime().Equal(configCacheModTime) {
+			copy := *configCache
+			configCacheMu.RUnlock()
+			return &copy, nil
+		}
+		configCacheMu.RUnlock()
+	}
+
 	if data, err := os.ReadFile(cfgPath); err == nil {
 		cfg := GetDefaultConfig()
 		if err := toml.Unmarshal(data, cfg); err != nil {
@@ -233,10 +238,15 @@ func Load() (*AppConfig, error) {
 				return nil, fmt.Errorf("migrate default firmware directories: %w", err)
 			}
 		}
-		// Populate cache with a copy of what we just parsed.
+		// Populate cache with a sanitized copy of what we just parsed.
 		configCacheMu.Lock()
 		cacheCopy := *cfg
+		cacheCopy.ProxyPassword = ""
 		configCache = &cacheCopy
+		configCachePath = cfgPath
+		if fi, statErr := os.Stat(cfgPath); statErr == nil {
+			configCacheModTime = fi.ModTime()
+		}
 		configCacheMu.Unlock()
 		return cfg, nil
 	}
@@ -313,7 +323,12 @@ func (c *AppConfig) Save() error {
 	// Update the in-memory cache so subsequent Load() calls do not re-read disk.
 	configCacheMu.Lock()
 	cacheCopy := *c
+	cacheCopy.ProxyPassword = ""
 	configCache = &cacheCopy
+	configCachePath = cfgPath
+	if fi, statErr := os.Stat(cfgPath); statErr == nil {
+		configCacheModTime = fi.ModTime()
+	}
 	configCacheMu.Unlock()
 
 	return nil

@@ -2866,14 +2866,24 @@ func EjectDisk(device string) error {
 
 	switch runtime.GOOS {
 	case "darwin":
-		cmd := execCommand("diskutil", "eject", device)
-		output, err := cmd.CombinedOutput()
-		if err != nil {
-			fallbackCmd := execCommand("diskutil", "unmountDisk", device)
-			if fallbackOut, fallbackErr := fallbackCmd.CombinedOutput(); fallbackErr != nil {
-				return fmt.Errorf("failed to eject disk %s: %s (%w)", device, strings.TrimSpace(string(output)), err)
-			} else {
-				_ = fallbackOut
+		diskNode := NormalizeDarwinDiskNode(device)
+		target := "/dev/" + diskNode
+		if diskNode == "" {
+			target = device
+		}
+
+		// Step 1: Force unmount all partitions first to avoid "Resource busy" or diskarbitrationd timeout
+		_ = execCommand("diskutil", "unmountDisk", "force", target).Run()
+
+		// Step 2: Perform true hardware eject
+		cmd := execCommand("diskutil", "eject", target)
+		if _, err := cmd.CombinedOutput(); err != nil {
+			// Retry once with an explicit forced unmount followed by eject
+			time.Sleep(200 * time.Millisecond)
+			_ = execCommand("diskutil", "unmountDisk", "force", target).Run()
+			retryCmd := execCommand("diskutil", "eject", target)
+			if retryOut, retryErr := retryCmd.CombinedOutput(); retryErr != nil {
+				return fmt.Errorf("failed to eject disk %s: %s (%w)", target, strings.TrimSpace(string(retryOut)), retryErr)
 			}
 		}
 		return nil
