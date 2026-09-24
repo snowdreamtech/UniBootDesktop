@@ -69,15 +69,19 @@ type diskSnapshot struct {
 
 // WorkerClient maintains a persistent RPC connection to the background privileged worker.
 type WorkerClient struct {
-	mu     sync.Mutex
-	conn   net.Conn
-	token  string
-	closed bool
+	mu         sync.Mutex
+	conn       net.Conn
+	token      string
+	socketPath string
+	closed     bool
+	lastPing   time.Time
 }
 
 var (
 	globalWorkerMutex  sync.RWMutex
 	globalWorkerClient *WorkerClient
+	lastWorkerSocket   string
+	lastWorkerToken    string
 )
 
 // GenerateRandomToken generates a secure hex-encoded 256-bit token.
@@ -93,11 +97,26 @@ func GenerateRandomToken() (string, error) {
 func GetActiveWorkerClient() *WorkerClient {
 	globalWorkerMutex.RLock()
 	client := globalWorkerClient
+	sock := lastWorkerSocket
+	tok := lastWorkerToken
 	globalWorkerMutex.RUnlock()
 
 	if client != nil && client.IsAlive() {
 		return client
 	}
+
+	// If client is disconnected/nil but active worker credentials are known, auto-reconnect silently
+	if sock != "" && tok != "" {
+		newClient := &WorkerClient{
+			socketPath: sock,
+			token:      tok,
+		}
+		if newClient.reconnectLocked() == nil {
+			SetActiveWorkerClient(newClient)
+			return newClient
+		}
+	}
+
 	return nil
 }
 
@@ -106,6 +125,14 @@ func SetActiveWorkerClient(client *WorkerClient) {
 	globalWorkerMutex.Lock()
 	defer globalWorkerMutex.Unlock()
 	globalWorkerClient = client
+	if client != nil {
+		if client.socketPath != "" {
+			lastWorkerSocket = client.socketPath
+		}
+		if client.token != "" {
+			lastWorkerToken = client.token
+		}
+	}
 }
 
 // markFailedLocked tears down broken connection and clears global reference.
@@ -116,8 +143,46 @@ func (c *WorkerClient) markFailedLocked() {
 	c.closed = true
 	if c.conn != nil {
 		_ = c.conn.Close()
+		c.conn = nil
 	}
 	SetActiveWorkerClient(nil)
+}
+
+// reconnectLocked dials the worker socket using the saved socket path and performs handshake.
+func (c *WorkerClient) reconnectLocked() error {
+	if c.socketPath == "" || c.token == "" {
+		return errors.New("cannot reconnect: missing socket path or token")
+	}
+	if c.conn != nil {
+		_ = c.conn.Close()
+		c.conn = nil
+	}
+
+	conn, err := dialWorkerSocket(c.socketPath)
+	if err != nil {
+		return err
+	}
+
+	_ = conn.SetDeadline(time.Now().Add(2 * time.Second))
+	req := WorkerRequest{
+		Token:  c.token,
+		Action: WorkerActionPing,
+	}
+	if err := json.NewEncoder(conn).Encode(req); err != nil {
+		_ = conn.Close()
+		return err
+	}
+	var resp WorkerResponse
+	if err := json.NewDecoder(conn).Decode(&resp); err != nil || !resp.Success {
+		_ = conn.Close()
+		return errors.New("handshake failed on reconnect")
+	}
+	_ = conn.SetDeadline(time.Time{})
+
+	c.conn = conn
+	c.closed = false
+	c.lastPing = time.Now()
+	return nil
 }
 
 // IsAlive checks whether the client connection is currently active and responding.
@@ -128,12 +193,20 @@ func (c *WorkerClient) IsAlive() bool {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
+	// Rate-limit ping roundtrips if connection is healthy and verified within last 3 seconds
+	if !c.closed && c.conn != nil && time.Since(c.lastPing) < 3*time.Second {
+		return true
+	}
+
 	if c.closed || c.conn == nil {
+		if c.reconnectLocked() == nil {
+			return true
+		}
 		return false
 	}
 
-	// Non-blocking ping with short deadline
-	_ = c.conn.SetDeadline(time.Now().Add(1 * time.Second))
+	// Non-blocking ping with 2-second deadline
+	_ = c.conn.SetDeadline(time.Now().Add(2 * time.Second))
 	defer func() {
 		if c.conn != nil {
 			_ = c.conn.SetDeadline(time.Time{})
@@ -145,12 +218,18 @@ func (c *WorkerClient) IsAlive() bool {
 		Action: WorkerActionPing,
 	}
 	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		if c.reconnectLocked() == nil {
+			return true
+		}
 		c.markFailedLocked()
 		return false
 	}
 
 	var resp WorkerResponse
 	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		if c.reconnectLocked() == nil {
+			return true
+		}
 		c.markFailedLocked()
 		return false
 	}
@@ -158,6 +237,7 @@ func (c *WorkerClient) IsAlive() bool {
 		c.markFailedLocked()
 		return false
 	}
+	c.lastPing = time.Now()
 	return true
 }
 

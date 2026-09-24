@@ -182,12 +182,7 @@ const (
 )
 
 func chmodPath(path string, mode os.FileMode) error {
-	if err := os.Chmod(path, mode); err == nil {
-		return nil
-	}
-	octal := fmt.Sprintf("%o", mode.Perm())
-	_, err := RunElevated("Restore or adjust raw disk permissions", "chmod "+octal+" "+path)
-	return err
+	return os.Chmod(path, mode)
 }
 
 // RelaxRawDiskPermissionsTemporarily sets a temporary mode on validated raw

@@ -83,13 +83,22 @@ func (d *UTMDriver) Detect() *VMStatus {
 }
 
 func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string) error {
+	return d.LaunchWithConfig(ctx, diskPath, VMConfig{
+		BootMode:     bootMode,
+		CpuCores:     GetRecommendedVCPUs(),
+		MemoryMB:     GetRecommendedVMMemoryMB(),
+		DisplayAccel: true,
+	})
+}
+
+func (d *UTMDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
 	status := d.Detect()
 	if !status.Installed && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
 	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
-		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run UTM launch complete", "diskPath", diskPath, "bootMode", bootMode)
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run UTM launch complete", "diskPath", diskPath, "bootMode", cfg.BootMode)
 		return nil
 	}
 
@@ -97,20 +106,22 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	if targetPath == "" {
 		targetPath = diskPath
 	}
-	restoreDiskPerms := ensureDiskPermissions(targetPath)
-	unmountTargetDisk(targetPath)
-	defer scheduleDiskPermissionRestore(restoreDiskPerms, nil)
 
 	// macOS App Sandbox (com.utmapp.UTM) strictly forbids UTM.app from reading raw host block devices (/dev/rdiskN).
-	// If system QEMU is installed, delegate physical disk preview testing to host QEMU engine.
+	// If system QEMU is installed, delegate physical disk preview testing to host QEMU engine IMMEDIATELY
+	// before any disk permissions are modified or any 2-second restore timers are scheduled.
 	if strings.HasPrefix(targetPath, "/dev/") {
 		qemuDrv := &QEMUDriver{}
 		if qemuStatus := qemuDrv.Detect(); qemuStatus.Installed {
-			logger.Info("UTM.app is sandboxed on macOS and cannot access raw block devices directly; delegating physical disk preview test to host QEMU engine", "disk", targetPath, "bootMode", bootMode)
-			return qemuDrv.Launch(ctx, diskPath, bootMode)
+			logger.Info("UTM.app is sandboxed on macOS and cannot access raw block devices directly; delegating physical disk preview test to host QEMU engine", "disk", targetPath, "bootMode", cfg.BootMode)
+			return qemuDrv.LaunchWithConfig(ctx, diskPath, cfg)
 		}
 		return fmt.Errorf("UTM on macOS is sandboxed and cannot access raw physical disks (%s). Please install QEMU via 'brew install qemu' to enable raw USB emulation", targetPath)
 	}
+
+	restoreDiskPerms := ensureDiskPermissions(targetPath)
+	unmountTargetDisk(targetPath)
+	defer scheduleDiskPermissionRestore(restoreDiskPerms, nil)
 
 	// Generate native .utm bundle with raw disk mapping and launch via UTM app
 	tmpDir := "/tmp/uniboot_utm"
@@ -120,8 +131,14 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 	utmBundle := "/tmp/uniboot_utm/UniBoot.utm"
 	_ = os.MkdirAll(utmBundle, 0755)
 
-	memMB := GetRecommendedVMMemoryMB()
-	vcpus := GetRecommendedVCPUs()
+	memMB := cfg.MemoryMB
+	if memMB <= 0 {
+		memMB = GetRecommendedVMMemoryMB()
+	}
+	vcpus := cfg.CpuCores
+	if vcpus <= 0 {
+		vcpus = GetRecommendedVCPUs()
+	}
 
 	plistContent := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

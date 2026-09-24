@@ -150,6 +150,10 @@ func RunWorkerServer(portFile, token string, parentPID int) error {
 	return nil
 }
 
+func dialWorkerSocket(addr string) (net.Conn, error) {
+	return net.DialTimeout("tcp", addr, 2*time.Second)
+}
+
 // StartOrConnectWorker launches the privileged worker with administrator elevation and connects to it on Windows.
 func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 	StartWorkerMutex.Lock()
@@ -241,8 +245,10 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 	}
 
 	client := &WorkerClient{
-		conn:  conn,
-		token: token,
+		conn:       conn,
+		token:      token,
+		socketPath: targetAddr,
+		lastPing:   time.Now(),
 	}
 
 	if !client.IsAlive() {

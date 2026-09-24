@@ -180,6 +180,10 @@ func RunWorkerServer(socketPath, token string, parentPID int) error {
 	return nil
 }
 
+func dialWorkerSocket(socketPath string) (net.Conn, error) {
+	return net.DialTimeout("unix", socketPath, 2*time.Second)
+}
+
 // StartOrConnectWorker launches the privileged worker with administrator elevation and connects to it.
 func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 	StartWorkerMutex.Lock()
@@ -189,17 +193,35 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		return client, nil
 	}
 
-	token, err := GenerateRandomToken()
-	if err != nil {
-		return nil, err
-	}
-
 	socketDir := filepath.Join(os.TempDir(), fmt.Sprintf("unigo-ipc-%d", os.Getuid()))
 	_ = os.MkdirAll(socketDir, 0700)
 	_ = os.Chmod(socketDir, 0700)
 	cleanStaleSockets(socketDir)
 
 	socketPath := filepath.Join(socketDir, fmt.Sprintf("w-%d.sock", os.Getpid()))
+
+	// If an existing worker is already running and listening for this process, connect silently
+	if lastWorkerToken != "" {
+		if c, err := dialWorkerSocket(socketPath); err == nil {
+			testClient := &WorkerClient{
+				conn:       c,
+				token:      lastWorkerToken,
+				socketPath: socketPath,
+				lastPing:   time.Now(),
+			}
+			if testClient.IsAlive() {
+				SetActiveWorkerClient(testClient)
+				return testClient, nil
+			}
+			_ = testClient.Close()
+		}
+	}
+
+	token, err := GenerateRandomToken()
+	if err != nil {
+		return nil, err
+	}
+
 	_ = os.Remove(socketPath)
 	workerLog := filepath.Join(socketDir, "worker.log")
 	_ = os.Remove(workerLog)
@@ -303,8 +325,10 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 	}
 
 	client := &WorkerClient{
-		conn:  conn,
-		token: token,
+		conn:       conn,
+		token:      token,
+		socketPath: socketPath,
+		lastPing:   time.Now(),
 	}
 
 	if !client.IsAlive() {

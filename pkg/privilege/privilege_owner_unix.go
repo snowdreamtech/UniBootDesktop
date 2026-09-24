@@ -23,10 +23,5 @@ func chownPath(path string, uid, gid int) error {
 	if uid < 0 || gid < 0 {
 		return fmt.Errorf("invalid owner %d:%d", uid, gid)
 	}
-	if err := os.Chown(path, uid, gid); err == nil {
-		return nil
-	}
-	spec := fmt.Sprintf("%d:%d", uid, gid)
-	_, err := RunElevated("Restore or adjust raw disk ownership", "chown "+spec+" "+path)
-	return err
+	return os.Chown(path, uid, gid)
 }
