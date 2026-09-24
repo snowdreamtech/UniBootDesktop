@@ -213,12 +213,12 @@ func (a *App) EjectDisk(targetDisk string) error {
 	}
 
 	logger.Info("Requesting explicit user-initiated safe ejection for selected disk", "disk", targetDisk)
-	disk.InvalidateDiskCache()
 	err := disk.SafeUserEjectDisk(targetDisk)
 	if err != nil {
 		logger.Error("Failed to eject target disk via explicit safety gate", "disk", targetDisk, "error", err)
 		return err
 	}
+	disk.InvalidateDiskCache()
 	logger.Info("Target disk safely ejected after explicit removable-disk validation", "disk", targetDisk)
 	return nil
 }

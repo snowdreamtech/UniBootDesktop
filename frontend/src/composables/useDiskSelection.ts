@@ -205,20 +205,22 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
       onSafelyEjectSuccess();
     }
     let ejectedCount = 0;
-    for (const dev of targets) {
-      markEjecting(dev);
-      try {
-        if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
-          await window.go.main.App.EjectDisk(dev);
-          removeDiskFromList(dev);
-          ejectedCount++;
+    await Promise.all(
+      targets.map(async (dev) => {
+        markEjecting(dev);
+        try {
+          if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
+            await window.go.main.App.EjectDisk(dev);
+            removeDiskFromList(dev);
+            ejectedCount++;
+          }
+        } catch (err) {
+          console.warn(`Eject failed for ${dev}:`, err);
+        } finally {
+          unmarkEjecting(dev);
         }
-      } catch (err) {
-        console.warn(`Eject failed for ${dev}:`, err);
-      } finally {
-        unmarkEjecting(dev);
-      }
-    }
+      })
+    );
     await refreshDisks();
     if (ejectedCount > 0) {
       showToast(t("deploy.toast_auto_ejected", { count: ejectedCount }), "success");
@@ -237,17 +239,19 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
     let failCount = 0;
 
     try {
-      for (const device of targets) {
-        try {
-          if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
-            await window.go.main.App.EjectDisk(device);
+      await Promise.all(
+        targets.map(async (device) => {
+          try {
+            if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
+              await window.go.main.App.EjectDisk(device);
+            }
+            successCount++;
+            removeDiskFromList(device);
+          } catch (err) {
+            failCount++;
           }
-          successCount++;
-          removeDiskFromList(device);
-        } catch (err) {
-          failCount++;
-        }
-      }
+        })
+      );
 
       if (failCount === 0) {
         showToast(t("disk.toast_batch_eject_success", { count: successCount }), "success");
