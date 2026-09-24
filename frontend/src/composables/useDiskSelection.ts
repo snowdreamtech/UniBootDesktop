@@ -322,6 +322,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
           const fetched = ((await window.go.main.App.GetDiskList()) || []).filter((d: DiskInfo) => {
             if (!d || d.isSystem) return false;
             if (d.writable === false) return false;
+            if (!d.mountPoint || d.mountPoint.trim() === "") return false;
             if (ejectingDevices.value.has(d.device)) return false;
             if (recentlyEjectedDevices.value.has(d.device)) return false;
             const nameLower = (d.name || "").toLowerCase();

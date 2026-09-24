@@ -1511,6 +1511,12 @@ func inspectDarwinDisk(wholeDisk darwinDiskutilWholeDisk, usbMap map[string]*dar
 		}
 	}
 
+	// Filter out completely unmounted disks (no mounted volumes visible in OS file manager/Finder)
+	// to avoid user confusion and ghost devices (e.g. empty card readers or unmounted hardware).
+	if primaryMountPoint == "" && len(mountPoints) == 0 {
+		return nil
+	}
+
 	if strings.EqualFold(primaryFileSystem, "Windows_NTFS") {
 		primaryFileSystem = "ExFAT / NTFS"
 	} else if strings.EqualFold(primaryFileSystem, "DOS_FAT_32") {
@@ -2226,6 +2232,11 @@ func inspectLinuxDisk(dev linuxBlockDevice) *DiskInfo {
 	}
 
 	if IsIgnoredVolume(filepath.Base(mountPath)) {
+		return nil
+	}
+
+	// Filter out completely unmounted devices (no active mount point) on Linux
+	if mountPath == devPath || mountPath == "" {
 		return nil
 	}
 
