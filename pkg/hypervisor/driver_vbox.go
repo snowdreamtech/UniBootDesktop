@@ -119,7 +119,11 @@ func (d *VirtualBoxDriver) LaunchWithConfig(ctx context.Context, diskPath string
 	if targetPath == "" {
 		targetPath = diskPath
 	}
-	restoreDiskPerms := ensureDiskPermissions(targetPath)
+	restoreDiskPerms, err := ensureDiskPermissions(targetPath)
+	if err != nil {
+		remountTargetDisk(targetPath)
+		return fmt.Errorf("failed to acquire target disk permissions: %w", err)
+	}
 	unmountTargetDisk(targetPath)
 
 	vboxManage, _ := exec.LookPath("VBoxManage")

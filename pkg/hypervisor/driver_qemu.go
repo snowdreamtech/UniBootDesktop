@@ -191,18 +191,18 @@ func extractPlistString(plistStr string, key string) string {
 	return strings.TrimSpace(rest[:endStr])
 }
 
-func ensureDiskPermissions(targetPath string) func() {
+func ensureDiskPermissions(targetPath string) (func(), error) {
 	noop := func() {}
 	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" || !strings.HasPrefix(targetPath, "/dev/") {
-		return noop
+		return noop, nil
 	}
 	if _, err := os.Stat(targetPath); err != nil {
-		return noop
+		return noop, nil
 	}
 	f, err := os.OpenFile(targetPath, os.O_RDWR, 0)
 	if err == nil {
 		_ = f.Close()
-		return noop
+		return noop, nil
 	}
 
 	if runtime.GOOS == "darwin" {
@@ -216,18 +216,18 @@ func ensureDiskPermissions(targetPath string) func() {
 		logger.Info("Temporarily relaxing disk node permissions for hypervisor GUI session", "diskNode", diskNode)
 		if !regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(rawNode) || !regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(diskNode) {
 			logger.Warn("Invalid disk node format, skipping permission elevation", "rawNode", rawNode, "diskNode", diskNode)
-			return noop
+			return noop, nil
 		}
-		return privilege.RelaxRawDiskPermissionsTemporarily("/dev/"+rawNode, "/dev/"+diskNode)
+		return privilege.RelaxRawDiskPermissionsTemporarilyWithResult("/dev/"+rawNode, "/dev/"+diskNode)
 	}
 	if runtime.GOOS == "linux" {
 		if err := privilege.ValidateRawDevicePath(targetPath); err != nil {
 			logger.Warn("Rejecting unsafe disk permission change target", "targetPath", targetPath, "error", err)
-			return noop
+			return noop, err
 		}
-		return privilege.RelaxRawDiskPermissionsTemporarily(targetPath)
+		return privilege.RelaxRawDiskPermissionsTemporarilyWithResult(targetPath)
 	}
-	return noop
+	return noop, nil
 }
 
 // getOrCreateVarsFile finds or generates an EFI VARS file for QEMU dual pflash drives.
@@ -345,7 +345,23 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 	args = append(args, "-drive", fmt.Sprintf("file=%s,format=raw,file.locking=off", targetPath))
 
 	runQEMU := func() error {
-		restoreDiskPerms := ensureDiskPermissions(targetPath)
+		restoreDiskPerms, err := ensureDiskPermissions(targetPath)
+		if err != nil {
+			remountTargetDisk(targetPath)
+			return fmt.Errorf("failed to acquire target disk permissions: %w", err)
+		}
+
+		// Preflight check: verify that current process can actually open targetPath
+		if strings.HasPrefix(targetPath, "/dev/") && os.Getenv("UNIBOOT_DRY_RUN") != "1" {
+			f, err := os.OpenFile(targetPath, os.O_RDWR, 0)
+			if err != nil {
+				remountTargetDisk(targetPath)
+				restoreDiskPerms()
+				return fmt.Errorf("unable to access raw disk %s: %w", targetPath, err)
+			}
+			_ = f.Close()
+		}
+
 		cmd := exec.Command(status.Path, args...)
 		var stderr bytes.Buffer
 		cmd.Stderr = &stderr
@@ -360,27 +376,30 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 			return fmt.Errorf("failed to start QEMU process: %w", err)
 		}
 
-		done := make(chan error, 1)
+		waitErrCh := make(chan error, 1)
 		go func() {
 			err := cmd.Wait()
+			// Send exit status immediately to unblock startup check if still waiting
+			waitErrCh <- err
+
+			// Post-exit teardown and notifications
 			time.Sleep(300 * time.Millisecond)
 			remountTargetDisk(targetPath)
 			restoreDiskPerms()
 			NotifyVMExited(targetPath, err)
-			done <- err
 		}()
 
 		select {
-		case err := <-done:
+		case err := <-waitErrCh:
+			errOutput := strings.TrimSpace(stderr.String())
+			if errOutput != "" {
+				return fmt.Errorf("QEMU launch message: %s", errOutput)
+			}
 			if err != nil {
-				errOutput := strings.TrimSpace(stderr.String())
-				if errOutput != "" {
-					return fmt.Errorf("QEMU launch message: %s", errOutput)
-				}
 				return fmt.Errorf("QEMU exited unexpectedly: %w", err)
 			}
-			return nil
-		case <-time.After(800 * time.Millisecond):
+			return fmt.Errorf("QEMU process exited immediately after startup")
+		case <-time.After(1200 * time.Millisecond):
 			// QEMU has started successfully and is running in the background.
 			// Permissions will be safely restored when the process terminates via cmd.Wait().
 			return nil

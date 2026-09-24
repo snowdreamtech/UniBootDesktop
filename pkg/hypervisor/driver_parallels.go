@@ -97,7 +97,11 @@ func (d *ParallelsDriver) Launch(ctx context.Context, diskPath string, bootMode 
 		targetPath = diskPath
 	}
 	unmountTargetDisk(targetPath)
-	restoreDiskPerms := ensureDiskPermissions(targetPath)
+	restoreDiskPerms, err := ensureDiskPermissions(targetPath)
+	if err != nil {
+		remountTargetDisk(targetPath)
+		return fmt.Errorf("failed to acquire target disk permissions: %w", err)
+	}
 
 	cmd := exec.Command("open", "-W", "-a", "Parallels Desktop")
 	if err := cmd.Start(); err != nil {

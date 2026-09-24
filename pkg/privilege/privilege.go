@@ -185,80 +185,104 @@ func chmodPath(path string, mode os.FileMode) error {
 	return os.Chmod(path, mode)
 }
 
+// RelaxRawDiskPermissionsTemporarilyWithResult sets a temporary mode on validated raw
+// device nodes and returns a restore function and an error if permission acquisition failed.
+func RelaxRawDiskPermissionsTemporarilyWithResult(paths ...string) (func(), error) {
+	noop := func() {}
+
+	var validPaths []string
+	for _, raw := range paths {
+		path := strings.TrimSpace(raw)
+		if path != "" && ValidateRawDevicePath(path) == nil {
+			validPaths = append(validPaths, path)
+		}
+	}
+	if len(validPaths) == 0 {
+		return noop, nil
+	}
+
+	worker := GetActiveWorkerClient()
+	if worker == nil || !worker.IsAlive() {
+		w, err := StartOrConnectWorker("UniGoDesktop requires administrator privileges to access raw storage devices.")
+		if err == nil {
+			worker = w
+		} else {
+			errStr := strings.ToLower(err.Error())
+			if strings.Contains(errStr, "canceled") || strings.Contains(errStr, "cancelled") || strings.Contains(errStr, "user declined") || strings.Contains(errStr, "-128") {
+				return noop, fmt.Errorf("user dismissed privilege elevation prompt")
+			}
+		}
+	}
+
+	if worker != nil && worker.IsAlive() {
+		if err := worker.AcquireDiskAccess(validPaths); err == nil {
+			var once sync.Once
+			return func() {
+				once.Do(func() {
+					_ = worker.ReleaseDiskAccess(validPaths)
+				})
+			}, nil
+		} else {
+			return noop, fmt.Errorf("privileged worker failed to grant disk access: %w", err)
+		}
+	}
+
+	// Fallback when running directly as root or in environments without worker
+	if os.Geteuid() == 0 || (runtime.GOOS == "windows" && checkIsElevated()) {
+		type snapshot struct {
+			path      string
+			perm      os.FileMode
+			uid       int
+			gid       int
+			haveOwner bool
+		}
+		var changed []snapshot
+		for _, path := range validPaths {
+			info, err := os.Stat(path)
+			orig := defaultRawDiskPerm
+			uid, gid := 0, 0
+			haveOwner := false
+			if err == nil {
+				orig = info.Mode().Perm()
+				uid, gid, haveOwner = snapshotOwner(info)
+			}
+
+			// Fail closed: never fall back to world-writable modes. If we cannot
+			// assign the node to the current user, skip the path.
+			if err := chownPath(path, os.Getuid(), os.Getgid()); err != nil {
+				continue
+			}
+			if err := chmodPath(path, temporaryRawDiskPerm); err != nil {
+				if haveOwner {
+					_ = chownPath(path, uid, gid)
+				}
+				continue
+			}
+			changed = append(changed, snapshot{path: path, perm: orig, uid: uid, gid: gid, haveOwner: haveOwner})
+		}
+
+		var once sync.Once
+		return func() {
+			once.Do(func() {
+				for _, item := range changed {
+					if item.haveOwner {
+						_ = chownPath(item.path, item.uid, item.gid)
+					}
+					_ = chmodPath(item.path, item.perm)
+				}
+			})
+		}, nil
+	}
+
+	return noop, fmt.Errorf("administrator privileges are required to access raw disk")
+}
+
 // RelaxRawDiskPermissionsTemporarily sets a temporary mode on validated raw
 // device nodes and returns a restore function that re-applies the original
 // permissions exactly once. Restore is a no-op when no mode change occurred.
 func RelaxRawDiskPermissionsTemporarily(paths ...string) func() {
-	if worker := GetActiveWorkerClient(); worker != nil && worker.IsAlive() {
-		var validPaths []string
-		for _, raw := range paths {
-			path := strings.TrimSpace(raw)
-			if path != "" && ValidateRawDevicePath(path) == nil {
-				validPaths = append(validPaths, path)
-			}
-		}
-		if len(validPaths) > 0 {
-			if err := worker.AcquireDiskAccess(validPaths); err == nil {
-				var once sync.Once
-				return func() {
-					once.Do(func() {
-						_ = worker.ReleaseDiskAccess(validPaths)
-					})
-				}
-			}
-		}
-	}
-
-	type snapshot struct {
-		path      string
-		perm      os.FileMode
-		uid       int
-		gid       int
-		haveOwner bool
-	}
-	var changed []snapshot
-	for _, raw := range paths {
-		path := strings.TrimSpace(raw)
-		if path == "" {
-			continue
-		}
-		if err := ValidateRawDevicePath(path); err != nil {
-			continue
-		}
-		info, err := os.Stat(path)
-		orig := defaultRawDiskPerm
-		uid, gid := 0, 0
-		haveOwner := false
-		if err == nil {
-			orig = info.Mode().Perm()
-			uid, gid, haveOwner = snapshotOwner(info)
-		}
-
-		// Fail closed: never fall back to world-writable modes. If we cannot
-		// assign the node to the current user, skip the path.
-		if err := chownPath(path, os.Getuid(), os.Getgid()); err != nil {
-			continue
-		}
-		if err := chmodPath(path, temporaryRawDiskPerm); err != nil {
-			if haveOwner {
-				_ = chownPath(path, uid, gid)
-			}
-			continue
-		}
-		changed = append(changed, snapshot{path: path, perm: orig, uid: uid, gid: gid, haveOwner: haveOwner})
-	}
-
-	var once sync.Once
-	return func() {
-		once.Do(func() {
-			for _, item := range changed {
-				if item.haveOwner {
-					_ = chownPath(item.path, item.uid, item.gid)
-				}
-				_ = chmodPath(item.path, item.perm)
-			}
-		})
-	}
+	restore, _ := RelaxRawDiskPermissionsTemporarilyWithResult(paths...)
+	return restore
 }
 
 // ValidateRawDevicePath rejects unsafe or clearly system-owned device paths before OS access.

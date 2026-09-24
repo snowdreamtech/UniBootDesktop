@@ -121,7 +121,11 @@ func (d *KVMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 		targetPath = diskPath
 	}
 	unmountTargetDisk(targetPath)
-	restoreDiskPerms := ensureDiskPermissions(targetPath)
+	restoreDiskPerms, err := ensureDiskPermissions(targetPath)
+	if err != nil {
+		remountTargetDisk(targetPath)
+		return fmt.Errorf("failed to acquire target disk permissions: %w", err)
+	}
 
 	cmd := exec.Command(status.Path)
 	if err := cmd.Start(); err != nil {

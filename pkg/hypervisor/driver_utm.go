@@ -119,7 +119,11 @@ func (d *UTMDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg V
 		return fmt.Errorf("UTM on macOS is sandboxed and cannot access raw physical disks (%s). Please install QEMU via 'brew install qemu' to enable raw USB emulation", targetPath)
 	}
 
-	restoreDiskPerms := ensureDiskPermissions(targetPath)
+	restoreDiskPerms, err := ensureDiskPermissions(targetPath)
+	if err != nil {
+		remountTargetDisk(targetPath)
+		return fmt.Errorf("failed to acquire target disk permissions: %w", err)
+	}
 	unmountTargetDisk(targetPath)
 	defer scheduleDiskPermissionRestore(restoreDiskPerms, nil)
 

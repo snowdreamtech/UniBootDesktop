@@ -122,7 +122,11 @@ func (d *VMwareDriver) LaunchWithConfig(ctx context.Context, diskPath string, cf
 	if targetPath == "" {
 		targetPath = diskPath
 	}
-	restoreDiskPerms := ensureDiskPermissions(targetPath)
+	restoreDiskPerms, err := ensureDiskPermissions(targetPath)
+	if err != nil {
+		remountTargetDisk(targetPath)
+		return fmt.Errorf("failed to acquire target disk permissions: %w", err)
+	}
 	unmountTargetDisk(targetPath)
 
 	if err := launchVMwareVM(ctx, status, targetPath, cfg, restoreDiskPerms); err != nil {
