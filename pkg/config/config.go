@@ -15,6 +15,22 @@ import (
 
 var configWriteMutex sync.Mutex
 
+// configCacheMu guards the in-memory config cache.
+var configCacheMu sync.RWMutex
+
+// configCache holds the last successfully loaded config to avoid redundant
+// os.ReadFile + TOML parse on each call to Load().
+var configCache *AppConfig
+
+// InvalidateConfigCache discards the in-memory config cache, forcing the next
+// Load() call to re-read the config file from disk. Useful in tests or
+// whenever the config file may have been modified externally.
+func InvalidateConfigCache() {
+	configCacheMu.Lock()
+	configCache = nil
+	configCacheMu.Unlock()
+}
+
 func isEmptyConfig(cfg *AppConfig) bool {
 	if cfg == nil {
 		return true
@@ -185,7 +201,19 @@ func GetDefaultConfig() *AppConfig {
 }
 
 // Load reads application configuration from the user config directory.
+// Repeated calls return a cached copy without touching disk until the cache
+// is invalidated by a Save() or explicit InvalidateConfigCache() call.
 func Load() (*AppConfig, error) {
+	// Fast path: return the cached config without any disk I/O.
+	configCacheMu.RLock()
+	if configCache != nil {
+		// Return a shallow copy so callers cannot mutate the shared cache.
+		copy := *configCache
+		configCacheMu.RUnlock()
+		return &copy, nil
+	}
+	configCacheMu.RUnlock()
+
 	cfgPath := env.GetGlobalConfigPath()
 	if data, err := os.ReadFile(cfgPath); err == nil {
 		cfg := GetDefaultConfig()
@@ -205,6 +233,11 @@ func Load() (*AppConfig, error) {
 				return nil, fmt.Errorf("migrate default firmware directories: %w", err)
 			}
 		}
+		// Populate cache with a copy of what we just parsed.
+		configCacheMu.Lock()
+		cacheCopy := *cfg
+		configCache = &cacheCopy
+		configCacheMu.Unlock()
 		return cfg, nil
 	}
 	defaultCfg := GetDefaultConfig()
@@ -276,6 +309,13 @@ func (c *AppConfig) Save() error {
 	if backupFile != "" {
 		_ = os.Remove(backupFile)
 	}
+
+	// Update the in-memory cache so subsequent Load() calls do not re-read disk.
+	configCacheMu.Lock()
+	cacheCopy := *c
+	configCache = &cacheCopy
+	configCacheMu.Unlock()
+
 	return nil
 }
 
