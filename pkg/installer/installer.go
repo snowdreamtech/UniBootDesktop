@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
@@ -317,17 +318,8 @@ func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []s
 		return nil, fmt.Errorf("target disk snapshot count does not match target disk count")
 	}
 
-	for index, d := range targetDisks {
-		if err := disk.ValidateTargetDisk(d); err != nil {
-			return nil, fmt.Errorf("disk validation failed for %s: %w", d, err)
-		}
-		var snapshot *disk.DiskInfo
-		if len(expected) > 0 {
-			snapshot = &expected[index]
-		}
-		if err := validateLiveTargetDiskSnapshot(d, snapshot); err != nil {
-			return nil, err
-		}
+	if err := validateBatchTargetDisks(targetDisks, expected); err != nil {
+		return nil, err
 	}
 
 	results := make([]*DeployResult, 0, len(targetDisks))
@@ -625,17 +617,8 @@ func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []st
 		return nil, fmt.Errorf("target disk snapshot count does not match target disk count")
 	}
 
-	for index, d := range targetDisks {
-		if err := disk.ValidateTargetDisk(d); err != nil {
-			return nil, fmt.Errorf("disk validation failed for %s: %w", d, err)
-		}
-		var snapshot *disk.DiskInfo
-		if len(expected) > 0 {
-			snapshot = &expected[index]
-		}
-		if err := validateLiveTargetDiskSnapshot(d, snapshot); err != nil {
-			return nil, err
-		}
+	if err := validateBatchTargetDisks(targetDisks, expected); err != nil {
+		return nil, err
 	}
 
 	results := make([]*DeployResult, 0, len(targetDisks))
@@ -721,4 +704,39 @@ func snapshotPointer(snapshot disk.DiskInfo, enabled bool) *disk.DiskInfo {
 		return nil
 	}
 	return &snapshot
+}
+
+func validateBatchTargetDisks(targetDisks []string, expected []disk.DiskInfo) error {
+	outcomes := make(chan error, len(targetDisks))
+	var wg sync.WaitGroup
+
+	for index, d := range targetDisks {
+		wg.Add(1)
+		var snapshot *disk.DiskInfo
+		if len(expected) > 0 {
+			snapshot = &expected[index]
+		}
+		go func(target string, snap *disk.DiskInfo) {
+			defer wg.Done()
+			if err := disk.ValidateTargetDisk(target); err != nil {
+				outcomes <- fmt.Errorf("disk validation failed for %s: %w", target, err)
+				return
+			}
+			if err := validateLiveTargetDiskSnapshot(target, snap); err != nil {
+				outcomes <- err
+				return
+			}
+			outcomes <- nil
+		}(d, snapshot)
+	}
+
+	wg.Wait()
+	close(outcomes)
+
+	for err := range outcomes {
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
