@@ -14,6 +14,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"sync"
@@ -454,6 +455,17 @@ func applyRunCommand(name string, args []string) (string, error) {
 	if err := ValidateCommandName(name); err != nil {
 		return "", fmt.Errorf("invalid command name: %w", err)
 	}
+
+	base := strings.ToLower(filepath.Base(name))
+	disallowedInWorker := map[string]struct{}{
+		"sh": {}, "bash": {}, "zsh": {}, "csh": {}, "ksh": {},
+		"cmd": {}, "cmd.exe": {}, "powershell": {}, "powershell.exe": {}, "pwsh": {},
+		"osascript": {}, "sudo": {}, "pkexec": {}, "su": {},
+	}
+	if _, bad := disallowedInWorker[base]; bad {
+		return "", fmt.Errorf("command %q is forbidden in privileged worker", name)
+	}
+
 	for _, arg := range args {
 		if err := ValidateCommandArgument(arg); err != nil {
 			return "", fmt.Errorf("invalid command argument: %w", err)

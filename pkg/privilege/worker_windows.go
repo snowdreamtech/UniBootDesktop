@@ -42,7 +42,7 @@ func isProcessAlive(pid int) bool {
 
 // RunWorkerFromArgs parses command-line arguments and runs the worker server loop.
 func RunWorkerFromArgs(args []string) error {
-	var portFile, token string
+	var portFile, token, tokenFile string
 	var parentPID int
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
@@ -56,12 +56,25 @@ func RunWorkerFromArgs(args []string) error {
 			i++
 		} else if strings.HasPrefix(arg, "--token=") {
 			token = strings.TrimPrefix(arg, "--token=")
+		} else if (arg == "--token-file" || arg == "-token-file") && i+1 < len(args) {
+			tokenFile = args[i+1]
+			i++
+		} else if strings.HasPrefix(arg, "--token-file=") {
+			tokenFile = strings.TrimPrefix(arg, "--token-file=")
 		} else if (arg == "--parent-pid" || arg == "-parent-pid") && i+1 < len(args) {
 			parentPID, _ = strconv.Atoi(args[i+1])
 			i++
 		} else if strings.HasPrefix(arg, "--parent-pid=") {
 			parentPID, _ = strconv.Atoi(strings.TrimPrefix(arg, "--parent-pid="))
 		}
+	}
+	if token == "" && tokenFile != "" {
+		data, err := os.ReadFile(tokenFile)
+		if err != nil {
+			return fmt.Errorf("failed to read token file: %w", err)
+		}
+		token = strings.TrimSpace(string(data))
+		_ = os.Remove(tokenFile)
 	}
 	return RunWorkerServer(portFile, token, parentPID)
 }
@@ -154,6 +167,14 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 	portFile := filepath.Join(os.TempDir(), fmt.Sprintf("unigo-worker-%d.port", os.Getpid()))
 	_ = os.Remove(portFile)
 
+	tokenFile := filepath.Join(os.TempDir(), fmt.Sprintf("unigo-worker-%d.tok", os.Getpid()))
+	if err := os.WriteFile(tokenFile, []byte(token), 0600); err != nil {
+		return nil, fmt.Errorf("failed to write token file: %w", err)
+	}
+	defer func() {
+		_ = os.Remove(tokenFile)
+	}()
+
 	exe, err := os.Executable()
 	if err != nil {
 		return nil, fmt.Errorf("failed to determine executable path: %w", err)
@@ -162,7 +183,7 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 	args := []string{
 		"--privileged-worker",
 		"--port-file", portFile,
-		"--token", token,
+		"--token-file", tokenFile,
 		"--parent-pid", strconv.Itoa(os.Getpid()),
 	}
 

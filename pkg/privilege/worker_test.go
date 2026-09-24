@@ -223,6 +223,14 @@ func TestWorkerClientRunCommand(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected RunCommand on /dev/disk0 to be rejected by device path validator")
 	}
+
+	// Test 4: Shell and script interpreters must be strictly forbidden in privileged worker
+	for _, badInterpreter := range []string{"osascript", "powershell", "powershell.exe", "cmd", "cmd.exe", "sudo", "pkexec", "sh", "bash"} {
+		_, err = client.RunCommand(badInterpreter, "-c", "whoami")
+		if err == nil {
+			t.Fatalf("expected interpreter %q to be forbidden in privileged worker", badInterpreter)
+		}
+	}
 }
 
 func TestWorkerClientAutoRecoveryOnBrokenConnection(t *testing.T) {

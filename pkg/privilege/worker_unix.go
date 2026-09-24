@@ -54,7 +54,7 @@ func cleanStaleSockets(dir string) {
 
 // RunWorkerFromArgs parses command-line arguments and runs the worker server loop.
 func RunWorkerFromArgs(args []string) error {
-	var socketPath, token string
+	var socketPath, token, tokenFile string
 	var parentPID int
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
@@ -68,12 +68,25 @@ func RunWorkerFromArgs(args []string) error {
 			i++
 		} else if strings.HasPrefix(arg, "--token=") {
 			token = strings.TrimPrefix(arg, "--token=")
+		} else if (arg == "--token-file" || arg == "-token-file") && i+1 < len(args) {
+			tokenFile = args[i+1]
+			i++
+		} else if strings.HasPrefix(arg, "--token-file=") {
+			tokenFile = strings.TrimPrefix(arg, "--token-file=")
 		} else if (arg == "--parent-pid" || arg == "-parent-pid") && i+1 < len(args) {
 			parentPID, _ = strconv.Atoi(args[i+1])
 			i++
 		} else if strings.HasPrefix(arg, "--parent-pid=") {
 			parentPID, _ = strconv.Atoi(strings.TrimPrefix(arg, "--parent-pid="))
 		}
+	}
+	if token == "" && tokenFile != "" {
+		data, err := os.ReadFile(tokenFile)
+		if err != nil {
+			return fmt.Errorf("failed to read token file: %w", err)
+		}
+		token = strings.TrimSpace(string(data))
+		_ = os.Remove(tokenFile)
 	}
 	return RunWorkerServer(socketPath, token, parentPID)
 }
@@ -181,15 +194,23 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		return nil, err
 	}
 
-	socketDir := "/tmp/unigo-ipc"
-	_ = os.MkdirAll(socketDir, 0755)
-	_ = os.Chmod(socketDir, 0755)
+	socketDir := filepath.Join(os.TempDir(), fmt.Sprintf("unigo-ipc-%d", os.Getuid()))
+	_ = os.MkdirAll(socketDir, 0700)
+	_ = os.Chmod(socketDir, 0700)
 	cleanStaleSockets(socketDir)
 
 	socketPath := filepath.Join(socketDir, fmt.Sprintf("w-%d.sock", os.Getpid()))
 	_ = os.Remove(socketPath)
 	workerLog := filepath.Join(socketDir, "worker.log")
 	_ = os.Remove(workerLog)
+
+	tokenFile := filepath.Join(socketDir, fmt.Sprintf("t-%d.tok", os.Getpid()))
+	if err := os.WriteFile(tokenFile, []byte(token), 0600); err != nil {
+		return nil, fmt.Errorf("failed to write token file: %w", err)
+	}
+	defer func() {
+		_ = os.Remove(tokenFile)
+	}()
 
 	exe, err := os.Executable()
 	if err != nil {
@@ -206,15 +227,15 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 	case "darwin":
 		escapedExe := strings.ReplaceAll(exe, "'", "'\"'\"'")
 		escapedSocket := strings.ReplaceAll(socketPath, "'", "'\"'\"'")
-		escapedToken := strings.ReplaceAll(token, "'", "'\"'\"'")
+		escapedTokenFile := strings.ReplaceAll(tokenFile, "'", "'\"'\"'")
 		escapedPrompt := strings.ReplaceAll(prompt, `"`, `\"`)
 		escapedLog := strings.ReplaceAll(workerLog, "'", "'\"'\"'")
 		escapedDir := strings.ReplaceAll(socketDir, "'", "'\"'\"'")
 
 		// Wrap in parentheses subshell with full I/O redirection so AppleScript 'do shell script'
 		// detaches cleanly and returns in under 200ms without holding inherited pipe descriptors.
-		bgCmd := fmt.Sprintf("(cd '%s' && '%s' --privileged-worker --socket '%s' --token '%s' --parent-pid '%d') </dev/null >'%s' 2>&1 &",
-			escapedDir, escapedExe, escapedSocket, escapedToken, os.Getpid(), escapedLog)
+		bgCmd := fmt.Sprintf("(cd '%s' && '%s' --privileged-worker --socket '%s' --token-file '%s' --parent-pid '%d') </dev/null >'%s' 2>&1 &",
+			escapedDir, escapedExe, escapedSocket, escapedTokenFile, os.Getpid(), escapedLog)
 		appleScript := fmt.Sprintf(`do shell script "%s" with prompt "%s" with administrator privileges`,
 			bgCmd, escapedPrompt)
 
@@ -229,8 +250,8 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		}()
 
 	case "linux":
-		bgCmd := fmt.Sprintf("(cd %s && %s --privileged-worker --socket %s --token %s --parent-pid %d) </dev/null >%s 2>&1 &",
-			socketDir, exe, socketPath, token, os.Getpid(), workerLog)
+		bgCmd := fmt.Sprintf("(cd %s && %s --privileged-worker --socket %s --token-file %s --parent-pid %d) </dev/null >%s 2>&1 &",
+			socketDir, exe, socketPath, tokenFile, os.Getpid(), workerLog)
 		go func() {
 			cmd := exec.Command("pkexec", "sh", "-c", bgCmd)
 			out, err := cmd.CombinedOutput()
