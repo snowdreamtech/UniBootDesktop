@@ -223,6 +223,66 @@ func (a *App) EjectDisk(targetDisk string) error {
 	return nil
 }
 
+// BatchEjectResult describes the outcome of a concurrent multi-disk ejection.
+type BatchEjectResult struct {
+	Success []string          `json:"success"`
+	Failed  map[string]string `json:"failed"`
+}
+
+// BatchEjectDisks safely unmounts and ejects multiple removable storage disks concurrently in parallel goroutines.
+func (a *App) BatchEjectDisks(targetDisks []string) BatchEjectResult {
+	result := BatchEjectResult{
+		Success: make([]string, 0, len(targetDisks)),
+		Failed:  make(map[string]string),
+	}
+
+	if len(targetDisks) == 0 {
+		return result
+	}
+
+	type ejectOutcome struct {
+		device string
+		err    error
+	}
+
+	outcomes := make(chan ejectOutcome, len(targetDisks))
+	var wg sync.WaitGroup
+
+	logger.Info("Requesting concurrent user-initiated safe batch ejection", "count", len(targetDisks), "disks", targetDisks)
+
+	for _, dev := range targetDisks {
+		devTrimmed := strings.TrimSpace(dev)
+		if devTrimmed == "" || len(devTrimmed) > 512 {
+			continue
+		}
+		wg.Add(1)
+		go func(target string) {
+			defer wg.Done()
+			err := disk.SafeUserEjectDisk(target)
+			outcomes <- ejectOutcome{device: target, err: err}
+		}(devTrimmed)
+	}
+
+	wg.Wait()
+	close(outcomes)
+
+	for o := range outcomes {
+		if o.err == nil {
+			result.Success = append(result.Success, o.device)
+			logger.Info("Target disk safely ejected concurrently", "disk", o.device)
+		} else {
+			result.Failed[o.device] = o.err.Error()
+			logger.Error("Failed to eject target disk concurrently", "disk", o.device, "error", o.err)
+		}
+	}
+
+	if len(result.Success) > 0 {
+		disk.InvalidateDiskCache()
+	}
+
+	return result
+}
+
 // SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
 func (a *App) SelectIsoFiles(title string, ventoyFilter string, allFilter string) ([]string, error) {
 	if title == "" {

@@ -761,18 +761,27 @@ export function useDeployment(options: UseDeploymentOptions) {
 
         let autoEjectedCount = 0;
         if (autoEjectAfterDeploy.value) {
-          await Promise.all(
-            targets.map(async (dev) => {
-              try {
-                if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
-                  await window.go.main.App.EjectDisk(dev);
-                  autoEjectedCount++;
+          if (window.go && window.go.main && window.go.main.App && window.go.main.App.BatchEjectDisks) {
+            try {
+              const res = await window.go.main.App.BatchEjectDisks(targets);
+              autoEjectedCount = res.success ? res.success.length : 0;
+            } catch (batchErr) {
+              console.warn("Batch auto eject failed:", batchErr);
+            }
+          } else {
+            await Promise.all(
+              targets.map(async (dev) => {
+                try {
+                  if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
+                    await window.go.main.App.EjectDisk(dev);
+                    autoEjectedCount++;
+                  }
+                } catch (ejectErr) {
+                  console.warn(`Auto eject failed for ${dev}:`, ejectErr);
                 }
-              } catch (ejectErr) {
-                console.warn(`Auto eject failed for ${dev}:`, ejectErr);
-              }
-            })
-          );
+              })
+            );
+          }
         }
 
         deploySuccessBanner.value = {

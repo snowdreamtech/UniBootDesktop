@@ -74,6 +74,7 @@ declare global {
           SelectDirectory?(title?: string): Promise<string>;
           ValidateVentoyCli(ventoyPath: string): Promise<any>;
           EjectDisk(targetDisk: string): Promise<void>;
+          BatchEjectDisks?(targetDisks: string[]): Promise<{ success: string[]; failed: Record<string, string> }>;
           ReloadAppMenu(lang: string): Promise<void>;
         };
       };

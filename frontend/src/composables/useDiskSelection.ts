@@ -205,23 +205,39 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
       onSafelyEjectSuccess();
     }
     let ejectedCount = 0;
-    await Promise.all(
-      targets.map(async (dev) => {
-        markEjecting(dev);
-        try {
-          if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
-            await window.go.main.App.EjectDisk(dev);
+    for (const dev of targets) {
+      markEjecting(dev);
+    }
+    try {
+      if (window.go && window.go.main && window.go.main.App && window.go.main.App.BatchEjectDisks) {
+        const res = await window.go.main.App.BatchEjectDisks(targets);
+        ejectedCount = res.success ? res.success.length : 0;
+        if (res.success) {
+          for (const dev of res.success) {
             removeDiskFromList(dev);
-            ejectedCount++;
           }
-        } catch (err) {
-          console.warn(`Eject failed for ${dev}:`, err);
-        } finally {
-          unmarkEjecting(dev);
         }
-      })
-    );
-    await refreshDisks();
+      } else {
+        await Promise.all(
+          targets.map(async (dev) => {
+            try {
+              if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
+                await window.go.main.App.EjectDisk(dev);
+                removeDiskFromList(dev);
+                ejectedCount++;
+              }
+            } catch (err) {
+              console.warn(`Eject failed for ${dev}:`, err);
+            }
+          })
+        );
+      }
+    } finally {
+      for (const dev of targets) {
+        unmarkEjecting(dev);
+      }
+      await refreshDisks();
+    }
     if (ejectedCount > 0) {
       showToast(t("deploy.toast_auto_ejected", { count: ejectedCount }), "success");
     }
@@ -239,19 +255,30 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
     let failCount = 0;
 
     try {
-      await Promise.all(
-        targets.map(async (device) => {
-          try {
-            if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
-              await window.go.main.App.EjectDisk(device);
-            }
-            successCount++;
-            removeDiskFromList(device);
-          } catch (err) {
-            failCount++;
+      if (window.go && window.go.main && window.go.main.App && window.go.main.App.BatchEjectDisks) {
+        const res = await window.go.main.App.BatchEjectDisks(targets);
+        successCount = res.success ? res.success.length : 0;
+        failCount = res.failed ? Object.keys(res.failed).length : 0;
+        if (res.success) {
+          for (const dev of res.success) {
+            removeDiskFromList(dev);
           }
-        })
-      );
+        }
+      } else {
+        await Promise.all(
+          targets.map(async (device) => {
+            try {
+              if (window.go && window.go.main && window.go.main.App && window.go.main.App.EjectDisk) {
+                await window.go.main.App.EjectDisk(device);
+              }
+              successCount++;
+              removeDiskFromList(device);
+            } catch (err) {
+              failCount++;
+            }
+          })
+        );
+      }
 
       if (failCount === 0) {
         showToast(t("disk.toast_batch_eject_success", { count: successCount }), "success");
