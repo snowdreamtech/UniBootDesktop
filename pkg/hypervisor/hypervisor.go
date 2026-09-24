@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unigodesktop/pkg/disk"
 	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
 )
 
@@ -358,12 +359,42 @@ func unmountTargetDisk(targetPath string) {
 	}
 }
 
+// VMExitHandler is a callback invoked when a VM session terminates and disk is remounted.
+type VMExitHandler func(targetDisk string, err error)
+
+var (
+	vmExitHandlers   []VMExitHandler
+	vmExitHandlersMu sync.Mutex
+)
+
+// RegisterVMExitHandler registers a callback invoked whenever a VM session terminates and target disk is remounted.
+func RegisterVMExitHandler(h VMExitHandler) {
+	vmExitHandlersMu.Lock()
+	defer vmExitHandlersMu.Unlock()
+	vmExitHandlers = append(vmExitHandlers, h)
+}
+
+// NotifyVMExited invokes all registered VM exit callbacks.
+func NotifyVMExited(targetDisk string, err error) {
+	vmExitHandlersMu.Lock()
+	handlers := make([]VMExitHandler, len(vmExitHandlers))
+	copy(handlers, vmExitHandlers)
+	vmExitHandlersMu.Unlock()
+
+	for _, h := range handlers {
+		if h != nil {
+			h(targetDisk, err)
+		}
+	}
+}
+
 // remountTargetDisk automatically remounts target disk partitions back to host OS after VM exit.
 func remountTargetDisk(targetPath string) {
 	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" {
 		return
 	}
 	defer TrackDiskRemounted(targetPath)
+	defer disk.InvalidateDiskCache()
 	logger.Info("Remounting target disk partitions back to host OS after VM exit", "targetPath", targetPath)
 
 	if runtime.GOOS == "darwin" {
@@ -372,9 +403,45 @@ func remountTargetDisk(targetPath string) {
 		if !strings.HasPrefix(diskNode, "disk") {
 			diskNode = "disk" + diskNode
 		}
-		_ = runCommandWithTimeout(3*time.Second, "diskutil", "mountDisk", fmt.Sprintf("/dev/%s", diskNode))
+
+		// 1. Brief pause to allow OS kernel to cleanly close raw block device descriptors
+		time.Sleep(300 * time.Millisecond)
+
+		// 2. Try diskutil mountDisk with generous timeout
+		mountErr := runCommandWithTimeout(8*time.Second, "diskutil", "mountDisk", fmt.Sprintf("/dev/%s", diskNode))
+		if mountErr != nil {
+			logger.Warn("diskutil mountDisk returned error, attempting partition-level remount", "disk", diskNode, "error", mountErr)
+		}
+
+		// 3. Fallback: if not yet mounted, attempt individual partition slice mounts
+		if !isDiskMounted(diskNode) {
+			for i := 1; i <= 4; i++ {
+				sliceNode := fmt.Sprintf("%ss%d", diskNode, i)
+				_ = runCommandWithTimeout(5*time.Second, "diskutil", "mount", fmt.Sprintf("/dev/%s", sliceNode))
+				if isDiskMounted(diskNode) {
+					break
+				}
+			}
+		}
+
+		// 4. Privileged worker fallback if standard user mount was denied
+		if !isDiskMounted(diskNode) {
+			if worker := privilege.GetActiveWorkerClient(); worker != nil && worker.IsAlive() {
+				logger.Info("Attempting privileged remount via active worker client", "disk", diskNode)
+				_, _ = worker.RunCommand("diskutil", "mountDisk", fmt.Sprintf("/dev/%s", diskNode))
+			}
+		}
+
+		if isDiskMounted(diskNode) {
+			logger.Info("Target disk successfully remounted back to macOS", "disk", diskNode)
+		} else {
+			logger.Warn("Target disk could not be confirmed as mounted after VM exit", "disk", diskNode)
+		}
 	} else if runtime.GOOS == "linux" {
-		_ = runCommandWithTimeout(3*time.Second, "udisksctl", "mount", "-b", targetPath)
+		if err := runCommandWithTimeout(5*time.Second, "udisksctl", "mount", "-b", targetPath); err != nil {
+			logger.Warn("udisksctl mount failed, falling back to mount", "error", err)
+			_ = runCommandWithTimeout(5*time.Second, "mount", targetPath)
+		}
 	} else if runtime.GOOS == "windows" {
 		// 安全地转义PowerShell参数，防止命令注入
 		safePath := strings.ReplaceAll(targetPath, "'", "''") // PowerShell单引号转义
@@ -383,7 +450,7 @@ func remountTargetDisk(targetPath string) {
 		safePath = strings.ReplaceAll(safePath, "\"", "`\"")  // 双引号转义
 
 		psCmd := fmt.Sprintf(`Get-Volume | Where-DriveLetter | Where-Object { $_.Path -like '*%s*' } | Mount-Volume`, safePath)
-		_ = runCommandWithTimeout(3*time.Second, "powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd)
+		_ = runCommandWithTimeout(5*time.Second, "powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd)
 	}
 }
 

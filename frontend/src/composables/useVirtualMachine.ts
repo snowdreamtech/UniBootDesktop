@@ -32,15 +32,24 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   const vmMemoryMB = ref<number>(2048);
   const vmDisplayAccel = ref<boolean>(true);
   const isLaunchingQemu = ref<boolean>(false);
+  const isVmRunning = ref<boolean>(false);
   const qemuStatus = ref<{ installed: boolean; path: string; version: string }>({
     installed: false,
     path: '',
     version: ''
   });
 
+  if (typeof window !== 'undefined' && (window as any).runtime && (window as any).runtime.EventsOn) {
+    (window as any).runtime.EventsOn('vm-session-ended', () => {
+      isVmRunning.value = false;
+      isLaunchingQemu.value = false;
+    });
+  }
+
   const isVmDisabled = computed(() => {
     return (
       isLaunchingQemu.value ||
+      isVmRunning.value ||
       isDeploying.value ||
       hypervisorList.value.length === 0 ||
       !activeVmTargetDevice.value
@@ -50,6 +59,9 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   const vmDisabledReason = computed(() => {
     if (isLaunchingQemu.value) {
       return t('vm.tip_launching');
+    }
+    if (isVmRunning.value) {
+      return t('vm.tip_running');
     }
     if (isDeploying.value) {
       return t('vm.tip_deploying');
@@ -142,14 +154,17 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
         const app = window.go.main.App as any;
         if (typeof app.LaunchVMWithConfig === 'function') {
           await app.LaunchVMWithConfig(targetDevice, selectedVMType.value, vmConfig);
+          isVmRunning.value = true;
           logUserAction('INFO', 'User launched hypervisor simulation test with VMConfig', `${vmName} (${selectedVMType.value}, ${selectedBootMode.value}, ${vmCpuCores.value} cores, ${vmMemoryMB.value}MB) on ${targetDevice}`);
           showToast(t('vm.startSuccess_vm', { name: vmName }), 'success');
         } else if (typeof app.LaunchVM === 'function') {
           await app.LaunchVM(targetDevice, selectedVMType.value, selectedBootMode.value);
+          isVmRunning.value = true;
           logUserAction('INFO', 'User launched hypervisor simulation test', `${vmName} (${selectedVMType.value}, ${selectedBootMode.value}) on ${targetDevice}`);
           showToast(t('vm.startSuccess_vm', { name: vmName }), 'success');
         } else if (typeof app.LaunchQEMU === 'function') {
           await app.LaunchQEMU(targetDevice);
+          isVmRunning.value = true;
           logUserAction('INFO', 'User launched hypervisor simulation test', `QEMU on ${targetDevice}`);
           showToast(t('vm.startSuccess', { name: 'QEMU' }), 'success');
         } else {
@@ -176,6 +191,7 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
     vmMemoryMB,
     vmDisplayAccel,
     isLaunchingQemu,
+    isVmRunning,
     qemuStatus,
     isVmDisabled,
     vmDisabledReason,

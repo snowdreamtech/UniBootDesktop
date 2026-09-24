@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/disk"
@@ -238,8 +239,10 @@ guestOS = "other-64"
 	}
 
 	go func() {
-		_ = cmd.Wait()
+		err := cmd.Wait()
+		time.Sleep(300 * time.Millisecond)
 		remountTargetDisk(targetPath)
+		NotifyVMExited(targetPath, err)
 	}()
 
 	return nil

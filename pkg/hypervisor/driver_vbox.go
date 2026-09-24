@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 )
@@ -179,8 +180,10 @@ func launchVirtualBoxVM(vboxManage string, targetPath string, bootMode string) e
 		return err
 	}
 	go func() {
-		_ = startCmd.Wait()
+		err := startCmd.Wait()
+		time.Sleep(300 * time.Millisecond)
 		remountTargetDisk(targetPath)
+		NotifyVMExited(targetPath, err)
 	}()
 	return nil
 }

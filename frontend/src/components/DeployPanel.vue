@@ -531,8 +531,8 @@
         :title="vmDisabledReason"
         @click="!isVmDisabled && emit('launch-vm')"
       >
-        <span class="btn-icon">{{ isLaunchingQemu ? '⏳' : '▶' }}</span>
-        <span>{{ isLaunchingQemu ? t('vm.launching') : t('vm.run_test') }}</span>
+        <span class="btn-icon">{{ isLaunchingQemu ? '⏳' : (isVmRunning ? '🔄' : '▶') }}</span>
+        <span>{{ isLaunchingQemu ? t('vm.launching') : (isVmRunning ? t('vm.running') : t('vm.run_test')) }}</span>
       </button>
     </div>
   </section>
@@ -576,6 +576,7 @@ const props = defineProps<{
   isVmDisabled: boolean;
   vmDisabledReason: string;
   isLaunchingQemu: boolean;
+  isVmRunning?: boolean;
   activeVmTargetName: string;
   activeVmTargetDevice: string;
 }>();

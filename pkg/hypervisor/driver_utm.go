@@ -192,6 +192,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 			select {
 			case <-timeout:
 				remountTargetDisk(targetPath)
+				NotifyVMExited(targetPath, nil)
 				return
 			case <-ticker.C:
 				// Check if UTM process itself was closed
@@ -200,6 +201,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 					// UTM app process has exited!
 					logger.Info("UTM process terminated, auto-remounting target disk", "targetPath", targetPath)
 					remountTargetDisk(targetPath)
+					NotifyVMExited(targetPath, nil)
 					return
 				}
 
@@ -213,6 +215,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 							// VM was running and has now stopped
 							logger.Info("UTM VM stopped, auto-remounting target disk", "targetPath", targetPath)
 							remountTargetDisk(targetPath)
+							NotifyVMExited(targetPath, nil)
 							return
 						}
 					}

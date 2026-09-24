@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 )
@@ -110,9 +111,11 @@ func (d *HyperVDriver) Launch(ctx context.Context, diskPath string, bootMode str
 	}
 
 	go func() {
-		_ = cmd.Wait()
-		restoreDiskPerms()
+		err := cmd.Wait()
+		time.Sleep(300 * time.Millisecond)
 		remountTargetDisk(targetPath)
+		restoreDiskPerms()
+		NotifyVMExited(targetPath, err)
 	}()
 
 	return nil

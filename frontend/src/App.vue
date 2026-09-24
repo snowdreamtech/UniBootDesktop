@@ -81,6 +81,7 @@
         :isVmDisabled="isVmDisabled"
         :vmDisabledReason="vmDisabledReason"
         :isLaunchingQemu="isLaunchingQemu"
+        :isVmRunning="isVmRunning"
         :activeVmTargetName="activeVmTargetName"
         :activeVmTargetDevice="activeVmTargetDevice"
         @open-settings-ventoy="openSettings('ventoy')"
@@ -320,6 +321,7 @@ const {
   vmMemoryMB,
   vmDisplayAccel,
   isLaunchingQemu,
+  isVmRunning,
   isVmDisabled,
   vmDisabledReason,
   checkQemu,
@@ -385,6 +387,7 @@ useAppRuntimeEvents({
   isAboutOpen,
   addIsoFilesByPaths,
   batchDeployInfo,
+  showToast,
 });
 </script>
 

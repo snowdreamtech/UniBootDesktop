@@ -215,11 +215,15 @@ export interface TranslationDict {
   "vm.no_disk_warn": string;
   "vm.run_test": string;
   "vm.launching": string;
+  "vm.running": string;
   "vm.tip_launching": string;
+  "vm.tip_running": string;
   "vm.tip_deploying": string;
   "vm.tip_not_installed": string;
   "vm.tip_select_target": string;
   "vm.tip_ready": string;
+  "vm.session_ended_success": string;
+  "vm.session_ended_error": string;
   "vm.toast_select_first": string;
   "vm.toast_not_installed": string;
   "vm.cfg_cpu": string;

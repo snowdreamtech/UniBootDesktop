@@ -97,6 +97,26 @@ func (a *App) startup(ctx context.Context) {
 		logger.Info("Removable disk change detected, refreshing drive list")
 		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
 	})
+
+	hypervisor.RegisterVMExitHandler(func(targetDisk string, vmErr error) {
+		logger.Info("Hypervisor VM session terminated, bouncing UI back and refreshing disk state", "disk", targetDisk)
+		disk.InvalidateDiskCache()
+		if a.ctx != nil {
+			wailsRuntime.WindowUnminimise(a.ctx)
+			wailsRuntime.WindowShow(a.ctx)
+			wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
+			wailsRuntime.EventsEmit(a.ctx, "vm-session-ended", map[string]interface{}{
+				"disk":    targetDisk,
+				"success": vmErr == nil,
+				"error": func() string {
+					if vmErr != nil {
+						return vmErr.Error()
+					}
+					return ""
+				}(),
+			})
+		}
+	})
 }
 
 // shutdown is called automatically when the Wails application is closing.

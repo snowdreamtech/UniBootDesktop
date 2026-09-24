@@ -5,6 +5,7 @@ package hypervisor
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"runtime"
 	"testing"
@@ -152,5 +153,30 @@ func TestResolveRawDiskDevice(t *testing.T) {
 	node := ResolveRawDiskDevice("/dev/disk2s1")
 	if node != "/dev/rdisk2" {
 		t.Errorf("expected /dev/rdisk2 for /dev/disk2s1, got %s", node)
+	}
+}
+
+func TestRegisterVMExitHandlerAndNotify(t *testing.T) {
+	called := false
+	var receivedDisk string
+	var receivedErr error
+
+	RegisterVMExitHandler(func(targetDisk string, err error) {
+		called = true
+		receivedDisk = targetDisk
+		receivedErr = err
+	})
+
+	testErr := fmt.Errorf("qemu exit test")
+	NotifyVMExited("/dev/disk42", testErr)
+
+	if !called {
+		t.Fatalf("expected VMExitHandler to be called")
+	}
+	if receivedDisk != "/dev/disk42" {
+		t.Errorf("expected disk /dev/disk42, got %s", receivedDisk)
+	}
+	if receivedErr != testErr {
+		t.Errorf("expected error %v, got %v", testErr, receivedErr)
 	}
 }

@@ -355,6 +355,7 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 		}
 
 		if err := cmd.Start(); err != nil {
+			remountTargetDisk(targetPath)
 			restoreDiskPerms()
 			return fmt.Errorf("failed to start QEMU process: %w", err)
 		}
@@ -362,8 +363,10 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 		done := make(chan error, 1)
 		go func() {
 			err := cmd.Wait()
-			restoreDiskPerms()
+			time.Sleep(300 * time.Millisecond)
 			remountTargetDisk(targetPath)
+			restoreDiskPerms()
+			NotifyVMExited(targetPath, err)
 			done <- err
 		}()
 

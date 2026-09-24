@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 )
@@ -105,9 +106,11 @@ func (d *ParallelsDriver) Launch(ctx context.Context, diskPath string, bootMode 
 	}
 
 	go func() {
-		_ = cmd.Wait()
-		restoreDiskPerms()
+		err := cmd.Wait()
+		time.Sleep(300 * time.Millisecond)
 		remountTargetDisk(targetPath)
+		restoreDiskPerms()
+		NotifyVMExited(targetPath, err)
 	}()
 
 	return nil

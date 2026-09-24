@@ -18,6 +18,7 @@ export interface UseAppRuntimeEventsOptions {
   isAboutOpen: Ref<boolean>;
   addIsoFilesByPaths: (paths: string[]) => void;
   batchDeployInfo?: Ref<any>;
+  showToast?: (message: string, type?: any) => void;
 }
 
 export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
@@ -76,6 +77,19 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
       window.runtime.EventsOn("disk-list-changed", () => {
         if (!isDeploying.value) {
           refreshDisks();
+        }
+      });
+
+      window.runtime.EventsOn("vm-session-ended", (data: any) => {
+        if (!isDeploying.value) {
+          refreshDisks();
+        }
+        if (options.showToast) {
+          if (data && data.error) {
+            options.showToast(t('vm.session_ended_error', { error: data.error }), 'warning');
+          } else {
+            options.showToast(t('vm.session_ended_success'), 'success');
+          }
         }
       });
 
