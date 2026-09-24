@@ -109,7 +109,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 			logger.Info("UTM.app is sandboxed on macOS and cannot access raw block devices directly; delegating physical disk preview test to host QEMU engine", "disk", targetPath, "bootMode", bootMode)
 			return qemuDrv.Launch(ctx, diskPath, bootMode)
 		}
-		return fmt.Errorf("UTM on macOS is sandboxed and cannot access raw physical disks (%s). Please install QEMU via 'brew install qemu' or use VMware Fusion / VirtualBox for physical USB testing", targetPath)
+		return fmt.Errorf("UTM on macOS is sandboxed and cannot access raw physical disks (%s). Please install QEMU via 'brew install qemu' to enable raw USB emulation", targetPath)
 	}
 
 	// Generate native .utm bundle with raw disk mapping and launch via UTM app
