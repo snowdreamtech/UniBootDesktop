@@ -1316,32 +1316,58 @@ var (
 	darwinUSBCacheMutex sync.Mutex
 	darwinUSBCacheMap   map[string]*darwinUSBInfo
 	darwinUSBCacheTime  time.Time
+	// darwinUSBInflight is a singleflight gate: non-nil means a system_profiler
+	// call is already in progress; close it to broadcast completion.
+	darwinUSBInflight chan struct{}
 )
 
 func getCachedDarwinUSBMap() map[string]*darwinUSBInfo {
-	darwinUSBCacheMutex.Lock()
-	defer darwinUSBCacheMutex.Unlock()
+	for {
+		darwinUSBCacheMutex.Lock()
 
-	// Cache hardware profile details for 30 seconds to prevent system_profiler CPU spikes
-	if darwinUSBCacheMap != nil && time.Since(darwinUSBCacheTime) < 30*time.Second {
-		return darwinUSBCacheMap
-	}
+		// Fast path: valid cache.
+		if darwinUSBCacheMap != nil && time.Since(darwinUSBCacheTime) < 30*time.Second {
+			m := darwinUSBCacheMap
+			darwinUSBCacheMutex.Unlock()
+			return m
+		}
 
-	usbMap := make(map[string]*darwinUSBInfo)
-	cmd := execCommand("system_profiler", "SPUSBDataType", "-json")
-	output, err := cmd.Output()
-	if err == nil {
-		var profiler darwinUSBProfiler
-		if jsonErr := jsonUnmarshal(output, &profiler); jsonErr == nil {
-			for _, bus := range profiler.SPUSBDataType {
-				walkDarwinUSBTree(bus.Items, usbMap)
+		// Singleflight: if another goroutine is already running system_profiler, wait for it.
+		if darwinUSBInflight != nil {
+			gate := darwinUSBInflight
+			darwinUSBCacheMutex.Unlock()
+			<-gate // block until the in-flight call finishes
+			// Re-loop: the cache should now be populated.
+			continue
+		}
+
+		// Slow path: this goroutine wins; register gate and release lock before
+		// executing the expensive system_profiler call (~1000ms).
+		gate := make(chan struct{})
+		darwinUSBInflight = gate
+		darwinUSBCacheMutex.Unlock()
+
+		usbMap := make(map[string]*darwinUSBInfo)
+		cmd := execCommand("system_profiler", "SPUSBDataType", "-json")
+		output, err := cmd.Output()
+		if err == nil {
+			var profiler darwinUSBProfiler
+			if jsonErr := jsonUnmarshal(output, &profiler); jsonErr == nil {
+				for _, bus := range profiler.SPUSBDataType {
+					walkDarwinUSBTree(bus.Items, usbMap)
+				}
 			}
 		}
-	}
 
-	darwinUSBCacheMap = usbMap
-	darwinUSBCacheTime = time.Now()
-	return usbMap
+		// Commit result and clear in-flight gate atomically.
+		darwinUSBCacheMutex.Lock()
+		darwinUSBCacheMap = usbMap
+		darwinUSBCacheTime = time.Now()
+		darwinUSBInflight = nil
+		darwinUSBCacheMutex.Unlock()
+		close(gate) // wake all waiters
+		return usbMap
+	}
 }
 
 type darwinDiskutilPartition struct {
