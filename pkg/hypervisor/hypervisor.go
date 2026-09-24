@@ -139,16 +139,28 @@ func (m *Manager) Register(driver Driver) {
 	m.drivers = append(m.drivers, driver)
 }
 
-// DetectAll scans system for all registered hypervisors and returns their statuses.
+// DetectAll scans system for all registered hypervisors concurrently and returns their statuses.
 func (m *Manager) DetectAll() []*VMStatus {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
-	results := make([]*VMStatus, 0, len(m.drivers))
-	for _, drv := range m.drivers {
-		status := drv.Detect()
-		results = append(results, status)
+	n := len(m.drivers)
+	if n == 0 {
+		return nil
 	}
+
+	results := make([]*VMStatus, n)
+	var wg sync.WaitGroup
+	wg.Add(n)
+
+	for i, drv := range m.drivers {
+		go func(idx int, d Driver) {
+			defer wg.Done()
+			results[idx] = d.Detect()
+		}(i, drv)
+	}
+
+	wg.Wait()
 	return results
 }
 
