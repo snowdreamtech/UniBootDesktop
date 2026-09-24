@@ -343,25 +343,62 @@ func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootRelea
 		expectedAssets[m.ReleaseName] = true
 	}
 
-	downloadedCount := 0
-	var firstErr error
-
+	var assetsToDownload []UniBootReleaseAsset
 	for _, asset := range rel.Assets {
 		if expectedAssets[asset.Name] {
+			assetsToDownload = append(assetsToDownload, asset)
+		}
+	}
+
+	if len(assetsToDownload) == 0 {
+		return nil, fmt.Errorf("firmware upgrade incomplete: no matching assets found in release")
+	}
+
+	type downloadOutcome struct {
+		name string
+		err  error
+	}
+
+	outcomeCh := make(chan downloadOutcome, len(assetsToDownload))
+	const maxConcurrency = 5
+	sem := make(chan struct{}, maxConcurrency)
+	var wg sync.WaitGroup
+
+	for _, a := range assetsToDownload {
+		wg.Add(1)
+		go func(asset UniBootReleaseAsset) {
+			defer wg.Done()
+			sem <- struct{}{}
+			defer func() { <-sem }()
+
 			destPath := filepath.Join(firmwareDir, asset.Name)
 			if err := updater.DownloadFileWithProxy(ctx, asset.BrowserDownloadURL, destPath, proxyPrefix); err != nil {
-				if firstErr == nil {
-					firstErr = err
-				}
-				continue
+				outcomeCh <- downloadOutcome{name: asset.Name, err: err}
+				return
 			}
 			if err := validateFirmwareAssetFile(destPath, asset.Name); err != nil {
 				_ = os.Remove(destPath)
-				if firstErr == nil {
-					firstErr = fmt.Errorf("downloaded firmware asset %s failed checksum validation: %w", asset.Name, err)
+				outcomeCh <- downloadOutcome{
+					name: asset.Name,
+					err:  fmt.Errorf("downloaded firmware asset %s failed checksum validation: %w", asset.Name, err),
 				}
-				continue
+				return
 			}
+			outcomeCh <- downloadOutcome{name: asset.Name, err: nil}
+		}(a)
+	}
+
+	wg.Wait()
+	close(outcomeCh)
+
+	downloadedCount := 0
+	var firstErr error
+	for oc := range outcomeCh {
+		if oc.err != nil {
+			if firstErr == nil {
+				firstErr = oc.err
+			}
+		} else {
 			downloadedCount++
 		}
 	}
