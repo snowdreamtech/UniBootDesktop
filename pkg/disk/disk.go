@@ -17,7 +17,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"syscall"
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
@@ -1507,10 +1506,7 @@ func inspectDarwinDisk(wholeDisk darwinDiskutilWholeDisk, usbMap map[string]*dar
 				primaryVolName = strings.TrimSpace(p.VolumeName)
 				primaryFileSystem = strings.TrimSpace(p.Content)
 
-				var stat syscall.Statfs_t
-				if statErr := syscall.Statfs(mp, &stat); statErr == nil {
-					freeSpace = stat.Bavail * uint64(stat.Bsize)
-				}
+				freeSpace = getMountFreeSpace(mp)
 			}
 		}
 	}
@@ -2855,12 +2851,11 @@ func SafeUserEjectDisk(device string) error {
 	return EjectDisk(device)
 }
 
-// SyncDiskBuffers commits all filesystem caches and dirty pages to storage media.
+// SyncDiskBuffers commits all filesystem caches and dirty pages to storage media across OS platforms.
 // On Unix (macOS and Linux), it issues a kernel-level sync() syscall.
+// On Windows, it flushes volume-level write caches via FlushFileBuffers.
 func SyncDiskBuffers() {
-	if runtime.GOOS == "darwin" || runtime.GOOS == "linux" {
-		syscall.Sync()
-	}
+	syncPlatformBuffers()
 }
 
 // EjectDisk safely unmounts and ejects the target removable USB storage drive.
