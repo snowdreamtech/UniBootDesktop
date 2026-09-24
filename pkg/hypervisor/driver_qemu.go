@@ -285,8 +285,6 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 	}
 	logger.Info("Executing QEMU preview simulation test", "disk", targetPath, "qemuPath", status.Path, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB, "accel", cfg.DisplayAccel)
 
-	unmountTargetDisk(targetPath)
-
 	ovmfFw := DetectOVMF()
 
 	memMB := cfg.MemoryMB
@@ -350,6 +348,9 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 			remountTargetDisk(targetPath)
 			return fmt.Errorf("failed to acquire target disk permissions: %w", err)
 		}
+
+		// Safely unmount target disk after permission grant to defeat OS automount
+		unmountTargetDisk(targetPath)
 
 		// Preflight check: verify that current process can actually open targetPath
 		if strings.HasPrefix(targetPath, "/dev/") && os.Getenv("UNIBOOT_DRY_RUN") != "1" {

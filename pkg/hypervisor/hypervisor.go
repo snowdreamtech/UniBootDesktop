@@ -385,6 +385,7 @@ func unmountTargetDisk(targetPath string) {
 		return
 	}
 	TrackDiskUnmounted(targetPath)
+	defer disk.InvalidateDiskCache()
 	logger.Info("Safely unmounting target disk partitions before VM launch", "targetPath", targetPath)
 
 	if runtime.GOOS == "darwin" {
