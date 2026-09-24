@@ -927,6 +927,13 @@ func FormatBytesDual(bytes uint64) string {
 	return sysFormatted
 }
 
+// darwinDiskutilInflight tracks in-progress diskutil calls to avoid duplicate
+// concurrent subprocess launches for the same node (singleflight without
+// external dependencies).
+type darwinDiskutilInflightEntry struct {
+	ready chan struct{}
+}
+
 var (
 	diskCacheMutex    sync.Mutex
 	diskCacheList     []DiskInfo
@@ -936,6 +943,9 @@ var (
 	darwinDiskutilCacheMutex sync.Mutex
 	darwinDiskutilCacheMap   = make(map[string]string)
 	darwinDiskutilCacheTime  time.Time
+	// darwinDiskutilInflightMap prevents concurrent goroutines from launching
+	// duplicate diskutil subprocesses for the same node.
+	darwinDiskutilInflightMap = make(map[string]*darwinDiskutilInflightEntry)
 )
 
 func diskCacheShouldReuse(snapshot string, cachedAt time.Time) bool {
@@ -955,15 +965,32 @@ func getDarwinDiskutilInfo(node string) string {
 	}
 
 	darwinDiskutilCacheMutex.Lock()
+	// Expire the entire cache if it's stale (TTL 5s).
 	if time.Since(darwinDiskutilCacheTime) > 5*time.Second {
 		darwinDiskutilCacheMap = make(map[string]string)
+		darwinDiskutilInflightMap = make(map[string]*darwinDiskutilInflightEntry)
 		darwinDiskutilCacheTime = time.Now()
 	}
 
+	// Fast path: cache hit.
 	if info, ok := darwinDiskutilCacheMap[node]; ok {
 		darwinDiskutilCacheMutex.Unlock()
 		return info
 	}
+
+	// Singleflight: if another goroutine is already fetching this node, wait for it.
+	if entry, ok := darwinDiskutilInflightMap[node]; ok {
+		darwinDiskutilCacheMutex.Unlock()
+		<-entry.ready // block until the in-flight call completes
+		darwinDiskutilCacheMutex.Lock()
+		result := darwinDiskutilCacheMap[node]
+		darwinDiskutilCacheMutex.Unlock()
+		return result
+	}
+
+	// Slow path: this goroutine wins the race, registers itself as the owner.
+	entry := &darwinDiskutilInflightEntry{ready: make(chan struct{})}
+	darwinDiskutilInflightMap[node] = entry
 	darwinDiskutilCacheMutex.Unlock()
 
 	cmd := execCommand("diskutil", "info", "-plist", node)
@@ -973,15 +1000,19 @@ func getDarwinDiskutilInfo(node string) string {
 		infoStr = string(out)
 	}
 
+	// Store result and unblock all waiters atomically.
 	darwinDiskutilCacheMutex.Lock()
 	darwinDiskutilCacheMap[node] = infoStr
+	delete(darwinDiskutilInflightMap, node)
 	darwinDiskutilCacheMutex.Unlock()
+	close(entry.ready) // wake all goroutines that were waiting on this node
 	return infoStr
 }
 
 func invalidateDarwinDiskutilCache() {
 	darwinDiskutilCacheMutex.Lock()
 	darwinDiskutilCacheMap = make(map[string]string)
+	darwinDiskutilInflightMap = make(map[string]*darwinDiskutilInflightEntry)
 	darwinDiskutilCacheTime = time.Time{}
 	darwinDiskutilCacheMutex.Unlock()
 }
