@@ -1358,17 +1358,12 @@ func getDarwinDisksBatch(usbMap map[string]*darwinUSBInfo) ([]DiskInfo, error) {
 		usbMap = getCachedDarwinUSBMap()
 	}
 
-	disks := make([]DiskInfo, 0, len(dl.AllDisksAndPartitions))
 	rootDisk := getDarwinRootSystemDisk()
+	validDisks := make([]darwinDiskutilWholeDisk, 0, len(dl.AllDisksAndPartitions))
 
 	for _, wholeDisk := range dl.AllDisksAndPartitions {
 		parentDisk := strings.TrimSpace(wholeDisk.DeviceIdentifier)
-		if parentDisk == "" {
-			continue
-		}
-
-		// Security: strictly filter out internal system disks and root disk
-		if wholeDisk.OSInternal || parentDisk == rootDisk || parentDisk == "disk0" || parentDisk == "disk1" {
+		if parentDisk == "" || wholeDisk.OSInternal || parentDisk == rootDisk || parentDisk == "disk0" || parentDisk == "disk1" {
 			continue
 		}
 		hasSystemMount := false
@@ -1379,206 +1374,236 @@ func getDarwinDisksBatch(usbMap map[string]*darwinUSBInfo) ([]DiskInfo, error) {
 				break
 			}
 		}
-		if hasSystemMount {
-			continue
+		if !hasSystemMount {
+			validDisks = append(validDisks, wholeDisk)
 		}
-		devNode := "/dev/" + parentDisk
+	}
 
-		totalSize := wholeDisk.Size
-		if parentInfo, ok := usbMap[parentDisk]; ok && totalSize == 0 {
-			totalSize = parentInfo.TotalSize
+	if len(validDisks) == 0 {
+		return []DiskInfo{}, nil
+	}
+
+	disksResult := make([]*DiskInfo, len(validDisks))
+	var wg sync.WaitGroup
+	wg.Add(len(validDisks))
+
+	for i, wd := range validDisks {
+		go func(idx int, diskNode darwinDiskutilWholeDisk) {
+			defer wg.Done()
+			disksResult[idx] = inspectDarwinDisk(diskNode, usbMap)
+		}(i, wd)
+	}
+	wg.Wait()
+
+	disks := make([]DiskInfo, 0, len(disksResult))
+	for _, d := range disksResult {
+		if d != nil {
+			disks = append(disks, *d)
 		}
-		if totalSize == 0 {
-			totalSize = 32 * 1024 * 1024 * 1024
-		}
-
-		partitionScheme := "GPT / MBR"
-		if strings.Contains(wholeDisk.Content, "FDisk") || strings.Contains(wholeDisk.Content, "MBR") {
-			partitionScheme = "MBR (Master Boot Record)"
-		} else if strings.Contains(wholeDisk.Content, "GUID") || strings.Contains(wholeDisk.Content, "GPT") {
-			partitionScheme = "GPT (GUID Partition Table)"
-		} else if wholeDisk.Content != "" {
-			partitionScheme = wholeDisk.Content
-		}
-
-		var mountPoints []string
-		var primaryMountPoint, primaryVolName, primaryFileSystem string
-		var freeSpace uint64
-		hasUnmountedEsp := false
-
-		for _, p := range wholeDisk.Partitions {
-			pContent := strings.ToUpper(strings.TrimSpace(p.Content))
-			if pContent == "0XEF" || strings.Contains(pContent, "EFI") {
-				if strings.TrimSpace(p.MountPoint) == "" {
-					hasUnmountedEsp = true
-				}
-			}
-
-			mp := strings.TrimSpace(p.MountPoint)
-			if mp != "" {
-				mountPoints = append(mountPoints, mp)
-				if !IsIgnoredVolume(p.VolumeName) && primaryMountPoint == "" {
-					primaryMountPoint = mp
-					primaryVolName = strings.TrimSpace(p.VolumeName)
-					primaryFileSystem = strings.TrimSpace(p.Content)
-
-					var stat syscall.Statfs_t
-					if statErr := syscall.Statfs(mp, &stat); statErr == nil {
-						freeSpace = stat.Bavail * uint64(stat.Bsize)
-					}
-				}
-			}
-		}
-
-		if strings.EqualFold(primaryFileSystem, "Windows_NTFS") {
-			primaryFileSystem = "ExFAT / NTFS"
-		} else if strings.EqualFold(primaryFileSystem, "DOS_FAT_32") {
-			primaryFileSystem = "FAT32"
-		} else if primaryFileSystem == "" {
-			if len(wholeDisk.Partitions) == 0 {
-				primaryFileSystem = "RAW / Unformatted"
-			} else {
-				primaryFileSystem = "ExFAT"
-			}
-		}
-
-		formattedSize := FormatBytesDual(totalSize)
-		freeFormatted := FormatBytes(freeSpace)
-		if freeSpace == 0 {
-			freeFormatted = formattedSize
-		}
-
-		usbVer := "USB 2.0"
-		usbSpeed := "480 Mb/s"
-		vendor := "Generic"
-		displayName := primaryVolName
-		serialNum := ""
-		vendorId := ""
-		productId := ""
-		busPower := "500 mA"
-		busPowerUsed := "500 mA"
-
-		if parentInfo, ok := usbMap[parentDisk]; ok && parentInfo != nil {
-			if parentInfo.Vendor != "" {
-				vendor = parentInfo.Vendor
-			}
-			if parentInfo.UsbVersion != "" {
-				usbVer = parentInfo.UsbVersion
-			}
-			if parentInfo.UsbSpeed != "" {
-				usbSpeed = parentInfo.UsbSpeed
-			}
-			if displayName == "" && parentInfo.Model != "" {
-				displayName = parentInfo.Model
-			}
-			serialNum = parentInfo.SerialNumber
-			vendorId = parentInfo.VendorId
-			productId = parentInfo.ProductId
-			if parentInfo.BusPower != "" {
-				busPower = parentInfo.BusPower
-			}
-			if parentInfo.BusPowerUsed != "" {
-				busPowerUsed = parentInfo.BusPowerUsed
-			}
-		}
-
-		if displayName == "" {
-			displayName = parentDisk
-		}
-
-		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
-		protoCode := MapProtocolCode(usbVer, usbSpeed)
-
-		isRealVentoy := CheckVentoyMbrSignature(devNode)
-		var manifest *UniBootManifest
-		for _, mp := range mountPoints {
-			if m, err := ReadUniBootManifest(mp); err == nil && m != nil {
-				manifest = m
-				break
-			}
-		}
-		if manifest == nil && !isRealVentoy && privilege.IsElevated() {
-			manifest = GetDiskUniBootManifest(devNode)
-		}
-		isCloudMode := false
-
-		for _, mp := range mountPoints {
-			if HasVentoyEngineFiles(mp) {
-				isRealVentoy = true
-			}
-			if HasUniBootCloudFiles(mp) {
-				isCloudMode = true
-			}
-		}
-
-		if manifest != nil {
-			if manifest.Mode == "cloud" {
-				isCloudMode = true
-			} else if manifest.Mode == "hybrid" {
-				isRealVentoy = true
-			}
-		}
-
-		thirdPartyBoot := BootTypeNone
-		isGenericBoot := false
-		if !isCloudMode && !isRealVentoy {
-			thirdPartyBoot = IdentifyThirdPartyBoot(mountPoints)
-			isGenericBoot = thirdPartyBoot != BootTypeNone
-		}
-
-		bootStatusStr, bootStatusCode := DetectBootStatus(partitionScheme, isRealVentoy, isCloudMode, thirdPartyBoot, manifest, hasUnmountedEsp)
-		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
-
-		disks = append(disks, DiskInfo{
-			Device:             devNode,
-			Name:               displayName,
-			Size:               totalSize,
-			Formatted:          formattedSize,
-			FreeSpace:          freeSpace,
-			FreeFormatted:      freeFormatted,
-			IsRemovable:        true,
-			IsSystem:           false,
-			UsbVersion:         usbVer,
-			UsbSpeed:           usbSpeed,
-			Vendor:             vendor,
-			FileSystem:         primaryFileSystem,
-			PartitionScheme:    partitionScheme,
-			Writable:           true,
-			SerialNumber:       serialNum,
-			VendorId:           vendorId,
-			ProductId:          productId,
-			SmartStatus:        "Verified",
-			BusPower:           busPower,
-			BusPowerUsed:       busPowerUsed,
-			SectorSize:         "512 Bytes (512n/512e)",
-			TransportProtocol:  "BOT (Bulk-Only Transport)",
-			BootStatus:         bootStatusStr,
-			BootStatusCode:     bootStatusCode,
-			ControllerVendor:   controllerVendorStr,
-			IsFakeUsb3:         isFake,
-			ProtocolCode:       protoCode,
-			IsRealVentoy:       isRealVentoy,
-			IsCloudMode:        isCloudMode,
-			IsGenericBoot:      isGenericBoot,
-			ThirdPartyBootType: thirdPartyBoot,
-			ThirdPartyBootCode: MapThirdPartyBootCode(thirdPartyBoot),
-			UniBootVersion: func() string {
-				if manifest != nil {
-					return manifest.Version
-				}
-				return ""
-			}(),
-			UniBootMode: func() string {
-				if manifest != nil {
-					return manifest.Mode
-				}
-				return ""
-			}(),
-			MountPoint: primaryMountPoint,
-		})
 	}
 
 	return disks, nil
+}
+
+func inspectDarwinDisk(wholeDisk darwinDiskutilWholeDisk, usbMap map[string]*darwinUSBInfo) *DiskInfo {
+	parentDisk := strings.TrimSpace(wholeDisk.DeviceIdentifier)
+	if parentDisk == "" {
+		return nil
+	}
+	devNode := "/dev/" + parentDisk
+
+	totalSize := wholeDisk.Size
+	if parentInfo, ok := usbMap[parentDisk]; ok && totalSize == 0 {
+		totalSize = parentInfo.TotalSize
+	}
+	if totalSize == 0 {
+		totalSize = 32 * 1024 * 1024 * 1024
+	}
+
+	partitionScheme := "GPT / MBR"
+	if strings.Contains(wholeDisk.Content, "FDisk") || strings.Contains(wholeDisk.Content, "MBR") {
+		partitionScheme = "MBR (Master Boot Record)"
+	} else if strings.Contains(wholeDisk.Content, "GUID") || strings.Contains(wholeDisk.Content, "GPT") {
+		partitionScheme = "GPT (GUID Partition Table)"
+	} else if wholeDisk.Content != "" {
+		partitionScheme = wholeDisk.Content
+	}
+
+	var mountPoints []string
+	var primaryMountPoint, primaryVolName, primaryFileSystem string
+	var freeSpace uint64
+	hasUnmountedEsp := false
+
+	for _, p := range wholeDisk.Partitions {
+		pContent := strings.ToUpper(strings.TrimSpace(p.Content))
+		if pContent == "0XEF" || strings.Contains(pContent, "EFI") {
+			if strings.TrimSpace(p.MountPoint) == "" {
+				hasUnmountedEsp = true
+			}
+		}
+
+		mp := strings.TrimSpace(p.MountPoint)
+		if mp != "" {
+			mountPoints = append(mountPoints, mp)
+			if !IsIgnoredVolume(p.VolumeName) && primaryMountPoint == "" {
+				primaryMountPoint = mp
+				primaryVolName = strings.TrimSpace(p.VolumeName)
+				primaryFileSystem = strings.TrimSpace(p.Content)
+
+				var stat syscall.Statfs_t
+				if statErr := syscall.Statfs(mp, &stat); statErr == nil {
+					freeSpace = stat.Bavail * uint64(stat.Bsize)
+				}
+			}
+		}
+	}
+
+	if strings.EqualFold(primaryFileSystem, "Windows_NTFS") {
+		primaryFileSystem = "ExFAT / NTFS"
+	} else if strings.EqualFold(primaryFileSystem, "DOS_FAT_32") {
+		primaryFileSystem = "FAT32"
+	} else if primaryFileSystem == "" {
+		if len(wholeDisk.Partitions) == 0 {
+			primaryFileSystem = "RAW / Unformatted"
+		} else {
+			primaryFileSystem = "ExFAT"
+		}
+	}
+
+	formattedSize := FormatBytesDual(totalSize)
+	freeFormatted := FormatBytes(freeSpace)
+	if freeSpace == 0 {
+		freeFormatted = formattedSize
+	}
+
+	usbVer := "USB 2.0"
+	usbSpeed := "480 Mb/s"
+	vendor := "Generic"
+	displayName := primaryVolName
+	serialNum := ""
+	vendorId := ""
+	productId := ""
+	busPower := "500 mA"
+	busPowerUsed := "500 mA"
+
+	if parentInfo, ok := usbMap[parentDisk]; ok && parentInfo != nil {
+		if parentInfo.Vendor != "" {
+			vendor = parentInfo.Vendor
+		}
+		if parentInfo.UsbVersion != "" {
+			usbVer = parentInfo.UsbVersion
+		}
+		if parentInfo.UsbSpeed != "" {
+			usbSpeed = parentInfo.UsbSpeed
+		}
+		if displayName == "" && parentInfo.Model != "" {
+			displayName = parentInfo.Model
+		}
+		serialNum = parentInfo.SerialNumber
+		vendorId = parentInfo.VendorId
+		productId = parentInfo.ProductId
+		if parentInfo.BusPower != "" {
+			busPower = parentInfo.BusPower
+		}
+		if parentInfo.BusPowerUsed != "" {
+			busPowerUsed = parentInfo.BusPowerUsed
+		}
+	}
+
+	if displayName == "" {
+		displayName = parentDisk
+	}
+
+	isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
+	protoCode := MapProtocolCode(usbVer, usbSpeed)
+
+	isRealVentoy := CheckVentoyMbrSignature(devNode)
+	var manifest *UniBootManifest
+	for _, mp := range mountPoints {
+		if m, err := ReadUniBootManifest(mp); err == nil && m != nil {
+			manifest = m
+			break
+		}
+	}
+	if manifest == nil && !isRealVentoy && privilege.IsElevated() {
+		manifest = GetDiskUniBootManifest(devNode)
+	}
+	isCloudMode := false
+
+	for _, mp := range mountPoints {
+		if HasVentoyEngineFiles(mp) {
+			isRealVentoy = true
+		}
+		if HasUniBootCloudFiles(mp) {
+			isCloudMode = true
+		}
+	}
+
+	if manifest != nil {
+		if manifest.Mode == "cloud" {
+			isCloudMode = true
+		} else if manifest.Mode == "hybrid" {
+			isRealVentoy = true
+		}
+	}
+
+	thirdPartyBoot := BootTypeNone
+	isGenericBoot := false
+	if !isCloudMode && !isRealVentoy {
+		thirdPartyBoot = IdentifyThirdPartyBoot(mountPoints)
+		isGenericBoot = thirdPartyBoot != BootTypeNone
+	}
+
+	bootStatusStr, bootStatusCode := DetectBootStatus(partitionScheme, isRealVentoy, isCloudMode, thirdPartyBoot, manifest, hasUnmountedEsp)
+	controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
+
+	return &DiskInfo{
+		Device:             devNode,
+		Name:               displayName,
+		Size:               totalSize,
+		Formatted:          formattedSize,
+		FreeSpace:          freeSpace,
+		FreeFormatted:      freeFormatted,
+		IsRemovable:        true,
+		IsSystem:           false,
+		UsbVersion:         usbVer,
+		UsbSpeed:           usbSpeed,
+		Vendor:             vendor,
+		FileSystem:         primaryFileSystem,
+		PartitionScheme:    partitionScheme,
+		Writable:           true,
+		SerialNumber:       serialNum,
+		VendorId:           vendorId,
+		ProductId:          productId,
+		SmartStatus:        "Verified",
+		BusPower:           busPower,
+		BusPowerUsed:       busPowerUsed,
+		SectorSize:         "512 Bytes (512n/512e)",
+		TransportProtocol:  "BOT (Bulk-Only Transport)",
+		BootStatus:         bootStatusStr,
+		BootStatusCode:     bootStatusCode,
+		ControllerVendor:   controllerVendorStr,
+		IsFakeUsb3:         isFake,
+		ProtocolCode:       protoCode,
+		IsRealVentoy:       isRealVentoy,
+		IsCloudMode:        isCloudMode,
+		IsGenericBoot:      isGenericBoot,
+		ThirdPartyBootType: thirdPartyBoot,
+		ThirdPartyBootCode: MapThirdPartyBootCode(thirdPartyBoot),
+		UniBootVersion: func() string {
+			if manifest != nil {
+				return manifest.Version
+			}
+			return ""
+		}(),
+		UniBootMode: func() string {
+			if manifest != nil {
+				return manifest.Mode
+			}
+			return ""
+		}(),
+		MountPoint: primaryMountPoint,
+	}
 }
 
 func getDarwinDisks() ([]DiskInfo, error) {
