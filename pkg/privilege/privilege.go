@@ -279,10 +279,13 @@ func ValidateRawDevicePath(devicePath string) error {
 	blocked := map[string]struct{}{
 		"/": {}, "C:": {}, "C:\\": {},
 		"/dev/sda": {}, "/dev/nvme0n1": {}, "/dev/mmcblk0": {}, "/dev/vda": {},
-		"/dev/disk0": {}, "disk0": {},
+		"/dev/disk0": {}, "/dev/rdisk0": {}, "disk0": {}, "rdisk0": {},
 		`\\.\PhysicalDrive0`: {}, "PhysicalDrive0": {},
 	}
 	if _, ok := blocked[trimmed]; ok {
+		return fmt.Errorf("device path %q is blocked as a system-owned path", trimmed)
+	}
+	if strings.HasPrefix(trimmed, "/dev/disk0s") || strings.HasPrefix(trimmed, "/dev/rdisk0s") {
 		return fmt.Errorf("device path %q is blocked as a system-owned path", trimmed)
 	}
 
@@ -316,6 +319,18 @@ func buildPowerShellStartProcessCommand(filePath string, args []string) string {
 		return fmt.Sprintf("Start-Process -FilePath '%s' -Verb RunAs -Wait", escapedPath)
 	}
 	return fmt.Sprintf("Start-Process -FilePath '%s' -ArgumentList @(%s) -Verb RunAs -Wait", escapedPath, strings.Join(quotedArgs, ", "))
+}
+
+func buildPowerShellStartDaemonCommand(filePath string, args []string) string {
+	escapedPath := escapePowerShellSingleQuotedString(filePath)
+	quotedArgs := make([]string, 0, len(args))
+	for _, arg := range args {
+		quotedArgs = append(quotedArgs, "'"+escapePowerShellSingleQuotedString(arg)+"'")
+	}
+	if len(quotedArgs) == 0 {
+		return fmt.Sprintf("Start-Process -FilePath '%s' -Verb RunAs -WindowStyle Hidden", escapedPath)
+	}
+	return fmt.Sprintf("Start-Process -FilePath '%s' -ArgumentList @(%s) -Verb RunAs -WindowStyle Hidden", escapedPath, strings.Join(quotedArgs, ", "))
 }
 
 func RunElevated(prompt string, cmdLine string) (string, error) {

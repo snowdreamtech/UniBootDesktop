@@ -18,11 +18,32 @@ import (
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"golang.org/x/sys/windows"
 )
+
+// isProcessAlive checks whether a process with given PID exists on Windows.
+func isProcessAlive(pid int) bool {
+	if pid <= 0 {
+		return false
+	}
+	h, err := windows.OpenProcess(windows.PROCESS_QUERY_LIMITED_INFORMATION, false, uint32(pid))
+	if err != nil {
+		return false
+	}
+	defer windows.CloseHandle(h)
+
+	var exitCode uint32
+	if err := windows.GetExitCodeProcess(h, &exitCode); err != nil {
+		return false
+	}
+	// STILL_ACTIVE is 259
+	return exitCode == 259
+}
 
 // RunWorkerFromArgs parses command-line arguments and runs the worker server loop.
 func RunWorkerFromArgs(args []string) error {
 	var portFile, token string
+	var parentPID int
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
 		if (arg == "--port-file" || arg == "-port-file") && i+1 < len(args) {
@@ -35,13 +56,18 @@ func RunWorkerFromArgs(args []string) error {
 			i++
 		} else if strings.HasPrefix(arg, "--token=") {
 			token = strings.TrimPrefix(arg, "--token=")
+		} else if (arg == "--parent-pid" || arg == "-parent-pid") && i+1 < len(args) {
+			parentPID, _ = strconv.Atoi(args[i+1])
+			i++
+		} else if strings.HasPrefix(arg, "--parent-pid=") {
+			parentPID, _ = strconv.Atoi(strings.TrimPrefix(arg, "--parent-pid="))
 		}
 	}
-	return RunWorkerServer(portFile, token)
+	return RunWorkerServer(portFile, token, parentPID)
 }
 
 // RunWorkerServer starts the TCP loopback server loop for the privileged worker on Windows.
-func RunWorkerServer(portFile, token string) error {
+func RunWorkerServer(portFile, token string, parentPID int) error {
 	if portFile == "" || token == "" {
 		return fmt.Errorf("port file and token are required")
 	}
@@ -64,6 +90,25 @@ func RunWorkerServer(portFile, token string) error {
 	var mu sync.Mutex
 
 	logger.Info("Privileged worker listening on loopback", "port", addr.Port)
+
+	// Parent process watchdog: if GUI app exits or is terminated, auto-clean and exit
+	if parentPID > 0 {
+		go func() {
+			ticker := time.NewTicker(2 * time.Second)
+			defer ticker.Stop()
+			for range ticker.C {
+				if !isProcessAlive(parentPID) {
+					logger.Info("Parent process exited, Windows privileged worker terminating", "parent_pid", parentPID)
+					mu.Lock()
+					restoreAllSnapshots(snapshots)
+					mu.Unlock()
+					_ = listener.Close()
+					_ = os.Remove(portFile)
+					os.Exit(0)
+				}
+			}
+		}()
+	}
 
 	idleTimer := time.NewTimer(defaultWorkerIdleTimeout)
 	go func() {
@@ -94,6 +139,9 @@ func RunWorkerServer(portFile, token string) error {
 
 // StartOrConnectWorker launches the privileged worker with administrator elevation and connects to it on Windows.
 func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
+	StartWorkerMutex.Lock()
+	defer StartWorkerMutex.Unlock()
+
 	if client := GetActiveWorkerClient(); client != nil {
 		return client, nil
 	}
@@ -115,20 +163,35 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		"--privileged-worker",
 		"--port-file", portFile,
 		"--token", token,
+		"--parent-pid", strconv.Itoa(os.Getpid()),
 	}
 
-	psCmd := buildPowerShellStartProcessCommand(exe, args)
-	cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", psCmd)
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		return nil, fmt.Errorf("elevation failed: %s (%w)", strings.TrimSpace(string(out)), err)
-	}
+	psCmd := buildPowerShellStartDaemonCommand(exe, args)
+	elevDone := make(chan error, 1)
+	go func() {
+		cmd := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", psCmd)
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			elevDone <- fmt.Errorf("elevation failed: %s (%w)", strings.TrimSpace(string(out)), err)
+			return
+		}
+		elevDone <- nil
+	}()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
 	var port int
 	for {
+		select {
+		case elevErr := <-elevDone:
+			if elevErr != nil {
+				_ = os.Remove(portFile)
+				return nil, elevErr
+			}
+		default:
+		}
+
 		select {
 		case <-ctx.Done():
 			_ = os.Remove(portFile)

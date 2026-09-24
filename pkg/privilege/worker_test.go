@@ -43,7 +43,7 @@ func TestWorkerClientServerRoundTrip(t *testing.T) {
 	// Start worker server in background
 	serverDone := make(chan error, 1)
 	go func() {
-		serverDone <- RunWorkerServer(socketPath, token)
+		serverDone <- RunWorkerServer(socketPath, token, 0)
 	}()
 
 	// Wait for socket to be ready
@@ -105,7 +105,7 @@ func TestWorkerClientRejectsInvalidToken(t *testing.T) {
 	token := "correct-token"
 
 	go func() {
-		_ = RunWorkerServer(socketPath, token)
+		_ = RunWorkerServer(socketPath, token, 0)
 	}()
 
 	var conn net.Conn
@@ -143,7 +143,7 @@ func TestWorkerAcquireDiskRejectsBlockedDevices(t *testing.T) {
 	token := "security-token"
 
 	go func() {
-		_ = RunWorkerServer(socketPath, token)
+		_ = RunWorkerServer(socketPath, token, 0)
 	}()
 
 	var conn net.Conn
@@ -184,7 +184,7 @@ func TestWorkerClientRunCommand(t *testing.T) {
 	token := "runcmd-token"
 
 	go func() {
-		_ = RunWorkerServer(socketPath, token)
+		_ = RunWorkerServer(socketPath, token, 0)
 	}()
 
 	var conn net.Conn
@@ -224,3 +224,39 @@ func TestWorkerClientRunCommand(t *testing.T) {
 		t.Fatal("expected RunCommand on /dev/disk0 to be rejected by device path validator")
 	}
 }
+
+func TestWorkerClientAutoRecoveryOnBrokenConnection(t *testing.T) {
+	serverConn, clientConn := net.Pipe()
+	client := &WorkerClient{
+		conn:  clientConn,
+		token: "test-token",
+	}
+	SetActiveWorkerClient(client)
+
+	// Close server side to simulate sudden worker termination/crash
+	_ = serverConn.Close()
+
+	// IsAlive should detect broken pipe, call markFailedLocked, and reset global client
+	if client.IsAlive() {
+		t.Fatal("expected IsAlive to return false on dead connection")
+	}
+
+	if GetActiveWorkerClient() != nil {
+		t.Fatal("expected GetActiveWorkerClient to be reset to nil after failure")
+	}
+
+	if !client.closed {
+		t.Fatal("expected client to be marked closed after failure")
+	}
+}
+
+func TestIsProcessAlive(t *testing.T) {
+	if !isProcessAlive(os.Getpid()) {
+		t.Fatalf("expected current process %d to be alive", os.Getpid())
+	}
+	if isProcessAlive(99999999) {
+		t.Fatal("expected non-existent process 99999999 to be reported dead")
+	}
+}
+
+

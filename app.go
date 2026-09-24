@@ -115,6 +115,12 @@ func (a *App) shutdown(ctx context.Context) {
 	case <-time.After(5 * time.Second):
 		logger.Warn("Tracked hypervisor disk cleanup hit shutdown timeout; continuing app exit without forcing arbitrary USB ejection")
 	}
+
+	// Cleanly disconnect and terminate active privileged worker session
+	if client := privilege.GetActiveWorkerClient(); client != nil {
+		_ = client.Close()
+		privilege.SetActiveWorkerClient(nil)
+	}
 }
 
 // GetRecentLogs returns recent log entries from the memory buffer.
@@ -999,21 +1005,8 @@ func (a *App) RequestPrivilegeElevation() (bool, error) {
 			return false, err
 		}
 
-		logger.Warn("Failed to start privileged worker, falling back to basic elevation", "error", err)
-		var cmdLine string
-		switch runtime.GOOS {
-		case "darwin", "linux":
-			cmdLine = "sudo -v"
-		case "windows":
-			cmdLine = "net session"
-		default:
-			cmdLine = "echo 1"
-		}
-
-		if _, err := privilege.RunElevated(prompt, cmdLine); err != nil {
-			logger.Warn("User declined or privilege elevation failed", "error", err)
-			return false, err
-		}
+		logger.Warn("Failed to start privileged worker", "error", err)
+		return false, err
 	}
 
 	privilege.ResetElevationCache()

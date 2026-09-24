@@ -5,6 +5,7 @@ package privilege
 
 import (
 	"crypto/rand"
+	"crypto/subtle"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -13,6 +14,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -30,6 +32,9 @@ const (
 
 	defaultWorkerIdleTimeout = 30 * time.Minute
 )
+
+// StartWorkerMutex synchronizes concurrent elevation attempts across goroutines.
+var StartWorkerMutex sync.Mutex
 
 // WorkerRequest represents an RPC request from main application to privileged worker.
 type WorkerRequest struct {
@@ -102,6 +107,18 @@ func SetActiveWorkerClient(client *WorkerClient) {
 	globalWorkerClient = client
 }
 
+// markFailedLocked tears down broken connection and clears global reference.
+func (c *WorkerClient) markFailedLocked() {
+	if c.closed {
+		return
+	}
+	c.closed = true
+	if c.conn != nil {
+		_ = c.conn.Close()
+	}
+	SetActiveWorkerClient(nil)
+}
+
 // IsAlive checks whether the client connection is currently active and responding.
 func (c *WorkerClient) IsAlive() bool {
 	if c == nil {
@@ -127,14 +144,20 @@ func (c *WorkerClient) IsAlive() bool {
 		Action: WorkerActionPing,
 	}
 	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		c.markFailedLocked()
 		return false
 	}
 
 	var resp WorkerResponse
 	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		c.markFailedLocked()
 		return false
 	}
-	return resp.Success
+	if !resp.Success {
+		c.markFailedLocked()
+		return false
+	}
+	return true
 }
 
 // AcquireDiskAccess requests the privileged worker to grant the current user access to disk nodes.
@@ -165,11 +188,13 @@ func (c *WorkerClient) AcquireDiskAccess(paths []string) error {
 	}()
 
 	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		c.markFailedLocked()
 		return fmt.Errorf("failed to send acquire disk request: %w", err)
 	}
 
 	var resp WorkerResponse
 	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		c.markFailedLocked()
 		return fmt.Errorf("failed to read acquire disk response: %w", err)
 	}
 	if !resp.Success {
@@ -204,11 +229,13 @@ func (c *WorkerClient) ReleaseDiskAccess(paths []string) error {
 	}()
 
 	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		c.markFailedLocked()
 		return fmt.Errorf("failed to send release disk request: %w", err)
 	}
 
 	var resp WorkerResponse
 	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		c.markFailedLocked()
 		return fmt.Errorf("failed to read release disk response: %w", err)
 	}
 	if !resp.Success {
@@ -244,11 +271,13 @@ func (c *WorkerClient) ReadSector(devicePath string, numBytes int) ([]byte, erro
 	}()
 
 	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		c.markFailedLocked()
 		return nil, fmt.Errorf("failed to send read sector request: %w", err)
 	}
 
 	var resp WorkerResponse
 	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		c.markFailedLocked()
 		return nil, fmt.Errorf("failed to read read sector response: %w", err)
 	}
 	if !resp.Success {
@@ -284,11 +313,13 @@ func (c *WorkerClient) RunCommand(name string, args ...string) (string, error) {
 	}()
 
 	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		c.markFailedLocked()
 		return "", fmt.Errorf("failed to send run command request: %w", err)
 	}
 
 	var resp WorkerResponse
 	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		c.markFailedLocked()
 		return "", fmt.Errorf("failed to read run command response: %w", err)
 	}
 	if !resp.Success {
@@ -325,7 +356,7 @@ func handleWorkerConnection(conn net.Conn, expectedToken string, snapshots map[s
 	for {
 		var req WorkerRequest
 		if err := decoder.Decode(&req); err != nil {
-			if errors.Is(err, io.EOF) {
+			if errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) {
 				logger.Info("Privileged worker client disconnected")
 			} else {
 				logger.Warn("Privileged worker decode error", "error", err)
@@ -333,7 +364,7 @@ func handleWorkerConnection(conn net.Conn, expectedToken string, snapshots map[s
 			return
 		}
 
-		if req.Token != expectedToken {
+		if subtle.ConstantTimeCompare([]byte(req.Token), []byte(expectedToken)) != 1 {
 			_ = encoder.Encode(WorkerResponse{Success: false, Error: "invalid token"})
 			return
 		}
@@ -395,6 +426,17 @@ func applyReadSector(devicePath string, numBytes int) ([]byte, error) {
 		return nil, fmt.Errorf("invalid byte count: %d", numBytes)
 	}
 	f, err := os.Open(devicePath)
+	if err != nil && runtime.GOOS == "darwin" {
+		alt := devicePath
+		if strings.HasPrefix(devicePath, "/dev/disk") {
+			alt = "/dev/r" + strings.TrimPrefix(devicePath, "/dev/")
+		} else if strings.HasPrefix(devicePath, "/dev/rdisk") {
+			alt = "/dev/" + strings.TrimPrefix(devicePath, "/dev/r")
+		}
+		if alt != devicePath {
+			f, err = os.Open(alt)
+		}
+	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to open device %s: %w", devicePath, err)
 	}

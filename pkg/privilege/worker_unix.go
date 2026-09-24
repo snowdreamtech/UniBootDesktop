@@ -7,6 +7,7 @@ package privilege
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net"
 	"os"
@@ -14,6 +15,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"sync"
 	"syscall"
@@ -22,9 +24,38 @@ import (
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 )
 
+// isProcessAlive checks whether a process with given PID exists in the system.
+func isProcessAlive(pid int) bool {
+	if pid <= 0 {
+		return false
+	}
+	err := syscall.Kill(pid, 0)
+	return err == nil || errors.Is(err, syscall.EPERM)
+}
+
+// cleanStaleSockets removes leftover Unix domain sockets from dead GUI processes.
+func cleanStaleSockets(dir string) {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return
+	}
+	for _, entry := range entries {
+		name := entry.Name()
+		if strings.HasPrefix(name, "w-") && strings.HasSuffix(name, ".sock") {
+			pidStr := strings.TrimSuffix(strings.TrimPrefix(name, "w-"), ".sock")
+			if pid, err := strconv.Atoi(pidStr); err == nil && pid > 0 {
+				if !isProcessAlive(pid) {
+					_ = os.Remove(filepath.Join(dir, name))
+				}
+			}
+		}
+	}
+}
+
 // RunWorkerFromArgs parses command-line arguments and runs the worker server loop.
 func RunWorkerFromArgs(args []string) error {
 	var socketPath, token string
+	var parentPID int
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
 		if (arg == "--socket" || arg == "-socket") && i+1 < len(args) {
@@ -37,13 +68,18 @@ func RunWorkerFromArgs(args []string) error {
 			i++
 		} else if strings.HasPrefix(arg, "--token=") {
 			token = strings.TrimPrefix(arg, "--token=")
+		} else if (arg == "--parent-pid" || arg == "-parent-pid") && i+1 < len(args) {
+			parentPID, _ = strconv.Atoi(args[i+1])
+			i++
+		} else if strings.HasPrefix(arg, "--parent-pid=") {
+			parentPID, _ = strconv.Atoi(strings.TrimPrefix(arg, "--parent-pid="))
 		}
 	}
-	return RunWorkerServer(socketPath, token)
+	return RunWorkerServer(socketPath, token, parentPID)
 }
 
 // RunWorkerServer starts the Unix domain socket server loop for the privileged worker.
-func RunWorkerServer(socketPath, token string) error {
+func RunWorkerServer(socketPath, token string, parentPID int) error {
 	if socketPath == "" || token == "" {
 		return fmt.Errorf("socket path and token are required")
 	}
@@ -82,6 +118,25 @@ func RunWorkerServer(socketPath, token string) error {
 		os.Exit(0)
 	}()
 
+	// Parent process watchdog: if GUI app crashes or is force-killed, auto-restore and exit
+	if parentPID > 0 {
+		go func() {
+			ticker := time.NewTicker(2 * time.Second)
+			defer ticker.Stop()
+			for range ticker.C {
+				if !isProcessAlive(parentPID) {
+					logger.Info("Parent process exited, privileged worker auto-terminating", "parent_pid", parentPID)
+					mu.Lock()
+					restoreAllSnapshots(snapshots)
+					mu.Unlock()
+					_ = listener.Close()
+					_ = os.Remove(socketPath)
+					os.Exit(0)
+				}
+			}
+		}()
+	}
+
 	logger.Info("Privileged worker listening on unix socket", "socket", socketPath)
 
 	idleTimer := time.NewTimer(defaultWorkerIdleTimeout)
@@ -114,6 +169,9 @@ func RunWorkerServer(socketPath, token string) error {
 
 // StartOrConnectWorker launches the privileged worker with administrator elevation and connects to it.
 func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
+	StartWorkerMutex.Lock()
+	defer StartWorkerMutex.Unlock()
+
 	if client := GetActiveWorkerClient(); client != nil {
 		return client, nil
 	}
@@ -126,6 +184,8 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 	socketDir := "/tmp/unigo-ipc"
 	_ = os.MkdirAll(socketDir, 0755)
 	_ = os.Chmod(socketDir, 0755)
+	cleanStaleSockets(socketDir)
+
 	socketPath := filepath.Join(socketDir, fmt.Sprintf("w-%d.sock", os.Getpid()))
 	_ = os.Remove(socketPath)
 	workerLog := filepath.Join(socketDir, "worker.log")
@@ -153,8 +213,8 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 
 		// Wrap in parentheses subshell with full I/O redirection so AppleScript 'do shell script'
 		// detaches cleanly and returns in under 200ms without holding inherited pipe descriptors.
-		bgCmd := fmt.Sprintf("(cd '%s' && '%s' --privileged-worker --socket '%s' --token '%s') </dev/null >'%s' 2>&1 &",
-			escapedDir, escapedExe, escapedSocket, escapedToken, escapedLog)
+		bgCmd := fmt.Sprintf("(cd '%s' && '%s' --privileged-worker --socket '%s' --token '%s' --parent-pid '%d') </dev/null >'%s' 2>&1 &",
+			escapedDir, escapedExe, escapedSocket, escapedToken, os.Getpid(), escapedLog)
 		appleScript := fmt.Sprintf(`do shell script "%s" with prompt "%s" with administrator privileges`,
 			bgCmd, escapedPrompt)
 
@@ -169,8 +229,8 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		}()
 
 	case "linux":
-		bgCmd := fmt.Sprintf("(cd %s && %s --privileged-worker --socket %s --token %s) </dev/null >%s 2>&1 &",
-			socketDir, exe, socketPath, token, workerLog)
+		bgCmd := fmt.Sprintf("(cd %s && %s --privileged-worker --socket %s --token %s --parent-pid %d) </dev/null >%s 2>&1 &",
+			socketDir, exe, socketPath, token, os.Getpid(), workerLog)
 		go func() {
 			cmd := exec.Command("pkexec", "sh", "-c", bgCmd)
 			out, err := cmd.CombinedOutput()
