@@ -994,11 +994,17 @@ func InvalidateDiskCache() {
 	diskCacheSnapshot = ""
 	diskCacheMutex.Unlock()
 
+	// Retain darwinUSBCacheMap across disk invalidations if within its 30s TTL window.
+	// This prevents excessive system_profiler CPU spikes while ensuring fresh disk inventory.
+	invalidateDarwinDiskutilCache()
+}
+
+// InvalidateDarwinUSBCache forces an immediate purge of the macOS USB hardware profile cache.
+func InvalidateDarwinUSBCache() {
 	darwinUSBCacheMutex.Lock()
 	darwinUSBCacheMap = nil
+	darwinUSBCacheTime = time.Time{}
 	darwinUSBCacheMutex.Unlock()
-
-	invalidateDarwinDiskutilCache()
 }
 
 // StartHotplugMonitor listens for OS drive mount/unmount events lightweightly and triggers onChange.
@@ -1341,6 +1347,17 @@ func getDarwinDisksBatch(usbMap map[string]*darwinUSBInfo) ([]DiskInfo, error) {
 		return nil, err
 	}
 
+	// Fast short-circuit: if no external physical disks are connected,
+	// return immediately without querying system_profiler (~1000ms saving).
+	if len(dl.AllDisksAndPartitions) == 0 {
+		return []DiskInfo{}, nil
+	}
+
+	// On-demand fetch of rich USB profile only when physical external disks actually exist
+	if usbMap == nil {
+		usbMap = getCachedDarwinUSBMap()
+	}
+
 	disks := make([]DiskInfo, 0, len(dl.AllDisksAndPartitions))
 	rootDisk := getDarwinRootSystemDisk()
 
@@ -1565,20 +1582,18 @@ func getDarwinDisksBatch(usbMap map[string]*darwinUSBInfo) ([]DiskInfo, error) {
 }
 
 func getDarwinDisks() ([]DiskInfo, error) {
-	// Step 1: Probe system_profiler for rich hardware details (cached for 30s to eliminate CPU spikes)
-	usbMap := getCachedDarwinUSBMap()
-
-	// Step 2: High-speed batch query using diskutil list -plist external physical (~200ms)
-	batchDisks, err := getDarwinDisksBatch(usbMap)
+	// Optimization: Call getDarwinDisksBatch with nil usbMap to enable fast short-circuiting (~140ms)
+	// when no external disks are attached, avoiding the expensive system_profiler SPUSBDataType call (~1000ms).
+	// If external disks exist, getDarwinDisksBatch fetches or reuses the cached USB map.
+	batchDisks, err := getDarwinDisksBatch(nil)
 	if err != nil {
 		logger.Warn("Batch disk discovery failed, using fallback scan", "error", err)
-	} else if len(batchDisks) > 0 || len(usbMap) == 0 {
+	} else if len(batchDisks) > 0 || err == nil {
 		return batchDisks, nil
-	} else {
-		logger.Warn("Batch disk discovery returned 0 disks, using fallback scan", "usbMapCount", len(usbMap))
 	}
 
 	disks := make([]DiskInfo, 0)
+	usbMap := getCachedDarwinUSBMap()
 
 	// Step 3: Scan /Volumes for mounted removable drives (fallback)
 	entries, err := os.ReadDir("/Volumes")
