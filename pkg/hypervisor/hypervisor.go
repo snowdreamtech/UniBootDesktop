@@ -333,11 +333,24 @@ func (m *Manager) CleanupAllUnmountedDisks() {
 		return true
 	})
 
-	for _, path := range paths {
-		logger.Info("Emergency cleanup: remounting tracked target disk back to host OS", "targetPath", path)
-		remountTargetDisk(path)
-		unmountedDisksTracker.Delete(path)
+	if len(paths) == 0 {
+		return
 	}
+
+	// Remount each tracked disk concurrently: each disk has an independent physical
+	// USB channel, so parallel remount is safe and reduces shutdown wait time from
+	// N×~8s to ~1×8s when multiple VM disks were in use simultaneously.
+	var wg sync.WaitGroup
+	wg.Add(len(paths))
+	for _, path := range paths {
+		go func(p string) {
+			defer wg.Done()
+			logger.Info("Emergency cleanup: remounting tracked target disk back to host OS", "targetPath", p)
+			remountTargetDisk(p)
+			unmountedDisksTracker.Delete(p)
+		}(path)
+	}
+	wg.Wait()
 }
 
 func runCommandWithTimeout(timeout time.Duration, name string, args ...string) error {
