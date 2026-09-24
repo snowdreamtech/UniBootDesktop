@@ -191,6 +191,22 @@ func extractPlistString(plistStr string, key string) string {
 	return strings.TrimSpace(rest[:endStr])
 }
 
+// canAccessDeviceNode checks whether the current process has read-write access to path.
+// On Unix (macOS, Linux), syscall.Access tests R_OK|W_OK without opening a character device descriptor,
+// crucially preventing macOS kernel from firing media-update notifications to diskarbitrationd upon fd close.
+func canAccessDeviceNode(path string) bool {
+	if runtime.GOOS == "windows" {
+		f, err := os.OpenFile(path, os.O_RDWR, 0)
+		if err == nil {
+			_ = f.Close()
+			return true
+		}
+		return false
+	}
+	// 6 = R_OK (4) | W_OK (2)
+	return syscall.Access(path, 6) == nil
+}
+
 func ensureDiskPermissions(targetPath string) (func(), error) {
 	noop := func() {}
 	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" || !strings.HasPrefix(targetPath, "/dev/") {
@@ -199,9 +215,7 @@ func ensureDiskPermissions(targetPath string) (func(), error) {
 	if _, err := os.Stat(targetPath); err != nil {
 		return noop, nil
 	}
-	f, err := os.OpenFile(targetPath, os.O_RDWR, 0)
-	if err == nil {
-		_ = f.Close()
+	if canAccessDeviceNode(targetPath) {
 		return noop, nil
 	}
 
@@ -352,15 +366,13 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 		// Safely unmount target disk after permission grant to defeat OS automount
 		unmountTargetDisk(targetPath)
 
-		// Preflight check: verify that current process can actually open targetPath
+		// Preflight check: verify that current process can actually access targetPath without touching character device
 		if strings.HasPrefix(targetPath, "/dev/") && os.Getenv("UNIBOOT_DRY_RUN") != "1" {
-			f, err := os.OpenFile(targetPath, os.O_RDWR, 0)
-			if err != nil {
+			if !canAccessDeviceNode(targetPath) {
 				remountTargetDisk(targetPath)
 				restoreDiskPerms()
-				return fmt.Errorf("unable to access raw disk %s: %w", targetPath, err)
+				return fmt.Errorf("unable to access raw disk %s: permission denied", targetPath)
 			}
-			_ = f.Close()
 		}
 
 		cmd := exec.Command(status.Path, args...)

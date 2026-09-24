@@ -217,8 +217,19 @@ export function useDeployment(options: UseDeploymentOptions) {
     }
   });
 
+  const runningVmTarget = ref<{ device: string; name: string } | null>(null);
+
+  function setRunningVmTarget(device: string, name: string) {
+    runningVmTarget.value = { device, name };
+  }
+
+  function clearRunningVmTarget() {
+    runningVmTarget.value = null;
+  }
+
   const deployDisabledReason = computed(() => {
     if (isDeploying.value) return t("deploy.tip_writing");
+    if (runningVmTarget.value) return t("vm.tip_running");
     if (selectionMode.value === "single" && !selectedDisk.value) return t("deploy.tip_select_single");
     if (selectionMode.value === "batch" && selectedDevices.value.size === 0) return t("deploy.tip_select_batch");
     if (activeMode.value === "hybrid" && !isNonDestructive.value && !ventoyStatus.value.valid) {
@@ -242,6 +253,9 @@ export function useDeployment(options: UseDeploymentOptions) {
   });
 
   const activeVmTargetDevice = computed(() => {
+    if (runningVmTarget.value && runningVmTarget.value.device) {
+      return runningVmTarget.value.device;
+    }
     if (selectionMode.value === "single") {
       return selectedDisk.value?.device || "";
     }
@@ -252,6 +266,9 @@ export function useDeployment(options: UseDeploymentOptions) {
   });
 
   const activeVmTargetName = computed(() => {
+    if (runningVmTarget.value && runningVmTarget.value.name) {
+      return runningVmTarget.value.name;
+    }
     if (selectionMode.value === "single") {
       return selectedDisk.value?.name || selectedDisk.value?.device || "";
     }
@@ -880,6 +897,9 @@ export function useDeployment(options: UseDeploymentOptions) {
     isNonDestructive,
     deployBtnText,
     deployDisabledReason,
+    runningVmTarget,
+    setRunningVmTarget,
+    clearRunningVmTarget,
     activeVmTargetDevice,
     activeVmTargetName,
     showDeploySuccessBanner,

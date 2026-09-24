@@ -17,9 +17,13 @@ export interface VMStatus {
 
 export interface UseVirtualMachineOptions {
   activeVmTargetDevice: ComputedRef<string>;
+  activeVmTargetName?: ComputedRef<string>;
   diskList: Ref<DiskInfo[]>;
   isDeploying: Ref<boolean>;
   showToast: (msg: string, type: 'info' | 'warning' | 'error' | 'success') => void;
+  refreshDisks?: () => Promise<void>;
+  onVmSessionStarted?: (targetDevice: string, targetName: string) => void;
+  onVmSessionEnded?: () => void;
 }
 
 export function useVirtualMachine(options: UseVirtualMachineOptions) {
@@ -33,16 +37,30 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   const vmDisplayAccel = ref<boolean>(true);
   const isLaunchingQemu = ref<boolean>(false);
   const isVmRunning = ref<boolean>(false);
+  const runningVmTargetDevice = ref<string>('');
+  const runningVmTargetName = ref<string>('');
   const qemuStatus = ref<{ installed: boolean; path: string; version: string }>({
     installed: false,
     path: '',
     version: ''
   });
 
+  function handleVmEnded() {
+    runningVmTargetDevice.value = '';
+    runningVmTargetName.value = '';
+    isVmRunning.value = false;
+    isLaunchingQemu.value = false;
+    if (options.onVmSessionEnded) {
+      options.onVmSessionEnded();
+    }
+    if (options.refreshDisks) {
+      options.refreshDisks();
+    }
+  }
+
   if (typeof window !== 'undefined' && (window as any).runtime && (window as any).runtime.EventsOn) {
     (window as any).runtime.EventsOn('vm-session-ended', () => {
-      isVmRunning.value = false;
-      isLaunchingQemu.value = false;
+      handleVmEnded();
     });
   }
 
@@ -151,27 +169,59 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
 
       if (window.go && window.go.main && window.go.main.App) {
         const app = window.go.main.App as any;
+        const launchedDev = targetDevice;
+        const launchedName = options.activeVmTargetName?.value || targetDevice;
+
         if (typeof app.LaunchVMWithConfig === 'function') {
           await app.LaunchVMWithConfig(targetDevice, selectedVMType.value, vmConfig);
+          runningVmTargetDevice.value = launchedDev;
+          runningVmTargetName.value = launchedName;
           isVmRunning.value = true;
+          if (options.onVmSessionStarted) {
+            options.onVmSessionStarted(launchedDev, launchedName);
+          }
           logUserAction('INFO', 'User launched hypervisor simulation test with VMConfig', `${vmName} (${selectedVMType.value}, ${selectedBootMode.value}, ${vmCpuCores.value} cores, ${vmMemoryMB.value}MB) on ${targetDevice}`);
           showToast(t('vm.startSuccess_vm', { name: vmName }), 'success');
         } else if (typeof app.LaunchVM === 'function') {
           await app.LaunchVM(targetDevice, selectedVMType.value, selectedBootMode.value);
+          runningVmTargetDevice.value = launchedDev;
+          runningVmTargetName.value = launchedName;
           isVmRunning.value = true;
+          if (options.onVmSessionStarted) {
+            options.onVmSessionStarted(launchedDev, launchedName);
+          }
           logUserAction('INFO', 'User launched hypervisor simulation test', `${vmName} (${selectedVMType.value}, ${selectedBootMode.value}) on ${targetDevice}`);
           showToast(t('vm.startSuccess_vm', { name: vmName }), 'success');
         } else if (typeof app.LaunchQEMU === 'function') {
           await app.LaunchQEMU(targetDevice);
+          runningVmTargetDevice.value = launchedDev;
+          runningVmTargetName.value = launchedName;
           isVmRunning.value = true;
+          if (options.onVmSessionStarted) {
+            options.onVmSessionStarted(launchedDev, launchedName);
+          }
           logUserAction('INFO', 'User launched hypervisor simulation test', `QEMU on ${targetDevice}`);
           showToast(t('vm.startSuccess', { name: 'QEMU' }), 'success');
         } else {
           showToast(t('vm.backendNotReady'), 'warning');
+          return;
+        }
+
+        if (options.refreshDisks) {
+          await options.refreshDisks();
         }
       } else {
         await new Promise(r => setTimeout(r, 600));
+        runningVmTargetDevice.value = targetDevice;
+        runningVmTargetName.value = options.activeVmTargetName?.value || targetDevice;
+        isVmRunning.value = true;
+        if (options.onVmSessionStarted) {
+          options.onVmSessionStarted(targetDevice, runningVmTargetName.value);
+        }
         logUserAction('INFO', 'User launched hypervisor simulation test (demo mode)', `${vmName} on ${targetDevice}`);
+        if (options.refreshDisks) {
+          await options.refreshDisks();
+        }
       }
     } catch (e: any) {
       console.error('[UniBoot] LaunchVM error:', e);
@@ -186,8 +236,7 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
       if (window.go && window.go.main && window.go.main.App && typeof (window.go.main.App as any).StopVM === 'function') {
         await (window.go.main.App as any).StopVM();
       }
-      isVmRunning.value = false;
-      isLaunchingQemu.value = false;
+      handleVmEnded();
     } catch (e: any) {
       console.warn('Failed to stop VM:', e);
     }
@@ -202,6 +251,8 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
     vmDisplayAccel,
     isLaunchingQemu,
     isVmRunning,
+    runningVmTargetDevice,
+    runningVmTargetName,
     qemuStatus,
     isVmDisabled,
     vmDisabledReason,

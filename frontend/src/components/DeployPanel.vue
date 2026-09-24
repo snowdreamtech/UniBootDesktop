@@ -661,6 +661,7 @@ function handleDrop(e: DragEvent) {
 const isDeployDisabled = computed(() => {
   if (props.isDeploying) return true;
   if (props.isPreflight) return true;
+  if (props.isVmRunning) return true;
   if (props.selectionMode === 'single') {
     return !props.selectedDisk;
   }

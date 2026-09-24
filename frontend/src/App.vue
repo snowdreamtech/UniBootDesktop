@@ -238,6 +238,7 @@ const {
   handleBatchEjectDisks,
   handleSafelyEjectAfterDeploy,
   refreshDisks,
+  setPendingRestoreDevice,
 } = useDiskSelection({
   t,
   showToast,
@@ -286,6 +287,8 @@ const {
   isNonDestructive,
   deployBtnText,
   deployDisabledReason,
+  setRunningVmTarget,
+  clearRunningVmTarget,
   activeVmTargetDevice,
   activeVmTargetName,
   showDeploySuccessBanner,
@@ -330,9 +333,18 @@ const {
   stopVM,
 } = useVirtualMachine({
   activeVmTargetDevice,
+  activeVmTargetName,
   diskList,
   isDeploying,
   showToast,
+  refreshDisks,
+  onVmSessionStarted: (dev, name) => {
+    setRunningVmTarget(dev, name);
+    setPendingRestoreDevice(dev);
+  },
+  onVmSessionEnded: () => {
+    clearRunningVmTarget();
+  },
 });
 
 // 7. Log Center Panel

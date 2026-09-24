@@ -321,6 +321,40 @@ func TrackDiskRemounted(targetPath string) {
 	}
 }
 
+// IsDiskInVMSession checks if targetDisk or its underlying physical device is currently in an active VM session.
+func IsDiskInVMSession(diskPath string) bool {
+	if diskPath == "" {
+		return false
+	}
+	targetNode := diskPath
+	if runtime.GOOS == "darwin" {
+		targetNode = disk.NormalizeDarwinDiskNode(diskPath)
+	}
+	var inUse bool
+	unmountedDisksTracker.Range(func(key, value any) bool {
+		tracked, ok := key.(string)
+		if !ok || tracked == "" {
+			return true
+		}
+		if tracked == diskPath {
+			inUse = true
+			return false
+		}
+		if runtime.GOOS == "darwin" {
+			trackedNode := disk.NormalizeDarwinDiskNode(tracked)
+			if trackedNode != "" && targetNode != "" && trackedNode == targetNode {
+				inUse = true
+				return false
+			}
+		} else if strings.TrimPrefix(tracked, "/dev/") == strings.TrimPrefix(diskPath, "/dev/") {
+			inUse = true
+			return false
+		}
+		return true
+	})
+	return inUse
+}
+
 // CleanupAllUnmountedDisks remounts only the disks previously tracked by the VM lifecycle.
 // This intentionally does NOT enumerate all removable media or eject arbitrary USB devices.
 // The shutdown policy is: best-effort remount of tracked VM targets, never mass-eject all U disks.

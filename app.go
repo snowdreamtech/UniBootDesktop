@@ -196,8 +196,16 @@ func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
 		logger.Error("Failed to scan removable storage drives", "error", err)
 		return nil, err
 	}
-	logger.Info(fmt.Sprintf("Scanned removable storage drives, found %d device(s)", len(disks)))
-	return disks, nil
+	filtered := make([]disk.DiskInfo, 0, len(disks))
+	for _, d := range disks {
+		if hypervisor.IsDiskInVMSession(d.Device) {
+			logger.Info("Filtering out disk currently engaged in active VM preview session", "disk", d.Device)
+			continue
+		}
+		filtered = append(filtered, d)
+	}
+	logger.Info(fmt.Sprintf("Scanned removable storage drives, found %d device(s)", len(filtered)))
+	return filtered, nil
 }
 
 // EjectDisk safely unmounts and ejects the target removable storage disk.
@@ -741,16 +749,22 @@ func (a *App) LaunchVMWithConfig(targetDisk string, vmType string, cfg hyperviso
 		cfg.MemoryMB = hypervisor.GetRecommendedVMMemoryMB()
 	}
 
+	var err error
 	if vmType == "" || vmType == "auto" {
-		return hypervisor.GetManager().LaunchBestConfigured(a.ctx, targetDisk, cfg)
+		err = hypervisor.GetManager().LaunchBestConfigured(a.ctx, targetDisk, cfg)
+	} else {
+		logger.Info("Requesting specified hypervisor preview test launch with VMConfig", "disk", targetDisk, "vmType", vmType, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB)
+		err = hypervisor.GetManager().LaunchSpecifiedConfigured(a.ctx, targetDisk, hypervisor.HypervisorType(vmType), cfg)
 	}
-	logger.Info("Requesting specified hypervisor preview test launch with VMConfig", "disk", targetDisk, "vmType", vmType, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB)
-	err := hypervisor.GetManager().LaunchSpecifiedConfigured(a.ctx, targetDisk, hypervisor.HypervisorType(vmType), cfg)
 	if err != nil {
-		logger.Error("Failed to launch specified hypervisor with VMConfig", "disk", targetDisk, "vmType", vmType, "error", err)
+		logger.Error("Failed to launch hypervisor with VMConfig", "disk", targetDisk, "vmType", vmType, "error", err)
 		return err
 	}
 	logger.Info("Specified hypervisor test launched successfully with VMConfig", "disk", targetDisk, "vmType", vmType)
+	disk.InvalidateDiskCache()
+	if a.ctx != nil {
+		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
+	}
 	return nil
 }
 

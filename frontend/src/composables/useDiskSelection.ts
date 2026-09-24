@@ -53,6 +53,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
   const isInspectorOpen = ref(false);
   const targetInspectorDisk = ref<DiskInfo | null>(null);
   const isScanningDisks = ref(false);
+  const pendingRestoreDevice = ref<string>("");
 
   watch(selectionMode, (newMode) => {
     logUserAction("INFO", "User switched disk selection mode", newMode);
@@ -354,11 +355,17 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
           }
           diskList.value = updatedList;
 
-          // Preserve single selection if the disk is still connected
-          if (previousSelectedDevice) {
-            const stillExists = diskList.value.find((d) => d.device === previousSelectedDevice);
-            selectedDisk.value = stillExists || (diskList.value.length > 0 ? diskList.value[0] : null);
-          } else if (diskList.value.length > 0) {
+          // Preserve single selection if the disk is still connected, or restore after VM remount
+          const targetToPreserve = pendingRestoreDevice.value || previousSelectedDevice;
+          if (targetToPreserve) {
+            const stillExists = diskList.value.find((d) => d.device === targetToPreserve);
+            if (stillExists) {
+              selectedDisk.value = stillExists;
+              pendingRestoreDevice.value = "";
+            } else {
+              selectedDisk.value = null;
+            }
+          } else if (diskList.value.length > 0 && !selectedDisk.value) {
             selectedDisk.value = diskList.value[0];
           } else {
             selectedDisk.value = null;
@@ -503,6 +510,10 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
     selectedDisk,
     selectedDevices,
     isScanningDisks,
+    pendingRestoreDevice,
+    setPendingRestoreDevice: (dev: string) => {
+      pendingRestoreDevice.value = dev;
+    },
     ejectingDevices,
     customIcons,
     isPickerOpen,
