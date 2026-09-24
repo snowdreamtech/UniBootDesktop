@@ -2855,6 +2855,14 @@ func SafeUserEjectDisk(device string) error {
 	return EjectDisk(device)
 }
 
+// SyncDiskBuffers commits all filesystem caches and dirty pages to storage media.
+// On Unix (macOS and Linux), it issues a kernel-level sync() syscall.
+func SyncDiskBuffers() {
+	if runtime.GOOS == "darwin" || runtime.GOOS == "linux" {
+		syscall.Sync()
+	}
+}
+
 // EjectDisk safely unmounts and ejects the target removable USB storage drive.
 func EjectDisk(device string) error {
 	if device == "" {
@@ -2863,6 +2871,9 @@ func EjectDisk(device string) error {
 	if err := ValidateTargetDisk(device); err != nil {
 		return err
 	}
+
+	// Flush OS kernel page cache to physical media before unmounting/ejecting
+	SyncDiskBuffers()
 
 	switch runtime.GOOS {
 	case "darwin":

@@ -270,6 +270,7 @@ func deployHybridModeWithStage(ctx context.Context, targetDisk string, fsType st
 		msg += fmt.Sprintf(" (%d ISO/IMG file(s) copied)", len(isoPaths))
 	}
 
+	disk.SyncDiskBuffers()
 	logger.Info("Hybrid Mode Boot Disk created successfully!", "target", targetDisk, "mountPoint", mountPoint)
 
 	return &DeployResult{
@@ -589,6 +590,7 @@ func deployCloudModeWithStage(ctx context.Context, targetDisk string, fsType str
 		msg = fmt.Sprintf("Successfully converted Ventoy drive to Cloud Mode iPXE Cloud Boot by flashing EFI partition at %s (Main Data Partition untouched, ISO data preserved!)", efiMountPoint)
 	}
 
+	disk.SyncDiskBuffers()
 	logger.Info("Cloud Boot Disk created successfully!", "target", targetDisk, "efiMountPoint", efiMountPoint)
 
 	return &DeployResult{
