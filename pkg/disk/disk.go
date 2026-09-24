@@ -2085,6 +2085,7 @@ func getLinuxDisks() ([]DiskInfo, error) {
 		return disks, nil
 	}
 
+	validDevs := make([]linuxBlockDevice, 0, len(lsblk.BlockDevices))
 	for _, dev := range lsblk.BlockDevices {
 		// Filter out virtual, loop, ram, optical, and read-only devices
 		if dev.Type == "loop" || strings.HasPrefix(dev.Name, "loop") {
@@ -2102,163 +2103,188 @@ func getLinuxDisks() ([]DiskInfo, error) {
 		if dev.Tran != "usb" && !dev.Rm {
 			continue
 		}
+		validDevs = append(validDevs, dev)
+	}
 
-		devPath := "/dev/" + dev.Name
-		mountPath := devPath
-		fileSystem := dev.Fstype
-		freeSpace := dev.Fsavail
-		partitionScheme := "GPT / MBR"
-		if strings.ToLower(dev.Pttype) == "gpt" {
-			partitionScheme = "GPT (GUID Partition Table)"
-		} else if strings.ToLower(dev.Pttype) == "dos" || strings.ToLower(dev.Pttype) == "mbr" {
-			partitionScheme = "MBR (Master Boot Record)"
-		}
+	if len(validDevs) == 0 {
+		return disks, nil
+	}
 
-		displayName := strings.TrimSpace(dev.Vendor + " " + dev.Model)
-		if displayName == "" {
-			displayName = dev.Name
-		}
-		if displayName == "" {
-			displayName = "USB Storage Device"
-		}
+	disksResult := make([]*DiskInfo, len(validDevs))
+	var wg sync.WaitGroup
+	wg.Add(len(validDevs))
 
-		// Labels are UI metadata only. They must never be used as device identity,
-		// cache key, or safety gate. Prefer the real block device path instead.
-		for _, child := range dev.Children {
-			if child.MountPoint != "" {
-				mountPath = child.MountPoint
-				if child.Fstype != "" {
-					fileSystem = child.Fstype
-				}
-				if child.Fsavail > 0 {
-					freeSpace = child.Fsavail
-				}
-				if displayName == "USB Storage Device" || displayName == dev.Name {
-					baseMount := filepath.Base(child.MountPoint)
-					if baseMount != "" && !IsIgnoredVolume(baseMount) {
-						displayName = baseMount
-					}
-				}
-				break
-			}
-		}
+	for i, d := range validDevs {
+		go func(idx int, dev linuxBlockDevice) {
+			defer wg.Done()
+			disksResult[idx] = inspectLinuxDisk(dev)
+		}(i, d)
+	}
+	wg.Wait()
 
-		if IsIgnoredVolume(filepath.Base(mountPath)) {
-			continue
+	for _, d := range disksResult {
+		if d != nil {
+			disks = append(disks, *d)
 		}
-
-		if fileSystem == "" {
-			fileSystem = "vfat / exfat"
-		}
-
-		usbVer := "USB 3.0"
-		usbSpeed := "5 Gb/s"
-		vendor := strings.TrimSpace(dev.Vendor)
-		if vendor == "" {
-			vendor = "Generic"
-		}
-
-		// Check sysfs for physical USB speed if available
-		sysSpeed, sysErr := os.ReadFile(fmt.Sprintf("/sys/block/%s/device/speed", dev.Name))
-		if sysErr == nil {
-			sp := strings.TrimSpace(string(sysSpeed))
-			if sp == "480" {
-				usbVer = "USB 2.0"
-				usbSpeed = "480 Mb/s"
-			} else if sp == "5000" {
-				usbVer = "USB 3.0"
-				usbSpeed = "5 Gb/s"
-			} else if sp == "10000" {
-				usbVer = "USB 3.1"
-				usbSpeed = "10 Gb/s"
-			}
-		}
-
-		formattedSize := FormatBytesDual(dev.Size)
-		freeFormatted := FormatBytes(freeSpace)
-		if freeSpace == 0 {
-			freeFormatted = formattedSize
-		}
-
-		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
-		protoCode := MapProtocolCode(usbVer, usbSpeed)
-
-		// Detect if this is a system disk
-		isSystemDisk, _ := isSystemDiskLinux("/dev/" + dev.Name)
-
-		// Use devPath for disk type detection (MBR check), mountPath for file checks
-		manifestLinux := GetDiskUniBootManifest(devPath)
-		if manifestLinux == nil && mountPath != "" {
-			manifestLinux = GetDiskUniBootManifest(mountPath)
-		}
-		isRealVentoyLinux := IsRealVentoyDisk(devPath)
-		isCloudModeLinux := IsCloudModeDisk(devPath)
-		if manifestLinux != nil {
-			if manifestLinux.Mode == "cloud" {
-				isCloudModeLinux = true
-			} else if manifestLinux.Mode == "hybrid" {
-				isRealVentoyLinux = true
-			}
-		}
-		thirdPartyBootLinux := BootTypeNone
-		isGenBootLinux := false
-		if !isCloudModeLinux && !isRealVentoyLinux {
-			thirdPartyBootLinux = GetDiskThirdPartyBoot(devPath)
-			if thirdPartyBootLinux == BootTypeNone && mountPath != "" {
-				thirdPartyBootLinux = GetDiskThirdPartyBoot(mountPath)
-			}
-			isGenBootLinux = thirdPartyBootLinux != BootTypeNone
-		}
-		hasUnmountedEspLinux := HasUnmountedEspPartition(devPath)
-		bootStatusLinux, bootStatusCodeLinux := DetectBootStatus(partitionScheme, isRealVentoyLinux, isCloudModeLinux, thirdPartyBootLinux, manifestLinux, hasUnmountedEspLinux)
-
-		disks = append(disks, DiskInfo{
-			Device:             mountPath,
-			Name:               displayName,
-			Size:               dev.Size,
-			Formatted:          formattedSize,
-			FreeSpace:          freeSpace,
-			FreeFormatted:      freeFormatted,
-			IsRemovable:        true,
-			IsSystem:           isSystemDisk,
-			UsbVersion:         usbVer,
-			UsbSpeed:           usbSpeed,
-			Vendor:             vendor,
-			FileSystem:         fileSystem,
-			PartitionScheme:    partitionScheme,
-			Writable:           !dev.Ro,
-			SmartStatus:        "Verified",
-			BusPower:           "500 mA",
-			BusPowerUsed:       "500 mA",
-			SectorSize:         "512 Bytes (512n/512e)",
-			TransportProtocol:  "BOT (Bulk-Only Transport)",
-			BootStatus:         bootStatusLinux,
-			BootStatusCode:     bootStatusCodeLinux,
-			ControllerVendor:   InferControllerVendor("", "", vendor),
-			IsFakeUsb3:         isFake,
-			ProtocolCode:       protoCode,
-			IsRealVentoy:       isRealVentoyLinux,
-			IsCloudMode:        isCloudModeLinux,
-			IsGenericBoot:      isGenBootLinux,
-			ThirdPartyBootType: thirdPartyBootLinux,
-			ThirdPartyBootCode: MapThirdPartyBootCode(thirdPartyBootLinux),
-			UniBootVersion: func() string {
-				if manifestLinux != nil {
-					return manifestLinux.Version
-				}
-				return ""
-			}(),
-			UniBootMode: func() string {
-				if manifestLinux != nil {
-					return manifestLinux.Mode
-				}
-				return ""
-			}(),
-			MountPoint: mountPath,
-		})
 	}
 
 	return disks, nil
+}
+
+func inspectLinuxDisk(dev linuxBlockDevice) *DiskInfo {
+	devPath := "/dev/" + dev.Name
+	mountPath := devPath
+	fileSystem := dev.Fstype
+	freeSpace := dev.Fsavail
+	partitionScheme := "GPT / MBR"
+	if strings.ToLower(dev.Pttype) == "gpt" {
+		partitionScheme = "GPT (GUID Partition Table)"
+	} else if strings.ToLower(dev.Pttype) == "dos" || strings.ToLower(dev.Pttype) == "mbr" {
+		partitionScheme = "MBR (Master Boot Record)"
+	}
+
+	displayName := strings.TrimSpace(dev.Vendor + " " + dev.Model)
+	if displayName == "" {
+		displayName = dev.Name
+	}
+	if displayName == "" {
+		displayName = "USB Storage Device"
+	}
+
+	// Labels are UI metadata only. They must never be used as device identity,
+	// cache key, or safety gate. Prefer the real block device path instead.
+	for _, child := range dev.Children {
+		if child.MountPoint != "" {
+			mountPath = child.MountPoint
+			if child.Fstype != "" {
+				fileSystem = child.Fstype
+			}
+			if child.Fsavail > 0 {
+				freeSpace = child.Fsavail
+			}
+			if displayName == "USB Storage Device" || displayName == dev.Name {
+				baseMount := filepath.Base(child.MountPoint)
+				if baseMount != "" && !IsIgnoredVolume(baseMount) {
+					displayName = baseMount
+				}
+			}
+			break
+		}
+	}
+
+	if IsIgnoredVolume(filepath.Base(mountPath)) {
+		return nil
+	}
+
+	if fileSystem == "" {
+		fileSystem = "vfat / exfat"
+	}
+
+	usbVer := "USB 3.0"
+	usbSpeed := "5 Gb/s"
+	vendor := strings.TrimSpace(dev.Vendor)
+	if vendor == "" {
+		vendor = "Generic"
+	}
+
+	// Check sysfs for physical USB speed if available
+	sysSpeed, sysErr := os.ReadFile(fmt.Sprintf("/sys/block/%s/device/speed", dev.Name))
+	if sysErr == nil {
+		sp := strings.TrimSpace(string(sysSpeed))
+		if sp == "480" {
+			usbVer = "USB 2.0"
+			usbSpeed = "480 Mb/s"
+		} else if sp == "5000" {
+			usbVer = "USB 3.0"
+			usbSpeed = "5 Gb/s"
+		} else if sp == "10000" {
+			usbVer = "USB 3.1"
+			usbSpeed = "10 Gb/s"
+		}
+	}
+
+	formattedSize := FormatBytesDual(dev.Size)
+	freeFormatted := FormatBytes(freeSpace)
+	if freeSpace == 0 {
+		freeFormatted = formattedSize
+	}
+
+	isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
+	protoCode := MapProtocolCode(usbVer, usbSpeed)
+
+	// Detect if this is a system disk
+	isSystemDisk, _ := isSystemDiskLinux("/dev/" + dev.Name)
+
+	// Use devPath for disk type detection (MBR check), mountPath for file checks
+	manifestLinux := GetDiskUniBootManifest(devPath)
+	if manifestLinux == nil && mountPath != "" {
+		manifestLinux = GetDiskUniBootManifest(mountPath)
+	}
+	isRealVentoyLinux := IsRealVentoyDisk(devPath)
+	isCloudModeLinux := IsCloudModeDisk(devPath)
+	if manifestLinux != nil {
+		if manifestLinux.Mode == "cloud" {
+			isCloudModeLinux = true
+		} else if manifestLinux.Mode == "hybrid" {
+			isRealVentoyLinux = true
+		}
+	}
+	thirdPartyBootLinux := BootTypeNone
+	isGenBootLinux := false
+	if !isCloudModeLinux && !isRealVentoyLinux {
+		thirdPartyBootLinux = GetDiskThirdPartyBoot(devPath)
+		if thirdPartyBootLinux == BootTypeNone && mountPath != "" {
+			thirdPartyBootLinux = GetDiskThirdPartyBoot(mountPath)
+		}
+		isGenBootLinux = thirdPartyBootLinux != BootTypeNone
+	}
+	hasUnmountedEspLinux := HasUnmountedEspPartition(devPath)
+	bootStatusLinux, bootStatusCodeLinux := DetectBootStatus(partitionScheme, isRealVentoyLinux, isCloudModeLinux, thirdPartyBootLinux, manifestLinux, hasUnmountedEspLinux)
+
+	return &DiskInfo{
+		Device:             mountPath,
+		Name:               displayName,
+		Size:               dev.Size,
+		Formatted:          formattedSize,
+		FreeSpace:          freeSpace,
+		FreeFormatted:      freeFormatted,
+		IsRemovable:        true,
+		IsSystem:           isSystemDisk,
+		UsbVersion:         usbVer,
+		UsbSpeed:           usbSpeed,
+		Vendor:             vendor,
+		FileSystem:         fileSystem,
+		PartitionScheme:    partitionScheme,
+		Writable:           !dev.Ro,
+		SmartStatus:        "Verified",
+		BusPower:           "500 mA",
+		BusPowerUsed:       "500 mA",
+		SectorSize:         "512 Bytes (512n/512e)",
+		TransportProtocol:  "BOT (Bulk-Only Transport)",
+		BootStatus:         bootStatusLinux,
+		BootStatusCode:     bootStatusCodeLinux,
+		ControllerVendor:   InferControllerVendor("", "", vendor),
+		IsFakeUsb3:         isFake,
+		ProtocolCode:       protoCode,
+		IsRealVentoy:       isRealVentoyLinux,
+		IsCloudMode:        isCloudModeLinux,
+		IsGenericBoot:      isGenBootLinux,
+		ThirdPartyBootType: thirdPartyBootLinux,
+		ThirdPartyBootCode: MapThirdPartyBootCode(thirdPartyBootLinux),
+		UniBootVersion: func() string {
+			if manifestLinux != nil {
+				return manifestLinux.Version
+			}
+			return ""
+		}(),
+		UniBootMode: func() string {
+			if manifestLinux != nil {
+				return manifestLinux.Mode
+			}
+			return ""
+		}(),
+		MountPoint: mountPath,
+	}
 }
 
 // Windows disk probing via PowerShell Win32_DiskDrive
@@ -2287,6 +2313,12 @@ func getWindowsDisks() ([]DiskInfo, error) {
 		}
 	}
 
+	type indexedDrive struct {
+		index int
+		drive winDiskDrive
+	}
+
+	validDrives := make([]indexedDrive, 0, len(winDrives))
 	for i, drive := range winDrives {
 		// Secondary check to ensure virtual devices, VHD, or mounted ISOs are not displayed
 		upperModel := strings.ToUpper(drive.Model + " " + drive.Caption)
@@ -2298,98 +2330,123 @@ func getWindowsDisks() ([]DiskInfo, error) {
 			drive.InterfaceType == "FileBackedVirtual" {
 			continue
 		}
+		validDrives = append(validDrives, indexedDrive{index: i, drive: drive})
+	}
 
-		driveLetter := fmt.Sprintf("%c:", 'E'+i)
-		displayName := drive.Model
-		if displayName == "" {
-			displayName = drive.Caption
+	if len(validDrives) == 0 {
+		return disks, nil
+	}
+
+	disksResult := make([]*DiskInfo, len(validDrives))
+	var wg sync.WaitGroup
+	wg.Add(len(validDrives))
+
+	for i, item := range validDrives {
+		go func(idx int, driveIndex int, d winDiskDrive) {
+			defer wg.Done()
+			disksResult[idx] = inspectWindowsDisk(driveIndex, d)
+		}(i, item.index, item.drive)
+	}
+	wg.Wait()
+
+	for _, d := range disksResult {
+		if d != nil {
+			disks = append(disks, *d)
 		}
-		if displayName == "" {
-			displayName = "USB Storage Device"
-		}
-
-		usbVer := "USB 3.0"
-		usbSpeed := "5 Gb/s"
-		if strings.Contains(strings.ToUpper(displayName), "2.0") {
-			usbVer = "USB 2.0"
-			usbSpeed = "480 Mb/s"
-		}
-
-		formattedSize := FormatBytesDual(drive.Size)
-		freeSpace := uint64(float64(drive.Size) * 0.8)
-		freeFormatted := FormatBytes(freeSpace)
-
-		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
-		protoCode := MapProtocolCode(usbVer, usbSpeed)
-
-		// Detect if this is a system disk
-		isSystemDisk, _ := isSystemDiskWindows(driveLetter)
-
-		manifestWin := GetDiskUniBootManifest(driveLetter)
-		isRealVentoyWin := IsRealVentoyDisk(driveLetter)
-		isCloudModeWin := IsCloudModeDisk(driveLetter)
-		if manifestWin != nil {
-			if manifestWin.Mode == "cloud" {
-				isCloudModeWin = true
-			} else if manifestWin.Mode == "hybrid" {
-				isRealVentoyWin = true
-			}
-		}
-		thirdPartyBootWin := BootTypeNone
-		isGenBootWin := false
-		if !isCloudModeWin && !isRealVentoyWin {
-			thirdPartyBootWin = GetDiskThirdPartyBoot(driveLetter)
-			isGenBootWin = thirdPartyBootWin != BootTypeNone
-		}
-		bootStatusWin, bootStatusCodeWin := DetectBootStatus("GPT / MBR", isRealVentoyWin, isCloudModeWin, thirdPartyBootWin, manifestWin, false)
-
-		disks = append(disks, DiskInfo{
-			Device:             driveLetter,
-			Name:               displayName,
-			Size:               drive.Size,
-			Formatted:          formattedSize,
-			FreeSpace:          freeSpace,
-			FreeFormatted:      freeFormatted,
-			IsRemovable:        true,
-			IsSystem:           isSystemDisk,
-			UsbVersion:         usbVer,
-			UsbSpeed:           usbSpeed,
-			Vendor:             "Generic",
-			FileSystem:         "FAT32 / NTFS",
-			PartitionScheme:    "GPT / MBR",
-			Writable:           true,
-			SmartStatus:        "Verified",
-			BusPower:           "500 mA",
-			BusPowerUsed:       "500 mA",
-			SectorSize:         "512 Bytes (512n/512e)",
-			TransportProtocol:  "BOT (Bulk-Only Transport)",
-			BootStatus:         bootStatusWin,
-			BootStatusCode:     bootStatusCodeWin,
-			ControllerVendor:   InferControllerVendor("", "", "Generic"),
-			IsFakeUsb3:         isFake,
-			ProtocolCode:       protoCode,
-			IsRealVentoy:       isRealVentoyWin,
-			IsCloudMode:        isCloudModeWin,
-			IsGenericBoot:      isGenBootWin,
-			ThirdPartyBootType: thirdPartyBootWin,
-			ThirdPartyBootCode: MapThirdPartyBootCode(thirdPartyBootWin),
-			UniBootVersion: func() string {
-				if manifestWin != nil {
-					return manifestWin.Version
-				}
-				return ""
-			}(),
-			UniBootMode: func() string {
-				if manifestWin != nil {
-					return manifestWin.Mode
-				}
-				return ""
-			}(),
-			MountPoint: driveLetter,
-		})
 	}
 
 	return disks, nil
+}
+
+func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
+	driveLetter := fmt.Sprintf("%c:", 'E'+i)
+	displayName := drive.Model
+	if displayName == "" {
+		displayName = drive.Caption
+	}
+	if displayName == "" {
+		displayName = "USB Storage Device"
+	}
+
+	usbVer := "USB 3.0"
+	usbSpeed := "5 Gb/s"
+	if strings.Contains(strings.ToUpper(displayName), "2.0") {
+		usbVer = "USB 2.0"
+		usbSpeed = "480 Mb/s"
+	}
+
+	formattedSize := FormatBytesDual(drive.Size)
+	freeSpace := uint64(float64(drive.Size) * 0.8)
+	freeFormatted := FormatBytes(freeSpace)
+
+	isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
+	protoCode := MapProtocolCode(usbVer, usbSpeed)
+
+	// Detect if this is a system disk
+	isSystemDisk, _ := isSystemDiskWindows(driveLetter)
+
+	manifestWin := GetDiskUniBootManifest(driveLetter)
+	isRealVentoyWin := IsRealVentoyDisk(driveLetter)
+	isCloudModeWin := IsCloudModeDisk(driveLetter)
+	if manifestWin != nil {
+		if manifestWin.Mode == "cloud" {
+			isCloudModeWin = true
+		} else if manifestWin.Mode == "hybrid" {
+			isRealVentoyWin = true
+		}
+	}
+	thirdPartyBootWin := BootTypeNone
+	isGenBootWin := false
+	if !isCloudModeWin && !isRealVentoyWin {
+		thirdPartyBootWin = GetDiskThirdPartyBoot(driveLetter)
+		isGenBootWin = thirdPartyBootWin != BootTypeNone
+	}
+	bootStatusWin, bootStatusCodeWin := DetectBootStatus("GPT / MBR", isRealVentoyWin, isCloudModeWin, thirdPartyBootWin, manifestWin, false)
+
+	return &DiskInfo{
+		Device:             driveLetter,
+		Name:               displayName,
+		Size:               drive.Size,
+		Formatted:          formattedSize,
+		FreeSpace:          freeSpace,
+		FreeFormatted:      freeFormatted,
+		IsRemovable:        true,
+		IsSystem:           isSystemDisk,
+		UsbVersion:         usbVer,
+		UsbSpeed:           usbSpeed,
+		Vendor:             "Generic",
+		FileSystem:         "FAT32 / NTFS",
+		PartitionScheme:    "GPT / MBR",
+		Writable:           true,
+		SmartStatus:        "Verified",
+		BusPower:           "500 mA",
+		BusPowerUsed:       "500 mA",
+		SectorSize:         "512 Bytes (512n/512e)",
+		TransportProtocol:  "BOT (Bulk-Only Transport)",
+		BootStatus:         bootStatusWin,
+		BootStatusCode:     bootStatusCodeWin,
+		ControllerVendor:   InferControllerVendor("", "", "Generic"),
+		IsFakeUsb3:         isFake,
+		ProtocolCode:       protoCode,
+		IsRealVentoy:       isRealVentoyWin,
+		IsCloudMode:        isCloudModeWin,
+		IsGenericBoot:      isGenBootWin,
+		ThirdPartyBootType: thirdPartyBootWin,
+		ThirdPartyBootCode: MapThirdPartyBootCode(thirdPartyBootWin),
+		UniBootVersion: func() string {
+			if manifestWin != nil {
+				return manifestWin.Version
+			}
+			return ""
+		}(),
+		UniBootMode: func() string {
+			if manifestWin != nil {
+				return manifestWin.Mode
+			}
+			return ""
+		}(),
+		MountPoint: driveLetter,
+	}
 }
 
 // Variables for command execution and JSON parsing to allow mocking in tests
