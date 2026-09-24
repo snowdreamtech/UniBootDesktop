@@ -17,6 +17,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
@@ -954,26 +955,27 @@ func getDarwinDiskutilInfo(node string) string {
 	}
 
 	darwinDiskutilCacheMutex.Lock()
-	defer darwinDiskutilCacheMutex.Unlock()
-
 	if time.Since(darwinDiskutilCacheTime) > 5*time.Second {
 		darwinDiskutilCacheMap = make(map[string]string)
 		darwinDiskutilCacheTime = time.Now()
 	}
 
 	if info, ok := darwinDiskutilCacheMap[node]; ok {
+		darwinDiskutilCacheMutex.Unlock()
 		return info
 	}
+	darwinDiskutilCacheMutex.Unlock()
 
 	cmd := execCommand("diskutil", "info", "-plist", node)
 	out, err := cmd.Output()
-	if err != nil {
-		darwinDiskutilCacheMap[node] = ""
-		return ""
+	var infoStr string
+	if err == nil {
+		infoStr = string(out)
 	}
 
-	infoStr := string(out)
+	darwinDiskutilCacheMutex.Lock()
 	darwinDiskutilCacheMap[node] = infoStr
+	darwinDiskutilCacheMutex.Unlock()
 	return infoStr
 }
 
@@ -1065,15 +1067,20 @@ func getVolumeSnapshot() string {
 		// volumes changes; the actual disk details are fetched by GetRemovableDisks
 		// only when a change is detected.
 		entries, err := os.ReadDir("/Volumes")
-		if err != nil {
-			return ""
-		}
 		var names []string
-		for _, e := range entries {
-			if e == nil || IsIgnoredVolume(e.Name()) {
-				continue
+		if err == nil {
+			for _, e := range entries {
+				if e == nil || IsIgnoredVolume(e.Name()) {
+					continue
+				}
+				names = append(names, e.Name())
 			}
-			names = append(names, e.Name())
+		}
+
+		// Also track /dev/disk[0-9]* device nodes so that plugging in or removing
+		// unformatted, raw, or not-yet-mounted USB drives is detected immediately.
+		if devEntries, err := filepath.Glob("/dev/disk[0-9]*"); err == nil {
+			names = append(names, strings.Join(devEntries, ","))
 		}
 		sort.Strings(names)
 		return strings.Join(names, "|")
@@ -1300,13 +1307,280 @@ func getCachedDarwinUSBMap() map[string]*darwinUSBInfo {
 	return usbMap
 }
 
-func getDarwinDisks() ([]DiskInfo, error) {
-	disks := make([]DiskInfo, 0)
+type darwinDiskutilPartition struct {
+	DeviceIdentifier string `json:"DeviceIdentifier"`
+	MountPoint       string `json:"MountPoint"`
+	VolumeName       string `json:"VolumeName"`
+	VolumeUUID       string `json:"VolumeUUID"`
+	Size             uint64 `json:"Size"`
+	Content          string `json:"Content"`
+}
 
+type darwinDiskutilWholeDisk struct {
+	DeviceIdentifier string                    `json:"DeviceIdentifier"`
+	Content          string                    `json:"Content"`
+	Size             uint64                    `json:"Size"`
+	OSInternal       bool                      `json:"OSInternal"`
+	Partitions       []darwinDiskutilPartition `json:"Partitions"`
+}
+
+type darwinDiskutilList struct {
+	WholeDisks            []string                  `json:"WholeDisks"`
+	AllDisksAndPartitions []darwinDiskutilWholeDisk `json:"AllDisksAndPartitions"`
+}
+
+func getDarwinDisksBatch(usbMap map[string]*darwinUSBInfo) ([]DiskInfo, error) {
+	cmd := execCommand("sh", "-c", "diskutil list -plist external physical | plutil -convert json -o - -")
+	out, err := cmd.Output()
+	if err != nil {
+		return nil, err
+	}
+
+	var dl darwinDiskutilList
+	if err := jsonUnmarshal(out, &dl); err != nil {
+		return nil, err
+	}
+
+	disks := make([]DiskInfo, 0, len(dl.AllDisksAndPartitions))
+	rootDisk := getDarwinRootSystemDisk()
+
+	for _, wholeDisk := range dl.AllDisksAndPartitions {
+		parentDisk := strings.TrimSpace(wholeDisk.DeviceIdentifier)
+		if parentDisk == "" {
+			continue
+		}
+
+		// Security: strictly filter out internal system disks and root disk
+		if wholeDisk.OSInternal || parentDisk == rootDisk || parentDisk == "disk0" || parentDisk == "disk1" {
+			continue
+		}
+		hasSystemMount := false
+		for _, p := range wholeDisk.Partitions {
+			mp := strings.TrimSpace(p.MountPoint)
+			if mp == "/" || mp == "/System" || strings.HasPrefix(mp, "/System/") {
+				hasSystemMount = true
+				break
+			}
+		}
+		if hasSystemMount {
+			continue
+		}
+		devNode := "/dev/" + parentDisk
+
+		totalSize := wholeDisk.Size
+		if parentInfo, ok := usbMap[parentDisk]; ok && totalSize == 0 {
+			totalSize = parentInfo.TotalSize
+		}
+		if totalSize == 0 {
+			totalSize = 32 * 1024 * 1024 * 1024
+		}
+
+		partitionScheme := "GPT / MBR"
+		if strings.Contains(wholeDisk.Content, "FDisk") || strings.Contains(wholeDisk.Content, "MBR") {
+			partitionScheme = "MBR (Master Boot Record)"
+		} else if strings.Contains(wholeDisk.Content, "GUID") || strings.Contains(wholeDisk.Content, "GPT") {
+			partitionScheme = "GPT (GUID Partition Table)"
+		} else if wholeDisk.Content != "" {
+			partitionScheme = wholeDisk.Content
+		}
+
+		var mountPoints []string
+		var primaryMountPoint, primaryVolName, primaryFileSystem string
+		var freeSpace uint64
+		hasUnmountedEsp := false
+
+		for _, p := range wholeDisk.Partitions {
+			pContent := strings.ToUpper(strings.TrimSpace(p.Content))
+			if pContent == "0XEF" || strings.Contains(pContent, "EFI") {
+				if strings.TrimSpace(p.MountPoint) == "" {
+					hasUnmountedEsp = true
+				}
+			}
+
+			mp := strings.TrimSpace(p.MountPoint)
+			if mp != "" {
+				mountPoints = append(mountPoints, mp)
+				if !IsIgnoredVolume(p.VolumeName) && primaryMountPoint == "" {
+					primaryMountPoint = mp
+					primaryVolName = strings.TrimSpace(p.VolumeName)
+					primaryFileSystem = strings.TrimSpace(p.Content)
+
+					var stat syscall.Statfs_t
+					if statErr := syscall.Statfs(mp, &stat); statErr == nil {
+						freeSpace = stat.Bavail * uint64(stat.Bsize)
+					}
+				}
+			}
+		}
+
+		if strings.EqualFold(primaryFileSystem, "Windows_NTFS") {
+			primaryFileSystem = "ExFAT / NTFS"
+		} else if strings.EqualFold(primaryFileSystem, "DOS_FAT_32") {
+			primaryFileSystem = "FAT32"
+		} else if primaryFileSystem == "" {
+			if len(wholeDisk.Partitions) == 0 {
+				primaryFileSystem = "RAW / Unformatted"
+			} else {
+				primaryFileSystem = "ExFAT"
+			}
+		}
+
+		formattedSize := FormatBytesDual(totalSize)
+		freeFormatted := FormatBytes(freeSpace)
+		if freeSpace == 0 {
+			freeFormatted = formattedSize
+		}
+
+		usbVer := "USB 2.0"
+		usbSpeed := "480 Mb/s"
+		vendor := "Generic"
+		displayName := primaryVolName
+		serialNum := ""
+		vendorId := ""
+		productId := ""
+		busPower := "500 mA"
+		busPowerUsed := "500 mA"
+
+		if parentInfo, ok := usbMap[parentDisk]; ok && parentInfo != nil {
+			if parentInfo.Vendor != "" {
+				vendor = parentInfo.Vendor
+			}
+			if parentInfo.UsbVersion != "" {
+				usbVer = parentInfo.UsbVersion
+			}
+			if parentInfo.UsbSpeed != "" {
+				usbSpeed = parentInfo.UsbSpeed
+			}
+			if displayName == "" && parentInfo.Model != "" {
+				displayName = parentInfo.Model
+			}
+			serialNum = parentInfo.SerialNumber
+			vendorId = parentInfo.VendorId
+			productId = parentInfo.ProductId
+			if parentInfo.BusPower != "" {
+				busPower = parentInfo.BusPower
+			}
+			if parentInfo.BusPowerUsed != "" {
+				busPowerUsed = parentInfo.BusPowerUsed
+			}
+		}
+
+		if displayName == "" {
+			displayName = parentDisk
+		}
+
+		isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
+		protoCode := MapProtocolCode(usbVer, usbSpeed)
+
+		isRealVentoy := CheckVentoyMbrSignature(devNode)
+		var manifest *UniBootManifest
+		for _, mp := range mountPoints {
+			if m, err := ReadUniBootManifest(mp); err == nil && m != nil {
+				manifest = m
+				break
+			}
+		}
+		if manifest == nil && !isRealVentoy && privilege.IsElevated() {
+			manifest = GetDiskUniBootManifest(devNode)
+		}
+		isCloudMode := false
+
+		for _, mp := range mountPoints {
+			if HasVentoyEngineFiles(mp) {
+				isRealVentoy = true
+			}
+			if HasUniBootCloudFiles(mp) {
+				isCloudMode = true
+			}
+		}
+
+		if manifest != nil {
+			if manifest.Mode == "cloud" {
+				isCloudMode = true
+			} else if manifest.Mode == "hybrid" {
+				isRealVentoy = true
+			}
+		}
+
+		thirdPartyBoot := BootTypeNone
+		isGenericBoot := false
+		if !isCloudMode && !isRealVentoy {
+			thirdPartyBoot = IdentifyThirdPartyBoot(mountPoints)
+			isGenericBoot = thirdPartyBoot != BootTypeNone
+		}
+
+		bootStatusStr, bootStatusCode := DetectBootStatus(partitionScheme, isRealVentoy, isCloudMode, thirdPartyBoot, manifest, hasUnmountedEsp)
+		controllerVendorStr := InferControllerVendor(vendorId, productId, vendor)
+
+		disks = append(disks, DiskInfo{
+			Device:             devNode,
+			Name:               displayName,
+			Size:               totalSize,
+			Formatted:          formattedSize,
+			FreeSpace:          freeSpace,
+			FreeFormatted:      freeFormatted,
+			IsRemovable:        true,
+			IsSystem:           false,
+			UsbVersion:         usbVer,
+			UsbSpeed:           usbSpeed,
+			Vendor:             vendor,
+			FileSystem:         primaryFileSystem,
+			PartitionScheme:    partitionScheme,
+			Writable:           true,
+			SerialNumber:       serialNum,
+			VendorId:           vendorId,
+			ProductId:          productId,
+			SmartStatus:        "Verified",
+			BusPower:           busPower,
+			BusPowerUsed:       busPowerUsed,
+			SectorSize:         "512 Bytes (512n/512e)",
+			TransportProtocol:  "BOT (Bulk-Only Transport)",
+			BootStatus:         bootStatusStr,
+			BootStatusCode:     bootStatusCode,
+			ControllerVendor:   controllerVendorStr,
+			IsFakeUsb3:         isFake,
+			ProtocolCode:       protoCode,
+			IsRealVentoy:       isRealVentoy,
+			IsCloudMode:        isCloudMode,
+			IsGenericBoot:      isGenericBoot,
+			ThirdPartyBootType: thirdPartyBoot,
+			ThirdPartyBootCode: MapThirdPartyBootCode(thirdPartyBoot),
+			UniBootVersion: func() string {
+				if manifest != nil {
+					return manifest.Version
+				}
+				return ""
+			}(),
+			UniBootMode: func() string {
+				if manifest != nil {
+					return manifest.Mode
+				}
+				return ""
+			}(),
+			MountPoint: primaryMountPoint,
+		})
+	}
+
+	return disks, nil
+}
+
+func getDarwinDisks() ([]DiskInfo, error) {
 	// Step 1: Probe system_profiler for rich hardware details (cached for 30s to eliminate CPU spikes)
 	usbMap := getCachedDarwinUSBMap()
 
-	// Step 2: Scan /Volumes for mounted removable drives
+	// Step 2: High-speed batch query using diskutil list -plist external physical (~200ms)
+	batchDisks, err := getDarwinDisksBatch(usbMap)
+	if err != nil {
+		logger.Warn("Batch disk discovery failed, using fallback scan", "error", err)
+	} else if len(batchDisks) > 0 || len(usbMap) == 0 {
+		return batchDisks, nil
+	} else {
+		logger.Warn("Batch disk discovery returned 0 disks, using fallback scan", "usbMapCount", len(usbMap))
+	}
+
+	disks := make([]DiskInfo, 0)
+
+	// Step 3: Scan /Volumes for mounted removable drives (fallback)
 	entries, err := os.ReadDir("/Volumes")
 	if err != nil {
 		return disks, nil
@@ -2212,17 +2486,14 @@ func isSystemDiskDarwin(device string) (bool, error) {
 		target = device
 	}
 
-	cmd := execCommand("diskutil", "info", "-plist", target)
-	output, err := cmd.Output()
-	if err != nil {
+	outputStr := getDarwinDiskutilInfo(target)
+	if outputStr == "" {
 		// If diskutil cannot find the device, verify it doesn't match root disk
 		if rootDisk := getDarwinRootSystemDisk(); rootDisk != "" && diskNode == rootDisk {
 			return true, nil
 		}
 		return false, nil
 	}
-
-	outputStr := string(output)
 
 	// Check for system mount points
 	systemMountPoints := []string{

@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 	"time"
 
@@ -215,6 +216,16 @@ func TestFormatBytes(t *testing.T) {
 
 func TestFormatBytesDual(t *testing.T) {
 	assert.Equal(t, "29.80 GB (Nominal 32 GB)", FormatBytesDual(32000000000))
+}
+
+func TestDarwinBatchDisks(t *testing.T) {
+	if runtime.GOOS != "darwin" {
+		t.Skip("Darwin only")
+	}
+	usbMap := getCachedDarwinUSBMap()
+	disks, err := getDarwinDisksBatch(usbMap)
+	assert.NoError(t, err)
+	assert.NotNil(t, disks)
 }
 
 func TestGetRemovableDisks(t *testing.T) {

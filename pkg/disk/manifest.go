@@ -148,24 +148,26 @@ func GetDiskUniBootManifest(targetDisk string) *UniBootManifest {
 		}
 	}
 
-	// If not found in actively mounted partitions, inspect unmounted ESP / Partition 2
-	espDevice := ""
-	if runtime.GOOS == "darwin" {
-		base := NormalizeDarwinDiskNode(targetDisk)
-		if strings.HasPrefix(base, "disk") {
-			espDevice = "/dev/" + base + "s2"
+	// If not found in actively mounted partitions, inspect unmounted ESP / Partition 2 only when elevated and not a Ventoy disk
+	if !CheckVentoyMbrSignature(targetDisk) && privilege.IsElevated() {
+		espDevice := ""
+		if runtime.GOOS == "darwin" {
+			base := NormalizeDarwinDiskNode(targetDisk)
+			if strings.HasPrefix(base, "disk") {
+				espDevice = "/dev/" + base + "s2"
+			}
+		} else if runtime.GOOS == "linux" {
+			if strings.HasPrefix(targetDisk, "/dev/") {
+				espDevice = targetDisk + "2"
+			}
 		}
-	} else if runtime.GOOS == "linux" {
-		if strings.HasPrefix(targetDisk, "/dev/") {
-			espDevice = targetDisk + "2"
-		}
-	}
 
-	if espDevice != "" {
-		if tempMnt, cleanup, err := privilege.MountHiddenESP(espDevice); err == nil {
-			defer cleanup()
-			if m, errM := ReadUniBootManifest(tempMnt); errM == nil && m != nil {
-				return m
+		if espDevice != "" {
+			if tempMnt, cleanup, err := privilege.MountHiddenESP(espDevice); err == nil {
+				defer cleanup()
+				if m, errM := ReadUniBootManifest(tempMnt); errM == nil && m != nil {
+					return m
+				}
 			}
 		}
 	}
