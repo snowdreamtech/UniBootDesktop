@@ -232,6 +232,41 @@ func (m *Manager) LaunchSpecified(ctx context.Context, targetDisk string, hType 
 	})
 }
 
+var (
+	activeSessionMu     sync.Mutex
+	activeSessionCancel context.CancelFunc
+	activeSessionTarget string
+)
+
+// RegisterActiveVMSession stores cancellation callback for currently executing VM simulation.
+func RegisterActiveVMSession(target string, cancel context.CancelFunc) {
+	activeSessionMu.Lock()
+	defer activeSessionMu.Unlock()
+	activeSessionTarget = target
+	activeSessionCancel = cancel
+}
+
+// ClearActiveVMSession clears active VM simulation tracking.
+func ClearActiveVMSession() {
+	activeSessionMu.Lock()
+	defer activeSessionMu.Unlock()
+	activeSessionTarget = ""
+	activeSessionCancel = nil
+}
+
+// StopActiveVMSession cancels running VM session context and returns true if an active session was stopped.
+func StopActiveVMSession() bool {
+	activeSessionMu.Lock()
+	cancel := activeSessionCancel
+	activeSessionMu.Unlock()
+	if cancel != nil {
+		cancel()
+		ClearActiveVMSession()
+		return true
+	}
+	return false
+}
+
 // LaunchSpecifiedConfigured launches a specific hypervisor driver with custom VMConfig options.
 func (m *Manager) LaunchSpecifiedConfigured(ctx context.Context, targetDisk string, hType HypervisorType, cfg VMConfig) error {
 	m.mu.RLock()
@@ -244,10 +279,14 @@ func (m *Manager) LaunchSpecifiedConfigured(ctx context.Context, targetDisk stri
 				return fmt.Errorf("requested hypervisor '%s' is not installed", drv.Name())
 			}
 			logger.Info("Launching specified hypervisor", "hypervisor", drv.Name(), "disk", targetDisk, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB)
+
+			sessionCtx, cancel := context.WithCancel(ctx)
+			RegisterActiveVMSession(targetDisk, cancel)
+
 			if cDrv, ok := drv.(ConfigurableDriver); ok {
-				return cDrv.LaunchWithConfig(ctx, targetDisk, cfg)
+				return cDrv.LaunchWithConfig(sessionCtx, targetDisk, cfg)
 			}
-			return drv.Launch(ctx, targetDisk, cfg.BootMode)
+			return drv.Launch(sessionCtx, targetDisk, cfg.BootMode)
 		}
 	}
 
@@ -376,6 +415,7 @@ func RegisterVMExitHandler(h VMExitHandler) {
 
 // NotifyVMExited invokes all registered VM exit callbacks.
 func NotifyVMExited(targetDisk string, err error) {
+	ClearActiveVMSession()
 	vmExitHandlersMu.Lock()
 	handlers := make([]VMExitHandler, len(vmExitHandlers))
 	copy(handlers, vmExitHandlers)

@@ -94,6 +94,7 @@
         @dismiss-success-banner="dismissDeploySuccessBanner"
         @safely-eject-success="handleSafelyEjectAfterDeploy"
         @launch-vm="launchVM"
+        @stop-vm="stopVM"
       />
 
       <!-- Embedded Log Center Component -->
@@ -326,6 +327,7 @@ const {
   vmDisabledReason,
   checkQemu,
   launchVM,
+  stopVM,
 } = useVirtualMachine({
   activeVmTargetDevice,
   diskList,

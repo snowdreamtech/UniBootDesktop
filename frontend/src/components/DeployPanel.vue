@@ -527,11 +527,12 @@
       </p>
       <button
         class="vm-launch-btn"
+        :class="{ 'vm-running': isVmRunning }"
         :disabled="isVmDisabled"
-        :title="vmDisabledReason"
-        @click="!isVmDisabled && emit('launch-vm')"
+        :title="isVmRunning ? t('vm.tip_running') : vmDisabledReason"
+        @click="isVmRunning ? emit('stop-vm') : (!isVmDisabled && emit('launch-vm'))"
       >
-        <span class="btn-icon">{{ isLaunchingQemu ? '⏳' : (isVmRunning ? '🔄' : '▶') }}</span>
+        <span class="btn-icon">{{ isLaunchingQemu ? '⏳' : (isVmRunning ? '⏹' : '▶') }}</span>
         <span>{{ isLaunchingQemu ? t('vm.launching') : (isVmRunning ? t('vm.running') : t('vm.run_test')) }}</span>
       </button>
     </div>
@@ -605,6 +606,7 @@ const emit = defineEmits<{
   (e: 'dismiss-success-banner'): void;
   (e: 'safely-eject-success'): void;
   (e: 'launch-vm'): void;
+  (e: 'stop-vm'): void;
 }>();
 
 // Drag & Drop State & Handlers

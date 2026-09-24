@@ -49,7 +49,6 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   const isVmDisabled = computed(() => {
     return (
       isLaunchingQemu.value ||
-      isVmRunning.value ||
       isDeploying.value ||
       hypervisorList.value.length === 0 ||
       !activeVmTargetDevice.value
@@ -60,9 +59,6 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
     if (isLaunchingQemu.value) {
       return t('vm.tip_launching');
     }
-    if (isVmRunning.value) {
-      return t('vm.tip_running');
-    }
     if (isDeploying.value) {
       return t('vm.tip_deploying');
     }
@@ -71,6 +67,9 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
     }
     if (!activeVmTargetDevice.value) {
       return t('vm.tip_select_target');
+    }
+    if (isVmRunning.value) {
+      return t('vm.tip_running');
     }
     return t('vm.tip_ready');
   });
@@ -173,13 +172,24 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
       } else {
         await new Promise(r => setTimeout(r, 600));
         logUserAction('INFO', 'User launched hypervisor simulation test (demo mode)', `${vmName} on ${targetDevice}`);
-        showToast(t('vm.demoModeStart', { name: vmName }), 'info');
       }
     } catch (e: any) {
       console.error('[UniBoot] LaunchVM error:', e);
       showToast(t('vm.startFailed', { error: e?.message || String(e) }), 'error');
     } finally {
       isLaunchingQemu.value = false;
+    }
+  }
+
+  async function stopVM() {
+    try {
+      if (window.go && window.go.main && window.go.main.App && typeof (window.go.main.App as any).StopVM === 'function') {
+        await (window.go.main.App as any).StopVM();
+      }
+      isVmRunning.value = false;
+      isLaunchingQemu.value = false;
+    } catch (e: any) {
+      console.warn('Failed to stop VM:', e);
     }
   }
 
@@ -197,5 +207,6 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
     vmDisabledReason,
     checkQemu,
     launchVM,
+    stopVM,
   };
 }

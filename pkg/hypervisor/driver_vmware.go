@@ -96,17 +96,27 @@ func (d *VMwareDriver) Detect() *VMStatus {
 }
 
 func (d *VMwareDriver) Launch(ctx context.Context, diskPath string, bootMode string) error {
+	return d.LaunchWithConfig(ctx, diskPath, VMConfig{
+		BootMode:     bootMode,
+		CpuCores:     GetRecommendedVCPUs(),
+		MemoryMB:     GetRecommendedVMMemoryMB(),
+		DisplayAccel: true,
+	})
+}
+
+// LaunchWithConfig launches VMware with custom VMConfig and monitors guest OS shutdown.
+func (d *VMwareDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
 	status := d.Detect()
 	if !status.Installed && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
 	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
-		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run VMware launch complete", "diskPath", diskPath, "bootMode", bootMode)
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run VMware launch complete", "diskPath", diskPath, "bootMode", cfg.BootMode)
 		return nil
 	}
 
-	logger.Info("Executing VMware preview test instance", "disk", diskPath, "vmwarePath", status.Path, "bootMode", bootMode)
+	logger.Info("Executing VMware preview test instance", "disk", diskPath, "vmwarePath", status.Path, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB)
 
 	targetPath := ResolveRawDiskDevice(diskPath)
 	if targetPath == "" {
@@ -114,29 +124,17 @@ func (d *VMwareDriver) Launch(ctx context.Context, diskPath string, bootMode str
 	}
 	restoreDiskPerms := ensureDiskPermissions(targetPath)
 	unmountTargetDisk(targetPath)
-	defer scheduleDiskPermissionRestore(restoreDiskPerms, nil)
 
-	if err := launchVMwareVM(status, targetPath, bootMode); err == nil {
-		return nil
-	}
-
-	if runtime.GOOS == "darwin" {
-		cmd := exec.Command("open", "-a", "VMware Fusion")
-		if err := cmd.Run(); err != nil {
-			return fmt.Errorf("failed to launch VMware Fusion: %w", err)
-		}
-		return nil
-	}
-
-	cmd := exec.Command(status.Path)
-	if err := cmd.Start(); err != nil {
-		return fmt.Errorf("failed to start VMware: %w", err)
+	if err := launchVMwareVM(ctx, status, targetPath, cfg, restoreDiskPerms); err != nil {
+		remountTargetDisk(targetPath)
+		restoreDiskPerms()
+		return err
 	}
 
 	return nil
 }
 
-func launchVMwareVM(status *VMStatus, targetPath string, bootMode string) error {
+func launchVMwareVM(ctx context.Context, status *VMStatus, targetPath string, cfg VMConfig, restoreDiskPerms func()) error {
 	tmpDir := filepath.Join(os.TempDir(), "uniboot_vmware")
 	_ = os.RemoveAll(tmpDir)
 	_ = os.MkdirAll(tmpDir, 0755)
@@ -146,7 +144,7 @@ func launchVMwareVM(status *VMStatus, targetPath string, bootMode string) error 
 	vmxPath := filepath.Join(tmpDir, "UniBoot.vmx")
 
 	fwSetting := "efi"
-	if bootMode == BootModeBIOS {
+	if cfg.BootMode == BootModeBIOS {
 		fwSetting = "bios"
 	}
 
@@ -197,10 +195,16 @@ ddb.virtualHWVersion = "14"
 		_ = os.WriteFile(vmdkPath, []byte(rawDiskContent), 0600)
 	}
 
-	memMB := GetRecommendedVMMemoryMB()
-	vcpus := GetRecommendedVCPUs()
+	memMB := cfg.MemoryMB
+	if memMB <= 0 {
+		memMB = GetRecommendedVMMemoryMB()
+	}
+	vcpus := cfg.CpuCores
+	if vcpus <= 0 {
+		vcpus = GetRecommendedVCPUs()
+	}
 
-	// 2. Generate clean VMX configuration
+	// 3. Generate clean VMX configuration with automatic power-on
 	vmxContent := fmt.Sprintf(`.encoding = "UTF-8"
 config.version = "8"
 virtualHW.version = "18"
@@ -221,31 +225,184 @@ ethernet0.connectionType = "nat"
 ethernet0.addressType = "generated"
 displayName = "UniBoot"
 guestOS = "other-64"
+gui.powerOnAtStartup = "TRUE"
 `, vcpus, memMB, fwSetting)
 	_ = os.WriteFile(vmxPath, []byte(vmxContent), 0600)
 
-	// 3. Launch VMware Fusion
-	var cmd *exec.Cmd
-	if runtime.GOOS == "darwin" {
-		cmd = exec.Command("open", "-W", "-a", "VMware Fusion", vmxPath)
-	} else if strings.HasSuffix(status.Path, "vmrun") || strings.HasSuffix(status.Path, "vmrun.exe") {
-		cmd = exec.Command(status.Path, "-T", "ws", "start", vmxPath, "gui")
+	// 4. Launch VMware GUI without blocking on the whole host application (-W removed)
+	vmrunPath := findVmrunPath()
+	var startCmd *exec.Cmd
+
+	if vmrunPath != "" {
+		if runtime.GOOS == "darwin" {
+			startCmd = exec.Command(vmrunPath, "-T", "fusion", "start", vmxPath, "gui")
+		} else {
+			startCmd = exec.Command(vmrunPath, "-T", "ws", "start", vmxPath, "gui")
+		}
+	} else if runtime.GOOS == "darwin" {
+		startCmd = exec.Command("open", "-a", "VMware Fusion", vmxPath)
 	} else {
-		cmd = exec.Command(status.Path, vmxPath)
+		startCmd = exec.Command(status.Path, vmxPath)
 	}
 
-	if err := cmd.Start(); err != nil {
-		return err
+	if err := startCmd.Start(); err != nil {
+		if runtime.GOOS == "darwin" && vmrunPath != "" {
+			fallbackCmd := exec.Command("open", "-a", "VMware Fusion", vmxPath)
+			if fErr := fallbackCmd.Start(); fErr != nil {
+				return fmt.Errorf("failed to start VMware: %w (fallback: %v)", err, fErr)
+			}
+		} else {
+			return fmt.Errorf("failed to start VMware: %w", err)
+		}
 	}
 
-	go func() {
-		err := cmd.Wait()
-		time.Sleep(300 * time.Millisecond)
-		remountTargetDisk(targetPath)
-		NotifyVMExited(targetPath, err)
-	}()
+	// 5. Watch for the guest system power-off (instead of waiting for VMware application to quit)
+	go monitorVMwareVM(ctx, vmrunPath, tmpDir, vmxPath, targetPath, restoreDiskPerms)
 
 	return nil
+}
+
+func monitorVMwareVM(ctx context.Context, vmrunPath, tmpDir, vmxPath, targetPath string, restoreDiskPerms func()) {
+	// Wait up to 15s for the guest VM to enter the running state
+	for i := 0; i < 30; i++ {
+		select {
+		case <-ctx.Done():
+			break
+		default:
+		}
+		time.Sleep(500 * time.Millisecond)
+		if isVMwareVMRunning(vmrunPath, tmpDir, vmxPath) {
+			logger.Info("VMware guest system confirmed running", "vmx", vmxPath)
+			break
+		}
+	}
+
+	// Poll until the guest VM powers off or user cancels
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+
+	consecutiveInactive := 0
+	for {
+		select {
+		case <-ctx.Done():
+			logger.Info("Context cancelled during VMware session, terminating", "vmx", vmxPath)
+			goto cleanup
+		case <-ticker.C:
+			running := isVMwareVMRunning(vmrunPath, tmpDir, vmxPath)
+			if !running {
+				consecutiveInactive++
+				// Require 2 consecutive checks (2 seconds) to avoid transient state during reboot
+				if consecutiveInactive >= 2 {
+					logger.Info("VMware guest system shutdown detected, cleaning up session", "vmx", vmxPath)
+					goto cleanup
+				}
+			} else {
+				consecutiveInactive = 0
+			}
+		}
+	}
+
+cleanup:
+	time.Sleep(300 * time.Millisecond)
+	remountTargetDisk(targetPath)
+	if restoreDiskPerms != nil {
+		restoreDiskPerms()
+	}
+	NotifyVMExited(targetPath, nil)
+}
+
+func findVmrunPath() string {
+	if path, err := exec.LookPath("vmrun"); err == nil {
+		return path
+	}
+	if path, err := exec.LookPath("vmrun.exe"); err == nil {
+		return path
+	}
+	candidates := []string{
+		"/Applications/VMware Fusion.app/Contents/Library/vmrun",
+		"/Applications/VMware Fusion Tech Preview.app/Contents/Library/vmrun",
+		`C:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe`,
+		`C:\Program Files\VMware\VMware Workstation\vmrun.exe`,
+		`C:\Program Files (x86)\VMware\VMware Player\vmrun.exe`,
+		`C:\Program Files\VMware\VMware Player\vmrun.exe`,
+		"/usr/bin/vmrun",
+		"/usr/local/bin/vmrun",
+	}
+	for _, c := range candidates {
+		if info, err := os.Stat(c); err == nil && !info.IsDir() {
+			return c
+		}
+	}
+	return ""
+}
+
+func isVMwareVMRunning(vmrunPath, tmpDir, vmxPath string) bool {
+	// 1. Authoritative check via vmrun CLI
+	if vmrunPath != "" {
+		if running, ok := isVMRunningViaVmrun(vmrunPath, vmxPath); ok {
+			return running
+		}
+	}
+
+	// 2. Check VMware disk locks in tmpDir (.lck)
+	// VMware creates *.lck directories when the VM is powered ON, and removes them when powered OFF.
+	if hasVMwareLocks(tmpDir) {
+		return true
+	}
+
+	// 3. Check vmware-vmx process
+	if isVMwareProcessRunning(vmxPath) {
+		return true
+	}
+
+	return false
+}
+
+func isVMRunningViaVmrun(vmrunPath, vmxPath string) (bool, bool) {
+	var cmd *exec.Cmd
+	if runtime.GOOS == "darwin" {
+		cmd = exec.Command(vmrunPath, "-T", "fusion", "list")
+	} else {
+		cmd = exec.Command(vmrunPath, "-T", "ws", "list")
+	}
+	out, err := cmd.Output()
+	if err != nil {
+		cmd2 := exec.Command(vmrunPath, "list")
+		out, err = cmd2.Output()
+		if err != nil {
+			return false, false
+		}
+	}
+	outStr := string(out)
+	vmxBase := filepath.Base(vmxPath)
+	return strings.Contains(outStr, vmxBase) || strings.Contains(outStr, vmxPath), true
+}
+
+func hasVMwareLocks(dir string) bool {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return false
+	}
+	for _, e := range entries {
+		if strings.HasSuffix(e.Name(), ".lck") {
+			return true
+		}
+	}
+	return false
+}
+
+func isVMwareProcessRunning(vmxPath string) bool {
+	vmxName := filepath.Base(vmxPath)
+	if runtime.GOOS != "windows" {
+		cmd := exec.Command("pgrep", "-f", vmxName)
+		if err := cmd.Run(); err == nil {
+			return true
+		}
+		return false
+	}
+	cmd := exec.Command("tasklist", "/FI", "IMAGENAME eq vmware-vmx.exe")
+	out, err := cmd.Output()
+	return err == nil && strings.Contains(string(out), "vmware-vmx.exe")
 }
 
 func getDiskSectorCount(diskDev string) int64 {

@@ -675,6 +675,17 @@ func (a *App) LaunchVMWithConfig(targetDisk string, vmType string, cfg hyperviso
 	return nil
 }
 
+// StopVM manually stops any active virtual machine simulation session, remounts target disks, and resets UI state.
+func (a *App) StopVM() error {
+	logger.Info("User manually requested VM simulation session stop")
+	hypervisor.StopActiveVMSession()
+	hypervisor.GetManager().CleanupAllUnmountedDisks()
+	if a.ctx != nil {
+		wailsRuntime.EventsEmit(a.ctx, "vm-session-ended")
+	}
+	return nil
+}
+
 // CheckUpdate returns GitHub release update metadata.
 func (a *App) CheckUpdate() *updater.UpdateStatus {
 	return updater.CheckUpdate(a.ctx)
