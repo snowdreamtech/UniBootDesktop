@@ -42,6 +42,8 @@ func (d *UTMDriver) Detect() *VMStatus {
 		}
 	}
 
+	qemuInstalled := (&QEMUDriver{}).Detect().Installed
+
 	// 1. Check utmctl command
 	if path, err := exec.LookPath("utmctl"); err == nil {
 		return &VMStatus{
@@ -51,7 +53,7 @@ func (d *UTMDriver) Detect() *VMStatus {
 			Path:       path,
 			Version:    "UTM CLI (utmctl)",
 			Priority:   d.Priority(),
-			CanBootRaw: true,
+			CanBootRaw: qemuInstalled,
 		}
 	}
 
@@ -65,7 +67,7 @@ func (d *UTMDriver) Detect() *VMStatus {
 			Path:       appPath,
 			Version:    "UTM App (/Applications/UTM.app)",
 			Priority:   d.Priority(),
-			CanBootRaw: true,
+			CanBootRaw: qemuInstalled,
 		}
 	}
 
@@ -107,6 +109,7 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 			logger.Info("UTM.app is sandboxed on macOS and cannot access raw block devices directly; delegating physical disk preview test to host QEMU engine", "disk", targetPath, "bootMode", bootMode)
 			return qemuDrv.Launch(ctx, diskPath, bootMode)
 		}
+		return fmt.Errorf("UTM on macOS is sandboxed and cannot access raw physical disks (%s). Please install QEMU via 'brew install qemu' or use VMware Fusion / VirtualBox for physical USB testing", targetPath)
 	}
 
 	// Generate native .utm bundle with raw disk mapping and launch via UTM app

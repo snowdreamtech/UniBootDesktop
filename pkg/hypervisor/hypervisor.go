@@ -200,9 +200,13 @@ func (m *Manager) LaunchBestConfigured(ctx context.Context, targetDisk string, c
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
+	isRawDisk := strings.HasPrefix(targetDisk, "/dev/") || strings.HasPrefix(targetDisk, `\\.\PhysicalDrive`) || strings.HasPrefix(targetDisk, "PhysicalDrive")
 	for _, drv := range m.drivers {
 		status := drv.Detect()
 		if status != nil && status.Installed {
+			if isRawDisk && !status.CanBootRaw {
+				continue
+			}
 			logger.Info("Selected best available hypervisor for preview launch", "hypervisor", drv.Name(), "disk", targetDisk, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB)
 			if cDrv, ok := drv.(ConfigurableDriver); ok {
 				return cDrv.LaunchWithConfig(ctx, targetDisk, cfg)
