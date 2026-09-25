@@ -3,21 +3,18 @@ import type { TranslationDict } from '../types';
 export const zhCn: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "跨平台桌面应用模版 (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "Hello World From UniGoDesktop!",
+  "app.greeting": "你好，来自 UniGoDesktop！",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript 跨平台应用模版",
   "app.template_desc": "现代化、高颜值、开箱即用的跨平台桌面应用开发模版，具备国际化、深浅主题与网络加速功能。",
-
-  "common.autoDetect": "自动识别 (Auto)",
+  "common.autoDetect": "自动识别",
   "common.langAuto": "自动",
   "common.lang": "语言",
   "common.close": "关闭",
-
   "theme.dark": "深色模式",
   "theme.light": "浅色模式",
   "theme.system": "跟随系统",
   "theme.toggleDark": "切换至深色模式",
   "theme.toggleLight": "切换至浅色模式",
-
   "hello.input_placeholder": "请输入您的名字...",
   "hello.greet_btn": "打个招呼",
   "hello.system_title": "运行环境",
@@ -39,7 +36,6 @@ export const zhCn: TranslationDict = {
   "hello.about_sub": "系统信息、构建哈希与版本检查",
   "hello.docs_title": "开发者文档",
   "hello.docs_sub": "GitHub 开源仓库与脚手架说明",
-
   "settings.title": "偏好设置",
   "settings.subtitle": "外观、语言与网络加速",
   "settings.realtime_save": "修改已实时生效",
@@ -76,7 +72,6 @@ export const zhCn: TranslationDict = {
   "settings.testProxyConn": "⚡ 测试网络代理连通性",
   "settings.connected": "已连接",
   "settings.connectFailed": "连接失败",
-
   "about.title": "关于",
   "about.subtitle": "通用 Go 桌面开发套件",
   "about.gitTag": "Git 标签",

@@ -1,241 +1,98 @@
 import type { TranslationDict } from '../types';
 
 export const slSi: TranslationDict = {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  "app.title": "Namizje UniBoot",
-  "app.subtitle": "Univerzalni multi-Arch UEFI / Legacy BIOS Dual-Engine Bootable Creator",
-  "app.greeting": "Hello World From UniGoDesktop!",
-  "app.template_badge": "Go + Wails + Vue 3 + TypeScript Desktop Template",
-  "app.template_desc": "A modern, robust, and extensible cross-platform desktop application template with i18n, theming, and network acceleration.",
-  "common.autoDetect": "Samodejno zaznavanje (samodejno)",
-  "common.langAuto": "Jezik (samodejno)",
-  "common.lang": "Jezik",
-  "common.close": "Close",
-  "theme.dark": "Dark Mode",
-  "theme.light": "Light Mode",
-  "theme.system": "System Default",
-  "theme.toggleDark": "Switch to Dark Mode",
-  "theme.toggleLight": "Switch to Light Mode",
-  "hello.input_placeholder": "Enter your name...",
-  "hello.greet_btn": "Say Hello",
-  "hello.system_title": "Runtime Environment",
-  "hello.system_desc": "Operating system, architecture, and Go runtime specs",
-  "hello.os_platform": "Platform & Arch",
-  "hello.go_version": "Go Runtime Version",
-  "hello.app_version": "Template Version",
-  "hello.wails_engine": "GUI Engine",
-  "hello.network_title": "Network & Proxy",
-  "hello.network_desc": "Proxy routing and GitHub mirror connectivity diagnostic",
-  "hello.ping_latency": "Round-Trip Latency (RTT)",
-  "hello.test_speed_btn": "Test Connectivity",
-  "hello.testing": "Testing...",
-  "hello.untested": "Not tested",
-  "hello.failed": "Unreachable",
-  "hello.quick_actions": "Quick Actions",
-  "hello.quick_desc": "Preferences, system diagnostics, and documentation",
-  "hello.settings_sub": "Theme, language, and network proxy",
-  "hello.about_sub": "Environment specs, build info, and update",
-  "hello.docs_title": "Documentation",
-  "hello.docs_sub": "GitHub repository and architecture guide",
-  "settings.title": "Nastavitve in sistemske konfiguracije",
-  "settings.subtitle": "Globalne nastavitve, omrežni posrednik in matrika vdelane programske opreme",
-  "settings.realtime_save": "Shranjeno v realnem času",
-  "settings.saveStatusEnabled": "⚡ Omogočeno shranjevanje v realnem času",
-  "settings.saveStatusApplied": "✅ Spremembe uporabljene v realnem času",
-  "settings.tab_general": "Splošne nastavitve",
-  "settings.tab_network": "Omrežje in proxy",
-  "settings.language": "Jezik aplikacije:",
-  "settings.theme": "Slog teme uporabniškega vmesnika:",
-  "settings.app_update": "Preverjanje posodobitve aplikacije:",
-  "settings.update_auto": "Samodejno preveri posodobitve ob zagonu",
-  "settings.update_manual": "Samo ročno preverjanje",
-  "settings.github_proxy_title": "GitHub Cloud Mirror & pospešek hitrosti",
-  "settings.github_proxy_desc": "Configure an optional mirror URL for downloads, or leave empty for direct connection.",
-  "settings.github_proxy": "Predpona posrednika/zrcaljenja GitHub:",
-  "settings.githubProxy": "GitHub Mirror",
-  "settings.proxy_placeholder": "Default empty (direct connection). e.g. https://proxy.example.com/",
-  "settings.test_net": "⚡ Preizkusite povezavo GitHub",
-  "settings.testing_net": "Preizkušanje povezljivosti ...",
-  "settings.system_proxy": "Sistemske globalne nastavitve proxyja (HTTP / HTTPS / SOCKS4 / SOCKS5)",
-  "settings.proxy_proto": "Proxy protokol:",
-  "settings.proxyProtocol": "Proxy Mode",
-  "settings.proxy_direct": "Neposredna povezava",
-  "settings.proxyDirect": "Direct (Disabled)",
-  "settings.proxy_host": "Proxy Host/IP:",
-  "settings.proxy_port": "Proxy vrata:",
-  "settings.proxyAuthUserLabel": "Uporabniško ime za preverjanje (uporabnik – neobvezno):",
-  "settings.proxyAuthUserPlaceholder": "Privzeto prazno (pustite prazno, če preverjanje pristnosti ni potrebno)",
-  "settings.proxyAuthPassLabel": "Geslo za avtorizacijo (geslo - neobvezno):",
-  "settings.proxyAuthPassPlaceholder": "Privzeto prazno (pustite prazno, če preverjanje pristnosti ni potrebno)",
-  "settings.directModeNotice": "💡 Neposredni način (proxy onemogočen)",
-  "settings.proxyHostRequired": "❌ Najprej vnesite naslov gostitelja proxy strežnika",
-  "settings.testingProxy": "Testiranje proxyja ...",
-  "settings.testProxyConn": "⚡ Preizkusite povezljivost omrežnega posrednika",
-  "settings.connected": "Connected",
-  "settings.connectFailed": "Connection Failed",
-  "about.title": "About",
-  "about.subtitle": "Universal Go Desktop Suite",
-  "about.gitTag": "Git Tag",
-  "about.commitHash": "Commit Hash",
-  "about.buildTime": "Build Time",
-  "about.environment": "Environment",
-  "about.copyInfo": "Copy Info",
-  "about.copied": "Copied",
-  "about.checkUpdate": "Check Updates",
-  "about.checking": "Checking...",
-  "about.updateTo": "Update to {tag}",
-  "about.updating": "Updating ({progress}%)",
-  "about.downloading": "Downloading ({progress}%)",
-  "about.updateAvailable": "New Version Available",
-  "about.isLatest": "Already Latest Version",
-  "about.checkFailed": "Check Failed",
-  "about.preparingDownload": "Preparing download...",
-  "about.updateReady": "Update ready: {path}",
-  "about.updateDownloadFailed": "Download failed",
-  "about.downloadingGuiUpdate": "Downloading update ({progress}%)",
-  "about.updateCompleteRestart": "Update complete, please restart",
-  "about.onlineUpdateFailed": "Update failed: {error}",
-  "about.newVersionNotice": "🚀 New version {tag} available!"
+  "app.title": "UniGoDesktop",
+  "app.subtitle": "Wieloplatformowy szablon aplikacji desktopowej (Go + Wails + Vue 3 + TypeScript)",
+  "app.greeting": "Lep pozdrav iz UniGoDesktop!",
+  "app.template_badge": "Szablon aplikacji desktopowej Go + Wails + Vue 3 + TypeScript",
+  "app.template_desc": "Nowoczesny, stabilny i rozszerzalny szablon aplikacji z wielojęzycznością, motywami i przyspieszeniem sieciowym.",
+  "common.autoDetect": "Samodejno zaznavanje",
+  "common.langAuto": "Samodejno",
+  "common.lang": "Jazyk",
+  "common.close": "Zapri",
+  "theme.dark": "Tmavý režim",
+  "theme.light": "Světlý režim",
+  "theme.system": "Výchozí systémový",
+  "theme.toggleDark": "Przełącz na tryb ciemny",
+  "theme.toggleLight": "Przełącz na tryb jasny",
+  "hello.input_placeholder": "Wpisz swoje imię...",
+  "hello.greet_btn": "Przywitaj się",
+  "hello.system_title": "Środowisko uruchomieniowe",
+  "hello.system_desc": "System operacyjny, architektura i specyfikacja środowiska Go",
+  "hello.os_platform": "Platforma i architektura",
+  "hello.go_version": "Wersja środowiska Go",
+  "hello.app_version": "Wersja szablonu",
+  "hello.wails_engine": "Silnik GUI",
+  "hello.network_title": "Sieć i proxy",
+  "hello.network_desc": "Routing proxy i diagnostyka połączenia z serwerem zwierciadlanym GitHub",
+  "hello.ping_latency": "Opóźnienie w obie strony (RTT)",
+  "hello.test_speed_btn": "Testuj połączenie",
+  "hello.testing": "Testowanie...",
+  "hello.untested": "Nie testowano",
+  "hello.failed": "Nieosiągalny",
+  "hello.quick_actions": "Szybkie akcje",
+  "hello.quick_desc": "Preferencje, diagnostyka systemu i dokumentacja",
+  "hello.settings_sub": "Motyw, język i proxy sieciowe",
+  "hello.about_sub": "Specyfikacja środowiska, kompilacja i aktualizacje",
+  "hello.docs_title": "Dokumentacja",
+  "hello.docs_sub": "Repozytorium GitHub i przewodnik po architekturze",
+  "settings.title": "Preferencje",
+  "settings.subtitle": "Wygląd, język i przyspieszenie sieci",
+  "settings.realtime_save": "Zmiany zapisywane w czasie rzeczywistym",
+  "settings.saveStatusEnabled": "⚡ Zapisywanie...",
+  "settings.saveStatusApplied": "✅ Zmiany zastosowane",
+  "settings.tab_general": "Ogólne",
+  "settings.tab_network": "Sieć i proxy",
+  "settings.language": "Język aplikacji",
+  "settings.theme": "Motyw wizualny",
+  "settings.app_update": "Aktualizacje oprogramowania",
+  "settings.update_auto": "Sprawdzaj automatycznie przy uruchomieniu",
+  "settings.update_manual": "Tylko ręcznie",
+  "settings.github_proxy_title": "Serwer przyspieszający GitHub",
+  "settings.github_proxy_desc": "Skonfiguruj opcjonalny adres mirror lub pozostaw puste dla połączenia bezpośredniego.",
+  "settings.github_proxy": "Prefiks mirrora",
+  "settings.githubProxy": "Serwer lustrzany GitHub",
+  "settings.proxy_placeholder": "Domyślnie puste (bezpośrednie). Np.: https://proxy.example.com/",
+  "settings.test_net": "⚡ Testuj połączenie z GitHub",
+  "settings.testing_net": "Testowanie połączenia...",
+  "settings.system_proxy": "Własne proxy (HTTP / HTTPS / SOCKS4 / SOCKS5)",
+  "settings.proxy_proto": "Protokół proxy",
+  "settings.proxyProtocol": "Tryb proxy",
+  "settings.proxy_direct": "Tryb bezpośredni",
+  "settings.proxyDirect": "Bezpośrednie (Wyłączone)",
+  "settings.proxy_host": "Host proxy",
+  "settings.proxy_port": "Port",
+  "settings.proxyAuthUserLabel": "Użytkownik (Opcjonalnie)",
+  "settings.proxyAuthUserPlaceholder": "Pozostaw puste, jeśli brak autoryzacji",
+  "settings.proxyAuthPassLabel": "Hasło (Opcjonalnie)",
+  "settings.proxyAuthPassPlaceholder": "Pozostaw puste, jeśli brak autoryzacji",
+  "settings.directModeNotice": "💡 Aktywny tryb bezpośredni (proxy wyłączone)",
+  "settings.proxyHostRequired": "❌ Najpierw wprowadź adres serwera proxy",
+  "settings.testingProxy": "Testowanie proxy...",
+  "settings.testProxyConn": "⚡ Testuj połączenie proxy",
+  "settings.connected": "Połączono",
+  "settings.connectFailed": "Błąd połączenia",
+  "about.title": "O programu",
+  "about.subtitle": "Univerzalni paket Go za namizje",
+  "about.gitTag": "Tag Git",
+  "about.commitHash": "Hash commitu",
+  "about.buildTime": "Czas kompilacji",
+  "about.environment": "Środowisko",
+  "about.copyInfo": "Kopiuj informacje",
+  "about.copied": "Skopiowano",
+  "about.checkUpdate": "Sprawdź aktualizacje",
+  "about.checking": "Sprawdzanie...",
+  "about.updateTo": "Zaktualizuj do {tag}",
+  "about.updating": "Aktualizacja ({progress}%)",
+  "about.downloading": "Pobieranie ({progress}%)",
+  "about.updateAvailable": "Dostępna nowa wersja",
+  "about.isLatest": "Posiadasz najnowszą wersję",
+  "about.checkFailed": "Błąd sprawdzania",
+  "about.preparingDownload": "Przygotowywanie pobierania...",
+  "about.updateReady": "Aktualizacja gotowa: {path}",
+  "about.updateDownloadFailed": "Błąd pobierania",
+  "about.downloadingGuiUpdate": "Pobieranie aktualizacji ({progress}%)",
+  "about.updateCompleteRestart": "Aktualizacja zakończona, zrestartuj aplikację",
+  "about.onlineUpdateFailed": "Błąd aktualizacji: {error}",
+  "about.newVersionNotice": "🚀 Dostępna nowa wersja {tag}!"
 };

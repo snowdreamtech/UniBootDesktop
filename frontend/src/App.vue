@@ -135,7 +135,7 @@ const langOptions = computed(() => [
   { value: 'auto', label: '🌐 ' + (t('common.autoDetect') || 'Auto Detect') },
   ...SUPPORTED_LANGUAGES.map(item => ({
     value: item.code,
-    label: `${item.nativeName} (${item.name})`
+    label: item.nativeName
   }))
 ]);
 
@@ -144,7 +144,7 @@ const currentLangLabel = computed(() => {
     return (t('common.langAuto') || 'Auto');
   }
   const opt = langOptions.value.find(o => o.value === currentLang.value);
-  return opt ? opt.label.split(' ')[0] : 'Language';
+  return opt ? opt.label : 'Language';
 });
 
 function showToast(msg: string, type: 'info' | 'success' | 'warning' | 'error' = 'info') {
