@@ -304,6 +304,7 @@ const {
   startDeployment,
   handleCancelDeploy,
   dismissDeploySuccessBanner,
+  fsm,
 } = useDeployment({
   t,
   showToast,
@@ -338,6 +339,7 @@ const {
   isDeploying,
   showToast,
   refreshDisks,
+  fsm,
   onVmSessionStarted: (dev, name) => {
     setRunningVmTarget(dev, name);
     setPendingRestoreDevice(dev);

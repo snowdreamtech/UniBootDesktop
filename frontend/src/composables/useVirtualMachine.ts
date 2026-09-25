@@ -1,9 +1,10 @@
 // Copyright (c) 2026 SnowdreamTech. All rights reserved.
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
-import { ref, computed, type Ref, type ComputedRef } from 'vue';
+import { ref, computed, watch, type Ref, type ComputedRef } from 'vue';
 import { t } from '../i18n';
 import { logUserAction } from '../utils/logger';
+import type { DiskStateMachine } from './useDiskStateMachine';
 
 export interface VMStatus {
   type: string;
@@ -24,10 +25,11 @@ export interface UseVirtualMachineOptions {
   refreshDisks?: () => Promise<void>;
   onVmSessionStarted?: (targetDevice: string, targetName: string) => void;
   onVmSessionEnded?: () => void;
+  fsm?: DiskStateMachine;
 }
 
 export function useVirtualMachine(options: UseVirtualMachineOptions) {
-  const { activeVmTargetDevice, diskList, isDeploying, showToast } = options;
+  const { activeVmTargetDevice, diskList, isDeploying, showToast, fsm } = options;
 
   const hypervisorList = ref<VMStatus[]>([]);
   const selectedBootMode = ref<string>('auto');
@@ -36,7 +38,7 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   const vmMemoryMB = ref<number>(2048);
   const vmDisplayAccel = ref<boolean>(true);
   const isLaunchingQemu = ref<boolean>(false);
-  const isVmRunning = ref<boolean>(false);
+  const internalVmRunning = ref<boolean>(false);
   const runningVmTargetDevice = ref<string>('');
   const runningVmTargetName = ref<string>('');
   const qemuStatus = ref<{ installed: boolean; path: string; version: string }>({
@@ -48,7 +50,7 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   function handleVmEnded() {
     runningVmTargetDevice.value = '';
     runningVmTargetName.value = '';
-    isVmRunning.value = false;
+    internalVmRunning.value = false;
     isLaunchingQemu.value = false;
     if (options.onVmSessionEnded) {
       options.onVmSessionEnded();
@@ -64,7 +66,17 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
     });
   }
 
+  const isVmRunning = computed(() => {
+    if (fsm) {
+      return fsm.isVmRunning.value;
+    }
+    return internalVmRunning.value;
+  });
+
   const isVmDisabled = computed(() => {
+    if (fsm) {
+      return fsm.isVmDisabled.value;
+    }
     return (
       isLaunchingQemu.value ||
       isDeploying.value ||
@@ -74,6 +86,9 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   });
 
   const vmDisabledReason = computed(() => {
+    if (fsm) {
+      return fsm.vmDisabledReason.value;
+    }
     if (isLaunchingQemu.value) {
       return t('vm.tip_launching');
     }
@@ -91,6 +106,25 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
     }
     return t('vm.tip_ready');
   });
+
+  watch(
+    () => hypervisorList.value.length,
+    (count) => {
+      if (fsm) {
+        fsm.setHypervisorCount(count);
+      }
+    },
+    { immediate: true }
+  );
+
+  watch(
+    () => isLaunchingQemu.value,
+    (launching) => {
+      if (fsm) {
+        fsm.setIsLaunchingQemu(launching);
+      }
+    }
+  );
 
   async function checkQemu() {
     if (window.go && window.go.main && window.go.main.App) {
@@ -176,7 +210,7 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
           await app.LaunchVMWithConfig(targetDevice, selectedVMType.value, vmConfig);
           runningVmTargetDevice.value = launchedDev;
           runningVmTargetName.value = launchedName;
-          isVmRunning.value = true;
+          internalVmRunning.value = true;
           if (options.onVmSessionStarted) {
             options.onVmSessionStarted(launchedDev, launchedName);
           }
@@ -186,7 +220,7 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
           await app.LaunchVM(targetDevice, selectedVMType.value, selectedBootMode.value);
           runningVmTargetDevice.value = launchedDev;
           runningVmTargetName.value = launchedName;
-          isVmRunning.value = true;
+          internalVmRunning.value = true;
           if (options.onVmSessionStarted) {
             options.onVmSessionStarted(launchedDev, launchedName);
           }
@@ -196,7 +230,7 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
           await app.LaunchQEMU(targetDevice);
           runningVmTargetDevice.value = launchedDev;
           runningVmTargetName.value = launchedName;
-          isVmRunning.value = true;
+          internalVmRunning.value = true;
           if (options.onVmSessionStarted) {
             options.onVmSessionStarted(launchedDev, launchedName);
           }
@@ -214,7 +248,7 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
         await new Promise(r => setTimeout(r, 600));
         runningVmTargetDevice.value = targetDevice;
         runningVmTargetName.value = options.activeVmTargetName?.value || targetDevice;
-        isVmRunning.value = true;
+        internalVmRunning.value = true;
         if (options.onVmSessionStarted) {
           options.onVmSessionStarted(targetDevice, runningVmTargetName.value);
         }

@@ -3,6 +3,7 @@ import type { InstallDiagnosticsData } from "../components/DiagnosticsModal.vue"
 import type { DiskInfo } from "../components/DiskPanel.vue";
 import { logUserAction } from "../utils/logger";
 import { getVentoyValidationMessage, type VentoyValidation } from "../utils/ventoyValidation";
+import { useDiskStateMachine } from "./useDiskStateMachine";
 
 export interface IsoCopyPlanEntry {
   sourcePath: string;
@@ -164,120 +165,32 @@ export function useDeployment(options: UseDeploymentOptions) {
     }
   }
 
-  const isSelectedVentoyDisk = computed(() => {
-    if (selectionMode.value === "single" && selectedDisk.value) {
-      return checkDiskCanUpdateNonDestructively(selectedDisk.value, activeMode.value);
-    }
-    return false;
+  const fsm = useDiskStateMachine({
+    t,
+    activeMode,
+    selectionMode,
+    selectedDisk,
+    selectedDevices,
+    diskList,
+    ventoyStatus,
+    isMacOs,
+    isDeploying,
+    isPreflight,
+    checkDiskCanUpdateNonDestructively,
+    getVentoyValidationMessage,
   });
 
-  const isNonDestructive = computed(() => {
-    if (selectionMode.value === "single") {
-      return isSelectedVentoyDisk.value;
-    }
-    if (selectedDevices.value.size === 0) return false;
-    return Array.from(selectedDevices.value).every((dev: string) => {
-      const d = diskList.value.find((disk: DiskInfo) => disk.device === dev);
-      return d ? checkDiskCanUpdateNonDestructively(d, activeMode.value) : false;
-    });
-  });
-
-  const ventoyCountInBatch = computed(() => {
-    if (selectionMode.value !== "batch" || selectedDevices.value.size === 0) return 0;
-    let count = 0;
-    selectedDevices.value.forEach((dev: string) => {
-      const d = diskList.value.find((disk: DiskInfo) => disk.device === dev);
-      if (d && checkDiskCanUpdateNonDestructively(d, activeMode.value)) {
-        count++;
-      }
-    });
-    return count;
-  });
-
-  const deployBtnText = computed(() => {
-    if (isDeploying.value) return t("deploy.writing");
-
-    if (selectionMode.value === "single") {
-      if (isNonDestructive.value) {
-        return t("deploy.start_update");
-      }
-      return activeMode.value === "cloud" ? t("deploy.start_cloud_create") : t("deploy.start_create");
-    }
-
-    const total = selectedDevices.value.size;
-    const bootCount = ventoyCountInBatch.value;
-    const blankCount = total - bootCount;
-
-    if (bootCount === total && total > 0) {
-      return t("deploy.batch_update", { count: total });
-    } else if (blankCount === total && total > 0) {
-      return t("deploy.batch_create", { count: total });
-    } else {
-      return t("deploy.batch_mixed", { count: total });
-    }
-  });
-
-  const runningVmTarget = ref<{ device: string; name: string } | null>(null);
-
-  function setRunningVmTarget(device: string, name: string) {
-    runningVmTarget.value = { device, name };
-  }
-
-  function clearRunningVmTarget() {
-    runningVmTarget.value = null;
-  }
-
-  const deployDisabledReason = computed(() => {
-    if (isDeploying.value) return t("deploy.tip_writing");
-    if (runningVmTarget.value) return t("vm.tip_running");
-    if (selectionMode.value === "single" && !selectedDisk.value) return t("deploy.tip_select_single");
-    if (selectionMode.value === "batch" && selectedDevices.value.size === 0) return t("deploy.tip_select_batch");
-    if (activeMode.value === "hybrid" && !isNonDestructive.value && !ventoyStatus.value.valid) {
-      if (isMacOs.value) {
-        return t("deploy.tip_macos_unsupported");
-      }
-      return getVentoyValidationMessage(ventoyStatus.value) || t("deploy.tip_need_ventoy");
-    }
-    if (selectionMode.value === "batch") {
-      const total = selectedDevices.value.size;
-      const bootCount = ventoyCountInBatch.value;
-      const blankCount = total - bootCount;
-      if (bootCount > 0 && blankCount > 0) {
-        return t("deploy.tip_batch_mixed", { bootCount, blankCount });
-      }
-      if (bootCount === total && total > 0) {
-        return t("deploy.tip_batch_update_all", { count: total });
-      }
-    }
-    return "";
-  });
-
-  const activeVmTargetDevice = computed(() => {
-    if (runningVmTarget.value && runningVmTarget.value.device) {
-      return runningVmTarget.value.device;
-    }
-    if (selectionMode.value === "single") {
-      return selectedDisk.value?.device || "";
-    }
-    if (selectedDevices.value.size > 0) {
-      return Array.from(selectedDevices.value)[0];
-    }
-    return "";
-  });
-
-  const activeVmTargetName = computed(() => {
-    if (runningVmTarget.value && runningVmTarget.value.name) {
-      return runningVmTarget.value.name;
-    }
-    if (selectionMode.value === "single") {
-      return selectedDisk.value?.name || selectedDisk.value?.device || "";
-    }
-    if (selectedDevices.value.size > 0) {
-      const firstDev = Array.from(selectedDevices.value)[0];
-      const found = diskList.value.find((d) => d.device === firstDev);
-      return found?.name || firstDev;
-    }
-    return "";
+  const isNonDestructive = fsm.isNonDestructive;
+  const deployBtnText = fsm.deployBtnText;
+  const deployDisabledReason = fsm.deployDisabledReason;
+  const activeVmTargetDevice = fsm.activeVmTargetDevice;
+  const activeVmTargetName = fsm.activeVmTargetName;
+  const setRunningVmTarget = fsm.setRunningVmTarget;
+  const clearRunningVmTarget = fsm.clearRunningVmTarget;
+  const runningVmTarget = computed(() => {
+    return fsm.isVmRunning.value && activeVmTargetDevice.value
+      ? { device: activeVmTargetDevice.value, name: activeVmTargetName.value }
+      : null;
   });
 
   async function checkVentoyStatus() {
@@ -916,6 +829,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     confirmIsoConflictPreflight,
     handleDeployBtnClick,
     startDeployment,
+    fsm,
     handleCancelDeploy,
     dismissDeploySuccessBanner,
   };
