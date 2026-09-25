@@ -112,7 +112,7 @@ jobs:
           cd frontend
           npm run build
 
-      - name: Prepare UniBoot App Icon
+      - name: Prepare UniGoDesktop App Icon
         shell: bash
         run: node scripts/prepare-app-icon.mjs
 

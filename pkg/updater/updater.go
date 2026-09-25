@@ -97,7 +97,7 @@ func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, 
 			cancel()
 			return fmt.Errorf("failed to create download request: %w", err)
 		}
-		req.Header.Set("User-Agent", "UniBootDesktop/1.0")
+		req.Header.Set("User-Agent", "UniGoDesktop/1.0")
 		req.Header.Set("Accept", "*/*")
 
 		resp, err := client.Do(req)

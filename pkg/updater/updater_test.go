@@ -8,7 +8,7 @@ import (
 )
 
 func TestBuildProxyURL(t *testing.T) {
-	rawURL := "https://github.com/snowdreamtech/UniBoot/releases/download/v1.0.0/undionly.kpxe"
+	rawURL := "https://github.com/snowdreamtech/unigodesktop/releases/download/v1.0.0/app.tar.gz"
 
 	tests := []struct {
 		proxyPrefix string
