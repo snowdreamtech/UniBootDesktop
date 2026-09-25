@@ -5,10 +5,7 @@
       <div class="modal-header">
         <div class="header-title">
           <span class="icon">⚙️</span>
-          <div>
-            <h3>{{ t('settings.title') || 'Settings & Preferences' }}</h3>
-            <span class="sub-title">{{ t('settings.subtitle') || 'Configure application appearance and network' }}</span>
-          </div>
+          <h3>{{ t('settings.title') || 'Settings' }}</h3>
         </div>
         <div class="header-actions">
           <span class="auto-save-tag" :class="{ saving: isAutoSaving }">
@@ -20,20 +17,22 @@
 
       <!-- Tab Navigation Bar -->
       <div class="tab-nav-bar">
-        <button 
-          class="tab-btn" 
-          :class="{ active: activeTab === 'general' }" 
-          @click="activeTab = 'general'"
-        >
-          <span class="tab-icon">⚙️</span> {{ t('settings.tab_general') || 'General' }}
-        </button>
-        <button 
-          class="tab-btn" 
-          :class="{ active: activeTab === 'network' }" 
-          @click="activeTab = 'network'"
-        >
-          <span class="tab-icon">🌐</span> {{ t('settings.tab_network') || 'Network & Proxy' }}
-        </button>
+        <div class="tab-segmented-track">
+          <button 
+            class="tab-btn" 
+            :class="{ active: activeTab === 'general' }" 
+            @click="activeTab = 'general'"
+          >
+            <span class="tab-icon">⚙️</span> {{ t('settings.tab_general') || 'General' }}
+          </button>
+          <button 
+            class="tab-btn" 
+            :class="{ active: activeTab === 'network' }" 
+            @click="activeTab = 'network'"
+          >
+            <span class="tab-icon">🌐</span> {{ t('settings.tab_network') || 'Network & Proxy' }}
+          </button>
+        </div>
       </div>
 
       <!-- Modal Body -->
@@ -552,47 +551,84 @@ watch(() => props.currentProxy, (val) => {
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* Tab Navigation Bar — Sleek Segmented Control */
 .tab-nav-bar {
   display: flex;
-  gap: 0.5rem;
-  padding: 0.6rem 1.5rem;
-  background: var(--section-bg);
+  align-items: center;
+  padding: 0.75rem 1.5rem 0.6rem 1.5rem;
+  background: transparent;
   border-bottom: 1px solid var(--card-border);
 }
 
-.tab-btn {
-  background: var(--input-bg);
+.tab-segmented-track {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(125, 125, 125, 0.08);
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
   border: 1px solid var(--card-border);
+}
+
+.tab-btn {
+  background: transparent;
+  border: 1px solid transparent;
   color: var(--text-muted);
-  padding: 0.5rem 1.1rem;
+  padding: 0.45rem 1.15rem;
   border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  transition: all 0.2s ease;
+  gap: 0.45rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tab-btn:hover {
-  background: rgba(0, 229, 255, 0.08);
-  border-color: var(--accent-cyan);
   color: var(--text-main);
+  background: rgba(125, 125, 125, 0.08);
 }
 
 .tab-btn.active {
-  background: rgba(0, 229, 255, 0.15);
+  background: var(--card-bg);
   border-color: var(--accent-cyan);
   color: var(--accent-cyan);
-  box-shadow: 0 0 12px var(--accent-cyan-glow);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .tab-segmented-track {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .tab-btn {
+  color: #64748b;
+}
+
+[data-theme="light"] .tab-btn:hover {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.6);
 }
 
 [data-theme="light"] .tab-btn.active {
-  background: #e0f2fe;
-  color: #0284c7;
+  background: #ffffff;
   border-color: #0284c7;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
+  color: #0284c7;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.18);
+}
+
+[data-theme="dark"] .tab-segmented-track {
+  background: rgba(0, 0, 0, 0.35);
+  border-color: var(--card-border);
+}
+
+[data-theme="dark"] .tab-btn.active {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 14px var(--accent-cyan-glow);
 }
 
 .tab-icon {
