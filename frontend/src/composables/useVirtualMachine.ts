@@ -20,7 +20,7 @@ export interface UseVirtualMachineOptions {
   activeVmTargetDevice: ComputedRef<string>;
   activeVmTargetName?: ComputedRef<string>;
   diskList: Ref<DiskInfo[]>;
-  isDeploying: Ref<boolean>;
+  isDeploying?: Ref<boolean>;
   showToast: (msg: string, type: 'info' | 'warning' | 'error' | 'success') => void;
   refreshDisks?: () => Promise<void>;
   onVmSessionStarted?: (targetDevice: string, targetName: string) => void;
@@ -29,7 +29,8 @@ export interface UseVirtualMachineOptions {
 }
 
 export function useVirtualMachine(options: UseVirtualMachineOptions) {
-  const { activeVmTargetDevice, diskList, isDeploying, showToast, fsm } = options;
+  const { activeVmTargetDevice, diskList, showToast, fsm } = options;
+  const isDeploying = fsm ? fsm.isDeploying : (options.isDeploying || ref<boolean>(false));
 
   const hypervisorList = ref<VMStatus[]>([]);
   const selectedBootMode = ref<string>('auto');
@@ -144,7 +145,7 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   }
 
   async function launchVM() {
-    if (isLaunchingQemu.value || isDeploying.value || isVmDisabled.value) {
+    if (fsm ? !fsm.canLaunchVm.value : (isLaunchingQemu.value || isDeploying.value || isVmDisabled.value)) {
       return;
     }
     isLaunchingQemu.value = true;
