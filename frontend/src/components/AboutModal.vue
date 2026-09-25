@@ -17,9 +17,7 @@
           <div class="about-hero">
             <div class="logo-wrapper">
               <div class="logo-glow"></div>
-              <svg class="app-logo-icon" viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <img src="/logo.png" alt="UniGo" class="app-logo-image" />
             </div>
             <h2 class="app-title">UniGoDesktop</h2>
             <p class="app-subtitle">{{ t('about.subtitle') || 'Universal Go Desktop Suite' }}</p>
@@ -456,10 +454,15 @@ const handlePerformUpdate = async () => {
   z-index: 0;
 }
 
-.app-logo-icon {
+.app-logo-icon,
+.app-logo-image {
   position: relative;
   z-index: 1;
-  color: var(--accent-cyan);
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 4px 20px var(--accent-cyan-glow);
 }
 
 .app-title {

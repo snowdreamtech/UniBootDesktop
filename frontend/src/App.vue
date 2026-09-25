@@ -17,7 +17,7 @@
     <!-- Header -->
     <header class="app-header">
       <div class="brand">
-        <span class="logo">🚀</span>
+        <img src="/logo.png" alt="UniGo" class="logo-img" />
         <div>
           <h1>{{ t('app.title') || 'UniGoDesktop' }}</h1>
           <span class="sub-brand">{{ t('app.subtitle') || 'Universal Cross-Platform Desktop Template' }}</span>
@@ -303,6 +303,14 @@ onUnmounted(() => {
 .logo {
   font-size: 2rem;
   filter: drop-shadow(0 0 10px var(--accent-cyan-glow));
+}
+
+.logo-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  object-fit: cover;
+  box-shadow: 0 0 10px var(--accent-cyan-glow);
 }
 
 .brand h1 {
