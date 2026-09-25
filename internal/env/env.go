@@ -8,8 +8,6 @@ import (
 	"os"
 )
 
-// EnvManager provides environment variable operations.
-type EnvManager struct{}
 
 // Get returns the value of the environment variable with the given key,
 // searching with prefix UNIGODESKTOP_ first, and then the raw key.
@@ -62,14 +60,8 @@ var (
 	// Debug indicates whether the application should run in debug mode.
 	Debug bool
 
-	// Trace indicates whether the application should run in trace mode.
-	Trace bool
-
 	// Quiet indicates whether the application should run in quiet mode.
 	Quiet bool
-
-	// Cwd specifies the current working directory for the application.
-	Cwd string
 
 	// Silent indicates whether to suppress all output and non-error messages.
 	Silent bool
