@@ -182,6 +182,7 @@ export function useDeployment(options: UseDeploymentOptions) {
 
   const isNonDestructive = fsm.isNonDestructive;
   const deployBtnText = fsm.deployBtnText;
+  const isDeployDisabled = fsm.isDeployDisabled;
   const deployDisabledReason = fsm.deployDisabledReason;
   const activeVmTargetDevice = fsm.activeVmTargetDevice;
   const activeVmTargetName = fsm.activeVmTargetName;
@@ -591,6 +592,9 @@ export function useDeployment(options: UseDeploymentOptions) {
     let resultMsg = "";
     let latestDiagnostics: any = null;
 
+    // Clear any previous error states for these targets
+    targets.forEach((dev) => fsm.clearDeviceError(dev));
+
     try {
       const app = window.go && window.go.main && window.go.main.App;
       if (!app) {
@@ -751,6 +755,7 @@ export function useDeployment(options: UseDeploymentOptions) {
       deploySpeedMBps.value = 0;
       deployElapsedSec.value = 0;
       deployEtaSec.value = 0;
+      targets.forEach((dev) => fsm.setDeviceError(dev, resultMsg));
       openDiagnosticsModal(latestDiagnostics, resultMsg);
     }
   }
@@ -809,6 +814,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     isMacOs,
     isNonDestructive,
     deployBtnText,
+    isDeployDisabled,
     deployDisabledReason,
     runningVmTarget,
     setRunningVmTarget,

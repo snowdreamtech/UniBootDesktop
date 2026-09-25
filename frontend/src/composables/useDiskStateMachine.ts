@@ -228,7 +228,7 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
       return 'EJECTED';
     }
 
-    if ((disk as any).is_readonly) {
+    if (disk.writable === false || (disk as any).is_readonly) {
       return 'READONLY';
     }
 
@@ -294,6 +294,9 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
 
     let allDeployed = true;
     let anyVerifying = false;
+    let anyReadonly = false;
+    let anyEjected = false;
+    let anyError = false;
 
     selectedDevices.value.forEach((dev) => {
       const d = diskList.value.find((disk) => disk.device === dev);
@@ -304,9 +307,21 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
       if (st === 'VERIFYING') {
         anyVerifying = true;
       }
+      if (st === 'READONLY') {
+        anyReadonly = true;
+      }
+      if (st === 'EJECTED') {
+        anyEjected = true;
+      }
+      if (st === 'ERROR') {
+        anyError = true;
+      }
     });
 
     if (anyVerifying) return 'VERIFYING';
+    if (anyReadonly) return 'READONLY';
+    if (anyEjected) return 'EJECTED';
+    if (anyError) return 'ERROR';
     if (allDeployed) return 'DEPLOYED';
     return 'UNDEPLOYED';
   });
@@ -362,6 +377,7 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
   // 3. isDeployDisabled & deployDisabledReason
   const isDeployDisabled = computed(() => {
     if (isDeploying.value) return true;
+    if (options.isPreflight && options.isPreflight.value) return true;
     if (currentDiskState.value === 'TESTING') return true;
     if (currentDiskState.value === 'VERIFYING') return true;
     if (currentDiskState.value === 'READONLY') return true;
@@ -380,8 +396,35 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
 
   const deployDisabledReason = computed(() => {
     if (isDeploying.value) return t('deploy.tip_writing');
+    if (options.isPreflight && options.isPreflight.value) return t('deploy.checking');
     if (currentDiskState.value === 'TESTING') return t('vm.tip_running');
     if (currentDiskState.value === 'VERIFYING') return t('checksum.calculating');
+
+    if (currentDiskState.value === 'READONLY') {
+      if (selectionMode.value === 'batch') {
+        const roNames: string[] = [];
+        selectedDevices.value.forEach((dev) => {
+          const d = diskList.value.find((disk) => disk.device === dev);
+          if (d && (d.writable === false || (d as any).is_readonly)) {
+            roNames.push(d.name || d.device);
+          }
+        });
+        return t('deploy.error_readonly_disk', { disks: roNames.join(', ') || 'Selected disks' });
+      }
+      const devName = selectedDisk.value?.name || activeVmTargetName.value || activeVmTargetDevice.value || '';
+      return t('deploy.error_readonly_disk', { disks: devName });
+    }
+
+    if (currentDiskState.value === 'EJECTED') {
+      return t('disk.toast_ejected_success', { device: activeVmTargetDevice.value, name: activeVmTargetName.value });
+    }
+
+    if (currentDiskState.value === 'ERROR') {
+      const dev = selectedDisk.value?.device || activeVmTargetDevice.value;
+      if (dev && errorDevices.value.has(dev)) {
+        return errorDevices.value.get(dev)!;
+      }
+    }
 
     if (selectionMode.value === 'single' && !selectedDisk.value) return t('deploy.tip_select_single');
     if (selectionMode.value === 'batch' && selectedDevices.value.size === 0) return t('deploy.tip_select_batch');

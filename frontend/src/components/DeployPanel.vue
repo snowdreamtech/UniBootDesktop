@@ -565,6 +565,7 @@ const props = defineProps<{
   elapsedSec?: number;
   etaSec?: number;
   deployBtnText: string;
+  isDeployDisabled?: boolean;
   deployDisabledReason: string;
   showDeploySuccessBanner: boolean;
   deploySuccessBanner: { autoEjected?: boolean; targets: string[] };
@@ -607,6 +608,7 @@ const emit = defineEmits<{
   (e: 'safely-eject-success'): void;
   (e: 'launch-vm'): void;
   (e: 'stop-vm'): void;
+  (e: 'update:isVerifying', verifying: boolean): void;
 }>();
 
 // Drag & Drop State & Handlers
@@ -659,6 +661,9 @@ function handleDrop(e: DragEvent) {
 
 // Deploy state
 const isDeployDisabled = computed(() => {
+  if (props.isDeployDisabled !== undefined) {
+    return props.isDeployDisabled;
+  }
   if (props.isDeploying) return true;
   if (props.isPreflight) return true;
   if (props.isVmRunning) return true;
@@ -731,6 +736,13 @@ watch(() => props.selectedIsoFiles, (newFiles: any[]) => {
     }
   }
 }, { deep: true });
+
+watch(
+  () => isCalculatingHash.value || isBatchCalculating.value,
+  (verifying) => {
+    emit('update:isVerifying', verifying);
+  }
+);
 
 function inspectSingleIso(index: number) {
   selectedChecksumIsoIndex.value = index;

@@ -69,6 +69,7 @@
         :elapsedSec="deployElapsedSec"
         :etaSec="deployEtaSec"
         :deployBtnText="deployBtnText"
+        :isDeployDisabled="isDeployDisabled"
         :deployDisabledReason="deployDisabledReason"
         :showDeploySuccessBanner="showDeploySuccessBanner"
         :deploySuccessBanner="deploySuccessBanner"
@@ -95,6 +96,7 @@
         @safely-eject-success="handleSafelyEjectAfterDeploy"
         @launch-vm="launchVM"
         @stop-vm="stopVM"
+        @update:is-verifying="(val: boolean) => fsm.setVerifyingDevice(activeVmTargetDevice, val)"
       />
 
       <!-- Embedded Log Center Component -->
@@ -286,6 +288,7 @@ const {
   isMacOs,
   isNonDestructive,
   deployBtnText,
+  isDeployDisabled,
   deployDisabledReason,
   setRunningVmTarget,
   clearRunningVmTarget,
