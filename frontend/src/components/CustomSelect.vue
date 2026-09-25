@@ -94,6 +94,10 @@ onUnmounted(() => {
   border-color: var(--card-border-active);
 }
 
+.custom-select-container.open {
+  z-index: 1000;
+}
+
 .custom-select-container.open .select-trigger {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 10px var(--accent-cyan-glow);

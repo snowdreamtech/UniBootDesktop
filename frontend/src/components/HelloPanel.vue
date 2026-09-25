@@ -354,6 +354,11 @@ onMounted(async () => {
   font-size: 14px;
 }
 
+:global([dir="rtl"]) .input-icon {
+  left: auto;
+  right: 12px;
+}
+
 .greet-input {
   width: 100%;
   box-sizing: border-box;
@@ -365,6 +370,10 @@ onMounted(async () => {
   font-size: 14px;
   outline: none;
   transition: all 0.2s ease;
+}
+
+:global([dir="rtl"]) .greet-input {
+  padding: 10px 36px 10px 14px;
 }
 
 .greet-input:focus {

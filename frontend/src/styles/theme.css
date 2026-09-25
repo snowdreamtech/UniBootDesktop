@@ -160,11 +160,31 @@ body {
   border-color: var(--accent-cyan);
 }
 
-/* Right-to-Left (RTL) Layout Adaptations for Arabic (ar-SA) */
+/* Smooth transition for layout directions and theme switching */
+html {
+  transition: direction 0.25s ease;
+}
+
+body,
+.app-container,
+.main-content,
+.app-header,
+.settings-modal-card {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* Bidirectional (LTR / RTL) Layout & Alignment */
 html[dir="rtl"],
 [dir="rtl"] {
   direction: rtl;
   text-align: right;
+}
+
+html[dir="ltr"],
+[dir="ltr"],
+html:not([dir="rtl"]) {
+  direction: ltr;
+  text-align: left;
 }
 
 html[dir="rtl"] input,
@@ -173,19 +193,27 @@ html[dir="rtl"] textarea {
   text-align: right;
 }
 
-html[dir="rtl"] .header-brand,
-html[dir="rtl"] .section-header-row,
-html[dir="rtl"] .iso-card-header,
-html[dir="rtl"] .modal-header,
-html[dir="rtl"] .sync-status,
-html[dir="rtl"] .tab-group,
-html[dir="rtl"] .protocol-radio-bar,
-html[dir="rtl"] .radio-group {
-  flex-direction: row-reverse;
+html[dir="ltr"] input,
+html[dir="ltr"] select,
+html[dir="ltr"] textarea {
+  text-align: left;
 }
 
-html[dir="rtl"] .dropdown-caret,
-html[dir="rtl"] .opt-check {
-  margin-left: 0;
-  margin-right: auto;
+/* Header dropdown menu anchoring in RTL */
+[dir="rtl"] .lang-dropdown-menu {
+  right: auto !important;
+  left: 0 !important;
+}
+
+[dir="rtl"] .lang-option {
+  text-align: right;
+}
+
+/* Custom Select in RTL */
+[dir="rtl"] .custom-select-container .select-trigger {
+  text-align: right;
+}
+
+[dir="rtl"] .custom-select-container .dropdown-item {
+  text-align: right;
 }

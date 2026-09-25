@@ -221,7 +221,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { t, setLanguage, SUPPORTED_LANGUAGES } from '../i18n';
+import { t, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from '../i18n';
 import CustomSelect from './CustomSelect.vue';
 
 const props = defineProps<{
@@ -240,7 +240,7 @@ const isAutoSaving = ref(false);
 const saveStatusText = ref('');
 
 // General Settings
-const appLanguage = ref('auto');
+const appLanguage = ref(selectedLangSetting.value || 'auto');
 const appTheme = ref('dark');
 const autoCheckUpdate = ref(true);
 
@@ -667,6 +667,11 @@ watch(() => props.currentProxy, (val) => {
 .highlight-label {
   color: var(--accent-cyan);
   font-weight: 600;
+}
+
+.highlight-form-group {
+  position: relative;
+  z-index: 20;
 }
 
 .form-input {

@@ -43,11 +43,11 @@
                 v-for="opt in langOptions" 
                 :key="opt.value"
                 class="lang-option"
-                :class="{ active: currentLang === opt.value }"
+                :class="{ active: selectedLangSetting === opt.value }"
                 @click="selectLanguage(opt.value)"
               >
                 <span class="opt-text">{{ opt.label }}</span>
-                <span v-if="currentLang === opt.value" class="opt-check">✓</span>
+                <span v-if="selectedLangSetting === opt.value" class="opt-check">✓</span>
               </button>
             </div>
           </transition>
@@ -112,7 +112,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import HelloPanel from './components/HelloPanel.vue';
 import SettingsModal from './components/SettingsModal.vue';
 import AboutModal from './components/AboutModal.vue';
-import { t, currentLang, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
+import { t, currentLang, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
 import type { config } from '../wailsjs/go/models';
 
 type AppConfigType = config.AppConfig;
@@ -140,7 +140,7 @@ const langOptions = computed(() => [
 ]);
 
 const currentLangLabel = computed(() => {
-  if (currentLang.value === 'auto') {
+  if (selectedLangSetting.value === 'auto') {
     return (t('common.langAuto') || 'Auto');
   }
   const opt = langOptions.value.find(o => o.value === currentLang.value);
@@ -394,6 +394,11 @@ onUnmounted(() => {
   -webkit-backdrop-filter: blur(20px);
 }
 
+:global([dir="rtl"]) .lang-dropdown-menu {
+  right: auto;
+  left: 0;
+}
+
 .lang-option {
   background: none;
   border: none;
@@ -407,6 +412,10 @@ onUnmounted(() => {
   cursor: pointer;
   text-align: left;
   transition: all 0.15s ease;
+}
+
+:global([dir="rtl"]) .lang-option {
+  text-align: right;
 }
 
 .lang-option:hover {

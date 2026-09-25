@@ -73,52 +73,66 @@ const loadedDictionaries = ref<Record<string, TranslationDict>>({
 
 const DEFAULT_LOCALE = 'zh-CN';
 
-function getInitialLocale(): string {
-  const saved = localStorage.getItem('unigo_locale');
-  if (saved && SUPPORTED_LANGUAGES.some(l => l.code === saved)) {
-    return saved;
-  }
+export function detectSystemLocale(): string {
+  if (typeof navigator === 'undefined') return DEFAULT_LOCALE;
   const navLang = navigator.language;
   const matched = SUPPORTED_LANGUAGES.find(l => l.code === navLang || l.code.startsWith(navLang.split('-')[0]));
-  if (matched) {
-    return matched.code;
-  }
-  return DEFAULT_LOCALE;
+  return matched ? matched.code : DEFAULT_LOCALE;
 }
 
+function getInitialLocale(): string {
+  const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('unigo_locale') : null;
+  if (saved && saved !== 'auto' && SUPPORTED_LANGUAGES.some(l => l.code === saved)) {
+    return saved;
+  }
+  return detectSystemLocale();
+}
+
+export const selectedLangSetting = ref<string>(
+  (typeof localStorage !== 'undefined' && localStorage.getItem('unigo_locale')) || 'auto'
+);
 export const currentLocale = ref<string>(getInitialLocale());
 export const currentLang = currentLocale;
 
 export async function setLocale(locale: string) {
-  if (!SUPPORTED_LANGUAGES.some(l => l.code === locale)) return;
+  selectedLangSetting.value = locale;
+  let targetLocale = locale;
 
-  if (!loadedDictionaries.value[locale]) {
-    const loader = localeLoaders[`./locales/${locale}.ts`];
+  if (locale === 'auto') {
+    targetLocale = detectSystemLocale();
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('unigo_locale', 'auto');
+    }
+  } else {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('unigo_locale', locale);
+    }
+  }
+
+  if (!SUPPORTED_LANGUAGES.some(l => l.code === targetLocale)) {
+    targetLocale = DEFAULT_LOCALE;
+  }
+
+  if (!loadedDictionaries.value[targetLocale]) {
+    const loader = localeLoaders[`./locales/${targetLocale}.ts`];
     if (loader) {
       try {
         const mod = await loader();
         const exportKey = Object.keys(mod).find(k => k !== 'default') || Object.keys(mod)[0];
         if (exportKey && mod[exportKey]) {
-          loadedDictionaries.value[locale] = mod[exportKey];
+          loadedDictionaries.value[targetLocale] = mod[exportKey];
         }
       } catch (e) {
-        console.error(`Failed to load locale chunk for ${locale}:`, e);
+        console.error(`Failed to load locale chunk for ${targetLocale}:`, e);
       }
     }
   }
 
-  currentLocale.value = locale;
-  localStorage.setItem('unigo_locale', locale);
+  currentLocale.value = targetLocale;
   updateDocumentDir();
 }
 
 export const setLanguage = setLocale;
-
-// Asynchronously load initial locale if not pre-bundled
-const initLoc = getInitialLocale();
-if (initLoc !== 'zh-CN' && initLoc !== 'en-US') {
-  setLocale(initLoc);
-}
 
 export const isRtl = computed(() => {
   return ['ar-SA', 'he-IL', 'fa-IR', 'ur-PK'].includes(currentLocale.value);
@@ -126,15 +140,19 @@ export const isRtl = computed(() => {
 
 export function updateDocumentDir() {
   if (typeof document !== 'undefined') {
-    if (isRtl.value) {
-      document.documentElement.setAttribute('dir', 'rtl');
-    } else {
-      document.documentElement.removeAttribute('dir');
-    }
+    const dir = isRtl.value ? 'rtl' : 'ltr';
+    document.documentElement.setAttribute('dir', dir);
+    document.documentElement.dir = dir;
   }
 }
 
-updateDocumentDir();
+// Asynchronously load initial locale if not pre-bundled
+const initLoc = getInitialLocale();
+if (initLoc !== 'zh-CN' && initLoc !== 'en-US') {
+  setLocale(selectedLangSetting.value === 'auto' ? 'auto' : initLoc);
+} else {
+  updateDocumentDir();
+}
 
 export function t(key: keyof TranslationDict, params?: Record<string, string | number>): string {
   const dict = loadedDictionaries.value[currentLocale.value] || loadedDictionaries.value[DEFAULT_LOCALE] || zhCn;
