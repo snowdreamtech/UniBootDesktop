@@ -10,8 +10,8 @@
         <!-- Minimalist Header Refresh Action -->
         <button
           class="header-action-btn"
-          :disabled="isScanningDisks"
-          :title="isScanningDisks ? t('disk.scanning') : t('disk.rescan')"
+          :disabled="isScanningDisks || isLocked"
+          :title="isLocked ? lockReason : (isScanningDisks ? t('disk.scanning') : t('disk.rescan'))"
           @click="emit('refresh-disks')"
         >
           <svg
@@ -58,6 +58,8 @@
         <button
           class="sub-tab-btn"
           :class="{ active: selectionMode === 'single' }"
+          :disabled="isLocked"
+          :title="isLocked ? lockReason : ''"
           @click="emit('set-selection-mode', 'single')"
         >
           {{ t("disk.single_mode") }}
@@ -65,6 +67,8 @@
         <button
           class="sub-tab-btn"
           :class="{ active: selectionMode === 'batch' }"
+          :disabled="isLocked"
+          :title="isLocked ? lockReason : ''"
           @click="emit('set-selection-mode', 'batch')"
         >
           {{ t("disk.batch_mode") }}
@@ -78,18 +82,19 @@
         <div class="batch-btn-group">
           <button
             class="batch-btn"
-            :disabled="diskList.length === 0 || selectedDevices.size === diskList.length"
+            :disabled="isLocked || diskList.length === 0 || selectedDevices.size === diskList.length"
+            :title="isLocked ? lockReason : ''"
             @click="emit('select-all')"
           >
             {{ t("disk.select_all") }}
           </button>
-          <button class="batch-btn" :disabled="selectedDevices.size === 0" @click="emit('deselect-all')">
+          <button class="batch-btn" :disabled="isLocked || selectedDevices.size === 0" :title="isLocked ? lockReason : ''" @click="emit('deselect-all')">
             {{ t("disk.clear_select") }}
           </button>
           <button
             class="batch-btn btn-eject"
-            :disabled="selectedDevices.size === 0"
-            :title="t('disk.batch_eject')"
+            :disabled="isLocked || selectedDevices.size === 0"
+            :title="isLocked ? lockReason : t('disk.batch_eject')"
             @click="emit('batch-eject')"
           >
             ⏏️ {{ t("disk.batch_eject") }}
@@ -208,6 +213,8 @@ const props = defineProps<{
   ejectingDevices: Set<string>;
   isScanningDisks: boolean;
   customIcons: Record<string, DiskIconType>;
+  isLocked?: boolean;
+  lockReason?: string;
 }>();
 
 const emit = defineEmits<{

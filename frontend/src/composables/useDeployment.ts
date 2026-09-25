@@ -184,6 +184,8 @@ export function useDeployment(options: UseDeploymentOptions) {
   const deployBtnText = fsm.deployBtnText;
   const isDeployDisabled = fsm.isDeployDisabled;
   const deployDisabledReason = fsm.deployDisabledReason;
+  const isDiskLocked = fsm.isDiskLocked;
+  const diskLockReason = fsm.diskLockReason;
   const activeVmTargetDevice = fsm.activeVmTargetDevice;
   const activeVmTargetName = fsm.activeVmTargetName;
   const setRunningVmTarget = fsm.setRunningVmTarget;
@@ -208,6 +210,12 @@ export function useDeployment(options: UseDeploymentOptions) {
   }
 
   async function selectMode(mode: "cloud" | "hybrid") {
+    if (isDiskLocked.value) {
+      if (diskLockReason.value) {
+        showToast(diskLockReason.value, "warning");
+      }
+      return;
+    }
     activeMode.value = mode;
     if (mode === "hybrid") {
       await checkVentoyStatus();
@@ -816,6 +824,8 @@ export function useDeployment(options: UseDeploymentOptions) {
     deployBtnText,
     isDeployDisabled,
     deployDisabledReason,
+    isDiskLocked,
+    diskLockReason,
     runningVmTarget,
     setRunningVmTarget,
     clearRunningVmTarget,

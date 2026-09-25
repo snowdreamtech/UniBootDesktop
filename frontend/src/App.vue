@@ -19,6 +19,7 @@
       :activeMode="activeMode"
       :isLogCardVisible="isLogCardVisible"
       :currentLang="currentLang"
+      :isActionBusy="isDiskLocked"
       @select-mode="selectMode"
       @toggle-log="toggleLogCard"
       @open-settings="(tab) => openSettings(tab as any)"
@@ -37,6 +38,8 @@
         :ejectingDevices="ejectingDevices"
         :isScanningDisks="isScanningDisks"
         :customIcons="customIcons"
+        :isLocked="isDiskLocked"
+        :lockReason="diskLockReason"
         @set-selection-mode="setSelectionMode"
         @select-all="selectAllDisks"
         @deselect-all="deselectAllDisks"
@@ -245,6 +248,8 @@ const {
   t,
   showToast,
   getTargetsToEject: () => deploySuccessBanner.value.targets,
+  isLocked: () => isDiskLocked.value,
+  lockReason: () => diskLockReason.value,
   onEjectSuccess: (device) => {
     if (deploySuccessBanner.value.targets.includes(device)) {
       deploySuccessBanner.value.dismissed = true;
@@ -290,6 +295,8 @@ const {
   deployBtnText,
   isDeployDisabled,
   deployDisabledReason,
+  isDiskLocked,
+  diskLockReason,
   setRunningVmTarget,
   clearRunningVmTarget,
   activeVmTargetDevice,

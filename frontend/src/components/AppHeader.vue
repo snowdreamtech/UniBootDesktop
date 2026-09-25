@@ -66,6 +66,7 @@ const props = defineProps<{
   activeMode: "cloud" | "hybrid";
   isLogCardVisible: boolean;
   currentLang: string;
+  isActionBusy?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -77,7 +78,8 @@ const emit = defineEmits<{
 }>();
 
 const isLangMenuOpen = ref(false);
-const isActionBusy = ref(false);
+const localActionBusy = ref(false);
+const isActionBusy = computed(() => Boolean(props.isActionBusy || localActionBusy.value));
 const langDropdownRef = ref<HTMLElement | null>(null);
 
 const langOptions = computed(() => [
@@ -97,9 +99,9 @@ const currentLangLabel = computed(() => {
 });
 
 function triggerActionFeedback() {
-  isActionBusy.value = true;
+  localActionBusy.value = true;
   window.setTimeout(() => {
-    isActionBusy.value = false;
+    localActionBusy.value = false;
   }, 180);
 }
 

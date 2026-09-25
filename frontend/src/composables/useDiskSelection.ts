@@ -36,10 +36,23 @@ export interface UseDiskSelectionOptions {
   getTargetsToEject?: () => string[];
   onEjectSuccess?: (device: string) => void;
   onSafelyEjectSuccess?: () => void;
+  isLocked?: () => boolean;
+  lockReason?: () => string;
 }
 
 export function useDiskSelection(options: UseDiskSelectionOptions) {
   const { t, showToast, getTargetsToEject, onEjectSuccess, onSafelyEjectSuccess } = options;
+
+  function checkLocked(): boolean {
+    if (options.isLocked && options.isLocked()) {
+      const reason = options.lockReason ? options.lockReason() : "";
+      if (reason) {
+        showToast(reason, "warning");
+      }
+      return true;
+    }
+    return false;
+  }
 
   const selectionMode = ref<"single" | "batch">("single");
   const diskList = ref<DiskInfo[]>([]);
@@ -68,18 +81,22 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
   });
 
   function setSelectionMode(mode: "single" | "batch") {
+    if (checkLocked()) return;
     selectionMode.value = mode;
   }
 
   function selectAllDisks() {
+    if (checkLocked()) return;
     selectedDevices.value = new Set(diskList.value.map((d) => d.device));
   }
 
   function deselectAllDisks() {
+    if (checkLocked()) return;
     selectedDevices.value.clear();
   }
 
   function onDiskSelect(disk: DiskInfo) {
+    if (checkLocked()) return;
     if (selectionMode.value === "single") {
       if (selectedDisk.value && selectedDisk.value.device === disk.device) {
         selectedDisk.value = null;
@@ -92,6 +109,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
   }
 
   function onDiskToggle(disk: DiskInfo) {
+    if (checkLocked()) return;
     const newSet = new Set(selectedDevices.value);
     const wasSelected = newSet.has(disk.device);
     if (wasSelected) {
@@ -178,6 +196,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
   }
 
   async function handleEjectDisk(disk: DiskInfo) {
+    if (checkLocked()) return;
     if (ejectingDevices.value.has(disk.device)) return;
     markEjecting(disk.device);
 
@@ -250,6 +269,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
   }
 
   async function handleBatchEjectDisks() {
+    if (checkLocked()) return;
     const targets = Array.from(selectedDevices.value);
     if (targets.length === 0) return;
 
@@ -305,6 +325,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
   // Wails JS binding fallbacks / mock data for standalone preview
   async function refreshDisks() {
     if (isScanningDisks.value) return;
+    if (options.isLocked && options.isLocked()) return;
     isScanningDisks.value = true;
 
     const previousSelectedDevice = selectedDisk.value?.device;

@@ -137,6 +137,8 @@ export interface DiskStateMachine {
   isVmRunning: ComputedRef<boolean>;
   activeVmTargetDevice: ComputedRef<string>;
   activeVmTargetName: ComputedRef<string>;
+  isDiskLocked: ComputedRef<boolean>;
+  diskLockReason: ComputedRef<string>;
 
   // State mutation actions
   setRunningVmTarget: (device: string, name: string) => void;
@@ -504,6 +506,24 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     return t('vm.tip_ready');
   });
 
+  // 7. isDiskLocked & diskLockReason (prevents switching disk, rescanning, or altering mode mid-operation)
+  const isDiskLocked = computed(() => {
+    return (
+      isDeploying.value ||
+      currentDiskState.value === 'TESTING' ||
+      currentDiskState.value === 'VERIFYING' ||
+      Boolean(options.isPreflight?.value)
+    );
+  });
+
+  const diskLockReason = computed(() => {
+    if (isDeploying.value) return t('deploy.tip_writing');
+    if (currentDiskState.value === 'TESTING') return t('vm.tip_running');
+    if (currentDiskState.value === 'VERIFYING') return t('checksum.calculating');
+    if (options.isPreflight?.value) return t('deploy.checking');
+    return '';
+  });
+
   return {
     currentDiskState,
     getDiskState,
@@ -516,6 +536,8 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     isVmRunning,
     activeVmTargetDevice,
     activeVmTargetName,
+    isDiskLocked,
+    diskLockReason,
     setRunningVmTarget,
     clearRunningVmTarget,
     setVerifyingDevice,
