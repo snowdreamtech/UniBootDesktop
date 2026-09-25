@@ -22,7 +22,7 @@
               </svg>
             </div>
             <h2 class="app-title">UniGoDesktop</h2>
-            <p class="app-subtitle">Universal Go Desktop Suite</p>
+            <p class="app-subtitle">{{ t('about.subtitle') || 'Universal Go Desktop Suite' }}</p>
             <div class="version-badge">
               <span class="badge-dot"></span>
               <span class="badge-text">{{ displayVersion }}</span>

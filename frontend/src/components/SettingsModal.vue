@@ -62,11 +62,7 @@
                 <label class="form-label">🎨 {{ t('settings.theme') || 'Appearance Theme' }}</label>
                 <CustomSelect
                   v-model="appTheme"
-                  :options="[
-                    { value: 'dark', label: '🌙 Dark Mode' },
-                    { value: 'light', label: '☀️ Light Mode' },
-                    { value: 'system', label: '💻 System Default' }
-                  ]"
+                  :options="themeSelectOptions"
                   @change="onThemeChange"
                 />
               </div>
@@ -299,6 +295,12 @@ const languageSelectOptions = computed(() => [
   }))
 ]);
 
+const themeSelectOptions = computed(() => [
+  { value: 'dark', label: '🌙 ' + (t('theme.dark') || 'Dark Mode') },
+  { value: 'light', label: '☀️ ' + (t('theme.light') || 'Light Mode') },
+  { value: 'system', label: '💻 ' + (t('theme.system') || 'System Default') }
+]);
+
 function setMirror(url: string) {
   proxyInputUrl.value = url;
   triggerAutoSave();
@@ -405,17 +407,17 @@ async function testConnection() {
       const res = await wailsApp.TestNetwork(targetUrl);
       netTestSuccess.value = res.connected;
       if (res.connected) {
-        netTestResult.value = `✓ Connected (${res.latencyMs}ms)`;
+        netTestResult.value = `✓ ${t('settings.connected')} (${res.latencyMs}ms)`;
       } else {
-        netTestResult.value = `✕ Failed: ${res.error || 'Timeout'}`;
+        netTestResult.value = `✕ ${t('settings.connectFailed')}: ${res.error || 'Timeout'}`;
       }
     } else {
       netTestSuccess.value = true;
-      netTestResult.value = '✓ Simulated test passed (56ms)';
+      netTestResult.value = `✓ ${t('settings.connected')} (56ms)`;
     }
   } catch (err: any) {
     netTestSuccess.value = false;
-    netTestResult.value = `✕ Error: ${err?.message || String(err)}`;
+    netTestResult.value = `✕ ${t('settings.connectFailed')}: ${err?.message || String(err)}`;
   } finally {
     isTestingNet.value = false;
   }
@@ -442,15 +444,15 @@ async function testNetworkProxy() {
       const res = await wailsApp.TestNetwork('https://api.github.com');
       proxyTestSuccess.value = res.connected;
       proxyTestResult.value = res.connected
-        ? `✓ Proxy ${proxyProtocol.value.toUpperCase()}://${proxyHost.value}:${proxyPort.value} connected (${res.latencyMs}ms)`
-        : `✕ Proxy connection failed: ${res.error || 'Unreachable'}`;
+        ? `✓ ${proxyProtocol.value.toUpperCase()}://${proxyHost.value}:${proxyPort.value} ${t('settings.connected')} (${res.latencyMs}ms)`
+        : `✕ ${t('settings.connectFailed')}: ${res.error || 'Unreachable'}`;
     } else {
       proxyTestSuccess.value = true;
-      proxyTestResult.value = `✓ Proxy ${proxyProtocol.value.toUpperCase()}://${proxyHost.value}:${proxyPort.value} OK`;
+      proxyTestResult.value = `✓ ${proxyProtocol.value.toUpperCase()}://${proxyHost.value}:${proxyPort.value} ${t('settings.connected')}`;
     }
   } catch (e: any) {
     proxyTestSuccess.value = false;
-    proxyTestResult.value = `✕ Proxy error: ${e?.message || String(e)}`;
+    proxyTestResult.value = `✕ ${t('settings.connectFailed')}: ${e?.message || String(e)}`;
   } finally {
     isTestingProxy.value = false;
   }
@@ -578,35 +580,48 @@ watch(() => props.currentProxy, (val) => {
 .tab-nav-bar {
   display: flex;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: rgba(0, 0, 0, 0.15);
+  padding: 0.6rem 1.5rem;
+  background: var(--section-bg);
   border-bottom: 1px solid var(--card-border);
 }
 
 .tab-btn {
-  background: none;
-  border: none;
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
   color: var(--text-muted);
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.1rem;
   border-radius: 8px;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
 }
 
 .tab-btn:hover {
+  background: rgba(0, 229, 255, 0.08);
+  border-color: var(--accent-cyan);
   color: var(--text-main);
-  background: rgba(255, 255, 255, 0.05);
 }
 
 .tab-btn.active {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
   color: var(--accent-cyan);
-  background: rgba(0, 229, 255, 0.12);
-  border: 1px solid rgba(0, 229, 255, 0.3);
+  box-shadow: 0 0 12px var(--accent-cyan-glow);
+}
+
+[data-theme="light"] .tab-btn.active {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #0284c7;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
+}
+
+.tab-icon {
+  font-size: 0.95rem;
 }
 
 .modal-body {

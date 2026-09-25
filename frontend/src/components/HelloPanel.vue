@@ -139,7 +139,7 @@
           <button class="nav-tile" @click="$emit('open-about')">
             <span class="tile-icon">ℹ️</span>
             <div class="tile-text">
-              <span class="tile-title">{{ t('about.title') || 'About & Diagnostics' }}</span>
+              <span class="tile-title">{{ t('about.title') || 'About' }}</span>
               <span class="tile-subtitle">{{ t('hello.about_sub') || 'Environment specs and update' }}</span>
             </div>
             <span class="tile-arrow">›</span>

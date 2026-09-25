@@ -56,7 +56,7 @@
         <!-- Quick Theme Toggle -->
         <button 
           class="icon-action-btn" 
-          :title="isDarkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme'"
+          :title="isDarkTheme ? (t('theme.toggleLight') || 'Switch to Light Theme') : (t('theme.toggleDark') || 'Switch to Dark Theme')"
           @click="toggleTheme"
         >
           <span>{{ isDarkTheme ? '🌙' : '☀️' }}</span>
@@ -280,6 +280,8 @@ onUnmounted(() => {
 
 /* Header */
 .app-header {
+  position: relative;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -349,6 +351,7 @@ onUnmounted(() => {
 /* Quick Language Dropdown */
 .lang-selector-header {
   position: relative;
+  z-index: 101;
 }
 
 .lang-pill-btn {
@@ -375,18 +378,20 @@ onUnmounted(() => {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  width: 230px;
-  max-height: 320px;
+  width: 240px;
+  max-height: 340px;
   overflow-y: auto;
   background: var(--modal-bg);
   border: 1px solid var(--card-border);
   border-radius: 12px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
-  z-index: 100;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+  z-index: 1000;
   padding: 0.4rem;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .lang-option {
@@ -405,7 +410,8 @@ onUnmounted(() => {
 }
 
 .lang-option:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 229, 255, 0.1);
+  color: var(--accent-cyan);
 }
 
 .lang-option.active {
@@ -420,6 +426,8 @@ onUnmounted(() => {
 
 /* Main Content */
 .main-content {
+  position: relative;
+  z-index: 1;
   flex: 1;
   display: flex;
   flex-direction: column;
