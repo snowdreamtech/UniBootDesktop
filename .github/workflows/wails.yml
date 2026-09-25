@@ -151,7 +151,7 @@ jobs:
           fi
 
       - name: Codesign macOS App Bundle
-        if: runner.os == 'macOS' && secrets.APPLE_CERTIFICATE != ''
+        if: runner.os == 'macOS'
         shell: bash
         env:
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
@@ -159,6 +159,10 @@ jobs:
           APPLE_IDENTITY: ${{ secrets.APPLE_IDENTITY }}
         run: |
           set -euo pipefail
+          if [ -z "${APPLE_CERTIFICATE:-}" ]; then
+            echo "No APPLE_CERTIFICATE secret provided, skipping codesign."
+            exit 0
+          fi
           APP_PATH="$(find build/bin -maxdepth 1 -type d -name '*.app' -print -quit)"
           if [ -z "${APP_PATH}" ]; then
             echo "App bundle not found in build/bin" >&2
