@@ -6,10 +6,16 @@
       "include-component-in-tag": false,
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
-        "docker/rocky/Dockerfile",
-        "docker/debian/Dockerfile",
-        "docker/alpine/Dockerfile",
-        ".github/workflows/docker.yml"
+        {
+          "type": "json",
+          "path": "wails.json",
+          "jsonpath": "$.info.productVersion"
+        },
+        {
+          "type": "json",
+          "path": "frontend/package.json",
+          "jsonpath": "$.version"
+        }
       ]
     }
   },
