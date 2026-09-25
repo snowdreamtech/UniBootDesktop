@@ -8,8 +8,8 @@
 #   sh install.sh --version v0.7.0
 #
 # Environment variables:
-#   GITHUB_PROXY  — Optional proxy prefix for GitHub downloads
-#                   Default: https://gh-proxy.sn0wdr1am.com/
+#   GITHUB_PROXY  — Optional proxy prefix for GitHub downloads (e.g. https://proxy.example.com/)
+#                   Default: empty (direct connection)
 #   INSTALL_DIR   — Directory to install the binary (default: ~/.unigodesktop/bin, or /usr/local/bin if root)
 #   UNIGODESKTOP_VERSION — Target version (overridden by --version flag)
 
@@ -20,7 +20,7 @@ set -eu
 # ---------------------------------------------------------------------------
 REPO="snowdreamtech/UniGoDesktop"
 BINARY="unigodesktop"
-GITHUB_PROXY="${GITHUB_PROXY:-https://gh-proxy.sn0wdr1am.com/}"
+GITHUB_PROXY="${GITHUB_PROXY:-}"
 UNIGODESKTOP_VERSION="${UNIGODESKTOP_VERSION:-}"
 
 # Retry config

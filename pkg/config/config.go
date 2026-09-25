@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/pelletier/go-toml/v2"
 	"github.com/snowdreamtech/unigodesktop/internal/env"
@@ -47,6 +48,11 @@ func Load() (*AppConfig, error) {
 		cfg := GetDefaultConfig()
 		if err := toml.Unmarshal(data, cfg); err != nil {
 			return nil, fmt.Errorf("parse config error: %w", err)
+		}
+		// Sanitize legacy or default public proxy mirrors to maintain legal compliance
+		if strings.Contains(cfg.GithubProxy, "ghproxy") || strings.Contains(cfg.GithubProxy, "ghfast") {
+			cfg.GithubProxy = ""
+			_ = cfg.Save()
 		}
 		return cfg, nil
 	}

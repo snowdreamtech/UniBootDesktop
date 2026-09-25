@@ -60,7 +60,7 @@ if ($Help) { Show-Help }
 $Repo = "snowdreamtech/UniGoDesktop"
 $Binary = "unigodesktop"
 $GitHubProxy = $env:GITHUB_PROXY
-if (-not $GitHubProxy) { $GitHubProxy = "https://gh-proxy.sn0wdr1am.com/" }
+if (-not $GitHubProxy) { $GitHubProxy = "" }
 if ($NoProxy) { $GitHubProxy = "" }
 
 # Retry settings for Invoke-WebRequest

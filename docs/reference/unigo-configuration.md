@@ -137,7 +137,7 @@ echo "🎉 Configuration verified!"
 [env]
 # GitHub Proxy Acceleration - Enable locally, disable in CI
 ENABLE_GITHUB_PROXY = "{% if env.CI is defined %}0{% else %}1{% endif %}"
-GITHUB_PROXY = "https://gh-proxy.sn0wdr1am.com/"
+GITHUB_PROXY = "https://proxy.example.com/"
 
 # Node.js mirror
 NPM_CONFIG_REGISTRY = "{% if env.CI is defined %}https://registry.npmjs.org{% else %}https://registry.npmmirror.com{% endif %}"

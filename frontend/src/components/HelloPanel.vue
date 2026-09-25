@@ -96,7 +96,7 @@
           </div>
           <div class="spec-item">
             <span class="spec-label">{{ t('settings.githubProxy') || 'GitHub Mirror' }}</span>
-            <span class="spec-val truncate">{{ appConfig?.githubProxy || t('settings.proxyDirect') || 'Direct (Disabled)' }}</span>
+            <span class="spec-val truncate">{{ appConfig?.githubProxy || t('settings.proxy_direct') || 'Direct' }}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">{{ t('hello.ping_latency') || 'Latency / RTT' }}</span>
