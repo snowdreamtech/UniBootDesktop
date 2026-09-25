@@ -12,8 +12,8 @@ import (
 type EnvManager struct{}
 
 // Get returns the value of the environment variable with the given key,
-// searching with prefixes in order: UNIGODESKTOP_, UNIBOOTDESKTOP_, MISE_, and then the raw key.
-// Note: PATH is retrieved directly to avoid pollution from UNIGODESKTOP_PATH/UNIBOOTDESKTOP_PATH/MISE_PATH.
+// searching with prefixes in order: UNIGODESKTOP_, MISE_, and then the raw key.
+// Note: PATH is retrieved directly to avoid pollution from UNIGODESKTOP_PATH/MISE_PATH.
 func Get(key string) string {
 	if key == "PATH" {
 		return os.Getenv("PATH")
@@ -22,15 +22,11 @@ func Get(key string) string {
 	if v := os.Getenv("UNIGODESKTOP_" + key); v != "" {
 		return v
 	}
-	// 2. UNIBOOTDESKTOP_ prefix (Legacy fallback)
-	if v := os.Getenv("UNIBOOTDESKTOP_" + key); v != "" {
-		return v
-	}
-	// 3. MISE_ prefix
+	// 2. MISE_ prefix
 	if v := os.Getenv("MISE_" + key); v != "" {
 		return v
 	}
-	// 4. Raw key (Native)
+	// 3. Raw key (Native)
 	return os.Getenv(key)
 }
 

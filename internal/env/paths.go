@@ -38,7 +38,7 @@ func GetFSToolName(tool, backend string) string {
 }
 
 // GetConfigDir returns the root configuration directory for UniGoDesktop.
-// It uses UNIGODESKTOP_CONFIG_DIR / UNIBOOTDESKTOP_CONFIG_DIR if set, otherwise falls back to XDG config directory.
+// It uses UNIGODESKTOP_CONFIG_DIR if set, otherwise falls back to XDG config directory.
 func GetConfigDir() string {
 	if configDir := Get("CONFIG_DIR"); configDir != "" {
 		return configDir
@@ -64,7 +64,7 @@ func GetConfigDir() string {
 }
 
 // GetDataDir returns the root data directory for UniGoDesktop.
-// It uses UNIGODESKTOP_DATA_DIR / UNIBOOTDESKTOP_DATA_DIR if set, otherwise falls back to appropriate OS directories.
+// It uses UNIGODESKTOP_DATA_DIR if set, otherwise falls back to appropriate OS directories.
 func GetDataDir() string {
 	if dataDir := Get("DATA_DIR"); dataDir != "" {
 		return dataDir
