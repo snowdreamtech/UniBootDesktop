@@ -1,4 +1,5 @@
 export interface TranslationDict {
+  [key: string]: any;
   "lang.zhCN": string;
   "lang.zhTW": string;
   "lang.jaJP": string;
