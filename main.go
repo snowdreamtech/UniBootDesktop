@@ -55,6 +55,10 @@ func RunWails() error {
 	})
 }
 
+func init() {
+	cmd.WailsRunner = RunWails
+}
+
 func main() {
 	if len(os.Args) <= 1 || (len(os.Args) > 1 && (os.Args[1] == "gui" || os.Args[1] == "desktop")) {
 		if err := RunWails(); err != nil {
