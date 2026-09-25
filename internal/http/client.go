@@ -17,10 +17,10 @@ import (
 type ClientConfig struct{}
 
 // MockTransport can be set during tests to intercept all HTTP/HTTPS requests
-// created by UniRTM's DefaultTransport.
+// created by DefaultTransport.
 var MockTransport http.RoundTripper
 
-// DefaultTransport returns UniRTM's standard http.Transport.
+// DefaultTransport returns UniGoDesktop's standard http.Transport.
 //
 // It customizes two behaviors that Go's default transport cannot provide:
 //
@@ -28,8 +28,8 @@ var MockTransport http.RoundTripper
 //     are forced to use DIRECT connections, preventing local proxy software from
 //     returning "Bad Request" errors when routing Chinese CDN traffic.
 //
-//  2. UNIRTM_/MISE_ env prefix support: reads HTTP_PROXY/HTTPS_PROXY/ALL_PROXY
-//     through env.Get(), which resolves UNIRTM_HTTP_PROXY and MISE_HTTP_PROXY
+//  2. UNIGODESKTOP_ env prefix support: reads HTTP_PROXY/HTTPS_PROXY/ALL_PROXY
+//     through env.Get(), which resolves UNIGODESKTOP_HTTP_PROXY
 //     in addition to the standard names that http.ProxyFromEnvironment covers.
 //
 // All other settings (connection pool, timeouts) are inherited from Go's
@@ -43,11 +43,11 @@ func DefaultTransport() *http.Transport {
 		trans = &http.Transport{}
 	}
 
-	// 1. Smart proxy bypass + UNIRTM_/MISE_ env prefix support + NO_PROXY + ALL_PROXY
+	// 1. Smart proxy bypass + UNIGODESKTOP_ env prefix support + NO_PROXY + ALL_PROXY
 	//
 	// Proxy config is resolved ONCE at transport creation time (not per request).
 	// httpproxy.Config is used to correctly enforce NO_PROXY rules alongside
-	// UNIRTM_/MISE_ prefixed proxy variables.
+	// UNIGODESKTOP_ prefixed proxy variables.
 	httpProxy := env.Get("HTTP_PROXY")
 	httpsProxy := env.Get("HTTPS_PROXY")
 	if allProxy := env.Get("ALL_PROXY"); allProxy != "" {
@@ -80,7 +80,7 @@ func DefaultTransport() *http.Transport {
 	return trans
 }
 
-// NewClient returns an http.Client pre-configured with UniRTM's robust transport.
+// NewClient returns an http.Client pre-configured with UniGoDesktop's robust transport.
 func NewClient() *http.Client {
 	var tr http.RoundTripper
 	if MockTransport != nil {

@@ -33,9 +33,7 @@ var doctorCmd = &cobra.Command{
 	Aliases: []string{"dr"},
 	Short:   "Check system health and diagnose issues",
 	Long: `Check UniGoDesktop system health and diagnose potential issues.
-
-This command partially aligns with UniRTM to ensure your environment is
-properly configured, providing insights into directories, configurations, and cache.`,
+It verifies that your environment is properly configured, providing insights into directories, configurations, and cache.`,
 	Args: cobra.NoArgs,
 	RunE: runDoctor,
 }

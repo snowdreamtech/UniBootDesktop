@@ -13,13 +13,10 @@ func TestGet(t *testing.T) {
 	// Setup
 	t.Setenv("UNIGODESKTOP_TEST_KEY_1", "val1")
 
-	t.Setenv("MISE_TEST_KEY_2", "val2")
+	t.Setenv("TEST_KEY_2", "val2")
 
-	t.Setenv("TEST_KEY_3", "val3")
-
-	t.Setenv("UNIGODESKTOP_TEST_KEY_4", "val4_unigo")
-	t.Setenv("MISE_TEST_KEY_4", "val4_mise")
-	t.Setenv("TEST_KEY_4", "val4_raw")
+	t.Setenv("UNIGODESKTOP_TEST_KEY_3", "val3_unigo")
+	t.Setenv("TEST_KEY_3", "val3_raw")
 
 	tests := []struct {
 		key      string
@@ -27,8 +24,7 @@ func TestGet(t *testing.T) {
 	}{
 		{"TEST_KEY_1", "val1"},
 		{"TEST_KEY_2", "val2"},
-		{"TEST_KEY_3", "val3"},
-		{"TEST_KEY_4", "val4_unigo"},
+		{"TEST_KEY_3", "val3_unigo"},
 		{"TEST_KEY_NONEXISTENT", ""},
 		{"PATH", os.Getenv("PATH")},
 	}
@@ -59,31 +55,6 @@ func TestRandomString(t *testing.T) {
 	}
 }
 
-func TestGetFSToolName(t *testing.T) {
-	tests := []struct {
-		tool     string
-		backend  string
-		expected string
-	}{
-		{"npm", "", "npm"},
-		{"npm", "native", "npm"},
-		{"prettier", "npm", "npm-prettier"},
-		{"npm-prettier", "npm", "npm-prettier"},
-		{"npm:prettier", "npm", "npm-prettier"},
-		{"org/pkg", "github", "github-org-pkg"},
-		{"tool@v1", "github", "github-toolv1"},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.tool+"_"+tc.backend, func(t *testing.T) {
-			result := GetFSToolName(tc.tool, tc.backend)
-			if result != tc.expected {
-				t.Errorf("expected %s, got %s", tc.expected, result)
-			}
-		})
-	}
-}
-
 func TestDirFunctions(t *testing.T) {
 	// Just test that they return strings and don't panic
 
@@ -99,22 +70,6 @@ func TestDirFunctions(t *testing.T) {
 
 	if !strings.HasPrefix(GetDatabasePath(), dataDir) {
 		t.Error("expected database path to be inside data dir")
-	}
-
-	if !strings.HasPrefix(GetShimsDir(), dataDir) {
-		t.Error("expected shims dir to be inside data dir")
-	}
-
-	if !strings.HasPrefix(GetInstallsDir(), dataDir) {
-		t.Error("expected installs dir to be inside data dir")
-	}
-
-	if !strings.HasPrefix(GetDownloadsDir(), dataDir) {
-		t.Error("expected downloads dir to be inside data dir")
-	}
-
-	if !strings.HasPrefix(GetPluginsDir(), dataDir) {
-		t.Error("expected plugins dir to be inside data dir")
 	}
 
 	cacheDir := GetCacheDir()

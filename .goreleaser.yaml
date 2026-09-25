@@ -156,9 +156,7 @@ release:
   # GUI installers/packages are produced by the dedicated Wails workflow on
   # native OS runners and uploaded separately to this GitHub Release.
   header: |
-    **Snowdream Tech AI IDE Template** is an enterprise-grade, foundational template designed for multi-AI IDE collaboration.
-
-    This repository serves as a **Single Source of Truth** for AI agent rules, workflows, and project configurations, supporting over 50 different AI-assisted IDEs with massive multi-language support.
+    **UniGoDesktop** is a modern, high-performance cross-platform desktop application built with Go, Wails, and Vue 3.
   footer: |
     **Full Changelog**: https://github.com/snowdreamtech/unigodesktop/compare/{{ .PreviousTag }}...{{ .Tag }}
 
@@ -217,7 +215,7 @@ nfpms:
     homepage: https://github.com/snowdreamtech/unigodesktop
     maintainer: "Snowdream Tech <snowdreamtech@qq.com>"
     description: |-
-      Snowdream Tech AI IDE Template is an enterprise-grade, foundational template designed for multi-AI IDE collaboration.
+      UniGoDesktop is a modern cross-platform desktop application built with Go, Wails, and Vue 3.
     license: MIT
     vendor: SnowdreamTech
     bindir: /usr/bin
@@ -315,7 +313,7 @@ homebrew_casks:
     url:
       template: "https://github.com/snowdreamtech/unigodesktop/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
       verified: "github.com/snowdreamtech/"
-    description: "Snowdream Tech AI IDE Template is an enterprise-grade, foundational template designed for multi-AI IDE collaboration."
+    description: "UniGoDesktop is a modern cross-platform desktop application built with Go, Wails, and Vue 3."
     license: "MIT"
     hooks:
       post:
@@ -329,7 +327,7 @@ winget:
     publisher: SnowdreamTech
     license: MIT
     homepage: https://github.com/snowdreamtech/unigodesktop
-    short_description: Snowdream Tech AI IDE Template
+    short_description: UniGoDesktop
     repository:
       owner: snowdreamtech
       name: winget-pkgs
@@ -348,7 +346,7 @@ scoops:
       name: scoop-bucket
       token: "{{ .Env.WORKFLOW_SECRET }}"
     homepage: https://github.com/snowdreamtech/unigodesktop
-    description: Snowdream Tech AI IDE Template is an enterprise-grade, foundational template designed for multi-AI IDE collaboration.
+    description: UniGoDesktop is a modern cross-platform desktop application built with Go, Wails, and Vue 3.
     license: MIT
 
 nix:
@@ -357,13 +355,13 @@ nix:
       name: nur
       token: "{{ .Env.WORKFLOW_SECRET }}"
     homepage: https://github.com/snowdreamtech/unigodesktop
-    description: Snowdream Tech AI IDE Template is an enterprise-grade, foundational template designed for multi-AI IDE collaboration.
+    description: UniGoDesktop is a modern cross-platform desktop application built with Go, Wails, and Vue 3.
     license: mit
     skip_upload: auto
 
 aurs:
   - homepage: https://github.com/snowdreamtech/unigodesktop
-    description: Snowdream Tech AI IDE Template is an enterprise-grade, foundational template designed for multi-AI IDE collaboration.
+    description: Snowdream Tech UniGoDesktop cross-platform desktop application.
     maintainers:
       - "Snowdream Tech <snowdreamtech@qq.com>"
     license: MIT

@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 )
 
 // Exported for testing override
@@ -18,24 +17,6 @@ var (
 	RuntimeGOOS     = runtime.GOOS
 	RuntimeGOARCH   = runtime.GOARCH
 )
-
-// GetFSToolName returns a sanitized tool name for use in filesystem paths.
-// It implements Scheme B: provider-tool-name, replacing colons and slashes with hyphens.
-func GetFSToolName(tool, backend string) string {
-	name := tool
-	// If tool already contains the backend as a prefix (followed by a hyphen), don't double it.
-	// For 'native' backend, we don't add a prefix to align with mise core tools layout.
-	if backend != "" && backend != "native" && !strings.HasPrefix(tool, backend+"-") && !strings.HasPrefix(tool, backend+":") {
-		name = backend + "-" + tool
-	}
-
-	// Replace colons and slashes with hyphens, and remove @ for consistency with Mise
-	name = strings.ReplaceAll(name, ":", "-")
-	name = strings.ReplaceAll(name, "/", "-")
-	name = strings.ReplaceAll(name, "@", "")
-
-	return name
-}
 
 // GetConfigDir returns the root configuration directory for UniGoDesktop.
 // It uses UNIGODESKTOP_CONFIG_DIR if set, otherwise falls back to XDG config directory.
@@ -95,26 +76,6 @@ func GetDataDir() string {
 // GetDatabasePath returns the path to the UniGoDesktop SQLite database.
 func GetDatabasePath() string {
 	return filepath.Join(GetDataDir(), "unigodesktop.db")
-}
-
-// GetShimsDir returns the directory where UniGoDesktop shims are stored.
-func GetShimsDir() string {
-	return filepath.Join(GetDataDir(), "shims")
-}
-
-// GetInstallsDir returns the directory where tools are installed.
-func GetInstallsDir() string {
-	return filepath.Join(GetDataDir(), "installs")
-}
-
-// GetDownloadsDir returns the directory where artifacts are downloaded before extraction.
-func GetDownloadsDir() string {
-	return filepath.Join(GetDataDir(), "downloads")
-}
-
-// GetPluginsDir returns the directory where plugins (e.g., asdf plugins) are stored.
-func GetPluginsDir() string {
-	return filepath.Join(GetDataDir(), "plugins")
 }
 
 // GetCacheDir returns the directory where cache files are stored.

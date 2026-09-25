@@ -41,8 +41,8 @@ var WailsRunner func() error
 
 var rootCmd = &cobra.Command{
 	Use:   "unigodesktop",
-	Short: "UniGoDesktop is a Golang desktop application template",
-	Long:  `A fast, cross-platform Golang desktop application template with embedded web UI and CLI capabilities.`,
+	Short: "UniGoDesktop is a modern cross-platform desktop application",
+	Long:  `A fast, cross-platform desktop application built with Go, Wails, and Vue 3.`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// Change directory if --cd is provided
 		if cdDir != "" {

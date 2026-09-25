@@ -14,7 +14,7 @@ import (
 func IsTesting() bool {
 	return strings.HasSuffix(os.Args[0], ".test") ||
 		strings.Contains(os.Args[0], "/_test/") ||
-		os.Getenv("UNIRTM_TESTING") == "1" ||
+		os.Getenv("UNIGODESKTOP_TESTING") == "1" ||
 		os.Getenv("CI") != "" // Usually CI runs tests, and we don't want spinners messing up CI logs anyway
 }
 
