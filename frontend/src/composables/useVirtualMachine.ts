@@ -37,10 +37,7 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   const vmCpuCores = ref<number>(2);
   const vmMemoryMB = ref<number>(2048);
   const vmDisplayAccel = ref<boolean>(true);
-  const isLaunchingQemu = ref<boolean>(false);
-  const internalVmRunning = ref<boolean>(false);
-  const runningVmTargetDevice = ref<string>('');
-  const runningVmTargetName = ref<string>('');
+  const isLaunchingQemu = fsm ? fsm.isLaunchingVm : ref<boolean>(false);
   const qemuStatus = ref<{ installed: boolean; path: string; version: string }>({
     installed: false,
     path: '',
@@ -48,12 +45,9 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   });
 
   function handleVmEnded() {
-    runningVmTargetDevice.value = '';
-    runningVmTargetName.value = '';
-    internalVmRunning.value = false;
     isLaunchingQemu.value = false;
     if (fsm) {
-      fsm.clearRunningVmTarget();
+      fsm.stopVm();
     }
     if (options.onVmSessionEnded) {
       options.onVmSessionEnded();
@@ -70,44 +64,23 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   }
 
   const isVmRunning = computed(() => {
-    if (fsm) {
-      return fsm.isVmRunning.value;
-    }
-    return internalVmRunning.value;
+    return fsm ? fsm.isVmRunning.value : false;
   });
 
   const isVmDisabled = computed(() => {
-    if (fsm) {
-      return fsm.isVmDisabled.value;
-    }
-    return (
-      isLaunchingQemu.value ||
-      isDeploying.value ||
-      hypervisorList.value.length === 0 ||
-      !activeVmTargetDevice.value
-    );
+    return fsm ? fsm.isVmDisabled.value : true;
   });
 
   const vmDisabledReason = computed(() => {
-    if (fsm) {
-      return fsm.vmDisabledReason.value;
-    }
-    if (isLaunchingQemu.value) {
-      return t('vm.tip_launching');
-    }
-    if (isDeploying.value) {
-      return t('vm.tip_deploying');
-    }
-    if (hypervisorList.value.length === 0) {
-      return t('vm.tip_not_installed');
-    }
-    if (!activeVmTargetDevice.value) {
-      return t('vm.tip_select_target');
-    }
-    if (isVmRunning.value) {
-      return t('vm.tip_running');
-    }
-    return t('vm.tip_ready');
+    return fsm ? fsm.vmDisabledReason.value : '';
+  });
+
+  const runningVmTargetDevice = computed(() => {
+    return fsm ? fsm.activeVmTargetDevice.value : '';
+  });
+
+  const runningVmTargetName = computed(() => {
+    return fsm ? fsm.activeVmTargetName.value : '';
   });
 
   watch(
@@ -211,11 +184,8 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
 
         if (typeof app.LaunchVMWithConfig === 'function') {
           await app.LaunchVMWithConfig(targetDevice, selectedVMType.value, vmConfig);
-          runningVmTargetDevice.value = launchedDev;
-          runningVmTargetName.value = launchedName;
-          internalVmRunning.value = true;
           if (fsm) {
-            fsm.setRunningVmTarget(launchedDev, launchedName);
+            fsm.startVm(launchedDev, launchedName);
           }
           if (options.onVmSessionStarted) {
             options.onVmSessionStarted(launchedDev, launchedName);
@@ -224,11 +194,8 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
           showToast(t('vm.startSuccess_vm', { name: vmName }), 'success');
         } else if (typeof app.LaunchVM === 'function') {
           await app.LaunchVM(targetDevice, selectedVMType.value, selectedBootMode.value);
-          runningVmTargetDevice.value = launchedDev;
-          runningVmTargetName.value = launchedName;
-          internalVmRunning.value = true;
           if (fsm) {
-            fsm.setRunningVmTarget(launchedDev, launchedName);
+            fsm.startVm(launchedDev, launchedName);
           }
           if (options.onVmSessionStarted) {
             options.onVmSessionStarted(launchedDev, launchedName);
@@ -237,11 +204,8 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
           showToast(t('vm.startSuccess_vm', { name: vmName }), 'success');
         } else if (typeof app.LaunchQEMU === 'function') {
           await app.LaunchQEMU(targetDevice);
-          runningVmTargetDevice.value = launchedDev;
-          runningVmTargetName.value = launchedName;
-          internalVmRunning.value = true;
           if (fsm) {
-            fsm.setRunningVmTarget(launchedDev, launchedName);
+            fsm.startVm(launchedDev, launchedName);
           }
           if (options.onVmSessionStarted) {
             options.onVmSessionStarted(launchedDev, launchedName);
@@ -258,14 +222,12 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
         }
       } else {
         await new Promise(r => setTimeout(r, 600));
-        runningVmTargetDevice.value = targetDevice;
-        runningVmTargetName.value = options.activeVmTargetName?.value || targetDevice;
-        internalVmRunning.value = true;
+        const demoName = options.activeVmTargetName?.value || targetDevice;
         if (fsm) {
-          fsm.setRunningVmTarget(targetDevice, runningVmTargetName.value);
+          fsm.startVm(targetDevice, demoName);
         }
         if (options.onVmSessionStarted) {
-          options.onVmSessionStarted(targetDevice, runningVmTargetName.value);
+          options.onVmSessionStarted(targetDevice, demoName);
         }
         logUserAction('INFO', 'User launched hypervisor simulation test (demo mode)', `${vmName} on ${targetDevice}`);
         if (options.refreshDisks) {

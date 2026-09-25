@@ -113,8 +113,8 @@ export interface DiskStateMachineOptions {
   diskList: Ref<DiskInfo[]>;
   ventoyStatus: Ref<VentoyValidation>;
   isMacOs: Ref<boolean>;
-  isDeploying: Ref<boolean>;
-  isPreflight: Ref<boolean>;
+  isDeploying?: Ref<boolean>;
+  isPreflight?: Ref<boolean>;
   pendingTargets?: Ref<string[]>;
   isVerifying?: Ref<boolean>;
   hypervisorCount?: Ref<number>;
@@ -127,6 +127,11 @@ export interface DiskStateMachine {
   // Evaluated state of current disk selection
   currentDiskState: ComputedRef<DiskState>;
   getDiskState: (disk: DiskInfo | null) => DiskState;
+
+  // Canonical state variables owned by State Machine
+  isDeploying: Ref<boolean>;
+  isPreflight: Ref<boolean>;
+  isLaunchingVm: Ref<boolean>;
 
   // Unified controlled UI variables (1:1 with existing UI props)
   isNonDestructive: ComputedRef<boolean>;
@@ -153,7 +158,13 @@ export interface DiskStateMachine {
   canVerifyHash: ComputedRef<boolean>;
   canConfigureVm: ComputedRef<boolean>;
 
-  // State mutation actions
+  // State mutation actions and transitions
+  startDeploy: (targets: string[]) => boolean;
+  finishDeploy: (success: boolean, targets: string[], errorMsg?: string) => void;
+  cancelDeploy: () => void;
+  setPreflight: (preflight: boolean) => void;
+  startVm: (device: string, name: string) => boolean;
+  stopVm: () => void;
   setRunningVmTarget: (device: string, name: string) => void;
   clearRunningVmTarget: () => void;
   setVerifyingDevice: (device: string, isVerifying: boolean) => void;
@@ -173,26 +184,71 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     diskList,
     ventoyStatus,
     isMacOs,
-    isDeploying,
     checkDiskCanUpdateNonDestructively,
     getVentoyValidationMessage,
   } = options;
 
+  const localIsDeploying = ref(false);
+  const isDeploying = options.isDeploying || localIsDeploying;
+  const localIsPreflight = ref(false);
+  const isPreflight = options.isPreflight || localIsPreflight;
+  const deployingTargets = ref<Set<string>>(new Set());
+
   const localHypervisorCount = ref(options.hypervisorCount ? options.hypervisorCount.value : 1);
-  const localIsLaunchingQemu = ref(options.isLaunchingQemu ? options.isLaunchingQemu.value : false);
+  const isLaunchingVm = ref(options.isLaunchingQemu ? options.isLaunchingQemu.value : false);
 
   function setHypervisorCount(count: number) {
     localHypervisorCount.value = count;
   }
 
   function setIsLaunchingQemu(launching: boolean) {
-    localIsLaunchingQemu.value = launching;
+    isLaunchingVm.value = launching;
   }
 
   // Track active operations per physical device
   const runningVmTarget = ref<{ device: string; name: string } | null>(null);
   const verifyingDevices = ref<Set<string>>(new Set());
   const errorDevices = ref<Map<string, string>>(new Map());
+
+  function startDeploy(targets: string[]): boolean {
+    if (isDiskLocked.value || isDeployDisabled.value) {
+      return false;
+    }
+    isDeploying.value = true;
+    deployingTargets.value = new Set(targets);
+    targets.forEach((dev) => errorDevices.value.delete(dev));
+    return true;
+  }
+
+  function finishDeploy(success: boolean, targets: string[], errorMsg?: string) {
+    isDeploying.value = false;
+    deployingTargets.value.clear();
+    if (!success && errorMsg) {
+      targets.forEach((dev) => errorDevices.value.set(dev, errorMsg));
+    }
+  }
+
+  function cancelDeploy() {
+    isDeploying.value = false;
+    deployingTargets.value.clear();
+  }
+
+  function setPreflight(preflight: boolean) {
+    isPreflight.value = preflight;
+  }
+
+  function startVm(device: string, name: string): boolean {
+    if (isVmDisabled.value) {
+      return false;
+    }
+    runningVmTarget.value = { device, name };
+    return true;
+  }
+
+  function stopVm() {
+    runningVmTarget.value = null;
+    isLaunchingVm.value = false;
+  }
 
   function setRunningVmTarget(device: string, name: string) {
     runningVmTarget.value = { device, name };
@@ -227,6 +283,9 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     }
 
     if (isDeploying.value) {
+      if (deployingTargets.value.has(disk.device)) {
+        return 'DEPLOYING';
+      }
       if (options.pendingTargets && options.pendingTargets.value.includes(disk.device)) {
         return 'DEPLOYING';
       }
@@ -477,7 +536,7 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
 
   // 5. isVmDisabled
   const isVmDisabled = computed(() => {
-    if (localIsLaunchingQemu.value) return true;
+    if (isLaunchingVm.value) return true;
     if (isDeploying.value) return true;
     if (localHypervisorCount.value === 0) return true;
     if (!activeVmTargetDevice.value) return true;
@@ -496,7 +555,7 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
 
   // 6. vmDisabledReason
   const vmDisabledReason = computed(() => {
-    if (localIsLaunchingQemu.value) {
+    if (isLaunchingVm.value) {
       return t('vm.tip_launching');
     }
     if (isDeploying.value) {
@@ -536,7 +595,7 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
       isDeploying.value ||
       currentDiskState.value === 'TESTING' ||
       currentDiskState.value === 'VERIFYING' ||
-      Boolean(options.isPreflight?.value)
+      Boolean(isPreflight.value)
     );
   });
 
@@ -544,7 +603,7 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     if (isDeploying.value) return t('deploy.tip_writing');
     if (currentDiskState.value === 'TESTING') return t('vm.tip_running');
     if (currentDiskState.value === 'VERIFYING') return t('checksum.calculating');
-    if (options.isPreflight?.value) return t('deploy.checking');
+    if (isPreflight.value) return t('deploy.checking');
     return '';
   });
 
@@ -558,11 +617,14 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
   const canChangeFs = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING' && !isDiskLocked.value);
   const canManageIso = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING');
   const canVerifyHash = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING');
-  const canConfigureVm = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING' && !localIsLaunchingQemu.value);
+  const canConfigureVm = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING' && !isLaunchingVm.value);
 
   return {
     currentDiskState,
     getDiskState,
+    isDeploying,
+    isPreflight,
+    isLaunchingVm,
     isNonDestructive,
     deployBtnText,
     isDeployDisabled,
@@ -584,6 +646,12 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     canManageIso,
     canVerifyHash,
     canConfigureVm,
+    startDeploy,
+    finishDeploy,
+    cancelDeploy,
+    setPreflight,
+    startVm,
+    stopVm,
     setRunningVmTarget,
     clearRunningVmTarget,
     setVerifyingDevice,

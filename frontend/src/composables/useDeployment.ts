@@ -86,7 +86,6 @@ export function useDeployment(options: UseDeploymentOptions) {
   const selectedFsType = ref<"exFAT" | "NTFS" | "FAT32" | "ext4">("exFAT");
   const autoEjectAfterDeploy = ref(false);
 
-  const isDeploying = ref(false);
   const deployProgress = ref(0);
   const deploySpeedMBps = ref(0);
   const deployElapsedSec = ref(0);
@@ -99,7 +98,6 @@ export function useDeployment(options: UseDeploymentOptions) {
   const isIsoConflictOpen = ref(false);
   const isoConflicts = ref<IsoCopyConflict[]>([]);
   const pendingIsoPlans = ref<IsoCopyDiskPlan[]>([]);
-  const isPreflight = ref(false);
   const pendingTargets = ref<string[]>([]);
   const pendingTargetSnapshots = ref<DiskInfo[]>([]);
   // Lock the ISO file list at deploy-initiation time alongside pendingTargets.
@@ -165,6 +163,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     }
   }
 
+  // FSM is the Single Source of Truth for lifecycle states and permissions
   const fsm = useDiskStateMachine({
     t,
     activeMode,
@@ -174,13 +173,13 @@ export function useDeployment(options: UseDeploymentOptions) {
     diskList,
     ventoyStatus,
     isMacOs,
-    isDeploying,
-    isPreflight,
     pendingTargets,
     checkDiskCanUpdateNonDestructively,
     getVentoyValidationMessage,
   });
 
+  const isDeploying = fsm.isDeploying;
+  const isPreflight = fsm.isPreflight;
   const isNonDestructive = fsm.isNonDestructive;
   const deployBtnText = fsm.deployBtnText;
   const isDeployDisabled = fsm.isDeployDisabled;
@@ -520,12 +519,12 @@ export function useDeployment(options: UseDeploymentOptions) {
     }
     pendingTargetSnapshots.value = currentSnapshots as DiskInfo[];
 
-    isPreflight.value = true;
+    fsm.setPreflight(true);
     try {
       if (!(await preflightIsoCopies(targets))) return;
       openDeployConfirm();
     } finally {
-      isPreflight.value = false;
+      fsm.setPreflight(false);
     }
   }
 
@@ -558,7 +557,8 @@ export function useDeployment(options: UseDeploymentOptions) {
       return;
     }
 
-    isDeploying.value = true;
+    const deployStarted = fsm.startDeploy(targets);
+    if (!deployStarted) return;
     deployProgress.value = 0;
     batchDeployInfo.value = {
       totalDisks: targets.length,
@@ -722,7 +722,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     if (success) {
       deployProgress.value = 100;
       setTimeout(async () => {
-        isDeploying.value = false;
+        fsm.finishDeploy(true, targets);
         deployProgress.value = 0;
         batchDeployInfo.value = null;
 
@@ -771,13 +771,12 @@ export function useDeployment(options: UseDeploymentOptions) {
         }
       }, 200);
     } else {
-      isDeploying.value = false;
+      fsm.finishDeploy(false, targets, resultMsg);
       deployProgress.value = 0;
       batchDeployInfo.value = null;
       deploySpeedMBps.value = 0;
       deployElapsedSec.value = 0;
       deployEtaSec.value = 0;
-      targets.forEach((dev) => fsm.setDeviceError(dev, resultMsg));
       openDiagnosticsModal(latestDiagnostics, resultMsg);
     }
   }
@@ -793,7 +792,7 @@ export function useDeployment(options: UseDeploymentOptions) {
           logUserAction("INFO", "Deployment task cancelled successfully");
 
           // Clean up deployment state
-          isDeploying.value = false;
+          fsm.cancelDeploy();
           deployProgress.value = 0;
           batchDeployInfo.value = null;
           deploySpeedMBps.value = 0;
