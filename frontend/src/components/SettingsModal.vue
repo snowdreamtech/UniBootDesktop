@@ -96,48 +96,23 @@
               {{ t('settings.github_proxy_desc') || 'Accelerates asset downloads and update checks via public GitHub mirror endpoints.' }}
             </p>
 
-            <div class="mirror-presets">
-              <button 
-                type="button" 
-                class="preset-btn" 
-                :class="{ active: !proxyInputUrl || proxyInputUrl === 'direct' }"
-                @click="setMirror('')"
-              >
-                {{ t('settings.proxyDirect') || 'Direct (No Mirror)' }}
-              </button>
-              <button 
-                type="button" 
-                class="preset-btn" 
-                :class="{ active: proxyInputUrl === 'https://mirror.ghproxy.com/' }"
-                @click="setMirror('https://mirror.ghproxy.com/')"
-              >
-                mirror.ghproxy.com
-              </button>
-              <button 
-                type="button" 
-                class="preset-btn" 
-                :class="{ active: proxyInputUrl === 'https://ghfast.top/' }"
-                @click="setMirror('https://ghfast.top/')"
-              >
-                ghfast.top
-              </button>
-              <button 
-                type="button" 
-                class="preset-btn" 
-                :class="{ active: proxyInputUrl === 'https://ghproxy.net/' }"
-                @click="setMirror('https://ghproxy.net/')"
-              >
-                ghproxy.net
-              </button>
-            </div>
-
-            <div class="form-group margin-top-sm">
-              <label class="form-label">{{ t('settings.github_proxy') || 'Mirror URL Prefix' }}</label>
+            <div class="form-group">
+              <div class="label-row">
+                <label class="form-label">{{ t('settings.github_proxy') || 'Mirror URL Prefix' }}</label>
+                <button 
+                  v-if="proxyInputUrl" 
+                  type="button" 
+                  class="clear-mirror-btn" 
+                  @click="setMirror('')"
+                >
+                  {{ t('settings.proxy_direct') || 'Direct' }}
+                </button>
+              </div>
               <input 
                 v-model="proxyInputUrl" 
                 type="text" 
                 class="form-input" 
-                :placeholder="t('settings.proxy_placeholder') || 'e.g. https://mirror.ghproxy.com/'"
+                :placeholder="t('settings.proxy_placeholder') || 'https://proxy.example.com/'"
                 @input="triggerAutoSave"
               />
             </div>
@@ -710,33 +685,26 @@ watch(() => props.currentProxy, (val) => {
   box-shadow: 0 0 0 2px var(--accent-cyan-glow);
 }
 
-.mirror-presets {
+.label-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.preset-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--card-border);
-  color: var(--text-main);
-  padding: 0.4rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.775rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.preset-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--accent-cyan);
-}
-
-.preset-btn.active {
-  background: rgba(0, 229, 255, 0.15);
-  border-color: var(--accent-cyan);
+.clear-mirror-btn {
+  background: none;
+  border: none;
   color: var(--accent-cyan);
-  font-weight: 600;
+  font-size: 0.775rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: opacity 0.2s;
+}
+
+.clear-mirror-btn:hover {
+  opacity: 0.8;
 }
 
 .margin-top-sm {

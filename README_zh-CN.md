@@ -24,7 +24,7 @@
   - 针对阿拉伯语、希伯来语、波斯语、乌尔都语提供自动双向文字排版 (RTL) 支持。
 - **通用网络代理与 GitHub 镜像加速**：
   - 完整支持 Direct、HTTP、HTTPS、SOCKS4、SOCKS5 代理协议及认证。
-  - 预设 GitHub 公共加速镜像通道（`mirror.ghproxy.com`、`ghfast.top`、`ghproxy.net` 或自定义镜像）。
+  - 支持自定义 GitHub 加速镜像配置。
   - 内置实时网络延迟测速与联通性诊断。
 - **CLI + GUI 双模运行能力**：
   - 完整 Cobra 命令行体系与交互式桌面 GUI 协同运行。

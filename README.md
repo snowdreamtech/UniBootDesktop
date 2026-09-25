@@ -25,7 +25,7 @@
   - Bidirectional text layout with automatic RTL (Right-to-Left) support for Arabic, Hebrew, Persian, and Urdu.
 - **Network Proxy & Mirror Acceleration**:
   - Full proxy routing support for `Direct`, `HTTP`, `HTTPS`, `SOCKS4`, and `SOCKS5` with credentials.
-  - Configurable GitHub acceleration mirrors (`mirror.ghproxy.com`, `ghfast.top`, `ghproxy.net`, or custom).
+  - Configurable custom GitHub acceleration mirror.
   - Built-in real-time network latency diagnostic and connectivity speed test.
 - **Dual Runtime Capabilities (CLI + GUI)**:
   - Full Cobra CLI command structure paired with interactive GUI.
