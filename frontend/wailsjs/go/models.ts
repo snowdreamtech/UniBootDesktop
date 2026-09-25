@@ -1,23 +1,15 @@
 export namespace config {
 	
 	export class AppConfig {
-	    mode: string;
 	    autoCheckUpdate: boolean;
 	    theme: string;
+	    language: string;
 	    githubProxy: string;
-	    fileSystem: string;
 	    proxyProtocol: string;
 	    proxyHost: string;
 	    proxyPort: number;
 	    proxyUser: string;
 	    proxyPassword: string;
-	    language: string;
-	    ventoyPath: string;
-	    ventoySecureBoot: boolean;
-	    ventoyPartitionStyle: string;
-	    ventoyReserveSpace: number;
-	    ventoyWin11Bypass: boolean;
-	    ventoyMenuTimeout: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new AppConfig(source);
@@ -25,237 +17,84 @@ export namespace config {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.mode = source["mode"];
 	        this.autoCheckUpdate = source["autoCheckUpdate"];
 	        this.theme = source["theme"];
+	        this.language = source["language"];
 	        this.githubProxy = source["githubProxy"];
-	        this.fileSystem = source["fileSystem"];
 	        this.proxyProtocol = source["proxyProtocol"];
 	        this.proxyHost = source["proxyHost"];
 	        this.proxyPort = source["proxyPort"];
 	        this.proxyUser = source["proxyUser"];
 	        this.proxyPassword = source["proxyPassword"];
-	        this.language = source["language"];
-	        this.ventoyPath = source["ventoyPath"];
-	        this.ventoySecureBoot = source["ventoySecureBoot"];
-	        this.ventoyPartitionStyle = source["ventoyPartitionStyle"];
-	        this.ventoyReserveSpace = source["ventoyReserveSpace"];
-	        this.ventoyWin11Bypass = source["ventoyWin11Bypass"];
-	        this.ventoyMenuTimeout = source["ventoyMenuTimeout"];
 	    }
 	}
 
 }
 
-export namespace disk {
+export namespace main {
 	
-	export class DiskInfo {
-	    device: string;
-	    name: string;
-	    size: number;
-	    formatted: string;
-	    freeSpace: number;
-	    freeFormatted: string;
-	    isRemovable: boolean;
-	    isSystem: boolean;
-	    usbVersion: string;
-	    usbSpeed: string;
-	    vendor: string;
-	    fileSystem: string;
-	    partitionScheme: string;
-	    writable: boolean;
-	    serialNumber: string;
-	    vendorId: string;
-	    productId: string;
-	    smartStatus: string;
-	    busPower: string;
-	    busPowerUsed: string;
-	    sectorSize: string;
-	    transportProtocol: string;
-	    bootStatus: string;
-	    controllerVendor: string;
-	    isFakeUsb3: boolean;
-	    protocolCode: string;
-	    isRealVentoy: boolean;
-	    isModeB: boolean;
+	export class HelloInfo {
+	    greeting: string;
+	    os: string;
+	    arch: string;
+	    timestamp: string;
 	
 	    static createFrom(source: any = {}) {
-	        return new DiskInfo(source);
+	        return new HelloInfo(source);
 	    }
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.device = source["device"];
-	        this.name = source["name"];
-	        this.size = source["size"];
-	        this.formatted = source["formatted"];
-	        this.freeSpace = source["freeSpace"];
-	        this.freeFormatted = source["freeFormatted"];
-	        this.isRemovable = source["isRemovable"];
-	        this.isSystem = source["isSystem"];
-	        this.usbVersion = source["usbVersion"];
-	        this.usbSpeed = source["usbSpeed"];
-	        this.vendor = source["vendor"];
-	        this.fileSystem = source["fileSystem"];
-	        this.partitionScheme = source["partitionScheme"];
-	        this.writable = source["writable"];
-	        this.serialNumber = source["serialNumber"];
-	        this.vendorId = source["vendorId"];
-	        this.productId = source["productId"];
-	        this.smartStatus = source["smartStatus"];
-	        this.busPower = source["busPower"];
-	        this.busPowerUsed = source["busPowerUsed"];
-	        this.sectorSize = source["sectorSize"];
-	        this.transportProtocol = source["transportProtocol"];
-	        this.bootStatus = source["bootStatus"];
-	        this.controllerVendor = source["controllerVendor"];
-	        this.isFakeUsb3 = source["isFakeUsb3"];
-	        this.protocolCode = source["protocolCode"];
-	        this.isRealVentoy = source["isRealVentoy"];
-	        this.isModeB = source["isModeB"];
+	        this.greeting = source["greeting"];
+	        this.os = source["os"];
+	        this.arch = source["arch"];
+	        this.timestamp = source["timestamp"];
 	    }
 	}
-
-}
-
-export namespace firmware {
-	
-	export class FirmwareMapping {
-	    releaseName: string;
-	    targetPath: string;
-	    description: string;
-	    isReserved: boolean;
+	export class NetworkTestResult {
+	    connected: boolean;
+	    latencyMs: number;
+	    targetUrl: string;
+	    error?: string;
 	
 	    static createFrom(source: any = {}) {
-	        return new FirmwareMapping(source);
+	        return new NetworkTestResult(source);
 	    }
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.releaseName = source["releaseName"];
-	        this.targetPath = source["targetPath"];
-	        this.description = source["description"];
-	        this.isReserved = source["isReserved"];
+	        this.connected = source["connected"];
+	        this.latencyMs = source["latencyMs"];
+	        this.targetUrl = source["targetUrl"];
+	        this.error = source["error"];
 	    }
 	}
-	export class UniBootReleaseAsset {
-	    name: string;
-	    browser_download_url: string;
-	    size: number;
-	
-	    static createFrom(source: any = {}) {
-	        return new UniBootReleaseAsset(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.name = source["name"];
-	        this.browser_download_url = source["browser_download_url"];
-	        this.size = source["size"];
-	    }
-	}
-	export class UniBootReleaseInfo {
-	    tagName: string;
-	    name: string;
-	    publishedAt: string;
-	    body: string;
-	    assets: UniBootReleaseAsset[];
-	    localTag: string;
-	    hasUpdate: boolean;
-	
-	    static createFrom(source: any = {}) {
-	        return new UniBootReleaseInfo(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.tagName = source["tagName"];
-	        this.name = source["name"];
-	        this.publishedAt = source["publishedAt"];
-	        this.body = source["body"];
-	        this.assets = this.convertValues(source["assets"], UniBootReleaseAsset);
-	        this.localTag = source["localTag"];
-	        this.hasUpdate = source["hasUpdate"];
-	    }
-	
-		convertValues(a: any, classs: any, asMap: boolean = false): any {
-		    if (!a) {
-		        return a;
-		    }
-		    if (a.slice && a.map) {
-		        return (a as any[]).map(elem => this.convertValues(elem, classs));
-		    } else if ("object" === typeof a) {
-		        if (asMap) {
-		            for (const key of Object.keys(a)) {
-		                a[key] = new classs(a[key]);
-		            }
-		            return a;
-		        }
-		        return new classs(a);
-		    }
-		    return a;
-		}
-	}
-
-}
-
-export namespace installer {
-	
-	export class DeployResult {
-	    success: boolean;
-	    mode: string;
-	    target: string;
-	    message: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new DeployResult(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.success = source["success"];
-	        this.mode = source["mode"];
-	        this.target = source["target"];
-	        this.message = source["message"];
-	    }
-	}
-	export class VentoyCliValidationResult {
-	    valid: boolean;
+	export class SystemInfo {
+	    os: string;
+	    arch: string;
+	    goVersion: string;
+	    appName: string;
 	    version: string;
-	    message: string;
-	    executablePath: string;
+	    commit: string;
+	    buildTime: string;
+	    dataDir: string;
+	    configDir: string;
 	
 	    static createFrom(source: any = {}) {
-	        return new VentoyCliValidationResult(source);
+	        return new SystemInfo(source);
 	    }
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.valid = source["valid"];
+	        this.os = source["os"];
+	        this.arch = source["arch"];
+	        this.goVersion = source["goVersion"];
+	        this.appName = source["appName"];
 	        this.version = source["version"];
-	        this.message = source["message"];
-	        this.executablePath = source["executablePath"];
-	    }
-	}
-
-}
-
-export namespace qemu {
-	
-	export class QEMUStatus {
-	    installed: boolean;
-	    path: string;
-	    version: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new QEMUStatus(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.installed = source["installed"];
-	        this.path = source["path"];
-	        this.version = source["version"];
+	        this.commit = source["commit"];
+	        this.buildTime = source["buildTime"];
+	        this.dataDir = source["dataDir"];
+	        this.configDir = source["configDir"];
 	    }
 	}
 
