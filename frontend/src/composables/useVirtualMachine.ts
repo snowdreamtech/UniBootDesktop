@@ -52,6 +52,9 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
     runningVmTargetName.value = '';
     internalVmRunning.value = false;
     isLaunchingQemu.value = false;
+    if (fsm) {
+      fsm.clearRunningVmTarget();
+    }
     if (options.onVmSessionEnded) {
       options.onVmSessionEnded();
     }
@@ -168,7 +171,7 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
   }
 
   async function launchVM() {
-    if (isLaunchingQemu.value || isDeploying.value) {
+    if (isLaunchingQemu.value || isDeploying.value || isVmDisabled.value) {
       return;
     }
     isLaunchingQemu.value = true;
@@ -211,6 +214,9 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
           runningVmTargetDevice.value = launchedDev;
           runningVmTargetName.value = launchedName;
           internalVmRunning.value = true;
+          if (fsm) {
+            fsm.setRunningVmTarget(launchedDev, launchedName);
+          }
           if (options.onVmSessionStarted) {
             options.onVmSessionStarted(launchedDev, launchedName);
           }
@@ -221,6 +227,9 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
           runningVmTargetDevice.value = launchedDev;
           runningVmTargetName.value = launchedName;
           internalVmRunning.value = true;
+          if (fsm) {
+            fsm.setRunningVmTarget(launchedDev, launchedName);
+          }
           if (options.onVmSessionStarted) {
             options.onVmSessionStarted(launchedDev, launchedName);
           }
@@ -231,6 +240,9 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
           runningVmTargetDevice.value = launchedDev;
           runningVmTargetName.value = launchedName;
           internalVmRunning.value = true;
+          if (fsm) {
+            fsm.setRunningVmTarget(launchedDev, launchedName);
+          }
           if (options.onVmSessionStarted) {
             options.onVmSessionStarted(launchedDev, launchedName);
           }
@@ -249,6 +261,9 @@ export function useVirtualMachine(options: UseVirtualMachineOptions) {
         runningVmTargetDevice.value = targetDevice;
         runningVmTargetName.value = options.activeVmTargetName?.value || targetDevice;
         internalVmRunning.value = true;
+        if (fsm) {
+          fsm.setRunningVmTarget(targetDevice, runningVmTargetName.value);
+        }
         if (options.onVmSessionStarted) {
           options.onVmSessionStarted(targetDevice, runningVmTargetName.value);
         }

@@ -565,7 +565,7 @@ const props = defineProps<{
   elapsedSec?: number;
   etaSec?: number;
   deployBtnText: string;
-  isDeployDisabled?: boolean;
+  isDeployDisabled: boolean;
   deployDisabledReason: string;
   showDeploySuccessBanner: boolean;
   deploySuccessBanner: { autoEjected?: boolean; targets: string[] };
@@ -659,22 +659,8 @@ function handleDrop(e: DragEvent) {
   }
 }
 
-// Deploy state
-const isDeployDisabled = computed(() => {
-  if (props.isDeployDisabled !== undefined) {
-    return props.isDeployDisabled;
-  }
-  if (props.isDeploying) return true;
-  if (props.isPreflight) return true;
-  if (props.isVmRunning) return true;
-  if (props.selectionMode === 'single') {
-    return !props.selectedDisk;
-  }
-  if (props.selectionMode === 'batch') {
-    return !props.selectedDevices || props.selectedDevices.size === 0;
-  }
-  return false;
-});
+// Deploy state strictly driven by central state machine
+const isDeployDisabled = computed(() => props.isDeployDisabled);
 
 // Checksum State & Logic
 const selectedChecksumIsoIndex = ref(0);

@@ -370,7 +370,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     // even if a dialog is still open. isIsoConflictOpen / isDeployConfirmOpen
     // guard the remaining window so a second click cannot corrupt pendingTargets
     // while the user is resolving a conflict or reviewing the confirmation.
-    if (isDeploying.value || isPreflight.value || isIsoConflictOpen.value || isDeployConfirmOpen.value) return;
+    if (isDeployDisabled.value || isDeploying.value || isPreflight.value || isIsoConflictOpen.value || isDeployConfirmOpen.value) return;
 
     dismissDeploySuccessBanner();
 

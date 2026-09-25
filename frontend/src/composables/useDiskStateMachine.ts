@@ -483,10 +483,16 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     if (isDeploying.value) {
       return t('vm.tip_deploying');
     }
+    if (currentDiskState.value === 'VERIFYING') {
+      return t('checksum.calculating');
+    }
     if (localHypervisorCount.value === 0) {
       return t('vm.tip_not_installed');
     }
     if (!activeVmTargetDevice.value) {
+      return t('vm.tip_select_target');
+    }
+    if (currentDiskState.value === 'EJECTED') {
       return t('vm.tip_select_target');
     }
     if (currentDiskState.value === 'UNDEPLOYED') {
