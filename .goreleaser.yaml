@@ -322,24 +322,6 @@ homebrew_casks:
             system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/unigodesktop"]
           end
 
-winget:
-  - name: unigodesktop
-    publisher: SnowdreamTech
-    license: MIT
-    homepage: https://github.com/snowdreamtech/unigodesktop
-    short_description: UniGoDesktop
-    repository:
-      owner: snowdreamtech
-      name: winget-pkgs
-      token: "{{ .Env.WORKFLOW_SECRET }}"
-      branch: "unigodesktop-{{.Version}}"
-      pull_request:
-        enabled: true
-        base:
-          owner: microsoft
-          name: winget-pkgs
-          branch: master
-
 scoops:
   - repository:
       owner: snowdreamtech
