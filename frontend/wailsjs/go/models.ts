@@ -1,6 +1,7 @@
 export namespace config {
 	
 	export class AppConfig {
+	    debug: boolean;
 	    autoCheckUpdate: boolean;
 	    theme: string;
 	    language: string;
@@ -17,6 +18,7 @@ export namespace config {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.debug = source["debug"];
 	        this.autoCheckUpdate = source["autoCheckUpdate"];
 	        this.theme = source["theme"];
 	        this.language = source["language"];

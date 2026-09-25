@@ -6,8 +6,8 @@ package cmd
 import (
 	"context"
 
-	"github.com/snowdreamtech/unigodesktop/internal/config"
 	"github.com/snowdreamtech/unigodesktop/internal/desktop"
+	"github.com/snowdreamtech/unigodesktop/pkg/config"
 	"github.com/spf13/cobra"
 )
 

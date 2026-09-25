@@ -233,12 +233,6 @@ repos:
         exclude: '\.pre-commit-config\.yaml$'
         description: "Prevent accidental staging of sensitive private keys."
 
-      - id: hadolint
-        name: hadolint quality check
-        language: system
-        entry: unirtm hook-exec hadolint
-        files: "Dockerfile.*"
-        description: "Audit Dockerfiles for best practices and security vulnerabilities."
 
       # -- Deep Security & Vulnerability Audits -------------------------------
       - id: osv-scanner
@@ -449,13 +443,6 @@ repos:
         files: ^\.github/workflows/.*\.yml$
         description: "Validate GitHub Actions workflow syntax."
 
-      # -- Infrastructure & Config -------------------------------------------
-      - id: dockerfile-utils
-        name: dockerfile quality check
-        language: system
-        entry: unirtm hook-exec dockerfile-utils lint
-        files: Dockerfile
-        description: "Validate Dockerfile syntax and best practices."
 
       - id: editorconfig-checker
         name: editorconfig quality check

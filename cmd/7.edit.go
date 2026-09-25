@@ -8,8 +8,8 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/snowdreamtech/unigodesktop/internal/config"
 	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unigodesktop/pkg/config"
 	"github.com/spf13/cobra"
 )
 
@@ -43,8 +43,11 @@ func runEdit(cmd *cobra.Command, args []string) error {
 
 	targetFile := env.GetGlobalConfigPath()
 
-	// Ensure config directory and dummy file exist
-	cfg := &config.Config{}
+	// Ensure config directory and file exist
+	cfg, err := config.Load()
+	if err != nil {
+		cfg = config.GetDefaultConfig()
+	}
 	if err := cfg.Save(); err != nil {
 		return fmt.Errorf("failed to initialize config file: %w", err)
 	}

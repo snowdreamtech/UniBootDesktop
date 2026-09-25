@@ -241,8 +241,8 @@ func PromptIfAvailable(currentVersion string, cmdName string) {
 	}
 
 	// Print prompt to Stderr
-	pterm.Warning.Printf("unigo version %s available\n", cache.LatestVersion)
-	pterm.Warning.Printf("To update, run `unigo self-update`\n")
+	pterm.Warning.Printf("unigodesktop version %s available\n", cache.LatestVersion)
+	pterm.Warning.Printf("To update, run `unigodesktop self-update`\n")
 
 	// Update prompt time
 	cache.LastPrompted = time.Now()

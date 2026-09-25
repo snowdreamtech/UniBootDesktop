@@ -12,8 +12,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/config"
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unigodesktop/pkg/config"
 )
 
 // AppState represents the current state of the desktop application.
@@ -30,14 +30,14 @@ const (
 type App struct {
 	mu        sync.RWMutex
 	state     AppState
-	config    *config.Config
+	config    *config.AppConfig
 	runner    *UIRunner
 	tray      *TrayManager
 	startTime time.Time
 }
 
 // NewApp initializes a new desktop application instance.
-func NewApp(cfg *config.Config) *App {
+func NewApp(cfg *config.AppConfig) *App {
 	if cfg == nil {
 		cfg = config.GetDefaultConfig()
 	}

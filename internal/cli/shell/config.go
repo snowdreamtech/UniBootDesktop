@@ -65,7 +65,7 @@ func (m *ShellConfigManager) Inject(shell ShellType, marker string, content stri
 		return fmt.Errorf("failed to read config file: %w", err)
 	}
 
-	searchPattern := fmt.Sprintf("unigo %s activation", marker)
+	searchPattern := fmt.Sprintf("unigodesktop %s activation", marker)
 	fullBlock := fmt.Sprintf("\n# %s\n%s\n", searchPattern, content)
 
 	rawContentStr := string(rawContent)
@@ -159,7 +159,7 @@ func (m *ShellConfigManager) Remove(shell ShellType, marker string) error {
 		return fmt.Errorf("failed to read config file: %w", err)
 	}
 
-	searchPattern := fmt.Sprintf("unigo %s activation", marker)
+	searchPattern := fmt.Sprintf("unigodesktop %s activation", marker)
 	rawContentStr := string(rawContent)
 
 	if !strings.Contains(rawContentStr, searchPattern) {

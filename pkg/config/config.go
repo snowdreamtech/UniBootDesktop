@@ -15,6 +15,7 @@ import (
 
 // AppConfig represents universal desktop application settings.
 type AppConfig struct {
+	Debug           bool   `json:"debug" toml:"debug"`                     // Debug mode flag
 	AutoCheckUpdate bool   `json:"autoCheckUpdate" toml:"autoCheckUpdate"` // Automatically check for updates
 	Theme           string `json:"theme" toml:"theme"`                     // UI theme preference (dark, light, system)
 	Language        string `json:"language" toml:"language"`               // UI Language (auto, zh-CN, en-US, etc.)
@@ -29,6 +30,7 @@ type AppConfig struct {
 // GetDefaultConfig returns the default application configuration.
 func GetDefaultConfig() *AppConfig {
 	return &AppConfig{
+		Debug:           false,
 		AutoCheckUpdate: true,
 		Theme:           "system",
 		Language:        "auto", // Auto detect OS system language by default
