@@ -32,7 +32,7 @@ before:
     - go run ./main.go generate manpage -d ./manpages
 
 builds:
-  - id: unigodesktop
+  - id: unigodesktop-cli
     binary: unigodesktop
     env:
       - CGO_ENABLED=0
@@ -91,11 +91,11 @@ builds:
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 archives:
-  - id: unigodesktop
+  - id: unigodesktop-cli
     formats: [tar.gz]
     # This name template makes the OS and Arch compatible with uname and includes the version.
     name_template: >-
-      {{- .ProjectName }}_
+      {{- .ProjectName }}-cli_
       {{- title .Os }}_
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
@@ -153,6 +153,8 @@ release:
   github:
     owner: snowdreamtech
     name: unigodesktop
+  # GUI installers/packages are produced by the dedicated Wails workflow on
+  # native OS runners and uploaded separately to this GitHub Release.
   header: |
     **Snowdream Tech AI IDE Template** is an enterprise-grade, foundational template designed for multi-AI IDE collaboration.
 
@@ -211,7 +213,7 @@ changelog:
 
 nfpms:
   - id: default
-    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    file_name_template: "{{ .ProjectName }}-cli_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     homepage: https://github.com/snowdreamtech/unigodesktop
     maintainer: "Snowdream Tech <snowdreamtech@qq.com>"
     description: |-
@@ -274,15 +276,6 @@ snapcrafts:
     confinement: classic
     publish: false
     disable: "{{ if .IsNightly }}true{{ end }}"
-
-flatpak:
-  - app_id: io.github.snowdreamtech.unigodesktop
-    runtime: org.freedesktop.Platform
-    runtime_version: "24.08"
-    sdk: org.freedesktop.Sdk
-    finish_args:
-      - --share=network
-      - --filesystem=host
 
 universal_binaries:
   - replace: false

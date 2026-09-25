@@ -47,7 +47,7 @@ UNIRTM_HOOK_ALLOW_MISSING = "1"
 "github:rhysd/actionlint" = "1.7.12"
 "github:zizmorcore/zizmor" = "1.30.0"
 "github:goreleaser/goreleaser" = "2.18.0"
-go = "1.25.0"
+go = "1.25.13"
 node = "20.18.3"
 "npm:@commitlint/cli" = "21.2.2"
 "npm:@commitlint/config-conventional" = "21.2.2"
@@ -76,12 +76,48 @@ python = "3.14.7"
 [tasks]
 [tasks.dev]
 description = "Launch Wails GUI application in development mode"
-run = "unirtm exec -- wails dev"
+run = '''
+  mkdir -p .cache/go .cache/go-tmp
+  lsof -ti :34115,5173 | xargs kill -9 2>/dev/null || true
+  pkill -f "unigodesktop" 2>/dev/null || true
+  GOCACHE="$PWD/.cache/go" GOTMPDIR="$PWD/.cache/go-tmp" unirtm exec -- wails dev
+'''
 output = "interleaved"
 
 [tasks.build]
-description = "Build Wails GUI application binary"
-run = "unirtm exec -- wails build"
+description = "Build Wails GUI application binary with version injection"
+run = '''
+  rm -rf .cache
+  mkdir -p .cache/go .cache/go-tmp
+  TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "dev")
+  COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+  COMMITFULL=$(git rev-parse HEAD 2>/dev/null || echo "unknown")
+  DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    MODULE_PATH=$(go list -m)
+    PKG="${MODULE_PATH}/internal/env"
+    PROJECT_NAME="${MODULE_PATH##*/}"
+  GOCACHE="$PWD/.cache/go" GOTMPDIR="$PWD/.cache/go-tmp" unirtm exec -- wails build \
+    -clean \
+    -ldflags "-s -w \
+      -X '${PKG}.GitTag=${TAG}' \
+      -X '${PKG}.CommitHash=${COMMIT}' \
+      -X '${PKG}.CommitHashFull=${COMMITFULL}' \
+      -X '${PKG}.BuildTime=${DATE}' \
+            -X '${PKG}.ProjectName=${PROJECT_NAME}'"
+    if [ "$(go env GOOS)" = "darwin" ]; then
+        APP_PATH=$(find build/bin -maxdepth 1 -type d -name '*.app' -print -quit)
+        if [ -z "$APP_PATH" ]; then
+            echo "Wails build produced no macOS app bundle" >&2
+            exit 1
+    fi
+        EXECUTABLE=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP_PATH/Contents/Info.plist")
+        APP_BINARY="$APP_PATH/Contents/MacOS/$EXECUTABLE"
+        if [ ! -s "$APP_BINARY" ] || [ ! -x "$APP_BINARY" ]; then
+            echo "Wails build completed without a runnable macOS binary: $APP_BINARY" >&2
+            exit 1
+    fi
+    fi
+'''
 output = "interleaved"
 
 [tasks.audit]
