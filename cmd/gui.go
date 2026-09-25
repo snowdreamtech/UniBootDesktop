@@ -12,9 +12,10 @@ import (
 )
 
 var guiCmd = &cobra.Command{
-	Use:   "gui",
-	Short: "Launch the UniGoDesktop Wails graphical user interface",
-	Long:  `Launch the UniGoDesktop interactive Wails / Webview graphical desktop interface.`,
+	Use:     "gui",
+	Aliases: []string{"desktop"},
+	Short:   "Launch the UniGoDesktop graphical user interface",
+	Long:    `Launch the UniGoDesktop interactive Wails / Webview graphical desktop interface and system tray.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if WailsRunner != nil {
 			return WailsRunner()

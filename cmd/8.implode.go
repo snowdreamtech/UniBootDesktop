@@ -20,7 +20,7 @@ var (
 )
 
 func init() {
-	implodeCmd.Flags().BoolVar(&implodeConfig, "config", false, "also remove configuration directory (~/.config/unigo)")
+	implodeCmd.Flags().BoolVar(&implodeConfig, "config", false, "also remove configuration directory (~/.config/unigodesktop)")
 
 	if rootCmd != nil {
 		rootCmd.AddCommand(implodeCmd)
@@ -35,7 +35,7 @@ var implodeCmd = &cobra.Command{
 
 This command will internal-combust and erase:
   • All download caches and temporary files
-  • (Optional) Your configuration directory (~/.config/unigo)
+  • (Optional) Your configuration directory (~/.config/unigodesktop)
 
 WARNING: This action is permanent and IRREVERSIBLE.`,
 	Args: cobra.NoArgs,

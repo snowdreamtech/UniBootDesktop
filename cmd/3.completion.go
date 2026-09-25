@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
 // Package cmd contains all the command-line interface definitions and implementations
-// for the unigo application. This file implements shell completion generation commands.
+// for the unigodesktop application. This file implements shell completion generation commands.
 package cmd
 
 import (
@@ -64,19 +64,19 @@ Use the --dir (-d) flag to export all four completion scripts to a specified dir
 
 Examples:
   # Auto-detect and print to stdout
-  unigo completion
+  unigodesktop completion
 
   # Auto-detect and install persistently
-  unigo completion -i
+  unigodesktop completion -i
 
   # Generate for a specific shell and print
-  unigo completion zsh
+  unigodesktop completion zsh
 
   # Generate all scripts, install only for shells present on the system
-  unigo completion -i --all
+  unigodesktop completion -i --all
 
   # Export all four completion scripts to a directory (no shell config changes)
-  unigo completion -d ./completions`,
+  unigodesktop completion -d ./completions`,
 
 	DisableFlagsInUseLine: true,
 	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
@@ -163,7 +163,7 @@ func runCompletion(cmd *cobra.Command, args []string) error {
 // exportCompletionsToDir generates all four completion scripts and writes them to destDir.
 // The directory is created if it does not exist. This is idempotent.
 func exportCompletionsToDir(formatter output.Formatter, cmd *cobra.Command, destDir string) error {
-	// dryRun isn't explicitly defined in unigo root cmd in this example, so assuming false
+	// dryRun isn't explicitly defined in unigodesktop root cmd in this example, so assuming false
 	dryRun := false
 
 	if dryRun {
