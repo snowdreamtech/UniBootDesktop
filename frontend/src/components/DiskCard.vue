@@ -2,7 +2,7 @@
   <div
     class="glass-card disk-card"
     :class="{ selected: isSelected, 'is-ejecting': isEjecting, 'is-locked': isLocked }"
-    @click="!isLocked && $emit('select', disk)"
+    @click="$emit('select', disk)"
   >
     <div class="disk-checkbox-container" v-if="isBatchMode">
       <input
@@ -10,7 +10,7 @@
         class="disk-checkbox"
         :checked="isSelected"
         :disabled="isLocked"
-        @click.stop="!isLocked && $emit('toggle', disk)"
+        @click.stop="$emit('toggle', disk)"
       />
     </div>
 
@@ -19,7 +19,7 @@
       class="disk-icon-wrapper"
       :class="diskType"
       :title="isLocked ? lockReason : t('disk.change_icon')"
-      @click.stop="!isLocked && $emit('pick-icon', disk)"
+      @click.stop="$emit('pick-icon', disk)"
     >
       <!-- Boot USB Icon with Lightning -->
       <svg
@@ -273,7 +273,7 @@
         class="btn-eject"
         :title="isLocked ? lockReason : t('disk.eject')"
         :disabled="isLocked || isEjecting"
-        @click.stop="!isLocked && $emit('eject', disk)"
+        @click.stop="$emit('eject', disk)"
       >
         <span class="eject-button-icon" :class="{ 'is-spinning': isEjecting }">⏏️</span>
         {{ t("disk.eject") }}

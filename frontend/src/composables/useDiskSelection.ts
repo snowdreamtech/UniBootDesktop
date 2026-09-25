@@ -137,6 +137,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
   }
 
   function openIconPicker(disk: DiskInfo) {
+    if (checkLocked()) return;
     targetPickerDisk.value = disk;
     isPickerOpen.value = true;
     logUserAction("INFO", "User opened custom icon picker modal", disk.name || disk.device);
