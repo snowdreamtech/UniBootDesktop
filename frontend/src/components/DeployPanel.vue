@@ -281,7 +281,7 @@
                 <!-- Single ISO calculate button -->
                 <button
                   class="btn-secondary calc-hash-btn"
-                  :disabled="isDeploying || isCalculatingHash || isBatchCalculating"
+                  :disabled="!canVerifyHash || isCalculatingHash || isBatchCalculating"
                   @click="handleCalculateChecksum"
                 >
                   <span class="btn-icon">{{ isCalculatingHash ? '⏳' : '⚡' }}</span>
@@ -1003,7 +1003,7 @@ async function handleSumsFileSelected(event: Event) {
 }
 
 async function handleCalculateChecksum() {
-  if (props.selectedIsoFiles.length === 0 || props.isDeploying || isCalculatingHash.value || isBatchCalculating.value) return;
+  if (props.selectedIsoFiles.length === 0 || !canVerifyHash.value || isCalculatingHash.value || isBatchCalculating.value) return;
   const targetIdx = selectedChecksumIsoIndex.value < props.selectedIsoFiles.length ? selectedChecksumIsoIndex.value : 0;
   const fileToVerify = props.selectedIsoFiles[targetIdx];
   isCalculatingHash.value = true;
@@ -1047,7 +1047,7 @@ async function handleCalculateChecksum() {
 }
 
 async function handleBatchChecksum() {
-  if (!props.selectedIsoFiles || props.selectedIsoFiles.length === 0 || props.isDeploying || isBatchCalculating.value || isCalculatingHash.value) return;
+  if (!props.selectedIsoFiles || props.selectedIsoFiles.length === 0 || !canVerifyHash.value || isBatchCalculating.value || isCalculatingHash.value) return;
 
   isBatchCalculating.value = true;
   const total = props.selectedIsoFiles.length;
