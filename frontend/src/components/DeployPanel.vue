@@ -13,7 +13,7 @@
       <label class="fs-label">{{ t('settings.default_fs') }}</label>
       <CustomSelect
         :modelValue="selectedFsType"
-        :disabled="isDeploying"
+        :disabled="!canChangeFs"
         @update:modelValue="val => emit('update:selectedFsType', val)"
         :options="[
           { value: 'exFAT', label: t('fs.exfat') },
@@ -69,7 +69,7 @@
           </h3>
           <span class="iso-subtitle">{{ t('iso.desc') }}</span>
         </div>
-        <button class="btn-secondary add-iso-btn" :disabled="isDeploying" @click="!isDeploying && emit('select-iso')">
+        <button class="btn-secondary add-iso-btn" :disabled="!canManageIso" @click="canManageIso && emit('select-iso')">
           <span class="btn-icon">➕</span>
           <span>{{ t('iso.add_btn') }}</span>
         </button>
@@ -126,7 +126,7 @@
                 <span class="btn-icon">🔒</span>
                 <span>{{ selectedChecksumIsoIndex === index && checksumActiveTab === 'single' ? t('checksum.status_selected') : t('checksum.status_verify') }}</span>
               </button>
-              <button class="iso-remove-btn" :disabled="isDeploying" :title="t('iso.remove')" @click.stop="!isDeploying && emit('remove-iso', index)">✕</button>
+              <button class="iso-remove-btn" :disabled="!canManageIso" :title="t('iso.remove')" @click.stop="canManageIso && emit('remove-iso', index)">✕</button>
             </div>
           </div>
         </div>
@@ -151,7 +151,7 @@
           </div>
 
           <!-- Right isolated danger action: clear list button -->
-          <button class="btn-clear-iso" :disabled="isDeploying" :title="t('iso.clear')" @click="!isDeploying && emit('clear-iso')">
+          <button class="btn-clear-iso" :disabled="!canManageIso" :title="t('iso.clear')" @click="canManageIso && emit('clear-iso')">
             <span class="btn-icon">🗑️</span>
             <span>{{ t('iso.clear') }}</span>
           </button>
@@ -213,7 +213,7 @@
                 <!-- 批量导入校验汇总文件按钮 -->
                 <button
                   class="btn-secondary import-sums-header-btn"
-                  :disabled="isDeploying || isCalculatingHash || isBatchCalculating"
+                  :disabled="!canVerifyHash || isCalculatingHash || isBatchCalculating"
                   :title="t('checksum.import_file_title')"
                   @click="triggerSumsFilePick"
                 >
@@ -227,7 +227,7 @@
                 <!-- 一键批量校验全部按钮 -->
                 <button
                   class="btn-secondary batch-calc-btn"
-                  :disabled="isDeploying || isBatchCalculating || isCalculatingHash"
+                  :disabled="!canVerifyHash || isBatchCalculating || isCalculatingHash"
                   @click="handleBatchChecksum"
                 >
                   <span class="btn-icon">{{ isBatchCalculating ? '⏳' : '🔍' }}</span>
@@ -432,7 +432,7 @@
           <div class="vm-select-wrapper">
             <select
               :value="selectedBootMode"
-              :disabled="isVmRunning || isDeploying"
+              :disabled="!canConfigureVm"
               @change="e => emit('update:selectedBootMode', (e.target as HTMLSelectElement).value)"
               class="vm-select boot-select"
             >
@@ -458,7 +458,7 @@
           <div class="vm-select-wrapper">
             <select
               :value="selectedVMType"
-              :disabled="isVmRunning || isDeploying"
+              :disabled="!canConfigureVm"
               @change="e => emit('update:selectedVMType', (e.target as HTMLSelectElement).value)"
               class="vm-select"
             >
@@ -479,7 +479,7 @@
           <div class="vm-select-wrapper sm">
             <select
               :value="vmCpuCores || 2"
-              :disabled="isVmRunning || isDeploying"
+              :disabled="!canConfigureVm"
               @change="e => emit('update:vmCpuCores', Number((e.target as HTMLSelectElement).value))"
               class="vm-select sm"
             >
@@ -498,7 +498,7 @@
           <div class="vm-select-wrapper sm">
             <select
               :value="vmMemoryMB || 2048"
-              :disabled="isVmRunning || isDeploying"
+              :disabled="!canConfigureVm"
               @change="e => emit('update:vmMemoryMB', Number((e.target as HTMLSelectElement).value))"
               class="vm-select sm"
             >
@@ -515,7 +515,7 @@
         <label class="vm-checkbox-label">
           <input
             type="checkbox"
-            :disabled="isVmRunning || isDeploying"
+            :disabled="!canConfigureVm"
             :checked="vmDisplayAccel !== false"
             @change="e => emit('update:vmDisplayAccel', (e.target as HTMLInputElement).checked)"
           />
@@ -587,6 +587,10 @@ const props = defineProps<{
   isVmRunning?: boolean;
   activeVmTargetName: string;
   activeVmTargetDevice: string;
+  canChangeFs?: boolean;
+  canManageIso?: boolean;
+  canVerifyHash?: boolean;
+  canConfigureVm?: boolean;
 }>();
 
 function formatStatsTime(seconds?: number): string {
@@ -648,7 +652,7 @@ function handleDrop(e: DragEvent) {
   e.preventDefault();
   dragCounter = 0;
   isDragOver.value = false;
-  if (props.isDeploying) return;
+  if (!canManageIso.value) return;
 
   // In native Wails desktop runtime, OnFileDrop receives the system absolute paths.
   // Only fall back to HTML5 File API in pure browser demo mode.
@@ -666,8 +670,12 @@ function handleDrop(e: DragEvent) {
   }
 }
 
-// Deploy state strictly driven by central state machine
+// Capabilities strictly driven by central state machine
 const isDeployDisabled = computed(() => props.isDeployDisabled);
+const canChangeFs = computed(() => props.canChangeFs ?? (!props.isDeploying && !props.isVmRunning));
+const canManageIso = computed(() => props.canManageIso ?? (!props.isDeploying && !props.isVmRunning));
+const canVerifyHash = computed(() => props.canVerifyHash ?? (!props.isDeploying && !props.isVmRunning));
+const canConfigureVm = computed(() => props.canConfigureVm ?? (!props.isDeploying && !props.isVmRunning));
 
 // Checksum State & Logic
 const selectedChecksumIsoIndex = ref(0);

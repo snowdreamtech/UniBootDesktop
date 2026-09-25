@@ -19,7 +19,7 @@
       :activeMode="activeMode"
       :isLogCardVisible="isLogCardVisible"
       :currentLang="currentLang"
-      :isActionBusy="isDiskLocked"
+      :isActionBusy="!canSwitchMode"
       @select-mode="selectMode"
       @toggle-log="toggleLogCard"
       @open-settings="(tab) => openSettings(tab as any)"
@@ -38,7 +38,7 @@
         :ejectingDevices="ejectingDevices"
         :isScanningDisks="isScanningDisks"
         :customIcons="customIcons"
-        :isLocked="isDiskLocked"
+        :isLocked="!canSelectDisk"
         :lockReason="diskLockReason"
         @set-selection-mode="setSelectionMode"
         @select-all="selectAllDisks"
@@ -88,6 +88,10 @@
         :isVmRunning="isVmRunning"
         :activeVmTargetName="activeVmTargetName"
         :activeVmTargetDevice="activeVmTargetDevice"
+        :canChangeFs="canChangeFs"
+        :canManageIso="canManageIso"
+        :canVerifyHash="canVerifyHash"
+        :canConfigureVm="canConfigureVm"
         @open-settings-ventoy="openSettings('ventoy')"
         @select-iso="handleSelectIsoFiles"
         @drop-iso-paths="addIsoFilesByPaths"
@@ -297,6 +301,12 @@ const {
   deployDisabledReason,
   isDiskLocked,
   diskLockReason,
+  canSelectDisk,
+  canSwitchMode,
+  canChangeFs,
+  canManageIso,
+  canVerifyHash,
+  canConfigureVm,
   setRunningVmTarget,
   clearRunningVmTarget,
   activeVmTargetDevice,

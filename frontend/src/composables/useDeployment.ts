@@ -176,6 +176,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     isMacOs,
     isDeploying,
     isPreflight,
+    pendingTargets,
     checkDiskCanUpdateNonDestructively,
     getVentoyValidationMessage,
   });
@@ -186,6 +187,16 @@ export function useDeployment(options: UseDeploymentOptions) {
   const deployDisabledReason = fsm.deployDisabledReason;
   const isDiskLocked = fsm.isDiskLocked;
   const diskLockReason = fsm.diskLockReason;
+  const canDeploy = fsm.canDeploy;
+  const canLaunchVm = fsm.canLaunchVm;
+  const canStopVm = fsm.canStopVm;
+  const canSelectDisk = fsm.canSelectDisk;
+  const canEjectDisk = fsm.canEjectDisk;
+  const canSwitchMode = fsm.canSwitchMode;
+  const canChangeFs = fsm.canChangeFs;
+  const canManageIso = fsm.canManageIso;
+  const canVerifyHash = fsm.canVerifyHash;
+  const canConfigureVm = fsm.canConfigureVm;
   const activeVmTargetDevice = fsm.activeVmTargetDevice;
   const activeVmTargetName = fsm.activeVmTargetName;
   const setRunningVmTarget = fsm.setRunningVmTarget;
@@ -829,6 +840,16 @@ export function useDeployment(options: UseDeploymentOptions) {
     deployDisabledReason,
     isDiskLocked,
     diskLockReason,
+    canDeploy,
+    canLaunchVm,
+    canStopVm,
+    canSelectDisk,
+    canEjectDisk,
+    canSwitchMode,
+    canChangeFs,
+    canManageIso,
+    canVerifyHash,
+    canConfigureVm,
     runningVmTarget,
     setRunningVmTarget,
     clearRunningVmTarget,

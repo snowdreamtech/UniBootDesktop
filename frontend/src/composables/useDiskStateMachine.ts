@@ -115,6 +115,7 @@ export interface DiskStateMachineOptions {
   isMacOs: Ref<boolean>;
   isDeploying: Ref<boolean>;
   isPreflight: Ref<boolean>;
+  pendingTargets?: Ref<string[]>;
   isVerifying?: Ref<boolean>;
   hypervisorCount?: Ref<number>;
   isLaunchingQemu?: Ref<boolean>;
@@ -139,6 +140,18 @@ export interface DiskStateMachine {
   activeVmTargetName: ComputedRef<string>;
   isDiskLocked: ComputedRef<boolean>;
   diskLockReason: ComputedRef<string>;
+
+  // Fine-grained action capabilities driven 100% by State Machine
+  canDeploy: ComputedRef<boolean>;
+  canLaunchVm: ComputedRef<boolean>;
+  canStopVm: ComputedRef<boolean>;
+  canSelectDisk: ComputedRef<boolean>;
+  canEjectDisk: ComputedRef<boolean>;
+  canSwitchMode: ComputedRef<boolean>;
+  canChangeFs: ComputedRef<boolean>;
+  canManageIso: ComputedRef<boolean>;
+  canVerifyHash: ComputedRef<boolean>;
+  canConfigureVm: ComputedRef<boolean>;
 
   // State mutation actions
   setRunningVmTarget: (device: string, name: string) => void;
@@ -214,6 +227,9 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     }
 
     if (isDeploying.value) {
+      if (options.pendingTargets && options.pendingTargets.value.includes(disk.device)) {
+        return 'DEPLOYING';
+      }
       if (selectionMode.value === 'single' && selectedDisk.value?.device === disk.device) {
         return 'DEPLOYING';
       }
@@ -532,6 +548,18 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     return '';
   });
 
+  // Fine-grained action capabilities driven 100% by State Machine
+  const canDeploy = computed(() => !isDeployDisabled.value);
+  const canLaunchVm = computed(() => !isVmDisabled.value && !isVmRunning.value);
+  const canStopVm = computed(() => isVmRunning.value);
+  const canSelectDisk = computed(() => !isDiskLocked.value);
+  const canEjectDisk = computed(() => !isDiskLocked.value && currentDiskState.value !== 'EJECTED');
+  const canSwitchMode = computed(() => !isDiskLocked.value);
+  const canChangeFs = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING' && !isDiskLocked.value);
+  const canManageIso = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING');
+  const canVerifyHash = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING');
+  const canConfigureVm = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING' && !localIsLaunchingQemu.value);
+
   return {
     currentDiskState,
     getDiskState,
@@ -546,6 +574,16 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     activeVmTargetName,
     isDiskLocked,
     diskLockReason,
+    canDeploy,
+    canLaunchVm,
+    canStopVm,
+    canSelectDisk,
+    canEjectDisk,
+    canSwitchMode,
+    canChangeFs,
+    canManageIso,
+    canVerifyHash,
+    canConfigureVm,
     setRunningVmTarget,
     clearRunningVmTarget,
     setVerifyingDevice,
