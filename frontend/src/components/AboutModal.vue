@@ -179,10 +179,28 @@ const updateStatusClass = ref('');
 const loadAppInfo = async () => {
   try {
     const wailsApp = (window as any)?.go?.main?.App;
-    if (wailsApp && typeof wailsApp.GetAppInfo === 'function') {
-      const info = await wailsApp.GetAppInfo();
-      if (info) {
-        appInfo.value = info;
+    if (wailsApp) {
+      if (typeof wailsApp.GetSystemInfo === 'function') {
+        const sys = await wailsApp.GetSystemInfo();
+        if (sys) {
+          appInfo.value = {
+            projectName: sys.appName || 'UniGoDesktop',
+            version: sys.version || 'v1.0.0',
+            gitTag: sys.version || 'v1.0.0',
+            commitHash: sys.commit || 'dev',
+            buildTime: sys.buildTime || 'N/A',
+            osArch: `${sys.os || 'darwin'}/${sys.arch || 'arm64'}`,
+            goVersion: sys.goVersion || 'go1.25',
+            copyright: 'Copyright © 2026-present SnowdreamTech Inc.',
+          };
+          return;
+        }
+      }
+      if (typeof wailsApp.GetAppInfo === 'function') {
+        const info = await wailsApp.GetAppInfo();
+        if (info) {
+          appInfo.value = info;
+        }
       }
     }
   } catch (err) {
@@ -240,6 +258,8 @@ const openUrl = (url: string) => {
     const wailsApp = (window as any)?.go?.main?.App;
     if (wailsRuntime && typeof wailsRuntime.BrowserOpenURL === 'function') {
       wailsRuntime.BrowserOpenURL(url);
+    } else if (wailsApp && typeof wailsApp.OpenURL === 'function') {
+      wailsApp.OpenURL(url);
     } else if (wailsApp && typeof wailsApp.OpenBrowserURL === 'function') {
       wailsApp.OpenBrowserURL(url);
     } else {
