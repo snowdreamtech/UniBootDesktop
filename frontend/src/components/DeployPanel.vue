@@ -13,6 +13,7 @@
       <label class="fs-label">{{ t('settings.default_fs') }}</label>
       <CustomSelect
         :modelValue="selectedFsType"
+        :disabled="isDeploying"
         @update:modelValue="val => emit('update:selectedFsType', val)"
         :options="[
           { value: 'exFAT', label: t('fs.exfat') },
@@ -68,7 +69,7 @@
           </h3>
           <span class="iso-subtitle">{{ t('iso.desc') }}</span>
         </div>
-        <button class="btn-secondary add-iso-btn" @click="emit('select-iso')">
+        <button class="btn-secondary add-iso-btn" :disabled="isDeploying" @click="!isDeploying && emit('select-iso')">
           <span class="btn-icon">➕</span>
           <span>{{ t('iso.add_btn') }}</span>
         </button>
@@ -125,7 +126,7 @@
                 <span class="btn-icon">🔒</span>
                 <span>{{ selectedChecksumIsoIndex === index && checksumActiveTab === 'single' ? t('checksum.status_selected') : t('checksum.status_verify') }}</span>
               </button>
-              <button class="iso-remove-btn" :title="t('iso.remove')" @click.stop="emit('remove-iso', index)">✕</button>
+              <button class="iso-remove-btn" :disabled="isDeploying" :title="t('iso.remove')" @click.stop="!isDeploying && emit('remove-iso', index)">✕</button>
             </div>
           </div>
         </div>
@@ -150,7 +151,7 @@
           </div>
 
           <!-- Right isolated danger action: clear list button -->
-          <button class="btn-clear-iso" :title="t('iso.clear')" @click="emit('clear-iso')">
+          <button class="btn-clear-iso" :disabled="isDeploying" :title="t('iso.clear')" @click="!isDeploying && emit('clear-iso')">
             <span class="btn-icon">🗑️</span>
             <span>{{ t('iso.clear') }}</span>
           </button>
@@ -212,7 +213,7 @@
                 <!-- 批量导入校验汇总文件按钮 -->
                 <button
                   class="btn-secondary import-sums-header-btn"
-                  :disabled="isCalculatingHash || isBatchCalculating"
+                  :disabled="isDeploying || isCalculatingHash || isBatchCalculating"
                   :title="t('checksum.import_file_title')"
                   @click="triggerSumsFilePick"
                 >
@@ -226,7 +227,7 @@
                 <!-- 一键批量校验全部按钮 -->
                 <button
                   class="btn-secondary batch-calc-btn"
-                  :disabled="isBatchCalculating || isCalculatingHash"
+                  :disabled="isDeploying || isBatchCalculating || isCalculatingHash"
                   @click="handleBatchChecksum"
                 >
                   <span class="btn-icon">{{ isBatchCalculating ? '⏳' : '🔍' }}</span>
@@ -280,7 +281,7 @@
                 <!-- Single ISO calculate button -->
                 <button
                   class="btn-secondary calc-hash-btn"
-                  :disabled="isCalculatingHash || isBatchCalculating"
+                  :disabled="isDeploying || isCalculatingHash || isBatchCalculating"
                   @click="handleCalculateChecksum"
                 >
                   <span class="btn-icon">{{ isCalculatingHash ? '⏳' : '⚡' }}</span>
@@ -642,6 +643,7 @@ function handleDrop(e: DragEvent) {
   e.preventDefault();
   dragCounter = 0;
   isDragOver.value = false;
+  if (props.isDeploying) return;
 
   // In native Wails desktop runtime, OnFileDrop receives the system absolute paths.
   // Only fall back to HTML5 File API in pure browser demo mode.
@@ -988,7 +990,7 @@ async function handleSumsFileSelected(event: Event) {
 }
 
 async function handleCalculateChecksum() {
-  if (props.selectedIsoFiles.length === 0 || isCalculatingHash.value || isBatchCalculating.value) return;
+  if (props.selectedIsoFiles.length === 0 || props.isDeploying || isCalculatingHash.value || isBatchCalculating.value) return;
   const targetIdx = selectedChecksumIsoIndex.value < props.selectedIsoFiles.length ? selectedChecksumIsoIndex.value : 0;
   const fileToVerify = props.selectedIsoFiles[targetIdx];
   isCalculatingHash.value = true;
@@ -1032,7 +1034,7 @@ async function handleCalculateChecksum() {
 }
 
 async function handleBatchChecksum() {
-  if (!props.selectedIsoFiles || props.selectedIsoFiles.length === 0 || isBatchCalculating.value || isCalculatingHash.value) return;
+  if (!props.selectedIsoFiles || props.selectedIsoFiles.length === 0 || props.isDeploying || isBatchCalculating.value || isCalculatingHash.value) return;
 
   isBatchCalculating.value = true;
   const total = props.selectedIsoFiles.length;

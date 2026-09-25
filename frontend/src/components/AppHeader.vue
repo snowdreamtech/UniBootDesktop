@@ -9,11 +9,11 @@
     </div>
     <div class="mode-tabs" :class="{ 'is-busy': isActionBusy }">
       <div v-if="isActionBusy" class="local-action-overlay" aria-hidden="true"></div>
-      <button class="tab-btn" :class="{ active: activeMode === 'cloud' }" @click="emit('select-mode', 'cloud')">
+      <button class="tab-btn" :class="{ active: activeMode === 'cloud' }" :disabled="isActionBusy" @click="emit('select-mode', 'cloud')">
         <span class="btn-icon">⚡</span>
         <span>{{ t("mode.cloud") }}</span>
       </button>
-      <button class="tab-btn" :class="{ active: activeMode === 'hybrid' }" @click="emit('select-mode', 'hybrid')">
+      <button class="tab-btn" :class="{ active: activeMode === 'hybrid' }" :disabled="isActionBusy" @click="emit('select-mode', 'hybrid')">
         <span class="btn-icon">🛠️</span>
         <span>{{ t("mode.hybrid") }}</span>
       </button>

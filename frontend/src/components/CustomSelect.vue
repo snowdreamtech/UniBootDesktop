@@ -1,6 +1,6 @@
 <template>
-  <div class="custom-select-container" ref="containerRef" :class="{ open: isOpen }">
-    <div class="select-trigger" @click="toggleOpen">
+  <div class="custom-select-container" ref="containerRef" :class="{ open: isOpen, disabled: props.disabled }">
+    <div class="select-trigger" :class="{ disabled: props.disabled }" @click="!props.disabled && toggleOpen()">
       <span class="selected-label">{{ selectedOption?.label || modelValue }}</span>
       <span class="chevron-icon">▾</span>
     </div>
@@ -33,6 +33,7 @@ export interface SelectOption {
 const props = defineProps<{
   modelValue: string;
   options: SelectOption[];
+  disabled?: boolean;
 }>();
 
 const emit = defineEmits(['update:modelValue', 'change']);
@@ -92,6 +93,12 @@ onUnmounted(() => {
 
 .select-trigger:hover {
   border-color: var(--card-border-active);
+}
+
+.select-trigger.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .custom-select-container.open .select-trigger {
