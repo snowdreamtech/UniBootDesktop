@@ -15,9 +15,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// RootCmd represents the base command structure.
-type RootCmd struct{}
-
 var (
 	quiet       bool
 	silent      bool
@@ -26,7 +23,6 @@ var (
 	cdDir       string
 	yes         bool
 	showVersion bool
-	desktopMode bool
 )
 
 func getOutputFormat() output.OutputFormat {

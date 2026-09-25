@@ -40,7 +40,7 @@ builds:
       - -trimpath
     ldflags:
       - -s -w
-      - -X 'github.com/snowdreamtech/unigodesktop/internal/env.ProjectName=unigo'
+      - -X 'github.com/snowdreamtech/unigodesktop/internal/env.ProjectName=unigodesktop'
       - -X 'github.com/snowdreamtech/unigodesktop/internal/env.Author=Snowdream Tech <snowdreamtech@qq.com>'
       - -X github.com/snowdreamtech/unigodesktop/internal/env.BuildTime={{.Date}}
       - -X github.com/snowdreamtech/unigodesktop/internal/env.CommitHash={{.ShortCommit}}
@@ -230,7 +230,7 @@ nfpms:
       - git
     contents:
       - src: ./completions/unigodesktop.bash
-        dst: /usr/share/bash-completion/completions/unigo
+        dst: /usr/share/bash-completion/completions/unigodesktop
         file_info:
           mode: 0644
           mtime: "{{ .CommitDate }}"
@@ -332,7 +332,7 @@ winget:
       owner: snowdreamtech
       name: winget-pkgs
       token: "{{ .Env.WORKFLOW_SECRET }}"
-      branch: "unigo-{{.Version}}"
+      branch: "unigodesktop-{{.Version}}"
       pull_request:
         enabled: true
         base:
