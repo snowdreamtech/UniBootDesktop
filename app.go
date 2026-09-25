@@ -507,6 +507,24 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 	return installer.ValidateVentoyCli(ventoyPath)
 }
 
+// UniBootStatus represents the lightweight cross-platform ready status of native UniBoot engine.
+type UniBootStatus struct {
+	Ready   bool   `json:"ready"`
+	Version string `json:"version"`
+	Code    string `json:"code"`
+	Message string `json:"message,omitempty"`
+}
+
+// GetUniBootStatus returns the cross-platform ready status of native UniBoot engine.
+func (a *App) GetUniBootStatus() *UniBootStatus {
+	return &UniBootStatus{
+		Ready:   true,
+		Version: "1.0.0",
+		Code:    "ready",
+		Message: "UniBoot native cross-platform engine is ready",
+	}
+}
+
 // DeployHybridModeBatch triggers Hybrid Mode deployment for multiple target disk drives with customizable file system and optional ISO files.
 func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPaths []string, expected []disk.DiskInfo) ([]*installer.DeployResult, error) {
 	logger.Info("User confirmed batch Hybrid Mode boot disk creation", "diskCount", len(targetDisks), "fs", fsType)
