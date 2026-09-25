@@ -19,13 +19,13 @@ type Config struct {
 }
 
 // Load reads the configuration from the global config directory.
-// It prioritizes TOML (unibootdesktop.toml) over YAML (unibootdesktop.yaml/unibootdesktop.yml).
+// It prioritizes TOML (unigodesktop.toml) over YAML (unigodesktop.yaml/unigodesktop.yml).
 func Load() (*Config, error) {
 	configDir := env.GetConfigDir()
 	cfg := &Config{}
 
 	// Check TOML
-	tomlPath := filepath.Join(configDir, "unibootdesktop.toml")
+	tomlPath := filepath.Join(configDir, "unigodesktop.toml")
 	if data, err := os.ReadFile(tomlPath); err == nil {
 		if err := toml.Unmarshal(data, cfg); err != nil {
 			return nil, fmt.Errorf("failed to parse TOML config: %w", err)
@@ -36,7 +36,7 @@ func Load() (*Config, error) {
 	}
 
 	// Check YAML
-	yamlPaths := []string{"unibootdesktop.yaml", "unibootdesktop.yml"}
+	yamlPaths := []string{"unigodesktop.yaml", "unigodesktop.yml"}
 	for _, yp := range yamlPaths {
 		yamlPath := filepath.Join(configDir, yp)
 		if data, err := os.ReadFile(yamlPath); err == nil {
@@ -53,9 +53,9 @@ func Load() (*Config, error) {
 	return cfg, nil
 }
 
-// Save writes the current configuration to unibootdesktop.toml in the global config directory.
+// Save writes the current configuration to unigodesktop.toml in the global config directory.
 func (c *Config) Save() error {
-	configPath := env.GetGlobalConfigPath() // Defaults to unibootdesktop.toml
+	configPath := env.GetGlobalConfigPath() // Defaults to unigodesktop.toml
 
 	if err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil {
 		return fmt.Errorf("failed to create config directory: %w", err)

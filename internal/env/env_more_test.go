@@ -12,16 +12,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEnv_WindowsAppDataFallback(t *testing.T) {
+func TestEnv_WindowsPaths(t *testing.T) {
 	origGOOS := RuntimeGOOS
 	defer func() { RuntimeGOOS = origGOOS }()
 	RuntimeGOOS = "windows"
 
+	// clear overrides
 	t.Setenv("UNIGODESKTOP_CONFIG_DIR", "")
-	t.Setenv("XDG_CONFIG_HOME", "")
 	t.Setenv("UNIGODESKTOP_DATA_DIR", "")
-	t.Setenv("XDG_DATA_HOME", "")
 	t.Setenv("UNIGODESKTOP_CACHE_DIR", "")
+	t.Setenv("XDG_CONFIG_HOME", "")
+	t.Setenv("XDG_DATA_HOME", "")
 	t.Setenv("XDG_CACHE_HOME", "")
 	t.Setenv("LOCALAPPDATA", "")
 
@@ -35,15 +36,15 @@ func TestEnv_WindowsAppDataFallback(t *testing.T) {
 	OsUserHomeDir = func() (string, error) { return "C:\\Users\\test", nil }
 
 	cfg := GetConfigDir()
-	assert.Equal(t, filepath.Join("C:\\Users\\test\\AppData\\Roaming", "unibootdesktop"), cfg)
+	assert.Equal(t, filepath.Join("C:\\Users\\test\\AppData\\Roaming", "unigodesktop"), cfg)
 
 	data := GetDataDir()
-	assert.Equal(t, filepath.Join("C:\\Users\\test", "AppData", "Local", "unibootdesktop"), data)
+	assert.Equal(t, filepath.Join("C:\\Users\\test", "AppData", "Local", "unigodesktop"), data)
 
 	// mock localappdata
 	t.Setenv("LOCALAPPDATA", "C:\\Users\\test\\AppData\\Local")
 	data2 := GetDataDir()
-	assert.Equal(t, filepath.Join("C:\\Users\\test\\AppData\\Local", "unibootdesktop"), data2)
+	assert.Equal(t, filepath.Join("C:\\Users\\test\\AppData\\Local", "unigodesktop"), data2)
 
 	cache := GetCacheDir()
 	// GetCacheDir on Windows uses GetDataDir() + "cache"
@@ -55,7 +56,7 @@ func TestEnv_DarwinCacheFallback(t *testing.T) {
 	defer func() { RuntimeGOOS = origGOOS }()
 	RuntimeGOOS = "darwin"
 
-	t.Setenv("UNIBOOTDESKTOP_CACHE_DIR", "")
+	t.Setenv("UNIGODESKTOP_CACHE_DIR", "")
 	t.Setenv("XDG_CACHE_HOME", "")
 
 	origHomeDir := OsUserHomeDir
@@ -63,14 +64,14 @@ func TestEnv_DarwinCacheFallback(t *testing.T) {
 	OsUserHomeDir = func() (string, error) { return "/Users/test", nil }
 
 	cache := GetCacheDir()
-	assert.Equal(t, filepath.Join("/Users/test", "Library", "Caches", "unibootdesktop"), cache)
+	assert.Equal(t, filepath.Join("/Users/test", "Library", "Caches", "unigodesktop"), cache)
 }
 
 func TestEnv_PathsFallback(t *testing.T) {
 	// safely set environment variables to empty string
-	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", "")
-	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", "")
-	t.Setenv("UNIBOOTDESKTOP_CACHE_DIR", "")
+	t.Setenv("UNIGODESKTOP_CONFIG_DIR", "")
+	t.Setenv("UNIGODESKTOP_DATA_DIR", "")
+	t.Setenv("UNIGODESKTOP_CACHE_DIR", "")
 	t.Setenv("XDG_CONFIG_HOME", "")
 	t.Setenv("XDG_DATA_HOME", "")
 	t.Setenv("XDG_CACHE_HOME", "")
@@ -93,21 +94,20 @@ func TestEnv_PathsFallback(t *testing.T) {
 	t.Setenv("XDG_CONFIG_HOME", "/xdg_config")
 	t.Setenv("XDG_DATA_HOME", "/xdg_data")
 	t.Setenv("XDG_CACHE_HOME", "/xdg_cache")
-	assert.Equal(t, filepath.Join("/xdg_config", "unibootdesktop"), GetConfigDir())
-	assert.Equal(t, filepath.Join("/xdg_data", "unibootdesktop"), GetDataDir())
-	assert.Equal(t, filepath.Join("/xdg_cache", "unibootdesktop"), GetCacheDir())
+	assert.Equal(t, filepath.Join("/xdg_config", "unigodesktop"), GetConfigDir())
+	assert.Equal(t, filepath.Join("/xdg_data", "unigodesktop"), GetDataDir())
+	assert.Equal(t, filepath.Join("/xdg_cache", "unigodesktop"), GetCacheDir())
 }
 
 func TestEnv_GetLockFilePath(t *testing.T) {
 	tmpDir := t.TempDir()
-	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
 
 	// Create a dummy lockfile in tmpDir so it finds it, instead of searching up to repo root
-	dummyLock := filepath.Join(tmpDir, ".unibootdesktop.lock")
+	dummyLock := filepath.Join(tmpDir, ".unigodesktop.lock")
 	os.WriteFile(dummyLock, []byte(""), 0644)
 
 	lock := GetLockFilePath()
-	// Depending on logic, it might return dummyLock or some other path
 	assert.NotEmpty(t, lock)
 }
 
@@ -127,9 +127,9 @@ func TestEnv_RandomString(t *testing.T) {
 }
 
 func TestEnv_OsErrorFallbacks(t *testing.T) {
-	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", "")
-	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", "")
-	t.Setenv("UNIBOOTDESKTOP_CACHE_DIR", "")
+	t.Setenv("UNIGODESKTOP_CONFIG_DIR", "")
+	t.Setenv("UNIGODESKTOP_DATA_DIR", "")
+	t.Setenv("UNIGODESKTOP_CACHE_DIR", "")
 	t.Setenv("XDG_CONFIG_HOME", "")
 	t.Setenv("XDG_DATA_HOME", "")
 	t.Setenv("XDG_CACHE_HOME", "")
@@ -150,10 +150,10 @@ func TestEnv_OsErrorFallbacks(t *testing.T) {
 	OsUserConfigDir = func() (string, error) { return "", errMock }
 	OsGetwd = func() (string, error) { return "", errMock }
 
-	assert.Equal(t, "./unibootdesktop_config", GetConfigDir())
-	assert.Equal(t, "./unibootdesktop_data", GetDataDir())
-	assert.Equal(t, "./unibootdesktop_cache", GetCacheDir())
-	assert.Equal(t, "unibootdesktop.lock", GetLockFilePath())
+	assert.Equal(t, "./unigodesktop_config", GetConfigDir())
+	assert.Equal(t, "./unigodesktop_data", GetDataDir())
+	assert.Equal(t, "./unigodesktop_cache", GetCacheDir())
+	assert.Equal(t, "unigodesktop.lock", GetLockFilePath())
 
 	// mock crypto rand
 	origRand := CryptoRandRead
