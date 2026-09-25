@@ -4,28 +4,105 @@
 import { ref, computed, type Ref, type ComputedRef } from 'vue';
 import type { DiskInfo } from '../components/DiskPanel.vue';
 
+import type { VentoyValidation } from '../utils/ventoyValidation';
+
 /**
- * Approved finite disk states:
- * - UNDEPLOYED: Blank / unconfigured disk (no bootloader)
- * - DEPLOYED: Ready bootable system disk (UniBoot / Ventoy installed)
- * - DEPLOYING: Writing / installing / updating in progress
- * - VERIFYING: Checksum calculating / verifying in progress
- * - TESTING: VM preview simulation running
- * - READONLY: Write-protected / read-only permissions
- * - EJECTED: Safely ejected
- * - ERROR: Partition corrupted / write failure
+ * Finite disk lifecycle states managed by the unified State Machine.
+ * Every physical or selected disk strictly adheres to one of these states at any given moment.
  */
 export type DiskState =
+  /**
+   * UNDEPLOYED:
+   * Blank / unconfigured disk (no UniBoot or Ventoy bootloader installed).
+   *
+   * Lifecycle & Behavior:
+   * - Trigger: Newly inserted generic USB drive or drive lacking boot partition signature.
+   * - UI Display: Shows filesystem selector dropdown (exFAT, NTFS, FAT32, ext4).
+   * - Primary Action: "Create Boot Disk" (全新制作) - reformats drive and writes fresh bootloader.
+   * - Restrictions: Non-destructive update is disabled; VM preview testing is strictly disabled
+   *   because the drive has no bootable firmware.
+   */
   | 'UNDEPLOYED'
-  | 'DEPLOYED'
-  | 'DEPLOYING'
-  | 'VERIFYING'
-  | 'TESTING'
-  | 'READONLY'
-  | 'EJECTED'
-  | 'ERROR';
 
-import type { VentoyValidation } from '../utils/ventoyValidation';
+  /**
+   * DEPLOYED:
+   * Ready bootable system disk with active UniBoot / Ventoy environment installed.
+   *
+   * Lifecycle & Behavior:
+   * - Trigger: Drive contains valid boot partition (VTOYEFI / UniBoot) and version signatures.
+   * - UI Display: Hides filesystem selector; shows Safe Mode Notice Banner.
+   * - Primary Action: "Non-destructive Update" (无损更新) - updates bootloader without wiping user ISO data.
+   * - Secondary Action: "Simulate Test" (启动模拟测试) - ready to boot in QEMU / VMware / VirtualBox.
+   */
+  | 'DEPLOYED'
+
+  /**
+   * DEPLOYING:
+   * Active writing / partitioning / installing / updating operation in progress.
+   *
+   * Lifecycle & Behavior:
+   * - Trigger: User clicked "Create" or "Update" and confirmed execution.
+   * - UI Display: Shows live progress bar, transfer speed (MB/s), elapsed time, and ETA.
+   * - Primary Action: Displays "Cancel" button to safely abort deployment.
+   * - Restrictions: All other operations (VM simulation, disk switching) are strictly locked to prevent corruption.
+   */
+  | 'DEPLOYING'
+
+  /**
+   * VERIFYING:
+   * Active data integrity verification / checksum calculation in progress.
+   *
+   * Lifecycle & Behavior:
+   * - Trigger: SHA256/MD5 hash calculation on ISOs or post-install readback verification.
+   * - UI Display: Shows hash computation progress spinner; deploy button displays busy state.
+   * - Restrictions: VM testing and write operations are temporarily locked to prevent I/O race conditions.
+   */
+  | 'VERIFYING'
+
+  /**
+   * TESTING:
+   * Virtual machine preview simulation is actively running.
+   *
+   * Lifecycle & Behavior:
+   * - Trigger: User launched QEMU, VMware, VirtualBox, or UTM to test drive booting.
+   * - Kernel Isolation: Host OS partitions are forcibly unmounted to give VM exclusive raw disk passthrough.
+   * - UI Display: VM button turns into "Stop Test" (⏹ 运行中).
+   * - Restrictions: Host OS write operations are strictly locked (deployDisabledReason = vm.tip_running).
+   * - Exit: When VM powers off, host OS remounts partitions, and state transitions back to DEPLOYED.
+   */
+  | 'TESTING'
+
+  /**
+   * READONLY:
+   * Disk is write-protected or current process lacks raw block device access permissions.
+   *
+   * Lifecycle & Behavior:
+   * - Trigger: Physical write-protect switch on USB drive, OS read-only mount, or macOS TCC restriction.
+   * - UI Display: Deploy button is disabled; displays permission/read-only alert.
+   * - Restrictions: Write operations are forbidden until hardware switch is toggled or privilege helper elevates access.
+   */
+  | 'READONLY'
+
+  /**
+   * EJECTED:
+   * Drive volumes have been safely unmounted and ejected by host operating system.
+   *
+   * Lifecycle & Behavior:
+   * - Trigger: User clicked "Safely Eject", or auto-eject occurred after successful deployment.
+   * - UI Display: All action buttons are disabled; shows prompt that device has been safely ejected.
+   * - Exit: Drive must be physically re-plugged or remounted before new actions can run.
+   */
+  | 'EJECTED'
+
+  /**
+   * ERROR:
+   * Partition scheme is corrupted, raw, unformatted, or previous deployment was abnormally interrupted.
+   *
+   * Lifecycle & Behavior:
+   * - Trigger: Device disconnected during write, I/O hardware error, or damaged partition table.
+   * - UI Display: Disables non-destructive update; prompts user to perform clean format and re-install.
+   */
+  | 'ERROR';
 
 export interface DiskStateMachineOptions {
   t: (key: string, params?: Record<string, any>) => string;
