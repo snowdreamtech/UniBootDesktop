@@ -5,11 +5,14 @@
       <div class="modal-header">
         <div class="header-title">
           <span class="icon">⚙️</span>
-          <h3>{{ t('settings.title') || 'Settings' }}</h3>
+          <div>
+            <h3>{{ t('settings.title') || 'Settings' }}</h3>
+            <span class="sub-title">{{ t('settings.subtitle') || 'Preferences & Configuration' }}</span>
+          </div>
         </div>
         <div class="header-actions">
           <span class="auto-save-tag" :class="{ saving: isAutoSaving }">
-            {{ saveStatusText }}
+            {{ saveStatusText || ('⚡ ' + (t('settings.realtime_save') || 'Auto-Save Ready')) }}
           </span>
           <button class="close-btn" @click="close" title="Close">✕</button>
         </div>
@@ -17,22 +20,20 @@
 
       <!-- Tab Navigation Bar -->
       <div class="tab-nav-bar">
-        <div class="tab-segmented-track">
-          <button 
-            class="tab-btn" 
-            :class="{ active: activeTab === 'general' }" 
-            @click="activeTab = 'general'"
-          >
-            <span class="tab-icon">⚙️</span> {{ t('settings.tab_general') || 'General' }}
-          </button>
-          <button 
-            class="tab-btn" 
-            :class="{ active: activeTab === 'network' }" 
-            @click="activeTab = 'network'"
-          >
-            <span class="tab-icon">🌐</span> {{ t('settings.tab_network') || 'Network & Proxy' }}
-          </button>
-        </div>
+        <button 
+          class="tab-btn" 
+          :class="{ active: activeTab === 'general' }" 
+          @click="activeTab = 'general'"
+        >
+          <span class="tab-icon">⚙️</span> {{ t('settings.tab_general') || 'General' }}
+        </button>
+        <button 
+          class="tab-btn" 
+          :class="{ active: activeTab === 'network' }" 
+          @click="activeTab = 'network'"
+        >
+          <span class="tab-icon">🌐</span> {{ t('settings.tab_network') || 'Network & Proxy' }}
+        </button>
       </div>
 
       <!-- Modal Body -->
@@ -457,42 +458,37 @@ watch(() => props.currentProxy, (val) => {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
+  right: 0;
+  bottom: 0;
+  background: rgba(4, 8, 16, 0.75);
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  padding: 1.5rem;
 }
 
-.modal-card {
-  width: 100%;
-  max-width: 680px;
-  max-height: 85vh;
+.glass-modal {
+  background: var(--modal-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 24px var(--accent-cyan-glow);
   border-radius: 16px;
+  width: 92%;
+  max-width: 720px;
+  max-height: 88vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--card-border);
   overflow: hidden;
-  background: var(--modal-bg);
-  animation: modalEnter 0.25s ease-out forwards;
-}
-
-@keyframes modalEnter {
-  from { opacity: 0; transform: scale(0.96) translateY(8px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+  color: var(--text-main);
+  transition: all 0.3s ease;
 }
 
 .modal-header {
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem 1.5rem 0.75rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: var(--section-bg);
   border-bottom: 1px solid var(--card-border);
 }
 
@@ -503,7 +499,7 @@ watch(() => props.currentProxy, (val) => {
 }
 
 .header-title .icon {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
 }
 
 .header-title h3 {
@@ -514,7 +510,7 @@ watch(() => props.currentProxy, (val) => {
 }
 
 .header-title .sub-title {
-  font-size: 0.8rem;
+  font-size: 0.775rem;
   color: var(--text-muted);
 }
 
@@ -526,24 +522,30 @@ watch(() => props.currentProxy, (val) => {
 
 .auto-save-tag {
   font-size: 0.75rem;
-  color: var(--text-muted);
-  opacity: 0.8;
-  transition: all 0.2s ease;
+  color: var(--accent-cyan);
+  background: rgba(0, 229, 255, 0.1);
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  transition: all 0.3s ease;
 }
 
 .auto-save-tag.saving {
-  color: var(--accent-cyan);
+  color: var(--success);
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--success);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
 }
 
 .close-btn {
-  background: none;
+  background: transparent;
   border: none;
   color: var(--text-muted);
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
   border-radius: 6px;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .close-btn:hover {
@@ -551,84 +553,58 @@ watch(() => props.currentProxy, (val) => {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Tab Navigation Bar — Sleek Segmented Control */
+/* Tab Navigation Bar */
 .tab-nav-bar {
   display: flex;
-  align-items: center;
-  padding: 0.75rem 1.5rem 0.6rem 1.5rem;
-  background: transparent;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  background: var(--section-bg);
   border-bottom: 1px solid var(--card-border);
 }
 
-.tab-segmented-track {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(125, 125, 125, 0.08);
-  padding: 4px;
-  border-radius: 12px;
-  gap: 4px;
-  border: 1px solid var(--card-border);
-}
-
 .tab-btn {
-  background: transparent;
-  border: 1px solid transparent;
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
   color: var(--text-muted);
-  padding: 0.45rem 1.15rem;
+  padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 0.4rem;
+  transition: all 0.2s ease;
 }
 
 .tab-btn:hover {
+  background: rgba(0, 229, 255, 0.08);
   color: var(--text-main);
-  background: rgba(125, 125, 125, 0.08);
 }
 
 .tab-btn.active {
-  background: var(--card-bg);
-  border-color: var(--accent-cyan);
-  color: var(--accent-cyan);
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-}
-
-[data-theme="light"] .tab-segmented-track {
-  background: #f1f5f9;
-  border-color: #e2e8f0;
-}
-
-[data-theme="light"] .tab-btn {
-  color: #64748b;
-}
-
-[data-theme="light"] .tab-btn:hover {
-  color: #0f172a;
-  background: rgba(255, 255, 255, 0.6);
-}
-
-[data-theme="light"] .tab-btn.active {
-  background: #ffffff;
-  border-color: #0284c7;
-  color: #0284c7;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.18);
-}
-
-[data-theme="dark"] .tab-segmented-track {
-  background: rgba(0, 0, 0, 0.35);
-  border-color: var(--card-border);
-}
-
-[data-theme="dark"] .tab-btn.active {
   background: rgba(0, 229, 255, 0.15);
   border-color: var(--accent-cyan);
   color: var(--accent-cyan);
-  box-shadow: 0 0 14px var(--accent-cyan-glow);
+  box-shadow: 0 0 12px var(--accent-cyan-glow);
+}
+
+[data-theme="light"] .tab-btn {
+  background: #ffffff;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .tab-btn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+[data-theme="light"] .tab-btn.active {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
 }
 
 .tab-icon {
@@ -636,46 +612,50 @@ watch(() => props.currentProxy, (val) => {
 }
 
 .modal-body {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   flex: 1;
 }
 
-.settings-section {
+.tab-content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
+}
+
+.settings-section {
+  background: var(--section-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem;
 }
 
 .settings-section.margin-top {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px dashed var(--card-border);
+  margin-top: 0.5rem;
 }
 
 .section-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--text-main);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--accent-cyan);
 }
 
-.section-hint {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  line-height: 1.4;
-  margin-top: -0.5rem;
+.badge {
+  font-size: 0.725rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
 }
 
 .badge.info {
-  background: rgba(0, 229, 255, 0.15);
+  background: rgba(0, 229, 255, 0.12);
   color: var(--accent-cyan);
-  font-size: 0.7rem;
-  padding: 0.15rem 0.5rem;
-  border-radius: 12px;
-  font-weight: normal;
 }
 
 .grid-form {
@@ -694,36 +674,136 @@ watch(() => props.currentProxy, (val) => {
   gap: 0.4rem;
 }
 
-.form-label {
-  font-size: 0.825rem;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.highlight-label {
-  color: var(--accent-cyan);
-  font-weight: 600;
-}
-
-.highlight-form-group {
+.form-group.highlight-form-group {
   position: relative;
   z-index: 20;
 }
 
-.form-input {
+.form-label {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.highlight-label {
+  color: var(--accent-cyan);
+}
+
+.field-hint {
+  font-size: 0.725rem;
+  color: var(--text-muted);
+}
+
+.section-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: -0.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.form-input, .form-select {
   background: var(--input-bg);
   border: 1px solid var(--card-border);
-  color: var(--text-main);
-  padding: 0.6rem 0.85rem;
   border-radius: 8px;
-  font-size: 0.875rem;
-  transition: all 0.2s;
+  color: var(--text-main);
+  padding: 0.55rem 0.75rem;
+  font-size: 0.85rem;
   outline: none;
 }
 
-.form-input:focus {
+[data-theme="light"] .form-input, 
+[data-theme="light"] .form-select {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+.form-input::placeholder {
+  color: rgba(148, 163, 184, 0.42);
+  opacity: 1;
+  font-size: 0.82rem;
+  font-weight: 400;
+  transition: color 0.2s ease;
+}
+
+.form-input:focus::placeholder {
+  color: rgba(148, 163, 184, 0.22);
+}
+
+.form-input:focus, .form-select:focus {
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 0 2px var(--accent-cyan-glow);
+  box-shadow: 0 0 10px var(--accent-cyan-glow);
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.radio-group.horizontal {
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.protocol-radio-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.2rem;
+}
+
+.protocol-pill {
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s ease;
+}
+
+.protocol-pill input {
+  display: none;
+}
+
+.protocol-pill:hover {
+  border-color: var(--accent-cyan);
+  color: var(--text-main);
+}
+
+.protocol-pill.active {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+[data-theme="light"] .protocol-pill {
+  background: #ffffff;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .protocol-pill.active {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: #ffffff;
+  font-weight: 700;
 }
 
 .label-row {
@@ -748,86 +828,34 @@ watch(() => props.currentProxy, (val) => {
   opacity: 0.8;
 }
 
-.margin-top-sm {
-  margin-top: 0.5rem;
-}
-
-.radio-group {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.radio-group.horizontal {
-  flex-direction: row;
-}
-
-.radio-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text-main);
-  cursor: pointer;
-}
-
-.protocol-radio-bar {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
-
-.protocol-pill {
-  padding: 0.4rem 0.85rem;
-  border-radius: 8px;
-  border: 1px solid var(--card-border);
-  background: var(--input-bg);
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.protocol-pill input {
-  display: none;
-}
-
-.protocol-pill:hover {
-  border-color: var(--accent-cyan);
-  color: var(--text-main);
-}
-
-.protocol-pill.active {
-  background: rgba(0, 229, 255, 0.15);
-  border-color: var(--accent-cyan);
-  color: var(--accent-cyan);
-}
-
 .network-test-row {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .test-btn {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--input-bg);
   border: 1px solid var(--card-border);
   color: var(--text-main);
-  padding: 0.45rem 0.9rem;
-  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
 }
 
+[data-theme="light"] .test-btn {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
 .test-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.15);
   border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px var(--accent-cyan-glow);
 }
 
 .test-btn:disabled {
@@ -836,12 +864,11 @@ watch(() => props.currentProxy, (val) => {
 }
 
 .test-result {
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.775rem;
 }
 
 .test-result.success {
-  color: #10b981;
+  color: var(--success);
 }
 
 .test-result.error {
