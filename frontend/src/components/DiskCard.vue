@@ -1,19 +1,25 @@
 <template>
   <div
     class="glass-card disk-card"
-    :class="{ selected: isSelected, 'is-ejecting': isEjecting }"
-    @click="$emit('select', disk)"
+    :class="{ selected: isSelected, 'is-ejecting': isEjecting, 'is-locked': isLocked }"
+    @click="!isLocked && $emit('select', disk)"
   >
     <div class="disk-checkbox-container" v-if="isBatchMode">
-      <input type="checkbox" class="disk-checkbox" :checked="isSelected" @click.stop="$emit('toggle', disk)" />
+      <input
+        type="checkbox"
+        class="disk-checkbox"
+        :checked="isSelected"
+        :disabled="isLocked"
+        @click.stop="!isLocked && $emit('toggle', disk)"
+      />
     </div>
 
     <!-- Dynamic SVG Disk Icon -->
     <div
       class="disk-icon-wrapper"
       :class="diskType"
-      :title="t('disk.change_icon')"
-      @click.stop="$emit('pick-icon', disk)"
+      :title="isLocked ? lockReason : t('disk.change_icon')"
+      @click.stop="!isLocked && $emit('pick-icon', disk)"
     >
       <!-- Boot USB Icon with Lightning -->
       <svg
@@ -263,7 +269,12 @@
       <button class="btn-inspect" :title="t('disk.hw_inspect')" @click.stop="$emit('inspect', disk)">
         ℹ️ {{ t("disk.details") }}
       </button>
-      <button class="btn-eject" :title="t('disk.eject')" :disabled="isEjecting" @click.stop="$emit('eject', disk)">
+      <button
+        class="btn-eject"
+        :title="isLocked ? lockReason : t('disk.eject')"
+        :disabled="isLocked || isEjecting"
+        @click.stop="!isLocked && $emit('eject', disk)"
+      >
         <span class="eject-button-icon" :class="{ 'is-spinning': isEjecting }">⏏️</span>
         {{ t("disk.eject") }}
       </button>
@@ -284,11 +295,15 @@ const props = withDefaults(
     isSelected: boolean;
     isBatchMode?: boolean;
     isEjecting?: boolean;
+    isLocked?: boolean;
+    lockReason?: string;
     customIcon?: string;
   }>(),
   {
     isBatchMode: false,
     isEjecting: false,
+    isLocked: false,
+    lockReason: "",
   }
 );
 

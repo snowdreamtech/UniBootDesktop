@@ -432,6 +432,7 @@
           <div class="vm-select-wrapper">
             <select
               :value="selectedBootMode"
+              :disabled="isVmRunning || isDeploying"
               @change="e => emit('update:selectedBootMode', (e.target as HTMLSelectElement).value)"
               class="vm-select boot-select"
             >
@@ -457,6 +458,7 @@
           <div class="vm-select-wrapper">
             <select
               :value="selectedVMType"
+              :disabled="isVmRunning || isDeploying"
               @change="e => emit('update:selectedVMType', (e.target as HTMLSelectElement).value)"
               class="vm-select"
             >
@@ -477,6 +479,7 @@
           <div class="vm-select-wrapper sm">
             <select
               :value="vmCpuCores || 2"
+              :disabled="isVmRunning || isDeploying"
               @change="e => emit('update:vmCpuCores', Number((e.target as HTMLSelectElement).value))"
               class="vm-select sm"
             >
@@ -495,6 +498,7 @@
           <div class="vm-select-wrapper sm">
             <select
               :value="vmMemoryMB || 2048"
+              :disabled="isVmRunning || isDeploying"
               @change="e => emit('update:vmMemoryMB', Number((e.target as HTMLSelectElement).value))"
               class="vm-select sm"
             >
@@ -511,6 +515,7 @@
         <label class="vm-checkbox-label">
           <input
             type="checkbox"
+            :disabled="isVmRunning || isDeploying"
             :checked="vmDisplayAccel !== false"
             @change="e => emit('update:vmDisplayAccel', (e.target as HTMLInputElement).checked)"
           />

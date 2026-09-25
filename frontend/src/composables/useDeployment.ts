@@ -679,6 +679,9 @@ export function useDeployment(options: UseDeploymentOptions) {
           if (failed.length > 0) {
             success = false;
             resultMsg = failed.map((f) => `${f.target}: ${getDeployResultMessage(f)}`).join("\n");
+            failed.forEach((f) => {
+              fsm.setDeviceError(f.target, getDeployResultMessage(f));
+            });
             if (failed[0].diagnostics) {
               latestDiagnostics = failed[0].diagnostics;
             }

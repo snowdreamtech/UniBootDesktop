@@ -336,7 +336,7 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     if (selectedDevices.value.size === 0) return false;
     return Array.from(selectedDevices.value).every((dev) => {
       const d = diskList.value.find((disk) => disk.device === dev);
-      return d ? checkDiskCanUpdateNonDestructively(d, activeMode.value) : false;
+      return d ? getDiskState(d) === 'DEPLOYED' : false;
     });
   });
 
@@ -345,7 +345,7 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     let count = 0;
     selectedDevices.value.forEach((dev) => {
       const d = diskList.value.find((disk) => disk.device === dev);
-      if (d && checkDiskCanUpdateNonDestructively(d, activeMode.value)) {
+      if (d && getDiskState(d) === 'DEPLOYED') {
         count++;
       }
     });
@@ -466,8 +466,9 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     if (localHypervisorCount.value === 0) return true;
     if (!activeVmTargetDevice.value) return true;
 
-    // Blank disks (UNDEPLOYED) cannot be tested in VM
+    // Blank disks (UNDEPLOYED) or corrupted (ERROR) disks cannot be tested in VM
     if (currentDiskState.value === 'UNDEPLOYED') return true;
+    if (currentDiskState.value === 'ERROR') return true;
     if (currentDiskState.value === 'EJECTED') return true;
     if (currentDiskState.value === 'VERIFYING') return true;
 
@@ -498,6 +499,13 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
       return t('vm.tip_select_target');
     }
     if (currentDiskState.value === 'UNDEPLOYED') {
+      return t('vm.tip_select_target');
+    }
+    if (currentDiskState.value === 'ERROR') {
+      const dev = selectedDisk.value?.device || activeVmTargetDevice.value;
+      if (dev && errorDevices.value.has(dev)) {
+        return errorDevices.value.get(dev)!;
+      }
       return t('vm.tip_select_target');
     }
     if (currentDiskState.value === 'TESTING') {

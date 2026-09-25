@@ -118,6 +118,8 @@
         "
         :isEjecting="ejectingDevices.has(disk.device)"
         :customIcon="getCustomIcon(disk)"
+        :isLocked="isLocked"
+        :lockReason="lockReason"
         @select="emit('select-disk', disk)"
         @toggle="emit('toggle-disk', disk)"
         @pick-icon="emit('pick-icon', disk)"
