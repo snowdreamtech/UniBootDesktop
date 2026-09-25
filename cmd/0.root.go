@@ -10,7 +10,6 @@ import (
 	"github.com/snowdreamtech/unigodesktop/internal/cli/output"
 	"github.com/snowdreamtech/unigodesktop/internal/env"
 	"github.com/snowdreamtech/unigodesktop/internal/errors"
-	"github.com/snowdreamtech/unigodesktop/internal/hello"
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/internal/updater"
 	"github.com/spf13/cobra"
@@ -72,8 +71,7 @@ var rootCmd = &cobra.Command{
 		if WailsRunner != nil {
 			return WailsRunner()
 		}
-		hello.PrintHello()
-		return nil
+		return cmd.Help()
 	},
 }
 
