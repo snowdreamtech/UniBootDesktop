@@ -24,12 +24,11 @@ git:
 before:
   hooks:
     - go mod tidy
-    # Build Vue 3 i18n frontend assets before Go compilation
-    - cd frontend && npm install && npm run build
     # Generate shell completion scripts dynamically before building packages
-    - go run . completion -d ./completions --all
+    # NOTE: Uses -tags nogui to compile CLI-only (no Wails/CGO/frontend deps)
+    - go run -tags nogui . completion -d ./completions --all
     # Generate manpages
-    - go run . generate manpage -d ./manpages
+    - go run -tags nogui . generate manpage -d ./manpages
 
 builds:
   - id: unigodesktop-cli
@@ -38,6 +37,7 @@ builds:
       - CGO_ENABLED=0
     flags:
       - -trimpath
+      - -tags=nogui
     ldflags:
       - -s -w
       - -X 'github.com/snowdreamtech/unigodesktop/internal/env.ProjectName=unigodesktop'
