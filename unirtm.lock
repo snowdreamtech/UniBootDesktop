@@ -6,35 +6,27 @@ version = "1.51.1"
 backend = "github"
 
 [tools."github:anchore/syft"."platforms.linux-amd64"]
-checksum = "sha256:8fcb33017a0dc1058298c923c436d19dfa68ae93968e0b423248542e3afb9fc3"
 url = "https://github.com/anchore/syft/releases/download/v1.51.1/syft_1.51.1_linux_amd64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.linux-amd64-musl"]
-checksum = "sha256:8fcb33017a0dc1058298c923c436d19dfa68ae93968e0b423248542e3afb9fc3"
 url = "https://github.com/anchore/syft/releases/download/v1.51.1/syft_1.51.1_linux_amd64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.linux-arm64"]
-checksum = "sha256:a7fd2b784e6664acd44719270574f6cd8c6864fc2b1700bf9099bd1cccda7d7f"
 url = "https://github.com/anchore/syft/releases/download/v1.51.1/syft_1.51.1_linux_arm64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.linux-arm64-musl"]
-checksum = "sha256:a7fd2b784e6664acd44719270574f6cd8c6864fc2b1700bf9099bd1cccda7d7f"
 url = "https://github.com/anchore/syft/releases/download/v1.51.1/syft_1.51.1_linux_arm64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.macos-amd64"]
-checksum = "sha256:0e186ce1d4351ec276126851ca3ff258ed070e93e73574ed64858d4fc2339867"
 url = "https://github.com/anchore/syft/releases/download/v1.51.1/syft_1.51.1_darwin_amd64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.macos-arm64"]
-checksum = "sha256:ac063af3b9874769deb7ea1e6d76841e68f9e3bb50cd654226fc977de65532c1"
 url = "https://github.com/anchore/syft/releases/download/v1.51.1/syft_1.51.1_darwin_arm64.tar.gz"
 
 [tools."github:anchore/syft"."platforms.windows-amd64"]
-checksum = "sha256:5e4bc3e6b6344b4625de0f7aa5351aaa72856d11d78462972de0a101ee2c1c8f"
 url = "https://github.com/anchore/syft/releases/download/v1.51.1/syft_1.51.1_windows_amd64.zip"
 
 [tools."github:anchore/syft"."platforms.windows-arm64"]
-checksum = "sha256:fa735ee4c25b90b93d6795a15b90d6a0bae78eb5ad7d3d4591b3c10faa3463ad"
 url = "https://github.com/anchore/syft/releases/download/v1.51.1/syft_1.51.1_windows_arm64.zip"
 
 [[tools."github:aquasecurity/trivy"]]
@@ -339,35 +331,27 @@ version = "2.18.0"
 backend = "github"
 
 [tools."github:goreleaser/goreleaser"."platforms.linux-amd64"]
-checksum = "sha256:41cdf49b653784b03a08013dd99e382cd5d463049e915c2d818eaed182ae6197"
 url = "https://github.com/goreleaser/goreleaser/releases/download/v2.18.0/goreleaser_Linux_x86_64.tar.gz"
 
 [tools."github:goreleaser/goreleaser"."platforms.linux-amd64-musl"]
-checksum = "sha256:41cdf49b653784b03a08013dd99e382cd5d463049e915c2d818eaed182ae6197"
 url = "https://github.com/goreleaser/goreleaser/releases/download/v2.18.0/goreleaser_Linux_x86_64.tar.gz"
 
 [tools."github:goreleaser/goreleaser"."platforms.linux-arm64"]
-checksum = "sha256:1975566c9668e6f4247e6bb57656f21da13635c24d948ef47b1232e5c864a35b"
 url = "https://github.com/goreleaser/goreleaser/releases/download/v2.18.0/goreleaser_Linux_arm64.tar.gz"
 
 [tools."github:goreleaser/goreleaser"."platforms.linux-arm64-musl"]
-checksum = "sha256:1975566c9668e6f4247e6bb57656f21da13635c24d948ef47b1232e5c864a35b"
 url = "https://github.com/goreleaser/goreleaser/releases/download/v2.18.0/goreleaser_Linux_arm64.tar.gz"
 
 [tools."github:goreleaser/goreleaser"."platforms.macos-amd64"]
-checksum = "sha256:c115f9ca07163d55885ba2276c5c2efebc95d60f7f7f69fe2dd6a54e97ac6db4"
 url = "https://github.com/goreleaser/goreleaser/releases/download/v2.18.0/goreleaser_Darwin_x86_64.tar.gz"
 
 [tools."github:goreleaser/goreleaser"."platforms.macos-arm64"]
-checksum = "sha256:1c42b87cbce094a60f1a94dab0c71f640dbe4396fa5dc632b5c25bf14b1e88fc"
 url = "https://github.com/goreleaser/goreleaser/releases/download/v2.18.0/goreleaser_Darwin_arm64.tar.gz"
 
 [tools."github:goreleaser/goreleaser"."platforms.windows-amd64"]
-checksum = "sha256:cbd0aeab833806b6c07e2d156c2c9baaffa6e3d1fb870071bf3efc9d9e5b4777"
 url = "https://github.com/goreleaser/goreleaser/releases/download/v2.18.0/goreleaser_Windows_x86_64.zip"
 
 [tools."github:goreleaser/goreleaser"."platforms.windows-arm64"]
-checksum = "sha256:43647ce4e0fbc624d39dd095e0ed5bf55a11978ea58a74a91630fb26eea88511"
 url = "https://github.com/goreleaser/goreleaser/releases/download/v2.18.0/goreleaser_Windows_arm64.zip"
 
 [[tools."github:koalaman/shellcheck"]]
@@ -969,7 +953,7 @@ backend = "pipx"
 
 [[tools."pipx:clang-format"]]
 version = "23.1.1"
-backend = ""
+backend = "pipx"
 
 [tools."pipx:clang-format"."platforms.linux-amd64"]
 
