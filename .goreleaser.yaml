@@ -27,9 +27,9 @@ before:
     # Build Vue 3 i18n frontend assets before Go compilation
     - cd frontend && npm install && npm run build
     # Generate shell completion scripts dynamically before building packages
-    - go run ./main.go completion -d ./completions --all
+    - go run . completion -d ./completions --all
     # Generate manpages
-    - go run ./main.go generate manpage -d ./manpages
+    - go run . generate manpage -d ./manpages
 
 builds:
   - id: unigodesktop-cli
