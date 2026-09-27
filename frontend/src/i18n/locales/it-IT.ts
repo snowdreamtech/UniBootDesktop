@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const itIt: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "Modello per applicazioni desktop multipiattaforma (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "Saluti da UniGoDesktop!",
   "app.template_badge": "Modello desktop Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "Un modello di applicazione desktop moderno, robusto ed estensibile con i18n, temi e accelerazione di rete.",
+  "app.template_desc":
+    "Un modello di applicazione desktop moderno, robusto ed estensibile con i18n, temi e accelerazione di rete.",
   "common.autoDetect": "Rilevamento automatico",
   "common.langAuto": "Automatico",
   "common.lang": "Lingua",
@@ -94,5 +95,5 @@ export const itIt: TranslationDict = {
   "about.downloadingGuiUpdate": "Download aggiornamento ({progress}%)",
   "about.updateCompleteRestart": "Aggiornamento completato, riavvia l'applicazione",
   "about.onlineUpdateFailed": "Aggiornamento fallito: {error}",
-  "about.newVersionNotice": "🚀 Nuova versione {tag} disponibile!"
+  "about.newVersionNotice": "🚀 Nuova versione {tag} disponibile!",
 };

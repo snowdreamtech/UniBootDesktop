@@ -1,4 +1,4 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const zhCn: TranslationDict = {
   "app.title": "UniGoDesktop",
@@ -94,5 +94,5 @@ export const zhCn: TranslationDict = {
   "about.downloadingGuiUpdate": "正在下载更新 ({progress}%)",
   "about.updateCompleteRestart": "更新已完成，请重启应用",
   "about.onlineUpdateFailed": "更新失败: {error}",
-  "about.newVersionNotice": "🚀 发现新版本 {tag}！"
+  "about.newVersionNotice": "🚀 发现新版本 {tag}！",
 };

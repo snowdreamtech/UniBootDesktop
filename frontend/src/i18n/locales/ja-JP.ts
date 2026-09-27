@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const jaJp: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "クロスプラットフォームデスクトップアプリテンプレート (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "UniGoDesktop へようこそ！",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript アプリテンプレート",
-  "app.template_desc": "国際化、ダーク/ライトテーマ、ネットワークアクセラレーションを備えた最新かつ堅牢なクロスプラットフォームアプリテンプレート。",
+  "app.template_desc":
+    "国際化、ダーク/ライトテーマ、ネットワークアクセラレーションを備えた最新かつ堅牢なクロスプラットフォームアプリテンプレート。",
   "common.autoDetect": "自動判別",
   "common.langAuto": "自動",
   "common.lang": "言語",
@@ -94,5 +95,5 @@ export const jaJp: TranslationDict = {
   "about.downloadingGuiUpdate": "アップデータをダウンロード中 ({progress}%)",
   "about.updateCompleteRestart": "更新が完了しました。再起動してください",
   "about.onlineUpdateFailed": "更新失敗: {error}",
-  "about.newVersionNotice": "🚀 新バージョン {tag} が見つかりました！"
+  "about.newVersionNotice": "🚀 新バージョン {tag} が見つかりました！",
 };

@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const glEs: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "Modelo de aplicación de escritorio multiplataforma (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "Saúdos desde UniGoDesktop!",
   "app.template_badge": "Plantilla de escritorio Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "Una plantilla de escritorio moderna, robusta y extensible con i18n, temas y aceleración de red.",
+  "app.template_desc":
+    "Una plantilla de escritorio moderna, robusta y extensible con i18n, temas y aceleración de red.",
   "common.autoDetect": "Detección automática",
   "common.langAuto": "Automático",
   "common.lang": "Idioma",
@@ -94,5 +95,5 @@ export const glEs: TranslationDict = {
   "about.downloadingGuiUpdate": "Descargando actualización ({progress}%)",
   "about.updateCompleteRestart": "Actualización completada, reinicie la aplicación",
   "about.onlineUpdateFailed": "Error al actualizar: {error}",
-  "about.newVersionNotice": "🚀 ¡Nueva versión {tag} disponible!"
+  "about.newVersionNotice": "🚀 ¡Nueva versión {tag} disponible!",
 };

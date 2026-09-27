@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const viVn: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "Mẫu ứng dụng máy tính đa nền tảng (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "Lời chào từ UniGoDesktop!",
   "app.template_badge": "Mẫu ứng dụng Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "Mẫu ứng dụng máy tính đa nền tảng hiện đại, mạnh mẽ và mở rộng với đa ngôn ngữ, giao diện và tăng tốc mạng.",
+  "app.template_desc":
+    "Mẫu ứng dụng máy tính đa nền tảng hiện đại, mạnh mẽ và mở rộng với đa ngôn ngữ, giao diện và tăng tốc mạng.",
   "common.autoDetect": "Tự động nhận diện",
   "common.langAuto": "Tự động",
   "common.lang": "Ngôn ngữ",
@@ -94,5 +95,5 @@ export const viVn: TranslationDict = {
   "about.downloadingGuiUpdate": "Đang tải xuống bản cập nhật ({progress}%)",
   "about.updateCompleteRestart": "Cập nhật hoàn tất, vui lòng khởi động lại",
   "about.onlineUpdateFailed": "Cập nhật thất bại: {error}",
-  "about.newVersionNotice": "🚀 Có phiên bản mới {tag}!"
+  "about.newVersionNotice": "🚀 Có phiên bản mới {tag}!",
 };

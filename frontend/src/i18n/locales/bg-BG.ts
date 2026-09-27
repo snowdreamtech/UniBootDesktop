@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const bgBg: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "Кроссплатформенный шаблон десктопного приложения (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "Поздрави от UniGoDesktop!",
   "app.template_badge": "Шаблон десктопного приложения Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "Современный, надежный и расширяемый кроссплатформенный шаблон с интернационализацией, темами и сетевым ускорением.",
+  "app.template_desc":
+    "Современный, надежный и расширяемый кроссплатформенный шаблон с интернационализацией, темами и сетевым ускорением.",
   "common.autoDetect": "Автоматично откриване",
   "common.langAuto": "Автоматично",
   "common.lang": "Език",
@@ -94,5 +95,5 @@ export const bgBg: TranslationDict = {
   "about.downloadingGuiUpdate": "Загрузка обновления ({progress}%)",
   "about.updateCompleteRestart": "Обновление завершено, перезапустите приложение",
   "about.onlineUpdateFailed": "Сбой обновления: {error}",
-  "about.newVersionNotice": "🚀 Доступна новая версия {tag}!"
+  "about.newVersionNotice": "🚀 Доступна новая версия {tag}!",
 };

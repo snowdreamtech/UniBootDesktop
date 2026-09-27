@@ -6,13 +6,13 @@
         <div class="header-title">
           <span class="icon">⚙️</span>
           <div>
-            <h3>{{ t('settings.title') || 'Settings' }}</h3>
-            <span class="sub-title">{{ t('settings.subtitle') || 'Preferences & Configuration' }}</span>
+            <h3>{{ t("settings.title") || "Settings" }}</h3>
+            <span class="sub-title">{{ t("settings.subtitle") || "Preferences & Configuration" }}</span>
           </div>
         </div>
         <div class="header-actions">
           <span class="auto-save-tag" :class="{ saving: isAutoSaving }">
-            {{ saveStatusText || ('⚡ ' + (t('settings.realtime_save') || 'Auto-Save Ready')) }}
+            {{ saveStatusText || "⚡ " + (t("settings.realtime_save") || "Auto-Save Ready") }}
           </span>
           <button class="close-btn" @click="close" title="Close">✕</button>
         </div>
@@ -20,19 +20,11 @@
 
       <!-- Tab Navigation Bar -->
       <div class="tab-nav-bar">
-        <button 
-          class="tab-btn" 
-          :class="{ active: activeTab === 'general' }" 
-          @click="activeTab = 'general'"
-        >
-          <span class="tab-icon">⚙️</span> {{ t('settings.tab_general') || 'General' }}
+        <button class="tab-btn" :class="{ active: activeTab === 'general' }" @click="activeTab = 'general'">
+          <span class="tab-icon">⚙️</span> {{ t("settings.tab_general") || "General" }}
         </button>
-        <button 
-          class="tab-btn" 
-          :class="{ active: activeTab === 'network' }" 
-          @click="activeTab = 'network'"
-        >
-          <span class="tab-icon">🌐</span> {{ t('settings.tab_network') || 'Network & Proxy' }}
+        <button class="tab-btn" :class="{ active: activeTab === 'network' }" @click="activeTab = 'network'">
+          <span class="tab-icon">🌐</span> {{ t("settings.tab_network") || "Network & Proxy" }}
         </button>
       </div>
 
@@ -42,42 +34,34 @@
         <div v-if="activeTab === 'general'" class="tab-content">
           <div class="settings-section">
             <h4 class="section-title">
-              <span>⚙️ {{ t('settings.tab_general') || 'General Preferences' }}</span>
-              <span class="badge info">{{ t('settings.realtime_save') || 'Auto-Saved' }}</span>
+              <span>⚙️ {{ t("settings.tab_general") || "General Preferences" }}</span>
+              <span class="badge info">{{ t("settings.realtime_save") || "Auto-Saved" }}</span>
             </h4>
 
             <div class="grid-form">
               <!-- Language Selection -->
               <div class="form-group highlight-form-group">
-                <label class="form-label highlight-label">🌐 {{ t('settings.language') || 'Language' }}</label>
-                <CustomSelect
-                  v-model="appLanguage"
-                  :options="languageSelectOptions"
-                  @change="onLanguageChange"
-                />
+                <label class="form-label highlight-label">🌐 {{ t("settings.language") || "Language" }}</label>
+                <CustomSelect v-model="appLanguage" :options="languageSelectOptions" @change="onLanguageChange" />
               </div>
 
               <!-- Theme Selection -->
               <div class="form-group">
-                <label class="form-label">🎨 {{ t('settings.theme') || 'Appearance Theme' }}</label>
-                <CustomSelect
-                  v-model="appTheme"
-                  :options="themeSelectOptions"
-                  @change="onThemeChange"
-                />
+                <label class="form-label">🎨 {{ t("settings.theme") || "Appearance Theme" }}</label>
+                <CustomSelect v-model="appTheme" :options="themeSelectOptions" @change="onThemeChange" />
               </div>
 
               <!-- Auto Check Updates -->
               <div class="form-group span-full">
-                <label class="form-label">🔄 {{ t('settings.app_update') || 'Software Updates' }}</label>
+                <label class="form-label">🔄 {{ t("settings.app_update") || "Software Updates" }}</label>
                 <div class="radio-group horizontal">
                   <label class="radio-label">
                     <input type="radio" :value="true" v-model="autoCheckUpdate" @change="triggerAutoSave" />
-                    <span>{{ t('settings.update_auto') || 'Automatically check on startup' }}</span>
+                    <span>{{ t("settings.update_auto") || "Automatically check on startup" }}</span>
                   </label>
                   <label class="radio-label">
                     <input type="radio" :value="false" v-model="autoCheckUpdate" @change="triggerAutoSave" />
-                    <span>{{ t('settings.update_manual') || 'Manual check only' }}</span>
+                    <span>{{ t("settings.update_manual") || "Manual check only" }}</span>
                   </label>
                 </div>
               </div>
@@ -90,28 +74,26 @@
           <!-- Section 2A: GitHub Acceleration Mirror -->
           <div class="settings-section">
             <h4 class="section-title">
-              <span>⚡ {{ t('settings.github_proxy_title') || 'GitHub Acceleration Mirror' }}</span>
+              <span>⚡ {{ t("settings.github_proxy_title") || "GitHub Acceleration Mirror" }}</span>
             </h4>
             <p class="section-hint">
-              {{ t('settings.github_proxy_desc') || 'Accelerates asset downloads and update checks via public GitHub mirror endpoints.' }}
+              {{
+                t("settings.github_proxy_desc") ||
+                "Accelerates asset downloads and update checks via public GitHub mirror endpoints."
+              }}
             </p>
 
             <div class="form-group">
               <div class="label-row">
-                <label class="form-label">{{ t('settings.github_proxy') || 'Mirror URL Prefix' }}</label>
-                <button 
-                  v-if="proxyInputUrl" 
-                  type="button" 
-                  class="clear-mirror-btn" 
-                  @click="setMirror('')"
-                >
-                  {{ t('settings.proxy_direct') || 'Direct' }}
+                <label class="form-label">{{ t("settings.github_proxy") || "Mirror URL Prefix" }}</label>
+                <button v-if="proxyInputUrl" type="button" class="clear-mirror-btn" @click="setMirror('')">
+                  {{ t("settings.proxy_direct") || "Direct" }}
                 </button>
               </div>
-              <input 
-                v-model="proxyInputUrl" 
-                type="text" 
-                class="form-input" 
+              <input
+                v-model="proxyInputUrl"
+                type="text"
+                class="form-input"
                 :placeholder="t('settings.proxy_placeholder') || 'https://proxy.example.com/'"
                 @input="triggerAutoSave"
               />
@@ -119,7 +101,11 @@
 
             <div class="network-test-row">
               <button class="btn-secondary test-btn" :disabled="isTestingNet" @click="testConnection">
-                {{ isTestingNet ? (t('settings.testing_net') || 'Testing Latency...') : (t('settings.test_net') || 'Test GitHub Connectivity') }}
+                {{
+                  isTestingNet
+                    ? t("settings.testing_net") || "Testing Latency..."
+                    : t("settings.test_net") || "Test GitHub Connectivity"
+                }}
               </button>
               <span v-if="netTestResult" class="test-result" :class="netTestSuccess ? 'success' : 'error'">
                 {{ netTestResult }}
@@ -130,15 +116,16 @@
           <!-- Section 2B: Custom Network Proxy -->
           <div class="settings-section margin-top">
             <h4 class="section-title">
-              <span>🔌 {{ t('settings.system_proxy') || 'Custom Network Proxy' }}</span>
+              <span>🔌 {{ t("settings.system_proxy") || "Custom Network Proxy" }}</span>
             </h4>
 
             <div class="grid-form">
               <div class="form-group span-full">
-                <label class="form-label">{{ t('settings.proxy_proto') || 'Proxy Protocol' }}</label>
+                <label class="form-label">{{ t("settings.proxy_proto") || "Proxy Protocol" }}</label>
                 <div class="protocol-radio-bar">
                   <label class="protocol-pill" :class="{ active: proxyProtocol === 'direct' }">
-                    <input type="radio" v-model="proxyProtocol" value="direct" @change="triggerAutoSave" /> {{ t('settings.proxy_direct') || 'Direct' }}
+                    <input type="radio" v-model="proxyProtocol" value="direct" @change="triggerAutoSave" />
+                    {{ t("settings.proxy_direct") || "Direct" }}
                   </label>
                   <label class="protocol-pill" :class="{ active: proxyProtocol === 'http' }">
                     <input type="radio" v-model="proxyProtocol" value="http" @change="triggerAutoSave" /> HTTP
@@ -157,22 +144,22 @@
 
               <template v-if="proxyProtocol !== 'direct'">
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.proxy_host') || 'Proxy Host' }}</label>
-                  <input 
-                    v-model="proxyHost" 
-                    type="text" 
-                    class="form-input" 
+                  <label class="form-label">{{ t("settings.proxy_host") || "Proxy Host" }}</label>
+                  <input
+                    v-model="proxyHost"
+                    type="text"
+                    class="form-input"
                     placeholder="127.0.0.1"
                     @input="triggerAutoSave"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.proxy_port') || 'Proxy Port' }}</label>
-                  <input 
-                    v-model.number="proxyPort" 
-                    type="number" 
-                    class="form-input" 
+                  <label class="form-label">{{ t("settings.proxy_port") || "Proxy Port" }}</label>
+                  <input
+                    v-model.number="proxyPort"
+                    type="number"
+                    class="form-input"
                     placeholder="7890"
                     min="1"
                     max="65535"
@@ -181,22 +168,22 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.proxyAuthUserLabel') || 'Username (Optional)' }}</label>
-                  <input 
-                    v-model="proxyUser" 
-                    type="text" 
-                    class="form-input" 
+                  <label class="form-label">{{ t("settings.proxyAuthUserLabel") || "Username (Optional)" }}</label>
+                  <input
+                    v-model="proxyUser"
+                    type="text"
+                    class="form-input"
                     :placeholder="t('settings.proxyAuthUserPlaceholder') || 'Leave empty if none'"
                     @input="triggerAutoSave"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label">{{ t('settings.proxyAuthPassLabel') || 'Password (Optional)' }}</label>
-                  <input 
-                    v-model="proxyPassword" 
-                    type="password" 
-                    class="form-input" 
+                  <label class="form-label">{{ t("settings.proxyAuthPassLabel") || "Password (Optional)" }}</label>
+                  <input
+                    v-model="proxyPassword"
+                    type="password"
+                    class="form-input"
                     :placeholder="t('settings.proxyAuthPassPlaceholder') || 'Leave empty if none'"
                     @input="triggerAutoSave"
                   />
@@ -206,7 +193,11 @@
 
             <div class="network-test-row">
               <button class="btn-secondary test-btn" :disabled="isTestingProxy" @click="testNetworkProxy">
-                {{ isTestingProxy ? (t('settings.testingProxy') || 'Testing Proxy...') : (t('settings.testProxyConn') || 'Test Proxy Connection') }}
+                {{
+                  isTestingProxy
+                    ? t("settings.testingProxy") || "Testing Proxy..."
+                    : t("settings.testProxyConn") || "Test Proxy Connection"
+                }}
               </button>
               <span v-if="proxyTestResult" class="test-result" :class="proxyTestSuccess ? 'success' : 'error'">
                 {{ proxyTestResult }}
@@ -220,9 +211,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import { t, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from '../i18n';
-import CustomSelect from './CustomSelect.vue';
+import { ref, computed, watch } from "vue";
+import { t, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from "../i18n";
+import CustomSelect from "./CustomSelect.vue";
 
 const props = defineProps<{
   isOpen: boolean;
@@ -231,49 +222,49 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'close'): void;
-  (e: 'save', payload: any): void;
+  (e: "close"): void;
+  (e: "save", payload: any): void;
 }>();
 
-const activeTab = ref<'general' | 'network'>('general');
+const activeTab = ref<"general" | "network">("general");
 const isAutoSaving = ref(false);
-const saveStatusText = ref('');
+const saveStatusText = ref("");
 
 // General Settings
-const appLanguage = ref(selectedLangSetting.value || 'auto');
-const appTheme = ref('dark');
+const appLanguage = ref(selectedLangSetting.value || "auto");
+const appTheme = ref("dark");
 const autoCheckUpdate = ref(true);
 
 // Network Settings
-const proxyInputUrl = ref('');
+const proxyInputUrl = ref("");
 const isTestingNet = ref(false);
-const netTestResult = ref('');
+const netTestResult = ref("");
 const netTestSuccess = ref(false);
 
-const proxyProtocol = ref<'direct' | 'http' | 'https' | 'socks4' | 'socks5'>('direct');
-const proxyHost = ref('');
+const proxyProtocol = ref<"direct" | "http" | "https" | "socks4" | "socks5">("direct");
+const proxyHost = ref("");
 const proxyPort = ref(7890);
-const proxyUser = ref('');
-const proxyPassword = ref('');
+const proxyUser = ref("");
+const proxyPassword = ref("");
 const isTestingProxy = ref(false);
-const proxyTestResult = ref('');
+const proxyTestResult = ref("");
 const proxyTestSuccess = ref(false);
 
 let isInitializing = false;
 let autoSaveTimer: any = null;
 
 const languageSelectOptions = computed(() => [
-  { value: 'auto', label: '🌐 ' + (t('common.autoDetect') || 'Auto Detect') },
-  ...SUPPORTED_LANGUAGES.map(item => ({
+  { value: "auto", label: "🌐 " + (t("common.autoDetect") || "Auto Detect") },
+  ...SUPPORTED_LANGUAGES.map((item) => ({
     value: item.code,
-    label: item.nativeName
-  }))
+    label: item.nativeName,
+  })),
 ]);
 
 const themeSelectOptions = computed(() => [
-  { value: 'dark', label: '🌙 ' + (t('theme.dark') || 'Dark Mode') },
-  { value: 'light', label: '☀️ ' + (t('theme.light') || 'Light Mode') },
-  { value: 'system', label: '💻 ' + (t('theme.system') || 'System Default') }
+  { value: "dark", label: "🌙 " + (t("theme.dark") || "Dark Mode") },
+  { value: "light", label: "☀️ " + (t("theme.light") || "Light Mode") },
+  { value: "system", label: "💻 " + (t("theme.system") || "System Default") },
 ]);
 
 function setMirror(url: string) {
@@ -293,11 +284,11 @@ function onThemeChange(val: string) {
 
 function applyTheme(themeName: string) {
   let applied = themeName;
-  if (themeName === 'system') {
-    const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    applied = isDark ? 'dark' : 'light';
+  if (themeName === "system") {
+    const isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applied = isDark ? "dark" : "light";
   }
-  document.documentElement.setAttribute('data-theme', applied);
+  document.documentElement.setAttribute("data-theme", applied);
 }
 
 async function loadFullConfig() {
@@ -307,20 +298,20 @@ async function loadFullConfig() {
       const cfg = await (window as any).go.main.App.GetConfig();
       if (cfg) {
         autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
-        appTheme.value = cfg.theme || 'dark';
-        appLanguage.value = cfg.language || 'auto';
+        appTheme.value = cfg.theme || "dark";
+        appLanguage.value = cfg.language || "auto";
         setLanguage(appLanguage.value);
         applyTheme(appTheme.value);
 
-        proxyInputUrl.value = cfg.githubProxy || '';
-        proxyProtocol.value = cfg.proxyProtocol || 'direct';
-        proxyHost.value = cfg.proxyHost || '';
+        proxyInputUrl.value = cfg.githubProxy || "";
+        proxyProtocol.value = cfg.proxyProtocol || "direct";
+        proxyHost.value = cfg.proxyHost || "";
         proxyPort.value = cfg.proxyPort || 7890;
-        proxyUser.value = cfg.proxyUser || '';
-        proxyPassword.value = cfg.proxyPassword || '';
+        proxyUser.value = cfg.proxyUser || "";
+        proxyPassword.value = cfg.proxyPassword || "";
       }
     } catch (e) {
-      console.error('Failed to load full config:', e);
+      console.error("Failed to load full config:", e);
     }
   }
   setTimeout(() => {
@@ -333,7 +324,7 @@ function triggerAutoSave() {
   if (autoSaveTimer) clearTimeout(autoSaveTimer);
 
   isAutoSaving.value = true;
-  saveStatusText.value = t('settings.saveStatusEnabled') || 'Saving...';
+  saveStatusText.value = t("settings.saveStatusEnabled") || "Saving...";
 
   autoSaveTimer = setTimeout(async () => {
     const payload = {
@@ -352,17 +343,17 @@ function triggerAutoSave() {
       try {
         await (window as any).go.main.App.SaveConfig(payload);
       } catch (err) {
-        console.error('Failed to save config to backend:', err);
+        console.error("Failed to save config to backend:", err);
       }
     }
 
-    emit('save', payload);
+    emit("save", payload);
     isAutoSaving.value = false;
-    saveStatusText.value = t('settings.saveStatusApplied') || 'Saved';
+    saveStatusText.value = t("settings.saveStatusApplied") || "Saved";
 
     setTimeout(() => {
       if (!isAutoSaving.value) {
-        saveStatusText.value = '';
+        saveStatusText.value = "";
       }
     }, 2000);
   }, 300);
@@ -370,87 +361,95 @@ function triggerAutoSave() {
 
 async function testConnection() {
   isTestingNet.value = true;
-  netTestResult.value = '';
+  netTestResult.value = "";
 
-  const targetUrl = proxyInputUrl.value.trim() 
-    ? `${proxyInputUrl.value.trim().replace(/\/+$/, '')}/https://api.github.com`
-    : 'https://api.github.com';
+  const targetUrl = proxyInputUrl.value.trim()
+    ? `${proxyInputUrl.value.trim().replace(/\/+$/, "")}/https://api.github.com`
+    : "https://api.github.com";
 
   try {
     const wailsApp = (window as any)?.go?.main?.App;
-    if (wailsApp && typeof wailsApp.TestNetwork === 'function') {
+    if (wailsApp && typeof wailsApp.TestNetwork === "function") {
       const res = await wailsApp.TestNetwork(targetUrl);
       netTestSuccess.value = res.connected;
       if (res.connected) {
-        netTestResult.value = `✓ ${t('settings.connected')} (${res.latencyMs}ms)`;
+        netTestResult.value = `✓ ${t("settings.connected")} (${res.latencyMs}ms)`;
       } else {
-        netTestResult.value = `✕ ${t('settings.connectFailed')}: ${res.error || 'Timeout'}`;
+        netTestResult.value = `✕ ${t("settings.connectFailed")}: ${res.error || "Timeout"}`;
       }
     } else {
       netTestSuccess.value = true;
-      netTestResult.value = `✓ ${t('settings.connected')} (56ms)`;
+      netTestResult.value = `✓ ${t("settings.connected")} (56ms)`;
     }
   } catch (err: any) {
     netTestSuccess.value = false;
-    netTestResult.value = `✕ ${t('settings.connectFailed')}: ${err?.message || String(err)}`;
+    netTestResult.value = `✕ ${t("settings.connectFailed")}: ${err?.message || String(err)}`;
   } finally {
     isTestingNet.value = false;
   }
 }
 
 async function testNetworkProxy() {
-  if (proxyProtocol.value === 'direct') {
-    proxyTestResult.value = t('settings.directModeNotice') || 'Direct mode: no proxy active';
+  if (proxyProtocol.value === "direct") {
+    proxyTestResult.value = t("settings.directModeNotice") || "Direct mode: no proxy active";
     proxyTestSuccess.value = true;
     return;
   }
   if (!proxyHost.value.trim()) {
-    proxyTestResult.value = t('settings.proxyHostRequired') || 'Please enter proxy host';
+    proxyTestResult.value = t("settings.proxyHostRequired") || "Please enter proxy host";
     proxyTestSuccess.value = false;
     return;
   }
 
   isTestingProxy.value = true;
-  proxyTestResult.value = '';
+  proxyTestResult.value = "";
 
   try {
     const wailsApp = (window as any)?.go?.main?.App;
-    if (wailsApp && typeof wailsApp.TestNetwork === 'function') {
-      const res = await wailsApp.TestNetwork('https://api.github.com');
+    if (wailsApp && typeof wailsApp.TestNetwork === "function") {
+      const res = await wailsApp.TestNetwork("https://api.github.com");
       proxyTestSuccess.value = res.connected;
       proxyTestResult.value = res.connected
-        ? `✓ ${proxyProtocol.value.toUpperCase()}://${proxyHost.value}:${proxyPort.value} ${t('settings.connected')} (${res.latencyMs}ms)`
-        : `✕ ${t('settings.connectFailed')}: ${res.error || 'Unreachable'}`;
+        ? `✓ ${proxyProtocol.value.toUpperCase()}://${proxyHost.value}:${proxyPort.value} ${t("settings.connected")} (${res.latencyMs}ms)`
+        : `✕ ${t("settings.connectFailed")}: ${res.error || "Unreachable"}`;
     } else {
       proxyTestSuccess.value = true;
-      proxyTestResult.value = `✓ ${proxyProtocol.value.toUpperCase()}://${proxyHost.value}:${proxyPort.value} ${t('settings.connected')}`;
+      proxyTestResult.value = `✓ ${proxyProtocol.value.toUpperCase()}://${proxyHost.value}:${proxyPort.value} ${t("settings.connected")}`;
     }
   } catch (e: any) {
     proxyTestSuccess.value = false;
-    proxyTestResult.value = `✕ ${t('settings.connectFailed')}: ${e?.message || String(e)}`;
+    proxyTestResult.value = `✕ ${t("settings.connectFailed")}: ${e?.message || String(e)}`;
   } finally {
     isTestingProxy.value = false;
   }
 }
 
 function close() {
-  emit('close');
+  emit("close");
 }
 
-watch(() => props.isOpen, (val) => {
-  if (val) {
-    if (props.initialTab === 'network' || props.initialTab === 'general') {
-      activeTab.value = props.initialTab;
+watch(
+  () => props.isOpen,
+  (val) => {
+    if (val) {
+      if (props.initialTab === "network" || props.initialTab === "general") {
+        activeTab.value = props.initialTab;
+      }
+      loadFullConfig();
     }
-    loadFullConfig();
-  }
-}, { immediate: true });
+  },
+  { immediate: true }
+);
 
-watch(() => props.currentProxy, (val) => {
-  if (val !== undefined && val !== proxyInputUrl.value) {
-    proxyInputUrl.value = val;
-  }
-}, { immediate: true });
+watch(
+  () => props.currentProxy,
+  (val) => {
+    if (val !== undefined && val !== proxyInputUrl.value) {
+      proxyInputUrl.value = val;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped>
@@ -471,7 +470,9 @@ watch(() => props.currentProxy, (val) => {
 .glass-modal {
   background: var(--modal-bg);
   border: 1px solid var(--card-border);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 24px var(--accent-cyan-glow);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.3),
+    0 0 24px var(--accent-cyan-glow);
   border-radius: 16px;
   width: 92%;
   max-width: 720px;
@@ -702,7 +703,8 @@ watch(() => props.currentProxy, (val) => {
   line-height: 1.4;
 }
 
-.form-input, .form-select {
+.form-input,
+.form-select {
   background: var(--input-bg);
   border: 1px solid var(--card-border);
   border-radius: 8px;
@@ -712,7 +714,7 @@ watch(() => props.currentProxy, (val) => {
   outline: none;
 }
 
-[data-theme="light"] .form-input, 
+[data-theme="light"] .form-input,
 [data-theme="light"] .form-select {
   background: #ffffff;
   border-color: #cbd5e1;
@@ -730,7 +732,8 @@ watch(() => props.currentProxy, (val) => {
   color: rgba(148, 163, 184, 0.22);
 }
 
-.form-input:focus, .form-select:focus {
+.form-input:focus,
+.form-select:focus {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 10px var(--accent-cyan-glow);
 }

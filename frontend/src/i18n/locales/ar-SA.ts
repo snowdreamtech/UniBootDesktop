@@ -1,4 +1,4 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const arSa: TranslationDict = {
   "app.title": "UniGoDesktop",
@@ -94,5 +94,5 @@ export const arSa: TranslationDict = {
   "about.downloadingGuiUpdate": "جارٍ تنزيل التحديث ({progress}%)",
   "about.updateCompleteRestart": "اكتمل التحديث، يُرجى إعادة تشغيل التطبيق",
   "about.onlineUpdateFailed": "فشل التحديث: {error}",
-  "about.newVersionNotice": "🚀 إصدار جديد {tag} متوفر الآن!"
+  "about.newVersionNotice": "🚀 إصدار جديد {tag} متوفر الآن!",
 };

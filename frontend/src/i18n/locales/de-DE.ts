@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const deDe: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "Plattformübergreifende Desktop-Vorlage (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "Grüße von UniGoDesktop!",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript Desktop-Vorlage",
-  "app.template_desc": "Eine moderne, robuste und erweiterbare plattformübergreifende Desktop-Vorlage mit i18n, Themes und Netzwerkbeschleunigung.",
+  "app.template_desc":
+    "Eine moderne, robuste und erweiterbare plattformübergreifende Desktop-Vorlage mit i18n, Themes und Netzwerkbeschleunigung.",
   "common.autoDetect": "Automatische Erkennung",
   "common.langAuto": "Automatisch",
   "common.lang": "Sprache",
@@ -49,7 +50,8 @@ export const deDe: TranslationDict = {
   "settings.update_auto": "Beim Start automatisch nach Updates suchen",
   "settings.update_manual": "Nur manuell prüfen",
   "settings.github_proxy_title": "GitHub-Mirror-Beschleunigung",
-  "settings.github_proxy_desc": "Konfigurieren Sie eine Mirror-URL für Downloads oder lassen Sie das Feld leer für eine Direktverbindung.",
+  "settings.github_proxy_desc":
+    "Konfigurieren Sie eine Mirror-URL für Downloads oder lassen Sie das Feld leer für eine Direktverbindung.",
   "settings.github_proxy": "Mirror-Präfix",
   "settings.githubProxy": "GitHub-Mirror",
   "settings.proxy_placeholder": "Standardmäßig leer (Direktverbindung). z.B. https://proxy.example.com/",
@@ -94,5 +96,5 @@ export const deDe: TranslationDict = {
   "about.downloadingGuiUpdate": "Update wird heruntergeladen ({progress}%)",
   "about.updateCompleteRestart": "Update abgeschlossen, bitte neu starten",
   "about.onlineUpdateFailed": "Update fehlgeschlagen: {error}",
-  "about.newVersionNotice": "🚀 Neue Version {tag} verfügbar!"
+  "about.newVersionNotice": "🚀 Neue Version {tag} verfügbar!",
 };

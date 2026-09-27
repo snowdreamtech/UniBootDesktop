@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const ptPt: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "Modelo de aplicação desktop multiplataforma (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "Saudações do UniGoDesktop!",
   "app.template_badge": "Modelo desktop Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "Um modelo moderno, robusto e extensível de aplicativo desktop multiplataforma com i18n, temas e aceleração de rede.",
+  "app.template_desc":
+    "Um modelo moderno, robusto e extensível de aplicativo desktop multiplataforma com i18n, temas e aceleração de rede.",
   "common.autoDetect": "Detecção automática",
   "common.langAuto": "Automático",
   "common.lang": "Idioma",
@@ -49,7 +50,8 @@ export const ptPt: TranslationDict = {
   "settings.update_auto": "Verificar automaticamente ao iniciar",
   "settings.update_manual": "Apenas verificação manual",
   "settings.github_proxy_title": "Aceleração com espelho do GitHub",
-  "settings.github_proxy_desc": "Configure uma URL de espelho opcional para downloads ou deixe em branco para conexão direta.",
+  "settings.github_proxy_desc":
+    "Configure uma URL de espelho opcional para downloads ou deixe em branco para conexão direta.",
   "settings.github_proxy": "Prefixo do espelho",
   "settings.githubProxy": "Espelho GitHub",
   "settings.proxy_placeholder": "Padrão vazio (conexão direta). Ex: https://proxy.example.com/",
@@ -94,5 +96,5 @@ export const ptPt: TranslationDict = {
   "about.downloadingGuiUpdate": "Baixando atualização ({progress}%)",
   "about.updateCompleteRestart": "Atualização concluída, reinicie o aplicativo",
   "about.onlineUpdateFailed": "Falha na atualização: {error}",
-  "about.newVersionNotice": "🚀 Nova versão {tag} disponível!"
+  "about.newVersionNotice": "🚀 Nova versão {tag} disponível!",
 };

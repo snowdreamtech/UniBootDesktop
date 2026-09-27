@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from "vue";
 
 export interface SelectOption {
   value: string;
@@ -35,13 +35,13 @@ const props = defineProps<{
   options: SelectOption[];
 }>();
 
-const emit = defineEmits(['update:modelValue', 'change']);
+const emit = defineEmits(["update:modelValue", "change"]);
 
 const isOpen = ref(false);
 const containerRef = ref<HTMLElement | null>(null);
 
 const selectedOption = computed(() => {
-  return props.options.find(o => o.value === props.modelValue);
+  return props.options.find((o) => o.value === props.modelValue);
 });
 
 function toggleOpen() {
@@ -49,8 +49,8 @@ function toggleOpen() {
 }
 
 function selectOption(val: string) {
-  emit('update:modelValue', val);
-  emit('change', val);
+  emit("update:modelValue", val);
+  emit("change", val);
   isOpen.value = false;
 }
 
@@ -61,11 +61,11 @@ function handleClickOutside(e: MouseEvent) {
 }
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
+  document.addEventListener("click", handleClickOutside);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
+  document.removeEventListener("click", handleClickOutside);
 });
 </script>
 

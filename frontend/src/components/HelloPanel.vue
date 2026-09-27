@@ -5,13 +5,15 @@
       <div class="hero-content">
         <div class="hero-badge">
           <span class="sparkle-icon">✨</span>
-          <span>{{ t('app.template_badge') || 'Go + Wails + Vue 3 + TypeScript Template' }}</span>
+          <span>{{ t("app.template_badge") || "Go + Wails + Vue 3 + TypeScript Template" }}</span>
         </div>
         <h1 class="hero-title">
           {{ heroGreeting }}
         </h1>
         <p class="hero-subtitle">
-          {{ t('app.template_desc') || 'A modern, robust, and extensible cross-platform desktop application template.' }}
+          {{
+            t("app.template_desc") || "A modern, robust, and extensible cross-platform desktop application template."
+          }}
         </p>
 
         <!-- Interactive Greet Demonstration -->
@@ -28,7 +30,7 @@
           </div>
           <button class="greet-btn primary-btn" :disabled="loadingGreet" @click="handleGreet">
             <span v-if="loadingGreet" class="spin-icon">⏳</span>
-            <span v-else>👋 {{ t('hello.greet_btn') || 'Say Hello' }}</span>
+            <span v-else>👋 {{ t("hello.greet_btn") || "Say Hello" }}</span>
           </button>
         </div>
 
@@ -50,26 +52,26 @@
             <span>💻</span>
           </div>
           <div>
-            <h3>{{ t('hello.system_title') || 'Runtime Environment' }}</h3>
-            <span class="card-desc">{{ t('hello.system_desc') || 'Underlying operating system and Go runtime' }}</span>
+            <h3>{{ t("hello.system_title") || "Runtime Environment" }}</h3>
+            <span class="card-desc">{{ t("hello.system_desc") || "Underlying operating system and Go runtime" }}</span>
           </div>
         </div>
 
         <div class="spec-list">
           <div class="spec-item">
-            <span class="spec-label">{{ t('hello.os_platform') || 'Platform' }}</span>
+            <span class="spec-label">{{ t("hello.os_platform") || "Platform" }}</span>
             <span class="spec-val highlight">{{ sysInfo.os }} / {{ sysInfo.arch }}</span>
           </div>
           <div class="spec-item">
-            <span class="spec-label">{{ t('hello.go_version') || 'Go Version' }}</span>
-            <span class="spec-val font-mono">{{ sysInfo.goVersion || 'Go 1.25+' }}</span>
+            <span class="spec-label">{{ t("hello.go_version") || "Go Version" }}</span>
+            <span class="spec-val font-mono">{{ sysInfo.goVersion || "Go 1.25+" }}</span>
           </div>
           <div class="spec-item">
-            <span class="spec-label">{{ t('hello.app_version') || 'Template Version' }}</span>
-            <span class="spec-val font-mono">{{ sysInfo.version || 'v1.0.0' }}</span>
+            <span class="spec-label">{{ t("hello.app_version") || "Template Version" }}</span>
+            <span class="spec-val font-mono">{{ sysInfo.version || "v1.0.0" }}</span>
           </div>
           <div class="spec-item">
-            <span class="spec-label">{{ t('hello.wails_engine') || 'GUI Engine' }}</span>
+            <span class="spec-label">{{ t("hello.wails_engine") || "GUI Engine" }}</span>
             <span class="spec-val">Wails v2 + WebKit</span>
           </div>
         </div>
@@ -82,24 +84,26 @@
             <span>🌐</span>
           </div>
           <div>
-            <h3>{{ t('hello.network_title') || 'Network & Proxy' }}</h3>
-            <span class="card-desc">{{ t('hello.network_desc') || 'Proxy routing and connectivity diagnostic' }}</span>
+            <h3>{{ t("hello.network_title") || "Network & Proxy" }}</h3>
+            <span class="card-desc">{{ t("hello.network_desc") || "Proxy routing and connectivity diagnostic" }}</span>
           </div>
         </div>
 
         <div class="spec-list">
           <div class="spec-item">
-            <span class="spec-label">{{ t('settings.proxyProtocol') || 'Proxy Mode' }}</span>
+            <span class="spec-label">{{ t("settings.proxyProtocol") || "Proxy Mode" }}</span>
             <span class="spec-val badge" :class="proxyModeClass">
               {{ proxyModeText }}
             </span>
           </div>
           <div class="spec-item">
-            <span class="spec-label">{{ t('settings.githubProxy') || 'GitHub Mirror' }}</span>
-            <span class="spec-val truncate">{{ appConfig?.githubProxy || t('settings.proxy_direct') || 'Direct' }}</span>
+            <span class="spec-label">{{ t("settings.githubProxy") || "GitHub Mirror" }}</span>
+            <span class="spec-val truncate">{{
+              appConfig?.githubProxy || t("settings.proxy_direct") || "Direct"
+            }}</span>
           </div>
           <div class="spec-item">
-            <span class="spec-label">{{ t('hello.ping_latency') || 'Latency / RTT' }}</span>
+            <span class="spec-label">{{ t("hello.ping_latency") || "Latency / RTT" }}</span>
             <span class="spec-val" :class="latencyClass">
               {{ latencyText }}
             </span>
@@ -109,7 +113,7 @@
         <div class="card-action">
           <button class="test-network-btn" :disabled="testingNetwork" @click="handleTestNetwork">
             <span v-if="testingNetwork" class="spin-icon">🔄</span>
-            <span v-else>⚡ {{ t('hello.test_speed_btn') || 'Test Connectivity' }}</span>
+            <span v-else>⚡ {{ t("hello.test_speed_btn") || "Test Connectivity" }}</span>
           </button>
         </div>
       </div>
@@ -121,8 +125,8 @@
             <span>🚀</span>
           </div>
           <div>
-            <h3>{{ t('hello.quick_actions') || 'Quick Actions' }}</h3>
-            <span class="card-desc">{{ t('hello.quick_desc') || 'Configure preferences and inspect details' }}</span>
+            <h3>{{ t("hello.quick_actions") || "Quick Actions" }}</h3>
+            <span class="card-desc">{{ t("hello.quick_desc") || "Configure preferences and inspect details" }}</span>
           </div>
         </div>
 
@@ -130,8 +134,8 @@
           <button class="nav-tile" @click="$emit('open-settings')">
             <span class="tile-icon">⚙️</span>
             <div class="tile-text">
-              <span class="tile-title">{{ t('settings.title') || 'Preferences' }}</span>
-              <span class="tile-subtitle">{{ t('hello.settings_sub') || 'Theme, language, network' }}</span>
+              <span class="tile-title">{{ t("settings.title") || "Preferences" }}</span>
+              <span class="tile-subtitle">{{ t("hello.settings_sub") || "Theme, language, network" }}</span>
             </div>
             <span class="tile-arrow">›</span>
           </button>
@@ -139,8 +143,8 @@
           <button class="nav-tile" @click="$emit('open-about')">
             <span class="tile-icon">ℹ️</span>
             <div class="tile-text">
-              <span class="tile-title">{{ t('about.title') || 'About' }}</span>
-              <span class="tile-subtitle">{{ t('hello.about_sub') || 'Environment specs and update' }}</span>
+              <span class="tile-title">{{ t("about.title") || "About" }}</span>
+              <span class="tile-subtitle">{{ t("hello.about_sub") || "Environment specs and update" }}</span>
             </div>
             <span class="tile-arrow">›</span>
           </button>
@@ -148,8 +152,8 @@
           <button class="nav-tile" @click="openDocs">
             <span class="tile-icon">📖</span>
             <div class="tile-text">
-              <span class="tile-title">{{ t('hello.docs_title') || 'Documentation' }}</span>
-              <span class="tile-subtitle">{{ t('hello.docs_sub') || 'GitHub repository and guide' }}</span>
+              <span class="tile-title">{{ t("hello.docs_title") || "Documentation" }}</span>
+              <span class="tile-subtitle">{{ t("hello.docs_sub") || "GitHub repository and guide" }}</span>
             </div>
             <span class="tile-arrow">↗</span>
           </button>
@@ -160,21 +164,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { t } from '../i18n';
-import { Greet, GetSystemInfo, TestNetwork } from '../../wailsjs/go/main/App';
+import { ref, computed, onMounted } from "vue";
+import { t } from "../i18n";
+import { Greet, GetSystemInfo, TestNetwork } from "../../wailsjs/go/main/App";
 
 const props = defineProps<{
   appConfig?: any;
 }>();
 
 defineEmits<{
-  (e: 'open-settings'): void;
-  (e: 'open-about'): void;
+  (e: "open-settings"): void;
+  (e: "open-about"): void;
 }>();
 
-const userName = ref('');
-const greetReply = ref('');
+const userName = ref("");
+const greetReply = ref("");
 const loadingGreet = ref(false);
 
 const sysInfo = ref<{
@@ -184,11 +188,11 @@ const sysInfo = ref<{
   appName: string;
   version: string;
 }>({
-  os: 'darwin',
-  arch: 'arm64',
-  goVersion: 'go1.25',
-  appName: 'UniGoDesktop',
-  version: 'v1.0.0',
+  os: "darwin",
+  arch: "arm64",
+  goVersion: "go1.25",
+  appName: "UniGoDesktop",
+  version: "v1.0.0",
 });
 
 const testingNetwork = ref(false);
@@ -196,34 +200,34 @@ const latencyMs = ref<number | null>(null);
 const networkConnected = ref<boolean | null>(null);
 
 const heroGreeting = computed(() => {
-  return t('app.greeting') || 'Hello World From UniGoDesktop!';
+  return t("app.greeting") || "Hello World From UniGoDesktop!";
 });
 
 const proxyModeText = computed(() => {
   const p = props.appConfig?.proxyProtocol;
-  if (!p || p === 'direct') return t('settings.proxyDirect') || 'Direct';
+  if (!p || p === "direct") return t("settings.proxyDirect") || "Direct";
   return p.toUpperCase();
 });
 
 const proxyModeClass = computed(() => {
   const p = props.appConfig?.proxyProtocol;
-  if (!p || p === 'direct') return 'badge-neutral';
-  return 'badge-active';
+  if (!p || p === "direct") return "badge-neutral";
+  return "badge-active";
 });
 
 const latencyText = computed(() => {
-  if (testingNetwork.value) return t('hello.testing') || 'Testing...';
-  if (latencyMs.value === null) return t('hello.untested') || 'Not tested';
-  if (networkConnected.value === false) return t('hello.failed') || 'Unreachable';
+  if (testingNetwork.value) return t("hello.testing") || "Testing...";
+  if (latencyMs.value === null) return t("hello.untested") || "Not tested";
+  if (networkConnected.value === false) return t("hello.failed") || "Unreachable";
   return `${latencyMs.value} ms`;
 });
 
 const latencyClass = computed(() => {
-  if (latencyMs.value === null) return '';
-  if (networkConnected.value === false) return 'text-danger';
-  if (latencyMs.value < 200) return 'text-success';
-  if (latencyMs.value < 600) return 'text-warning';
-  return 'text-danger';
+  if (latencyMs.value === null) return "";
+  if (networkConnected.value === false) return "text-danger";
+  if (latencyMs.value < 200) return "text-success";
+  if (latencyMs.value < 600) return "text-warning";
+  return "text-danger";
 });
 
 const handleGreet = async () => {
@@ -232,7 +236,7 @@ const handleGreet = async () => {
     const res = await Greet(userName.value);
     greetReply.value = res;
   } catch (err) {
-    greetReply.value = `Hello ${userName.value || 'World'}!`;
+    greetReply.value = `Hello ${userName.value || "World"}!`;
   } finally {
     loadingGreet.value = false;
   }
@@ -241,7 +245,7 @@ const handleGreet = async () => {
 const handleTestNetwork = async () => {
   testingNetwork.value = true;
   try {
-    const res = await TestNetwork('https://api.github.com');
+    const res = await TestNetwork("https://api.github.com");
     networkConnected.value = res.connected;
     latencyMs.value = res.latencyMs;
   } catch (err) {
@@ -253,11 +257,11 @@ const handleTestNetwork = async () => {
 };
 
 const openDocs = () => {
-  const url = 'https://github.com/snowdreamtech/unigodesktop';
+  const url = "https://github.com/snowdreamtech/unigodesktop";
   if ((window as any)?.runtime?.BrowserOpenURL) {
     (window as any).runtime.BrowserOpenURL(url);
   } else {
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   }
 };
 
@@ -266,11 +270,11 @@ onMounted(async () => {
     const info = await GetSystemInfo();
     if (info) {
       sysInfo.value = {
-        os: info.os || 'darwin',
-        arch: info.arch || 'arm64',
-        goVersion: info.goVersion || 'go1.25',
-        appName: info.appName || 'UniGoDesktop',
-        version: info.version || 'v1.0.0',
+        os: info.os || "darwin",
+        arch: info.arch || "arm64",
+        goVersion: info.goVersion || "go1.25",
+        appName: info.appName || "UniGoDesktop",
+        version: info.version || "v1.0.0",
       };
     }
   } catch (err) {
@@ -622,13 +626,19 @@ onMounted(async () => {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .fade-enter-from,

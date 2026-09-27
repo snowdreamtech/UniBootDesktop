@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const ukUa: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "Кросплатформний шаблон десктопного додатку (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "Вітання від UniGoDesktop!",
   "app.template_badge": "Шаблон десктопного додатку Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "Сучасний, надійний та розширюваний кросплатформний шаблон з інтернаціоналізацією, темами та прискоренням мережі.",
+  "app.template_desc":
+    "Сучасний, надійний та розширюваний кросплатформний шаблон з інтернаціоналізацією, темами та прискоренням мережі.",
   "common.autoDetect": "Автоматичне визначення",
   "common.langAuto": "Авто",
   "common.lang": "Мова",
@@ -94,5 +95,5 @@ export const ukUa: TranslationDict = {
   "about.downloadingGuiUpdate": "Завантаження оновлення ({progress}%)",
   "about.updateCompleteRestart": "Оновлення завершено, перезапустіть додаток",
   "about.onlineUpdateFailed": "Помилка оновлення: {error}",
-  "about.newVersionNotice": "🚀 Доступна нова версія {tag}!"
+  "about.newVersionNotice": "🚀 Доступна нова версія {tag}!",
 };
