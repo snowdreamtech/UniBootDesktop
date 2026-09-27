@@ -105,17 +105,17 @@ jobs:
         shell: bash
         run: |
           cd frontend
-          npm ci
+          unirtm exec -- npm ci
 
       - name: Build frontend assets
         shell: bash
         run: |
           cd frontend
-          npm run build
+          unirtm exec -- npm run build
 
       - name: Prepare UniGoDesktop App Icon
         shell: bash
-        run: node scripts/prepare-app-icon.mjs
+        run: unirtm exec -- node scripts/prepare-app-icon.mjs
 
       - name: Build Wails native bundle
         shell: bash
@@ -133,6 +133,7 @@ jobs:
           PROJECT_NAME="${MODULE_PATH##*/}"
           mkdir -p build/bin
           unirtm exec -- wails build \
+            -s \
             -clean \
             -platform "${TARGET}" \
             -ldflags "-s -w -X '${PKG}.GitTag=${TAG}' -X '${PKG}.CommitHash=${COMMIT}' -X '${PKG}.CommitHashFull=${COMMIT_FULL}' -X '${PKG}.BuildTime=${DATE}' -X '${PKG}.ProjectName=${PROJECT_NAME}'"
