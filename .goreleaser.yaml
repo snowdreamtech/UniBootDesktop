@@ -11,7 +11,7 @@ project_name: unigodesktop
 report_sizes: true
 
 gomod:
-  proxy: false
+  proxy: true
 
 metadata:
   mod_timestamp: "{{ .CommitTimestamp }}"
