@@ -314,7 +314,7 @@ jobs:
         run: |
           gh release download "$TAG" \
             --repo snowdreamtech/UniGoDesktop \
-            --pattern 'unigodesktop_Linux_x86_64.tar.gz' \
+            --pattern 'unigodesktop-cli_Linux_x86_64.tar.gz' \
             --pattern 'checksums.txt' \
             --pattern 'checksums.txt.sigstore.json'
 
@@ -333,6 +333,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
         run: |
-          gh attestation verify unigodesktop_Linux_x86_64.tar.gz \
+          gh attestation verify unigodesktop-cli_Linux_x86_64.tar.gz \
             --repo snowdreamtech/UniGoDesktop \
             --signer-repo snowdreamtech/UniGoDesktop
