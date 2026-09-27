@@ -4,68 +4,25 @@
 package main
 
 import (
-	"embed"
 	"fmt"
 	"os"
 
 	"github.com/snowdreamtech/unigodesktop/cmd"
-	"github.com/wailsapp/wails/v2"
-	"github.com/wailsapp/wails/v2/pkg/options"
-	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
-	"github.com/wailsapp/wails/v2/pkg/options/mac"
 )
 
-//go:embed all:frontend/dist
-var assets embed.FS
-
-// RunWails initializes and launches the Wails v2 desktop GUI application.
-func RunWails() error {
-	fmt.Println(">>> Starting Wails GUI Runtime...")
-	app := NewApp()
-
-	return wails.Run(&options.App{
-		Title:     "UniGoDesktop",
-		Width:     1180,
-		Height:    820,
-		MinWidth:  1024,
-		MinHeight: 728,
-		AssetServer: &assetserver.Options{
-			Assets: assets,
-		},
-		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup:        app.startup,
-		Bind: []interface{}{
-			app,
-		},
-		Mac: &mac.Options{
-			TitleBar: &mac.TitleBar{
-				TitlebarAppearsTransparent: false,
-				HideTitle:                  false,
-				HideTitleBar:               false,
-				FullSizeContent:            false,
-			},
-			Appearance:           mac.NSAppearanceNameDarkAqua,
-			WebviewIsTransparent: false,
-			WindowIsTranslucent:  false,
-			About: &mac.AboutInfo{
-				Title:   "UniGoDesktop",
-				Message: "Universal Go Desktop Suite",
-			},
-		},
-	})
-}
-
-func init() {
-	cmd.WailsRunner = RunWails
-}
-
 func main() {
+	// When built with GUI support (default, no build tags), WailsRunner is
+	// set by wails_gui.go's init(). In CLI-only builds (-tags nogui),
+	// WailsRunner remains nil and we fall through to the CLI.
 	if len(os.Args) <= 1 || (len(os.Args) > 1 && (os.Args[1] == "gui" || os.Args[1] == "desktop")) {
-		if err := RunWails(); err != nil {
-			fmt.Fprintf(os.Stderr, "Error launching Wails application: %v\n", err)
-			os.Exit(1)
+		if cmd.WailsRunner != nil {
+			if err := cmd.WailsRunner(); err != nil {
+				fmt.Fprintf(os.Stderr, "Error launching Wails application: %v\n", err)
+				os.Exit(1)
+			}
+			return
 		}
-		return
+		// CLI-only build: fall through to cobra which handles "gui" subcommand
 	}
 
 	cmd.Execute()
