@@ -41,9 +41,9 @@ func RunWails() error {
 		Mac: &mac.Options{
 			TitleBar: &mac.TitleBar{
 				TitlebarAppearsTransparent: false,
-				HideTitle:                 false,
-				HideTitleBar:              false,
-				FullSizeContent:           false,
+				HideTitle:                  false,
+				HideTitleBar:               false,
+				FullSizeContent:            false,
 			},
 			Appearance:           mac.NSAppearanceNameDarkAqua,
 			WebviewIsTransparent: false,

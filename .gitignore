@@ -746,3 +746,4 @@ frontend/package.json.md5
 .downloads/
 internal/database/file:
 internal/database/file*
+.trivycache/

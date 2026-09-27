@@ -295,4 +295,3 @@ signs:
       - "--bundle=${signature}"
       - "${artifact}"
       - --yes # Enables keyless signing via OIDC token
-
