@@ -615,6 +615,26 @@ backend = "go"
 
 [tools."go:github.com/wailsapp/wails/v2/cmd/wails"."platforms.windows-arm64"]
 
+[[tools."go:github.com/wailsapp/wails/v2/cmd/wails"]]
+version = "v2.14.0"
+backend = "go"
+
+[tools."go:github.com/wailsapp/wails/v2/cmd/wails"."platforms.linux-amd64"]
+
+[tools."go:github.com/wailsapp/wails/v2/cmd/wails"."platforms.linux-amd64-musl"]
+
+[tools."go:github.com/wailsapp/wails/v2/cmd/wails"."platforms.linux-arm64"]
+
+[tools."go:github.com/wailsapp/wails/v2/cmd/wails"."platforms.linux-arm64-musl"]
+
+[tools."go:github.com/wailsapp/wails/v2/cmd/wails"."platforms.macos-amd64"]
+
+[tools."go:github.com/wailsapp/wails/v2/cmd/wails"."platforms.macos-arm64"]
+
+[tools."go:github.com/wailsapp/wails/v2/cmd/wails"."platforms.windows-amd64"]
+
+[tools."go:github.com/wailsapp/wails/v2/cmd/wails"."platforms.windows-arm64"]
+
 [[tools."go:golang.org/x/tools/cmd/goimports"]]
 version = "v0.49.0"
 backend = "go"
