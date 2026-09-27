@@ -219,7 +219,7 @@ const loadAppInfo = async () => {
             commitHash: sys.commit || "dev",
             buildTime: sys.buildTime || "N/A",
             osArch: `${sys.os || "darwin"}/${sys.arch || "arm64"}`,
-            goVersion: sys.goVersion || "go1.25",
+            goVersion: sys.goVersion || "go1.27",
             copyright: "Copyright © 2026-present SnowdreamTech Inc.",
           };
           return;

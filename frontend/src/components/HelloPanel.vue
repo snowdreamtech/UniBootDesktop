@@ -64,7 +64,7 @@
           </div>
           <div class="spec-item">
             <span class="spec-label">{{ t("hello.go_version") || "Go Version" }}</span>
-            <span class="spec-val font-mono">{{ sysInfo.goVersion || "Go 1.25+" }}</span>
+            <span class="spec-val font-mono">{{ sysInfo.goVersion || "Go 1.27+" }}</span>
           </div>
           <div class="spec-item">
             <span class="spec-label">{{ t("hello.app_version") || "Template Version" }}</span>
@@ -190,7 +190,7 @@ const sysInfo = ref<{
 }>({
   os: "darwin",
   arch: "arm64",
-  goVersion: "go1.25",
+  goVersion: "go1.27",
   appName: "UniGoDesktop",
   version: "v1.0.0",
 });
@@ -272,7 +272,7 @@ onMounted(async () => {
       sysInfo.value = {
         os: info.os || "darwin",
         arch: info.arch || "arm64",
-        goVersion: info.goVersion || "go1.25",
+        goVersion: info.goVersion || "go1.27",
         appName: info.appName || "UniGoDesktop",
         version: info.version || "v1.0.0",
       };
