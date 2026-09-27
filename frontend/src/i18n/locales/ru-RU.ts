@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const ruRu: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "Кроссплатформенный шаблон десктопного приложения (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "Привет от UniGoDesktop!",
   "app.template_badge": "Шаблон десктопного приложения Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "Современный, надежный и расширяемый кроссплатформенный шаблон с интернационализацией, темами и сетевым ускорением.",
+  "app.template_desc":
+    "Современный, надежный и расширяемый кроссплатформенный шаблон с интернационализацией, темами и сетевым ускорением.",
   "common.autoDetect": "Автоопределение",
   "common.langAuto": "Авто",
   "common.lang": "Язык",
@@ -94,5 +95,5 @@ export const ruRu: TranslationDict = {
   "about.downloadingGuiUpdate": "Загрузка обновления ({progress}%)",
   "about.updateCompleteRestart": "Обновление завершено, перезапустите приложение",
   "about.onlineUpdateFailed": "Сбой обновления: {error}",
-  "about.newVersionNotice": "🚀 Доступна новая версия {tag}!"
+  "about.newVersionNotice": "🚀 Доступна новая версия {tag}!",
 };

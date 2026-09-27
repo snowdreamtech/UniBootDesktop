@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const faIr: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "الگوی برنامه دسکتاپ چند پلتفرمی (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "درود از UniGoDesktop!",
   "app.template_badge": "الگوی دسکتاپ Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "الگوی مدرن، پایدار و قابل توسعه برای برنامه‌های دسکتاپ با پشتیبانی از چندزبانی، تم‌ها و شتاب‌دهنده شبکه.",
+  "app.template_desc":
+    "الگوی مدرن، پایدار و قابل توسعه برای برنامه‌های دسکتاپ با پشتیبانی از چندزبانی، تم‌ها و شتاب‌دهنده شبکه.",
   "common.autoDetect": "تشخیص خودکار",
   "common.langAuto": "خودکار",
   "common.lang": "زبان",
@@ -94,5 +95,5 @@ export const faIr: TranslationDict = {
   "about.downloadingGuiUpdate": "در حال بارگیری به‌روزرسانی ({progress}%)",
   "about.updateCompleteRestart": "به‌روزرسانی انجام شد، لطفاً برنامه را مجدداً راه‌اندازی کنید",
   "about.onlineUpdateFailed": "به‌روزرسانی ناموفق بود: {error}",
-  "about.newVersionNotice": "🚀 نسخه جدید {tag} در دسترس است!"
+  "about.newVersionNotice": "🚀 نسخه جدید {tag} در دسترس است!",
 };

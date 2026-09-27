@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const thTh: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "เทมเพลตแอปพลิเคชันเดสก์ท็อปข้ามแพลตฟอร์ม (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "ทักทายจาก UniGoDesktop!",
   "app.template_badge": "เทมเพลตเดสก์ท็อป Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "เทมเพลตแอปพลิเคชันเดสก์ท็อปที่ทันสมัย แข็งแกร่ง และขยายได้ พร้อมระบบหลายภาษา ธีม และการเร่งความเร็วเครือข่าย",
+  "app.template_desc":
+    "เทมเพลตแอปพลิเคชันเดสก์ท็อปที่ทันสมัย แข็งแกร่ง และขยายได้ พร้อมระบบหลายภาษา ธีม และการเร่งความเร็วเครือข่าย",
   "common.autoDetect": "ตรวจจับอัตโนมัติ",
   "common.langAuto": "อัตโนมัติ",
   "common.lang": "ภาษา",
@@ -94,5 +95,5 @@ export const thTh: TranslationDict = {
   "about.downloadingGuiUpdate": "กำลังดาวน์โหลดอัปเดต ({progress}%)",
   "about.updateCompleteRestart": "อัปเดตเสร็จสมบูรณ์ โปรดรีสตาร์ทแอป",
   "about.onlineUpdateFailed": "การอัปเดตล้มเหลว: {error}",
-  "about.newVersionNotice": "🚀 มีเวอร์ชันใหม่ {tag} แล้ว!"
+  "about.newVersionNotice": "🚀 มีเวอร์ชันใหม่ {tag} แล้ว!",
 };

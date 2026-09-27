@@ -24,10 +24,10 @@ func RunWails() error {
 	app := NewApp()
 
 	return wails.Run(&options.App{
-		Title:  "UniGoDesktop",
-		Width:  1180,
-		Height: 820,
-		MinWidth: 1024,
+		Title:     "UniGoDesktop",
+		Width:     1180,
+		Height:    820,
+		MinWidth:  1024,
 		MinHeight: 728,
 		AssetServer: &assetserver.Options{
 			Assets: assets,

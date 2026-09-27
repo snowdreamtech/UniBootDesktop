@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const taIn: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "குறுக்கு-தள டெஸ்க்டாப் பயன்பாட்டு டெம்ப்ளேட் (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "UniGoDesktop-லிருந்து வாழ்த்துகள்!",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript டெஸ்க்டாப் டெம்ப்ளேட்",
-  "app.template_desc": "சர்வதேசமயமாக்கல், தீம்கள் மற்றும் நெட்வொர்க் முடுக்கம் கொண்ட நவீன, வலுவான மற்றும் விரிவாக்கக்கூடிய குறுக்கு-தள டெஸ்க்டாப் பயன்பாட்டு டெம்ப்ளேட்.",
+  "app.template_desc":
+    "சர்வதேசமயமாக்கல், தீம்கள் மற்றும் நெட்வொர்க் முடுக்கம் கொண்ட நவீன, வலுவான மற்றும் விரிவாக்கக்கூடிய குறுக்கு-தள டெஸ்க்டாப் பயன்பாட்டு டெம்ப்ளேட்.",
   "common.autoDetect": "தானியங்கு கண்டறிதல்",
   "common.langAuto": "தானியங்கு",
   "common.lang": "மொழி",
@@ -49,7 +50,8 @@ export const taIn: TranslationDict = {
   "settings.update_auto": "தொடக்கத்தில் புதுப்பிப்புகளைத் தானாகச் சரிபார்க்கவும்",
   "settings.update_manual": "கைமுறை சரிபார்ப்பு மட்டுமே",
   "settings.github_proxy_title": "GitHub கிளவுட் மிரர் & வேக முடுக்கம்",
-  "settings.github_proxy_desc": "பதிவிறக்கங்களுக்கு விருப்பத்தேர்வு மிரர் முகவரியை உள்ளிடவும், அல்லது நேரடி இணைப்பிற்கு காலியாக விடவும்.",
+  "settings.github_proxy_desc":
+    "பதிவிறக்கங்களுக்கு விருப்பத்தேர்வு மிரர் முகவரியை உள்ளிடவும், அல்லது நேரடி இணைப்பிற்கு காலியாக விடவும்.",
   "settings.github_proxy": "மிரர் முன்னொட்டு",
   "settings.githubProxy": "GitHub மிரர்",
   "settings.proxy_placeholder": "இயல்புநிலை காலியாக உள்ளது (நேரடி இணைப்பு). எ.கா: https://proxy.example.com/",
@@ -94,5 +96,5 @@ export const taIn: TranslationDict = {
   "about.downloadingGuiUpdate": "புதுப்பிப்பு பதிவிறக்குகிறது ({progress}%)",
   "about.updateCompleteRestart": "புதுப்பிப்பு முடிந்தது, பயன்பாட்டை மறுதொடக்கம் செய்யவும்",
   "about.onlineUpdateFailed": "புதுப்பிப்பு தோல்வியடைந்தது: {error}",
-  "about.newVersionNotice": "🚀 புதிய பதிப்பு {tag} கிடைக்கிறது!"
+  "about.newVersionNotice": "🚀 புதிய பதிப்பு {tag} கிடைக்கிறது!",
 };

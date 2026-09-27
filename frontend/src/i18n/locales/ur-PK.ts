@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const urPk: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "کراس پلیٹ فارم ڈیسک ٹاپ ایپلیکیشن سانچہ (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "UniGoDesktop کی طرف سے سلام!",
   "app.template_badge": "ڈیسک ٹاپ سانچہ Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "بین الاقوامی کاری، تھیمز اور نیٹ ورک اسپیڈ کے ساتھ جدید اور قابل توسیع ڈیسک ٹاپ ایپلیکیشن سانچہ۔",
+  "app.template_desc":
+    "بین الاقوامی کاری، تھیمز اور نیٹ ورک اسپیڈ کے ساتھ جدید اور قابل توسیع ڈیسک ٹاپ ایپلیکیشن سانچہ۔",
   "common.autoDetect": "خودکار شناخت",
   "common.langAuto": "خودکار",
   "common.lang": "زبان",
@@ -94,5 +95,5 @@ export const urPk: TranslationDict = {
   "about.downloadingGuiUpdate": "اپ ڈیٹ ڈاؤن لوڈ ہو رہا ہے ({progress}%)",
   "about.updateCompleteRestart": "اپ ڈیٹ مکمل ہو گیا، براہ کرم ایپ دوبارہ شروع کریں",
   "about.onlineUpdateFailed": "اپ ڈیٹ ناکام ہو گیا: {error}",
-  "about.newVersionNotice": "🚀 نیا ورژن {tag} دستیاب ہے!"
+  "about.newVersionNotice": "🚀 نیا ورژن {tag} دستیاب ہے!",
 };

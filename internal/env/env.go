@@ -8,7 +8,6 @@ import (
 	"os"
 )
 
-
 // Get returns the value of the environment variable with the given key,
 // searching with prefix UNIGODESKTOP_ first, and then the raw key.
 // Note: PATH is retrieved directly to avoid pollution from UNIGODESKTOP_PATH.

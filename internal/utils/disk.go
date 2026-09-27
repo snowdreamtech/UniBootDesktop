@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 )
 
-
 // CalculateDirectorySize recursively calculates the size of a directory.
 func CalculateDirectorySize(path string) (int64, error) {
 	var size int64

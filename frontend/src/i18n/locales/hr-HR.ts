@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const hrHr: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "Wieloplatformowy szablon aplikacji desktopowej (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "Pozdrav iz UniGoDesktop!",
   "app.template_badge": "Szablon aplikacji desktopowej Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "Nowoczesny, stabilny i rozszerzalny szablon aplikacji z wielojęzycznością, motywami i przyspieszeniem sieciowym.",
+  "app.template_desc":
+    "Nowoczesny, stabilny i rozszerzalny szablon aplikacji z wielojęzycznością, motywami i przyspieszeniem sieciowym.",
   "common.autoDetect": "Automatsko otkrivanje",
   "common.langAuto": "Automatski",
   "common.lang": "Jazyk",
@@ -94,5 +95,5 @@ export const hrHr: TranslationDict = {
   "about.downloadingGuiUpdate": "Pobieranie aktualizacji ({progress}%)",
   "about.updateCompleteRestart": "Aktualizacja zakończona, zrestartuj aplikację",
   "about.onlineUpdateFailed": "Błąd aktualizacji: {error}",
-  "about.newVersionNotice": "🚀 Dostępna nowa wersja {tag}!"
+  "about.newVersionNotice": "🚀 Dostępna nowa wersja {tag}!",
 };

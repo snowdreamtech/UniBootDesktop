@@ -12,7 +12,6 @@ import (
 	"sync"
 )
 
-
 var (
 	isMuslCached bool
 	isMuslOnce   sync.Once

@@ -30,7 +30,7 @@ exclude = [
   "https://unigo.snowdream.tech.*",
   "https://github.com/snowdreamtech/UniGoDesktop/discussions",
   ".*docs/glossary.md",
-  ".*docs/index.md",                                        # Unreleased version compare links (tags don't exist yet)
+  ".*docs/index.md",                                           # Unreleased version compare links (tags don't exist yet)
   'https://github\.com/.*/compare/.*\.\.\.v\d+\.\d+\.\d+$',
 ]
 

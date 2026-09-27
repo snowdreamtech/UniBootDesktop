@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const roRo: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "Çok platformlu masaüstü uygulama şablonu (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "Salutări de la UniGoDesktop!",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript Masaüstü Şablonu",
-  "app.template_desc": "Uluslararasılaştırma, temalar ve ağ hızlandırma içeren modern ve genişletilebilir masaüstü şablonu.",
+  "app.template_desc":
+    "Uluslararasılaştırma, temalar ve ağ hızlandırma içeren modern ve genişletilebilir masaüstü şablonu.",
   "common.autoDetect": "Detectare automată",
   "common.langAuto": "Automat",
   "common.lang": "Limbă",
@@ -49,7 +50,8 @@ export const roRo: TranslationDict = {
   "settings.update_auto": "Başlangıçta otomatik kontrol et",
   "settings.update_manual": "Yalnızca manuel kontrol",
   "settings.github_proxy_title": "GitHub Ayna Hızlandırması",
-  "settings.github_proxy_desc": "İndirmeler için isteğe bağlı bir ayna URL'si yapılandırın veya doğrudan bağlantı için boş bırakın.",
+  "settings.github_proxy_desc":
+    "İndirmeler için isteğe bağlı bir ayna URL'si yapılandırın veya doğrudan bağlantı için boş bırakın.",
   "settings.github_proxy": "Ayna Ön Eki",
   "settings.githubProxy": "GitHub Aynası",
   "settings.proxy_placeholder": "Varsayılan olarak boş (doğrudan bağlantı). Örn: https://proxy.example.com/",
@@ -94,5 +96,5 @@ export const roRo: TranslationDict = {
   "about.downloadingGuiUpdate": "Güncelleme indiriliyor (%{progress})",
   "about.updateCompleteRestart": "Güncelleme tamamlandı, lütfen yeniden başlatın",
   "about.onlineUpdateFailed": "Güncelleme başarısız: {error}",
-  "about.newVersionNotice": "🚀 Yeni sürüm {tag} mevcut!"
+  "about.newVersionNotice": "🚀 Yeni sürüm {tag} mevcut!",
 };

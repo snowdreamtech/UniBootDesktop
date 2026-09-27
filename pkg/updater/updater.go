@@ -21,10 +21,10 @@ import (
 
 // UpdateStatus represents release update metadata.
 type UpdateStatus struct {
-	HasUpdate     bool   `json:"hasUpdate"`
-	CurrentTag    string `json:"currentTag"`
-	LatestTag     string `json:"latestTag"`
-	DownloadURL   string `json:"downloadUrl"`
+	HasUpdate   bool   `json:"hasUpdate"`
+	CurrentTag  string `json:"currentTag"`
+	LatestTag   string `json:"latestTag"`
+	DownloadURL string `json:"downloadUrl"`
 }
 
 // CheckUpdate queries GitHub Releases for newer release versions.
@@ -154,5 +154,3 @@ func DownloadFileWithProxy(ctx context.Context, rawURL string, destPath string, 
 
 	return fmt.Errorf("download failed (%s): %w", rawURL, lastErr)
 }
-
-

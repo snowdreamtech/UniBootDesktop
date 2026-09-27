@@ -1,4 +1,4 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const heIl: TranslationDict = {
   "app.title": "UniGoDesktop",
@@ -94,5 +94,5 @@ export const heIl: TranslationDict = {
   "about.downloadingGuiUpdate": "מוריד עדכון ({progress}%)",
   "about.updateCompleteRestart": "העדכון הושלם, אנא הפעל מחדש",
   "about.onlineUpdateFailed": "העדכון נכשל: {error}",
-  "about.newVersionNotice": "🚀 גרסה חדשה {tag} זמינה!"
+  "about.newVersionNotice": "🚀 גרסה חדשה {tag} זמינה!",
 };

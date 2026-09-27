@@ -19,19 +19,15 @@
       <div class="brand">
         <img src="/logo.png" alt="UniGo" class="logo-img" />
         <div>
-          <h1>{{ t('app.title') || 'UniGoDesktop' }}</h1>
-          <span class="sub-brand">{{ t('app.subtitle') || 'Universal Cross-Platform Desktop Template' }}</span>
+          <h1>{{ t("app.title") || "UniGoDesktop" }}</h1>
+          <span class="sub-brand">{{ t("app.subtitle") || "Universal Cross-Platform Desktop Template" }}</span>
         </div>
       </div>
 
       <div class="header-actions">
         <!-- Quick Language Switcher Dropdown -->
         <div class="lang-selector-header" ref="langDropdownRef">
-          <button 
-            class="lang-pill-btn" 
-            :title="t('settings.language') || 'Language'"
-            @click.stop="toggleLangMenu"
-          >
+          <button class="lang-pill-btn" :title="t('settings.language') || 'Language'" @click.stop="toggleLangMenu">
             <span class="lang-icon">🌐</span>
             <span class="lang-label">{{ currentLangLabel }}</span>
             <span class="dropdown-caret">▾</span>
@@ -39,8 +35,8 @@
 
           <transition name="dropdown-fade">
             <div v-if="isLangMenuOpen" class="lang-dropdown-menu" @click.stop>
-              <button 
-                v-for="opt in langOptions" 
+              <button
+                v-for="opt in langOptions"
                 :key="opt.value"
                 class="lang-option"
                 :class="{ active: selectedLangSetting === opt.value }"
@@ -54,29 +50,25 @@
         </div>
 
         <!-- Quick Theme Toggle -->
-        <button 
-          class="icon-action-btn" 
-          :title="isDarkTheme ? (t('theme.toggleLight') || 'Switch to Light Theme') : (t('theme.toggleDark') || 'Switch to Dark Theme')"
+        <button
+          class="icon-action-btn"
+          :title="
+            isDarkTheme
+              ? t('theme.toggleLight') || 'Switch to Light Theme'
+              : t('theme.toggleDark') || 'Switch to Dark Theme'
+          "
           @click="toggleTheme"
         >
-          <span>{{ isDarkTheme ? '🌙' : '☀️' }}</span>
+          <span>{{ isDarkTheme ? "🌙" : "☀️" }}</span>
         </button>
 
         <!-- Settings Button -->
-        <button 
-          class="icon-action-btn" 
-          :title="t('settings.title') || 'Settings'"
-          @click="openSettings"
-        >
+        <button class="icon-action-btn" :title="t('settings.title') || 'Settings'" @click="openSettings">
           <span>⚙️</span>
         </button>
 
         <!-- About Button -->
-        <button 
-          class="icon-action-btn" 
-          :title="t('about.title') || 'About'"
-          @click="openAbout"
-        >
+        <button class="icon-action-btn" :title="t('about.title') || 'About'" @click="openAbout">
           <span>ℹ️</span>
         </button>
       </div>
@@ -84,11 +76,7 @@
 
     <!-- Main Content Area -->
     <main class="main-content">
-      <HelloPanel 
-        :appConfig="appConfig" 
-        @open-settings="openSettings" 
-        @open-about="openAbout" 
-      />
+      <HelloPanel :appConfig="appConfig" @open-settings="openSettings" @open-about="openAbout" />
     </main>
 
     <!-- Settings Modal -->
@@ -100,20 +88,17 @@
     />
 
     <!-- About Modal -->
-    <AboutModal
-      :show="isAboutOpen"
-      @close="isAboutOpen = false"
-    />
+    <AboutModal :show="isAboutOpen" @close="isAboutOpen = false" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import HelloPanel from './components/HelloPanel.vue';
-import SettingsModal from './components/SettingsModal.vue';
-import AboutModal from './components/AboutModal.vue';
-import { t, currentLang, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from './i18n';
-import type { config } from '../wailsjs/go/models';
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import HelloPanel from "./components/HelloPanel.vue";
+import SettingsModal from "./components/SettingsModal.vue";
+import AboutModal from "./components/AboutModal.vue";
+import { t, currentLang, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from "./i18n";
+import type { config } from "../wailsjs/go/models";
 
 type AppConfigType = config.AppConfig;
 
@@ -124,35 +109,35 @@ const appConfig = ref<AppConfigType | null>(null);
 const isLangMenuOpen = ref(false);
 const langDropdownRef = ref<HTMLElement | null>(null);
 
-const toastMessage = ref('');
-const toastType = ref<'info' | 'success' | 'warning' | 'error'>('info');
+const toastMessage = ref("");
+const toastType = ref<"info" | "success" | "warning" | "error">("info");
 let toastTimer: any = null;
 
-const currentTheme = ref('dark');
-const isDarkTheme = computed(() => currentTheme.value !== 'light');
+const currentTheme = ref("dark");
+const isDarkTheme = computed(() => currentTheme.value !== "light");
 
 const langOptions = computed(() => [
-  { value: 'auto', label: '🌐 ' + (t('common.autoDetect') || 'Auto Detect') },
-  ...SUPPORTED_LANGUAGES.map(item => ({
+  { value: "auto", label: "🌐 " + (t("common.autoDetect") || "Auto Detect") },
+  ...SUPPORTED_LANGUAGES.map((item) => ({
     value: item.code,
-    label: item.nativeName
-  }))
+    label: item.nativeName,
+  })),
 ]);
 
 const currentLangLabel = computed(() => {
-  if (selectedLangSetting.value === 'auto') {
-    return (t('common.langAuto') || 'Auto');
+  if (selectedLangSetting.value === "auto") {
+    return t("common.langAuto") || "Auto";
   }
-  const opt = langOptions.value.find(o => o.value === currentLang.value);
-  return opt ? opt.label : 'Language';
+  const opt = langOptions.value.find((o) => o.value === currentLang.value);
+  return opt ? opt.label : "Language";
 });
 
-function showToast(msg: string, type: 'info' | 'success' | 'warning' | 'error' = 'info') {
+function showToast(msg: string, type: "info" | "success" | "warning" | "error" = "info") {
   toastMessage.value = msg;
   toastType.value = type;
   if (toastTimer) clearTimeout(toastTimer);
   toastTimer = setTimeout(() => {
-    toastMessage.value = '';
+    toastMessage.value = "";
   }, 4000);
 }
 
@@ -170,7 +155,7 @@ function selectLanguage(langVal: string) {
 }
 
 function toggleTheme() {
-  const nextTheme = currentTheme.value === 'light' ? 'dark' : 'light';
+  const nextTheme = currentTheme.value === "light" ? "dark" : "light";
   applyTheme(nextTheme);
   if (appConfig.value) {
     appConfig.value.theme = nextTheme;
@@ -181,11 +166,11 @@ function toggleTheme() {
 function applyTheme(themeName: string) {
   currentTheme.value = themeName;
   let applied = themeName;
-  if (themeName === 'system') {
-    const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    applied = isDark ? 'dark' : 'light';
+  if (themeName === "system") {
+    const isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applied = isDark ? "dark" : "light";
   }
-  document.documentElement.setAttribute('data-theme', applied);
+  document.documentElement.setAttribute("data-theme", applied);
 }
 
 function openSettings() {
@@ -211,7 +196,7 @@ async function saveConfigToBackend(cfg: any) {
     try {
       await (window as any).go.main.App.SaveConfig(cfg);
     } catch (e) {
-      console.warn('Failed to save config:', e);
+      console.warn("Failed to save config:", e);
     }
   }
 }
@@ -228,24 +213,26 @@ async function initApp() {
         if (cfg.theme) {
           applyTheme(cfg.theme);
         } else {
-          applyTheme('dark');
+          applyTheme("dark");
         }
 
         // Auto check updates if enabled
         if (cfg.autoCheckUpdate !== false && (window as any)?.go?.main?.App?.CheckUpdate) {
-          (window as any).go.main.App.CheckUpdate().then((res: any) => {
-            if (res && res.hasUpdate) {
-              showToast(`🚀 New version ${res.latestTag} is available!`, 'info');
-            }
-          }).catch(() => {});
+          (window as any).go.main.App.CheckUpdate()
+            .then((res: any) => {
+              if (res && res.hasUpdate) {
+                showToast(`🚀 New version ${res.latestTag} is available!`, "info");
+              }
+            })
+            .catch(() => {});
         }
       }
     } catch (e) {
-      console.warn('Failed to load initial config from backend:', e);
-      applyTheme('dark');
+      console.warn("Failed to load initial config from backend:", e);
+      applyTheme("dark");
     }
   } else {
-    applyTheme('dark');
+    applyTheme("dark");
   }
 }
 
@@ -257,11 +244,11 @@ function handleGlobalClick(e: MouseEvent) {
 
 onMounted(() => {
   initApp();
-  window.addEventListener('click', handleGlobalClick);
+  window.addEventListener("click", handleGlobalClick);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('click', handleGlobalClick);
+  window.removeEventListener("click", handleGlobalClick);
 });
 </script>
 
@@ -508,17 +495,21 @@ onUnmounted(() => {
 }
 
 /* Transitions */
-.toast-fade-enter-active, .toast-fade-leave-active,
-.dropdown-fade-enter-active, .dropdown-fade-leave-active {
+.toast-fade-enter-active,
+.toast-fade-leave-active,
+.dropdown-fade-enter-active,
+.dropdown-fade-leave-active {
   transition: all 0.2s ease;
 }
 
-.toast-fade-enter-from, .toast-fade-leave-to {
+.toast-fade-enter-from,
+.toast-fade-leave-to {
   opacity: 0;
   transform: translateY(-8px);
 }
 
-.dropdown-fade-enter-from, .dropdown-fade-leave-to {
+.dropdown-fade-enter-from,
+.dropdown-fade-leave-to {
   opacity: 0;
   transform: translateY(4px);
 }

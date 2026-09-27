@@ -1,4 +1,4 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const koKr: TranslationDict = {
   "app.title": "UniGoDesktop",
@@ -94,5 +94,5 @@ export const koKr: TranslationDict = {
   "about.downloadingGuiUpdate": "업데이트 다운로드 중 ({progress}%)",
   "about.updateCompleteRestart": "업데이트 완료, 다시 시작하세요",
   "about.onlineUpdateFailed": "업데이트 실패: {error}",
-  "about.newVersionNotice": "🚀 새 버전 {tag} 사용 가능!"
+  "about.newVersionNotice": "🚀 새 버전 {tag} 사용 가능!",
 };

@@ -1,4 +1,4 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const fiFi: TranslationDict = {
   "app.title": "UniGoDesktop",
@@ -94,5 +94,5 @@ export const fiFi: TranslationDict = {
   "about.downloadingGuiUpdate": "Update downloaden ({progress}%)",
   "about.updateCompleteRestart": "Update voltooid, herstart de applicatie",
   "about.onlineUpdateFailed": "Update mislukt: {error}",
-  "about.newVersionNotice": "🚀 Nieuwe versie {tag} beschikbaar!"
+  "about.newVersionNotice": "🚀 Nieuwe versie {tag} beschikbaar!",
 };

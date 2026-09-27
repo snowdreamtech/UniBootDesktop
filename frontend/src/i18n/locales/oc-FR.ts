@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const ocFr: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "Modèl d'aplicacion de burèu multiplataforma (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "Saludacions de UniGoDesktop !",
   "app.template_badge": "Modèle de bureau Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "Un modèle moderne, robuste et extensible d'application de bureau avec i18n, thèmes et accélération réseau.",
+  "app.template_desc":
+    "Un modèle moderne, robuste et extensible d'application de bureau avec i18n, thèmes et accélération réseau.",
   "common.autoDetect": "Deteccion automatica",
   "common.langAuto": "Automatic",
   "common.lang": "Langue",
@@ -94,5 +95,5 @@ export const ocFr: TranslationDict = {
   "about.downloadingGuiUpdate": "Téléchargement de la mise à jour ({progress}%)",
   "about.updateCompleteRestart": "Mise à jour terminée, veuillez redémarrer",
   "about.onlineUpdateFailed": "Échec de la mise à jour : {error}",
-  "about.newVersionNotice": "🚀 Nouvelle version {tag} disponible !"
+  "about.newVersionNotice": "🚀 Nouvelle version {tag} disponible !",
 };

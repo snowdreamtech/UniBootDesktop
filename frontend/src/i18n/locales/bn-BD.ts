@@ -1,11 +1,12 @@
-import type { TranslationDict } from '../types';
+import type { TranslationDict } from "../types";
 
 export const bnBd: TranslationDict = {
   "app.title": "UniGoDesktop",
   "app.subtitle": "क्रॉस-प्लेटफ़ॉर्म डेस्कटॉप एप्लिकेशन टेम्पलेट (Go + Wails + Vue 3 + TypeScript)",
   "app.greeting": "UniGoDesktop থেকে শুভেচ্ছা!",
   "app.template_badge": "डेस्कटॉप टेम्पलेट Go + Wails + Vue 3 + TypeScript",
-  "app.template_desc": "अंतर्राष्ट्रीयकरण, थीम और नेटवर्क त्वरण के साथ आधुनिक, मजबूत और विस्तार योग्य डेस्कटॉप एप्लिकेशन टेम्पलेट।",
+  "app.template_desc":
+    "अंतर्राष्ट्रीयकरण, थीम और नेटवर्क त्वरण के साथ आधुनिक, मजबूत और विस्तार योग्य डेस्कटॉप एप्लिकेशन टेम्पलेट।",
   "common.autoDetect": "স্বয়ংক্রিয় সনাক্তকরণ",
   "common.langAuto": "স্বয়ংক্রিয়",
   "common.lang": "ভাষা",
@@ -94,5 +95,5 @@ export const bnBd: TranslationDict = {
   "about.downloadingGuiUpdate": "अपडेट डाउनलोड हो रहा है ({progress}%)",
   "about.updateCompleteRestart": "अपडेट पूर्ण, कृपया ऐप पुनः प्रारंभ करें",
   "about.onlineUpdateFailed": "अपडेट विफल: {error}",
-  "about.newVersionNotice": "🚀 नया संस्करण {tag} उपलब्ध है!"
+  "about.newVersionNotice": "🚀 नया संस्करण {tag} उपलब्ध है!",
 };
