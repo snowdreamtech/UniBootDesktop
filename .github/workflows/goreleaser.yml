@@ -269,11 +269,13 @@ jobs:
       - name: "🔍 Verify Core Artifacts Generation"
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          if [ ! -f dist/metadata.json ]; then
-            echo "❌ GoReleaser failed to compile or generate core artifacts!"
+          if [ ! -s dist/checksums.txt ]; then
+            echo "❌ GoReleaser failed to generate dist/checksums.txt!"
+            ls -la dist/ || true
             exit 1
           fi
-          echo "✅ Core artifacts successfully generated. Proceeding to downstream publishers."
+          echo "✅ Core artifacts and checksums.txt successfully generated:"
+          head -n 20 dist/checksums.txt
 
       - name: "🛡️ Attest Build Provenance (SLSA)"
         if: startsWith(github.ref, 'refs/tags/')
