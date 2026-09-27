@@ -75,7 +75,9 @@ repos:
         exclude: |
           (?x)^(
             examples/plugin-go/unirtm-plugin-example|
-            docs/tapes/demo\.gif
+            docs/tapes/demo\.gif|
+            docs/public/logo-1024\.png|
+            assets/branding/app-icon\.png
           )
         stages: [pre-commit, pre-merge-commit]
         description: "Prevent large files (>1MB) from being committed."
@@ -232,7 +234,6 @@ repos:
         types: [text]
         exclude: '\.pre-commit-config\.yaml$'
         description: "Prevent accidental staging of sensitive private keys."
-
 
       # -- Deep Security & Vulnerability Audits -------------------------------
       - id: osv-scanner
@@ -442,7 +443,6 @@ repos:
         entry: unirtm hook-exec actionlint --shellcheck=
         files: ^\.github/workflows/.*\.yml$
         description: "Validate GitHub Actions workflow syntax."
-
 
       - id: editorconfig-checker
         name: editorconfig quality check
