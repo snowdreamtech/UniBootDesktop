@@ -37,6 +37,7 @@ rules:
       - "pr-title.yml"
       - "scorecard.yml"
       - "stale.yml"
+      - "wails.yml"
 
   # ----------------------------------------------------------------------------
   # template-injection: Suppresses warnings for template expansion in run blocks
@@ -63,6 +64,7 @@ rules:
       - "pr-title.yml"
       - "scorecard.yml"
       - "stale.yml"
+      - "wails.yml"
 
   # ----------------------------------------------------------------------------
   # untrusted-input: Suppresses warnings for using dynamically evaluated data
@@ -89,6 +91,7 @@ rules:
       - "pr-title.yml"
       - "scorecard.yml"
       - "stale.yml"
+      - "wails.yml"
 
   # ----------------------------------------------------------------------------
   # insecure-workflow: Overrides generic architectural insecure warnings
@@ -115,6 +118,7 @@ rules:
       - "pr-title.yml"
       - "scorecard.yml"
       - "stale.yml"
+      - "wails.yml"
 
   # ----------------------------------------------------------------------------
   # missing-permissions: Disables missing token permissions requirements
@@ -141,6 +145,7 @@ rules:
       - "pr-title.yml"
       - "scorecard.yml"
       - "stale.yml"
+      - "wails.yml"
 
   # ----------------------------------------------------------------------------
   # unpinned-uses: Suppresses warnings for unpinned action references
@@ -167,6 +172,7 @@ rules:
       - "pr-title.yml"
       - "scorecard.yml"
       - "stale.yml"
+      - "wails.yml"
 
   # ----------------------------------------------------------------------------
   # excessive-permissions: Suppresses warnings for broad GITHUB_TOKEN permissions
@@ -192,6 +198,7 @@ rules:
       - "pr-title.yml"
       - "scorecard.yml"
       - "stale.yml"
+      - "wails.yml"
 
   # ----------------------------------------------------------------------------
   # artipacked: Suppresses warnings for credential persistence in artifacts
@@ -217,3 +224,20 @@ rules:
       - "pr-title.yml"
       - "scorecard.yml"
       - "stale.yml"
+      - "wails.yml"
+
+  # ----------------------------------------------------------------------------
+  # dangerous-triggers: Suppresses warnings for workflow_run trigger
+  # ----------------------------------------------------------------------------
+  # Wails GUI packaging is chained to GoReleaser completion via workflow_run.
+  dangerous-triggers:
+    ignore:
+      - "wails.yml"
+
+  # ----------------------------------------------------------------------------
+  # github-env: Suppresses warnings for writing environment variables to GITHUB_ENV
+  # ----------------------------------------------------------------------------
+  # The workflow safely populates TAG, ASSET, and CHECKSUM_FILE paths.
+  github-env:
+    ignore:
+      - "wails.yml"
