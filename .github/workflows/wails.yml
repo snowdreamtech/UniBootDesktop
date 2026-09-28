@@ -35,7 +35,7 @@ jobs:
             asset_glob: "build/bin/*.dmg"
           - os: windows-latest
             target: windows/amd64
-            asset_glob: "build/bin/*installer*.exe"
+            asset_glob: "build/bin/*installer*.exe build/bin/*portable*.zip"
           - os: ubuntu-latest
             target: linux/amd64
             asset_glob: "build/bin/*.tar.gz"
@@ -255,6 +255,33 @@ jobs:
           fi
           echo "Windows installer produced: ${INSTALLER}"
 
+      - name: Package Windows portable zip
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXE_PATH="$(find build/bin -maxdepth 1 -name 'unigodesktop.exe' -print -quit 2>/dev/null || true)"
+          if [ -z "${EXE_PATH}" ] || [ ! -f "${EXE_PATH}" ]; then
+            echo "Windows executable unigodesktop.exe not found in build/bin" >&2
+            exit 1
+          fi
+          PORTABLE_DIR="build/bin/unigodesktop-portable"
+          mkdir -p "${PORTABLE_DIR}"
+          cp "${EXE_PATH}" "${PORTABLE_DIR}/unigodesktop.exe"
+          touch "${PORTABLE_DIR}/portable.dat"
+          PORTABLE_ZIP="build/bin/unigodesktop-gui_windows_amd64_portable.zip"
+          if command -v 7z >/dev/null 2>&1; then
+            7z a -tzip "${PORTABLE_ZIP}" "./${PORTABLE_DIR}/*"
+          else
+            tar -a -c -f "${PORTABLE_ZIP}" -C "${PORTABLE_DIR}" unigodesktop.exe portable.dat
+          fi
+          rm -rf "${PORTABLE_DIR}"
+          if [ ! -f "${PORTABLE_ZIP}" ]; then
+            echo "Failed to create portable zip at ${PORTABLE_ZIP}" >&2
+            exit 1
+          fi
+          echo "Windows portable zip produced: ${PORTABLE_ZIP}"
+
       - name: Create Linux archive
         if: runner.os == 'Linux'
         shell: bash
@@ -279,35 +306,46 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ASSET=""
-          for f in ${ASSET_GLOB}; do
-            if [ -f "$f" ]; then
-              ASSET="$f"
-              break
-            fi
+          MATCHED_ASSETS=()
+          for glob_pattern in ${ASSET_GLOB}; do
+            for f in ${glob_pattern}; do
+              if [ -f "$f" ]; then
+                MATCHED_ASSETS+=("$f")
+              fi
+            done
           done
-          if [ -z "${ASSET}" ]; then
+          if [ "${#MATCHED_ASSETS[@]}" -eq 0 ]; then
             echo "No release asset matched ${ASSET_GLOB}" >&2
             exit 1
           fi
+
           CHECKSUM_FILE="build/bin/unigodesktop-gui-${RUNNER_OS}.sha256"
+          rm -f "${CHECKSUM_FILE}"
+
+          for ASSET in "${MATCHED_ASSETS[@]}"; do
+            echo "Securing asset: ${ASSET}"
+            if command -v sha256sum >/dev/null 2>&1; then
+              sha256sum "${ASSET}" >> "${CHECKSUM_FILE}"
+            else
+              shasum -a 256 "${ASSET}" >> "${CHECKSUM_FILE}"
+            fi
+
+            syft "file:${ASSET}" -o "spdx-json=${ASSET}.sbom.spdx.json"
+            cosign sign-blob --yes \
+              --bundle "${ASSET}.sigstore.json" \
+              "${ASSET}"
+            cosign verify-blob \
+              --certificate-identity "${WORKFLOW_IDENTITY}" \
+              --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+              --bundle "${ASSET}.sigstore.json" \
+              "${ASSET}"
+          done
+
           if command -v sha256sum >/dev/null 2>&1; then
-            sha256sum "${ASSET}" > "${CHECKSUM_FILE}"
             sha256sum --check "${CHECKSUM_FILE}"
           else
-            shasum -a 256 "${ASSET}" > "${CHECKSUM_FILE}"
             shasum -a 256 --check "${CHECKSUM_FILE}"
           fi
-          syft "file:${ASSET}" -o "spdx-json=${ASSET}.sbom.spdx.json"
-          cosign sign-blob --yes \
-            --bundle "${ASSET}.sigstore.json" \
-            "${ASSET}"
-          cosign verify-blob \
-            --certificate-identity "${WORKFLOW_IDENTITY}" \
-            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-            --bundle "${ASSET}.sigstore.json" \
-            "${ASSET}"
-          echo "ASSET=${ASSET}" >> "$GITHUB_ENV"
           echo "CHECKSUM_FILE=${CHECKSUM_FILE}" >> "$GITHUB_ENV"
 
       - name: Attest GUI artifact provenance
@@ -334,15 +372,28 @@ jobs:
 
       - name: Upload GUI artifacts to GitHub Release
         env:
+          ASSET_GLOB: ${{ matrix.asset_glob }}
           REPOSITORY: ${{ github.repository }}
         shell: bash
         run: |
           set -euo pipefail
           upload_assets=()
-          for f in "${ASSET}" "${CHECKSUM_FILE}" "${ASSET}.sbom.spdx.json" "${ASSET}.sigstore.json"; do
-            if [ -f "$f" ]; then
-              upload_assets+=("$f")
-            fi
+          CHECKSUM_FILE="build/bin/unigodesktop-gui-${RUNNER_OS}.sha256"
+          if [ -f "${CHECKSUM_FILE}" ]; then
+            upload_assets+=("${CHECKSUM_FILE}")
+          fi
+          for glob_pattern in ${ASSET_GLOB}; do
+            for ASSET in ${glob_pattern}; do
+              if [ -f "${ASSET}" ]; then
+                upload_assets+=("${ASSET}")
+                if [ -f "${ASSET}.sbom.spdx.json" ]; then
+                  upload_assets+=("${ASSET}.sbom.spdx.json")
+                fi
+                if [ -f "${ASSET}.sigstore.json" ]; then
+                  upload_assets+=("${ASSET}.sigstore.json")
+                fi
+              fi
+            done
           done
           if [ "${#upload_assets[@]}" -eq 0 ]; then
             echo "No assets found to upload" >&2
