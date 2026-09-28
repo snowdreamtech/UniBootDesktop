@@ -283,15 +283,15 @@ jobs:
         with:
           subject-checksums: dist/checksums.txt
 
-      - name: "🧹 Cleanup on Failure (Rollback)"
+      - name: "🧹 Cleanup Partial Release on Failure"
         if: failure() && startsWith(github.ref, 'refs/tags/')
         shell: sh
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
         run: |
-          echo "⚠️ Release process failed for ${GITHUB_REF_NAME}. Rolling back partial release..."
-          # Delete the partial GitHub release and the associated tag to allow for a clean retry.
-          gh release delete "${GITHUB_REF_NAME}" --yes --cleanup-tag
+          echo "⚠️ Release process failed for ${GITHUB_REF_NAME}. Keeping git tag intact for audit and forward-fix."
+          # Delete partial GitHub release object if created, but NEVER delete the Git tag
+          gh release delete "${GITHUB_REF_NAME}" --yes 2>/dev/null || true
 
   verify:
     name: "🔍 Verify Release Signature"
