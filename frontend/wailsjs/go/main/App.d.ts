@@ -16,6 +16,8 @@ export function Greet(arg1:string):Promise<string>;
 
 export function OpenURL(arg1:string):Promise<void>;
 
+export function RestartApp():Promise<void>;
+
 export function SaveConfig(arg1:config.AppConfig):Promise<void>;
 
 export function TestNetwork(arg1:string):Promise<main.NetworkTestResult>;
