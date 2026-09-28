@@ -17,6 +17,7 @@ import (
 	"github.com/snowdreamtech/unigodesktop/internal/env"
 	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
 	"github.com/snowdreamtech/unigodesktop/internal/updater"
+	"github.com/snowdreamtech/unigodesktop/internal/version"
 )
 
 // UpdateStatus represents release update metadata.
@@ -27,20 +28,37 @@ type UpdateStatus struct {
 	DownloadURL string `json:"downloadUrl"`
 }
 
+// HasNewVersion checks whether latestTag is semantically newer than currentTag.
+// Returns false if currentTag is empty, "N/A", "dev", or if latestTag is not newer.
+func HasNewVersion(currentTag, latestTag string) bool {
+	cleanCur := strings.TrimSpace(currentTag)
+	cleanLatest := strings.TrimSpace(latestTag)
+	if cleanCur == "" || cleanCur == "N/A" || cleanCur == "dev" {
+		return false
+	}
+	if cleanLatest == "" {
+		return false
+	}
+	return version.CompareVersions(cleanLatest, cleanCur) > 0
+}
+
 // CheckUpdate queries GitHub Releases for newer release versions.
 func CheckUpdate(ctx context.Context) *UpdateStatus {
 	currentTag := env.GitTag
-	if currentTag == "" || currentTag == "N/A" {
-		currentTag = "v0.1.0"
-	}
 
 	info, err := updater.FetchLatestReleaseInfo(ctx)
 	if err == nil && info != nil {
+		latestTag := info.TagName
+		hasUpdate := HasNewVersion(currentTag, latestTag)
+		var downloadURL string
+		if hasUpdate {
+			downloadURL = "https://github.com/snowdreamtech/UniGoDesktop/releases/tag/" + latestTag
+		}
 		return &UpdateStatus{
-			HasUpdate:   true,
+			HasUpdate:   hasUpdate,
 			CurrentTag:  currentTag,
-			LatestTag:   info.TagName,
-			DownloadURL: "https://github.com/snowdreamtech/UniGoDesktop/releases/tag/" + info.TagName,
+			LatestTag:   latestTag,
+			DownloadURL: downloadURL,
 		}
 	}
 

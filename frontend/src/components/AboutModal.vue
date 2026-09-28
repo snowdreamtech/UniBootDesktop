@@ -343,10 +343,19 @@ const handleCheckUpdate = async () => {
     if (wailsApp && typeof wailsApp.CheckUpdate === "function") {
       const res = await wailsApp.CheckUpdate();
       if (res && res.hasUpdate) {
-        hasUpdateAvailable.value = true;
-        latestTag.value = res.latestTag || res.latestVersion || "v0.2.0";
-        updateMessage.value = `${t("about.updateAvailable")} ${latestTag.value}!`;
-        updateStatusClass.value = "has-update";
+        const cleanTag = (tag: string) => (tag || "").trim().toLowerCase().replace(/^v/, "");
+        const curVer = cleanTag(displayVersion.value) || cleanTag(displayGitTag.value) || cleanTag(res.currentTag);
+        const newVer = cleanTag(res.latestTag || res.latestVersion);
+        if (newVer && curVer && newVer === curVer) {
+          hasUpdateAvailable.value = false;
+          updateMessage.value = t("about.isLatest");
+          updateStatusClass.value = "is-latest";
+        } else {
+          hasUpdateAvailable.value = true;
+          latestTag.value = res.latestTag || res.latestVersion || "v0.2.0";
+          updateMessage.value = `${t("about.updateAvailable")} ${latestTag.value}!`;
+          updateStatusClass.value = "has-update";
+        }
       } else {
         hasUpdateAvailable.value = false;
         updateMessage.value = t("about.isLatest");
