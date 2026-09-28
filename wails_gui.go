@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 
 	"github.com/snowdreamtech/unigodesktop/cmd"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -89,7 +90,8 @@ func RunWails() error {
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{
 				Title:   "UniGoDesktop",
-				Message: "Universal Go Desktop Suite",
+				Message: fmt.Sprintf("Universal Go Desktop Suite\nVersion %s", env.GitTag),
+				Icon:    appIcon,
 			},
 		},
 		Linux: &linux.Options{
