@@ -333,14 +333,18 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          assets=(
-            "${ASSET}"
-            "${CHECKSUM_FILE}"
-            "${ASSET}.sbom.spdx.json"
-            "${ASSET}.sigstore.json"
-          )
+          upload_assets=()
+          for f in "${ASSET}" "${CHECKSUM_FILE}" "${ASSET}.sbom.spdx.json" "${ASSET}.sigstore.json"; do
+            if [ -f "$f" ]; then
+              upload_assets+=("$f")
+            fi
+          done
+          if [ "${#upload_assets[@]}" -eq 0 ]; then
+            echo "No assets found to upload" >&2
+            exit 1
+          fi
           gh release upload "${TAG}" \
             --repo "${REPOSITORY}" \
             --clobber \
-            "${assets[@]}"
+            ${upload_assets[@]+"${upload_assets[@]}"}
 
