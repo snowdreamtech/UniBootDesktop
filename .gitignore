@@ -747,3 +747,17 @@ frontend/package.json.md5
 internal/database/file:
 internal/database/file*
 .trivycache/
+
+# =============================================================================
+# Wails Desktop Application
+# =============================================================================
+!build/
+build/*
+!build/darwin/
+!build/darwin/**
+!build/windows/
+!build/windows/**
+!build/linux/
+!build/linux/**
+!build/appicon.png
+build/bin/
