@@ -83,7 +83,7 @@ func RunWails() error {
 				HideTitleBar:               false,
 				FullSizeContent:            false,
 			},
-			Appearance:           mac.NSAppearanceNameDarkAqua,
+			Appearance:           mac.DefaultAppearance,
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{
