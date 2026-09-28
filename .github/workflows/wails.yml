@@ -315,11 +315,21 @@ jobs:
           mkdir -p "${PORTABLE_DIR}"
           cp "${EXE_PATH}" "${PORTABLE_DIR}/unigodesktop.exe"
           touch "${PORTABLE_DIR}/portable.dat"
+          if [ -f "build/windows/icon.ico" ]; then
+            cp "build/windows/icon.ico" "${PORTABLE_DIR}/icon.ico"
+          fi
+          cat << 'EOF' > "${PORTABLE_DIR}/README.txt"
+UniGoDesktop Portable Edition
+=============================
+This is the standalone portable edition of UniGoDesktop.
+All user configuration, local caches, and WebView2 runtime data are isolated in the local "data" directory.
+Please do not delete portable.dat if you wish to keep portable mode active.
+EOF
           PORTABLE_ZIP="build/bin/unigodesktop-gui_windows_amd64_portable.zip"
           if command -v 7z >/dev/null 2>&1; then
             7z a -tzip "${PORTABLE_ZIP}" "./${PORTABLE_DIR}/*"
           else
-            tar -a -c -f "${PORTABLE_ZIP}" -C "${PORTABLE_DIR}" unigodesktop.exe portable.dat
+            tar -a -c -f "${PORTABLE_ZIP}" -C "${PORTABLE_DIR}" .
           fi
           rm -rf "${PORTABLE_DIR}"
           if [ ! -f "${PORTABLE_ZIP}" ]; then
