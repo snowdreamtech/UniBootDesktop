@@ -55,9 +55,14 @@
                 </array>
                 <key>CFBundleTypeRole</key>
                 <string>{{.Role}}</string>
-            </dict>
+        </dict>
           {{end}}
         </array>
         {{end}}
+        <key>NSAppTransportSecurity</key>
+        <dict>
+            <key>NSAllowsLocalNetworking</key>
+            <true/>
+        </dict>
     </dict>
 </plist>
