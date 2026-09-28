@@ -38,7 +38,7 @@ jobs:
             asset_glob: "build/bin/*installer*.exe build/bin/*portable*.zip"
           - os: ubuntu-latest
             target: linux/amd64
-            asset_glob: "build/bin/*.tar.gz"
+            asset_glob: "build/bin/*.tar.gz build/bin/*.deb build/bin/*.rpm"
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     concurrency:
@@ -299,6 +299,44 @@ jobs:
           cp build/appicon.png build/bin/linux-dist/unigodesktop.png
           tar -czf build/bin/unigodesktop-gui_linux_amd64.tar.gz -C build/bin/linux-dist unigodesktop unigodesktop.desktop unigodesktop.png
           rm -rf build/bin/linux-dist
+
+      - name: Package Linux deb & rpm
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v nfpm >/dev/null 2>&1; then
+            echo "Installing nfpm..."
+            curl -sfL --retry 3 https://github.com/goreleaser/nfpm/releases/download/v2.41.3/nfpm_2.41.3_Linux_x86_64.tar.gz | tar -xz -C /tmp nfpm
+            sudo mv /tmp/nfpm /usr/local/bin/
+          fi
+
+          CLEAN_VERSION="${TAG#v}"
+          cat << EOF > /tmp/nfpm.yaml
+          name: "unigodesktop"
+          arch: "amd64"
+          platform: "linux"
+          version: "${CLEAN_VERSION}"
+          section: "utils"
+          priority: "optional"
+          maintainer: "SnowdreamTech <snowdreamtech@qq.com>"
+          description: "Universal Go Desktop Suite"
+          vendor: "SnowdreamTech"
+          homepage: "https://github.com/snowdreamtech/UniGoDesktop"
+          license: "MIT"
+          contents:
+            - src: "build/bin/unigodesktop"
+              dst: "/usr/bin/unigodesktop"
+            - src: "build/linux/unigodesktop.desktop"
+              dst: "/usr/share/applications/unigodesktop.desktop"
+            - src: "build/appicon.png"
+              dst: "/usr/share/icons/hicolor/512x512/apps/unigodesktop.png"
+          EOF
+
+          nfpm package --config /tmp/nfpm.yaml --packager deb --target "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_amd64.deb"
+          nfpm package --config /tmp/nfpm.yaml --packager rpm --target "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_amd64.rpm"
+          rm -f /tmp/nfpm.yaml
+          echo "Linux deb and rpm packages created successfully"
 
       - name: Secure GUI artifacts
         env:
