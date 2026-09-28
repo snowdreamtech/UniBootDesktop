@@ -66,6 +66,11 @@ func (a *App) startup(ctx context.Context) {
 	logger.Info("UniGoDesktop Wails GUI runtime started successfully")
 }
 
+// shutdown is called when the Wails application is shutting down.
+func (a *App) shutdown(ctx context.Context) {
+	logger.Info("UniGoDesktop Wails GUI runtime shutting down")
+}
+
 // Greet returns a friendly greeting for demonstration.
 func (a *App) Greet(name string) string {
 	if name == "" {
