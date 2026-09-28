@@ -73,3 +73,14 @@ try {
 } catch (e) {
   console.warn("Failed to update build/windows/wails.exe.manifest:", e);
 }
+
+// 4. Update frontend/package.json
+const pkgPath = resolve(projectRoot, "frontend/package.json");
+try {
+  const pkgContent = JSON.parse(await readFile(pkgPath, "utf-8"));
+  pkgContent.version = cleanVer;
+  await writeFile(pkgPath, JSON.stringify(pkgContent, null, 2) + "\n", "utf-8");
+  console.log(`Updated frontend/package.json version to ${cleanVer}`);
+} catch (e) {
+  console.warn("Failed to update frontend/package.json:", e);
+}
