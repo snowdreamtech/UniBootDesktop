@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.4](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.3.3...v0.3.4) (2026-09-28)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** fix macos bash array expansion and use bash for windows installer step ([a461049](https://github.com/snowdreamtech/UniGoDesktop/commit/a461049d8ce405ca50688ff048a0c015f348ba4f))
+
 ## [0.3.3](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.3.2...v0.3.3) (2026-09-28)
 
 
