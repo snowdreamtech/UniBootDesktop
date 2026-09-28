@@ -102,4 +102,3 @@ func TestHasNewVersion(t *testing.T) {
 		})
 	}
 }
-

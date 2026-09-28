@@ -175,4 +175,3 @@ func (a *App) RestartApp() error {
 	}
 	return nil
 }
-
