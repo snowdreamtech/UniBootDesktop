@@ -385,6 +385,12 @@ EOF
             fi
             curl -sfL --retry 3 "${GITHUB_PROXY}https://github.com/goreleaser/nfpm/releases/download/v2.41.3/nfpm_2.41.3_Linux_${NFPM_ARCH}.tar.gz" | tar -xz -C /tmp nfpm
             sudo mv /tmp/nfpm /usr/local/bin/
+            INSTALLED_NFPM_VER="$(nfpm --version 2>&1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
+            if [ "${INSTALLED_NFPM_VER}" != "2.41.3" ]; then
+              echo "nfpm version mismatch: expected 2.41.3, got ${INSTALLED_NFPM_VER:-unknown}" >&2
+              exit 1
+            fi
+            echo "nfpm v${INSTALLED_NFPM_VER} installed successfully"
           fi
 
           cat << EOF > /tmp/nfpm.yaml
@@ -423,6 +429,13 @@ EOF
           if [ ! -f "${APPIMAGETOOL}" ]; then
             curl -sfL --retry 3 -o "${APPIMAGETOOL}" "${GITHUB_PROXY}https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${APPIMAGE_ARCH}.AppImage"
             chmod +x "${APPIMAGETOOL}"
+            # Verify the downloaded binary is a valid executable (continuous tag has no stable checksum)
+            if ! file "${APPIMAGETOOL}" | grep -qiE 'ELF|executable'; then
+              echo "Downloaded appimagetool is not a valid executable" >&2
+              rm -f "${APPIMAGETOOL}"
+              exit 1
+            fi
+            echo "appimagetool downloaded and verified"
           fi
 
           APPDIR="build/bin/AppDir"
