@@ -39,6 +39,9 @@ jobs:
           - os: ubuntu-latest
             target: linux/amd64
             asset_glob: "build/bin/*.tar.gz build/bin/*.deb build/bin/*.rpm build/bin/*.AppImage"
+          - os: ubuntu-24.04-arm
+            target: linux/arm64
+            asset_glob: "build/bin/*.tar.gz build/bin/*.deb build/bin/*.rpm build/bin/*.AppImage"
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     concurrency:
@@ -92,9 +95,9 @@ jobs:
             ~/AppData/Local/go-build
             ~/.npm
             ~/AppData/Local/npm-cache
-          key: ${{ runner.os }}-wails-${{ hashFiles('go.sum', 'frontend/package-lock.json') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-wails-${{ hashFiles('go.sum', 'frontend/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-wails-
+            ${{ runner.os }}-${{ runner.arch }}-wails-
 
       - name: Resolve build metadata
         shell: bash
