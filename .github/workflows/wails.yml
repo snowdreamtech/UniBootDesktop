@@ -265,7 +265,12 @@ jobs:
             echo "Linux binary not found at $APP_BIN" >&2
             exit 1
           fi
-          tar -czf build/bin/unigodesktop-gui_linux_amd64.tar.gz -C build/bin unigodesktop
+          mkdir -p build/bin/linux-dist
+          cp "$APP_BIN" build/bin/linux-dist/unigodesktop
+          cp build/linux/unigodesktop.desktop build/bin/linux-dist/unigodesktop.desktop
+          cp build/appicon.png build/bin/linux-dist/unigodesktop.png
+          tar -czf build/bin/unigodesktop-gui_linux_amd64.tar.gz -C build/bin/linux-dist unigodesktop unigodesktop.desktop unigodesktop.png
+          rm -rf build/bin/linux-dist
 
       - name: Secure GUI artifacts
         env:
@@ -347,4 +352,3 @@ jobs:
             --repo "${REPOSITORY}" \
             --clobber \
             ${upload_assets[@]+"${upload_assets[@]}"}
-
