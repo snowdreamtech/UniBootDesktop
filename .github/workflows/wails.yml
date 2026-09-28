@@ -138,6 +138,16 @@ jobs:
         shell: bash
         run: unirtm exec -- node scripts/prepare-app-icon.mjs
 
+      - name: Verify frontend build artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -d "frontend/dist" ] || [ ! -f "frontend/dist/index.html" ]; then
+            echo "frontend/dist or frontend/dist/index.html is missing, frontend build failed" >&2
+            exit 1
+          fi
+          echo "Frontend build verified: frontend/dist/index.html exists"
+
       - name: Build Wails native bundle
         if: runner.os != 'Windows'
         shell: bash
