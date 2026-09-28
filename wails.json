@@ -16,6 +16,9 @@
     "name": "SnowdreamTech",
     "email": "snowdreamtech@qq.com"
   },
+  "windows": {
+    "webview2": "download"
+  },
   "info": {
     "companyName": "SnowdreamTech",
     "productName": "UniGoDesktop",
