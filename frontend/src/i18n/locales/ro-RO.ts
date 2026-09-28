@@ -94,7 +94,9 @@ export const roRo: TranslationDict = {
   "about.updateReady": "Güncelleme hazır: {path}",
   "about.updateDownloadFailed": "İndirme başarısız",
   "about.downloadingGuiUpdate": "Güncelleme indiriliyor (%{progress})",
-  "about.updateCompleteRestart": "Güncelleme tamamlandı, lütfen yeniden başlatın",
+  "about.updateCompleteRestart": "Noua versiune este gata. Reporniți aplicația pentru a aplica modificările.",
+  "about.restartToApply": "Reporniți pentru a aplica",
+  "about.restarting": "Se repornește...",
   "about.onlineUpdateFailed": "Güncelleme başarısız: {error}",
   "about.newVersionNotice": "🚀 Yeni sürüm {tag} mevcut!",
 };

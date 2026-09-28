@@ -93,7 +93,9 @@ export const enUs: TranslationDict = {
   "about.updateReady": "Update ready: {path}",
   "about.updateDownloadFailed": "Download failed",
   "about.downloadingGuiUpdate": "Downloading update ({progress}%)",
-  "about.updateCompleteRestart": "Update complete, please restart",
+  "about.updateCompleteRestart": "New version ready. Restart the application to apply.",
+  "about.restartToApply": "Restart to Apply",
+  "about.restarting": "Restarting...",
   "about.onlineUpdateFailed": "Update failed: {error}",
   "about.newVersionNotice": "🚀 New version {tag} available!",
 };

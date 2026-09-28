@@ -93,7 +93,9 @@ export const csCz: TranslationDict = {
   "about.updateReady": "Aktualizacja gotowa: {path}",
   "about.updateDownloadFailed": "Błąd pobierania",
   "about.downloadingGuiUpdate": "Pobieranie aktualizacji ({progress}%)",
-  "about.updateCompleteRestart": "Aktualizacja zakończona, zrestartuj aplikację",
+  "about.updateCompleteRestart": "Nová verze je připravena. Restartujte aplikaci pro její použití.",
+  "about.restartToApply": "Restartovat a použít",
+  "about.restarting": "Restartování...",
   "about.onlineUpdateFailed": "Błąd aktualizacji: {error}",
   "about.newVersionNotice": "🚀 Dostępna nowa wersja {tag}!",
 };

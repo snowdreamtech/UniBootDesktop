@@ -94,7 +94,9 @@ export const azAz: TranslationDict = {
   "about.updateReady": "Güncelleme hazır: {path}",
   "about.updateDownloadFailed": "İndirme başarısız",
   "about.downloadingGuiUpdate": "Güncelleme indiriliyor (%{progress})",
-  "about.updateCompleteRestart": "Güncelleme tamamlandı, lütfen yeniden başlatın",
+  "about.updateCompleteRestart": "Yeni versiya hazırdır. Tətbiq etmək üçün proqramı yenidən başladın.",
+  "about.restartToApply": "Yenidən başlat",
+  "about.restarting": "Yenidən başladılır...",
   "about.onlineUpdateFailed": "Güncelleme başarısız: {error}",
   "about.newVersionNotice": "🚀 Yeni sürüm {tag} mevcut!",
 };

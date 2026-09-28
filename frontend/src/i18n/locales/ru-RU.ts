@@ -93,7 +93,9 @@ export const ruRu: TranslationDict = {
   "about.updateReady": "Обновление готово: {path}",
   "about.updateDownloadFailed": "Ошибка загрузки",
   "about.downloadingGuiUpdate": "Загрузка обновления ({progress}%)",
-  "about.updateCompleteRestart": "Обновление завершено, перезапустите приложение",
+  "about.updateCompleteRestart": "Новая версия готова. Перезапустите приложение для применения.",
+  "about.restartToApply": "Перезапустить сейчас",
+  "about.restarting": "Перезапуск...",
   "about.onlineUpdateFailed": "Сбой обновления: {error}",
   "about.newVersionNotice": "🚀 Доступна новая версия {tag}!",
 };

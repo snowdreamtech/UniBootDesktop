@@ -92,7 +92,9 @@ export const noNo: TranslationDict = {
   "about.updateReady": "Update gereed: {path}",
   "about.updateDownloadFailed": "Download mislukt",
   "about.downloadingGuiUpdate": "Update downloaden ({progress}%)",
-  "about.updateCompleteRestart": "Update voltooid, herstart de applicatie",
+  "about.updateCompleteRestart": "Ny versjon er klar. Start programmet på nytt for å ta i bruk.",
+  "about.restartToApply": "Start på nytt nå",
+  "about.restarting": "Starter på nytt...",
   "about.onlineUpdateFailed": "Update mislukt: {error}",
   "about.newVersionNotice": "🚀 Nieuwe versie {tag} beschikbaar!",
 };

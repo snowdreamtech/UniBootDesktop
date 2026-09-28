@@ -94,7 +94,9 @@ export const huHu: TranslationDict = {
   "about.updateReady": "Güncelleme hazır: {path}",
   "about.updateDownloadFailed": "İndirme başarısız",
   "about.downloadingGuiUpdate": "Güncelleme indiriliyor (%{progress})",
-  "about.updateCompleteRestart": "Güncelleme tamamlandı, lütfen yeniden başlatın",
+  "about.updateCompleteRestart": "Az új verzió készen áll. Az alkalmazáshoz indítsa újra az alkalmazást.",
+  "about.restartToApply": "Újraindítás most",
+  "about.restarting": "Újraindítás...",
   "about.onlineUpdateFailed": "Güncelleme başarısız: {error}",
   "about.newVersionNotice": "🚀 Yeni sürüm {tag} mevcut!",
 };

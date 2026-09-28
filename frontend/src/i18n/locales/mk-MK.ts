@@ -93,7 +93,9 @@ export const mkMk: TranslationDict = {
   "about.updateReady": "Обновление готово: {path}",
   "about.updateDownloadFailed": "Ошибка загрузки",
   "about.downloadingGuiUpdate": "Загрузка обновления ({progress}%)",
-  "about.updateCompleteRestart": "Обновление завершено, перезапустите приложение",
+  "about.updateCompleteRestart": "Новата верзија е подготвена. Рестартирајте ја апликацијата за да се примени.",
+  "about.restartToApply": "Рестартирај веднаш",
+  "about.restarting": "Се рестартира...",
   "about.onlineUpdateFailed": "Сбой обновления: {error}",
   "about.newVersionNotice": "🚀 Доступна новая версия {tag}!",
 };

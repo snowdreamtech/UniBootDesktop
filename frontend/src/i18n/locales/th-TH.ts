@@ -93,7 +93,9 @@ export const thTh: TranslationDict = {
   "about.updateReady": "อัปเดตพร้อม: {path}",
   "about.updateDownloadFailed": "การดาวน์โหลดล้มเหลว",
   "about.downloadingGuiUpdate": "กำลังดาวน์โหลดอัปเดต ({progress}%)",
-  "about.updateCompleteRestart": "อัปเดตเสร็จสมบูรณ์ โปรดรีสตาร์ทแอป",
+  "about.updateCompleteRestart": "เวอร์ชันใหม่พร้อมแล้ว รีสตาร์ทแอปเพื่อเริ่มใช้งาน",
+  "about.restartToApply": "รีสตาร์ทเพื่อใช้งาน",
+  "about.restarting": "กำลังรีสตาร์ท...",
   "about.onlineUpdateFailed": "การอัปเดตล้มเหลว: {error}",
   "about.newVersionNotice": "🚀 มีเวอร์ชันใหม่ {tag} แล้ว!",
 };

@@ -92,7 +92,9 @@ export const koKr: TranslationDict = {
   "about.updateReady": "업데이트 준비 완료: {path}",
   "about.updateDownloadFailed": "다운로드 실패",
   "about.downloadingGuiUpdate": "업데이트 다운로드 중 ({progress}%)",
-  "about.updateCompleteRestart": "업데이트 완료, 다시 시작하세요",
+  "about.updateCompleteRestart": "새 버전이 준비되었습니다. 적용하려면 앱을 다시 시작하세요.",
+  "about.restartToApply": "지금 다시 시작",
+  "about.restarting": "다시 시작하는 중...",
   "about.onlineUpdateFailed": "업데이트 실패: {error}",
   "about.newVersionNotice": "🚀 새 버전 {tag} 사용 가능!",
 };

@@ -92,7 +92,9 @@ export const nlNl: TranslationDict = {
   "about.updateReady": "Update gereed: {path}",
   "about.updateDownloadFailed": "Download mislukt",
   "about.downloadingGuiUpdate": "Update downloaden ({progress}%)",
-  "about.updateCompleteRestart": "Update voltooid, herstart de applicatie",
+  "about.updateCompleteRestart": "Nieuwe versie gereed. Start de applicatie opnieuw op om toe te passen.",
+  "about.restartToApply": "Herstarten en toepassen",
+  "about.restarting": "Bezig met herstarten...",
   "about.onlineUpdateFailed": "Update mislukt: {error}",
   "about.newVersionNotice": "🚀 Nieuwe versie {tag} beschikbaar!",
 };

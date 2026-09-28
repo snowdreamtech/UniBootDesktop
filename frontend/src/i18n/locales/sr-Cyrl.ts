@@ -93,7 +93,9 @@ export const srCyrl: TranslationDict = {
   "about.updateReady": "Обновление готово: {path}",
   "about.updateDownloadFailed": "Ошибка загрузки",
   "about.downloadingGuiUpdate": "Загрузка обновления ({progress}%)",
-  "about.updateCompleteRestart": "Обновление завершено, перезапустите приложение",
+  "about.updateCompleteRestart": "Нова верзија је спремна. Поново покрените апликацију да бисте применили.",
+  "about.restartToApply": "Поново покрени",
+  "about.restarting": "Поновно покретање...",
   "about.onlineUpdateFailed": "Сбой обновления: {error}",
   "about.newVersionNotice": "🚀 Доступна новая версия {tag}!",
 };

@@ -92,7 +92,9 @@ export const fiFi: TranslationDict = {
   "about.updateReady": "Update gereed: {path}",
   "about.updateDownloadFailed": "Download mislukt",
   "about.downloadingGuiUpdate": "Update downloaden ({progress}%)",
-  "about.updateCompleteRestart": "Update voltooid, herstart de applicatie",
+  "about.updateCompleteRestart": "Uusi versio on valmis. Ota se käyttöön käynnistämällä sovellus uudelleen.",
+  "about.restartToApply": "Käynnistä uudelleen",
+  "about.restarting": "Käynnistetään uudelleen...",
   "about.onlineUpdateFailed": "Update mislukt: {error}",
   "about.newVersionNotice": "🚀 Nieuwe versie {tag} beschikbaar!",
 };

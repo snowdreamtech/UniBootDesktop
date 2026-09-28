@@ -93,7 +93,9 @@ export const urPk: TranslationDict = {
   "about.updateReady": "اپ ڈیٹ تیار ہے: {path}",
   "about.updateDownloadFailed": "ڈاؤن لوڈ ناکام ہو گیا",
   "about.downloadingGuiUpdate": "اپ ڈیٹ ڈاؤن لوڈ ہو رہا ہے ({progress}%)",
-  "about.updateCompleteRestart": "اپ ڈیٹ مکمل ہو گیا، براہ کرم ایپ دوبارہ شروع کریں",
+  "about.updateCompleteRestart": "نیا ورژن تیار ہے۔ لاگو کرنے کے لیے ایپلیکیشن دوبارہ شروع کریں۔",
+  "about.restartToApply": "لاگو کرنے کیلئے دوبارہ شروع کریں",
+  "about.restarting": "دوبارہ شروع ہو رہا ہے...",
   "about.onlineUpdateFailed": "اپ ڈیٹ ناکام ہو گیا: {error}",
   "about.newVersionNotice": "🚀 نیا ورژن {tag} دستیاب ہے!",
 };

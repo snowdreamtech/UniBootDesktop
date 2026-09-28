@@ -93,7 +93,9 @@ export const faIr: TranslationDict = {
   "about.updateReady": "به‌روزرسانی آماده است: {path}",
   "about.updateDownloadFailed": "بارگیری ناموفق بود",
   "about.downloadingGuiUpdate": "در حال بارگیری به‌روزرسانی ({progress}%)",
-  "about.updateCompleteRestart": "به‌روزرسانی انجام شد، لطفاً برنامه را مجدداً راه‌اندازی کنید",
+  "about.updateCompleteRestart": "نسخه جدید آماده است. برای اعمال، برنامه را مجدداً راه‌اندازی کنید.",
+  "about.restartToApply": "راه‌اندازی مجدد برای اعمال",
+  "about.restarting": "در حال راه‌اندازی مجدد...",
   "about.onlineUpdateFailed": "به‌روزرسانی ناموفق بود: {error}",
   "about.newVersionNotice": "🚀 نسخه جدید {tag} در دسترس است!",
 };

@@ -93,7 +93,9 @@ export const skSk: TranslationDict = {
   "about.updateReady": "Aktualizacja gotowa: {path}",
   "about.updateDownloadFailed": "Błąd pobierania",
   "about.downloadingGuiUpdate": "Pobieranie aktualizacji ({progress}%)",
-  "about.updateCompleteRestart": "Aktualizacja zakończona, zrestartuj aplikację",
+  "about.updateCompleteRestart": "Nová verzia je pripravená. Reštartujte aplikáciu pre jej použitie.",
+  "about.restartToApply": "Reštartovať a použiť",
+  "about.restarting": "Reštartovanie...",
   "about.onlineUpdateFailed": "Błąd aktualizacji: {error}",
   "about.newVersionNotice": "🚀 Dostępna nowa wersja {tag}!",
 };

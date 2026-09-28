@@ -93,7 +93,9 @@ export const beBy: TranslationDict = {
   "about.updateReady": "Обновление готово: {path}",
   "about.updateDownloadFailed": "Ошибка загрузки",
   "about.downloadingGuiUpdate": "Загрузка обновления ({progress}%)",
-  "about.updateCompleteRestart": "Обновление завершено, перезапустите приложение",
+  "about.updateCompleteRestart": "Новая версія гатовая. Перазапусціце праграму, каб прымяніць.",
+  "about.restartToApply": "Перазапусціць зараз",
+  "about.restarting": "Перазапуск...",
   "about.onlineUpdateFailed": "Сбой обновления: {error}",
   "about.newVersionNotice": "🚀 Доступна новая версия {tag}!",
 };

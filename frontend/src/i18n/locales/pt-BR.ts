@@ -94,7 +94,9 @@ export const ptBr: TranslationDict = {
   "about.updateReady": "Atualização pronta: {path}",
   "about.updateDownloadFailed": "Falha no download",
   "about.downloadingGuiUpdate": "Baixando atualização ({progress}%)",
-  "about.updateCompleteRestart": "Atualização concluída, reinicie o aplicativo",
+  "about.updateCompleteRestart": "Nova versão pronta. Reinicie o aplicativo para aplicar.",
+  "about.restartToApply": "Reiniciar para aplicar",
+  "about.restarting": "Reiniciando...",
   "about.onlineUpdateFailed": "Falha na atualização: {error}",
   "about.newVersionNotice": "🚀 Nova versão {tag} disponível!",
 };

@@ -58,7 +58,7 @@
             </button>
 
             <button
-              v-if="!hasUpdateAvailable"
+              v-if="!hasUpdateAvailable && !isRestartReady"
               class="action-btn primary-btn"
               @click="handleCheckUpdate"
               :disabled="checking || updating"
@@ -95,6 +95,23 @@
                 <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
               </svg>
               <span>{{ checking ? t("about.checking") : t("about.checkUpdate") }}</span>
+            </button>
+
+            <!-- 关键演进：更新准备就绪时，按钮就地转化为【立即重启生效】 -->
+            <button
+              v-else-if="isRestartReady"
+              class="action-btn restart-btn"
+              @click="handleRestartApp"
+              :disabled="restarting"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+              <span>{{
+                restarting
+                  ? (t("about.restarting") || "正在重启...")
+                  : (t("about.restartToApply") || "立即重启生效")
+              }}</span>
             </button>
 
             <button v-else class="action-btn update-btn" @click="handlePerformUpdate" :disabled="updating">
@@ -198,6 +215,8 @@ const displayBuildTime = computed(() => appInfo.value.buildTime || "N/A");
 const copied = ref(false);
 const checking = ref(false);
 const updating = ref(false);
+const isRestartReady = ref(false);
+const restarting = ref(false);
 const updateProgress = ref(0);
 const updateStatusText = ref("");
 const hasUpdateAvailable = ref(false);
@@ -268,6 +287,8 @@ watch(
       copied.value = false;
       updateMessage.value = "";
       updating.value = false;
+      isRestartReady.value = false;
+      restarting.value = false;
     }
   }
 );
@@ -386,7 +407,8 @@ const handlePerformUpdate = async () => {
     if (wailsApp && typeof wailsApp.PerformGuiUpdate === "function") {
       const res = await wailsApp.PerformGuiUpdate();
       if (res && res.success) {
-        updateMessage.value = t("about.updateReady", { path: res.targetFile });
+        isRestartReady.value = true;
+        updateMessage.value = t("about.updateCompleteRestart");
         updateStatusClass.value = "is-latest";
       } else {
         updateMessage.value = t("about.updateDownloadFailed");
@@ -402,6 +424,7 @@ const handlePerformUpdate = async () => {
         if (p >= 100) {
           clearInterval(interval);
           updating.value = false;
+          isRestartReady.value = true;
           updateMessage.value = t("about.updateCompleteRestart");
           updateStatusClass.value = "is-latest";
         }
@@ -416,6 +439,26 @@ const handlePerformUpdate = async () => {
     } else {
       updating.value = false;
     }
+  }
+};
+
+const handleRestartApp = async () => {
+  logUserAction("INFO", "User clicked restart app to apply update");
+  restarting.value = true;
+  updateMessage.value = t("about.restarting") || "正在重启应用...";
+  try {
+    const wailsApp = (window as any)?.go?.main?.App;
+    if (wailsApp && typeof wailsApp.RestartApp === "function") {
+      await wailsApp.RestartApp();
+    } else {
+      setTimeout(() => {
+        window.location.reload();
+      }, 800);
+    }
+  } catch (err) {
+    restarting.value = false;
+    updateMessage.value = String(err);
+    updateStatusClass.value = "update-error";
   }
 };
 </script>
@@ -621,6 +664,18 @@ const handlePerformUpdate = async () => {
 
 .update-btn:hover:not(:disabled) {
   background: #047857;
+}
+
+.restart-btn {
+  background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.restart-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8 0%, #0369a1 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
 }
 
 .update-progress-container {

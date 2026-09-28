@@ -92,7 +92,9 @@ export const arSa: TranslationDict = {
   "about.updateReady": "التحديث جاهز: {path}",
   "about.updateDownloadFailed": "فشل التنزيل",
   "about.downloadingGuiUpdate": "جارٍ تنزيل التحديث ({progress}%)",
-  "about.updateCompleteRestart": "اكتمل التحديث، يُرجى إعادة تشغيل التطبيق",
+  "about.updateCompleteRestart": "الإصدار الجديد جاهز. أعد تشغيل التطبيق للتطبيق.",
+  "about.restartToApply": "إعادة التشغيل للتطبيق",
+  "about.restarting": "جارٍ إعادة التشغيل...",
   "about.onlineUpdateFailed": "فشل التحديث: {error}",
   "about.newVersionNotice": "🚀 إصدار جديد {tag} متوفر الآن!",
 };

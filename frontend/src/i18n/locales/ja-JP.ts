@@ -93,7 +93,9 @@ export const jaJp: TranslationDict = {
   "about.updateReady": "更新準備完了: {path}",
   "about.updateDownloadFailed": "ダウンロード失敗",
   "about.downloadingGuiUpdate": "アップデータをダウンロード中 ({progress}%)",
-  "about.updateCompleteRestart": "更新が完了しました。再起動してください",
+  "about.updateCompleteRestart": "新しいバージョンの準備ができました。再起動して適用してください。",
+  "about.restartToApply": "再起動して適用",
+  "about.restarting": "再起動中...",
   "about.onlineUpdateFailed": "更新失敗: {error}",
   "about.newVersionNotice": "🚀 新バージョン {tag} が見つかりました！",
 };

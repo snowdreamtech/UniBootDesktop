@@ -93,7 +93,9 @@ export const itIt: TranslationDict = {
   "about.updateReady": "Aggiornamento pronto: {path}",
   "about.updateDownloadFailed": "Download fallito",
   "about.downloadingGuiUpdate": "Download aggiornamento ({progress}%)",
-  "about.updateCompleteRestart": "Aggiornamento completato, riavvia l'applicazione",
+  "about.updateCompleteRestart": "Nuova versione pronta. Riavvia l'applicazione per applicarla.",
+  "about.restartToApply": "Riavvia per applicare",
+  "about.restarting": "Riavvio in corso...",
   "about.onlineUpdateFailed": "Aggiornamento fallito: {error}",
   "about.newVersionNotice": "🚀 Nuova versione {tag} disponibile!",
 };

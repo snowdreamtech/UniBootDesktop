@@ -93,7 +93,9 @@ export const caEs: TranslationDict = {
   "about.updateReady": "Actualización lista: {path}",
   "about.updateDownloadFailed": "Descarga fallida",
   "about.downloadingGuiUpdate": "Descargando actualización ({progress}%)",
-  "about.updateCompleteRestart": "Actualización completada, reinicie la aplicación",
+  "about.updateCompleteRestart": "Nova versió a punt. Reinicieu l'aplicació per aplicar-la.",
+  "about.restartToApply": "Reinicia per aplicar",
+  "about.restarting": "Reiniciant...",
   "about.onlineUpdateFailed": "Error al actualizar: {error}",
   "about.newVersionNotice": "🚀 ¡Nueva versión {tag} disponible!",
 };
