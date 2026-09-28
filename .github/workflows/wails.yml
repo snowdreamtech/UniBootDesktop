@@ -343,6 +343,8 @@ EOF
 
       - name: Create Linux archive
         if: runner.os == 'Linux'
+        env:
+          TARGET: ${{ matrix.target }}
         shell: bash
         run: |
           set -euo pipefail
@@ -351,30 +353,38 @@ EOF
             echo "Linux binary not found at $APP_BIN" >&2
             exit 1
           fi
+          LINUX_ARCH="${TARGET##*/}"
           mkdir -p build/bin/linux-dist
           cp "$APP_BIN" build/bin/linux-dist/unigodesktop
           cp build/linux/unigodesktop.desktop build/bin/linux-dist/unigodesktop.desktop
           cp build/appicon.png build/bin/linux-dist/unigodesktop.png
-          tar -czf build/bin/unigodesktop-gui_linux_amd64.tar.gz -C build/bin/linux-dist unigodesktop unigodesktop.desktop unigodesktop.png
+          tar -czf "build/bin/unigodesktop-gui_linux_${LINUX_ARCH}.tar.gz" -C build/bin/linux-dist unigodesktop unigodesktop.desktop unigodesktop.png
           rm -rf build/bin/linux-dist
 
       - name: Package Linux packages (deb, rpm, AppImage)
         if: runner.os == 'Linux'
+        env:
+          TARGET: ${{ matrix.target }}
         shell: bash
         run: |
           set -euo pipefail
           CLEAN_VERSION="${TAG#v}"
+          LINUX_ARCH="${TARGET##*/}"
 
           # 1. Package deb and rpm via nfpm
           if ! command -v nfpm >/dev/null 2>&1; then
             echo "Installing nfpm..."
-            curl -sfL --retry 3 https://github.com/goreleaser/nfpm/releases/download/v2.41.3/nfpm_2.41.3_Linux_x86_64.tar.gz | tar -xz -C /tmp nfpm
+            NFPM_ARCH="x86_64"
+            if [ "$(uname -m)" = "aarch64" ] || [ "${LINUX_ARCH}" = "arm64" ]; then
+              NFPM_ARCH="arm64"
+            fi
+            curl -sfL --retry 3 "https://github.com/goreleaser/nfpm/releases/download/v2.41.3/nfpm_2.41.3_Linux_${NFPM_ARCH}.tar.gz" | tar -xz -C /tmp nfpm
             sudo mv /tmp/nfpm /usr/local/bin/
           fi
 
           cat << EOF > /tmp/nfpm.yaml
           name: "unigodesktop"
-          arch: "amd64"
+          arch: "${LINUX_ARCH}"
           platform: "linux"
           version: "${CLEAN_VERSION}"
           section: "utils"
@@ -393,16 +403,21 @@ EOF
               dst: "/usr/share/icons/hicolor/512x512/apps/unigodesktop.png"
           EOF
 
-          nfpm package --config /tmp/nfpm.yaml --packager deb --target "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_amd64.deb"
-          nfpm package --config /tmp/nfpm.yaml --packager rpm --target "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_amd64.rpm"
+          nfpm package --config /tmp/nfpm.yaml --packager deb --target "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.deb"
+          nfpm package --config /tmp/nfpm.yaml --packager rpm --target "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.rpm"
           rm -f /tmp/nfpm.yaml
           echo "Linux deb and rpm packages created successfully"
 
           # 2. Package AppImage via appimagetool
           echo "Preparing AppImage..."
-          if [ ! -f /tmp/appimagetool ]; then
-            curl -sfL --retry 3 -o /tmp/appimagetool https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
-            chmod +x /tmp/appimagetool
+          APPIMAGE_ARCH="x86_64"
+          if [ "$(uname -m)" = "aarch64" ] || [ "${LINUX_ARCH}" = "arm64" ]; then
+            APPIMAGE_ARCH="aarch64"
+          fi
+          APPIMAGETOOL="/tmp/appimagetool-${APPIMAGE_ARCH}"
+          if [ ! -f "${APPIMAGETOOL}" ]; then
+            curl -sfL --retry 3 -o "${APPIMAGETOOL}" "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${APPIMAGE_ARCH}.AppImage"
+            chmod +x "${APPIMAGETOOL}"
           fi
 
           APPDIR="build/bin/AppDir"
@@ -420,12 +435,13 @@ EOF
           EOF
           chmod +x "${APPDIR}/AppRun"
 
-          ARCH=x86_64 /tmp/appimagetool --appimage-extract-and-run "${APPDIR}" "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_amd64.AppImage"
+          ARCH="${APPIMAGE_ARCH}" "${APPIMAGETOOL}" --appimage-extract-and-run "${APPDIR}" "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.AppImage"
           rm -rf "${APPDIR}"
           echo "Linux AppImage created successfully"
 
       - name: Secure GUI artifacts
         env:
+          TARGET: ${{ matrix.target }}
           ASSET_GLOB: ${{ matrix.asset_glob }}
           WORKFLOW_IDENTITY: https://github.com/${{ github.workflow_ref }}
         shell: bash
@@ -444,7 +460,8 @@ EOF
             exit 1
           fi
 
-          CHECKSUM_FILE="build/bin/unigodesktop-gui-${RUNNER_OS}.sha256"
+          TARGET_ARCH="${TARGET##*/}"
+          CHECKSUM_FILE="build/bin/unigodesktop-gui-${RUNNER_OS}-${TARGET_ARCH}.sha256"
           rm -f "${CHECKSUM_FILE}"
 
           for ASSET in "${MATCHED_ASSETS[@]}"; do
@@ -476,7 +493,7 @@ EOF
       - name: Attest GUI artifact provenance
         uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
         with:
-          subject-checksums: build/bin/unigodesktop-gui-${{ runner.os }}.sha256
+          subject-checksums: ${{ env.CHECKSUM_FILE }}
 
       - name: Wait for release to exist
         env:
@@ -503,7 +520,7 @@ EOF
         run: |
           set -euo pipefail
           upload_assets=()
-          CHECKSUM_FILE="build/bin/unigodesktop-gui-${RUNNER_OS}.sha256"
+          CHECKSUM_FILE="${CHECKSUM_FILE:-build/bin/unigodesktop-gui-${RUNNER_OS}.sha256}"
           if [ -f "${CHECKSUM_FILE}" ]; then
             upload_assets+=("${CHECKSUM_FILE}")
           fi
