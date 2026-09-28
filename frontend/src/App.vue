@@ -216,15 +216,23 @@ async function initApp() {
           applyTheme("dark");
         }
 
-        // Auto check updates if enabled
+        // Auto check updates if enabled (throttled to at most once per 24 hours)
         if (cfg.autoCheckUpdate !== false && (window as any)?.go?.main?.App?.CheckUpdate) {
-          (window as any).go.main.App.CheckUpdate()
-            .then((res: any) => {
-              if (res && res.hasUpdate) {
-                showToast(`🚀 New version ${res.latestTag} is available!`, "info");
-              }
-            })
-            .catch(() => {});
+          const LAST_CHECK_KEY = "unigo_last_auto_check_update";
+          const now = Date.now();
+          const lastCheck = parseInt(localStorage.getItem(LAST_CHECK_KEY) || "0", 10);
+          const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+
+          if (now - lastCheck >= TWENTY_FOUR_HOURS) {
+            (window as any).go.main.App.CheckUpdate()
+              .then((res: any) => {
+                localStorage.setItem(LAST_CHECK_KEY, String(Date.now()));
+                if (res && res.hasUpdate) {
+                  showToast(`🚀 New version ${res.latestTag} is available!`, "info");
+                }
+              })
+              .catch(() => {});
+          }
         }
       }
     } catch (e) {
