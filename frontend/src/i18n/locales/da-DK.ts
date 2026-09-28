@@ -92,7 +92,9 @@ export const daDk: TranslationDict = {
   "about.updateReady": "Update gereed: {path}",
   "about.updateDownloadFailed": "Download mislukt",
   "about.downloadingGuiUpdate": "Update downloaden ({progress}%)",
-  "about.updateCompleteRestart": "Update voltooid, herstart de applicatie",
+  "about.updateCompleteRestart": "Ny version er klar. Genstart programmet for at anvende.",
+  "about.restartToApply": "Genstart for at anvende",
+  "about.restarting": "Genstarter...",
   "about.onlineUpdateFailed": "Update mislukt: {error}",
   "about.newVersionNotice": "🚀 Nieuwe versie {tag} beschikbaar!",
 };

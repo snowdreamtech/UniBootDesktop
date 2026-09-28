@@ -93,7 +93,9 @@ export const hiIn: TranslationDict = {
   "about.updateReady": "अपडेट तैयार: {path}",
   "about.updateDownloadFailed": "डाउनलोड विफल",
   "about.downloadingGuiUpdate": "अपडेट डाउनलोड हो रहा है ({progress}%)",
-  "about.updateCompleteRestart": "अपडेट पूर्ण, कृपया ऐप पुनः प्रारंभ करें",
+  "about.updateCompleteRestart": "नया संस्करण तैयार है। लागू करने के लिए ऐप को पुनः प्रारंभ करें।",
+  "about.restartToApply": "लागू करने हेतु पुनः प्रारंभ करें",
+  "about.restarting": "पुनः प्रारंभ हो रहा है...",
   "about.onlineUpdateFailed": "अपडेट विफल: {error}",
   "about.newVersionNotice": "🚀 नया संस्करण {tag} उपलब्ध है!",
 };

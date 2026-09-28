@@ -94,7 +94,9 @@ export const deDe: TranslationDict = {
   "about.updateReady": "Update bereit: {path}",
   "about.updateDownloadFailed": "Download fehlgeschlagen",
   "about.downloadingGuiUpdate": "Update wird heruntergeladen ({progress}%)",
-  "about.updateCompleteRestart": "Update abgeschlossen, bitte neu starten",
+  "about.updateCompleteRestart": "Neue Version bereit. Starten Sie die Anwendung neu, um sie zu aktivieren.",
+  "about.restartToApply": "Neu starten & anwenden",
+  "about.restarting": "Wird neu gestartet...",
   "about.onlineUpdateFailed": "Update fehlgeschlagen: {error}",
   "about.newVersionNotice": "🚀 Neue Version {tag} verfügbar!",
 };

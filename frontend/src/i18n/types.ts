@@ -97,6 +97,8 @@ export interface TranslationDict {
   "about.updateDownloadFailed": string;
   "about.downloadingGuiUpdate": string;
   "about.updateCompleteRestart": string;
+  "about.restartToApply": string;
+  "about.restarting": string;
   "about.onlineUpdateFailed": string;
   "about.newVersionNotice": string;
 }

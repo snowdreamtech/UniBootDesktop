@@ -93,7 +93,9 @@ export const mlIn: TranslationDict = {
   "about.updateReady": "अपडेट तैयार: {path}",
   "about.updateDownloadFailed": "डाउनलोड विफल",
   "about.downloadingGuiUpdate": "अपडेट डाउनलोड हो रहा है ({progress}%)",
-  "about.updateCompleteRestart": "अपडेट पूर्ण, कृपया ऐप पुनः प्रारंभ करें",
+  "about.updateCompleteRestart": "പുതിയ പതിപ്പ് തയ്യാറാണ്. മാറ്റങ്ങൾ ബാധകമാക്കാൻ ആപ്പ് പുനരാരംഭിക്കുക.",
+  "about.restartToApply": "ഉടൻ പുനരാരംഭിക്കുക",
+  "about.restarting": "പുനരാരംഭിക്കുന്നു...",
   "about.onlineUpdateFailed": "अपडेट विफल: {error}",
   "about.newVersionNotice": "🚀 नया संस्करण {tag} उपलब्ध है!",
 };

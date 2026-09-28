@@ -93,7 +93,9 @@ export const ocFr: TranslationDict = {
   "about.updateReady": "Mise à jour prête : {path}",
   "about.updateDownloadFailed": "Échec du téléchargement",
   "about.downloadingGuiUpdate": "Téléchargement de la mise à jour ({progress}%)",
-  "about.updateCompleteRestart": "Mise à jour terminée, veuillez redémarrer",
+  "about.updateCompleteRestart": "Novèla version prèsta. Reaviatz l'aplicacion per l'aplicar.",
+  "about.restartToApply": "Reaviar per aplicar",
+  "about.restarting": "Reaviada...",
   "about.onlineUpdateFailed": "Échec de la mise à jour : {error}",
   "about.newVersionNotice": "🚀 Nouvelle version {tag} disponible !",
 };

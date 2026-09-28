@@ -92,7 +92,9 @@ export const zhCn: TranslationDict = {
   "about.updateReady": "更新已就绪: {path}",
   "about.updateDownloadFailed": "更新包下载失败",
   "about.downloadingGuiUpdate": "正在下载更新 ({progress}%)",
-  "about.updateCompleteRestart": "更新已完成，请重启应用",
+  "about.updateCompleteRestart": "新版本已准备就绪，重启应用后即可生效",
+  "about.restartToApply": "立即重启生效",
+  "about.restarting": "正在重启...",
   "about.onlineUpdateFailed": "更新失败: {error}",
   "about.newVersionNotice": "🚀 发现新版本 {tag}！",
 };

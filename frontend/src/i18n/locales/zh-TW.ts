@@ -92,7 +92,9 @@ export const zhTw: TranslationDict = {
   "about.updateReady": "更新已就緒: {path}",
   "about.updateDownloadFailed": "更新包下載失敗",
   "about.downloadingGuiUpdate": "正在下載更新 ({progress}%)",
-  "about.updateCompleteRestart": "更新已完成，請重啟應用",
+  "about.updateCompleteRestart": "新版本已準備就緒，重啟應用後即可生效",
+  "about.restartToApply": "立即重啟生效",
+  "about.restarting": "正在重啟...",
   "about.onlineUpdateFailed": "更新失敗: {error}",
   "about.newVersionNotice": "🚀 發現新版本 {tag}！",
 };

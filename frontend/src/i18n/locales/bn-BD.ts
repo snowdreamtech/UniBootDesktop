@@ -93,7 +93,9 @@ export const bnBd: TranslationDict = {
   "about.updateReady": "अपडेट तैयार: {path}",
   "about.updateDownloadFailed": "डाउनलोड विफल",
   "about.downloadingGuiUpdate": "अपडेट डाउनलोड हो रहा है ({progress}%)",
-  "about.updateCompleteRestart": "अपडेट पूर्ण, कृपया ऐप पुनः प्रारंभ करें",
+  "about.updateCompleteRestart": "নতুন সংস্করণ প্রস্তুত। প্রয়োগ করতে অ্যাপ্লিকেশন পুনরায় চালু করুন।",
+  "about.restartToApply": "প্রয়োগ করতে পুনরায় চালু করুন",
+  "about.restarting": "পুনরায় চালু হচ্ছে...",
   "about.onlineUpdateFailed": "अपडेट विफल: {error}",
   "about.newVersionNotice": "🚀 नया संस्करण {tag} उपलब्ध है!",
 };

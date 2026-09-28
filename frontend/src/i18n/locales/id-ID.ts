@@ -93,7 +93,9 @@ export const idId: TranslationDict = {
   "about.updateReady": "Pembaruan siap: {path}",
   "about.updateDownloadFailed": "Unduhan gagal",
   "about.downloadingGuiUpdate": "Mengunduh pembaruan ({progress}%)",
-  "about.updateCompleteRestart": "Pembaruan selesai, silakan mulai ulang aplikasi",
+  "about.updateCompleteRestart": "Versi baru sudah siap. Mulai ulang aplikasi untuk menerapkan.",
+  "about.restartToApply": "Mulai Ulang Sekarang",
+  "about.restarting": "Memulai ulang...",
   "about.onlineUpdateFailed": "Pembaruan gagal: {error}",
   "about.newVersionNotice": "🚀 Versi baru {tag} tersedia!",
 };

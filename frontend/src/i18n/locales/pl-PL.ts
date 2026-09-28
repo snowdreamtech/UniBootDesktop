@@ -93,7 +93,9 @@ export const plPl: TranslationDict = {
   "about.updateReady": "Aktualizacja gotowa: {path}",
   "about.updateDownloadFailed": "Błąd pobierania",
   "about.downloadingGuiUpdate": "Pobieranie aktualizacji ({progress}%)",
-  "about.updateCompleteRestart": "Aktualizacja zakończona, zrestartuj aplikację",
+  "about.updateCompleteRestart": "Nowa wersja jest gotowa. Uruchom ponownie aplikację, aby zastosować.",
+  "about.restartToApply": "Uruchom ponownie",
+  "about.restarting": "Ponowne uruchamianie...",
   "about.onlineUpdateFailed": "Błąd aktualizacji: {error}",
   "about.newVersionNotice": "🚀 Dostępna nowa wersja {tag}!",
 };

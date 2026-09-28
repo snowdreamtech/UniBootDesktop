@@ -93,7 +93,9 @@ export const bgBg: TranslationDict = {
   "about.updateReady": "Обновление готово: {path}",
   "about.updateDownloadFailed": "Ошибка загрузки",
   "about.downloadingGuiUpdate": "Загрузка обновления ({progress}%)",
-  "about.updateCompleteRestart": "Обновление завершено, перезапустите приложение",
+  "about.updateCompleteRestart": "Новата версия е готова. Рестартирайте приложението, за да приложите.",
+  "about.restartToApply": "Рестартиране за прилагане",
+  "about.restarting": "Рестартиране...",
   "about.onlineUpdateFailed": "Сбой обновления: {error}",
   "about.newVersionNotice": "🚀 Доступна новая версия {tag}!",
 };

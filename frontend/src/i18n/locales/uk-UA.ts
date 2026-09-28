@@ -93,7 +93,9 @@ export const ukUa: TranslationDict = {
   "about.updateReady": "Оновлення готове: {path}",
   "about.updateDownloadFailed": "Помилка завантаження",
   "about.downloadingGuiUpdate": "Завантаження оновлення ({progress}%)",
-  "about.updateCompleteRestart": "Оновлення завершено, перезапустіть додаток",
+  "about.updateCompleteRestart": "Нова версія готова. Перезапустіть програму, щоб застосувати зміни.",
+  "about.restartToApply": "Перезапустити зараз",
+  "about.restarting": "Перезапуск...",
   "about.onlineUpdateFailed": "Помилка оновлення: {error}",
   "about.newVersionNotice": "🚀 Доступна нова версія {tag}!",
 };

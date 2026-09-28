@@ -93,7 +93,9 @@ export const slSi: TranslationDict = {
   "about.updateReady": "Aktualizacja gotowa: {path}",
   "about.updateDownloadFailed": "Błąd pobierania",
   "about.downloadingGuiUpdate": "Pobieranie aktualizacji ({progress}%)",
-  "about.updateCompleteRestart": "Aktualizacja zakończona, zrestartuj aplikację",
+  "about.updateCompleteRestart": "Nova različica je pripravljena. Za uveljavitev znova zaženite aplikacijo.",
+  "about.restartToApply": "Znova zaženi",
+  "about.restarting": "Ponovni zagon...",
   "about.onlineUpdateFailed": "Błąd aktualizacji: {error}",
   "about.newVersionNotice": "🚀 Dostępna nowa wersja {tag}!",
 };

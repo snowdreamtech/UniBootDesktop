@@ -92,7 +92,9 @@ export const elGr: TranslationDict = {
   "about.updateReady": "Update gereed: {path}",
   "about.updateDownloadFailed": "Download mislukt",
   "about.downloadingGuiUpdate": "Update downloaden ({progress}%)",
-  "about.updateCompleteRestart": "Update voltooid, herstart de applicatie",
+  "about.updateCompleteRestart": "Η νέα έκδοση είναι έτοιμη. Επανεκκινήστε την εφαρμογή για εφαρμογή.",
+  "about.restartToApply": "Επανεκκίνηση για εφαρμογή",
+  "about.restarting": "Επανεκκίνηση...",
   "about.onlineUpdateFailed": "Update mislukt: {error}",
   "about.newVersionNotice": "🚀 Nieuwe versie {tag} beschikbaar!",
 };

@@ -9,6 +9,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
+	"os/exec"
 	"runtime"
 	"time"
 
@@ -148,3 +150,24 @@ func (a *App) OpenURL(url string) {
 		wailsRuntime.BrowserOpenURL(a.ctx, url)
 	}
 }
+
+var execCommand = exec.Command
+
+// RestartApp gracefully quits and restarts the application.
+func (a *App) RestartApp() error {
+	exe, err := os.Executable()
+	if err != nil {
+		return fmt.Errorf("failed to get executable path: %w", err)
+	}
+
+	cmd := execCommand(exe, os.Args[1:]...)
+	if err := cmd.Start(); err != nil {
+		return fmt.Errorf("failed to restart application: %w", err)
+	}
+
+	if a.ctx != nil {
+		wailsRuntime.Quit(a.ctx)
+	}
+	return nil
+}
+

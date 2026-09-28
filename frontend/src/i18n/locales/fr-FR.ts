@@ -93,7 +93,9 @@ export const frFr: TranslationDict = {
   "about.updateReady": "Mise à jour prête : {path}",
   "about.updateDownloadFailed": "Échec du téléchargement",
   "about.downloadingGuiUpdate": "Téléchargement de la mise à jour ({progress}%)",
-  "about.updateCompleteRestart": "Mise à jour terminée, veuillez redémarrer",
+  "about.updateCompleteRestart": "Nouvelle version prête. Redémarrez l'application pour l'appliquer.",
+  "about.restartToApply": "Redémarrer pour appliquer",
+  "about.restarting": "Redémarrage en cours...",
   "about.onlineUpdateFailed": "Échec de la mise à jour : {error}",
   "about.newVersionNotice": "🚀 Nouvelle version {tag} disponible !",
 };

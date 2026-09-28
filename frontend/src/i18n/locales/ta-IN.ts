@@ -94,7 +94,9 @@ export const taIn: TranslationDict = {
   "about.updateReady": "புதுப்பிப்பு தயார்: {path}",
   "about.updateDownloadFailed": "பதிவிறக்கம் தோல்வியடைந்தது",
   "about.downloadingGuiUpdate": "புதுப்பிப்பு பதிவிறக்குகிறது ({progress}%)",
-  "about.updateCompleteRestart": "புதுப்பிப்பு முடிந்தது, பயன்பாட்டை மறுதொடக்கம் செய்யவும்",
+  "about.updateCompleteRestart": "புதிய பதிப்பு தயார். மாற்றங்களைப் பயன்படுத்த பயன்பாட்டை மீண்டும் தொடங்கவும்.",
+  "about.restartToApply": "மீண்டும் தொடங்கவும்",
+  "about.restarting": "மீண்டும் தொடங்குகிறது...",
   "about.onlineUpdateFailed": "புதுப்பிப்பு தோல்வியடைந்தது: {error}",
   "about.newVersionNotice": "🚀 புதிய பதிப்பு {tag} கிடைக்கிறது!",
 };

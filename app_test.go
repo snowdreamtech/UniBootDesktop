@@ -7,6 +7,7 @@ package main
 
 import (
 	"context"
+	"os/exec"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -47,4 +48,21 @@ func TestResolveWindowsUserDataPath(t *testing.T) {
 	// Verify that resolving the Windows user data path executes safely
 	path := resolveWindowsUserDataPath()
 	_ = path
+}
+
+func TestApp_RestartApp(t *testing.T) {
+	app := NewApp()
+	require.NotNil(t, app)
+
+	// Mock execCommand to a command that succeeds without launching another app instance
+	origExec := execCommand
+	defer func() { execCommand = origExec }()
+
+	execCommand = func(name string, arg ...string) *exec.Cmd {
+		// Use echo or true which exits immediately
+		return exec.Command("true")
+	}
+
+	err := app.RestartApp()
+	assert.NoError(t, err)
 }

@@ -93,7 +93,9 @@ export const viVn: TranslationDict = {
   "about.updateReady": "Bản cập nhật đã sẵn sàng: {path}",
   "about.updateDownloadFailed": "Tải xuống thất bại",
   "about.downloadingGuiUpdate": "Đang tải xuống bản cập nhật ({progress}%)",
-  "about.updateCompleteRestart": "Cập nhật hoàn tất, vui lòng khởi động lại",
+  "about.updateCompleteRestart": "Phiên bản mới đã sẵn sàng. Khởi động lại ứng dụng để áp dụng.",
+  "about.restartToApply": "Khởi động lại ngay",
+  "about.restarting": "Đang khởi động lại...",
   "about.onlineUpdateFailed": "Cập nhật thất bại: {error}",
   "about.newVersionNotice": "🚀 Có phiên bản mới {tag}!",
 };

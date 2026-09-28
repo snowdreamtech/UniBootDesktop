@@ -93,7 +93,9 @@ export const hyAm: TranslationDict = {
   "about.updateReady": "Обновление готово: {path}",
   "about.updateDownloadFailed": "Ошибка загрузки",
   "about.downloadingGuiUpdate": "Загрузка обновления ({progress}%)",
-  "about.updateCompleteRestart": "Обновление завершено, перезапустите приложение",
+  "about.updateCompleteRestart": "Նոր տարբերակը պատրաստ է: Վերագործարկեք հավելվածը կիրառելու համար:",
+  "about.restartToApply": "Վերագործարկել հիմա",
+  "about.restarting": "Վերագործարկվում է...",
   "about.onlineUpdateFailed": "Сбой обновления: {error}",
   "about.newVersionNotice": "🚀 Доступна новая версия {tag}!",
 };

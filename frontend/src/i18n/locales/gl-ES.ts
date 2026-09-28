@@ -93,7 +93,9 @@ export const glEs: TranslationDict = {
   "about.updateReady": "Actualización lista: {path}",
   "about.updateDownloadFailed": "Descarga fallida",
   "about.downloadingGuiUpdate": "Descargando actualización ({progress}%)",
-  "about.updateCompleteRestart": "Actualización completada, reinicie la aplicación",
+  "about.updateCompleteRestart": "Nova versión lista. Reinicie a aplicación para aplicala.",
+  "about.restartToApply": "Reiniciar para aplicar",
+  "about.restarting": "Reiniciando...",
   "about.onlineUpdateFailed": "Error al actualizar: {error}",
   "about.newVersionNotice": "🚀 ¡Nueva versión {tag} disponible!",
 };

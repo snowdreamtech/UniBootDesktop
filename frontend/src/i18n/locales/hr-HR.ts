@@ -93,7 +93,9 @@ export const hrHr: TranslationDict = {
   "about.updateReady": "Aktualizacja gotowa: {path}",
   "about.updateDownloadFailed": "Błąd pobierania",
   "about.downloadingGuiUpdate": "Pobieranie aktualizacji ({progress}%)",
-  "about.updateCompleteRestart": "Aktualizacja zakończona, zrestartuj aplikację",
+  "about.updateCompleteRestart": "Nova verzija je spremna. Ponovno pokrenite aplikaciju za primjenu.",
+  "about.restartToApply": "Ponovno pokreni",
+  "about.restarting": "Ponovno pokretanje...",
   "about.onlineUpdateFailed": "Błąd aktualizacji: {error}",
   "about.newVersionNotice": "🚀 Dostępna nowa wersja {tag}!",
 };

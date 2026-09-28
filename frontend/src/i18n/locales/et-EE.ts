@@ -92,7 +92,9 @@ export const etEe: TranslationDict = {
   "about.updateReady": "Update gereed: {path}",
   "about.updateDownloadFailed": "Download mislukt",
   "about.downloadingGuiUpdate": "Update downloaden ({progress}%)",
-  "about.updateCompleteRestart": "Update voltooid, herstart de applicatie",
+  "about.updateCompleteRestart": "Uus versioon on valmis. Rakendamiseks taaskäivitage rakendus.",
+  "about.restartToApply": "Taaskäivita ja rakenda",
+  "about.restarting": "Taaskäivitamine...",
   "about.onlineUpdateFailed": "Update mislukt: {error}",
   "about.newVersionNotice": "🚀 Nieuwe versie {tag} beschikbaar!",
 };

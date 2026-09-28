@@ -92,7 +92,9 @@ export const ltLt: TranslationDict = {
   "about.updateReady": "Update gereed: {path}",
   "about.updateDownloadFailed": "Download mislukt",
   "about.downloadingGuiUpdate": "Update downloaden ({progress}%)",
-  "about.updateCompleteRestart": "Update voltooid, herstart de applicatie",
+  "about.updateCompleteRestart": "Nauja versija paruošta. Paleiskite programą iš naujo, kad pritaikytumėte.",
+  "about.restartToApply": "Paleisti iš naujo",
+  "about.restarting": "Paleidžiama iš naujo...",
   "about.onlineUpdateFailed": "Update mislukt: {error}",
   "about.newVersionNotice": "🚀 Nieuwe versie {tag} beschikbaar!",
 };

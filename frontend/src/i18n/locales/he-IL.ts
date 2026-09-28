@@ -92,7 +92,9 @@ export const heIl: TranslationDict = {
   "about.updateReady": "העדכון מוכן: {path}",
   "about.updateDownloadFailed": "ההורדה נכשלה",
   "about.downloadingGuiUpdate": "מוריד עדכון ({progress}%)",
-  "about.updateCompleteRestart": "העדכון הושלם, אנא הפעל מחדש",
+  "about.updateCompleteRestart": "גרסה חדשה מוכנה. הפעל מחדש את האפליקציה כדי להחיל.",
+  "about.restartToApply": "הפעל מחדש כעת",
+  "about.restarting": "מפעיל מחדש...",
   "about.onlineUpdateFailed": "העדכון נכשל: {error}",
   "about.newVersionNotice": "🚀 גרסה חדשה {tag} זמינה!",
 };
