@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.1](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.3.0...v0.3.1) (2026-09-28)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** use unirtm exec for frontend steps and skip rebuild in wails build ([4d95092](https://github.com/snowdreamtech/UniGoDesktop/commit/4d950924746460d0a98510f4adc2648cfbb2a754))
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** sync dependabot config and unirtm toolchain ([36a0cbd](https://github.com/snowdreamtech/UniGoDesktop/commit/36a0cbda0701decd1c7706f342593a5ba3248c38))
+
 ## [0.3.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.2.0...v0.3.0) (2026-09-27)
 
 
