@@ -89,6 +89,20 @@ jobs:
       - name: Install Syft
         uses: anchore/sbom-action/download-syft@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
 
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            build-essential \
+            pkg-config \
+            libgtk-3-dev
+          if ! sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.0-dev; then
+            echo "libwebkit2gtk-4.0-dev not available, installing libwebkit2gtk-4.1-dev"
+            sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-dev
+          fi
+
       - name: Install frontend dependencies
         shell: bash
         run: |
@@ -119,11 +133,16 @@ jobs:
           MODULE_PATH="$(go list -m -f '{{.Path}}')"
           PKG="${MODULE_PATH}/internal/env"
           PROJECT_NAME="${MODULE_PATH##*/}"
+          BUILD_TAGS=()
+          if [ "${RUNNER_OS}" = "Linux" ] && pkg-config --exists webkit2gtk-4.1 && ! pkg-config --exists webkit2gtk-4.0; then
+            BUILD_TAGS+=("-tags" "webkit2_41")
+          fi
           mkdir -p build/bin
           unirtm exec -- wails build \
             -s \
             -clean \
             -platform "${TARGET}" \
+            "${BUILD_TAGS[@]}" \
             -ldflags "-s -w -X '${PKG}.GitTag=${TAG}' -X '${PKG}.CommitHash=${COMMIT}' -X '${PKG}.CommitHashFull=${COMMIT_FULL}' -X '${PKG}.BuildTime=${DATE}' -X '${PKG}.ProjectName=${PROJECT_NAME}'"
           if [ "${RUNNER_OS}" = "macOS" ]; then
             APP_PATH="$(find build/bin -maxdepth 1 -type d -name '*.app' -print -quit)"
@@ -192,7 +211,7 @@ jobs:
           $date = (Get-Date).ToUniversalTime().ToString("o")
           $pkg = "github.com/snowdreamtech/unigodesktop/internal/env"
           $ldflags = "-s -w -X '$pkg.GitTag=$tag' -X '$pkg.CommitHash=$($commit.Substring(0,7))' -X '$pkg.CommitHashFull=$commit' -X '$pkg.BuildTime=$date' -X '$pkg.ProjectName=unigodesktop'"
-          unirtm exec -- wails build -platform windows/amd64 -nsis -ldflags "$ldflags"
+          unirtm exec -- wails build -s -platform windows/amd64 -nsis -ldflags "$ldflags"
 
       - name: Create Linux archive
         if: runner.os == 'Linux'
