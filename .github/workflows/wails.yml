@@ -201,6 +201,8 @@ jobs:
           fi
           echo "Signing macOS App Bundle..."
           codesign --force --deep --options runtime --sign "${APPLE_IDENTITY}" "${APP_PATH}"
+          codesign --verify --deep --strict "${APP_PATH}"
+          echo "macOS App Bundle signature verified"
 
       - name: Create macOS DMG
         if: runner.os == 'macOS'
@@ -219,9 +221,17 @@ jobs:
             echo "App bundle has no runnable executable at $APP_BINARY" >&2
             exit 1
           fi
+          rm -rf build/bin/dmg-src
           mkdir -p build/bin/dmg-src
           cp -R "$APP_PATH" "build/bin/dmg-src/${APP_NAME}"
           hdiutil create -volname "${APP_NAME%.app}" -srcfolder build/bin/dmg-src -ov -format UDZO "build/bin/${APP_NAME%.app}.dmg"
+          rm -rf build/bin/dmg-src
+          DMG_PATH="build/bin/${APP_NAME%.app}.dmg"
+          if [ ! -f "${DMG_PATH}" ]; then
+            echo "DMG creation failed: ${DMG_PATH} not found" >&2
+            exit 1
+          fi
+          echo "macOS DMG created successfully: ${DMG_PATH}"
 
       - name: Create Windows installer
         if: runner.os == 'Windows'
