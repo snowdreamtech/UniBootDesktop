@@ -129,7 +129,10 @@ jobs:
         if: runner.os == 'Linux'
         shell: bash
         run: |
-          sudo apt-get update -qq
+          set -euo pipefail
+          for i in {1..3}; do
+            sudo apt-get update -qq && break || sleep 5
+          done
           sudo apt-get install -y --no-install-recommends \
             build-essential \
             pkg-config \
