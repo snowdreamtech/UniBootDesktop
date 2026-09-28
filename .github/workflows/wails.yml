@@ -224,6 +224,7 @@ jobs:
           rm -rf build/bin/dmg-src
           mkdir -p build/bin/dmg-src
           cp -R "$APP_PATH" "build/bin/dmg-src/${APP_NAME}"
+          ln -s /Applications "build/bin/dmg-src/Applications"
           hdiutil create -volname "${APP_NAME%.app}" -srcfolder build/bin/dmg-src -ov -format UDZO "build/bin/${APP_NAME%.app}.dmg"
           rm -rf build/bin/dmg-src
           DMG_PATH="build/bin/${APP_NAME%.app}.dmg"
