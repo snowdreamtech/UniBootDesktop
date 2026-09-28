@@ -42,3 +42,9 @@ func TestApp_LifecycleAndAPIs(t *testing.T) {
 	err = app.SaveConfig(cfg)
 	assert.NoError(t, err)
 }
+
+func TestResolveWindowsUserDataPath(t *testing.T) {
+	// Verify that resolving the Windows user data path executes safely
+	path := resolveWindowsUserDataPath()
+	_ = path
+}

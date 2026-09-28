@@ -27,7 +27,19 @@ var assets embed.FS
 var appIcon []byte
 
 // resolveWindowsUserDataPath returns the user data path for WebView2 on Windows.
+// It detects portable mode by checking for a portable marker file (portable.dat or .portable)
+// next to the executable, isolating user data in the local "data" directory.
 func resolveWindowsUserDataPath() string {
+	if exePath, err := os.Executable(); err == nil {
+		exeDir := filepath.Dir(exePath)
+		if _, err := os.Stat(filepath.Join(exeDir, "portable.dat")); err == nil {
+			return filepath.Join(exeDir, "data", "webview2")
+		}
+		if _, err := os.Stat(filepath.Join(exeDir, ".portable")); err == nil {
+			return filepath.Join(exeDir, "data", "webview2")
+		}
+	}
+
 	if localAppData := os.Getenv("LOCALAPPDATA"); localAppData != "" {
 		return filepath.Join(localAppData, "UniGoDesktop", "webview2")
 	}
