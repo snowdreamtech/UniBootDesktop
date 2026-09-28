@@ -8,16 +8,34 @@ package main
 import (
 	"embed"
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/snowdreamtech/unigodesktop/cmd"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"github.com/wailsapp/wails/v2/pkg/options/linux"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
+	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
 //go:embed all:frontend/dist
 var assets embed.FS
+
+//go:embed build/appicon.png
+var appIcon []byte
+
+// resolveWindowsUserDataPath returns the user data path for WebView2 on Windows.
+func resolveWindowsUserDataPath() string {
+	if localAppData := os.Getenv("LOCALAPPDATA"); localAppData != "" {
+		return filepath.Join(localAppData, "UniGoDesktop", "webview2")
+	}
+	if appData := os.Getenv("APPDATA"); appData != "" {
+		return filepath.Join(appData, "UniGoDesktop", "webview2")
+	}
+	return ""
+}
 
 // RunWails initializes and launches the Wails v2 desktop GUI application.
 func RunWails() error {
@@ -38,6 +56,14 @@ func RunWails() error {
 		Bind: []interface{}{
 			app,
 		},
+		Windows: &windows.Options{
+			WebviewUserDataPath:  resolveWindowsUserDataPath(),
+			WebviewIsTransparent: false,
+			WindowIsTranslucent:  false,
+			DisableWindowIcon:    false,
+			Theme:                windows.SystemDefault,
+			BackdropType:         windows.Auto,
+		},
 		Mac: &mac.Options{
 			TitleBar: &mac.TitleBar{
 				TitlebarAppearsTransparent: false,
@@ -52,6 +78,12 @@ func RunWails() error {
 				Title:   "UniGoDesktop",
 				Message: "Universal Go Desktop Suite",
 			},
+		},
+		Linux: &linux.Options{
+			Icon:                appIcon,
+			WindowIsTranslucent: false,
+			ProgramName:         "unigodesktop",
+			WebviewGpuPolicy:    linux.WebviewGpuPolicyOnDemand,
 		},
 	})
 }
