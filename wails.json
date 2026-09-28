@@ -5,6 +5,7 @@
   "frontend:dir": "frontend",
   "frontend:install": "npm ci",
   "frontend:build": "npm run build",
+  "frontend:dev:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
   "wailsjsdir": "./frontend",
@@ -23,6 +24,7 @@
     "companyName": "SnowdreamTech",
     "productName": "UniGoDesktop",
     "productVersion": "0.3.4",
-    "copyright": "Copyright (c) 2026 SnowdreamTech. All rights reserved."
+    "copyright": "Copyright (c) 2026 SnowdreamTech. All rights reserved.",
+    "comments": "Universal Go Desktop Suite"
   }
 }
