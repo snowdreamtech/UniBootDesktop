@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.3.1...v0.3.2) (2026-09-28)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** add linux build dependencies and skip frontend in windows installer ([8f81589](https://github.com/snowdreamtech/UniGoDesktop/commit/8f81589b935dc71eda74b63118b76c8a4232e8d1))
+
 ## [0.3.1](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.3.0...v0.3.1) (2026-09-28)
 
 
