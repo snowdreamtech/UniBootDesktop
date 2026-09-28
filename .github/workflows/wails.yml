@@ -478,6 +478,13 @@ EOF
             exit 1
           fi
 
+          for ASSET in "${MATCHED_ASSETS[@]}"; do
+            FSIZE=$(stat -f%z "$ASSET" 2>/dev/null || stat -c%s "$ASSET" 2>/dev/null || echo 0)
+            if [ "${FSIZE}" -lt 1048576 ]; then
+              echo "WARNING: ${ASSET} is suspiciously small (${FSIZE} bytes), expected >= 1MB for a GUI artifact" >&2
+            fi
+          done
+
           TARGET_ARCH="${TARGET##*/}"
           CHECKSUM_FILE="build/bin/unigodesktop-gui-${RUNNER_OS}-${TARGET_ARCH}.sha256"
           rm -f "${CHECKSUM_FILE}"
