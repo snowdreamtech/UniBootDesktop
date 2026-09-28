@@ -42,6 +42,10 @@ jobs:
           - os: ubuntu-24.04-arm
             target: linux/arm64
             asset_glob: "build/bin/*.tar.gz build/bin/*.deb build/bin/*.rpm build/bin/*.AppImage"
+          # TODO: Add windows/arm64 when GitHub Actions provides Windows ARM runners
+          # - os: windows-11-arm
+          #   target: windows/arm64
+          #   asset_glob: "build/bin/*installer*.exe build/bin/*portable*.zip"
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     concurrency:
