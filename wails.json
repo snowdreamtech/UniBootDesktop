@@ -3,10 +3,15 @@
   "name": "UniGoDesktop",
   "outputfilename": "unigodesktop",
   "frontend:dir": "frontend",
-  "frontend:install": "npm install",
+  "frontend:install": "npm ci || npm install",
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
+  "wailsjsdir": "./frontend",
+  "preBuildHooks": {
+    "*/*": "node scripts/prepare-app-icon.mjs"
+  },
+  "nsisType": "multiple",
   "author": {
     "name": "SnowdreamTech",
     "email": "snowdreamtech@qq.com"
