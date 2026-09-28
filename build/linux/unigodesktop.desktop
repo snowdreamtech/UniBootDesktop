@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=UniGoDesktop
+Comment=Universal Go Desktop Suite
+Exec=unigodesktop
+Icon=unigodesktop
+Terminal=false
+Categories=Utility;Development;
+StartupWMClass=unigodesktop
