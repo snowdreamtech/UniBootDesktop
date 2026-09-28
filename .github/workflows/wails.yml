@@ -35,7 +35,7 @@ jobs:
             asset_glob: "build/bin/*.dmg"
           - os: windows-latest
             target: windows/amd64
-            asset_glob: "build/bin/*.exe"
+            asset_glob: "build/bin/*installer*.exe"
           - os: ubuntu-latest
             target: linux/amd64
             asset_glob: "build/bin/*.tar.gz"
@@ -139,6 +139,7 @@ jobs:
         run: unirtm exec -- node scripts/prepare-app-icon.mjs
 
       - name: Build Wails native bundle
+        if: runner.os != 'Windows'
         shell: bash
         env:
           TARGET: ${{ matrix.target }}
@@ -217,11 +218,22 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p build/bin
           unirtm exec -- wails build \
             -s \
+            -clean \
             -platform windows/amd64 \
             -nsis \
             -ldflags "${LDFLAGS}"
+          INSTALLER="$(find build/bin -maxdepth 1 -name '*installer*.exe' -print -quit 2>/dev/null || true)"
+          if [ -z "${INSTALLER}" ] || [ ! -f "${INSTALLER}" ]; then
+            INSTALLER="$(find build/bin -maxdepth 1 -name '*.exe' -print -quit 2>/dev/null || true)"
+          fi
+          if [ -z "${INSTALLER}" ] || [ ! -f "${INSTALLER}" ]; then
+            echo "Windows installer executable not found in build/bin" >&2
+            exit 1
+          fi
+          echo "Windows installer produced: ${INSTALLER}"
 
       - name: Create Linux archive
         if: runner.os == 'Linux'
