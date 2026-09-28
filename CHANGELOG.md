@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.3](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.3.2...v0.3.3) (2026-09-28)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** pre-install tools in dependabot sync to avoid shim recursion ([ef57e8c](https://github.com/snowdreamtech/UniGoDesktop/commit/ef57e8cbb01fea9554197e1f5d2b27f2a8349079))
+* **ci:** prepend real node bin dir to PATH during toolchain update ([a50c6d0](https://github.com/snowdreamtech/UniGoDesktop/commit/a50c6d0f770d247262839f555fdde9802374176d))
+* **ci:** remove harmful rollback tag deletion logic across release workflows ([c0a0fb4](https://github.com/snowdreamtech/UniGoDesktop/commit/c0a0fb45d1faa281fd3f91ec9cc8dffefda36235))
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** sync dependabot config and unirtm toolchain ([13716de](https://github.com/snowdreamtech/UniGoDesktop/commit/13716dedc3f350535f2d95b70715cb8b4d1aee5d))
+* **deps:** upgrade unirtm-version to 0.33.1 ([6714d9b](https://github.com/snowdreamtech/UniGoDesktop/commit/6714d9bd08d4315a436ec08cb2080f0c3d12610f))
+* **deps:** upgrade unirtm-version to 0.33.2 ([2a0a5d1](https://github.com/snowdreamtech/UniGoDesktop/commit/2a0a5d1c6652710bc99f801fd0c6c5f3b733dd93))
+
 ## [0.3.2](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.3.1...v0.3.2) (2026-09-28)
 
 
