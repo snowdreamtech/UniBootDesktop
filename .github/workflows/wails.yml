@@ -251,6 +251,34 @@ jobs:
           fi
           echo "macOS DMG created successfully: ${DMG_PATH}"
 
+      - name: Notarize macOS DMG
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          if [ -z "${APPLE_ID:-}" ] || [ -z "${APPLE_PASSWORD:-}" ] || [ -z "${APPLE_TEAM_ID:-}" ]; then
+            echo "Apple notarization credentials not provided, gracefully skipping notarization."
+            exit 0
+          fi
+          DMG_PATH="$(find build/bin -maxdepth 1 -name '*.dmg' -print -quit)"
+          if [ -z "${DMG_PATH}" ] || [ ! -f "${DMG_PATH}" ]; then
+            echo "DMG file not found for notarization, skipping."
+            exit 0
+          fi
+          echo "Submitting ${DMG_PATH} for Apple Notarization..."
+          xcrun notarytool submit "${DMG_PATH}" \
+            --apple-id "${APPLE_ID}" \
+            --password "${APPLE_PASSWORD}" \
+            --team-id "${APPLE_TEAM_ID}" \
+            --wait
+          echo "Stapling notarization ticket to ${DMG_PATH}..."
+          xcrun stapler staple "${DMG_PATH}"
+          echo "macOS DMG notarization and stapling completed successfully"
+
       - name: Create Windows installer
         if: runner.os == 'Windows'
         shell: bash
