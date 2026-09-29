@@ -244,9 +244,9 @@ nfpms:
 
 snapcrafts:
   - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    summary: Snowdream Tech AI IDE Template
+    summary: Modern cross-platform desktop application built with Go, Wails, and Vue 3
     description: |
-      Snowdream Tech AI IDE Template is an enterprise-grade, foundational template designed for multi-AI IDE collaboration.
+      UniGoDesktop is a modern, extensible cross-platform desktop application built with Go, Wails, and Vue 3.
     grade: stable
     confinement: classic
     publish: false

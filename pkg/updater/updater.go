@@ -5,6 +5,8 @@ package updater
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -304,7 +306,8 @@ func DownloadWithProgress(
 				onProgress: onProgress,
 			}
 
-			_, copyErr := io.Copy(out, tracker)
+			copyBuf := make([]byte, 64*1024)
+			_, copyErr := io.CopyBuffer(out, tracker, copyBuf)
 			resp.Body.Close()
 			out.Close()
 
@@ -446,6 +449,18 @@ func StageMacDmgUpdate(
 		})
 	}
 
+	elevatedScriptPath := filepath.Join(updatesDir, "elevated_replace.sh")
+	elevatedScriptContent := `#!/bin/bash
+TARGET="$1"
+STAGED="$2"
+rm -rf "$TARGET"
+cp -R "$STAGED" "$TARGET"
+xattr -dr com.apple.quarantine "$TARGET" 2>/dev/null || true
+`
+	if err := os.WriteFile(elevatedScriptPath, []byte(elevatedScriptContent), 0755); err != nil {
+		return nil, fmt.Errorf("failed to write elevated helper script: %w", err)
+	}
+
 	scriptPath := filepath.Join(updatesDir, "apply_update.sh")
 	scriptContent := `#!/bin/bash
 PID=$1
@@ -463,7 +478,7 @@ if [[ "$TARGET" == *".app"* ]]; then
         xattr -dr com.apple.quarantine "$TARGET" 2>/dev/null || true
         open "$TARGET"
     else
-        osascript -e "do shell script \"rm -rf '$TARGET' && cp -R '$STAGED' '$TARGET' && xattr -dr com.apple.quarantine '$TARGET'\" with administrator privileges" 2>/dev/null || true
+        osascript -e "do shell script \"/bin/bash \\\"$UPDATE_DIR/elevated_replace.sh\\\" \\\"$TARGET\\\" \\\"$STAGED\\\"\" with administrator privileges" 2>/dev/null || true
         open "$TARGET"
     fi
 else
@@ -532,11 +547,7 @@ func StageWindowsUpdate(
 	var stagedExe string
 
 	if strings.HasSuffix(strings.ToLower(archivePath), ".zip") {
-		data, err := os.ReadFile(archivePath)
-		if err != nil {
-			return nil, fmt.Errorf("failed to read downloaded archive: %w", err)
-		}
-		if err := archive.ExtractArchive(data, stagingDir); err != nil {
+		if err := archive.ExtractArchiveFromFile(archivePath, stagingDir); err != nil {
 			return nil, fmt.Errorf("failed to extract Windows archive: %w", err)
 		}
 		_ = os.Remove(archivePath)
@@ -659,11 +670,7 @@ func StageLinuxUpdate(
 	lowerPath := strings.ToLower(filePath)
 
 	if strings.HasSuffix(lowerPath, ".tar.gz") || strings.HasSuffix(lowerPath, ".tgz") {
-		data, err := os.ReadFile(filePath)
-		if err != nil {
-			return nil, fmt.Errorf("failed to read downloaded archive: %w", err)
-		}
-		if err := archive.ExtractArchive(data, stagingDir); err != nil {
+		if err := archive.ExtractArchiveFromFile(filePath, stagingDir); err != nil {
 			return nil, fmt.Errorf("failed to extract Linux archive: %w", err)
 		}
 		_ = os.Remove(filePath)
@@ -745,6 +752,27 @@ rm -rf "$UPDATE_DIR" 2>/dev/null || true
 	return pending, nil
 }
 
+// VerifyFileSHA256 computes and verifies the SHA-256 checksum of filePath against expectedHash.
+func VerifyFileSHA256(filePath string, expectedHash string) error {
+	f, err := os.Open(filePath)
+	if err != nil {
+		return fmt.Errorf("failed to open file for checksum verification: %w", err)
+	}
+	defer f.Close()
+
+	hasher := sha256.New()
+	buf := make([]byte, 64*1024)
+	if _, err := io.CopyBuffer(hasher, f, buf); err != nil {
+		return fmt.Errorf("failed to compute file hash: %w", err)
+	}
+
+	actualHash := hex.EncodeToString(hasher.Sum(nil))
+	if !strings.EqualFold(actualHash, strings.TrimSpace(expectedHash)) {
+		return fmt.Errorf("checksum mismatch: expected %s, got %s", expectedHash, actualHash)
+	}
+	return nil
+}
+
 // PerformGuiUpdate executes end-to-end download, staging, and preparation for atomic restart replacement.
 func PerformGuiUpdate(
 	ctx context.Context,
@@ -785,8 +813,51 @@ func PerformGuiUpdate(
 	downloadDir := filepath.Join(updatesDir, "download")
 	destFile := filepath.Join(downloadDir, asset.Name)
 
-	if err := DownloadWithProgress(ctx, asset.BrowserDownloadURL, destFile, proxyPrefix, onProgress, 10, 75); err != nil {
+	if err := DownloadWithProgress(ctx, asset.BrowserDownloadURL, destFile, proxyPrefix, onProgress, 10, 70); err != nil {
 		return &GuiUpdateResult{Success: false, Message: fmt.Sprintf("Download failed: %v", err)}, err
+	}
+
+	// Verify SHA-256 checksum if checksums file exists in release assets
+	var checksumsAsset *updater.ReleaseAsset
+	for _, a := range info.Assets {
+		if strings.EqualFold(a.Name, "checksums.txt") || strings.HasSuffix(strings.ToLower(a.Name), "_checksums.txt") {
+			checksumsAsset = &a
+			break
+		}
+	}
+
+	if checksumsAsset != nil {
+		if onProgress != nil {
+			onProgress(UpdateProgress{
+				Percentage: 72,
+				Status:     "Verifying download checksum...",
+				Stage:      "verifying_checksum",
+				Detail:     checksumsAsset.Name,
+			})
+		}
+		checksumPath := filepath.Join(downloadDir, checksumsAsset.Name)
+		if err := DownloadFileWithProxy(ctx, checksumsAsset.BrowserDownloadURL, checksumPath, proxyPrefix); err == nil {
+			chkData, readErr := os.ReadFile(checksumPath)
+			if readErr == nil {
+				var expectedHash string
+				for _, line := range strings.Split(string(chkData), "\n") {
+					parts := strings.Fields(line)
+					if len(parts) >= 2 && parts[1] == asset.Name {
+						expectedHash = parts[0]
+						break
+					}
+				}
+				if expectedHash != "" {
+					if err := VerifyFileSHA256(destFile, expectedHash); err != nil {
+						_ = os.Remove(destFile)
+						return &GuiUpdateResult{
+							Success: false,
+							Message: fmt.Sprintf("Integrity verification failed: %v", err),
+						}, err
+					}
+				}
+			}
+		}
 	}
 
 	var stageErr error

@@ -363,3 +363,34 @@ func TestStageLinuxUpdate_AppImage(t *testing.T) {
 		t.Errorf("expected chmod +x in Linux apply script, got: %s", string(shContent))
 	}
 }
+
+func TestVerifyFileSHA256(t *testing.T) {
+	tmpDir := t.TempDir()
+	filePath := filepath.Join(tmpDir, "test.bin")
+	content := []byte("unigodesktop update test binary payload")
+	if err := os.WriteFile(filePath, content, 0644); err != nil {
+		t.Fatalf("failed to write test file: %v", err)
+	}
+
+	expectedHash := "ade7a59f8b76defd6e81c1477b783495d12ed19c1dbb74d98982f2e28fa7974d"
+
+	// Matching checksum
+	if err := VerifyFileSHA256(filePath, expectedHash); err != nil {
+		t.Errorf("expected matching hash to succeed, got %v", err)
+	}
+
+	// Case-insensitive match
+	if err := VerifyFileSHA256(filePath, strings.ToUpper(expectedHash)); err != nil {
+		t.Errorf("expected uppercase matching hash to succeed, got %v", err)
+	}
+
+	// Mismatched checksum
+	if err := VerifyFileSHA256(filePath, "0000000000000000000000000000000000000000000000000000000000000000"); err == nil {
+		t.Errorf("expected error on mismatched hash, got nil")
+	}
+
+	// Non-existent file
+	if err := VerifyFileSHA256(filepath.Join(tmpDir, "non_existent.bin"), expectedHash); err == nil {
+		t.Errorf("expected error on non-existent file, got nil")
+	}
+}

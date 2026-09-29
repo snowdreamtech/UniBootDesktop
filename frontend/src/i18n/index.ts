@@ -163,7 +163,7 @@ export function t(key: keyof TranslationDict, params?: Record<string, string | n
 
   if (params) {
     Object.keys(params).forEach((pKey) => {
-      text = text.replace(new RegExp(`{\s*${pKey}\s*}`, "g"), String(params[pKey]));
+      text = text.replace(new RegExp(`{\\s*${pKey}\\s*}`, "g"), String(params[pKey]));
     });
   }
 

@@ -213,6 +213,8 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { t, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from "../i18n";
+import { GetConfig, SaveConfig, TestNetwork } from "../../wailsjs/go/main/App";
+import { isWails } from "../utils/wails";
 import CustomSelect from "./CustomSelect.vue";
 
 const props = defineProps<{
@@ -293,9 +295,9 @@ function applyTheme(themeName: string) {
 
 async function loadFullConfig() {
   isInitializing = true;
-  if ((window as any)?.go?.main?.App?.GetConfig) {
+  if (isWails()) {
     try {
-      const cfg = await (window as any).go.main.App.GetConfig();
+      const cfg = await GetConfig();
       if (cfg) {
         autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
         appTheme.value = cfg.theme || "dark";
@@ -304,7 +306,7 @@ async function loadFullConfig() {
         applyTheme(appTheme.value);
 
         proxyInputUrl.value = cfg.githubProxy || "";
-        proxyProtocol.value = cfg.proxyProtocol || "direct";
+        proxyProtocol.value = (cfg.proxyProtocol as any) || "direct";
         proxyHost.value = cfg.proxyHost || "";
         proxyPort.value = cfg.proxyPort || 7890;
         proxyUser.value = cfg.proxyUser || "";
@@ -339,9 +341,9 @@ function triggerAutoSave() {
       proxyPassword: proxyPassword.value.trim(),
     };
 
-    if ((window as any)?.go?.main?.App?.SaveConfig) {
+    if (isWails()) {
       try {
-        await (window as any).go.main.App.SaveConfig(payload);
+        await SaveConfig(payload as any);
       } catch (err) {
         console.error("Failed to save config to backend:", err);
       }
@@ -368,9 +370,8 @@ async function testConnection() {
     : "https://api.github.com";
 
   try {
-    const wailsApp = (window as any)?.go?.main?.App;
-    if (wailsApp && typeof wailsApp.TestNetwork === "function") {
-      const res = await wailsApp.TestNetwork(targetUrl);
+    if (isWails()) {
+      const res = await TestNetwork(targetUrl);
       netTestSuccess.value = res.connected;
       if (res.connected) {
         netTestResult.value = `✓ ${t("settings.connected")} (${res.latencyMs}ms)`;
@@ -405,9 +406,8 @@ async function testNetworkProxy() {
   proxyTestResult.value = "";
 
   try {
-    const wailsApp = (window as any)?.go?.main?.App;
-    if (wailsApp && typeof wailsApp.TestNetwork === "function") {
-      const res = await wailsApp.TestNetwork("https://api.github.com");
+    if (isWails()) {
+      const res = await TestNetwork("https://api.github.com");
       proxyTestSuccess.value = res.connected;
       proxyTestResult.value = res.connected
         ? `✓ ${proxyProtocol.value.toUpperCase()}://${proxyHost.value}:${proxyPort.value} ${t("settings.connected")} (${res.latencyMs}ms)`

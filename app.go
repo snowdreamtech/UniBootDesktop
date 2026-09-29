@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/env"
@@ -54,7 +55,9 @@ type HelloInfo struct {
 
 // App struct manages Wails GUI lifecycle and frontend bound APIs.
 type App struct {
-	ctx context.Context
+	ctx    context.Context
+	cancel context.CancelFunc
+	mu     sync.Mutex
 }
 
 // NewApp creates a new App application struct.
@@ -64,12 +67,15 @@ func NewApp() *App {
 
 // startup is called when the Wails application starts up.
 func (a *App) startup(ctx context.Context) {
-	a.ctx = ctx
+	a.ctx, a.cancel = context.WithCancel(ctx)
 	logger.Info("UniGoDesktop Wails GUI runtime started successfully")
 }
 
 // shutdown is called when the Wails application is shutting down.
 func (a *App) shutdown(ctx context.Context) {
+	if a.cancel != nil {
+		a.cancel()
+	}
 	logger.Info("UniGoDesktop Wails GUI runtime shutting down")
 }
 
@@ -144,6 +150,11 @@ func (a *App) CheckUpdate() *updater.UpdateStatus {
 
 // PerformGuiUpdate performs background download and staging of the latest GUI release.
 func (a *App) PerformGuiUpdate() (*updater.GuiUpdateResult, error) {
+	if !a.mu.TryLock() {
+		return nil, fmt.Errorf("update is already in progress")
+	}
+	defer a.mu.Unlock()
+
 	ctx := a.ctx
 	if ctx == nil {
 		ctx = context.Background()
