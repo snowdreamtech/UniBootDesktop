@@ -8,8 +8,10 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -392,5 +394,97 @@ func TestVerifyFileSHA256(t *testing.T) {
 	// Non-existent file
 	if err := VerifyFileSHA256(filepath.Join(tmpDir, "non_existent.bin"), expectedHash); err == nil {
 		t.Errorf("expected error on non-existent file, got nil")
+	}
+}
+
+type testMockTransport struct {
+	target *url.URL
+	base   http.RoundTripper
+}
+
+func (m *testMockTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	req.URL.Scheme = m.target.Scheme
+	req.URL.Host = m.target.Host
+	return m.base.RoundTrip(req)
+}
+
+func TestPerformGuiUpdate_IntegrityVerificationFailure(t *testing.T) {
+	origTransport := http.DefaultTransport
+	defer func() { http.DefaultTransport = origTransport }()
+
+	var stages []string
+	progressCallback := func(p UpdateProgress) {
+		stages = append(stages, p.Stage)
+	}
+
+	assetName := "unigodesktop_darwin_arm64.dmg"
+	if runtime.GOOS == "windows" {
+		assetName = "unigodesktop_windows_amd64.zip"
+	} else if runtime.GOOS == "linux" {
+		assetName = "unigodesktop_linux_amd64.AppImage"
+	}
+
+	var ts *httptest.Server
+	ts = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.Contains(r.URL.Path, "releases/latest") {
+			w.Header().Set("Content-Type", "application/json")
+			resp := fmt.Sprintf(`{
+				"tag_name": "v99.0.0",
+				"assets": [
+					{
+						"name": "%s",
+						"browser_download_url": "%s/download/%s"
+					},
+					{
+						"name": "checksums.txt",
+						"browser_download_url": "%s/download/checksums.txt"
+					}
+				]
+			}`, assetName, ts.URL, assetName, ts.URL)
+			_, _ = w.Write([]byte(resp))
+			return
+		}
+		if strings.HasSuffix(r.URL.Path, "checksums.txt") {
+			_, _ = w.Write([]byte("0000000000000000000000000000000000000000000000000000000000000000  " + assetName + "\n"))
+			return
+		}
+		_, _ = w.Write([]byte("dummy binary payload"))
+	}))
+	defer ts.Close()
+
+	targetURL, err := url.Parse(ts.URL)
+	if err != nil {
+		t.Fatalf("failed to parse test server URL: %v", err)
+	}
+
+	http.DefaultTransport = &testMockTransport{
+		target: targetURL,
+		base:   origTransport,
+	}
+
+	tmpData := t.TempDir()
+	t.Setenv("XDG_DATA_HOME", tmpData)
+	t.Setenv("HOME", tmpData)
+
+	res, err := PerformGuiUpdate(context.Background(), "", progressCallback)
+	if err == nil {
+		t.Fatalf("expected PerformGuiUpdate to fail on mismatched checksum, got nil error")
+	}
+	if res == nil || res.Success {
+		t.Fatalf("expected result success to be false, got: %+v", res)
+	}
+	if !strings.Contains(res.Message, "Integrity verification failed") {
+		t.Errorf("expected error message to mention Integrity verification failed, got: %s", res.Message)
+	}
+
+	foundChecksumStage := false
+	for _, s := range stages {
+		if s == "verifying_checksum" {
+			foundChecksumStage = true
+			break
+		}
+	}
+	if !foundChecksumStage {
+		t.Errorf("expected verifying_checksum stage in stages: %v", stages)
 	}
 }
