@@ -7,12 +7,17 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"testing"
 
 	"github.com/snowdreamtech/unigodesktop/internal/env"
+	internalUpdater "github.com/snowdreamtech/unigodesktop/internal/updater"
 	"github.com/snowdreamtech/unigodesktop/pkg/updater"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -103,15 +108,75 @@ func TestApp_RestartApp_WithPendingUpdate(t *testing.T) {
 	assert.NotEmpty(t, executedCmd)
 }
 
+type testMockTransport struct {
+	target *url.URL
+	base   http.RoundTripper
+}
+
+func (m *testMockTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	req.URL.Scheme = m.target.Scheme
+	req.URL.Host = m.target.Host
+	return m.base.RoundTrip(req)
+}
+
 func TestApp_CheckUpdateAndURL(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(internalUpdater.ReleaseInfo{
+			TagName: "v99.0.0",
+		})
+	}))
+	defer ts.Close()
+
+	origTransport := http.DefaultTransport
+	defer func() { http.DefaultTransport = origTransport }()
+
+	targetURL, _ := url.Parse(ts.URL)
+	http.DefaultTransport = &testMockTransport{
+		target: targetURL,
+		base:   origTransport,
+	}
+
 	app := NewApp()
 	require.NotNil(t, app)
 
-	// CheckUpdate should safely return a status
+	// CheckUpdate should safely return a status without hitting external network
 	status := app.CheckUpdate()
 	assert.NotNil(t, status)
 
 	// OpenURL should safely execute without panic
 	app.OpenURL("")
 	app.OpenURL("https://github.com/snowdreamtech/UniGoDesktop")
+}
+
+func TestApp_PerformGuiUpdate_Concurrency(t *testing.T) {
+	app := NewApp()
+	require.NotNil(t, app)
+
+	// Lock mutex to simulate an ongoing update
+	app.mu.Lock()
+	res, err := app.PerformGuiUpdate()
+	app.mu.Unlock()
+
+	assert.Error(t, err)
+	assert.Nil(t, res)
+	assert.Contains(t, err.Error(), "already in progress")
+}
+
+func TestApp_ContextLifecycle(t *testing.T) {
+	app := NewApp()
+	require.NotNil(t, app)
+
+	ctx := context.Background()
+	app.startup(ctx)
+	require.NotNil(t, app.ctx)
+	require.NotNil(t, app.cancel)
+
+	// Context should not be canceled yet
+	assert.NoError(t, app.ctx.Err())
+
+	// Shutdown should trigger cancel
+	app.shutdown(ctx)
+	assert.Error(t, app.ctx.Err())
+	assert.Equal(t, context.Canceled, app.ctx.Err())
 }
