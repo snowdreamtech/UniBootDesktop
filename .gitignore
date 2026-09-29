@@ -761,3 +761,6 @@ build/*
 !build/linux/**
 !build/appicon.png
 build/bin/
+!frontend/dist/
+frontend/dist/*
+!frontend/dist/.gitkeep
