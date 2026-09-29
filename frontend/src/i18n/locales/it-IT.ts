@@ -107,4 +107,5 @@ export const itIt: TranslationDict = {
   "about.extractingPackage": "Estrazione pacchetto di aggiornamento: {name}...",
   "about.stagingPackage": "Preparazione file di aggiornamento...",
   "about.preparingApplyScript": "Preparazione script di aggiornamento...",
+  "about.verifyingChecksum": "Verifying download checksum...",
 };

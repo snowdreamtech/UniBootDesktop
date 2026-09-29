@@ -108,4 +108,5 @@ export const ptPt: TranslationDict = {
   "about.extractingPackage": "A extrair pacote de atualização: {name}...",
   "about.stagingPackage": "A preparar ficheiros de atualização...",
   "about.preparingApplyScript": "A preparar script de aplicação...",
+  "about.verifyingChecksum": "Verifying download checksum...",
 };

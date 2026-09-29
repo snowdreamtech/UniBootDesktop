@@ -107,4 +107,5 @@ export const jaJp: TranslationDict = {
   "about.extractingPackage": "更新パッケージを展開中: {name}...",
   "about.stagingPackage": "更新ファイルを準備中...",
   "about.preparingApplyScript": "更新適用スクリプトを準備中...",
+  "about.verifyingChecksum": "Verifying download checksum...",
 };

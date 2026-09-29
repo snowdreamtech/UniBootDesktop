@@ -108,4 +108,5 @@ export const huHu: TranslationDict = {
   "about.extractingPackage": "Extracting update package: {name}...",
   "about.stagingPackage": "Staging update package...",
   "about.preparingApplyScript": "Preparing update apply script...",
+  "about.verifyingChecksum": "Verifying download checksum...",
 };

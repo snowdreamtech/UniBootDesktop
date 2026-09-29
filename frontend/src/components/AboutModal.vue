@@ -270,6 +270,9 @@ const formatUpdateProgress = (p: UpdateProgressPayload | null): string => {
   if (stage === "preparing_script") {
     return t("about.preparingApplyScript");
   }
+  if (stage === "verifying_checksum") {
+    return t("about.verifyingChecksum");
+  }
   if (stage === "ready") {
     return t("about.updateCompleteRestart");
   }
@@ -305,6 +308,9 @@ const formatUpdateProgress = (p: UpdateProgressPayload | null): string => {
   }
   if (/Preparing update apply script/i.test(raw)) {
     return t("about.preparingApplyScript");
+  }
+  if (/Verifying download checksum/i.test(raw)) {
+    return t("about.verifyingChecksum");
   }
   if (/Checking for latest release/i.test(raw)) {
     return t("about.checkingForUpdate");

@@ -107,4 +107,5 @@ export const frFr: TranslationDict = {
   "about.extractingPackage": "Extraction du paquet de mise à jour : {name}...",
   "about.stagingPackage": "Préparation des fichiers de mise à jour...",
   "about.preparingApplyScript": "Préparation du script d'application...",
+  "about.verifyingChecksum": "Verifying download checksum...",
 };

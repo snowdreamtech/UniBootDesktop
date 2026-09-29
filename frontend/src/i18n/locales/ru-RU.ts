@@ -107,4 +107,5 @@ export const ruRu: TranslationDict = {
   "about.extractingPackage": "Распаковка пакета обновления: {name}...",
   "about.stagingPackage": "Подготовка файлов обновления...",
   "about.preparingApplyScript": "Подготовка скрипта обновления...",
+  "about.verifyingChecksum": "Verifying download checksum...",
 };

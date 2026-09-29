@@ -107,4 +107,5 @@ export const esLa: TranslationDict = {
   "about.extractingPackage": "Extrayendo paquete de actualización: {name}...",
   "about.stagingPackage": "Preparando archivos de actualización...",
   "about.preparingApplyScript": "Preparando script de actualización...",
+  "about.verifyingChecksum": "Verifying download checksum...",
 };
