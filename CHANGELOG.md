@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.5.0...v0.5.1) (2026-09-29)
+
+
+### 🐛 Bug Fixes
+
+* **ci:** install nsis on windows runner and ensure proper installer packaging ([4a0070d](https://github.com/snowdreamtech/UniGoDesktop/commit/4a0070d02f1fbc2a0e561cfcd9e044ca342e7b96))
+
 ## [0.5.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.4.0...v0.5.0) (2026-09-29)
 
 
