@@ -106,4 +106,5 @@ export const zhTw: TranslationDict = {
   "about.extractingPackage": "正在解壓縮更新檔案: {name}...",
   "about.stagingPackage": "正在準備更新檔案...",
   "about.preparingApplyScript": "正在準備更新替換腳本...",
+  "about.verifyingChecksum": "Verifying download checksum...",
 };

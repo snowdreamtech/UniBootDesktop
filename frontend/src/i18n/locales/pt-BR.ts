@@ -108,4 +108,5 @@ export const ptBr: TranslationDict = {
   "about.extractingPackage": "Extraindo pacote de atualização: {name}...",
   "about.stagingPackage": "Preparando arquivos de atualização...",
   "about.preparingApplyScript": "Preparando script de aplicação...",
+  "about.verifyingChecksum": "Verifying download checksum...",
 };

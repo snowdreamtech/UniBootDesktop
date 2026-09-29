@@ -108,4 +108,5 @@ export const deDe: TranslationDict = {
   "about.extractingPackage": "Update-Paket wird entpackt: {name}...",
   "about.stagingPackage": "Update-Dateien werden vorbereitet...",
   "about.preparingApplyScript": "Update-Skript wird vorbereitet...",
+  "about.verifyingChecksum": "Verifying download checksum...",
 };

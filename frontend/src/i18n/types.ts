@@ -110,4 +110,5 @@ export interface TranslationDict {
   "about.extractingPackage": string;
   "about.stagingPackage": string;
   "about.preparingApplyScript": string;
+  "about.verifyingChecksum": string;
 }

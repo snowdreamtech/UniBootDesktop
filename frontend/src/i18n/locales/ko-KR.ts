@@ -106,4 +106,5 @@ export const koKr: TranslationDict = {
   "about.extractingPackage": "업데이트 패키지 압축 해제 중: {name}...",
   "about.stagingPackage": "업데이트 파일 준비 중...",
   "about.preparingApplyScript": "업데이트 적용 스크립트 준비 중...",
+  "about.verifyingChecksum": "Verifying download checksum...",
 };

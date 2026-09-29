@@ -106,4 +106,5 @@ export const zhCn: TranslationDict = {
   "about.extractingPackage": "正在解压更新文件: {name}...",
   "about.stagingPackage": "正在准备更新文件...",
   "about.preparingApplyScript": "正在准备更新替换脚本...",
+  "about.verifyingChecksum": "正在校验更新包完整性...",
 };
