@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.4.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.3.4...v0.4.0) (2026-09-29)
+
+
+### 🚀 Features
+
+* **build:** dynamically sync version metadata from git tag ([d626a0f](https://github.com/snowdreamtech/UniGoDesktop/commit/d626a0feca6b57c267b4194cf6228d39d460cc62))
+* **ci:** package windows portable zip and support multi-asset attestation ([d852fef](https://github.com/snowdreamtech/UniGoDesktop/commit/d852fef69769a21f7bcaef76a72acd21644ddc87))
+* **gui:** adapt macOS titlebar appearance to system light and dark themes ([cb6c337](https://github.com/snowdreamtech/UniGoDesktop/commit/cb6c337fedb7866fe8831ec576f446e9aacf2496))
+* **gui:** add OnShutdown lifecycle callback for graceful teardown ([dbb48be](https://github.com/snowdreamtech/UniGoDesktop/commit/dbb48be9c90b683b1732e2db461f28a312730f3e))
+* **gui:** add seamless app restart upon update completion with full 53-locale i18n ([39716b0](https://github.com/snowdreamtech/UniGoDesktop/commit/39716b0cb6c36be2da7ebdeaeeca43d6ac4b8ee7))
+* **gui:** configure windows and linux runtime options in wails_gui ([bf3ab9b](https://github.com/snowdreamtech/UniGoDesktop/commit/bf3ab9bd32f75de302b7bd670bb94e35c51f441a))
+* **gui:** enhance macOS About dialog with app icon and version info ([92fb0d4](https://github.com/snowdreamtech/UniGoDesktop/commit/92fb0d4135d361dcba0dbb7916375e09f5fc5444))
+* **gui:** support portable mode data isolation on windows ([a99c0f5](https://github.com/snowdreamtech/UniGoDesktop/commit/a99c0f5d418981bab54f2dcb64152ac3d8e58a38))
+* **linux:** add desktop entry and enhance linux packaging assets ([95154a5](https://github.com/snowdreamtech/UniGoDesktop/commit/95154a50e05b0e15558231173d3e10d7b6a1109e))
+* **linux:** enhance .desktop entry with localization and discoverability ([a1ce325](https://github.com/snowdreamtech/UniGoDesktop/commit/a1ce32525a9fbdfe0b581900cb203bbe8dcb72b6))
+* **updater:** throttle automatic update checks to once per 24 hours ([5ac1163](https://github.com/snowdreamtech/UniGoDesktop/commit/5ac1163b169229e4ba75402f549c571e92546bc8))
+* **windows:** add native manifest and resource templates for windows build ([c7ed0de](https://github.com/snowdreamtech/UniGoDesktop/commit/c7ed0ded5c46ecc479a0c5d37328e2fe989d69e0))
+* **windows:** configure automatic WebView2 bootstrapper download in wails.json ([985d0f6](https://github.com/snowdreamtech/UniGoDesktop/commit/985d0f66c782453435118389b046f46e5362c516))
+
+
+### 🐛 Bug Fixes
+
+* **build:** unignore wails build templates in gitignore ([6349007](https://github.com/snowdreamtech/UniGoDesktop/commit/63490070ae21e7e764c933b19fcb72a299b60df6))
+* **ci:** ensure cross-platform asset resolution and sha256 checksum in wails workflow ([ce76938](https://github.com/snowdreamtech/UniGoDesktop/commit/ce7693877b04498d4e19020f7f3948e11650dcf6))
+* **ci:** optimize windows wails build and validate installer output ([3764307](https://github.com/snowdreamtech/UniGoDesktop/commit/3764307eb771f7c229fd25d76482ab10ef738269))
+* **darwin:** add NSAppTransportSecurity to production Info.plist ([cc3caba](https://github.com/snowdreamtech/UniGoDesktop/commit/cc3caba42d003f4806299c321909b0082790420b))
+* **darwin:** replace default Wails CFBundleIdentifier with organization-specific reverse DNS ([a5d73cd](https://github.com/snowdreamtech/UniGoDesktop/commit/a5d73cd304497fe32cef0e3fcd3e8fae0610035a))
+* **gui:** correct BackgroundColour alpha from 1 to 255 for full opacity ([9b4b39e](https://github.com/snowdreamtech/UniGoDesktop/commit/9b4b39e2b1dda067f607d52714563c6c8fe1f058))
+* **updater:** compare versions before reporting updates available in gui ([526a597](https://github.com/snowdreamtech/UniGoDesktop/commit/526a59739cfcd7909bc6a0cf48d3f3b374f8d824))
+* **windows:** remove Windows 7/8/8.1 compatibility declarations from manifest ([a52f9f9](https://github.com/snowdreamtech/UniGoDesktop/commit/a52f9f95812fedd4c990692e9b52c7a6fd4e66bf))
+
+
+### ⚡️ Performance Improvements
+
+* **assets:** optimize application icon size by 89% ([99bfa3e](https://github.com/snowdreamtech/UniGoDesktop/commit/99bfa3ee8f453e6cfebe37d1bec4fa9850471b96))
+
+
+### 🛠 Refactoring
+
+* **ci:** consolidate build metadata resolution in wails workflow ([e933562](https://github.com/snowdreamtech/UniGoDesktop/commit/e9335624e045e24ae5edddda0bd839dd1106ed1b))
+
+
+### ♻️ Miscellaneous Chores
+
+* **wails:** configure pre-build hooks and project settings in wails.json ([cf5f45b](https://github.com/snowdreamtech/UniGoDesktop/commit/cf5f45b4e62c19ac7440800926e2f1a7504b3db8))
+
 ## [0.3.4](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.3.3...v0.3.4) (2026-09-28)
 
 
