@@ -98,4 +98,13 @@ export const esEs: TranslationDict = {
   "about.restarting": "Reiniciando...",
   "about.onlineUpdateFailed": "Error al actualizar: {error}",
   "about.newVersionNotice": "🚀 ¡Nueva versión {tag} disponible!",
+  "about.checkingForUpdate": "Buscando la última versión...",
+  "about.foundReleaseAsset": "Recurso de versión encontrado: {asset}",
+  "about.downloadingWithTotal": "Descargando actualización: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "Descargando actualización: {loaded} MB",
+  "about.downloadCompleted": "Descarga completada",
+  "about.mountingDiskImage": "Montando imagen de disco...",
+  "about.extractingPackage": "Extrayendo paquete de actualización: {name}...",
+  "about.stagingPackage": "Preparando archivos de actualización...",
+  "about.preparingApplyScript": "Preparando script de actualización...",
 };

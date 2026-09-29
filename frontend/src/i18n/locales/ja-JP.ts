@@ -98,4 +98,13 @@ export const jaJp: TranslationDict = {
   "about.restarting": "再起動中...",
   "about.onlineUpdateFailed": "更新失敗: {error}",
   "about.newVersionNotice": "🚀 新バージョン {tag} が見つかりました！",
+  "about.checkingForUpdate": "最新リリースを確認中...",
+  "about.foundReleaseAsset": "リリースアセットを発見: {asset}",
+  "about.downloadingWithTotal": "更新をダウンロード中: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "更新をダウンロード中: {loaded} MB",
+  "about.downloadCompleted": "ダウンロード完了",
+  "about.mountingDiskImage": "ディスクイメージをマウント中...",
+  "about.extractingPackage": "更新パッケージを展開中: {name}...",
+  "about.stagingPackage": "更新ファイルを準備中...",
+  "about.preparingApplyScript": "更新適用スクリプトを準備中...",
 };

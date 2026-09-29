@@ -97,4 +97,13 @@ export const zhTw: TranslationDict = {
   "about.restarting": "正在重啟...",
   "about.onlineUpdateFailed": "更新失敗: {error}",
   "about.newVersionNotice": "🚀 發現新版本 {tag}！",
+  "about.checkingForUpdate": "正在檢查最新版本...",
+  "about.foundReleaseAsset": "已找到更新包: {asset}",
+  "about.downloadingWithTotal": "正在下載更新: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "正在下載更新: {loaded} MB",
+  "about.downloadCompleted": "更新包下載完成",
+  "about.mountingDiskImage": "正在掛載磁碟映像...",
+  "about.extractingPackage": "正在解壓縮更新檔案: {name}...",
+  "about.stagingPackage": "正在準備更新檔案...",
+  "about.preparingApplyScript": "正在準備更新替換腳本...",
 };

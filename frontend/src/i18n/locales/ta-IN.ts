@@ -99,4 +99,13 @@ export const taIn: TranslationDict = {
   "about.restarting": "மீண்டும் தொடங்குகிறது...",
   "about.onlineUpdateFailed": "புதுப்பிப்பு தோல்வியடைந்தது: {error}",
   "about.newVersionNotice": "🚀 புதிய பதிப்பு {tag} கிடைக்கிறது!",
+  "about.checkingForUpdate": "Checking for latest release...",
+  "about.foundReleaseAsset": "Found release asset: {asset}",
+  "about.downloadingWithTotal": "Downloading update: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "Downloading update: {loaded} MB",
+  "about.downloadCompleted": "Download completed",
+  "about.mountingDiskImage": "Mounting disk image...",
+  "about.extractingPackage": "Extracting update package: {name}...",
+  "about.stagingPackage": "Staging update package...",
+  "about.preparingApplyScript": "Preparing update apply script...",
 };

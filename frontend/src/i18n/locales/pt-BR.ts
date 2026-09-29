@@ -99,4 +99,13 @@ export const ptBr: TranslationDict = {
   "about.restarting": "Reiniciando...",
   "about.onlineUpdateFailed": "Falha na atualização: {error}",
   "about.newVersionNotice": "🚀 Nova versão {tag} disponível!",
+  "about.checkingForUpdate": "Verificando versão mais recente...",
+  "about.foundReleaseAsset": "Arquivo de versão encontrado: {asset}",
+  "about.downloadingWithTotal": "Baixando atualização: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "Baixando atualização: {loaded} MB",
+  "about.downloadCompleted": "Download concluído",
+  "about.mountingDiskImage": "Montando imagem de disco...",
+  "about.extractingPackage": "Extraindo pacote de atualização: {name}...",
+  "about.stagingPackage": "Preparando arquivos de atualização...",
+  "about.preparingApplyScript": "Preparando script de aplicação...",
 };

@@ -97,4 +97,13 @@ export const arSa: TranslationDict = {
   "about.restarting": "جارٍ إعادة التشغيل...",
   "about.onlineUpdateFailed": "فشل التحديث: {error}",
   "about.newVersionNotice": "🚀 إصدار جديد {tag} متوفر الآن!",
+  "about.checkingForUpdate": "Checking for latest release...",
+  "about.foundReleaseAsset": "Found release asset: {asset}",
+  "about.downloadingWithTotal": "Downloading update: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "Downloading update: {loaded} MB",
+  "about.downloadCompleted": "Download completed",
+  "about.mountingDiskImage": "Mounting disk image...",
+  "about.extractingPackage": "Extracting update package: {name}...",
+  "about.stagingPackage": "Staging update package...",
+  "about.preparingApplyScript": "Preparing update apply script...",
 };

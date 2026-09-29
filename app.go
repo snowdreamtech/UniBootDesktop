@@ -158,12 +158,9 @@ func (a *App) PerformGuiUpdate() (*updater.GuiUpdateResult, error) {
 		proxyPrefix = env.GithubProxy()
 	}
 
-	progressCallback := func(percentage int, status string) {
+	progressCallback := func(p updater.UpdateProgress) {
 		if a.ctx != nil {
-			wailsRuntime.EventsEmit(a.ctx, "gui-update-progress", map[string]interface{}{
-				"percentage": percentage,
-				"status":     status,
-			})
+			wailsRuntime.EventsEmit(a.ctx, "gui-update-progress", p)
 		}
 	}
 

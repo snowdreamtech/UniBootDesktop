@@ -97,4 +97,13 @@ export const zhCn: TranslationDict = {
   "about.restarting": "正在重启...",
   "about.onlineUpdateFailed": "更新失败: {error}",
   "about.newVersionNotice": "🚀 发现新版本 {tag}！",
+  "about.checkingForUpdate": "正在检查最新版本...",
+  "about.foundReleaseAsset": "已找到更新包: {asset}",
+  "about.downloadingWithTotal": "正在下载更新: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "正在下载更新: {loaded} MB",
+  "about.downloadCompleted": "更新包下载完成",
+  "about.mountingDiskImage": "正在挂载磁盘镜像...",
+  "about.extractingPackage": "正在解压更新文件: {name}...",
+  "about.stagingPackage": "正在准备更新文件...",
+  "about.preparingApplyScript": "正在准备更新替换脚本...",
 };

@@ -98,4 +98,13 @@ export const frFr: TranslationDict = {
   "about.restarting": "Redémarrage en cours...",
   "about.onlineUpdateFailed": "Échec de la mise à jour : {error}",
   "about.newVersionNotice": "🚀 Nouvelle version {tag} disponible !",
+  "about.checkingForUpdate": "Vérification de la dernière version...",
+  "about.foundReleaseAsset": "Fichier de version trouvé : {asset}",
+  "about.downloadingWithTotal": "Téléchargement de la mise à jour : {loaded} Mo / {total} Mo ({progress}%)",
+  "about.downloadingSizeOnly": "Téléchargement de la mise à jour : {loaded} Mo",
+  "about.downloadCompleted": "Téléchargement terminé",
+  "about.mountingDiskImage": "Montage de l'image disque...",
+  "about.extractingPackage": "Extraction du paquet de mise à jour : {name}...",
+  "about.stagingPackage": "Préparation des fichiers de mise à jour...",
+  "about.preparingApplyScript": "Préparation du script d'application...",
 };
