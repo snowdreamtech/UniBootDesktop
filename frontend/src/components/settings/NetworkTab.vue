@@ -62,12 +62,7 @@
               {{ t("settings.proxy_direct") || "Direct" }}
             </label>
             <label class="protocol-pill" :class="{ active: proxyProtocol === 'http' }">
-              <input
-                type="radio"
-                :checked="proxyProtocol === 'http'"
-                value="http"
-                @change="onProtocolChange('http')"
-              />
+              <input type="radio" :checked="proxyProtocol === 'http'" value="http" @change="onProtocolChange('http')" />
               HTTP
             </label>
             <label class="protocol-pill" :class="{ active: proxyProtocol === 'https' }">
@@ -103,13 +98,7 @@
         <template v-if="proxyProtocol !== 'direct'">
           <div class="form-group">
             <label class="form-label">{{ t("settings.proxy_host") || "Proxy Host" }}</label>
-            <input
-              :value="proxyHost"
-              type="text"
-              class="form-input"
-              placeholder="127.0.0.1"
-              @input="onHostChange"
-            />
+            <input :value="proxyHost" type="text" class="form-input" placeholder="127.0.0.1" @input="onHostChange" />
           </div>
 
           <div class="form-group">
