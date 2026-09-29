@@ -10,6 +10,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/snowdreamtech/unigodesktop/internal/updater"
@@ -302,5 +303,63 @@ func TestDownloadWithProgress(t *testing.T) {
 	}
 	if !progressCalled {
 		t.Error("expected onProgress to be called")
+	}
+}
+
+func TestStageWindowsUpdate_InstallerExe(t *testing.T) {
+	tmpDir := t.TempDir()
+	installerPath := filepath.Join(tmpDir, "unigodesktop-gui_windows_amd64_installer.exe")
+	if err := os.WriteFile(installerPath, []byte("mock-installer-binary"), 0755); err != nil {
+		t.Fatalf("failed to create mock installer: %v", err)
+	}
+
+	updatesDir := filepath.Join(tmpDir, "updates")
+	pending, err := StageWindowsUpdate(context.Background(), installerPath, updatesDir, nil)
+	if err != nil {
+		t.Fatalf("StageWindowsUpdate failed: %v", err)
+	}
+
+	if pending.Shell != "cmd.exe" {
+		t.Errorf("expected Shell cmd.exe, got %s", pending.Shell)
+	}
+	if filepath.Base(pending.ScriptPath) != "apply_update.bat" {
+		t.Errorf("expected apply_update.bat, got %s", pending.ScriptPath)
+	}
+
+	batContent, err := os.ReadFile(pending.ScriptPath)
+	if err != nil {
+		t.Fatalf("failed to read apply_update.bat: %v", err)
+	}
+	if !strings.Contains(string(batContent), "/SILENT") {
+		t.Errorf("expected /SILENT in installer batch script, got: %s", string(batContent))
+	}
+}
+
+func TestStageLinuxUpdate_AppImage(t *testing.T) {
+	tmpDir := t.TempDir()
+	appImagePath := filepath.Join(tmpDir, "UniGoDesktop.AppImage")
+	if err := os.WriteFile(appImagePath, []byte("mock-appimage-content"), 0755); err != nil {
+		t.Fatalf("failed to create mock appimage: %v", err)
+	}
+
+	updatesDir := filepath.Join(tmpDir, "updates")
+	pending, err := StageLinuxUpdate(context.Background(), appImagePath, updatesDir, "amd64", nil)
+	if err != nil {
+		t.Fatalf("StageLinuxUpdate failed: %v", err)
+	}
+
+	if pending.Shell != "/bin/sh" {
+		t.Errorf("expected Shell /bin/sh, got %s", pending.Shell)
+	}
+	if filepath.Base(pending.ScriptPath) != "apply_update.sh" {
+		t.Errorf("expected apply_update.sh, got %s", pending.ScriptPath)
+	}
+
+	shContent, err := os.ReadFile(pending.ScriptPath)
+	if err != nil {
+		t.Fatalf("failed to read apply_update.sh: %v", err)
+	}
+	if !strings.Contains(string(shContent), "chmod +x") {
+		t.Errorf("expected chmod +x in Linux apply script, got: %s", string(shContent))
 	}
 }
