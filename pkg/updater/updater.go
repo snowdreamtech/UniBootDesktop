@@ -486,6 +486,9 @@ func StageWindowsUpdate(
 		return nil, fmt.Errorf("failed to create staging directory: %w", err)
 	}
 
+	isInstaller := false
+	var stagedExe string
+
 	if strings.HasSuffix(strings.ToLower(archivePath), ".zip") {
 		data, err := os.ReadFile(archivePath)
 		if err != nil {
@@ -495,24 +498,26 @@ func StageWindowsUpdate(
 			return nil, fmt.Errorf("failed to extract Windows archive: %w", err)
 		}
 		_ = os.Remove(archivePath)
+
+		stagedExe = filepath.Join(stagingDir, "unigodesktop.exe")
+		if _, err := os.Stat(stagedExe); err != nil {
+			// Look for any .exe in stagingDir
+			entries, _ := os.ReadDir(stagingDir)
+			for _, e := range entries {
+				if strings.HasSuffix(strings.ToLower(e.Name()), ".exe") {
+					stagedExe = filepath.Join(stagingDir, e.Name())
+					break
+				}
+			}
+		}
 	} else {
 		// Single installer executable: move to staging
 		dest := filepath.Join(stagingDir, filepath.Base(archivePath))
 		if err := os.Rename(archivePath, dest); err != nil {
 			return nil, fmt.Errorf("failed to stage installer executable: %w", err)
 		}
-	}
-
-	stagedExe := filepath.Join(stagingDir, "unigodesktop.exe")
-	if _, err := os.Stat(stagedExe); err != nil {
-		// Look for any .exe in stagingDir
-		entries, _ := os.ReadDir(stagingDir)
-		for _, e := range entries {
-			if strings.HasSuffix(strings.ToLower(e.Name()), ".exe") {
-				stagedExe = filepath.Join(stagingDir, e.Name())
-				break
-			}
-		}
+		stagedExe = dest
+		isInstaller = true
 	}
 
 	execPath, err := os.Executable()
@@ -521,11 +526,30 @@ func StageWindowsUpdate(
 	}
 
 	scriptPath := filepath.Join(updatesDir, "apply_update.bat")
-	scriptContent := `@echo off
-set PID=%1
-set TARGET=%2
-set STAGED=%3
-set UPDATE_DIR=%4
+	var scriptContent string
+	if isInstaller {
+		scriptContent = `@echo off
+set PID=%~1
+set TARGET=%~2
+set STAGED=%~3
+set UPDATE_DIR=%~4
+
+:WAIT_LOOP
+tasklist /FI "PID eq %PID%" 2>NUL | find /I "%PID%" >NUL
+if not errorlevel 1 (
+    timeout /T 1 /NOBREAK >NUL
+    goto WAIT_LOOP
+)
+
+start "" "%STAGED%" /SILENT
+rmdir /S /Q "%UPDATE_DIR%" 2>NUL
+`
+	} else {
+		scriptContent = `@echo off
+set PID=%~1
+set TARGET=%~2
+set STAGED=%~3
+set UPDATE_DIR=%~4
 
 :WAIT_LOOP
 tasklist /FI "PID eq %PID%" 2>NUL | find /I "%PID%" >NUL
@@ -538,6 +562,8 @@ copy /Y "%STAGED%" "%TARGET%" >NUL
 start "" "%TARGET%"
 rmdir /S /Q "%UPDATE_DIR%" 2>NUL
 `
+	}
+
 	if err := os.WriteFile(scriptPath, []byte(scriptContent), 0755); err != nil {
 		return nil, fmt.Errorf("failed to write update batch script: %w", err)
 	}
@@ -578,15 +604,50 @@ func StageLinuxUpdate(
 		return nil, fmt.Errorf("failed to create staging directory: %w", err)
 	}
 
-	stagedPath := filepath.Join(stagingDir, filepath.Base(filePath))
-	if err := os.Rename(filePath, stagedPath); err != nil {
-		return nil, fmt.Errorf("failed to stage Linux package: %w", err)
+	var stagedPath string
+	lowerPath := strings.ToLower(filePath)
+
+	if strings.HasSuffix(lowerPath, ".tar.gz") || strings.HasSuffix(lowerPath, ".tgz") {
+		data, err := os.ReadFile(filePath)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read downloaded archive: %w", err)
+		}
+		if err := archive.ExtractArchive(data, stagingDir); err != nil {
+			return nil, fmt.Errorf("failed to extract Linux archive: %w", err)
+		}
+		_ = os.Remove(filePath)
+
+		stagedBinary := filepath.Join(stagingDir, "unigodesktop")
+		if _, err := os.Stat(stagedBinary); err != nil {
+			entries, _ := os.ReadDir(stagingDir)
+			for _, e := range entries {
+				if !e.IsDir() {
+					stagedBinary = filepath.Join(stagingDir, e.Name())
+					break
+				}
+			}
+		}
+		stagedPath = stagedBinary
+	} else {
+		// AppImage or standalone binary
+		dest := filepath.Join(stagingDir, filepath.Base(filePath))
+		if err := os.Rename(filePath, dest); err != nil {
+			return nil, fmt.Errorf("failed to stage Linux package: %w", err)
+		}
+		stagedPath = dest
 	}
+
 	_ = os.Chmod(stagedPath, 0755)
 
-	execPath, err := os.Executable()
-	if err == nil {
-		execPath, _ = filepath.EvalSymlinks(execPath)
+	// In AppImage environments, os.Getenv("APPIMAGE") points to the original .AppImage file on disk,
+	// whereas os.Executable() points to the extracted /tmp/.mount_*/ binary.
+	targetPath := os.Getenv("APPIMAGE")
+	if targetPath == "" {
+		execPath, err := os.Executable()
+		if err == nil {
+			execPath, _ = filepath.EvalSymlinks(execPath)
+		}
+		targetPath = execPath
 	}
 
 	scriptPath := filepath.Join(updatesDir, "apply_update.sh")
@@ -614,7 +675,7 @@ rm -rf "$UPDATE_DIR" 2>/dev/null || true
 	pending := &PendingUpdate{
 		Shell:      "/bin/sh",
 		ScriptPath: scriptPath,
-		Target:     execPath,
+		Target:     targetPath,
 		Staged:     stagedPath,
 	}
 
