@@ -10,7 +10,7 @@
   "frontend:dev:serverUrl": "auto",
   "wailsjsdir": "./frontend",
   "preBuildHooks": {
-    "*/*": "node -e \"const { existsSync } = require('fs'); const p = existsSync('scripts/prepare-app-icon.mjs') ? './scripts/prepare-app-icon.mjs' : '../../scripts/prepare-app-icon.mjs'; import(p);\""
+    "*/*": "node scripts/prepare-app-icon.mjs"
   },
   "nsisType": "multiple",
   "author": {
