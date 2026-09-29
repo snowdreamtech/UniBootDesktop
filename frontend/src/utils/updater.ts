@@ -15,10 +15,7 @@ export interface UpdateProgressPayload {
  * @param fallbackPercentage Optional percentage to display if payload percentage is absent.
  * @returns Localized progress description text.
  */
-export function formatUpdateProgress(
-  p: UpdateProgressPayload | null,
-  fallbackPercentage: number = 0
-): string {
+export function formatUpdateProgress(p: UpdateProgressPayload | null, fallbackPercentage: number = 0): string {
   if (!p) {
     return t("about.preparingDownload");
   }
