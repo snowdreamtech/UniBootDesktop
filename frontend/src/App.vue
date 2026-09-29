@@ -98,6 +98,8 @@ import HelloPanel from "./components/HelloPanel.vue";
 import SettingsModal from "./components/SettingsModal.vue";
 import AboutModal from "./components/AboutModal.vue";
 import { t, currentLang, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from "./i18n";
+import { GetConfig, SaveConfig, CheckUpdate } from "../wailsjs/go/main/App";
+import { isWails } from "./utils/wails";
 import type { config } from "../wailsjs/go/models";
 
 type AppConfigType = config.AppConfig;
@@ -192,9 +194,9 @@ function onSaveSettings(savedCfg: any) {
 }
 
 async function saveConfigToBackend(cfg: any) {
-  if ((window as any)?.go?.main?.App?.SaveConfig) {
+  if (isWails()) {
     try {
-      await (window as any).go.main.App.SaveConfig(cfg);
+      await SaveConfig(cfg);
     } catch (e) {
       console.warn("Failed to save config:", e);
     }
@@ -202,9 +204,9 @@ async function saveConfigToBackend(cfg: any) {
 }
 
 async function initApp() {
-  if ((window as any)?.go?.main?.App?.GetConfig) {
+  if (isWails()) {
     try {
-      const cfg = await (window as any).go.main.App.GetConfig();
+      const cfg = await GetConfig();
       if (cfg) {
         appConfig.value = cfg;
         if (cfg.language) {
@@ -217,18 +219,18 @@ async function initApp() {
         }
 
         // Auto check updates if enabled (throttled to at most once per 24 hours)
-        if (cfg.autoCheckUpdate !== false && (window as any)?.go?.main?.App?.CheckUpdate) {
+        if (cfg.autoCheckUpdate !== false) {
           const LAST_CHECK_KEY = "unigo_last_auto_check_update";
           const now = Date.now();
           const lastCheck = parseInt(localStorage.getItem(LAST_CHECK_KEY) || "0", 10);
           const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
 
           if (now - lastCheck >= TWENTY_FOUR_HOURS) {
-            (window as any).go.main.App.CheckUpdate()
-              .then((res: any) => {
+            CheckUpdate()
+              .then((res) => {
                 localStorage.setItem(LAST_CHECK_KEY, String(Date.now()));
                 if (res && res.hasUpdate) {
-                  showToast(`🚀 New version ${res.latestTag} is available!`, "info");
+                  showToast(t("about.newVersionNotice", { tag: res.latestTag }), "info");
                 }
               })
               .catch(() => {});

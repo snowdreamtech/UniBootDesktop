@@ -166,7 +166,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { t } from "../i18n";
-import { Greet, GetSystemInfo, TestNetwork } from "../../wailsjs/go/main/App";
+import { Greet, GetSystemInfo, TestNetwork, OpenURL } from "../../wailsjs/go/main/App";
+import { isWails } from "../utils/wails";
 
 const props = defineProps<{
   appConfig?: any;
@@ -258,8 +259,8 @@ const handleTestNetwork = async () => {
 
 const openDocs = () => {
   const url = "https://github.com/snowdreamtech/unigodesktop";
-  if ((window as any)?.runtime?.BrowserOpenURL) {
-    (window as any).runtime.BrowserOpenURL(url);
+  if (isWails()) {
+    OpenURL(url);
   } else {
     window.open(url, "_blank");
   }

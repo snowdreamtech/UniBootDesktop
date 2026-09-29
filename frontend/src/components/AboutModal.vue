@@ -171,6 +171,9 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { t } from "../i18n";
+import { GetSystemInfo, CheckUpdate, PerformGuiUpdate, RestartApp, OpenURL } from "../../wailsjs/go/main/App";
+import { EventsOn } from "../../wailsjs/runtime/runtime";
+import { isWails, isWailsRuntime } from "../utils/wails";
 
 const props = defineProps<{
   show: boolean;
@@ -328,33 +331,24 @@ const updateStatusClass = ref("");
 
 const loadAppInfo = async () => {
   try {
-    const wailsApp = (window as any)?.go?.main?.App;
-    if (wailsApp) {
-      if (typeof wailsApp.GetSystemInfo === "function") {
-        const sys = await wailsApp.GetSystemInfo();
-        if (sys) {
-          appInfo.value = {
-            projectName: sys.appName || "UniGoDesktop",
-            version: sys.version || "v1.0.0",
-            gitTag: sys.version || "v1.0.0",
-            commitHash: sys.commit || "dev",
-            buildTime: sys.buildTime || "N/A",
-            osArch: `${sys.os || "darwin"}/${sys.arch || "arm64"}`,
-            goVersion: sys.goVersion || "go1.27",
-            copyright: "Copyright © 2026-present SnowdreamTech Inc.",
-          };
-          return;
-        }
-      }
-      if (typeof wailsApp.GetAppInfo === "function") {
-        const info = await wailsApp.GetAppInfo();
-        if (info) {
-          appInfo.value = info;
-        }
+    if (isWails()) {
+      const sys = await GetSystemInfo();
+      if (sys) {
+        appInfo.value = {
+          projectName: sys.appName || "UniGoDesktop",
+          version: sys.version || "v1.0.0",
+          gitTag: sys.version || "v1.0.0",
+          commitHash: sys.commit || "dev",
+          buildTime: sys.buildTime || "N/A",
+          osArch: `${sys.os || "darwin"}/${sys.arch || "arm64"}`,
+          goVersion: sys.goVersion || "go1.27",
+          copyright: "Copyright © 2026-present SnowdreamTech Inc.",
+        };
+        return;
       }
     }
   } catch (err) {
-    console.warn("Failed to load Wails GetAppInfo, using fallback info:", err);
+    console.warn("Failed to load Wails GetSystemInfo, using fallback info:", err);
   }
 };
 
@@ -364,9 +358,8 @@ onMounted(() => {
   if (props.show) {
     loadAppInfo();
   }
-  const runtime = (window as any)?.runtime;
-  if (runtime && typeof runtime.EventsOn === "function") {
-    unlistenProgress = runtime.EventsOn("gui-update-progress", (p: any) => {
+  if (isWailsRuntime()) {
+    unlistenProgress = EventsOn("gui-update-progress", (p: any) => {
       if (p) {
         updateProgress.value = p.percentage || 0;
         currentProgress.value = p;
@@ -400,23 +393,16 @@ const close = () => {
 };
 
 const logUserAction = (level: string, message: string, details: string = "") => {
-  const app = (window as any)?.go?.main?.App;
-  if (app && typeof app.LogAction === "function") {
-    app.LogAction(level, message, details);
+  if (import.meta.env?.DEV) {
+    console.debug(`[${level}] ${message}`, details);
   }
 };
 
 const openUrl = (url: string) => {
   logUserAction("INFO", "User opened external link in browser", url);
   try {
-    const wailsRuntime = (window as any)?.runtime;
-    const wailsApp = (window as any)?.go?.main?.App;
-    if (wailsRuntime && typeof wailsRuntime.BrowserOpenURL === "function") {
-      wailsRuntime.BrowserOpenURL(url);
-    } else if (wailsApp && typeof wailsApp.OpenURL === "function") {
-      wailsApp.OpenURL(url);
-    } else if (wailsApp && typeof wailsApp.OpenBrowserURL === "function") {
-      wailsApp.OpenBrowserURL(url);
+    if (isWails()) {
+      OpenURL(url);
     } else {
       window.open(url, "_blank");
     }
@@ -462,20 +448,19 @@ const handleCheckUpdate = async () => {
   checking.value = true;
   updateMessage.value = "";
   try {
-    const wailsApp = (window as any)?.go?.main?.App;
-    if (wailsApp && typeof wailsApp.CheckUpdate === "function") {
-      const res = await wailsApp.CheckUpdate();
+    if (isWails()) {
+      const res = await CheckUpdate();
       if (res && res.hasUpdate) {
         const cleanTag = (tag: string) => (tag || "").trim().toLowerCase().replace(/^v/, "");
         const curVer = cleanTag(displayVersion.value) || cleanTag(displayGitTag.value) || cleanTag(res.currentTag);
-        const newVer = cleanTag(res.latestTag || res.latestVersion);
+        const newVer = cleanTag(res.latestTag || (res as any).latestVersion);
         if (newVer && curVer && newVer === curVer) {
           hasUpdateAvailable.value = false;
           updateMessage.value = t("about.isLatest");
           updateStatusClass.value = "is-latest";
         } else {
           hasUpdateAvailable.value = true;
-          latestTag.value = res.latestTag || res.latestVersion || "v0.2.0";
+          latestTag.value = res.latestTag || (res as any).latestVersion || "v0.2.0";
           updateMessage.value = `${t("about.updateAvailable")} ${latestTag.value}!`;
           updateStatusClass.value = "has-update";
         }
@@ -505,9 +490,8 @@ const handlePerformUpdate = async () => {
   currentProgress.value = { stage: "checking", percentage: 0 };
   updateMessage.value = "";
   try {
-    const wailsApp = (window as any)?.go?.main?.App;
-    if (wailsApp && typeof wailsApp.PerformGuiUpdate === "function") {
-      const res = await wailsApp.PerformGuiUpdate();
+    if (isWails()) {
+      const res = await PerformGuiUpdate();
       if (res && res.success) {
         isRestartReady.value = true;
         updateMessage.value = t("about.updateCompleteRestart");
@@ -541,9 +525,7 @@ const handlePerformUpdate = async () => {
     updateMessage.value = t("about.onlineUpdateFailed", { error: String(err) });
     updateStatusClass.value = "update-error";
   } finally {
-    if (!(window as any)?.go?.main?.App?.PerformGuiUpdate) {
-      // keep updating status managed in interval
-    } else {
+    if (isWails()) {
       updating.value = false;
     }
   }
@@ -554,9 +536,8 @@ const handleRestartApp = async () => {
   restarting.value = true;
   updateMessage.value = t("about.restarting") || "正在重启应用...";
   try {
-    const wailsApp = (window as any)?.go?.main?.App;
-    if (wailsApp && typeof wailsApp.RestartApp === "function") {
-      await wailsApp.RestartApp();
+    if (isWails()) {
+      await RestartApp();
     } else {
       setTimeout(() => {
         window.location.reload();
