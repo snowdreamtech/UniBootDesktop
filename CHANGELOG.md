@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.6.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.5.1...v0.6.0) (2026-09-29)
+
+
+### 🚀 Features
+
+* **i18n:** add update-locales CLI script for automated multi-language synchronization ([9405a72](https://github.com/snowdreamtech/UniGoDesktop/commit/9405a72f0443b05607aa58c4e090ab1974204508))
+* **i18n:** localize checksum verification stage in AboutModal across all 53 locales ([8829ffe](https://github.com/snowdreamtech/UniGoDesktop/commit/8829ffe5fa3edad355703ea48bf443151ea04435))
+* **i18n:** localize in-app update progress text and lifecycle across all locales ([c1318ed](https://github.com/snowdreamtech/UniGoDesktop/commit/c1318ed1bd93dfdd84f7f8817c1d556457a2922e))
+
+
+### 🐛 Bug Fixes
+
+* **config:** ensure atomic configuration save and sync frontend lockfile ([cfb4ed2](https://github.com/snowdreamtech/UniGoDesktop/commit/cfb4ed2af34ca7000730eca5f8f9ea74751a5cff))
+
+
+### 🛠 Refactoring
+
+* **core:** harden lifecycle, streaming updater security, and frontend type safety ([1e1b770](https://github.com/snowdreamtech/UniGoDesktop/commit/1e1b770ba4212d89935c2f5fd8a6538ebc28696e))
+* **frontend:** extract formatUpdateProgress utility and add unit tests ([969f955](https://github.com/snowdreamtech/UniGoDesktop/commit/969f9555986e3c2336615b08055b8ae8637947aa))
+* **settings:** modularize SettingsModal into GeneralTab and NetworkTab subcomponents ([8cde281](https://github.com/snowdreamtech/UniGoDesktop/commit/8cde28144347b120b0771edab0f0b21c1b0c4c36))
+* **ui:** extract ToastNotification component from App.vue ([f3cd8a7](https://github.com/snowdreamtech/UniGoDesktop/commit/f3cd8a701ee64dba5eb379f5540cbb3e1308ce04))
+
+
+### 📖 Documentation
+
+* **adr:** record ADR 0006 for credential storage and secrets management strategy ([1f47de5](https://github.com/snowdreamtech/UniGoDesktop/commit/1f47de5b9a3ae4ecc65a0c4f88eee7dc309f0c12))
+* **adr:** record architectural decisions for dual-mode architecture and pure-go storage ([4d721ab](https://github.com/snowdreamtech/UniGoDesktop/commit/4d721abc19eb9b96fdc33c78be5e37664439689d))
+
 ## [0.5.1](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.5.0...v0.5.1) (2026-09-29)
 
 
