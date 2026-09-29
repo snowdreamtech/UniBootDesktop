@@ -11,7 +11,9 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
+	"strconv"
 	"time"
 
 	"github.com/snowdreamtech/unigodesktop/internal/env"
@@ -133,7 +135,39 @@ func (a *App) TestNetwork(targetURL string) *NetworkTestResult {
 
 // CheckUpdate returns GitHub release update metadata.
 func (a *App) CheckUpdate() *updater.UpdateStatus {
-	return updater.CheckUpdate(a.ctx)
+	ctx := a.ctx
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return updater.CheckUpdate(ctx)
+}
+
+// PerformGuiUpdate performs background download and staging of the latest GUI release.
+func (a *App) PerformGuiUpdate() (*updater.GuiUpdateResult, error) {
+	ctx := a.ctx
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	proxyPrefix := ""
+	cfg, err := config.Load()
+	if err == nil && cfg != nil {
+		proxyPrefix = cfg.GithubProxy
+	}
+	if proxyPrefix == "" {
+		proxyPrefix = env.GithubProxy()
+	}
+
+	progressCallback := func(percentage int, status string) {
+		if a.ctx != nil {
+			wailsRuntime.EventsEmit(a.ctx, "gui-update-progress", map[string]interface{}{
+				"percentage": percentage,
+				"status":     status,
+			})
+		}
+	}
+
+	return updater.PerformGuiUpdate(ctx, proxyPrefix, progressCallback)
 }
 
 // GetConfig loads the application settings.
@@ -151,15 +185,34 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 
 // OpenURL opens the specified URL in the native desktop browser.
 func (a *App) OpenURL(url string) {
-	if url != "" {
+	if url != "" && a.ctx != nil {
 		wailsRuntime.BrowserOpenURL(a.ctx, url)
 	}
 }
 
 var execCommand = exec.Command
 
-// RestartApp gracefully quits and restarts the application.
+// RestartApp gracefully quits and restarts the application or applies pending updates.
 func (a *App) RestartApp() error {
+	pending, err := updater.GetPendingUpdate(env.GetDataDir())
+	if err == nil && pending != nil && pending.ScriptPath != "" {
+		if _, err := os.Stat(pending.ScriptPath); err == nil {
+			var cmd *exec.Cmd
+			if runtime.GOOS == "windows" {
+				cmd = execCommand(pending.Shell, "/c", pending.ScriptPath, strconv.Itoa(os.Getpid()), pending.Target, pending.Staged, filepath.Dir(pending.ScriptPath))
+			} else {
+				cmd = execCommand(pending.Shell, pending.ScriptPath, strconv.Itoa(os.Getpid()), pending.Target, pending.Staged, filepath.Dir(pending.ScriptPath))
+			}
+			detachProcess(cmd)
+			if err := cmd.Start(); err == nil {
+				if a.ctx != nil {
+					wailsRuntime.Quit(a.ctx)
+				}
+				return nil
+			}
+		}
+	}
+
 	exe, err := os.Executable()
 	if err != nil {
 		return fmt.Errorf("failed to get executable path: %w", err)

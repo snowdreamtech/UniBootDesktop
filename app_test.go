@@ -7,9 +7,13 @@ package main
 
 import (
 	"context"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"testing"
 
+	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unigodesktop/pkg/updater"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -65,4 +69,49 @@ func TestApp_RestartApp(t *testing.T) {
 
 	err := app.RestartApp()
 	assert.NoError(t, err)
+}
+
+func TestApp_RestartApp_WithPendingUpdate(t *testing.T) {
+	app := NewApp()
+	require.NotNil(t, app)
+
+	origExec := execCommand
+	defer func() { execCommand = origExec }()
+
+	tmpDir := t.TempDir()
+	scriptPath := filepath.Join(tmpDir, "apply_update.sh")
+	require.NoError(t, os.WriteFile(scriptPath, []byte("#!/bin/sh\nexit 0\n"), 0755))
+
+	dataDir := env.GetDataDir()
+	pending := &updater.PendingUpdate{
+		Shell:      "/bin/sh",
+		ScriptPath: scriptPath,
+		Target:     filepath.Join(tmpDir, "target"),
+		Staged:     filepath.Join(tmpDir, "staged"),
+	}
+	require.NoError(t, updater.SavePendingUpdate(dataDir, pending))
+	defer func() { _ = updater.ClearPendingUpdate(dataDir) }()
+
+	var executedCmd string
+	execCommand = func(name string, arg ...string) *exec.Cmd {
+		executedCmd = name
+		return exec.Command("true")
+	}
+
+	err := app.RestartApp()
+	assert.NoError(t, err)
+	assert.NotEmpty(t, executedCmd)
+}
+
+func TestApp_CheckUpdateAndURL(t *testing.T) {
+	app := NewApp()
+	require.NotNil(t, app)
+
+	// CheckUpdate should safely return a status
+	status := app.CheckUpdate()
+	assert.NotNil(t, status)
+
+	// OpenURL should safely execute without panic
+	app.OpenURL("")
+	app.OpenURL("https://github.com/snowdreamtech/UniGoDesktop")
 }
