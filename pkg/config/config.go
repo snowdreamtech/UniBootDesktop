@@ -61,15 +61,45 @@ func Load() (*AppConfig, error) {
 	return GetDefaultConfig(), nil
 }
 
-// Save writes application configuration to disk.
+// Save writes application configuration to disk atomically.
 func (c *AppConfig) Save() error {
 	cfgPath := env.GetGlobalConfigPath()
-	if err := os.MkdirAll(filepath.Dir(cfgPath), 0755); err != nil {
+	dir := filepath.Dir(cfgPath)
+	if err := os.MkdirAll(dir, 0755); err != nil {
 		return fmt.Errorf("create config dir error: %w", err)
 	}
 	data, err := toml.Marshal(c)
 	if err != nil {
 		return fmt.Errorf("marshal config error: %w", err)
 	}
-	return os.WriteFile(cfgPath, data, 0600)
+
+	tmpFile, err := os.CreateTemp(dir, "config-*.tmp")
+	if err != nil {
+		return fmt.Errorf("create temp config file error: %w", err)
+	}
+	tmpName := tmpFile.Name()
+	defer func() {
+		_ = os.Remove(tmpName)
+	}()
+
+	if _, err := tmpFile.Write(data); err != nil {
+		_ = tmpFile.Close()
+		return fmt.Errorf("write temp config error: %w", err)
+	}
+	if err := tmpFile.Chmod(0600); err != nil {
+		_ = tmpFile.Close()
+		return fmt.Errorf("chmod config error: %w", err)
+	}
+	if err := tmpFile.Sync(); err != nil {
+		_ = tmpFile.Close()
+		return fmt.Errorf("sync config error: %w", err)
+	}
+	if err := tmpFile.Close(); err != nil {
+		return fmt.Errorf("close temp config error: %w", err)
+	}
+
+	if err := os.Rename(tmpName, cfgPath); err != nil {
+		return fmt.Errorf("atomic rename config error: %w", err)
+	}
+	return nil
 }
