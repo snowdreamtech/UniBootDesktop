@@ -1,18 +1,7 @@
 <template>
   <div class="app-container">
     <!-- Global Toast Notification -->
-    <transition name="toast-fade">
-      <div v-if="toastMessage" class="global-toast" :class="toastType">
-        <span class="toast-icon">
-          <template v-if="toastType === 'warning'">⚠️</template>
-          <template v-else-if="toastType === 'error'">❌</template>
-          <template v-else-if="toastType === 'success'">🎉</template>
-          <template v-else>ℹ️</template>
-        </span>
-        <span class="toast-text">{{ toastMessage }}</span>
-        <button class="toast-close" @click="toastMessage = ''">✕</button>
-      </div>
-    </transition>
+    <ToastNotification :message="toastMessage" :type="toastType" @close="toastMessage = ''" />
 
     <!-- Header -->
     <header class="app-header">
@@ -97,6 +86,7 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import HelloPanel from "./components/HelloPanel.vue";
 import SettingsModal from "./components/SettingsModal.vue";
 import AboutModal from "./components/AboutModal.vue";
+import ToastNotification from "./components/ToastNotification.vue";
 import { t, currentLang, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from "./i18n";
 import { GetConfig, SaveConfig, CheckUpdate } from "../wailsjs/go/main/App";
 import { isWails } from "./utils/wails";
@@ -447,75 +437,10 @@ onUnmounted(() => {
   flex-direction: column;
 }
 
-/* Global Toast */
-.global-toast {
-  position: fixed;
-  top: 1.5rem;
-  right: 2rem;
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1.25rem;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  font-size: 0.875rem;
-  font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.global-toast.info {
-  background: rgba(15, 23, 42, 0.95);
-  border-color: rgba(0, 229, 255, 0.4);
-  color: #f8fafc;
-}
-
-.global-toast.success {
-  background: rgba(6, 78, 59, 0.95);
-  border-color: rgba(16, 185, 129, 0.4);
-  color: #ecfdf5;
-}
-
-.global-toast.warning {
-  background: rgba(120, 53, 15, 0.95);
-  border-color: rgba(245, 158, 11, 0.4);
-  color: #fffbeb;
-}
-
-.global-toast.error {
-  background: rgba(127, 29, 29, 0.95);
-  border-color: rgba(239, 68, 68, 0.4);
-  color: #fef2f2;
-}
-
-.toast-close {
-  background: none;
-  border: none;
-  color: inherit;
-  opacity: 0.7;
-  cursor: pointer;
-  padding: 0.1rem 0.3rem;
-  font-size: 0.9rem;
-}
-
-.toast-close:hover {
-  opacity: 1;
-}
-
 /* Transitions */
-.toast-fade-enter-active,
-.toast-fade-leave-active,
 .dropdown-fade-enter-active,
 .dropdown-fade-leave-active {
   transition: all 0.2s ease;
-}
-
-.toast-fade-enter-from,
-.toast-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
 }
 
 .dropdown-fade-enter-from,
