@@ -157,6 +157,20 @@ jobs:
             sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-dev
           fi
 
+      - name: Install Windows build dependencies
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          if (-not (Get-Command makensis -ErrorAction SilentlyContinue)) {
+            choco install nsis -y --no-progress
+            $nsisPath = "C:\Program Files (x86)\NSIS"
+            if (Test-Path $nsisPath) {
+              echo "$nsisPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+              $env:PATH = "$nsisPath;$env:PATH"
+            }
+          }
+          makensis /VERSION
+
       - name: Install frontend dependencies
         shell: bash
         run: |
@@ -303,6 +317,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          if [ -d "/c/Program Files (x86)/NSIS" ]; then
+            export PATH="/c/Program Files (x86)/NSIS:${PATH}"
+          fi
           mkdir -p build/bin
           unirtm exec -- wails build \
             -s \
@@ -310,12 +327,11 @@ jobs:
             -platform windows/amd64 \
             -nsis \
             -ldflags "${LDFLAGS}"
-          INSTALLER="$(find build/bin -maxdepth 1 -name '*installer*.exe' -print -quit 2>/dev/null || true)"
+          echo "Files in build/bin after wails build:"
+          ls -la build/bin/
+          INSTALLER="$(find build/bin -maxdepth 1 -iname '*installer*.exe' -print -quit 2>/dev/null || true)"
           if [ -z "${INSTALLER}" ] || [ ! -f "${INSTALLER}" ]; then
-            INSTALLER="$(find build/bin -maxdepth 1 -name '*.exe' -print -quit 2>/dev/null || true)"
-          fi
-          if [ -z "${INSTALLER}" ] || [ ! -f "${INSTALLER}" ]; then
-            echo "Windows installer executable not found in build/bin" >&2
+            echo "Windows installer executable (*installer*.exe) not found in build/bin" >&2
             exit 1
           fi
           INSTALLER_TARGET="build/bin/unigodesktop-gui_${CLEAN_VERSION}_windows_amd64_installer.exe"
@@ -329,9 +345,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          EXE_PATH="$(find build/bin -maxdepth 1 -name 'unigodesktop.exe' -print -quit 2>/dev/null || true)"
+          EXE_PATH="$(find build/bin -maxdepth 1 \( -iname 'unigodesktop.exe' -o -iname "${PROJECT_NAME}.exe" \) -print -quit 2>/dev/null || true)"
           if [ -z "${EXE_PATH}" ] || [ ! -f "${EXE_PATH}" ]; then
-            echo "Windows executable unigodesktop.exe not found in build/bin" >&2
+            echo "Windows executable (unigodesktop.exe) not found in build/bin" >&2
+            ls -la build/bin/
             exit 1
           fi
           PORTABLE_DIR="build/bin/unigodesktop-portable"
