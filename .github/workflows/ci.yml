@@ -235,6 +235,7 @@ jobs:
         run: |
           cd frontend
           unirtm exec -- npm ci
+          unirtm exec -- npm test
           unirtm exec -- npm run build
 
       - name: "🖥️ Verify Wails Binary Compilation"
