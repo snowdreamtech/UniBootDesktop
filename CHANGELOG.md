@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.5.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.4.0...v0.5.0) (2026-09-29)
+
+
+### 🚀 Features
+
+* **updater:** implement in-place automatic GUI update and atomic restart replacement ([db4563a](https://github.com/snowdreamtech/UniGoDesktop/commit/db4563ad965224884b432b091a3e08b98e2616c6))
+
+
+### 🐛 Bug Fixes
+
+* **ci:** remove invalid -noinstall flag from wails build ([56837c4](https://github.com/snowdreamtech/UniGoDesktop/commit/56837c4575203a72dd49d3538ed5436028b285b4))
+
+
+### 🛠 Refactoring
+
+* **release:** standardize release asset naming conventions across cli and gui ([f3db222](https://github.com/snowdreamtech/UniGoDesktop/commit/f3db2225b2bebb2365c9eec93584221c5e845def))
+* **updater:** enhance cross-platform in-place update for Windows and Linux ([427763d](https://github.com/snowdreamtech/UniGoDesktop/commit/427763deadfefc5d4e8046290e117fa1b85e1c5f))
+
 ## [0.4.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.3.4...v0.4.0) (2026-09-29)
 
 
