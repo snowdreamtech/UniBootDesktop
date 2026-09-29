@@ -97,4 +97,13 @@ export const koKr: TranslationDict = {
   "about.restarting": "다시 시작하는 중...",
   "about.onlineUpdateFailed": "업데이트 실패: {error}",
   "about.newVersionNotice": "🚀 새 버전 {tag} 사용 가능!",
+  "about.checkingForUpdate": "최신 릴리스 확인 중...",
+  "about.foundReleaseAsset": "릴리스 파일 발견: {asset}",
+  "about.downloadingWithTotal": "업데이트 다운로드 중: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "업데이트 다운로드 중: {loaded} MB",
+  "about.downloadCompleted": "다운로드 완료",
+  "about.mountingDiskImage": "디스크 이미지 마운트 중...",
+  "about.extractingPackage": "업데이트 패키지 압축 해제 중: {name}...",
+  "about.stagingPackage": "업데이트 파일 준비 중...",
+  "about.preparingApplyScript": "업데이트 적용 스크립트 준비 중...",
 };

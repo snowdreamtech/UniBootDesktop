@@ -285,7 +285,7 @@ func TestDownloadWithProgress(t *testing.T) {
 	destFile := filepath.Join(tmpDir, "update.bin")
 
 	var progressCalled bool
-	onProgress := func(pct int, status string) {
+	onProgress := func(p UpdateProgress) {
 		progressCalled = true
 	}
 

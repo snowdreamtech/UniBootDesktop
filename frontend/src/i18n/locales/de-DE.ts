@@ -99,4 +99,13 @@ export const deDe: TranslationDict = {
   "about.restarting": "Wird neu gestartet...",
   "about.onlineUpdateFailed": "Update fehlgeschlagen: {error}",
   "about.newVersionNotice": "🚀 Neue Version {tag} verfügbar!",
+  "about.checkingForUpdate": "Nach neuester Version suchen...",
+  "about.foundReleaseAsset": "Release-Asset gefunden: {asset}",
+  "about.downloadingWithTotal": "Update wird heruntergeladen: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "Update wird heruntergeladen: {loaded} MB",
+  "about.downloadCompleted": "Download abgeschlossen",
+  "about.mountingDiskImage": "Disk-Image wird bereitgestellt...",
+  "about.extractingPackage": "Update-Paket wird entpackt: {name}...",
+  "about.stagingPackage": "Update-Dateien werden vorbereitet...",
+  "about.preparingApplyScript": "Update-Skript wird vorbereitet...",
 };

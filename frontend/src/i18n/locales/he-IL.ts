@@ -97,4 +97,13 @@ export const heIl: TranslationDict = {
   "about.restarting": "מפעיל מחדש...",
   "about.onlineUpdateFailed": "העדכון נכשל: {error}",
   "about.newVersionNotice": "🚀 גרסה חדשה {tag} זמינה!",
+  "about.checkingForUpdate": "Checking for latest release...",
+  "about.foundReleaseAsset": "Found release asset: {asset}",
+  "about.downloadingWithTotal": "Downloading update: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "Downloading update: {loaded} MB",
+  "about.downloadCompleted": "Download completed",
+  "about.mountingDiskImage": "Mounting disk image...",
+  "about.extractingPackage": "Extracting update package: {name}...",
+  "about.stagingPackage": "Staging update package...",
+  "about.preparingApplyScript": "Preparing update apply script...",
 };

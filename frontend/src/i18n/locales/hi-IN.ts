@@ -98,4 +98,13 @@ export const hiIn: TranslationDict = {
   "about.restarting": "पुनः प्रारंभ हो रहा है...",
   "about.onlineUpdateFailed": "अपडेट विफल: {error}",
   "about.newVersionNotice": "🚀 नया संस्करण {tag} उपलब्ध है!",
+  "about.checkingForUpdate": "Checking for latest release...",
+  "about.foundReleaseAsset": "Found release asset: {asset}",
+  "about.downloadingWithTotal": "Downloading update: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "Downloading update: {loaded} MB",
+  "about.downloadCompleted": "Download completed",
+  "about.mountingDiskImage": "Mounting disk image...",
+  "about.extractingPackage": "Extracting update package: {name}...",
+  "about.stagingPackage": "Staging update package...",
+  "about.preparingApplyScript": "Preparing update apply script...",
 };

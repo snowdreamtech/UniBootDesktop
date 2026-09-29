@@ -101,4 +101,13 @@ export interface TranslationDict {
   "about.restarting": string;
   "about.onlineUpdateFailed": string;
   "about.newVersionNotice": string;
+  "about.checkingForUpdate": string;
+  "about.foundReleaseAsset": string;
+  "about.downloadingWithTotal": string;
+  "about.downloadingSizeOnly": string;
+  "about.downloadCompleted": string;
+  "about.mountingDiskImage": string;
+  "about.extractingPackage": string;
+  "about.stagingPackage": string;
+  "about.preparingApplyScript": string;
 }

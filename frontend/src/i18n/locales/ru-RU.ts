@@ -98,4 +98,13 @@ export const ruRu: TranslationDict = {
   "about.restarting": "Перезапуск...",
   "about.onlineUpdateFailed": "Сбой обновления: {error}",
   "about.newVersionNotice": "🚀 Доступна новая версия {tag}!",
+  "about.checkingForUpdate": "Проверка последнего релиза...",
+  "about.foundReleaseAsset": "Найден файл релиза: {asset}",
+  "about.downloadingWithTotal": "Загрузка обновления: {loaded} МБ / {total} МБ ({progress}%)",
+  "about.downloadingSizeOnly": "Загрузка обновления: {loaded} МБ",
+  "about.downloadCompleted": "Загрузка завершена",
+  "about.mountingDiskImage": "Монтирование образа диска...",
+  "about.extractingPackage": "Распаковка пакета обновления: {name}...",
+  "about.stagingPackage": "Подготовка файлов обновления...",
+  "about.preparingApplyScript": "Подготовка скрипта обновления...",
 };

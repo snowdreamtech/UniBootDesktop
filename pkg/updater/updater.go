@@ -38,8 +38,18 @@ type GuiUpdateResult struct {
 	Message string `json:"message,omitempty"`
 }
 
-// ProgressFunc reports update progress percentage (0-100) and current status text.
-type ProgressFunc func(percentage int, status string)
+// UpdateProgress provides structured progress events for internationalization and native UI display.
+type UpdateProgress struct {
+	Percentage  int    `json:"percentage"`
+	Status      string `json:"status"`
+	Stage       string `json:"stage"`
+	Detail      string `json:"detail,omitempty"`
+	LoadedBytes int64  `json:"loadedBytes,omitempty"`
+	TotalBytes  int64  `json:"totalBytes,omitempty"`
+}
+
+// ProgressFunc reports update progress.
+type ProgressFunc func(p UpdateProgress)
 
 // PendingUpdate holds the staged update state for application restart.
 type PendingUpdate struct {
@@ -220,7 +230,13 @@ func (pt *progressTrackingReader) Read(p []byte) (int, error) {
 				} else {
 					status = fmt.Sprintf("Downloading update: %.1f MB", float64(pt.readBytes)/1048576.0)
 				}
-				pt.onProgress(currentPct, status)
+				pt.onProgress(UpdateProgress{
+					Percentage:  currentPct,
+					Status:      status,
+					Stage:       "downloading",
+					LoadedBytes: pt.readBytes,
+					TotalBytes:  pt.totalBytes,
+				})
 			}
 		}
 	}
@@ -301,7 +317,11 @@ func DownloadWithProgress(
 					return fmt.Errorf("failed to replace destination file: %w", err)
 				}
 				if onProgress != nil {
-					onProgress(endPct, "Download completed")
+					onProgress(UpdateProgress{
+						Percentage: endPct,
+						Status:     "Download completed",
+						Stage:      "download_completed",
+					})
 				}
 				return nil
 			}
@@ -341,7 +361,11 @@ func StageMacDmgUpdate(
 	onProgress ProgressFunc,
 ) (*PendingUpdate, error) {
 	if onProgress != nil {
-		onProgress(75, "Mounting disk image...")
+		onProgress(UpdateProgress{
+			Percentage: 75,
+			Status:     "Mounting disk image...",
+			Stage:      "mounting",
+		})
 	}
 
 	mountDir, err := os.MkdirTemp("", "unigodesktop-mount-*")
@@ -375,7 +399,12 @@ func StageMacDmgUpdate(
 	}
 
 	if onProgress != nil {
-		onProgress(82, fmt.Sprintf("Extracting %s...", appName))
+		onProgress(UpdateProgress{
+			Percentage: 82,
+			Status:     fmt.Sprintf("Extracting %s...", appName),
+			Stage:      "extracting",
+			Detail:     appName,
+		})
 	}
 
 	stagingDir := filepath.Join(updatesDir, "staging")
@@ -410,7 +439,11 @@ func StageMacDmgUpdate(
 	}
 
 	if onProgress != nil {
-		onProgress(92, "Preparing update apply script...")
+		onProgress(UpdateProgress{
+			Percentage: 92,
+			Status:     "Preparing update apply script...",
+			Stage:      "preparing_script",
+		})
 	}
 
 	scriptPath := filepath.Join(updatesDir, "apply_update.sh")
@@ -463,7 +496,11 @@ rm -rf "$UPDATE_DIR" 2>/dev/null || true
 	}
 
 	if onProgress != nil {
-		onProgress(100, "Update ready! Restart application to apply.")
+		onProgress(UpdateProgress{
+			Percentage: 100,
+			Status:     "Update ready! Restart application to apply.",
+			Stage:      "ready",
+		})
 	}
 
 	return pending, nil
@@ -477,7 +514,12 @@ func StageWindowsUpdate(
 	onProgress ProgressFunc,
 ) (*PendingUpdate, error) {
 	if onProgress != nil {
-		onProgress(75, "Extracting Windows update package...")
+		onProgress(UpdateProgress{
+			Percentage: 75,
+			Status:     "Extracting Windows update package...",
+			Stage:      "extracting",
+			Detail:     filepath.Base(archivePath),
+		})
 	}
 
 	stagingDir := filepath.Join(updatesDir, "staging")
@@ -580,7 +622,11 @@ rmdir /S /Q "%UPDATE_DIR%" 2>NUL
 	}
 
 	if onProgress != nil {
-		onProgress(100, "Update ready! Restart application to apply.")
+		onProgress(UpdateProgress{
+			Percentage: 100,
+			Status:     "Update ready! Restart application to apply.",
+			Stage:      "ready",
+		})
 	}
 
 	return pending, nil
@@ -595,7 +641,12 @@ func StageLinuxUpdate(
 	onProgress ProgressFunc,
 ) (*PendingUpdate, error) {
 	if onProgress != nil {
-		onProgress(75, "Staging Linux update package...")
+		onProgress(UpdateProgress{
+			Percentage: 75,
+			Status:     "Staging Linux update package...",
+			Stage:      "staging",
+			Detail:     filepath.Base(filePath),
+		})
 	}
 
 	stagingDir := filepath.Join(updatesDir, "staging")
@@ -684,7 +735,11 @@ rm -rf "$UPDATE_DIR" 2>/dev/null || true
 	}
 
 	if onProgress != nil {
-		onProgress(100, "Update ready! Restart application to apply.")
+		onProgress(UpdateProgress{
+			Percentage: 100,
+			Status:     "Update ready! Restart application to apply.",
+			Stage:      "ready",
+		})
 	}
 
 	return pending, nil
@@ -700,7 +755,11 @@ func PerformGuiUpdate(
 		ctx = context.Background()
 	}
 	if onProgress != nil {
-		onProgress(5, "Checking for latest release...")
+		onProgress(UpdateProgress{
+			Percentage: 5,
+			Status:     "Checking for latest release...",
+			Stage:      "checking",
+		})
 	}
 
 	info, err := updater.FetchLatestReleaseInfo(ctx)
@@ -714,7 +773,12 @@ func PerformGuiUpdate(
 	}
 
 	if onProgress != nil {
-		onProgress(10, fmt.Sprintf("Found release asset: %s", asset.Name))
+		onProgress(UpdateProgress{
+			Percentage: 10,
+			Status:     fmt.Sprintf("Found release asset: %s", asset.Name),
+			Stage:      "found_asset",
+			Detail:     asset.Name,
+		})
 	}
 
 	updatesDir := filepath.Join(env.GetDataDir(), "updates")

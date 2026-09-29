@@ -98,4 +98,13 @@ export const itIt: TranslationDict = {
   "about.restarting": "Riavvio in corso...",
   "about.onlineUpdateFailed": "Aggiornamento fallito: {error}",
   "about.newVersionNotice": "🚀 Nuova versione {tag} disponibile!",
+  "about.checkingForUpdate": "Controllo dell'ultima versione...",
+  "about.foundReleaseAsset": "Trovato file di rilascio: {asset}",
+  "about.downloadingWithTotal": "Download dell'aggiornamento: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "Download dell'aggiornamento: {loaded} MB",
+  "about.downloadCompleted": "Download completato",
+  "about.mountingDiskImage": "Montaggio immagine disco...",
+  "about.extractingPackage": "Estrazione pacchetto di aggiornamento: {name}...",
+  "about.stagingPackage": "Preparazione file di aggiornamento...",
+  "about.preparingApplyScript": "Preparazione script di aggiornamento...",
 };

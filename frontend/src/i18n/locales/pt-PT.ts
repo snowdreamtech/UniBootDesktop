@@ -99,4 +99,13 @@ export const ptPt: TranslationDict = {
   "about.restarting": "A reiniciar...",
   "about.onlineUpdateFailed": "Falha na atualização: {error}",
   "about.newVersionNotice": "🚀 Nova versão {tag} disponível!",
+  "about.checkingForUpdate": "A verificar versão mais recente...",
+  "about.foundReleaseAsset": "Ficheiro de versão encontrado: {asset}",
+  "about.downloadingWithTotal": "A descarregar atualização: {loaded} MB / {total} MB ({progress}%)",
+  "about.downloadingSizeOnly": "A descarregar atualização: {loaded} MB",
+  "about.downloadCompleted": "Transferência concluída",
+  "about.mountingDiskImage": "A montar imagem de disco...",
+  "about.extractingPackage": "A extrair pacote de atualização: {name}...",
+  "about.stagingPackage": "A preparar ficheiros de atualização...",
+  "about.preparingApplyScript": "A preparar script de aplicação...",
 };
