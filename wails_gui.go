@@ -47,7 +47,7 @@ func resolveWindowsUserDataPath() string {
 	if appData := os.Getenv("APPDATA"); appData != "" {
 		return filepath.Join(appData, "UniGoDesktop", "webview2")
 	}
-	return ""
+	return filepath.Join(env.GetDataDir(), "webview2")
 }
 
 // RunWails initializes and launches the Wails v2 desktop GUI application.
