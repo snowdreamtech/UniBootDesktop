@@ -58,9 +58,7 @@ describe("updater utility", () => {
   });
 
   it("formats stage: ready", () => {
-    expect(formatUpdateProgress({ stage: "ready" })).toBe(
-      "New version ready. Restart the application to apply."
-    );
+    expect(formatUpdateProgress({ stage: "ready" })).toBe("New version ready. Restart the application to apply.");
   });
 
   it("localizes correctly into zh-CN", async () => {
