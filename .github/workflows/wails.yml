@@ -104,9 +104,14 @@ jobs:
             ${{ runner.os }}-${{ runner.arch }}-wails-
 
       - name: Resolve build metadata
+        env:
+          MATRIX_TARGET: ${{ matrix.target }}
         shell: bash
         run: |
           set -euo pipefail
+          CLEAN_VERSION="${TAG#v}"
+          TARGET_OS="${MATRIX_TARGET%/*}"
+          TARGET_ARCH="${MATRIX_TARGET#*/}"
           COMMIT="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
           COMMIT_FULL="$(git rev-parse HEAD 2>/dev/null || echo unknown)"
           DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
@@ -114,6 +119,9 @@ jobs:
           PKG="${MODULE_PATH}/internal/env"
           PROJECT_NAME="${MODULE_PATH##*/}"
           LDFLAGS="-s -w -X '${PKG}.GitTag=${TAG}' -X '${PKG}.CommitHash=${COMMIT}' -X '${PKG}.CommitHashFull=${COMMIT_FULL}' -X '${PKG}.BuildTime=${DATE}' -X '${PKG}.ProjectName=${PROJECT_NAME}'"
+          echo "CLEAN_VERSION=${CLEAN_VERSION}" >> "$GITHUB_ENV"
+          echo "TARGET_OS=${TARGET_OS}" >> "$GITHUB_ENV"
+          echo "TARGET_ARCH=${TARGET_ARCH}" >> "$GITHUB_ENV"
           echo "COMMIT=${COMMIT}" >> "$GITHUB_ENV"
           echo "COMMIT_FULL=${COMMIT_FULL}" >> "$GITHUB_ENV"
           echo "DATE=${DATE}" >> "$GITHUB_ENV"
@@ -252,9 +260,10 @@ jobs:
           mkdir -p build/bin/dmg-src
           cp -R "$APP_PATH" "build/bin/dmg-src/${APP_NAME}"
           ln -s /Applications "build/bin/dmg-src/Applications"
-          hdiutil create -volname "${APP_NAME%.app}" -srcfolder build/bin/dmg-src -ov -format UDZO "build/bin/${APP_NAME%.app}.dmg"
+          DMG_NAME="unigodesktop-gui_${CLEAN_VERSION}_darwin_universal.dmg"
+          hdiutil create -volname "${APP_NAME%.app}" -srcfolder build/bin/dmg-src -ov -format UDZO "build/bin/${DMG_NAME}"
           rm -rf build/bin/dmg-src
-          DMG_PATH="build/bin/${APP_NAME%.app}.dmg"
+          DMG_PATH="build/bin/${DMG_NAME}"
           if [ ! -f "${DMG_PATH}" ]; then
             echo "DMG creation failed: ${DMG_PATH} not found" >&2
             exit 1
@@ -309,7 +318,11 @@ jobs:
             echo "Windows installer executable not found in build/bin" >&2
             exit 1
           fi
-          echo "Windows installer produced: ${INSTALLER}"
+          INSTALLER_TARGET="build/bin/unigodesktop-gui_${CLEAN_VERSION}_windows_amd64_installer.exe"
+          if [ "${INSTALLER}" != "${INSTALLER_TARGET}" ]; then
+            mv "${INSTALLER}" "${INSTALLER_TARGET}"
+          fi
+          echo "Windows installer produced: ${INSTALLER_TARGET}"
 
       - name: Package Windows portable zip
         if: runner.os == 'Windows'
@@ -335,7 +348,7 @@ jobs:
             'All user configuration, local caches, and WebView2 runtime data are isolated in the local "data" directory.' \
             'Please do not delete portable.dat if you wish to keep portable mode active.' \
             > "${PORTABLE_DIR}/README.txt"
-          PORTABLE_ZIP="build/bin/unigodesktop-gui_windows_amd64_portable.zip"
+          PORTABLE_ZIP="build/bin/unigodesktop-gui_${CLEAN_VERSION}_windows_amd64_portable.zip"
           if command -v 7z >/dev/null 2>&1; then
             7z a -tzip "${PORTABLE_ZIP}" "./${PORTABLE_DIR}/*"
           else
@@ -365,7 +378,7 @@ jobs:
           cp "$APP_BIN" build/bin/linux-dist/unigodesktop
           cp build/linux/unigodesktop.desktop build/bin/linux-dist/unigodesktop.desktop
           cp build/appicon.png build/bin/linux-dist/unigodesktop.png
-          tar -czf "build/bin/unigodesktop-gui_linux_${LINUX_ARCH}.tar.gz" -C build/bin/linux-dist unigodesktop unigodesktop.desktop unigodesktop.png
+          tar -czf "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.tar.gz" -C build/bin/linux-dist unigodesktop unigodesktop.desktop unigodesktop.png
           rm -rf build/bin/linux-dist
 
       - name: Package Linux packages (deb, rpm, AppImage)
@@ -489,8 +502,7 @@ jobs:
             fi
           done
 
-          TARGET_ARCH="${TARGET##*/}"
-          CHECKSUM_FILE="build/bin/unigodesktop-gui-${RUNNER_OS}-${TARGET_ARCH}.sha256"
+          CHECKSUM_FILE="build/bin/unigodesktop-gui_${CLEAN_VERSION}_${TARGET_OS}_${TARGET_ARCH}.sha256"
           rm -f "${CHECKSUM_FILE}"
 
           for ASSET in "${MATCHED_ASSETS[@]}"; do
@@ -549,7 +561,7 @@ jobs:
         run: |
           set -euo pipefail
           upload_assets=()
-          CHECKSUM_FILE="${CHECKSUM_FILE:-build/bin/unigodesktop-gui-${RUNNER_OS}.sha256}"
+          CHECKSUM_FILE="${CHECKSUM_FILE:-build/bin/unigodesktop-gui_${CLEAN_VERSION}_${TARGET_OS}_${TARGET_ARCH}.sha256}"
           if [ -f "${CHECKSUM_FILE}" ]; then
             upload_assets+=("${CHECKSUM_FILE}")
           fi
