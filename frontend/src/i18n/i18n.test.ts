@@ -35,4 +35,21 @@ describe("i18n module", () => {
   it("contains 53 supported languages", () => {
     expect(SUPPORTED_LANGUAGES.length).toBe(53);
   });
+
+  it("ensures all 53 locales contain all translation keys from en-US", async () => {
+    const enModule = await import("./locales/en-US");
+    const enDict = enModule.enUs;
+    const enKeys = Object.keys(enDict);
+
+    for (const lang of SUPPORTED_LANGUAGES) {
+      if (lang.code === "en-US") continue;
+      const mod = await import(`./locales/${lang.code}.ts`);
+      const exportKey = Object.keys(mod).find((k) => k !== "default") || Object.keys(mod)[0];
+      const dict = mod[exportKey];
+      expect(dict, `Locale dictionary for ${lang.code} should exist`).toBeDefined();
+      const localeKeys = new Set(Object.keys(dict));
+      const missingKeys = enKeys.filter((k) => !localeKeys.has(k));
+      expect(missingKeys, `Missing keys in ${lang.code}`).toEqual([]);
+    }
+  });
 });
