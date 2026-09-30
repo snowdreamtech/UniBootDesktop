@@ -23,6 +23,26 @@
         <string>true</string>
         <key>NSHumanReadableCopyright</key>
         <string>{{.Info.Copyright}}</string>
+        <key>CFBundleDevelopmentRegion</key>
+        <string>zh_CN</string>
+        <key>CFBundleAllowMixedLocalizations</key>
+        <true/>
+        <key>CFBundleLocalizations</key>
+        <array>
+            <string>zh_CN</string>
+            <string>zh-Hans</string>
+            <string>zh-Hant</string>
+            <string>zh_TW</string>
+            <string>en</string>
+            <string>ja</string>
+            <string>ko</string>
+            <string>de</string>
+            <string>fr</string>
+            <string>es</string>
+            <string>ru</string>
+            <string>pt</string>
+            <string>it</string>
+        </array>
         {{if .Info.FileAssociations}}
         <key>CFBundleDocumentTypes</key>
         <array>
