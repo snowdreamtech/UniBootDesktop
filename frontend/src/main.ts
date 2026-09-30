@@ -2,79 +2,41 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import "./styles/theme.css";
 
-// 1. Prevent default browser context menu on non-editable UI elements
-window.addEventListener("contextmenu", (e: MouseEvent) => {
-  const target = e.target as HTMLElement | null;
-  if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
-    return;
-  }
-  e.preventDefault();
-});
+const STARTUP_LOADER_MIN_DURATION_MS = 650;
+const startupStartedAt = performance.now();
 
-// 2. Prevent accidental browser reload, find, print, and save shortcuts
-window.addEventListener("keydown", (e: KeyboardEvent) => {
-  const key = e.key.toLowerCase();
-  const isCmdOrCtrl = e.metaKey || e.ctrlKey;
+function setStartupProgress(progress: number) {
+  document.documentElement.style.setProperty("--startup-progress", `${progress}%`);
+}
 
-  // Prevent reload: F5, Ctrl+R, Cmd+R
-  if (e.key === "F5" || (isCmdOrCtrl && key === "r")) {
-    e.preventDefault();
-  }
-  // Prevent browser in-page search: Ctrl+F, Cmd+F
-  if (isCmdOrCtrl && key === "f") {
-    e.preventDefault();
-  }
-  // Prevent browser print: Ctrl+P, Cmd+P
-  if (isCmdOrCtrl && key === "p") {
-    e.preventDefault();
-  }
-  // Prevent browser save webpage: Ctrl+S, Cmd+S
-  if (isCmdOrCtrl && key === "s") {
-    e.preventDefault();
-  }
-  // Prevent browser history navigation: Alt+Left/Right, Cmd+[/]
-  if (
-    (e.altKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) ||
-    (e.metaKey && (e.key === "[" || e.key === "]"))
-  ) {
-    e.preventDefault();
-  }
-});
+function dismissStartupLoader() {
+  const elapsed = performance.now() - startupStartedAt;
+  const remaining = Math.max(0, STARTUP_LOADER_MIN_DURATION_MS - elapsed);
+  setStartupProgress(92);
 
-// 3. Prevent mouse navigation side-buttons (Back/Forward) from navigating webview
-window.addEventListener("mousedown", (e: MouseEvent) => {
-  if (e.button === 3 || e.button === 4) {
-    e.preventDefault();
-    e.stopPropagation();
+  window.setTimeout(() => {
+    setStartupProgress(100);
+    document.documentElement.classList.add("app-ready");
+    window.setTimeout(() => {
+      document.getElementById("startup-loader")?.remove();
+    }, 260);
+  }, remaining);
+}
+
+window.addEventListener("uniboot:config-ready", dismissStartupLoader, { once: true });
+
+// Fallback safety timeout: ensure startup loader is dismissed if event doesn't fire
+window.setTimeout(() => {
+  if (!document.documentElement.classList.contains("app-ready")) {
+    dismissStartupLoader();
   }
-});
-window.addEventListener("mouseup", (e: MouseEvent) => {
-  if (e.button === 3 || e.button === 4) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
-});
+}, 2500);
 
-// 4. Prevent pinch-to-zoom and Ctrl/Cmd + wheel zooming
-window.addEventListener(
-  "wheel",
-  (e: WheelEvent) => {
-    if (e.ctrlKey || e.metaKey) {
-      e.preventDefault();
-    }
-  },
-  { passive: false }
-);
-
-window.addEventListener("gesturestart", (e: Event) => e.preventDefault());
-window.addEventListener("gesturechange", (e: Event) => e.preventDefault());
-window.addEventListener("gestureend", (e: Event) => e.preventDefault());
-
-// 5. Prevent accidental external file drop from navigating away
+// Prevent accidental external file drop from navigating away
 window.addEventListener("dragover", (e: DragEvent) => e.preventDefault(), false);
 window.addEventListener("drop", (e: DragEvent) => e.preventDefault(), false);
 
-// 6. Native Window Focus / Blur State Adaptation
+// Native Window Focus / Blur State Adaptation
 window.addEventListener("focus", () => {
   document.documentElement.classList.remove("window-inactive");
 });
@@ -82,4 +44,6 @@ window.addEventListener("blur", () => {
   document.documentElement.classList.add("window-inactive");
 });
 
+setStartupProgress(12);
 createApp(App).mount("#app");
+setStartupProgress(36);

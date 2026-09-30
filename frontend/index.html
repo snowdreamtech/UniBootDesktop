@@ -5,8 +5,223 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UniBootDesktop</title>
+    <!-- Theme pre-load: apply saved or system theme synchronously before any render -->
+    <script>
+      (function () {
+        try {
+          var cachedTheme = localStorage.getItem("uniboot_theme_cache");
+          var systemTheme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          var theme = cachedTheme === "light" || cachedTheme === "dark" ? cachedTheme : systemTheme;
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {
+          document.documentElement.setAttribute(
+            "data-theme",
+            window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"
+          );
+        }
+      })();
+    </script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      [data-theme="dark"] {
+        background: #0b0f19;
+        color: #f8fafc;
+      }
+
+      [data-theme="light"] {
+        background: #f8fafc;
+        color: #0f172a;
+      }
+
+      html::before {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483646;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at 50% 38%, rgba(56, 189, 248, 0.12), transparent 30%), #0b0f19;
+        color: #f8fafc;
+        content: "UniBootDesktop";
+        font:
+          700 22px/1.2 -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+
+      [data-theme="light"]::before {
+        background: radial-gradient(circle at 50% 38%, rgba(2, 132, 199, 0.1), transparent 30%), #f8fafc;
+        color: #0f172a;
+      }
+
+      html.app-ready::before {
+        display: none;
+      }
+
+      #startup-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        background: radial-gradient(circle at 50% 38%, rgba(56, 189, 248, 0.12), transparent 30%), #0b0f19;
+        color: #f8fafc;
+        opacity: 1;
+        transition:
+          opacity 220ms ease,
+          visibility 220ms ease;
+      }
+
+      [data-theme="light"] #startup-loader {
+        background: radial-gradient(circle at 50% 38%, rgba(2, 132, 199, 0.1), transparent 30%), #f8fafc;
+        color: #0f172a;
+      }
+
+      html.app-ready #startup-loader {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .startup-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        transform: translateY(-4vh);
+        animation: startup-rise 500ms ease-out both;
+      }
+
+      .startup-mark {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 86px;
+        height: 86px;
+        color: #f8fafc;
+        background: linear-gradient(145deg, #38bdf8, #2563eb);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 24px;
+        box-shadow:
+          0 18px 50px rgba(14, 165, 233, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+      }
+
+      [data-theme="light"] .startup-mark {
+        color: #ffffff;
+        box-shadow:
+          0 18px 50px rgba(2, 132, 199, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.55);
+      }
+
+      .startup-mark::after {
+        position: absolute;
+        inset: -9px;
+        border: 1px solid rgba(56, 189, 248, 0.32);
+        border-radius: 31px;
+        content: "";
+        animation: startup-pulse 1.8s ease-out infinite;
+      }
+
+      .startup-mark svg {
+        width: 43px;
+        height: 43px;
+      }
+
+      .startup-title {
+        margin: 2px 0 0;
+        color: currentColor;
+        font:
+          700 22px/1.2 -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        letter-spacing: 0.01em;
+      }
+
+      .startup-progress {
+        width: 148px;
+        height: 3px;
+        margin-top: 5px;
+        overflow: hidden;
+        background: color-mix(in srgb, currentColor 12%, transparent);
+        border-radius: 99px;
+      }
+
+      .startup-progress-fill {
+        width: var(--startup-progress, 8%);
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #38bdf8, #2563eb);
+        transition: width 260ms ease-out;
+      }
+
+      @keyframes startup-rise {
+        from {
+          opacity: 1;
+          transform: translateY(-2vh);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(-4vh);
+        }
+      }
+
+      @keyframes startup-pulse {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: scale(0.96);
+        }
+        50% {
+          opacity: 0;
+          transform: scale(1.08);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .startup-content,
+        .startup-mark::after,
+        .startup-progress-fill {
+          animation: none;
+          transition: none;
+        }
+      }
+    </style>
   </head>
   <body>
+    <div id="startup-loader" role="status" aria-live="polite" aria-label="Starting UniBootDesktop">
+      <div class="startup-content">
+        <div class="startup-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path
+              d="M24 6c8.5 2.1 13.2 7.6 14.4 16.5L24 39 9.6 22.5C10.8 13.6 15.5 8.1 24 6Z"
+              fill="currentColor"
+              opacity=".95"
+            />
+            <path
+              d="m18.5 25.5 5 5 7-8"
+              stroke="#2563eb"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+        <h1 class="startup-title">UniBootDesktop</h1>
+        <div class="startup-progress" aria-hidden="true">
+          <div class="startup-progress-fill"></div>
+        </div>
+      </div>
+    </div>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
