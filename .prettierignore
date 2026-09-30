@@ -134,6 +134,7 @@ Desktop.ini
 **/*.min.css
 **/*.map
 **/*.bundle.js
+frontend/wailsjs/
 
 # ── 10. Miscellaneous ─────────────────────────────────────────────────────────
 .ansible-lint
