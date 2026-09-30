@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const svSe: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "Platformonafhankelijk desktopsjabloon (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "Hälsningar från UniGoDesktop!",
+  "app.greeting": "Hälsningar från UniBootDesktop!",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript Desktopsjabloon",
   "app.template_desc": "Een modern, robuust en uitbreidbaar desktopsjabloon met i18n, thema's en netwerkversnelling.",
   "common.autoDetect": "Autoavkänning",

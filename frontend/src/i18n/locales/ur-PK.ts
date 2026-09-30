@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const urPk: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "کراس پلیٹ فارم ڈیسک ٹاپ ایپلیکیشن سانچہ (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "UniGoDesktop کی طرف سے سلام!",
+  "app.greeting": "UniBootDesktop کی طرف سے سلام!",
   "app.template_badge": "ڈیسک ٹاپ سانچہ Go + Wails + Vue 3 + TypeScript",
   "app.template_desc":
     "بین الاقوامی کاری، تھیمز اور نیٹ ورک اسپیڈ کے ساتھ جدید اور قابل توسیع ڈیسک ٹاپ ایپلیکیشن سانچہ۔",

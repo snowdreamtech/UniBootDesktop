@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const csCz: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "Wieloplatformowy szablon aplikacji desktopowej (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "Zdraví vás UniGoDesktop!",
+  "app.greeting": "Zdraví vás UniBootDesktop!",
   "app.template_badge": "Szablon aplikacji desktopowej Go + Wails + Vue 3 + TypeScript",
   "app.template_desc":
     "Nowoczesny, stabilny i rozszerzalny szablon aplikacji z wielojęzycznością, motywami i przyspieszeniem sieciowym.",

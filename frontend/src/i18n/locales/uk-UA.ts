@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const ukUa: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "Кросплатформний шаблон десктопного додатку (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "Вітання від UniGoDesktop!",
+  "app.greeting": "Вітання від UniBootDesktop!",
   "app.template_badge": "Шаблон десктопного додатку Go + Wails + Vue 3 + TypeScript",
   "app.template_desc":
     "Сучасний, надійний та розширюваний кросплатформний шаблон з інтернаціоналізацією, темами та прискоренням мережі.",

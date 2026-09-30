@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const mkMk: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "Кроссплатформенный шаблон десктопного приложения (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "Поздрав од UniGoDesktop!",
+  "app.greeting": "Поздрав од UniBootDesktop!",
   "app.template_badge": "Шаблон десктопного приложения Go + Wails + Vue 3 + TypeScript",
   "app.template_desc":
     "Современный, надежный и расширяемый кроссплатформенный шаблон с интернационализацией, темами и сетевым ускорением.",

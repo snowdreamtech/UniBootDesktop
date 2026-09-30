@@ -192,7 +192,7 @@ const sysInfo = ref<{
   os: "darwin",
   arch: "arm64",
   goVersion: "go1.27",
-  appName: "UniGoDesktop",
+  appName: "UniBootDesktop",
   version: "v1.0.0",
 });
 
@@ -201,7 +201,7 @@ const latencyMs = ref<number | null>(null);
 const networkConnected = ref<boolean | null>(null);
 
 const heroGreeting = computed(() => {
-  return t("app.greeting") || "Hello World From UniGoDesktop!";
+  return t("app.greeting") || "Hello World From UniBootDesktop!";
 });
 
 const proxyModeText = computed(() => {
@@ -258,7 +258,7 @@ const handleTestNetwork = async () => {
 };
 
 const openDocs = () => {
-  const url = "https://github.com/snowdreamtech/unigodesktop";
+  const url = "https://github.com/snowdreamtech/unibootdesktop";
   if (isWails()) {
     OpenURL(url);
   } else {
@@ -274,7 +274,7 @@ onMounted(async () => {
         os: info.os || "darwin",
         arch: info.arch || "arm64",
         goVersion: info.goVersion || "go1.27",
-        appName: info.appName || "UniGoDesktop",
+        appName: info.appName || "UniBootDesktop",
         version: info.version || "v1.0.0",
       };
     }

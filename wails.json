@@ -1,7 +1,7 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "UniGoDesktop",
-  "outputfilename": "unigodesktop",
+  "name": "UniBootDesktop",
+  "outputfilename": "unibootdesktop",
   "frontend:dir": "frontend",
   "frontend:install": "npm ci",
   "frontend:build": "npm run build",
@@ -22,7 +22,7 @@
   },
   "info": {
     "companyName": "SnowdreamTech",
-    "productName": "UniGoDesktop",
+    "productName": "UniBootDesktop",
     "productVersion": "0.8.0",
     "copyright": "Copyright (c) 2026 SnowdreamTech. All rights reserved.",
     "comments": "Universal Go Desktop Suite"

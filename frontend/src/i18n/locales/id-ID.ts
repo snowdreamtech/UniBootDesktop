@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const idId: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "Templat aplikasi desktop lintas platform (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "Salam dari UniGoDesktop!",
+  "app.greeting": "Salam dari UniBootDesktop!",
   "app.template_badge": "Templat Desktop Go + Wails + Vue 3 + TypeScript",
   "app.template_desc":
     "Templat aplikasi desktop lintas platform yang modern, tangguh, dan dapat diperluas dengan i18n, tema, dan akselerasi jaringan.",

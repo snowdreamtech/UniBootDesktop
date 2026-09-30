@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const glEs: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "Modelo de aplicación de escritorio multiplataforma (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "Saúdos desde UniGoDesktop!",
+  "app.greeting": "Saúdos desde UniBootDesktop!",
   "app.template_badge": "Plantilla de escritorio Go + Wails + Vue 3 + TypeScript",
   "app.template_desc":
     "Una plantilla de escritorio moderna, robusta y extensible con i18n, temas y aceleración de red.",

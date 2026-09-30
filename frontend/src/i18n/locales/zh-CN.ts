@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const zhCn: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "跨平台桌面应用模版 (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "你好，来自 UniGoDesktop！",
+  "app.greeting": "你好，来自 UniBootDesktop！",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript 跨平台应用模版",
   "app.template_desc": "现代化、高颜值、开箱即用的跨平台桌面应用开发模版，具备国际化、深浅主题与网络加速功能。",
   "common.autoDetect": "自动识别",

@@ -6,9 +6,9 @@
     <!-- Header -->
     <header class="app-header" @dblclick="handleHeaderDblClick">
       <div class="brand">
-        <img src="/logo.png" alt="UniGo" class="logo-img" />
+        <img src="/logo.png" alt="UniBoot" class="logo-img" />
         <div>
-          <h1>{{ t("app.title") || "UniGoDesktop" }}</h1>
+          <h1>{{ t("app.title") || "UniBootDesktop" }}</h1>
           <span class="sub-brand">{{ t("app.subtitle") || "Universal Cross-Platform Desktop Template" }}</span>
         </div>
       </div>
@@ -256,7 +256,7 @@ async function initApp() {
 
         // Auto check updates if enabled (throttled to at most once per 24 hours)
         if (cfg.autoCheckUpdate !== false) {
-          const LAST_CHECK_KEY = "unigo_last_auto_check_update";
+          const LAST_CHECK_KEY = "uniboot_last_auto_check_update";
           const now = Date.now();
           const lastCheck = parseInt(localStorage.getItem(LAST_CHECK_KEY) || "0", 10);
           const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
