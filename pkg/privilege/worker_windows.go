@@ -168,10 +168,10 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		return nil, err
 	}
 
-	portFile := filepath.Join(os.TempDir(), fmt.Sprintf("unigo-worker-%d.port", os.Getpid()))
+	portFile := filepath.Join(os.TempDir(), fmt.Sprintf("uniboot-worker-%d.port", os.Getpid()))
 	_ = os.Remove(portFile)
 
-	tokenFile := filepath.Join(os.TempDir(), fmt.Sprintf("unigo-worker-%d.tok", os.Getpid()))
+	tokenFile := filepath.Join(os.TempDir(), fmt.Sprintf("uniboot-worker-%d.tok", os.Getpid()))
 	if err := os.WriteFile(tokenFile, []byte(token), 0600); err != nil {
 		return nil, fmt.Errorf("failed to write token file: %w", err)
 	}

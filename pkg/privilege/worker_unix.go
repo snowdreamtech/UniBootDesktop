@@ -193,7 +193,7 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		return client, nil
 	}
 
-	socketDir := filepath.Join(os.TempDir(), fmt.Sprintf("unigo-ipc-%d", os.Getuid()))
+	socketDir := filepath.Join(os.TempDir(), fmt.Sprintf("uniboot-ipc-%d", os.Getuid()))
 	_ = os.MkdirAll(socketDir, 0700)
 	_ = os.Chmod(socketDir, 0700)
 	cleanStaleSockets(socketDir)
