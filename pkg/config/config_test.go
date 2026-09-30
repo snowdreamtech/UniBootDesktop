@@ -18,6 +18,12 @@ func TestDefaultConfig(t *testing.T) {
 	if cfg.Language != "auto" {
 		t.Errorf("expected default Language 'auto', got %s", cfg.Language)
 	}
+	if cfg.EnableTray {
+		t.Errorf("expected default EnableTray false, got %v", cfg.EnableTray)
+	}
+	if cfg.CloseAction != "quit" {
+		t.Errorf("expected default CloseAction 'quit', got %s", cfg.CloseAction)
+	}
 	if cfg.GithubProxy != "" {
 		t.Errorf("expected default GithubProxy '', got %s", cfg.GithubProxy)
 	}
