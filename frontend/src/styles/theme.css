@@ -98,6 +98,29 @@ select:focus::placeholder {
   color: rgba(100, 116, 139, 0.22) !important;
 }
 
+/* Purge Browser Default Autofill Background & Red Spellcheck Squiggles */
+input,
+textarea {
+  spellcheck: false;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-main) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--input-bg) inset !important;
+  box-shadow: 0 0 0px 1000px var(--input-bg) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: var(--text-main);
+}
+
+
 * {
   box-sizing: border-box;
   margin: 0;
