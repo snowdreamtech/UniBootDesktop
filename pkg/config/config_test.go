@@ -34,8 +34,8 @@ func TestDefaultConfig(t *testing.T) {
 
 func TestConfigSaveAndLoad(t *testing.T) {
 	tmpDir := t.TempDir()
-	t.Setenv("UNIGODESKTOP_CONFIG_DIR", tmpDir)
-	t.Setenv("UNIGO_DATA_DIR", tmpDir)
+	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIBOOT_DATA_DIR", tmpDir)
 
 	cfg := GetDefaultConfig()
 	cfg.Theme = "dark"

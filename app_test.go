@@ -16,9 +16,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	internalUpdater "github.com/snowdreamtech/unigodesktop/internal/updater"
-	"github.com/snowdreamtech/unigodesktop/pkg/updater"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	internalUpdater "github.com/snowdreamtech/unibootdesktop/internal/updater"
+	"github.com/snowdreamtech/unibootdesktop/pkg/updater"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -31,8 +31,8 @@ func TestApp_LifecycleAndAPIs(t *testing.T) {
 	app.startup(ctx)
 
 	// Greet
-	assert.Equal(t, "Hello World, Welcome to UniGoDesktop!", app.Greet(""))
-	assert.Equal(t, "Hello Alice, Welcome to UniGoDesktop!", app.Greet("Alice"))
+	assert.Equal(t, "Hello World, Welcome to UniBootDesktop!", app.Greet(""))
+	assert.Equal(t, "Hello Alice, Welcome to UniBootDesktop!", app.Greet("Alice"))
 
 	// HelloInfo
 	info := app.GetHelloInfo()
@@ -42,7 +42,7 @@ func TestApp_LifecycleAndAPIs(t *testing.T) {
 	// SystemInfo
 	sys := app.GetSystemInfo()
 	assert.NotNil(t, sys)
-	assert.Equal(t, "UniGoDesktop", sys.AppName)
+	assert.Equal(t, "UniBootDesktop", sys.AppName)
 
 	// Config
 	cfg, err := app.GetConfig()
@@ -146,7 +146,7 @@ func TestApp_CheckUpdateAndURL(t *testing.T) {
 
 	// OpenURL should safely execute without panic
 	app.OpenURL("")
-	app.OpenURL("https://github.com/snowdreamtech/UniGoDesktop")
+	app.OpenURL("https://github.com/snowdreamtech/UniBootDesktop")
 }
 
 func TestApp_PerformGuiUpdate_Concurrency(t *testing.T) {

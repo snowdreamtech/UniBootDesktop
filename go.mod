@@ -1,4 +1,4 @@
-module github.com/snowdreamtech/unigodesktop
+module github.com/snowdreamtech/unibootdesktop
 
 go 1.27.1
 

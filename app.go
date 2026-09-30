@@ -17,10 +17,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
-	"github.com/snowdreamtech/unigodesktop/pkg/config"
-	"github.com/snowdreamtech/unigodesktop/pkg/updater"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/pkg/config"
+	"github.com/snowdreamtech/unibootdesktop/pkg/updater"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -69,7 +69,7 @@ func NewApp() *App {
 // startup is called when the Wails application starts up.
 func (a *App) startup(ctx context.Context) {
 	a.ctx, a.cancel = context.WithCancel(ctx)
-	logger.Info("UniGoDesktop Wails GUI runtime started successfully")
+	logger.Info("UniBootDesktop Wails GUI runtime started successfully")
 }
 
 // shutdown is called when the Wails application is shutting down.
@@ -77,7 +77,7 @@ func (a *App) shutdown(ctx context.Context) {
 	if a.cancel != nil {
 		a.cancel()
 	}
-	logger.Info("UniGoDesktop Wails GUI runtime shutting down")
+	logger.Info("UniBootDesktop Wails GUI runtime shutting down")
 }
 
 // beforeClose is invoked before the application window closes.
@@ -112,13 +112,13 @@ func (a *App) Greet(name string) string {
 	if name == "" {
 		name = "World"
 	}
-	return fmt.Sprintf("Hello %s, Welcome to UniGoDesktop!", name)
+	return fmt.Sprintf("Hello %s, Welcome to UniBootDesktop!", name)
 }
 
 // GetHelloInfo returns structured hello greeting and runtime environment details.
 func (a *App) GetHelloInfo() *HelloInfo {
 	return &HelloInfo{
-		Greeting:  "Hello World From UniGoDesktop!",
+		Greeting:  "Hello World From UniBootDesktop!",
 		OS:        runtime.GOOS,
 		Arch:      runtime.GOARCH,
 		Timestamp: time.Now().Format(time.RFC3339),
@@ -131,7 +131,7 @@ func (a *App) GetSystemInfo() *SystemInfo {
 		OS:        runtime.GOOS,
 		Arch:      runtime.GOARCH,
 		GoVersion: runtime.Version(),
-		AppName:   "UniGoDesktop",
+		AppName:   "UniBootDesktop",
 		Version:   env.GitTag,
 		Commit:    env.CommitHash,
 		BuildTime: env.BuildTime,

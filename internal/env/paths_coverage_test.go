@@ -14,8 +14,8 @@ func TestEnvPaths_CoverageMore(t *testing.T) {
 	oldOS := RuntimeGOOS
 	RuntimeGOOS = "windows"
 
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", "")
-	os.Setenv("UNIGODESKTOP_XDG_CONFIG_HOME", "")
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", "")
+	os.Setenv("UNIBOOTDESKTOP_XDG_CONFIG_HOME", "")
 
 	oldOsUserConfigDir := OsUserConfigDir
 	OsUserConfigDir = func() (string, error) { return "C:\\Users\\test\\AppData\\Roaming", nil }
@@ -25,16 +25,16 @@ func TestEnvPaths_CoverageMore(t *testing.T) {
 	GetConfigDir()
 
 	// 2. Test GetDataDir windows
-	os.Setenv("UNIGODESKTOP_DATA_DIR", "")
-	os.Setenv("UNIGODESKTOP_XDG_DATA_HOME", "")
-	os.Setenv("UNIGODESKTOP_LOCALAPPDATA", "C:\\AppData\\Local")
+	os.Setenv("UNIBOOTDESKTOP_DATA_DIR", "")
+	os.Setenv("UNIBOOTDESKTOP_XDG_DATA_HOME", "")
+	os.Setenv("UNIBOOTDESKTOP_LOCALAPPDATA", "C:\\AppData\\Local")
 	GetDataDir()
-	os.Unsetenv("UNIGODESKTOP_LOCALAPPDATA")
+	os.Unsetenv("UNIBOOTDESKTOP_LOCALAPPDATA")
 	GetDataDir()
 
 	// 3. Test GetCacheDir darwin
-	os.Setenv("UNIGODESKTOP_CACHE_DIR", "")
-	os.Setenv("UNIGODESKTOP_XDG_CACHE_HOME", "")
+	os.Setenv("UNIBOOTDESKTOP_CACHE_DIR", "")
+	os.Setenv("UNIBOOTDESKTOP_XDG_CACHE_HOME", "")
 	RuntimeGOOS = "darwin"
 	GetCacheDir()
 
@@ -43,7 +43,7 @@ func TestEnvPaths_CoverageMore(t *testing.T) {
 	GetCacheDir()
 
 	// 5. Test GetLockFilePath error
-	os.Setenv("UNIGODESKTOP_LOCK_FILE", "")
+	os.Setenv("UNIBOOTDESKTOP_LOCK_FILE", "")
 	oldOsGetwd := OsGetwd
 	OsGetwd = func() (string, error) { return "", errors.New("err") }
 	GetLockFilePath()
@@ -56,32 +56,32 @@ func TestEnvPaths_CoverageMore(t *testing.T) {
 	// 6. Test OsUserHomeDir error paths
 	oldOsUserHomeDir := OsUserHomeDir
 	OsUserHomeDir = func() (string, error) { return "", errors.New("err") }
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", "")
-	os.Setenv("UNIGODESKTOP_XDG_CONFIG_HOME", "")
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", "")
+	os.Setenv("UNIBOOTDESKTOP_XDG_CONFIG_HOME", "")
 	GetConfigDir()
 
-	os.Setenv("UNIGODESKTOP_DATA_DIR", "")
-	os.Setenv("UNIGODESKTOP_XDG_DATA_HOME", "")
+	os.Setenv("UNIBOOTDESKTOP_DATA_DIR", "")
+	os.Setenv("UNIBOOTDESKTOP_XDG_DATA_HOME", "")
 	GetDataDir()
 
-	os.Setenv("UNIGODESKTOP_CACHE_DIR", "")
-	os.Setenv("UNIGODESKTOP_XDG_CACHE_HOME", "")
+	os.Setenv("UNIBOOTDESKTOP_CACHE_DIR", "")
+	os.Setenv("UNIBOOTDESKTOP_XDG_CACHE_HOME", "")
 	GetCacheDir()
 
 	OsUserHomeDir = oldOsUserHomeDir
 
-	// 7. Test direct UNIGODESKTOP_DIR env vars
-	os.Setenv("UNIGODESKTOP_CONFIG_DIR", "/custom/config")
+	// 7. Test direct UNIBOOTDESKTOP_DIR env vars
+	os.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", "/custom/config")
 	GetConfigDir()
-	os.Unsetenv("UNIGODESKTOP_CONFIG_DIR")
+	os.Unsetenv("UNIBOOTDESKTOP_CONFIG_DIR")
 
-	os.Setenv("UNIGODESKTOP_DATA_DIR", "/custom/data")
+	os.Setenv("UNIBOOTDESKTOP_DATA_DIR", "/custom/data")
 	GetDataDir()
-	os.Unsetenv("UNIGODESKTOP_DATA_DIR")
+	os.Unsetenv("UNIBOOTDESKTOP_DATA_DIR")
 
-	os.Setenv("UNIGODESKTOP_CACHE_DIR", "/custom/cache")
+	os.Setenv("UNIBOOTDESKTOP_CACHE_DIR", "/custom/cache")
 	GetCacheDir()
-	os.Unsetenv("UNIGODESKTOP_CACHE_DIR")
+	os.Unsetenv("UNIBOOTDESKTOP_CACHE_DIR")
 
 	// 8. Test GetCacheDir linux fallback
 	RuntimeGOOS = "linux"

@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
 )
 
 // EnvPathHelper provides path formatting and manipulation utilities.
@@ -38,7 +38,7 @@ func JoinForPosix(paths []string) string {
 
 // FormatDirForPosix ensures that a single directory path is safe for injection into
 // POSIX shell scripts (Bash, Zsh). On Windows, it converts backslashes to forward slashes,
-// and supports UNIGODESKTOP_CYGDRIVE_PREFIX for Git Bash/MSYS2 path conversions.
+// and supports UNIBOOTDESKTOP_CYGDRIVE_PREFIX for Git Bash/MSYS2 path conversions.
 func FormatDirForPosix(dir string) string {
 	if isWindowsMode {
 		dir = strings.ReplaceAll(dir, "\\", "/")

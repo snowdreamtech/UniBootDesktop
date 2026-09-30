@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
 // Package cmd contains all the command-line interface definitions and implementations
-// for the unigodesktop application. This file implements shell completion generation commands.
+// for the unibootdesktop application. This file implements shell completion generation commands.
 package cmd
 
 import (
@@ -11,9 +11,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/snowdreamtech/unigodesktop/internal/cli/output"
-	"github.com/snowdreamtech/unigodesktop/internal/cli/shell"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/cli/output"
+	"github.com/snowdreamtech/unibootdesktop/internal/cli/shell"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
 	"github.com/spf13/cobra"
 )
 
@@ -35,10 +35,10 @@ var allShells = []shell.ShellType{
 
 // completionFileNames maps each ShellType to its output filename.
 var completionFileNames = map[shell.ShellType]string{
-	shell.ShellZsh:        "unigodesktop.zsh",
-	shell.ShellBash:       "unigodesktop.bash",
-	shell.ShellFish:       "unigodesktop.fish",
-	shell.ShellPowerShell: "unigodesktop.ps1",
+	shell.ShellZsh:        "unibootdesktop.zsh",
+	shell.ShellBash:       "unibootdesktop.bash",
+	shell.ShellFish:       "unibootdesktop.fish",
+	shell.ShellPowerShell: "unibootdesktop.ps1",
 }
 
 // init registers the completion command and its subcommands to the root command.
@@ -54,7 +54,7 @@ func init() {
 var completionCmd = &cobra.Command{
 	Use:   "completion [bash|zsh|fish|powershell]",
 	Short: "Generate or install shell completion script",
-	Long: `Generate or install shell completion script for UniGoDesktop.
+	Long: `Generate or install shell completion script for UniBootDesktop.
 
 By default, it auto-detects your current shell and prints the completion script.
 Use the --install (-i) flag to automatically save the script and enable it in your shell configuration.
@@ -64,19 +64,19 @@ Use the --dir (-d) flag to export all four completion scripts to a specified dir
 
 Examples:
   # Auto-detect and print to stdout
-  unigodesktop completion
+  unibootdesktop completion
 
   # Auto-detect and install persistently
-  unigodesktop completion -i
+  unibootdesktop completion -i
 
   # Generate for a specific shell and print
-  unigodesktop completion zsh
+  unibootdesktop completion zsh
 
   # Generate all scripts, install only for shells present on the system
-  unigodesktop completion -i --all
+  unibootdesktop completion -i --all
 
   # Export all four completion scripts to a directory (no shell config changes)
-  unigodesktop completion -d ./completions`,
+  unibootdesktop completion -d ./completions`,
 
 	DisableFlagsInUseLine: true,
 	ValidArgs:             []string{"bash", "zsh", "fish", "powershell"},
@@ -163,7 +163,7 @@ func runCompletion(cmd *cobra.Command, args []string) error {
 // exportCompletionsToDir generates all four completion scripts and writes them to destDir.
 // The directory is created if it does not exist. This is idempotent.
 func exportCompletionsToDir(formatter output.Formatter, cmd *cobra.Command, destDir string) error {
-	// dryRun isn't explicitly defined in unigodesktop root cmd in this example, so assuming false
+	// dryRun isn't explicitly defined in unibootdesktop root cmd in this example, so assuming false
 	dryRun := false
 
 	if dryRun {
@@ -341,16 +341,16 @@ func installCompletion(formatter output.Formatter, cmd *cobra.Command, shellType
 
 	switch shellType {
 	case shell.ShellZsh:
-		compFile = filepath.Join(compDir, "unigodesktop.zsh")
+		compFile = filepath.Join(compDir, "unibootdesktop.zsh")
 		configFile = filepath.Join(home, ".zshrc")
 	case shell.ShellBash:
-		compFile = filepath.Join(compDir, "unigodesktop.bash")
+		compFile = filepath.Join(compDir, "unibootdesktop.bash")
 		configFile = filepath.Join(home, ".bashrc")
 	case shell.ShellFish:
 		// Fish uses a standard completion path; place the file there directly.
-		compFile = filepath.Join(home, ".config/fish/completions/unigodesktop.fish")
+		compFile = filepath.Join(home, ".config/fish/completions/unibootdesktop.fish")
 	case shell.ShellPowerShell:
-		compFile = filepath.Join(compDir, "unigodesktop.ps1")
+		compFile = filepath.Join(compDir, "unibootdesktop.ps1")
 		configFile = env.Get("PROFILE")
 		if configFile == "" {
 			configFile = filepath.Join(home, "Documents", "PowerShell", "Microsoft.PowerShell_profile.ps1")
@@ -383,9 +383,9 @@ func installCompletion(formatter output.Formatter, cmd *cobra.Command, shellType
 	}
 
 	if dryRun {
-		formatter.Success(fmt.Sprintf("[dry-run] UniGoDesktop completion for %s is ready to be enabled.", shellType))
+		formatter.Success(fmt.Sprintf("[dry-run] UniBootDesktop completion for %s is ready to be enabled.", shellType))
 	} else {
-		formatter.Success(fmt.Sprintf("UniGoDesktop completion for %s is now enabled.", shellType))
+		formatter.Success(fmt.Sprintf("UniBootDesktop completion for %s is now enabled.", shellType))
 		if configFile != "" {
 			fmt.Printf("\nPlease restart your shell or run: source %s\n", configFile)
 		}
@@ -405,15 +405,15 @@ func uninstallCompletion(formatter output.Formatter, shellType shell.ShellType) 
 
 	switch shellType {
 	case shell.ShellZsh:
-		compFile = filepath.Join(compDir, "unigodesktop.zsh")
+		compFile = filepath.Join(compDir, "unibootdesktop.zsh")
 		configFile = filepath.Join(home, ".zshrc")
 	case shell.ShellBash:
-		compFile = filepath.Join(compDir, "unigodesktop.bash")
+		compFile = filepath.Join(compDir, "unibootdesktop.bash")
 		configFile = filepath.Join(home, ".bashrc")
 	case shell.ShellFish:
-		compFile = filepath.Join(home, ".config/fish/completions/unigodesktop.fish")
+		compFile = filepath.Join(home, ".config/fish/completions/unibootdesktop.fish")
 	case shell.ShellPowerShell:
-		compFile = filepath.Join(compDir, "unigodesktop.ps1")
+		compFile = filepath.Join(compDir, "unibootdesktop.ps1")
 		configFile = env.Get("PROFILE")
 		if configFile == "" {
 			configFile = filepath.Join(home, "Documents", "PowerShell", "Microsoft.PowerShell_profile.ps1")
@@ -443,6 +443,6 @@ func uninstallCompletion(formatter output.Formatter, shellType shell.ShellType) 
 		}
 	}
 
-	formatter.Success(fmt.Sprintf("UniGoDesktop completion for %s has been disabled.", shellType))
+	formatter.Success(fmt.Sprintf("UniBootDesktop completion for %s has been disabled.", shellType))
 	return nil
 }

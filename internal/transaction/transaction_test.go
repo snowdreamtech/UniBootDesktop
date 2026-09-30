@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/database"
-	"github.com/snowdreamtech/unigodesktop/internal/repository"
-	"github.com/snowdreamtech/unigodesktop/internal/repository/sqlite"
+	"github.com/snowdreamtech/unibootdesktop/internal/database"
+	"github.com/snowdreamtech/unibootdesktop/internal/repository"
+	"github.com/snowdreamtech/unibootdesktop/internal/repository/sqlite"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -21,7 +21,7 @@ func setupTestDB(t *testing.T) (*database.DB, func()) {
 	t.Helper()
 
 	tempDir := t.TempDir()
-	dbPath := filepath.Join(tempDir, "unigo_test.db")
+	dbPath := filepath.Join(tempDir, "uniboot_test.db")
 
 	config := database.Config{
 		Path:    dbPath,

@@ -19,11 +19,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/archive"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
-	"github.com/snowdreamtech/unigodesktop/internal/updater"
-	"github.com/snowdreamtech/unigodesktop/internal/version"
+	"github.com/snowdreamtech/unibootdesktop/internal/archive"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	pkgHttp "github.com/snowdreamtech/unibootdesktop/internal/http"
+	"github.com/snowdreamtech/unibootdesktop/internal/updater"
+	"github.com/snowdreamtech/unibootdesktop/internal/version"
 )
 
 // UpdateStatus represents release update metadata.
@@ -88,7 +88,7 @@ func CheckUpdate(ctx context.Context) *UpdateStatus {
 		hasUpdate := HasNewVersion(currentTag, latestTag)
 		var downloadURL string
 		if hasUpdate {
-			downloadURL = "https://github.com/snowdreamtech/UniGoDesktop/releases/tag/" + latestTag
+			downloadURL = "https://github.com/snowdreamtech/UniBootDesktop/releases/tag/" + latestTag
 		}
 		return &UpdateStatus{
 			HasUpdate:   hasUpdate,
@@ -155,7 +155,7 @@ func FindGuiReleaseAsset(assets []updater.ReleaseAsset, targetOS, targetArch str
 
 		switch cleanOS {
 		case "darwin":
-			// macOS release asset is a DMG image (e.g. UniGoDesktop.dmg)
+			// macOS release asset is a DMG image (e.g. UniBootDesktop.dmg)
 			if strings.HasSuffix(name, ".dmg") {
 				matched = append(matched, a)
 			}
@@ -281,7 +281,7 @@ func DownloadWithProgress(
 		if err != nil {
 			return fmt.Errorf("failed to create download request: %w", err)
 		}
-		req.Header.Set("User-Agent", "UniGoDesktop/1.0")
+		req.Header.Set("User-Agent", "UniBootDesktop/1.0")
 		req.Header.Set("Accept", "*/*")
 
 		resp, err := client.Do(req)
@@ -371,7 +371,7 @@ func StageMacDmgUpdate(
 		})
 	}
 
-	mountDir, err := os.MkdirTemp("", "unigodesktop-mount-*")
+	mountDir, err := os.MkdirTemp("", "unibootdesktop-mount-*")
 	if err != nil {
 		return nil, fmt.Errorf("failed to create temporary mount point: %w", err)
 	}
@@ -482,8 +482,8 @@ if [[ "$TARGET" == *".app"* ]]; then
         open "$TARGET"
     fi
 else
-    if [ -f "$STAGED/Contents/MacOS/unigodesktop" ]; then
-        cp -f "$STAGED/Contents/MacOS/unigodesktop" "$TARGET" 2>/dev/null || true
+    if [ -f "$STAGED/Contents/MacOS/unibootdesktop" ]; then
+        cp -f "$STAGED/Contents/MacOS/unibootdesktop" "$TARGET" 2>/dev/null || true
         chmod +x "$TARGET" 2>/dev/null || true
         "$TARGET" &
     elif [ -f "$STAGED" ]; then
@@ -552,7 +552,7 @@ func StageWindowsUpdate(
 		}
 		_ = os.Remove(archivePath)
 
-		stagedExe = filepath.Join(stagingDir, "unigodesktop.exe")
+		stagedExe = filepath.Join(stagingDir, "unibootdesktop.exe")
 		if _, err := os.Stat(stagedExe); err != nil {
 			// Look for any .exe in stagingDir
 			entries, _ := os.ReadDir(stagingDir)
@@ -675,7 +675,7 @@ func StageLinuxUpdate(
 		}
 		_ = os.Remove(filePath)
 
-		stagedBinary := filepath.Join(stagingDir, "unigodesktop")
+		stagedBinary := filepath.Join(stagingDir, "unibootdesktop")
 		if _, err := os.Stat(stagedBinary); err != nil {
 			entries, _ := os.ReadDir(stagingDir)
 			for _, e := range entries {

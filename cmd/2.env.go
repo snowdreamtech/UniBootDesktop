@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/pterm/pterm"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	"github.com/snowdreamtech/unigodesktop/internal/sysinfo"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/sysinfo"
 	"github.com/spf13/cobra"
 )
 
@@ -57,7 +57,7 @@ func runEnv(cmd *cobra.Command, args []string) error {
 		}
 		pterm.DefaultTable.WithHasHeader().WithData(data).Render()
 		fmt.Println()
-		pterm.Info.Println("To apply this environment, run: " + pterm.LightMagenta("eval \"$(unigodesktop env)\""))
+		pterm.Info.Println("To apply this environment, run: " + pterm.LightMagenta("eval \"$(unibootdesktop env)\""))
 	} else {
 		for _, v := range vars {
 			fmt.Printf("export %s=%q\n", v.Name, v.Value)

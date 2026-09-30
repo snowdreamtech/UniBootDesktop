@@ -12,8 +12,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
-	"github.com/snowdreamtech/unigodesktop/pkg/config"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/pkg/config"
 )
 
 // AppState represents the current state of the desktop application.
@@ -57,7 +57,7 @@ func (a *App) Start(ctx context.Context) error {
 	a.state = StateRunning
 	a.mu.Unlock()
 
-	logger.Info("Starting UniGoDesktop application...", "mode", "desktop")
+	logger.Info("Starting UniBootDesktop application...", "mode", "desktop")
 
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -105,7 +105,7 @@ func (a *App) Stop() error {
 	}
 
 	a.state = StateStopping
-	logger.Info("Stopping UniGoDesktop components...")
+	logger.Info("Stopping UniBootDesktop components...")
 
 	if err := a.runner.Stop(); err != nil {
 		logger.Warn("Failed to cleanly stop UI runner", "error", err)
@@ -116,7 +116,7 @@ func (a *App) Stop() error {
 	}
 
 	a.state = StateStopped
-	logger.Info("UniGoDesktop application stopped cleanly")
+	logger.Info("UniBootDesktop application stopped cleanly")
 	return nil
 }
 
