@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	goRuntime "runtime"
 
 	"github.com/snowdreamtech/unigodesktop/cmd"
 	"github.com/snowdreamtech/unigodesktop/internal/env"
@@ -63,7 +62,6 @@ func RunWails() error {
 		MinWidth:         1024,
 		MinHeight:        728,
 		StartHidden:      true,
-		HideWindowOnClose: goRuntime.GOOS == "darwin",
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
