@@ -99,7 +99,8 @@ export const azAz: TranslationDict = {
   "disk.tag_boot_hybrid": "Hibrid Başlanğıc",
   "disk.tag_boot_thirdparty": "Üçüncü Tərəf Başlanğıcı",
   "confirm.cloud_to_hybrid_warn_title": "Xəbərdarlıq: Hibrid rejimə keçid tam formatlaşdırma tələb edir",
-  "confirm.cloud_to_hybrid_warn_desc": "Bu disk sırf Bulud Başlanğıcı rejimindədir. Ventoy Hibrid rejimi MBR və bölmə cədvəlinin yenidən qurulmasını tələb edir və bütün mövcud məlumatları və ISO-ları SİLƏCƏK!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Bu disk sırf Bulud Başlanğıcı rejimindədir. Ventoy Hibrid rejimi MBR və bölmə cədvəlinin yenidən qurulmasını tələb edir və bütün mövcud məlumatları və ISO-ları SİLƏCƏK!",
   "disk.tag_ssd": "Portativ SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Şifrələnmiş Disk",
@@ -127,13 +128,16 @@ export const azAz: TranslationDict = {
   "log.level_error": "XƏTA",
   "log.level_debug": "Xəta ayarlama",
   "safe.title_cloud": "Mövcud Ventoy/UniBoot diski aşkar edildi (Bulud rejimi yalnız ESP bölməsini yeniləyir)",
-  "safe.desc_cloud": "Bulud rejimi UNIBOOT iki bölməli quruluşunu qoruyur. ESP bölməsini yeniləmək bütün ISO və faylları toxunulmaz saxlayır!",
+  "safe.desc_cloud":
+    "Bulud rejimi UNIBOOT iki bölməli quruluşunu qoruyur. ESP bölməsini yeniləmək bütün ISO və faylları toxunulmaz saxlayır!",
   "safe.title_hybrid": "Mövcud Ventoy diski aşkar edildi (Hibrid rejimdə yerində yenilənmə)",
-  "safe.desc_hybrid": "Hibrid rejim bütün mövcud ISO fayllarını formatlamadan qoruyur, UniBoot tünd mövzusunu və bulud menyusunu təhlükəsiz əlavə edir!",
+  "safe.desc_hybrid":
+    "Hibrid rejim bütün mövcud ISO fayllarını formatlamadan qoruyur, UniBoot tünd mövzusunu və bulud menyusunu təhlükəsiz əlavə edir!",
   "common.optional": "İstəyə bağlı",
   "common.optional_test": "İstəyə bağlı test",
   "iso.title": "Yerli Sistem Şəkil Mənbələri (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Ventoy / UniBoot birbaşa yükləmə üçün /UNIBOOT/iso/ qovluğuna avtomatik surətdə kopyalamaq üçün ISO faylları əlavə edin.",
+  "iso.desc":
+    "Ventoy / UniBoot birbaşa yükləmə üçün /UNIBOOT/iso/ qovluğuna avtomatik surətdə kopyalamaq üçün ISO faylları əlavə edin.",
   "iso.add_btn": "Şəkil faylları əlavə edin",
   "iso.empty_title": "Şəkil faylları əlavə etmək üçün klikləyin (tək və ya toplu seçimi dəstəkləyir)",
   "iso.empty_sub": ".iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formatlarını dəstəkləyir",
@@ -144,7 +148,8 @@ export const azAz: TranslationDict = {
   "iso.drag_unsupported": "Dəstəklənən şəkil faylları aşkar edilmədi (.iso, .wim, .img və s.)",
   "iso.preflight_title": "Yazmadan əvvəl yoxlama",
   "iso.conflict_title": "Eyni adlı fayl tapıldı",
-  "iso.conflict_desc": "Hədəf USB-nin iso qovluğunda eyni adlı fayl artıq mövcuddur. Əməliyyat seçin. Hash müqayisə edilmir.",
+  "iso.conflict_desc":
+    "Hədəf USB-nin iso qovluğunda eyni adlı fayl artıq mövcuddur. Əməliyyat seçin. Hash müqayisə edilmir.",
   "iso.conflict_action": "Əməliyyat",
   "iso.conflict_keep_both": "Saxla",
   "iso.conflict_replace": "Üzərinə yaz",
@@ -154,13 +159,15 @@ export const azAz: TranslationDict = {
   "iso.conflict_confirm": "Təsdiqlə və davam et",
   "iso.preflight_failed": "Yazmadan əvvəl yoxlama uğursuz oldu",
   "deploy.title": "Yüklənə bilən disk yaradılması və QEMU testi",
-  "deploy.desc_cloud": "Təmiz iPXE Bulud Yükləməsi • Çox arxitekturalı iPXE şəbəkə proqramı ilə ultra sürətli iki bölməli quraşdırma.",
+  "deploy.desc_cloud":
+    "Təmiz iPXE Bulud Yükləməsi • Çox arxitekturalı iPXE şəbəkə proqramı ilə ultra sürətli iki bölməli quraşdırma.",
   "deploy.desc_hybrid": "Ventoy CLI Yerli Mühərriki • Yerli ISO idarəetməsi ilə Ventoy hibrid bölmə quraşdırması.",
   "deploy.target_device": "Hədəf Cihazı:",
   "deploy.batch_target": "Seçilmiş {count} USB disk(lər)",
   "deploy.start_create": "Yükləmə diski yaradın",
   "deploy.tip_batch_update_all": "Toplu itkisiz yeniləmə: Seçilmiş bütün {count} USB disk yerində yenilənəcək",
-  "deploy.tip_batch_mixed": "Toplu qarışıq yerləşdirmə: {bootCount} disk məlumat saxlanılmaqla yerində yenilənir, {blankCount} disk yenidən formatlanır",
+  "deploy.tip_batch_mixed":
+    "Toplu qarışıq yerləşdirmə: {bootCount} disk məlumat saxlanılmaqla yerində yenilənir, {blankCount} disk yenidən formatlanır",
   "deploy.start_update": "Yerində Təkmilləşdirmə (Data Təhlükəsizliyi)",
   "deploy.batch_create": "Toplu Yerləşdirməyə başlayın ({count} Disk)",
   "deploy.writing": "Yükləmə Mikro Proqramı Paketləri Yazılır...",
@@ -175,19 +182,24 @@ export const azAz: TranslationDict = {
   "deploy.tip_writing": "Yükləmə proqramı yazılır...",
   "deploy.tip_select_single": "Zəhmət olmasa əvvəlcə hədəf USB sürücüsünü seçin",
   "deploy.tip_select_batch": "Zəhmət olmasa toplu yerləşdirmə üçün hədəf USB sürücülərini yoxlayın",
-  "deploy.tip_macos_unsupported": "macOS Hibrid Rejimdə ilkin formatlamanı dəstəkləmir (Bulud Rejimindən istifadə edin və ya əvvəlcə Win/Linux-da başladın)",
+  "deploy.tip_macos_unsupported":
+    "macOS Hibrid Rejimdə ilkin formatlamanı dəstəkləmir (Bulud Rejimindən istifadə edin və ya əvvəlcə Win/Linux-da başladın)",
   "deploy.tip_need_ventoy": "Hibrid rejim yerli Ventoy CLI alətlərini tələb edir. Bulud rejimini tövsiyə edirik!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Təzə Formatlaşdırma Dəstəklənmir",
-  "deploy.macos_alert_desc": "Rəsmi Ventoy hələ macOS-da formatlaşdırma proqramının işləməsini dəstəkləmir. Yeni [Hibrid Disk] yaratmaq üçün Ventoy CLI tələb olunur. [Bulud rejimi (1s bulud yükləmə diski)] istifadə etmək tövsiyə olunur!",
+  "deploy.macos_alert_desc":
+    "Rəsmi Ventoy hələ macOS-da formatlaşdırma proqramının işləməsini dəstəkləmir. Yeni [Hibrid Disk] yaratmaq üçün Ventoy CLI tələb olunur. [Bulud rejimi (1s bulud yükləmə diski)] istifadə etmək tövsiyə olunur!",
   "deploy.no_ventoy_title": "Ventoy CLI İcra edilə biləni Aşkarlanmadı",
-  "deploy.no_ventoy_desc": "[Hibrid Disk] yaradılması yerli olaraq quraşdırılmış Ventoy CLI tələb edir. Zəhmət olmasa dəstəklənən [Bulud rejimi]-ni seçin!",
+  "deploy.no_ventoy_desc":
+    "[Hibrid Disk] yaradılması yerli olaraq quraşdırılmış Ventoy CLI tələb edir. Zəhmət olmasa dəstəklənən [Bulud rejimi]-ni seçin!",
   "deploy.result_batch_success": "1 saniyəlik bulud quraşdırma diski {count} diskə uğurla tətbiq edildi!",
   "deploy.result_success": "{mode} rejimi {targets} hədəfinə uğurla tətbiq edildi",
   "deploy.alert_success": "Yerləşdirmə uğurlu!",
   "deploy.safely_eject_btn": "USB diski təhlükəsiz çıxar",
   "deploy.success_banner_title": "Yükləmə diski uğurla yaradıldı!",
-  "deploy.success_banner_desc": "Yükləmə faylları və mikroyazılım yazıldı. Məlumat itkisinin qarşısını almaq üçün çıxarmazdan əvvəl təhlükəsiz çıxarın.",
-  "deploy.toast_auto_ejected": "Yaradılma tamamlandı! {count} USB disk avtomatik təhlükəsiz çıxarıldı. Bütün məlumatlar yazıldı.",
+  "deploy.success_banner_desc":
+    "Yükləmə faylları və mikroyazılım yazıldı. Məlumat itkisinin qarşısını almaq üçün çıxarmazdan əvvəl təhlükəsiz çıxarın.",
+  "deploy.toast_auto_ejected":
+    "Yaradılma tamamlandı! {count} USB disk avtomatik təhlükəsiz çıxarıldı. Bütün məlumatlar yazıldı.",
   "deploy.confirm_auto_eject_title": "Yazılma tamamlandı — Təhlükəsiz çıxarılsın?",
   "deploy.confirm_auto_eject_desc": "Bütün məlumatlar uğurla yazıldı. İndi USB diski təhlükəsiz çıxarmaq istəyirsiniz?",
   "deploy.confirm_auto_eject_yes": "Təhlükəsiz çıxar",
@@ -208,7 +220,8 @@ export const azAz: TranslationDict = {
   "vm.boot_mode_bios": "BIOS (Legacy) Rejimi",
   "vm.boot_mode_auto": "Avtomatik Təyin Etmə",
   "vm.startSuccess_vm": "{name} simulyasiya testi uğurla başladıldı",
-  "vm.desc_optional": "İstəyə bağlı funksiya: Kompüteri yenidən başlatmadan USB yüklənməsini virtual maşında nəzərdən keçirin.",
+  "vm.desc_optional":
+    "İstəyə bağlı funksiya: Kompüteri yenidən başlatmadan USB yüklənməsini virtual maşında nəzərdən keçirin.",
   "vm.installed": "QEMU Aşkar Edildi",
   "vm.not_installed": "QEMU Tapılmadı",
   "vm.target": "Test Hədəfi:",
@@ -219,7 +232,8 @@ export const azAz: TranslationDict = {
   "vm.tip_launching": "QEMU emulyatoru işə salınır...",
   "vm.tip_running": "Virtual machine is currently running. Target disk will be automatically remounted when closed.",
   "vm.tip_deploying": "Yükləmə faylları yerləşdirilir, bitənə qədər gözləyin",
-  "vm.tip_not_installed": "QEMU emulyatoru tapılmadı. Zəhmət olmasa əvvəlcə QEMU quraşdırın (qemu dəmləyin/port quraşdırın)",
+  "vm.tip_not_installed":
+    "QEMU emulyatoru tapılmadı. Zəhmət olmasa əvvəlcə QEMU quraşdırın (qemu dəmləyin/port quraşdırın)",
   "vm.tip_select_target": "Əvvəlcə sol paneldən hədəf USB sürücüsünü seçin",
   "vm.tip_ready": "Cari iş masasında USB yükləyicisini yoxlamaq üçün QEMU VM-ni işə salmaq üçün klikləyin",
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
@@ -279,7 +293,8 @@ export const azAz: TranslationDict = {
   "settings.ventoy_timeout": "Ventoy Menyu Taymout (Saniyələr):",
   "confirm.title": "High-Risk Format Xəbərdarlıq",
   "confirm.warning_title": "Xəbərdarlıq: Formatting will erase all data!",
-  "confirm.warning_desc": "Seçilmiş USB sürücüsü yenidən bölmələrə bölünəcək və formatlaşdırılacaq. Bütün mövcud fayllar tamamilə silinəcək. Vacib məlumatların ehtiyat nüsxəsini çıxardığınızdan əmin olun!",
+  "confirm.warning_desc":
+    "Seçilmiş USB sürücüsü yenidən bölmələrə bölünəcək və formatlaşdırılacaq. Bütün mövcud fayllar tamamilə silinəcək. Vacib məlumatların ehtiyat nüsxəsini çıxardığınızdan əmin olun!",
   "confirm.mode_title": "Yerləşdirmə rejimi:",
   "confirm.fs_title": "Hədəf Fayl Sistemi:",
   "confirm.disks_title": "Formatlaşdırılacaq disklər ({count}):",
@@ -289,11 +304,14 @@ export const azAz: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Təsdiqləation",
   "confirm.title_danger": "Format Xəbərdarlıq: Disk Initialization",
   "confirm.safe_banner_title": "Yerində Artan Yeniləmə Bildirişi (Data Təhlükəsiz)",
-  "confirm.safe_banner_desc": "Hədəf diskdə Ventoy / UniBoot açılış quruluşu aşkar edildi. Sistem artımlı yeniləmə atlama formatını həyata keçirəcək. Bütün mövcud fayllar və ISO-lar 100% qorunur!",
+  "confirm.safe_banner_desc":
+    "Hədəf diskdə Ventoy / UniBoot açılış quruluşu aşkar edildi. Sistem artımlı yeniləmə atlama formatını həyata keçirəcək. Bütün mövcud fayllar və ISO-lar 100% qorunur!",
   "confirm.mixed_banner_title": "Ağıllı Qarışıq Rejim: Yükləmə Diskləri üçün Yerində Yeniləmə, Boş Disklər üçün Format",
-  "confirm.mixed_banner_desc": "Seçilmiş {ventoyCount} yükləmə disk(lər)i (yerində yeniləmə) və {blankCount} boş disk(lər) (Tam format).",
+  "confirm.mixed_banner_desc":
+    "Seçilmiş {ventoyCount} yükləmə disk(lər)i (yerində yeniləmə) və {blankCount} boş disk(lər) (Tam format).",
   "confirm.danger_banner_title": "Xəbərdarlıq: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Yazı hədəf cihazı (MBR/GPT) yenidən bölməyə və formatlaşdıracaq. Seçilmiş disk(lər)dəki bütün mövcud fayllar tamamilə silinəcək!",
+  "confirm.danger_banner_desc":
+    "Yazı hədəf cihazı (MBR/GPT) yenidən bölməyə və formatlaşdıracaq. Seçilmiş disk(lər)dəki bütün mövcud fayllar tamamilə silinəcək!",
   "confirm.summary_title": "Yükləmə Yerləşdirmə üçün Hədəf Disklər:",
   "confirm.smart_safe_tag": "Ağıllı Təhlükəsiz",
   "confirm.ventoy_group_title": "Yerində Təkmilləşdirilmiş Disklər (Bütün İSO qorunur):",
@@ -313,8 +331,10 @@ export const azAz: TranslationDict = {
   "confirm.no_format": "Yerində ağıllı yeniləmə",
   "deploy.toast_target_changed": "Seçilmiş hədəf disk dəyişdi və ya artıq əlçatan deyil. Yenidən skan edin.",
   "deploy.toast_some_disks_removed": "{count} əlçatmaz disk avtomatik silindi, qalan disklərlə davam edilir",
-  "deploy.error_system_disk_blocked": "⛔ Qadağandır: {disks} sistem diskidir. USB yükləmə diskini sistem sürücüsünə yerləşdirmək olmaz!",
-  "deploy.error_readonly_disk": "🔒 Yazma qoruması: {disks} yalnız oxumaq üçündür. Yazma qorumasını silin və ya fərqli USB istifadə edin",
+  "deploy.error_system_disk_blocked":
+    "⛔ Qadağandır: {disks} sistem diskidir. USB yükləmə diskini sistem sürücüsünə yerləşdirmək olmaz!",
+  "deploy.error_readonly_disk":
+    "🔒 Yazma qoruması: {disks} yalnız oxumaq üçündür. Yazma qorumasını silin və ya fərqli USB istifadə edin",
   "deploy.start_cloud_create": "Bulud yükləmə diski yaradın",
   "deploy.batch_update": "Toplu İtkisiz Yeniləməni Başlat ({count} USB disk)",
   "deploy.batch_mixed": "Toplu Qarışıq Yerləşdirməni Başlat ({count} USB disk)",
@@ -332,7 +352,8 @@ export const azAz: TranslationDict = {
   "inspector.vendor": "Satıcı / Brend:",
   "inspector.bus_speed": "Avtobus Protokolu və Sürəti:",
   "inspector.fake_report": "Saxta USB 3.0 Analizi:",
-  "inspector.fake_text": "Fake USB 3.0 səviyyəsi aşağı salındı ​​(Mavi/Qara port, lakin daxili protokol USB 2.0 480Mb/s-dir)",
+  "inspector.fake_text":
+    "Fake USB 3.0 səviyyəsi aşağı salındı ​​(Mavi/Qara port, lakin daxili protokol USB 2.0 480Mb/s-dir)",
   "inspector.genuine_text": "Orijinal Yüksək Sürətli USB 3.0/3.1 Nəzarətçi",
   "inspector.smart": "SMART sağlamlıq vəziyyəti:",
   "inspector.sector": "Sektor ölçüsü:",
@@ -445,9 +466,12 @@ export const azAz: TranslationDict = {
   "diag.action_reformat_title": "Yenidən formatla (reformat)",
   "diag.action_remount_title": "Yenidən qoş (remount)",
   "diag.action_retry_title": "Yenidən cəhd et (retry)",
-  "diag.action_reformat_desc": "Yazmanın kəsilməsi bölmə cədvəlini və ya fayl sistemini zədələdi. Yenidən formatlaşdırmaq tövsiyə olunur.",
-  "diag.action_remount_desc": "Yazma zamanı hədəf qoşulma yolu ayrıldı. USB diski yenidən daxil edin və ya diski yenidən qoşun.",
-  "diag.action_retry_desc": "Mühit və cihazın vəziyyəti qaydasındadır. Quraşdırmanı təhlükəsiz şəkildə yenidən cəhd edə bilərsiniz.",
+  "diag.action_reformat_desc":
+    "Yazmanın kəsilməsi bölmə cədvəlini və ya fayl sistemini zədələdi. Yenidən formatlaşdırmaq tövsiyə olunur.",
+  "diag.action_remount_desc":
+    "Yazma zamanı hədəf qoşulma yolu ayrıldı. USB diski yenidən daxil edin və ya diski yenidən qoşun.",
+  "diag.action_retry_desc":
+    "Mühit və cihazın vəziyyəti qaydasındadır. Quraşdırmanı təhlükəsiz şəkildə yenidən cəhd edə bilərsiniz.",
   "about.updating": "Yenilənir ({progress}%)",
   "about.updateTo": "{tag} versiyasına onlayn yenilənmə",
   "about.downloading": "Yüklənir {progress}%",
@@ -455,7 +479,8 @@ export const azAz: TranslationDict = {
   "about.updateReady": "Yenilənmə hazırdır! Yükləndi: {path}. Paketi işə salın və ya tətbiqi yenidən başladın.",
   "about.updateDownloadFailed": "Yenilənmə paketinin yüklənməsi uğursuz oldu. Şəbəkə bağlantısını yoxlayın.",
   "about.downloadingGuiUpdate": "GUI yenilənməsi yüklənir ({progress}%)...",
-  "about.updateCompleteRestart": "Yenilənmə paketinin yüklənməsi tamamlandı! Tətbiq etmək üçün tətbiqi yenidən başladın.",
+  "about.updateCompleteRestart":
+    "Yenilənmə paketinin yüklənməsi tamamlandı! Tətbiq etmək üçün tətbiqi yenidən başladın.",
   "about.onlineUpdateFailed": "Onlayn yenilənmə uğursuz oldu: {error}",
   "common.close": "Bağla",
   "dialog.exportTitle": "Jurnal faylını ixrac et",
@@ -463,7 +488,8 @@ export const azAz: TranslationDict = {
   "dialog.textFilesFilter": "Mətn faylları (*.txt)",
   "dialog.allFilesFilter": "Bütün fayllar (*.*)",
   "dialog.selectIsoTitle": "Sistem şəkil fayllarını seçin (*.iso, *.wim, *.img və s.)",
-  "dialog.ventoyFilter": "Ventoy mənbə şəkilləri (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy mənbə şəkilləri (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Hash Hesabla",
   "checksum.calculating": "Hash hesablanır...",
   "checksum.algo_label": "Alqoritmi",
@@ -509,9 +535,11 @@ export const azAz: TranslationDict = {
   "privilege.modal_title": "Administrator İcazəsi Tələb Olunur",
   "privilege.modal_subtitle": "Yükləmə məlumatlarını oxumaq və disklərə yazmaq üçün sistem icazəsi tələb olunur",
   "privilege.reason_title": "Administrator hüquqları nə üçün tələb olunur?",
-  "privilege.reason_desc": "Əməliyyat sistemi xam sektorları və EFI bölmələrini təcrid edir. İcazə birbaşa aşkarlanmanı və təhlükəsiz disk yaratmanı təmin edir.",
+  "privilege.reason_desc":
+    "Əməliyyat sistemi xam sektorları və EFI bölmələrini təcrid edir. İcazə birbaşa aşkarlanmanı və təhlükəsiz disk yaratmanı təmin edir.",
   "privilege.scope_title": "Giriş dairəsi",
-  "privilege.scope_desc": "Yalnız seçilmiş xarici USB disklərlə məhdudlaşır. Daxili sistem disklərinə heç vaxt toxunulmur.",
+  "privilege.scope_desc":
+    "Yalnız seçilmiş xarici USB disklərlə məhdudlaşır. Daxili sistem disklərinə heç vaxt toxunulmur.",
   "privilege.safety_title": "Təhlükəsizlik və şəffaflıq",
   "privilege.safety_desc": "Yoxlama tamamilə yalnız oxuma rejimindədir və məlumatları pozmur; mənbə kodu tam açıqdır.",
   "privilege.confirm_btn": "İndi İcazə Ver",

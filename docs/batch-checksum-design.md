@@ -3,12 +3,14 @@
 ## 📋 需求分析
 
 ### 当前问题
+
 - 校验功能只针对单个 ISO 设计
 - 每次只能校验一个文件
 - 导入 SHA 文件后只提取当前选中文件的哈希值
 - 无法高效校验多个 ISO 文件
 
 ### 目标功能
+
 1. **批量导入**：支持导入包含多个文件哈希的 SHA256SUMS 文件
 2. **智能缓存**：缓存所有文件名到哈希值的映射
 3. **批量计算**：一键计算所有已选 ISO 的哈希值
@@ -43,6 +45,7 @@ const isoChecksumStatuses = ref<Map<string, IsoChecksumStatus>>(new Map());
 ### 2. 工作流程
 
 #### 导入 SHA 文件
+
 ```
 用户点击"导入校验文件"
   ↓
@@ -56,6 +59,7 @@ const isoChecksumStatuses = ref<Map<string, IsoChecksumStatus>>(new Map());
 ```
 
 #### 批量计算
+
 ```
 用户点击"批量校验所有文件"
   ↓
@@ -69,6 +73,7 @@ const isoChecksumStatuses = ref<Map<string, IsoChecksumStatus>>(new Map());
 ```
 
 #### 单文件计算（保持向后兼容）
+
 ```
 用户选择单个 ISO 并点击"计算Hash"
   ↓
@@ -132,11 +137,11 @@ const isoChecksumStatuses = ref<Map<string, IsoChecksumStatus>>(new Map());
 function parseChecksumFile(fileContent: string): ChecksumCache {
   const cache: ChecksumCache = {};
   const lines = fileContent.split('\n');
-  
+
   for (const line of lines) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith('#')) continue;
-    
+
     // 支持格式：
     // hash  filename
     // hash *filename
@@ -148,7 +153,7 @@ function parseChecksumFile(fileContent: string): ChecksumCache {
       cache[filename.trim()] = hash.toLowerCase();
     }
   }
-  
+
   return cache;
 }
 ```
@@ -158,11 +163,11 @@ function parseChecksumFile(fileContent: string): ChecksumCache {
 ```typescript
 async function handleBatchChecksum() {
   if (props.selectedIsoFiles.length === 0) return;
-  
+
   isBatchCalculating.value = true;
   let successCount = 0;
   let failCount = 0;
-  
+
   for (const [index, file] of props.selectedIsoFiles.entries()) {
     // 更新状态为计算中
     const status: IsoChecksumStatus = {
@@ -172,15 +177,15 @@ async function handleBatchChecksum() {
       algo: selectedAlgo.value
     };
     isoChecksumStatuses.value.set(file.name, status);
-    
+
     try {
       // 调用后端计算
       const w = window as any;
       const res = await w.go.main.App.CalculateFileChecksum(file.path, selectedAlgo.value);
-      
+
       if (res && res.hash) {
         status.calculated = res.hash.toLowerCase();
-        
+
         // 判断匹配状态
         if (!status.expected) {
           status.status = 'no-expected';
@@ -196,12 +201,12 @@ async function handleBatchChecksum() {
       status.status = 'no-expected';
       failCount++;
     }
-    
+
     isoChecksumStatuses.value.set(file.name, status);
   }
-  
+
   isBatchCalculating.value = false;
-  
+
   // 显示结果提示
   if (failCount === 0) {
     alert(`✅ 全部校验成功！${successCount} 个文件哈希匹配`);
@@ -298,6 +303,7 @@ const text = computed(() => {
 ## 🎬 用户使用场景
 
 ### 场景 1：批量下载后验证
+
 ```
 1. 用户下载了 ubuntu.iso, debian.iso, arch.iso
 2. 同时下载了官方的 SHA256SUMS 文件
@@ -308,6 +314,7 @@ const text = computed(() => {
 ```
 
 ### 场景 2：单文件快速验证（向后兼容）
+
 ```
 1. 用户只添加一个 ISO 文件
 2. 手动输入或导入期望 SHA 值
@@ -327,6 +334,6 @@ const text = computed(() => {
 
 ---
 
-**创建时间**：2026-09-19  
-**作者**：Kiro AI Assistant  
+**创建时间**：2026-09-19
+**作者**：Kiro AI Assistant
 **状态**：设计阶段 - 待实现

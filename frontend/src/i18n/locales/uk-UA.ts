@@ -24,7 +24,8 @@ export const ukUa: TranslationDict = {
   "common.langAuto": "Мова (авто)",
   "common.lang": "Мова",
   "vm.startSuccess": "Симуляцію ВМ успішно запущено для диска: {disk} ({device})",
-  "vm.backendNotReady": "Backend API не готовий: сповіщення про завантаження прив’язок, перезапустіть програму UniBoot.",
+  "vm.backendNotReady":
+    "Backend API не готовий: сповіщення про завантаження прив’язок, перезапустіть програму UniBoot.",
   "vm.demoModeStart": "[Демо-режим] Запуск перевірки симулятора QEMU: {disk} ({device})",
   "vm.startFailed": "Не вдалося запустити симулятор QEMU: {error}",
   "disk.writingImageProgress": "Запис образу ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -68,7 +69,8 @@ export const ukUa: TranslationDict = {
   "settings.cliFormattingFlags": "Прапорці форматування CLI Ventoy",
   "settings.ventoyPlugins": "Плагіни автоматизації Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",
-  "app.subtitle": "Інструмент створення завантажувальних дисків із подвійним рушієм UEFI/Legacy BIOS для всех архітектур",
+  "app.subtitle":
+    "Інструмент створення завантажувальних дисків із подвійним рушієм UEFI/Legacy BIOS для всех архітектур",
   "mode.cloud": "Хмарний режим",
   "mode.hybrid": "Гібридний режим",
   "disk.select_title": "Оберіть Цільовий USB-диск",
@@ -99,7 +101,8 @@ export const ukUa: TranslationDict = {
   "disk.tag_boot_hybrid": "Гібридне завантаження",
   "disk.tag_boot_thirdparty": "Стороннє завантаження",
   "confirm.cloud_to_hybrid_warn_title": "Увага: Перехід у гібридний режим вимагає повного форматування",
-  "confirm.cloud_to_hybrid_warn_desc": "Цей диск працює в режимі чистого хмарного завантаження. Гібридний режим Ventoy вимагає перебудови MBR та таблиці розділів, що призведе до ВИДАЛЕННЯ всіх даних та образів ISO!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Цей диск працює в режимі чистого хмарного завантаження. Гібридний режим Ventoy вимагає перебудови MBR та таблиці розділів, що призведе до ВИДАЛЕННЯ всіх даних та образів ISO!",
   "disk.tag_ssd": "Портативний SSD",
   "disk.tag_typec": "Диск Type-C",
   "disk.tag_secure": "Зашифрований диск",
@@ -109,7 +112,8 @@ export const ukUa: TranslationDict = {
   "disk.tag_cdrom": "Віртуальний CD-ROM",
   "disk.tooltip_uniboot_hybrid": "Завантажувальний диск Ventoy / UniBoot (Гібридний режим, оновлення без втрати)",
   "disk.tooltip_uniboot_cloud": "Хмарний завантажувальний диск UniBoot (Хмарний режим, оновлення без втрати даних)",
-  "disk.tooltip_third_party_boot": "Сторонній завантажувальний диск (Містить структуру Rufus/PE/ISO, потрібне форматування)",
+  "disk.tooltip_third_party_boot":
+    "Сторонній завантажувальний диск (Містить структуру Rufus/PE/ISO, потрібне форматування)",
   "log.title": "Центр журналів",
   "log.live": "В реальному часі",
   "log.search_placeholder": "Пошук у логах...",
@@ -127,13 +131,16 @@ export const ukUa: TranslationDict = {
   "log.level_error": "ПОМИЛКА",
   "log.level_debug": "Налагодження",
   "safe.title_cloud": "Виявлено існуючий диск Ventoy/UniBoot (Хмарний режим оновлює лише розділ ESP)",
-  "safe.desc_cloud": "Хмарний режим зберігає двороздільну структуру UNIBOOT. Оновлення ESP залишає всі ISO та файли неушкодженими!",
+  "safe.desc_cloud":
+    "Хмарний режим зберігає двороздільну структуру UNIBOOT. Оновлення ESP залишає всі ISO та файли неушкодженими!",
   "safe.title_hybrid": "Виявлено існуючий диск Ventoy (Оновлення на місці в гібридному режимі)",
-  "safe.desc_hybrid": "Гібридний режим зберігає всі існуючі ISO-файли без форматування, безпечно додаючи темну тему UniBoot та хмарне меню!",
+  "safe.desc_hybrid":
+    "Гібридний режим зберігає всі існуючі ISO-файли без форматування, безпечно додаючи темну тему UniBoot та хмарне меню!",
   "common.optional": "Необов'язково",
   "common.optional_test": "Необов'язковий тест",
   "iso.title": "Локальні джерела образів системи (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Додайте файли ISO для автоматичного копіювання в каталог /UNIBOOT/iso/ для прямого завантаження Ventoy / UniBoot.",
+  "iso.desc":
+    "Додайте файли ISO для автоматичного копіювання в каталог /UNIBOOT/iso/ для прямого завантаження Ventoy / UniBoot.",
   "iso.add_btn": "Додайте файли зображень",
   "iso.empty_title": "Клацніть, щоб додати файли зображень (підтримує одиночний або пакетний вибір)",
   "iso.empty_sub": "Підтримує формати .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -154,8 +161,10 @@ export const ukUa: TranslationDict = {
   "iso.conflict_confirm": "Підтвердити й продовжити",
   "iso.preflight_failed": "Не вдалося виконати перевірку перед записом",
   "deploy.title": "Створення завантажувального диска та тест QEMU",
-  "deploy.desc_cloud": "Чисте хмарне завантаження iPXE • Надшвидке налаштування двох розділів із мережевою прошивкою iPXE.",
-  "deploy.desc_hybrid": "Локальний рушій Ventoy CLI • Налаштування гібридного розділу Ventoy із локальним керуванням ISO.",
+  "deploy.desc_cloud":
+    "Чисте хмарне завантаження iPXE • Надшвидке налаштування двох розділів із мережевою прошивкою iPXE.",
+  "deploy.desc_hybrid":
+    "Локальний рушій Ventoy CLI • Налаштування гібридного розділу Ventoy із локальним керуванням ISO.",
   "deploy.target_device": "Цільовий пристрій:",
   "deploy.batch_target": "Обрано USB-дисків: {count}",
   "deploy.start_create": "Створити завантажувальний диск",
@@ -175,18 +184,22 @@ export const ukUa: TranslationDict = {
   "deploy.tip_writing": "Запис завантажувальної мікропрограми...",
   "deploy.tip_select_single": "Спочатку виберіть цільовий USB-диск",
   "deploy.tip_select_batch": "Перевірте цільові USB-дискі для пакетного розгортання",
-  "deploy.tip_macos_unsupported": "macOS не підтримує початкове форматування в гібридному режимі (використовуйте хмарний режим або спочатку ініціалізуйте на Win/Linux)",
+  "deploy.tip_macos_unsupported":
+    "macOS не підтримує початкове форматування в гібридному режимі (використовуйте хмарний режим або спочатку ініціалізуйте на Win/Linux)",
   "deploy.tip_need_ventoy": "Початкове форматування в гібридному режимі потребує локального Ventoy CLI",
   "deploy.macos_alert_title": "Нове форматування CLI macOS Ventoy не підтримується",
-  "deploy.macos_alert_desc": "Ventoy не підтримує пряме форматування на macOS. Використовуйте хмарний режим для нативної підтримки, або спочатку ініціалізуйте Ventoy на Windows/Linux, потім виконайте оновлення на macOS.",
+  "deploy.macos_alert_desc":
+    "Ventoy не підтримує пряме форматування на macOS. Використовуйте хмарний режим для нативної підтримки, або спочатку ініціалізуйте Ventoy на Windows/Linux, потім виконайте оновлення на macOS.",
   "deploy.no_ventoy_title": "Виконуваний файл Ventoy CLI не виявлено",
-  "deploy.no_ventoy_desc": "Гібридний режим вимагає локального ланцюжка інструментів Ventoy CLI. Ми рекомендуємо хмарний режим!",
+  "deploy.no_ventoy_desc":
+    "Гібридний режим вимагає локального ланцюжка інструментів Ventoy CLI. Ми рекомендуємо хмарний режим!",
   "deploy.result_batch_success": "Хмарний інсталяційний диск за 1 сек успішно розгорнуто на {count} диск(ів)!",
   "deploy.result_success": "Режим {mode} успішно розгорнуто на {targets}",
   "deploy.alert_success": "Розгортання успішне!",
   "deploy.safely_eject_btn": "Безпечно витягнути USB",
   "deploy.success_banner_title": "Завантажувальний диск успішно створено!",
-  "deploy.success_banner_desc": "Файли завантаження та прошивку записано. Безпечно витягніть диск перед відключенням, щоб уникнути втрати даних.",
+  "deploy.success_banner_desc":
+    "Файли завантаження та прошивку записано. Безпечно витягніть диск перед відключенням, щоб уникнути втрати даних.",
   "deploy.toast_auto_ejected": "Готово! Автоматично вилучено {count} USB-дисків.",
   "deploy.confirm_auto_eject_title": "Запис завершено — Безпечно видалити?",
   "deploy.confirm_auto_eject_desc": "Всі дані успішно записані. Бажаєте безпечно вилучити USB-диск зараз?",
@@ -208,7 +221,8 @@ export const ukUa: TranslationDict = {
   "vm.boot_mode_bios": "Режим BIOS (Legacy)",
   "vm.boot_mode_auto": "Автовизначення",
   "vm.startSuccess_vm": "Тест симуляції {name} успішно запущено",
-  "vm.desc_optional": "Додаткова функція: Попередній перегляд завантаження USB у віртуальній машині без перезавантаження ПК.",
+  "vm.desc_optional":
+    "Додаткова функція: Попередній перегляд завантаження USB у віртуальній машині без перезавантаження ПК.",
   "vm.installed": "Виявлено QEMU",
   "vm.not_installed": "Не виявлено QEMU",
   "vm.target": "Мета тесту:",
@@ -225,7 +239,8 @@ export const ukUa: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Натисніть, щоб спочатку вибрати цільовий USB-диск на лівій панелі!",
-  "vm.toast_not_installed": "Емулятор QEMU не знайдено! Будь ласка, встановіть QEMU (brew install qemu або port install qemu)",
+  "vm.toast_not_installed":
+    "Емулятор QEMU не знайдено! Будь ласка, встановіть QEMU (brew install qemu або port install qemu)",
   "vm.cfg_secure_boot": "Симуляція SecureBoot",
   "vm.cfg_accel": "Апаратне прискорення",
   "vm.cfg_ram": "Виділення ОЗП",
@@ -279,7 +294,8 @@ export const ukUa: TranslationDict = {
   "settings.ventoy_timeout": "Час очікування меню Ventoy (секунди):",
   "confirm.title": "High-Risk Format Попередження",
   "confirm.warning_title": "Попередження: Formatting will erase all data!",
-  "confirm.warning_desc": "Вибраний USB-диск буде повторно розділено на розділи та відформатовано. Усі наявні файли буде повністю видалено. Переконайтеся, що ви створили резервну копію важливих даних!",
+  "confirm.warning_desc":
+    "Вибраний USB-диск буде повторно розділено на розділи та відформатовано. Усі наявні файли буде повністю видалено. Переконайтеся, що ви створили резервну копію важливих даних!",
   "confirm.mode_title": "Режим розгортання:",
   "confirm.fs_title": "Цільова файлова система:",
   "confirm.disks_title": "USB-дискі для форматування ({count}):",
@@ -289,11 +305,14 @@ export const ukUa: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Підтвердитиation",
   "confirm.title_danger": "Format Попередження: Disk Initialization",
   "confirm.safe_banner_title": "Повідомлення про інкрементне оновлення на місці (безпека даних)",
-  "confirm.safe_banner_desc": "На цільовому диску виявлено структуру завантаження Ventoy / UniBoot. Система виконає поступове оновлення, пропускаючи формат. Усі існуючі файли та ISO збережено на 100%!",
-  "confirm.mixed_banner_title": "Розумний змішаний режим: оновлення на місці для завантажувальних дисків, форматування для порожніх дисків",
+  "confirm.safe_banner_desc":
+    "На цільовому диску виявлено структуру завантаження Ventoy / UniBoot. Система виконає поступове оновлення, пропускаючи формат. Усі існуючі файли та ISO збережено на 100%!",
+  "confirm.mixed_banner_title":
+    "Розумний змішаний режим: оновлення на місці для завантажувальних дисків, форматування для порожніх дисків",
   "confirm.mixed_banner_desc": "Обрано завантажувальних дисків: {ventoyCount}, порожніх: {blankCount}.",
   "confirm.danger_banner_title": "Попередження: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Запис призведе до повторного розділення та форматування цільового пристрою (MBR/GPT). Усі наявні файли на вибраних дисках буде повністю стерто!",
+  "confirm.danger_banner_desc":
+    "Запис призведе до повторного розділення та форматування цільового пристрою (MBR/GPT). Усі наявні файли на вибраних дисках буде повністю стерто!",
   "confirm.summary_title": "Цільові диски для розгортання завантаження:",
   "confirm.smart_safe_tag": "Розумний захист",
   "confirm.ventoy_group_title": "Диски для оновлення на місці (усі ISO збережені):",
@@ -311,10 +330,13 @@ export const ukUa: TranslationDict = {
   "confirm.no": "Скасувати",
   "confirm.will_format": "Повне форматування",
   "confirm.no_format": "Розумне оновлення на місці",
-  "deploy.toast_target_changed": "Вибраний цільовий диск змінився або більше недоступний. Будь ласка, виконайте сканування знову.",
+  "deploy.toast_target_changed":
+    "Вибраний цільовий диск змінився або більше недоступний. Будь ласка, виконайте сканування знову.",
   "deploy.toast_some_disks_removed": "{count} недоступних дисків автоматично видалено, продовження з іншими дисками",
-  "deploy.error_system_disk_blocked": "⛔ Заблоковано: {disks} — це системний диск. Неможливо розгорнути завантажувальний USB-диск на системний диск!",
-  "deploy.error_readonly_disk": "🔒 Захист від запису: {disks} лише для читання. Зніміть захист від запису або використовуйте інший USB",
+  "deploy.error_system_disk_blocked":
+    "⛔ Заблоковано: {disks} — це системний диск. Неможливо розгорнути завантажувальний USB-диск на системний диск!",
+  "deploy.error_readonly_disk":
+    "🔒 Захист від запису: {disks} лише для читання. Зніміть захист від запису або використовуйте інший USB",
   "deploy.start_cloud_create": "Створити хмарний завантажувальний диск",
   "deploy.batch_update": "Розпочати оновлення без втрати даних ({count} дисків)",
   "deploy.batch_mixed": "Розпочати змішане розгортання ({count} дисків)",
@@ -332,16 +354,19 @@ export const ukUa: TranslationDict = {
   "inspector.vendor": "Постачальник / Бренд:",
   "inspector.bus_speed": "Протокол шини та швидкість:",
   "inspector.fake_report": "Підроблений аналіз USB 3.0:",
-  "inspector.fake_text": "Понижений підроблений USB 3.0 (синій/чорний порт, але внутрішній протокол — USB 2.0 480 Мбіт/с)",
+  "inspector.fake_text":
+    "Понижений підроблений USB 3.0 (синій/чорний порт, але внутрішній протокол — USB 2.0 480 Мбіт/с)",
   "inspector.genuine_text": "Справжній високошвидкісний контролер USB 3.0/3.1",
   "inspector.smart": "Здоров'я SMART:",
   "inspector.sector": "Розмір сектора:",
   "inspector.fake_title": "Fake USB 3.0 Попередження Alert!",
   "inspector.fake_desc": "Пристрій заявлено як USB 3.0, але реальна швидкість становить {speed} (USB 2.0 PHY).",
   "inspector.genuine_title": "Перевірку фізичного обладнання пройдено (справжній пристрій USB 3.0+)",
-  "inspector.genuine_desc": "Фізичний рівень PHY встановив справжнє з'єднання SuperSpeed/SuperSpeed+ зі швидкістю {speed}.",
+  "inspector.genuine_desc":
+    "Фізичний рівень PHY встановив справжнє з'єднання SuperSpeed/SuperSpeed+ зі швидкістю {speed}.",
   "inspector.usb2_title": "Стандартний інтерфейс USB 2.0",
-  "inspector.usb2_desc": "Апаратне забезпечення пристрою — USB 2.0, теоретична фізична максимальна швидкість — 480 Мбіт/с.",
+  "inspector.usb2_desc":
+    "Апаратне забезпечення пристрою — USB 2.0, теоретична фізична максимальна швидкість — 480 Мбіт/с.",
   "inspector.section_basic": "Основна інформація про пристрій",
   "inspector.section_hw": "Hardware Деталі",
   "inspector.lbl_name": "Назва пристрою",
@@ -445,8 +470,10 @@ export const ukUa: TranslationDict = {
   "diag.action_reformat_title": "Переформатувати (reformat)",
   "diag.action_remount_title": "Перемонтувати (remount)",
   "diag.action_retry_title": "Повторити (retry)",
-  "diag.action_reformat_desc": "Перерва розгортання пошкодила таблицю розділів або файлову систему. Рекомендується переформатування.",
-  "diag.action_remount_desc": "Шлях монтування цілі відключився під час запису. Будь ласка, повторно підключіть USB або перемонтуйте том.",
+  "diag.action_reformat_desc":
+    "Перерва розгортання пошкодила таблицю розділів або файлову систему. Рекомендується переформатування.",
+  "diag.action_remount_desc":
+    "Шлях монтування цілі відключився під час запису. Будь ласка, повторно підключіть USB або перемонтуйте том.",
   "diag.action_retry_desc": "Середовище та стан пристрою в порядку. Ви можете безпечно повторити розгортання.",
   "about.updating": "Оновлення ({progress}%)",
   "about.updateTo": "Онлайн-оновлення до {tag}",
@@ -463,7 +490,8 @@ export const ukUa: TranslationDict = {
   "dialog.textFilesFilter": "Текстові файли (*.txt)",
   "dialog.allFilesFilter": "Усі файли (*.*)",
   "dialog.selectIsoTitle": "Виберіть файли образів системи (*.iso, *.wim, *.img тощо)",
-  "dialog.ventoyFilter": "Вихідні образи Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Вихідні образи Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Обчислити хеш",
   "checksum.calculating": "Обчислення хейшу...",
   "checksum.algo_label": "Алгоритм",
@@ -509,11 +537,14 @@ export const ukUa: TranslationDict = {
   "privilege.modal_title": "Потрібні права адміністратора",
   "privilege.modal_subtitle": "Потрібен дозвіл системи для читання завантажувальних даних і запису на диски",
   "privilege.reason_title": "Чому потрібні права адміністратора?",
-  "privilege.reason_desc": "ОС ізолює необроблені сектори та розділи EFI. Авторизація забезпечує пряме виявлення та безпечне створення диска.",
+  "privilege.reason_desc":
+    "ОС ізолює необроблені сектори та розділи EFI. Авторизація забезпечує пряме виявлення та безпечне створення диска.",
   "privilege.scope_title": "Обсяг доступу",
-  "privilege.scope_desc": "Суворо обмежено вибраними зовнішніми накопичувачами USB. Внутрішні системні диски ніколи не зачіпаються.",
+  "privilege.scope_desc":
+    "Суворо обмежено вибраними зовнішніми накопичувачами USB. Внутрішні системні диски ніколи не зачіпаються.",
   "privilege.safety_title": "Безпека та прозорість",
-  "privilege.safety_desc": "Перевірка виконується виключно в режимі читання без зміни даних; вихідний код повністю відкритий.",
+  "privilege.safety_desc":
+    "Перевірка виконується виключно в режимі читання без зміни даних; вихідний код повністю відкритий.",
   "privilege.confirm_btn": "Авторизувати зараз",
   "privilege.cancel_btn": "Скасувати",
   "privilege.success_msg": "Права адміністратора надано",

@@ -4,7 +4,7 @@
       <div class="modal-header danger-header">
         <div class="header-title">
           <span class="warning-icon">🚨</span>
-          <h3>{{ t('diag.title') }}</h3>
+          <h3>{{ t("diag.title") }}</h3>
         </div>
         <button class="close-btn" @click="close">✕</button>
       </div>
@@ -16,7 +16,7 @@
             <span class="stage-badge" v-if="diagnostics?.failedStage">
               {{ diagnostics.failedStage }}
             </span>
-            <span>{{ t('diag.task_terminated') }}</span>
+            <span>{{ t("diag.task_terminated") }}</span>
           </div>
           <div class="banner-desc">{{ diagnostics?.errorCause || errorMsg }}</div>
         </div>
@@ -24,24 +24,24 @@
         <!-- Diagnostics Status Grid -->
         <div class="status-grid" v-if="diagnostics">
           <div class="grid-item">
-            <span class="item-label">{{ t('diag.task_id') }}</span>
+            <span class="item-label">{{ t("diag.task_id") }}</span>
             <span class="item-value code-font">{{ diagnostics.taskId }}</span>
           </div>
           <div class="grid-item">
-            <span class="item-label">{{ t('diag.target_device') }}</span>
+            <span class="item-label">{{ t("diag.target_device") }}</span>
             <span class="item-value">{{ diagnostics.deviceSummary || diagnostics.target }}</span>
           </div>
           <div class="grid-item">
-            <span class="item-label">{{ t('diag.format_status') }}</span>
+            <span class="item-label">{{ t("diag.format_status") }}</span>
             <span class="item-value" :class="diagnostics.isFormatted ? 'text-warning' : 'text-muted'">
-              {{ diagnostics.isFormatted ? t('diag.formatted') : t('diag.not_formatted') }}
+              {{ diagnostics.isFormatted ? t("diag.formatted") : t("diag.not_formatted") }}
             </span>
           </div>
           <div class="grid-item">
-            <span class="item-label">{{ t('diag.safe_unplug_status') }}</span>
+            <span class="item-label">{{ t("diag.safe_unplug_status") }}</span>
             <span class="item-value" :class="diagnostics.safeToUnplug ? 'text-success' : 'text-danger'">
-              <span class="val-icon">{{ diagnostics.safeToUnplug ? '✅' : '❌' }}</span>
-              <span>{{ diagnostics.safeToUnplug ? t('diag.safe_to_unplug') : t('diag.not_safe_to_unplug') }}</span>
+              <span class="val-icon">{{ diagnostics.safeToUnplug ? "✅" : "❌" }}</span>
+              <span>{{ diagnostics.safeToUnplug ? t("diag.safe_to_unplug") : t("diag.not_safe_to_unplug") }}</span>
             </span>
           </div>
         </div>
@@ -50,7 +50,7 @@
         <div class="recommend-card" :class="actionClass" v-if="diagnostics">
           <div class="recommend-title">
             <span class="recommend-icon">{{ actionIcon }}</span>
-            <span>{{ t('diag.suggested_action') }}: {{ actionTitle }}</span>
+            <span>{{ t("diag.suggested_action") }}: {{ actionTitle }}</span>
           </div>
           <div class="recommend-desc">{{ actionDescription }}</div>
         </div>
@@ -58,8 +58,11 @@
         <!-- Written Files Collapsible List -->
         <div class="files-collapsible" v-if="diagnostics?.writtenFiles && diagnostics.writtenFiles.length > 0">
           <div class="files-header" @click="showFiles = !showFiles">
-            <span><span class="icon">📁</span> {{ t('diag.written_files', { count: diagnostics.writtenFiles.length }) }}</span>
-            <span class="arrow">{{ showFiles ? '▲' : '▼' }}</span>
+            <span
+              ><span class="icon">📁</span>
+              {{ t("diag.written_files", { count: diagnostics.writtenFiles.length }) }}</span
+            >
+            <span class="arrow">{{ showFiles ? "▲" : "▼" }}</span>
           </div>
           <div class="files-body" v-if="showFiles">
             <ul>
@@ -74,14 +77,14 @@
         <div class="action-buttons-group">
           <button class="btn-primary flex-btn" @click="onRetry">
             <span class="btn-icon">🔄</span>
-            <span>{{ t('diag.btn_retry') }}</span>
+            <span>{{ t("diag.btn_retry") }}</span>
           </button>
           <button class="btn-secondary flex-btn" @click="onCopyReport">
             <span class="btn-icon">📋</span>
-            <span>{{ t('diag.btn_copy_report') }}</span>
+            <span>{{ t("diag.btn_copy_report") }}</span>
           </button>
           <button class="btn-outline flex-btn" @click="close">
-            <span>{{ t('common.close') }}</span>
+            <span>{{ t("common.close") }}</span>
           </button>
         </div>
       </div>
@@ -90,8 +93,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { t } from '../i18n';
+import { ref, computed } from "vue";
+import { t } from "../i18n";
 
 export interface InstallDiagnosticsData {
   taskId: string;
@@ -114,56 +117,68 @@ const props = defineProps<{
   errorMsg: string;
 }>();
 
-const emit = defineEmits(['close', 'retry', 'copy-report']);
+const emit = defineEmits(["close", "retry", "copy-report"]);
 
 const showFiles = ref(false);
 
 const actionIcon = computed(() => {
   switch (props.diagnostics?.recommendedAction) {
-    case 'reformat': return '🧹';
-    case 'remount': return '🔌';
-    case 'retry': default: return '🔄';
+    case "reformat":
+      return "🧹";
+    case "remount":
+      return "🔌";
+    case "retry":
+    default:
+      return "🔄";
   }
 });
 
 const actionTitle = computed(() => {
   switch (props.diagnostics?.recommendedAction) {
-    case 'reformat': return t('diag.action_reformat_title');
-    case 'remount': return t('diag.action_remount_title');
-    case 'retry': default: return t('diag.action_retry_title');
+    case "reformat":
+      return t("diag.action_reformat_title");
+    case "remount":
+      return t("diag.action_remount_title");
+    case "retry":
+    default:
+      return t("diag.action_retry_title");
   }
 });
 
 const actionDescription = computed(() => {
   switch (props.diagnostics?.recommendedAction) {
-    case 'reformat':
-      return t('diag.action_reformat_desc');
-    case 'remount':
-      return t('diag.action_remount_desc');
-    case 'retry':
+    case "reformat":
+      return t("diag.action_reformat_desc");
+    case "remount":
+      return t("diag.action_remount_desc");
+    case "retry":
     default:
-      return t('diag.action_retry_desc');
+      return t("diag.action_retry_desc");
   }
 });
 
 const actionClass = computed(() => {
   switch (props.diagnostics?.recommendedAction) {
-    case 'reformat': return 'card-reformat';
-    case 'remount': return 'card-remount';
-    case 'retry': default: return 'card-retry';
+    case "reformat":
+      return "card-reformat";
+    case "remount":
+      return "card-remount";
+    case "retry":
+    default:
+      return "card-retry";
   }
 });
 
 function close() {
-  emit('close');
+  emit("close");
 }
 
 function onRetry() {
-  emit('retry');
+  emit("retry");
 }
 
 function onCopyReport() {
-  emit('copy-report');
+  emit("copy-report");
 }
 </script>
 
@@ -183,7 +198,9 @@ function onCopyReport() {
   background: var(--modal-bg);
   border: 1px solid var(--alert-danger-border);
   border-radius: 16px;
-  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--card-border);
+  box-shadow:
+    0 25px 60px -12px rgba(0, 0, 0, 0.45),
+    0 0 0 1px var(--card-border);
   width: 90%;
   max-width: 580px;
   max-height: 85vh;
@@ -193,7 +210,9 @@ function onCopyReport() {
 }
 
 [data-theme="light"] .diag-card {
-  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.22), 0 0 0 1px #cbd5e1;
+  box-shadow:
+    0 20px 50px -10px rgba(15, 23, 42, 0.22),
+    0 0 0 1px #cbd5e1;
 }
 
 .danger-header {
@@ -330,13 +349,24 @@ function onCopyReport() {
 }
 
 .code-font {
-  font-family: 'JetBrains Mono', Consolas, monospace;
+  font-family: "JetBrains Mono", Consolas, monospace;
 }
 
-.text-warning { color: var(--warning); font-weight: 600; }
-.text-muted { color: var(--text-muted); }
-.text-success { color: var(--success); font-weight: 600; }
-.text-danger { color: var(--danger); font-weight: 600; }
+.text-warning {
+  color: var(--warning);
+  font-weight: 600;
+}
+.text-muted {
+  color: var(--text-muted);
+}
+.text-success {
+  color: var(--success);
+  font-weight: 600;
+}
+.text-danger {
+  color: var(--danger);
+  font-weight: 600;
+}
 
 .recommend-card {
   padding: 14px 16px;

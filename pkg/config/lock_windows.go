@@ -8,7 +8,8 @@ package config
 import (
 	"fmt"
 	"os"
-	"syscall"
+
+	"golang.org/x/sys/windows"
 )
 
 func acquireConfigLock(cfgPath string) (*os.File, func(), error) {
@@ -17,13 +18,13 @@ func acquireConfigLock(cfgPath string) (*os.File, func(), error) {
 	if err != nil {
 		return nil, nil, fmt.Errorf("open config lock: %w", err)
 	}
-	overlapped := &syscall.Overlapped{}
-	if err := syscall.LockFileEx(syscall.Handle(file.Fd()), syscall.LOCKFILE_EXCLUSIVE_LOCK, 0, 1, 0, overlapped); err != nil {
+	overlapped := &windows.Overlapped{}
+	if err := windows.LockFileEx(windows.Handle(file.Fd()), windows.LOCKFILE_EXCLUSIVE_LOCK, 0, 1, 0, overlapped); err != nil {
 		_ = file.Close()
 		return nil, nil, fmt.Errorf("lock config file: %w", err)
 	}
 	unlock := func() {
-		_ = syscall.UnlockFileEx(syscall.Handle(file.Fd()), 0, 1, 0, overlapped)
+		_ = windows.UnlockFileEx(windows.Handle(file.Fd()), 0, 1, 0, overlapped)
 		_ = file.Close()
 		_ = os.Remove(lockPath)
 	}

@@ -1,5 +1,5 @@
-import { onMounted, onUnmounted, type Ref } from 'vue';
-import { GetRecentLogs } from '../../wailsjs/go/main/App';
+import { onMounted, onUnmounted, type Ref } from "vue";
+import { GetRecentLogs } from "../../wailsjs/go/main/App";
 
 export interface UseAppRuntimeEventsOptions {
   t: (key: any, named?: Record<string, any>) => string;
@@ -46,11 +46,13 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
     checkQemu();
     checkVentoyStatus();
 
-    GetRecentLogs().then((logs: any[]) => {
-      setInitialLogs(logs);
-    }).catch(() => {
-      setInitialLogs([]);
-    });
+    GetRecentLogs()
+      .then((logs: any[]) => {
+        setInitialLogs(logs);
+      })
+      .catch(() => {
+        setInitialLogs([]);
+      });
 
     if (window.runtime && window.runtime.EventsOn) {
       window.runtime.EventsOn("log:entry", (entry: any) => {
@@ -59,14 +61,14 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
 
       window.runtime.EventsOn("iso-copy-progress", (data: any) => {
         if (data) {
-          isoCopyStatus.value = t('disk.writingImageProgress', {
+          isoCopyStatus.value = t("disk.writingImageProgress", {
             fileIndex: data.fileIndex,
             totalFiles: data.totalFiles,
             currentFile: data.currentFile,
-            progress: data.progress.toFixed(1)
+            progress: data.progress.toFixed(1),
           });
           if (batchDeployInfo?.value) {
-            batchDeployInfo.value.currentStage = `${t('deploy.stage_iso_copy')} (${data.currentFile} ${data.progress.toFixed(0)}%)`;
+            batchDeployInfo.value.currentStage = `${t("deploy.stage_iso_copy")} (${data.currentFile} ${data.progress.toFixed(0)}%)`;
           }
           if (data.speedMBps !== undefined) deploySpeedMBps.value = data.speedMBps;
           if (data.elapsedSec !== undefined) deployElapsedSec.value = data.elapsedSec;
@@ -86,9 +88,9 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
         }
         if (options.showToast) {
           if (data && data.error) {
-            options.showToast(t('vm.session_ended_error', { error: data.error }), 'warning');
+            options.showToast(t("vm.session_ended_error", { error: data.error }), "warning");
           } else {
-            options.showToast(t('vm.session_ended_success'), 'success');
+            options.showToast(t("vm.session_ended_success"), "success");
           }
         }
       });
@@ -98,13 +100,13 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
       });
 
       window.runtime.EventsOn("open-log-modal", () => {
-        const el = document.querySelector('.log-section-card');
+        const el = document.querySelector(".log-section-card");
         if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
+          el.scrollIntoView({ behavior: "smooth" });
         }
       });
 
-      if (typeof window.runtime.OnFileDrop === 'function') {
+      if (typeof window.runtime.OnFileDrop === "function") {
         window.runtime.OnFileDrop((_x: number, _y: number, paths: string[]) => {
           if (paths && paths.length > 0) {
             addIsoFilesByPaths(paths);
@@ -115,7 +117,7 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
   });
 
   onUnmounted(() => {
-    if (window.runtime && typeof window.runtime.OnFileDropOff === 'function') {
+    if (window.runtime && typeof window.runtime.OnFileDropOff === "function") {
       window.runtime.OnFileDropOff();
     }
   });

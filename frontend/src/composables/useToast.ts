@@ -1,24 +1,24 @@
-import { ref } from 'vue';
-import { logUserAction } from '../utils/logger';
+import { ref } from "vue";
+import { logUserAction } from "../utils/logger";
 
 export function useToast() {
-  const toastMessage = ref('');
-  const toastType = ref<'info' | 'warning' | 'error' | 'success'>('info');
+  const toastMessage = ref("");
+  const toastType = ref<"info" | "warning" | "error" | "success">("info");
   let toastTimer: number | undefined;
 
-  function showToast(msg: string, type: 'info' | 'warning' | 'error' | 'success' = 'info') {
-    const cleanMsg = msg ? msg.replace(/^[\s\uFE0F]*[⚠️❌🎉ℹ️✅🚨⚡️❗][\s\uFE0F]*/, '').trim() : '';
+  function showToast(msg: string, type: "info" | "warning" | "error" | "success" = "info") {
+    const cleanMsg = msg ? msg.replace(/^[\s\uFE0F]*[⚠️❌🎉ℹ️✅🚨⚡️❗][\s\uFE0F]*/, "").trim() : "";
     toastMessage.value = cleanMsg || msg;
     toastType.value = type;
     if (toastTimer) clearTimeout(toastTimer);
     toastTimer = window.setTimeout(() => {
-      toastMessage.value = '';
+      toastMessage.value = "";
     }, 4000);
   }
 
   function dismissToast() {
-    toastMessage.value = '';
-    logUserAction('DEBUG', 'User dismissed toast notification');
+    toastMessage.value = "";
+    logUserAction("DEBUG", "User dismissed toast notification");
   }
 
   return {

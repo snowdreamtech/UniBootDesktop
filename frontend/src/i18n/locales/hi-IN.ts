@@ -99,7 +99,8 @@ export const hiIn: TranslationDict = {
   "disk.tag_boot_hybrid": "हाइब्रिड बूट",
   "disk.tag_boot_thirdparty": "तृतीय-पक्ष बूट",
   "confirm.cloud_to_hybrid_warn_title": "सूचना: हाइब्रिड मोड में बदलने के लिए पूर्ण प्रारूपण की आवश्यकता है",
-  "confirm.cloud_to_hybrid_warn_desc": "यह डिस्क शुद्ध क्लाउड बूट मोड में है। Ventoy हाइब्रिड मोड के लिए MBR और विभाजन तालिका के पुनर्निर्माण की आवश्यकता होती है, जो सभी डेटा और ISO को मिटा देगा!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "यह डिस्क शुद्ध क्लाउड बूट मोड में है। Ventoy हाइब्रिड मोड के लिए MBR और विभाजन तालिका के पुनर्निर्माण की आवश्यकता होती है, जो सभी डेटा और ISO को मिटा देगा!",
   "disk.tag_ssd": "पोर्टेबल एसएसडी",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "एन्क्रिप्टेड ड्राइव",
@@ -127,9 +128,11 @@ export const hiIn: TranslationDict = {
   "log.level_error": "त्रुटि",
   "log.level_debug": "डिबग",
   "safe.title_cloud": "मौजूदा Ventoy/UniBoot ड्राइव मिली (क्लाउड मोड केवल ESP विभाजन को ताज़ा करता है)",
-  "safe.desc_cloud": "क्लाउड मोड मानक UNIBOOT द्वि-विभाजन संरचना को बनाए रखता है। ESP विभाजन को ताज़ा करने से डेटा विभाजन में सभी ISO और उपयोगकर्ता फ़ाइलें सुरक्षित रहती हैं!",
+  "safe.desc_cloud":
+    "क्लाउड मोड मानक UNIBOOT द्वि-विभाजन संरचना को बनाए रखता है। ESP विभाजन को ताज़ा करने से डेटा विभाजन में सभी ISO और उपयोगकर्ता फ़ाइलें सुरक्षित रहती हैं!",
   "safe.title_hybrid": "मौजूदा Ventoy ड्राइव मिली (हाइब्रिड मोड इन-प्लेस अपडेट)",
-  "safe.desc_hybrid": "हाइब्रिड मोड बिना फ़ॉर्मैट किए सभी मौजूदा ISO फ़ाइलों को सुरक्षित रखता है, और UniBoot थीम और क्लाउड बूट मेनू को सुरक्षित रूप से जोड़ता है!",
+  "safe.desc_hybrid":
+    "हाइब्रिड मोड बिना फ़ॉर्मैट किए सभी मौजूदा ISO फ़ाइलों को सुरक्षित रखता है, और UniBoot थीम और क्लाउड बूट मेनू को सुरक्षित रूप से जोड़ता है!",
   "common.optional": "वैकल्पिक",
   "common.optional_test": "वैकल्पिक परीक्षण",
   "iso.title": "स्थानीय सिस्टम इमेज स्रोत (ISO / IMG / WIM / VHD)",
@@ -144,7 +147,8 @@ export const hiIn: TranslationDict = {
   "iso.drag_unsupported": "कोई समर्थित छवि फ़ाइल नहीं मिली (.iso, .wim, .img आदि)",
   "iso.preflight_title": "लिखने से पहले जाँच",
   "iso.conflict_title": "एक ही नाम वाली फ़ाइल मिली",
-  "iso.conflict_desc": "लक्ष्य USB के iso फ़ोल्डर में इसी नाम की फ़ाइल पहले से मौजूद है। कार्रवाई चुनें। Hash की तुलना नहीं की जाएगी।",
+  "iso.conflict_desc":
+    "लक्ष्य USB के iso फ़ोल्डर में इसी नाम की फ़ाइल पहले से मौजूद है। कार्रवाई चुनें। Hash की तुलना नहीं की जाएगी।",
   "iso.conflict_action": "कार्रवाई",
   "iso.conflict_keep_both": "रखें",
   "iso.conflict_replace": "ओवरराइट",
@@ -154,7 +158,8 @@ export const hiIn: TranslationDict = {
   "iso.conflict_confirm": "पुष्टि करें और जारी रखें",
   "iso.preflight_failed": "लिखने से पहले की जाँच विफल रही",
   "deploy.title": "बूट करने योग्य ड्राइव निर्माण और QEMU परीक्षण",
-  "deploy.desc_cloud": "शुद्ध iPXE क्लाउड बूट • मल्टी-आर्क iPXE नेटवर्क फर्मवेयर के साथ अल्ट्रा-फास्ट डुअल-पार्टीशन सेटअप।",
+  "deploy.desc_cloud":
+    "शुद्ध iPXE क्लाउड बूट • मल्टी-आर्क iPXE नेटवर्क फर्मवेयर के साथ अल्ट्रा-फास्ट डुअल-पार्टीशन सेटअप।",
   "deploy.desc_hybrid": "Ventoy CLI स्थानीय इंजन • स्थानीय ISO प्रबंधन के साथ Ventoy हाइब्रिड विभाजन सेटअप।",
   "deploy.target_device": "लक्ष्य डिवाइस:",
   "deploy.batch_target": "{count} USB ड्राइव चुने गए",
@@ -175,21 +180,28 @@ export const hiIn: TranslationDict = {
   "deploy.tip_writing": "बूट फ़र्मवेयर लिख रहा हूँ...",
   "deploy.tip_select_single": "कृपया पहले एक लक्ष्य USB ड्राइव चुनें",
   "deploy.tip_select_batch": "कृपया बैच परिनियोजन के लिए लक्ष्य USB ड्राइव की जाँच करें",
-  "deploy.tip_macos_unsupported": "macOS हाइब्रिड मोड में नए स्वरूपण का समर्थन नहीं करता है (क्लाउड मोड का उपयोग करें या पहले Win/Linux पर प्रारंभ करें)",
-  "deploy.tip_need_ventoy": "हाइब्रिड मोड के लिए स्थानीय Ventoy CLI टूलसेट की आवश्यकता है। हम क्लाउड मोड की सिफारिश करते हैं!",
+  "deploy.tip_macos_unsupported":
+    "macOS हाइब्रिड मोड में नए स्वरूपण का समर्थन नहीं करता है (क्लाउड मोड का उपयोग करें या पहले Win/Linux पर प्रारंभ करें)",
+  "deploy.tip_need_ventoy":
+    "हाइब्रिड मोड के लिए स्थानीय Ventoy CLI टूलसेट की आवश्यकता है। हम क्लाउड मोड की सिफारिश करते हैं!",
   "deploy.macos_alert_title": "macOS वेंटॉय CLI ताज़ा फ़ॉर्मेटिंग असमर्थित",
-  "deploy.macos_alert_desc": "आधिकारिक Ventoy अभी तक macOS पर स्वरूपण कार्यक्रम चलाने का समर्थन नहीं करता है। नया [हाइब्रिड ड्राइव] बनाने के लिए Ventoy CLI आवश्यक है। [क्लाउड मोड (1s क्लाउड बूट ड्राइव)] का उपयोग करने की सिफारिश की जाती है!",
+  "deploy.macos_alert_desc":
+    "आधिकारिक Ventoy अभी तक macOS पर स्वरूपण कार्यक्रम चलाने का समर्थन नहीं करता है। नया [हाइब्रिड ड्राइव] बनाने के लिए Ventoy CLI आवश्यक है। [क्लाउड मोड (1s क्लाउड बूट ड्राइव)] का उपयोग करने की सिफारिश की जाती है!",
   "deploy.no_ventoy_title": "वेंटॉय सीएलआई निष्पादन योग्य का पता नहीं चला",
-  "deploy.no_ventoy_desc": "[हाइब्रिड ड्राइव] बनाने के लिए स्थानीय रूप से स्थापित Ventoy CLI की आवश्यकता है। कृपया समर्थित [क्लाउड मोड] चुनें!",
+  "deploy.no_ventoy_desc":
+    "[हाइब्रिड ड्राइव] बनाने के लिए स्थानीय रूप से स्थापित Ventoy CLI की आवश्यकता है। कृपया समर्थित [क्लाउड मोड] चुनें!",
   "deploy.result_batch_success": "{count} डिस्क पर 1-सेकंड क्लाउड इंस्टॉल डिस्क सफलतापूर्वक तैनात की गई!",
   "deploy.result_success": "{targets} पर मोड {mode} सफलतापूर्वक तैनात किया गया",
   "deploy.alert_success": "परिनियोजन सफल!",
   "deploy.safely_eject_btn": "सुरक्षित रूप से USB ड्राइव निकालें",
   "deploy.success_banner_title": "बूट ड्राइव सफलतापूर्वक बनाई गई!",
-  "deploy.success_banner_desc": "बूट फ़ाइलें और फ़र्मवेयर लिखे गए। डेटा हानि से बचने के लिए अनप्लग करने से पहले सुरक्षित रूप से निकालें।",
-  "deploy.toast_auto_ejected": "निर्माण पूर्ण! {count} USB ड्राइव स्वचालित रूप से सुरक्षित रूप से निकाल दिए गए। सारा डेटा सहेजा गया।",
+  "deploy.success_banner_desc":
+    "बूट फ़ाइलें और फ़र्मवेयर लिखे गए। डेटा हानि से बचने के लिए अनप्लग करने से पहले सुरक्षित रूप से निकालें।",
+  "deploy.toast_auto_ejected":
+    "निर्माण पूर्ण! {count} USB ड्राइव स्वचालित रूप से सुरक्षित रूप से निकाल दिए गए। सारा डेटा सहेजा गया।",
   "deploy.confirm_auto_eject_title": "राइट पूरा हुआ — सुरक्षित रूप से निकालें?",
-  "deploy.confirm_auto_eject_desc": "सभी डेटा सफलतापूर्वक लिखा गया है। क्या आप अब सुरक्षित रूप से USB ड्राइव निकालना चाहते हैं?",
+  "deploy.confirm_auto_eject_desc":
+    "सभी डेटा सफलतापूर्वक लिखा गया है। क्या आप अब सुरक्षित रूप से USB ड्राइव निकालना चाहते हैं?",
   "deploy.confirm_auto_eject_yes": "सुरक्षित रूप से निकालें",
   "deploy.confirm_auto_eject_no": "अभी नहीं",
   "deploy.alert_fail": "परिनियोजन विफल:",
@@ -208,7 +220,8 @@ export const hiIn: TranslationDict = {
   "vm.boot_mode_bios": "BIOS (Legacy) मोड",
   "vm.boot_mode_auto": "स्वचालित पहचान",
   "vm.startSuccess_vm": "{name} सिमुलेशन परीक्षण सफलतापूर्वक शुरू हुआ",
-  "vm.desc_optional": "वैकल्पिक सुविधा: असली पीसी को रीबूट किए बिना डेस्कटॉप पर वर्चुअल मशीन में बूट का पूर्वावलोकन करें।",
+  "vm.desc_optional":
+    "वैकल्पिक सुविधा: असली पीसी को रीबूट किए बिना डेस्कटॉप पर वर्चुअल मशीन में बूट का पूर्वावलोकन करें।",
   "vm.installed": "QEMU का पता चला",
   "vm.not_installed": "QEMU का पता नहीं चला",
   "vm.target": "परीक्षण लक्ष्य:",
@@ -225,7 +238,8 @@ export const hiIn: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "कृपया पहले बाएं पैनल से एक लक्ष्य यूएसबी ड्राइव का चयन करने के लिए क्लिक करें!",
-  "vm.toast_not_installed": "QEMU एम्यूलेटर नहीं मिला! कृपया QEMU इंस्टॉल करें (ब्रू इंस्टॉल qemu या पोर्ट इंस्टॉल qemu)",
+  "vm.toast_not_installed":
+    "QEMU एम्यूलेटर नहीं मिला! कृपया QEMU इंस्टॉल करें (ब्रू इंस्टॉल qemu या पोर्ट इंस्टॉल qemu)",
   "vm.cfg_secure_boot": "SecureBoot अनुकरण",
   "vm.cfg_accel": "हार्डवेयर त्वरण",
   "vm.cfg_ram": "रैम आवंटन",
@@ -279,7 +293,8 @@ export const hiIn: TranslationDict = {
   "settings.ventoy_timeout": "वेंटॉय मेनू टाइमआउट (सेकंड):",
   "confirm.title": "High-Risk Format चेतावनी",
   "confirm.warning_title": "चेतावनी: Formatting will erase all data!",
-  "confirm.warning_desc": "चयनित USB ड्राइव को पुनः विभाजित और स्वरूपित किया जाएगा। सभी मौजूदा फ़ाइलें पूरी तरह मिटा दी जाएंगी. सुनिश्चित करें कि आपने महत्वपूर्ण डेटा का बैकअप ले लिया है!",
+  "confirm.warning_desc":
+    "चयनित USB ड्राइव को पुनः विभाजित और स्वरूपित किया जाएगा। सभी मौजूदा फ़ाइलें पूरी तरह मिटा दी जाएंगी. सुनिश्चित करें कि आपने महत्वपूर्ण डेटा का बैकअप ले लिया है!",
   "confirm.mode_title": "परिनियोजन मोड:",
   "confirm.fs_title": "लक्ष्य फ़ाइल सिस्टम:",
   "confirm.disks_title": "फॉर्मेट किए जाने वाले USB ड्राइव ({count}):",
@@ -289,11 +304,14 @@ export const hiIn: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode पुष्टि करेंation",
   "confirm.title_danger": "Format चेतावनी: Disk Initialization",
   "confirm.safe_banner_title": "इन-प्लेस वृद्धिशील अद्यतन सूचना (डेटा सुरक्षित)",
-  "confirm.safe_banner_desc": "लक्ष्य ड्राइव पर वेंटॉय/यूनीबूट बूट संरचना का पता चला। सिस्टम एक वृद्धिशील अद्यतन स्किपिंग प्रारूप निष्पादित करेगा। सभी मौजूदा फ़ाइलें और आईएसओ 100% संरक्षित हैं!",
+  "confirm.safe_banner_desc":
+    "लक्ष्य ड्राइव पर वेंटॉय/यूनीबूट बूट संरचना का पता चला। सिस्टम एक वृद्धिशील अद्यतन स्किपिंग प्रारूप निष्पादित करेगा। सभी मौजूदा फ़ाइलें और आईएसओ 100% संरक्षित हैं!",
   "confirm.mixed_banner_title": "स्मार्ट मिश्रित मोड: बूट ड्राइव के लिए इन-प्लेस अपडेट, खाली ड्राइव के लिए प्रारूप",
-  "confirm.mixed_banner_desc": "चयनित {ventoyCount} बूट ड्राइव (इन-प्लेस अपडेट) और {blankCount} रिक्त ड्राइव (पूर्ण प्रारूप)।",
+  "confirm.mixed_banner_desc":
+    "चयनित {ventoyCount} बूट ड्राइव (इन-प्लेस अपडेट) और {blankCount} रिक्त ड्राइव (पूर्ण प्रारूप)।",
   "confirm.danger_banner_title": "चेतावनी: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "लेखन लक्ष्य डिवाइस (एमबीआर/जीपीटी) को फिर से विभाजित और प्रारूपित करेगा। चयनित ड्राइव पर सभी मौजूदा फ़ाइलें पूरी तरह से मिटा दी जाएंगी!",
+  "confirm.danger_banner_desc":
+    "लेखन लक्ष्य डिवाइस (एमबीआर/जीपीटी) को फिर से विभाजित और प्रारूपित करेगा। चयनित ड्राइव पर सभी मौजूदा फ़ाइलें पूरी तरह से मिटा दी जाएंगी!",
   "confirm.summary_title": "बूट परिनियोजन के लिए लक्ष्य ड्राइव:",
   "confirm.smart_safe_tag": "स्मार्ट सेफ",
   "confirm.ventoy_group_title": "इन-प्लेस अपग्रेड ड्राइव (सभी आईएसओ संरक्षित):",
@@ -313,8 +331,10 @@ export const hiIn: TranslationDict = {
   "confirm.no_format": "स्मार्ट इन-प्लेस अपडेट",
   "deploy.toast_target_changed": "चयनित लक्ष्य डिस्क बदल गई है या अब उपलब्ध नहीं है। कृपया फिर से स्कैन करें।",
   "deploy.toast_some_disks_removed": "{count} अनुपलब्ध डिस्क स्वचालित रूप से हटा दी गई, शेष डिस्क के साथ जारी रखना",
-  "deploy.error_system_disk_blocked": "⛔ अवरोधित: {disks} एक सिस्टम डिस्क है। सिस्टम ड्राइव पर USB बूट डिस्क तैनात नहीं की जा सकती!",
-  "deploy.error_readonly_disk": "🔒 लेखन-सुरक्षित: {disks} केवल पठनीय है। कृपया लेखन सुरक्षा हटाएं या एक अलग USB का उपयोग करें",
+  "deploy.error_system_disk_blocked":
+    "⛔ अवरोधित: {disks} एक सिस्टम डिस्क है। सिस्टम ड्राइव पर USB बूट डिस्क तैनात नहीं की जा सकती!",
+  "deploy.error_readonly_disk":
+    "🔒 लेखन-सुरक्षित: {disks} केवल पठनीय है। कृपया लेखन सुरक्षा हटाएं या एक अलग USB का उपयोग करें",
   "deploy.start_cloud_create": "क्लाउड बूट डिस्क बनाएं",
   "deploy.batch_update": "बिना डेटा हानि के बैच अपडेट शुरू करें ({count} USB ड्राइव)",
   "deploy.batch_mixed": "मिश्रित बैच परिनियोजन शुरू करें ({count} USB ड्राइव)",
@@ -445,9 +465,12 @@ export const hiIn: TranslationDict = {
   "diag.action_reformat_title": "पुनः स्वरूपित करें (reformat)",
   "diag.action_remount_title": "पुनः माउंट करें (remount)",
   "diag.action_retry_title": "पुनः प्रयास करें (retry)",
-  "diag.action_reformat_desc": "राइट में व्यवधान ने विभाजन तालिका या फाइल सिस्टम को क्षतिग्रस्त कर दिया है। नया स्वरूपण अनुशंसित है।",
-  "diag.action_remount_desc": "राइट के दौरान लक्ष्य माउंट पथ डिस्कनेक्ट हो गया। कृपया USB ड्राइव पुनः डालें या वॉल्यूम को पुनः माउंट करें।",
-  "diag.action_retry_desc": "पर्यावरण और उपकरण की स्थिति ठीक है। आप सुरक्षित रूप से स्थापना का पुनः प्रयास कर सकते हैं।",
+  "diag.action_reformat_desc":
+    "राइट में व्यवधान ने विभाजन तालिका या फाइल सिस्टम को क्षतिग्रस्त कर दिया है। नया स्वरूपण अनुशंसित है।",
+  "diag.action_remount_desc":
+    "राइट के दौरान लक्ष्य माउंट पथ डिस्कनेक्ट हो गया। कृपया USB ड्राइव पुनः डालें या वॉल्यूम को पुनः माउंट करें।",
+  "diag.action_retry_desc":
+    "पर्यावरण और उपकरण की स्थिति ठीक है। आप सुरक्षित रूप से स्थापना का पुनः प्रयास कर सकते हैं।",
   "about.updating": "अपडेट हो रहा है ({progress}%)",
   "about.updateTo": "{tag} में ऑनलाइन अपडेट करें",
   "about.downloading": "डाउनलोड हो रहा है {progress}%",
@@ -463,7 +486,8 @@ export const hiIn: TranslationDict = {
   "dialog.textFilesFilter": "टेक्स्ट फ़ाइलें (*.txt)",
   "dialog.allFilesFilter": "सभी फ़ाइलें (*.*)",
   "dialog.selectIsoTitle": "सिस्टम इमेज फ़ाइलें चुनें (*.iso, *.wim, *.img आदि)",
-  "dialog.ventoyFilter": "Ventoy स्रोत इमेज (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy स्रोत इमेज (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "हैश की गणना करें",
   "checksum.calculating": "हैश की गणना की जा रही है...",
   "checksum.algo_label": "एल्गोरिदम",
@@ -509,11 +533,13 @@ export const hiIn: TranslationDict = {
   "privilege.modal_title": "व्यवस्थापक अनुमति आवश्यक",
   "privilege.modal_subtitle": "बूट डेटा पढ़ने और डिस्क पर लिखने के लिए सिस्टम प्राधिकरण आवश्यक है",
   "privilege.reason_title": "व्यवस्थापक विशेषाधिकार क्यों आवश्यक है?",
-  "privilege.reason_desc": "ऑपरेटिंग सिस्टम रॉ सेक्टर और EFI विभाजन को सुरक्षित रखता है। अनुमति मिलने पर सीधा सत्यापन और सुरक्षित डिस्क निर्माण संभव होता है।",
+  "privilege.reason_desc":
+    "ऑपरेटिंग सिस्टम रॉ सेक्टर और EFI विभाजन को सुरक्षित रखता है। अनुमति मिलने पर सीधा सत्यापन और सुरक्षित डिस्क निर्माण संभव होता है।",
   "privilege.scope_title": "पहुंच का दायरा",
   "privilege.scope_desc": "केवल चयनित बाहरी USB ड्राइव तक सख्ती से सीमित है। आंतरिक सिस्टम डिस्क को कभी छुआ नहीं जाता।",
   "privilege.safety_title": "सुरक्षा और पारदर्शिता",
-  "privilege.safety_desc": "निरीक्षण पूरी तरह से केवल-पढ़ने के लिए है और डेटा सुरक्षित रहता है; स्रोत कोड पूरी तरह से खुला है।",
+  "privilege.safety_desc":
+    "निरीक्षण पूरी तरह से केवल-पढ़ने के लिए है और डेटा सुरक्षित रहता है; स्रोत कोड पूरी तरह से खुला है।",
   "privilege.confirm_btn": "अभी अधिकृत करें",
   "privilege.cancel_btn": "रद्द करें",
   "privilege.success_msg": "व्यवस्थापक अधिकार सफलतापूर्वक प्रदान किए गए",

@@ -4,8 +4,8 @@
       <!-- Row 1: Title & Top Control Buttons -->
       <div class="log-section-header">
         <div class="log-title-group">
-          <h2>📜 {{ t('log.title') }}</h2>
-          <span class="badge live-badge">● {{ t('log.live') }}</span>
+          <h2>📜 {{ t("log.title") }}</h2>
+          <span class="badge live-badge">● {{ t("log.live") }}</span>
         </div>
 
         <div class="log-section-controls">
@@ -13,21 +13,15 @@
             <input
               type="checkbox"
               :checked="autoScroll"
-              @change="e => emit('update:autoScroll', (e.target as HTMLInputElement).checked)"
+              @change="(e) => emit('update:autoScroll', (e.target as HTMLInputElement).checked)"
             />
-            {{ t('log.auto_scroll') }}
+            {{ t("log.auto_scroll") }}
           </label>
 
-          <button class="btn-text-sm" @click="emit('copy-logs')">📋 {{ t('log.copy') }}</button>
-          <button class="btn-text-sm" @click="emit('export-logs')">📥 {{ t('log.export') }}</button>
-          <button class="btn-text-danger-sm" @click="emit('clear-logs')">🗑️ {{ t('log.clear') }}</button>
-          <button
-            class="btn-text-sm btn-close-log"
-            :title="t('common.close')"
-            @click="emit('close-log')"
-          >
-            ✕
-          </button>
+          <button class="btn-text-sm" @click="emit('copy-logs')">📋 {{ t("log.copy") }}</button>
+          <button class="btn-text-sm" @click="emit('export-logs')">📥 {{ t("log.export") }}</button>
+          <button class="btn-text-danger-sm" @click="emit('clear-logs')">🗑️ {{ t("log.clear") }}</button>
+          <button class="btn-text-sm btn-close-log" :title="t('common.close')" @click="emit('close-log')">✕</button>
         </div>
       </div>
 
@@ -48,7 +42,7 @@
 
       <div class="embedded-terminal-window" ref="embeddedTerminalRef">
         <div v-if="filteredLogs.length === 0" class="empty-logs">
-          {{ t('log.empty') }}
+          {{ t("log.empty") }}
         </div>
         <div
           v-for="log in filteredLogs"
@@ -56,11 +50,19 @@
           class="log-row"
           :class="log.level.toLowerCase()"
         >
-          <span class="log-time"><bdi>{{ formatLogTime(log.timestamp) }}</bdi></span>
-          <span class="log-level-badge" :class="log.level.toLowerCase()"><bdi>[{{ log.level }}]</bdi></span>
+          <span class="log-time"
+            ><bdi>{{ formatLogTime(log.timestamp) }}</bdi></span
+          >
+          <span class="log-level-badge" :class="log.level.toLowerCase()"
+            ><bdi>[{{ log.level }}]</bdi></span
+          >
           <div class="log-content">
-            <span class="log-msg"><bdi>{{ log.message }}</bdi></span>
-            <span v-if="log.details" class="log-details"><bdi>{{ log.details }}</bdi></span>
+            <span class="log-msg"
+              ><bdi>{{ log.message }}</bdi></span
+            >
+            <span v-if="log.details" class="log-details"
+              ><bdi>{{ log.details }}</bdi></span
+            >
           </div>
         </div>
       </div>
@@ -69,10 +71,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, onMounted } from 'vue';
-import type { LogItem } from './LogViewerModal.vue';
-import { t } from '../i18n';
-import { formatLogTime } from '../utils/logFormatter';
+import { ref, watch, nextTick, onMounted } from "vue";
+import type { LogItem } from "./LogViewerModal.vue";
+import { t } from "../i18n";
+import { formatLogTime } from "../utils/logFormatter";
 
 const props = defineProps<{
   isVisible: boolean;
@@ -83,12 +85,12 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'update:autoScroll', scroll: boolean): void;
-  (e: 'update:currentLogFilter', filter: string): void;
-  (e: 'copy-logs'): void;
-  (e: 'export-logs'): void;
-  (e: 'clear-logs'): void;
-  (e: 'close-log'): void;
+  (e: "update:autoScroll", scroll: boolean): void;
+  (e: "update:currentLogFilter", filter: string): void;
+  (e: "copy-logs"): void;
+  (e: "export-logs"): void;
+  (e: "clear-logs"): void;
+  (e: "close-log"): void;
 }>();
 
 const embeddedTerminalRef = ref<HTMLElement | null>(null);
@@ -103,29 +105,45 @@ function scrollToBottom() {
   }
 }
 
-watch(() => props.filteredLogs.length, () => {
-  scrollToBottom();
-});
-
-watch(() => props.filteredLogs, () => {
-  scrollToBottom();
-}, { deep: true });
-
-watch(() => props.autoScroll, (val) => {
-  if (val) {
+watch(
+  () => props.filteredLogs.length,
+  () => {
     scrollToBottom();
   }
-});
+);
 
-watch(() => props.isVisible, (val) => {
-  if (val) {
+watch(
+  () => props.filteredLogs,
+  () => {
+    scrollToBottom();
+  },
+  { deep: true }
+);
+
+watch(
+  () => props.autoScroll,
+  (val) => {
+    if (val) {
+      scrollToBottom();
+    }
+  }
+);
+
+watch(
+  () => props.isVisible,
+  (val) => {
+    if (val) {
+      scrollToBottom();
+    }
+  }
+);
+
+watch(
+  () => props.currentLogFilter,
+  () => {
     scrollToBottom();
   }
-});
-
-watch(() => props.currentLogFilter, () => {
-  scrollToBottom();
-});
+);
 
 onMounted(() => {
   scrollToBottom();
@@ -303,7 +321,7 @@ onMounted(() => {
   max-height: 560px;
   overflow-y: auto;
   overflow-x: hidden;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
   font-size: 0.82rem;
   line-height: 1.6;
   flex: 1;
@@ -335,10 +353,19 @@ onMounted(() => {
   flex-shrink: 0;
 }
 
-.log-level-badge.info { color: #38bdf8; }
-.log-level-badge.warn, .log-level-badge.warning { color: #fbbf24; }
-.log-level-badge.error { color: #f87171; }
-.log-level-badge.debug { color: #c084fc; }
+.log-level-badge.info {
+  color: #38bdf8;
+}
+.log-level-badge.warn,
+.log-level-badge.warning {
+  color: #fbbf24;
+}
+.log-level-badge.error {
+  color: #f87171;
+}
+.log-level-badge.debug {
+  color: #c084fc;
+}
 
 .log-content {
   flex: 1;
@@ -387,7 +414,9 @@ onMounted(() => {
   background: linear-gradient(135deg, #0396e6 0%, #0284c7 45%, #2563eb 100%);
   color: #ffffff;
   font-weight: 700;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 2px 8px rgba(2, 132, 199, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 2px 8px rgba(2, 132, 199, 0.3);
 }
 
 [data-theme="light"] .btn-text-sm {
@@ -395,14 +424,18 @@ onMounted(() => {
   border: 1px solid rgba(15, 23, 42, 0.12);
   color: #0f172a;
   font-weight: 600;
-  box-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(15, 23, 42, 0.05);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 [data-theme="light"] .btn-text-sm:hover {
   background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
   border-color: rgba(2, 132, 199, 0.35);
   color: #0284c7;
-  box-shadow: inset 0 1px 0 #ffffff, 0 3px 8px rgba(2, 132, 199, 0.15);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 3px 8px rgba(2, 132, 199, 0.15);
 }
 
 [data-theme="light"] .auto-scroll-label-sm {
@@ -410,7 +443,9 @@ onMounted(() => {
   border: 1px solid rgba(15, 23, 42, 0.12);
   color: #0f172a;
   font-weight: 600;
-  box-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(15, 23, 42, 0.05);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 [data-theme="light"] .auto-scroll-label-sm input[type="checkbox"] {
@@ -421,7 +456,9 @@ onMounted(() => {
   background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
   border-color: rgba(2, 132, 199, 0.35);
   color: #0284c7;
-  box-shadow: inset 0 1px 0 #ffffff, 0 3px 8px rgba(2, 132, 199, 0.15);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 3px 8px rgba(2, 132, 199, 0.15);
 }
 
 [data-theme="light"] .btn-text-danger-sm {
@@ -429,14 +466,18 @@ onMounted(() => {
   border: 1px solid rgba(239, 68, 68, 0.25);
   color: #dc2626;
   font-weight: 600;
-  box-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(239, 68, 68, 0.08);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 1px 3px rgba(239, 68, 68, 0.08);
 }
 
 [data-theme="light"] .btn-text-danger-sm:hover {
   background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%);
   border-color: rgba(239, 68, 68, 0.45);
   color: #b91c1c;
-  box-shadow: inset 0 1px 0 #ffffff, 0 3px 8px rgba(239, 68, 68, 0.15);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 3px 8px rgba(239, 68, 68, 0.15);
 }
 
 [data-theme="light"] .embedded-terminal-window {

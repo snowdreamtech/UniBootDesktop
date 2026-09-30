@@ -1,25 +1,25 @@
 <template>
   <section class="glass-card section-card">
-    <h2>{{ t('deploy.title') }}</h2>
+    <h2>{{ t("deploy.title") }}</h2>
     <p class="section-desc" v-if="activeMode === 'cloud'">
-      {{ t('deploy.desc_cloud') }}
+      {{ t("deploy.desc_cloud") }}
     </p>
     <p class="section-desc" v-else>
-      {{ t('deploy.desc_hybrid') }}
+      {{ t("deploy.desc_hybrid") }}
     </p>
 
     <!-- Filesystem Selection for Hybrid Mode & Cloud Mode (Hidden when upgrading an existing Ventoy/UniBoot drive) -->
     <div v-if="!isNonDestructive" class="fs-selector">
-      <label class="fs-label">{{ t('settings.default_fs') }}</label>
+      <label class="fs-label">{{ t("settings.default_fs") }}</label>
       <CustomSelect
         :modelValue="selectedFsType"
         :disabled="!canChangeFs"
-        @update:modelValue="val => emit('update:selectedFsType', val)"
+        @update:modelValue="(val) => emit('update:selectedFsType', val)"
         :options="[
           { value: 'exFAT', label: t('fs.exfat') },
           { value: 'NTFS', label: t('fs.ntfs') },
           { value: 'FAT32', label: t('fs.fat32') },
-          { value: 'ext4', label: t('fs.ext4') }
+          { value: 'ext4', label: t('fs.ext4') },
         ]"
       />
     </div>
@@ -28,12 +28,16 @@
     <div v-if="activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid" class="ventoy-warning-card">
       <span class="warning-card-icon">⚠️</span>
       <div class="warning-card-body">
-        <div class="warning-card-title">{{ isMacOs ? t('deploy.macos_alert_title') : t('deploy.no_ventoy_title') }}</div>
-        <div class="warning-card-message">{{ isMacOs ? t('deploy.macos_alert_desc') : t('deploy.no_ventoy_desc') }}</div>
+        <div class="warning-card-title">
+          {{ isMacOs ? t("deploy.macos_alert_title") : t("deploy.no_ventoy_title") }}
+        </div>
+        <div class="warning-card-message">
+          {{ isMacOs ? t("deploy.macos_alert_desc") : t("deploy.no_ventoy_desc") }}
+        </div>
       </div>
       <button class="btn-secondary btn-sm" @click="emit('open-settings-ventoy')">
         <span class="btn-icon">⚙️</span>
-        <span>{{ t('settings.title') }}</span>
+        <span>{{ t("settings.title") }}</span>
       </button>
     </div>
 
@@ -42,10 +46,10 @@
       <span class="safe-notice-icon">🛡️</span>
       <div class="safe-notice-content">
         <div class="safe-notice-title">
-          {{ activeMode === 'cloud' ? t('safe.title_cloud') : t('safe.title_hybrid') }}
+          {{ activeMode === "cloud" ? t("safe.title_cloud") : t("safe.title_hybrid") }}
         </div>
         <div class="safe-notice-desc">
-          {{ activeMode === 'cloud' ? t('safe.desc_cloud') : t('safe.desc_hybrid') }}
+          {{ activeMode === "cloud" ? t("safe.desc_cloud") : t("safe.desc_hybrid") }}
         </div>
       </div>
     </div>
@@ -64,14 +68,14 @@
         <div class="iso-title-group">
           <h3>
             <span class="section-icon">💿</span>
-            <span>{{ t('iso.title') }}</span>
-            <span class="optional-badge">{{ t('common.optional') }}</span>
+            <span>{{ t("iso.title") }}</span>
+            <span class="optional-badge">{{ t("common.optional") }}</span>
           </h3>
-          <span class="iso-subtitle">{{ t('iso.desc') }}</span>
+          <span class="iso-subtitle">{{ t("iso.desc") }}</span>
         </div>
         <button class="btn-secondary add-iso-btn" :disabled="!canManageIso" @click="canManageIso && emit('select-iso')">
           <span class="btn-icon">➕</span>
-          <span>{{ t('iso.add_btn') }}</span>
+          <span>{{ t("iso.add_btn") }}</span>
         </button>
       </div>
 
@@ -79,7 +83,7 @@
         <!-- Overlay when dragging files over non-empty list -->
         <div v-if="isDragOver && selectedIsoFiles.length > 0" class="iso-drag-overlay">
           <span class="drag-icon">📥</span>
-          <div class="drag-text">{{ t('iso.drag_drop_tip') }}</div>
+          <div class="drag-text">{{ t("iso.drag_drop_tip") }}</div>
         </div>
 
         <div
@@ -89,8 +93,8 @@
           @click="emit('select-iso')"
         >
           <span class="empty-icon">📥</span>
-          <div class="empty-text">{{ isDragOver ? t('iso.drag_drop_tip') : t('iso.empty_title') }}</div>
-          <div class="empty-subtext">{{ t('iso.empty_sub') }}</div>
+          <div class="empty-text">{{ isDragOver ? t("iso.drag_drop_tip") : t("iso.empty_title") }}</div>
+          <div class="empty-subtext">{{ t("iso.empty_sub") }}</div>
         </div>
 
         <div v-else class="iso-file-list">
@@ -124,9 +128,20 @@
                 @click.stop="inspectSingleIso(index)"
               >
                 <span class="btn-icon">🔒</span>
-                <span>{{ selectedChecksumIsoIndex === index && checksumActiveTab === 'single' ? t('checksum.status_selected') : t('checksum.status_verify') }}</span>
+                <span>{{
+                  selectedChecksumIsoIndex === index && checksumActiveTab === "single"
+                    ? t("checksum.status_selected")
+                    : t("checksum.status_verify")
+                }}</span>
               </button>
-              <button class="iso-remove-btn" :disabled="!canManageIso" :title="t('iso.remove')" @click.stop="canManageIso && emit('remove-iso', index)">✕</button>
+              <button
+                class="iso-remove-btn"
+                :disabled="!canManageIso"
+                :title="t('iso.remove')"
+                @click.stop="canManageIso && emit('remove-iso', index)"
+              >
+                ✕
+              </button>
             </div>
           </div>
         </div>
@@ -134,7 +149,7 @@
         <div v-if="selectedIsoFiles.length > 0" class="iso-footer">
           <!-- Left safe action group: summary count + toggle checksum button -->
           <div class="iso-footer-left">
-            <span class="iso-count-summary">{{ t('iso.summary', { count: selectedIsoFiles.length }) }}</span>
+            <span class="iso-count-summary">{{ t("iso.summary", { count: selectedIsoFiles.length }) }}</span>
             <button
               class="btn-toggle-checksum"
               :class="{ active: isChecksumPanelExpanded }"
@@ -142,18 +157,23 @@
               @click="isChecksumPanelExpanded = !isChecksumPanelExpanded"
             >
               <span class="btn-icon">🔍</span>
-              <span>{{ isChecksumPanelExpanded ? t('checksum.collapse') : t('checksum.expand') }}</span>
-              <span class="caret-icon">{{ isChecksumPanelExpanded ? '▴' : '▾' }}</span>
+              <span>{{ isChecksumPanelExpanded ? t("checksum.collapse") : t("checksum.expand") }}</span>
+              <span class="caret-icon">{{ isChecksumPanelExpanded ? "▴" : "▾" }}</span>
               <span v-if="hasAnyChecksumResult" class="checksum-mini-badge" :class="{ 'all-match': isAllBatchMatched }">
-                {{ isAllBatchMatched ? '✅' : '⚠️' }}
+                {{ isAllBatchMatched ? "✅" : "⚠️" }}
               </span>
             </button>
           </div>
 
           <!-- Right isolated danger action: clear list button -->
-          <button class="btn-clear-iso" :disabled="!canManageIso" :title="t('iso.clear')" @click="canManageIso && emit('clear-iso')">
+          <button
+            class="btn-clear-iso"
+            :disabled="!canManageIso"
+            :title="t('iso.clear')"
+            @click="canManageIso && emit('clear-iso')"
+          >
             <span class="btn-icon">🗑️</span>
-            <span>{{ t('iso.clear') }}</span>
+            <span>{{ t("iso.clear") }}</span>
           </button>
         </div>
 
@@ -163,7 +183,7 @@
           <input
             type="file"
             ref="sumsFileInputRef"
-            style="display: none;"
+            style="display: none"
             accept=".txt,.sums,.checksum,.sha1,.sha1sum,.sha224,.sha256,.sha256sum,.sha256sums,.sha384,.sha512,.sha512sum,.sha512sums,.md5,.md5sum,.md5sums,*"
             multiple
             @change="handleSumsFileSelected"
@@ -177,7 +197,7 @@
               @click="checksumActiveTab = 'batch'"
             >
               <span class="btn-icon">🔍</span>
-              <span>{{ t('checksum.tab_batch') }}</span>
+              <span>{{ t("checksum.tab_batch") }}</span>
               <span class="tab-badge">{{ selectedIsoFiles.length }}</span>
             </button>
             <button
@@ -186,22 +206,25 @@
               @click="checksumActiveTab = 'single'"
             >
               <span class="btn-icon">⚡</span>
-              <span>{{ t('checksum.tab_single') }}</span>
+              <span>{{ t("checksum.tab_single") }}</span>
             </button>
           </div>
 
           <!-- ================= TAB 1: 批量校验专属视图 ================= -->
-          <div v-if="checksumActiveTab === 'batch' && selectedIsoFiles.length > 1" class="checksum-tab-panel batch-panel">
+          <div
+            v-if="checksumActiveTab === 'batch' && selectedIsoFiles.length > 1"
+            class="checksum-tab-panel batch-panel"
+          >
             <div class="checksum-header">
               <div class="checksum-header-left">
-                <span class="checksum-title">{{ t('checksum.tab_batch') }}</span>
-                <span class="checksum-panel-desc">{{ t('checksum.batch_desc') }}</span>
+                <span class="checksum-title">{{ t("checksum.tab_batch") }}</span>
+                <span class="checksum-panel-desc">{{ t("checksum.batch_desc") }}</span>
               </div>
 
               <div class="checksum-header-actions">
                 <div class="algo-selector">
                   <select v-model="selectedAlgo" class="algo-select">
-                    <option value="sha256">SHA-256 {{ t('checksum.recommended') }}</option>
+                    <option value="sha256">SHA-256 {{ t("checksum.recommended") }}</option>
                     <option value="md5">MD5</option>
                     <option value="sha1">SHA-1</option>
                     <option value="sha384">SHA-384</option>
@@ -218,8 +241,12 @@
                   @click="triggerSumsFilePick"
                 >
                   <span class="btn-icon">📄</span>
-                  <span>{{ t('checksum.import_file') }}</span>
-                  <span v-if="cachedHashCount > 0" class="cached-count-pill" :title="t('checksum.cache_loaded', { count: cachedHashCount })">
+                  <span>{{ t("checksum.import_file") }}</span>
+                  <span
+                    v-if="cachedHashCount > 0"
+                    class="cached-count-pill"
+                    :title="t('checksum.cache_loaded', { count: cachedHashCount })"
+                  >
                     {{ cachedHashCount }}
                   </span>
                 </button>
@@ -230,15 +257,22 @@
                   :disabled="!canVerifyHash || isBatchCalculating || isCalculatingHash"
                   @click="handleBatchChecksum"
                 >
-                  <span class="btn-icon">{{ isBatchCalculating ? '⏳' : '🔍' }}</span>
-                  <span>{{ isBatchCalculating ? t('checksum.batch_verifying', { current: batchProgress.current, total: selectedIsoFiles.length }) : t('checksum.batch_verify_all') }}</span>
+                  <span class="btn-icon">{{ isBatchCalculating ? "⏳" : "🔍" }}</span>
+                  <span>{{
+                    isBatchCalculating
+                      ? t("checksum.batch_verifying", {
+                          current: batchProgress.current,
+                          total: selectedIsoFiles.length,
+                        })
+                      : t("checksum.batch_verify_all")
+                  }}</span>
                 </button>
               </div>
             </div>
 
             <!-- Batch Checksum Summary Banner -->
             <div v-if="batchSummaryText" class="batch-summary-banner" :class="{ 'all-matched': isAllBatchMatched }">
-              <span class="summary-icon">{{ isAllBatchMatched ? '✅' : 'ℹ️' }}</span>
+              <span class="summary-icon">{{ isAllBatchMatched ? "✅" : "ℹ️" }}</span>
               <span>{{ batchSummaryText }}</span>
             </div>
           </div>
@@ -247,7 +281,7 @@
           <div v-else class="checksum-tab-panel single-panel">
             <!-- Target ISO Selector Bar -->
             <div class="checksum-target-bar">
-              <span class="target-bar-label">🎯 {{ t('checksum.target_iso_label') }}:</span>
+              <span class="target-bar-label">🎯 {{ t("checksum.target_iso_label") }}:</span>
               <div v-if="selectedIsoFiles.length > 1" class="target-iso-selector">
                 <select v-model="selectedChecksumIsoIndex" class="target-iso-select">
                   <option v-for="(file, idx) in selectedIsoFiles" :key="idx" :value="idx">
@@ -262,14 +296,14 @@
 
             <div class="checksum-header">
               <div class="checksum-header-left">
-                <span class="checksum-title">{{ t('checksum.tab_single') }}</span>
-                <span class="checksum-panel-desc">{{ t('checksum.single_desc') }}</span>
+                <span class="checksum-title">{{ t("checksum.tab_single") }}</span>
+                <span class="checksum-panel-desc">{{ t("checksum.single_desc") }}</span>
               </div>
 
               <div class="checksum-header-actions">
                 <div class="algo-selector">
                   <select v-model="selectedAlgo" class="algo-select">
-                    <option value="sha256">SHA-256 {{ t('checksum.recommended') }}</option>
+                    <option value="sha256">SHA-256 {{ t("checksum.recommended") }}</option>
                     <option value="md5">MD5</option>
                     <option value="sha1">SHA-1</option>
                     <option value="sha384">SHA-384</option>
@@ -284,8 +318,8 @@
                   :disabled="!canVerifyHash || isCalculatingHash || isBatchCalculating"
                   @click="handleCalculateChecksum"
                 >
-                  <span class="btn-icon">{{ isCalculatingHash ? '⏳' : '⚡' }}</span>
-                  <span>{{ isCalculatingHash ? t('checksum.calculating') : t('checksum.calc_btn') }}</span>
+                  <span class="btn-icon">{{ isCalculatingHash ? "⏳" : "⚡" }}</span>
+                  <span>{{ isCalculatingHash ? t("checksum.calculating") : t("checksum.calc_btn") }}</span>
                 </button>
               </div>
             </div>
@@ -295,13 +329,18 @@
               <div v-if="calculatedHash" class="hash-code-row">
                 <span class="hash-algo-badge">{{ currentChecksumAlgo.toUpperCase() }}</span>
                 <code class="hash-code" :title="calculatedHash">{{ calculatedHash }}</code>
-                <button class="copy-hash-btn" :class="{ copied: isHashCopied }" :title="t('checksum.copy_hash')" @click="copyHashToClipboard">
-                  {{ isHashCopied ? '✓' : '📋' }}
+                <button
+                  class="copy-hash-btn"
+                  :class="{ copied: isHashCopied }"
+                  :title="t('checksum.copy_hash')"
+                  @click="copyHashToClipboard"
+                >
+                  {{ isHashCopied ? "✓" : "📋" }}
                 </button>
               </div>
               <div v-else class="hash-empty-hint">
                 <span class="hint-icon">⚡</span>
-                <span>{{ t('checksum.single_desc') }}</span>
+                <span>{{ t("checksum.single_desc") }}</span>
               </div>
 
               <div class="hash-compare-row">
@@ -313,11 +352,15 @@
                 />
                 <button class="import-sums-btn" :title="t('checksum.import_file_title')" @click="triggerSumsFilePick">
                   <span class="btn-icon">📄</span>
-                  <span>{{ t('checksum.import_file') }}</span>
+                  <span>{{ t("checksum.import_file") }}</span>
                 </button>
-                <div v-if="parsedExpectedHash && calculatedHash" class="match-badge" :class="isHashMatching ? 'match' : 'mismatch'">
-                  <span class="badge-icon">{{ isHashMatching ? '✅' : '❌' }}</span>
-                  <span>{{ isHashMatching ? t('checksum.match_success') : t('checksum.match_mismatch') }}</span>
+                <div
+                  v-if="parsedExpectedHash && calculatedHash"
+                  class="match-badge"
+                  :class="isHashMatching ? 'match' : 'mismatch'"
+                >
+                  <span class="badge-icon">{{ isHashMatching ? "✅" : "❌" }}</span>
+                  <span>{{ isHashMatching ? t("checksum.match_success") : t("checksum.match_mismatch") }}</span>
                 </div>
               </div>
             </div>
@@ -328,12 +371,12 @@
 
     <div class="deploy-box">
       <div class="selected-target">
-        <span>{{ t('deploy.target_device') }}</span>
+        <span>{{ t("deploy.target_device") }}</span>
         <strong v-if="selectionMode === 'single'">
-          {{ selectedDisk ? selectedDisk.name + ' (' + selectedDisk.device + ')' : t('disk.no_disk') }}
+          {{ selectedDisk ? selectedDisk.name + " (" + selectedDisk.device + ")" : t("disk.no_disk") }}
         </strong>
         <strong v-else>
-          {{ selectedDevices.size > 0 ? t('deploy.batch_target', { count: selectedDevices.size }) : t('disk.no_disk') }}
+          {{ selectedDevices.size > 0 ? t("deploy.batch_target", { count: selectedDevices.size }) : t("disk.no_disk") }}
         </strong>
       </div>
 
@@ -341,47 +384,57 @@
         <!-- Unified deployment stage & disk card -->
         <div class="batch-deploy-info">
           <div class="batch-current-disk" v-if="batchDeployInfo && batchDeployInfo.totalDisks > 1">
-            {{ t('deploy.batch_current') }}: {{ batchDeployInfo.currentDiskIndex }}/{{ batchDeployInfo.totalDisks }}
+            {{ t("deploy.batch_current") }}: {{ batchDeployInfo.currentDiskIndex }}/{{ batchDeployInfo.totalDisks }}
           </div>
           <div class="batch-disk-name" v-if="batchDeployInfo?.currentDisk">
             {{ batchDeployInfo.currentDisk }}
           </div>
           <div class="batch-current-stage">
-            {{ batchDeployInfo?.currentStage || t('deploy.stage_preparing') }}
+            {{ batchDeployInfo?.currentStage || t("deploy.stage_preparing") }}
           </div>
         </div>
 
         <ProgressBar
-          :label="batchDeployInfo && batchDeployInfo.totalDisks > 1
-            ? t('deploy.batch_overall_progress')
-            : t('deploy.writing')"
+          :label="
+            batchDeployInfo && batchDeployInfo.totalDisks > 1 ? t('deploy.batch_overall_progress') : t('deploy.writing')
+          "
           :progress="deployProgress"
         />
         <div class="deploy-stats-row">
-          <span class="stat-badge" v-if="(speedMBps || 0) > 0">⚡ {{ t('deploy.stats_speed') }}: {{ speedMBps?.toFixed(1) }} MB/s</span>
-          <span class="stat-badge" v-if="(elapsedSec || 0) > 0">⏱️ {{ t('deploy.stats_elapsed') }}: {{ formatStatsTime(elapsedSec) }}</span>
-          <span class="stat-badge" v-if="(etaSec || 0) > 0">⌛ {{ t('deploy.stats_eta') }}: {{ formatStatsTime(etaSec) }}</span>
+          <span class="stat-badge" v-if="(speedMBps || 0) > 0"
+            >⚡ {{ t("deploy.stats_speed") }}: {{ speedMBps?.toFixed(1) }} MB/s</span
+          >
+          <span class="stat-badge" v-if="(elapsedSec || 0) > 0"
+            >⏱️ {{ t("deploy.stats_elapsed") }}: {{ formatStatsTime(elapsedSec) }}</span
+          >
+          <span class="stat-badge" v-if="(etaSec || 0) > 0"
+            >⌛ {{ t("deploy.stats_eta") }}: {{ formatStatsTime(etaSec) }}</span
+          >
         </div>
         <button class="btn-cancel-deploy" @click="emit('cancel-deploy')">
           <span class="cancel-icon">🛑</span>
-          <span>{{ t('deploy.btn_cancel') }}</span>
+          <span>{{ t("deploy.btn_cancel") }}</span>
         </button>
       </div>
 
       <button
         v-else
         class="btn-primary deploy-btn"
-        :class="{ 'safe-btn': isNonDestructive, 'danger-disabled': activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid, 'preflight-btn': isPreflight }"
+        :class="{
+          'safe-btn': isNonDestructive,
+          'danger-disabled': activeMode === 'hybrid' && !isNonDestructive && !ventoyStatus.valid,
+          'preflight-btn': isPreflight,
+        }"
         :disabled="isDeployDisabled"
         :title="deployDisabledReason"
         @click="emit('deploy-click')"
       >
         <template v-if="isPreflight">
           <span class="deploy-icon preflight-spinner">⏳</span>
-          <span>{{ t('deploy.checking') }}</span>
+          <span>{{ t("deploy.checking") }}</span>
         </template>
         <template v-else>
-          <span class="deploy-icon">{{ isNonDestructive ? '🛡️' : '🚀' }}</span>
+          <span class="deploy-icon">{{ isNonDestructive ? "🛡️" : "🚀" }}</span>
           <span>{{ deployBtnText }}</span>
         </template>
       </button>
@@ -390,9 +443,13 @@
       <div v-if="showDeploySuccessBanner" class="deploy-success-banner">
         <div class="deploy-success-icon">🎉</div>
         <div class="deploy-success-content">
-          <div class="deploy-success-title">{{ t('deploy.success_banner_title') }}</div>
+          <div class="deploy-success-title">{{ t("deploy.success_banner_title") }}</div>
           <div class="deploy-success-desc">
-            {{ deploySuccessBanner.autoEjected ? t('deploy.toast_auto_ejected', { count: deploySuccessBanner.targets.length }) : t('deploy.success_banner_desc') }}
+            {{
+              deploySuccessBanner.autoEjected
+                ? t("deploy.toast_auto_ejected", { count: deploySuccessBanner.targets.length })
+                : t("deploy.success_banner_desc")
+            }}
           </div>
         </div>
         <div class="deploy-success-actions">
@@ -404,7 +461,7 @@
             @click="emit('safely-eject-success')"
           >
             <span class="btn-icon">⏏️</span>
-            <span>{{ t('deploy.safely_eject_btn') }}</span>
+            <span>{{ t("deploy.safely_eject_btn") }}</span>
           </button>
         </div>
       </div>
@@ -415,11 +472,11 @@
       <div class="vm-header">
         <div class="vm-title-group">
           <h3>
-            {{ t('vm.box_title') }}
-            <span class="optional-badge">{{ t('common.optional') }}</span>
+            {{ t("vm.box_title") }}
+            <span class="optional-badge">{{ t("common.optional") }}</span>
           </h3>
           <span class="badge success" v-if="hypervisorList.length > 0">
-            {{ t('vm.installed') }}
+            {{ t("vm.installed") }}
           </span>
         </div>
       </div>
@@ -428,17 +485,17 @@
       <div class="vm-options-bar">
         <!-- Boot Mode Selector -->
         <div class="vm-selector-container">
-          <span class="vm-selector-label">{{ t('vm.boot_mode_label') }}</span>
+          <span class="vm-selector-label">{{ t("vm.boot_mode_label") }}</span>
           <div class="vm-select-wrapper">
             <select
               :value="selectedBootMode"
               :disabled="!canConfigureVm"
-              @change="e => emit('update:selectedBootMode', (e.target as HTMLSelectElement).value)"
+              @change="(e) => emit('update:selectedBootMode', (e.target as HTMLSelectElement).value)"
               class="vm-select boot-select"
             >
-              <option value="uefi">{{ t('vm.boot_mode_uefi') }}</option>
-              <option value="bios">{{ t('vm.boot_mode_bios') }}</option>
-              <option value="auto">{{ t('vm.boot_mode_auto') }}</option>
+              <option value="uefi">{{ t("vm.boot_mode_uefi") }}</option>
+              <option value="bios">{{ t("vm.boot_mode_bios") }}</option>
+              <option value="auto">{{ t("vm.boot_mode_auto") }}</option>
             </select>
             <span class="select-arrow">▾</span>
           </div>
@@ -446,20 +503,20 @@
 
         <!-- Single Hypervisor Badge -->
         <div v-if="hypervisorList.length <= 1" class="vm-selector-container">
-          <span class="vm-selector-label">{{ t('vm.select_vm_label') }}</span>
+          <span class="vm-selector-label">{{ t("vm.select_vm_label") }}</span>
           <span class="badge" :class="hypervisorList.length === 1 ? 'success' : 'muted'">
-            {{ hypervisorList.length === 1 ? hypervisorList[0].name : t('vm.not_installed') }}
+            {{ hypervisorList.length === 1 ? hypervisorList[0].name : t("vm.not_installed") }}
           </span>
         </div>
 
         <!-- Multiple Hypervisors Selector -->
         <div v-else class="vm-selector-container">
-          <span class="vm-selector-label">{{ t('vm.select_vm_label') }}</span>
+          <span class="vm-selector-label">{{ t("vm.select_vm_label") }}</span>
           <div class="vm-select-wrapper">
             <select
               :value="selectedVMType"
               :disabled="!canConfigureVm"
-              @change="e => emit('update:selectedVMType', (e.target as HTMLSelectElement).value)"
+              @change="(e) => emit('update:selectedVMType', (e.target as HTMLSelectElement).value)"
               class="vm-select"
             >
               <option v-for="vm in hypervisorList" :key="vm.type" :value="vm.type">
@@ -475,18 +532,18 @@
       <div class="vm-tuning-row">
         <!-- CPU Cores -->
         <div class="vm-tuning-item">
-          <span class="vm-selector-label">{{ t('vm.cfg_cpu') }}</span>
+          <span class="vm-selector-label">{{ t("vm.cfg_cpu") }}</span>
           <div class="vm-select-wrapper sm">
             <select
               :value="vmCpuCores || 2"
               :disabled="!canConfigureVm"
-              @change="e => emit('update:vmCpuCores', Number((e.target as HTMLSelectElement).value))"
+              @change="(e) => emit('update:vmCpuCores', Number((e.target as HTMLSelectElement).value))"
               class="vm-select sm"
             >
-              <option :value="1">1 {{ t('vm.cfg_core_singular') }}</option>
-              <option :value="2">2 {{ t('vm.cfg_core_plural') }}</option>
-              <option :value="4">4 {{ t('vm.cfg_core_plural') }}</option>
-              <option :value="8">8 {{ t('vm.cfg_core_plural') }}</option>
+              <option :value="1">1 {{ t("vm.cfg_core_singular") }}</option>
+              <option :value="2">2 {{ t("vm.cfg_core_plural") }}</option>
+              <option :value="4">4 {{ t("vm.cfg_core_plural") }}</option>
+              <option :value="8">8 {{ t("vm.cfg_core_plural") }}</option>
             </select>
             <span class="select-arrow">▾</span>
           </div>
@@ -494,12 +551,12 @@
 
         <!-- RAM Allocation -->
         <div class="vm-tuning-item">
-          <span class="vm-selector-label">{{ t('vm.cfg_ram') }}</span>
+          <span class="vm-selector-label">{{ t("vm.cfg_ram") }}</span>
           <div class="vm-select-wrapper sm">
             <select
               :value="vmMemoryMB || 2048"
               :disabled="!canConfigureVm"
-              @change="e => emit('update:vmMemoryMB', Number((e.target as HTMLSelectElement).value))"
+              @change="(e) => emit('update:vmMemoryMB', Number((e.target as HTMLSelectElement).value))"
               class="vm-select sm"
             >
               <option :value="1024">1 GB</option>
@@ -517,18 +574,18 @@
             type="checkbox"
             :disabled="!canConfigureVm"
             :checked="vmDisplayAccel !== false"
-            @change="e => emit('update:vmDisplayAccel', (e.target as HTMLInputElement).checked)"
+            @change="(e) => emit('update:vmDisplayAccel', (e.target as HTMLInputElement).checked)"
           />
-          {{ t('vm.cfg_accel') }}
+          {{ t("vm.cfg_accel") }}
         </label>
       </div>
       <p class="vm-desc">
-        {{ t('vm.target') }}
+        {{ t("vm.target") }}
         <strong v-if="activeVmTargetDevice" class="target-highlight">
           {{ activeVmTargetName }} ({{ activeVmTargetDevice }})
         </strong>
         <span v-else class="target-warn">
-          {{ t('vm.no_disk_warn') }}
+          {{ t("vm.no_disk_warn") }}
         </span>
       </p>
       <button
@@ -536,25 +593,25 @@
         :class="{ 'vm-running': isVmRunning }"
         :disabled="isVmDisabled"
         :title="isVmRunning ? t('vm.tip_running') : vmDisabledReason"
-        @click="isVmRunning ? emit('stop-vm') : (!isVmDisabled && emit('launch-vm'))"
+        @click="isVmRunning ? emit('stop-vm') : !isVmDisabled && emit('launch-vm')"
       >
-        <span class="btn-icon">{{ isLaunchingQemu ? '⏳' : (isVmRunning ? '⏹' : '▶') }}</span>
-        <span>{{ isLaunchingQemu ? t('vm.launching') : (isVmRunning ? t('vm.running') : t('vm.run_test')) }}</span>
+        <span class="btn-icon">{{ isLaunchingQemu ? "⏳" : isVmRunning ? "⏹" : "▶" }}</span>
+        <span>{{ isLaunchingQemu ? t("vm.launching") : isVmRunning ? t("vm.running") : t("vm.run_test") }}</span>
       </button>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import CustomSelect from './CustomSelect.vue';
-import ProgressBar from './ProgressBar.vue';
-import type { DiskInfo } from './DiskPanel.vue';
-import { t } from '../i18n';
+import { ref, computed, watch } from "vue";
+import CustomSelect from "./CustomSelect.vue";
+import ProgressBar from "./ProgressBar.vue";
+import type { DiskInfo } from "./DiskPanel.vue";
+import { t } from "../i18n";
 
 const props = defineProps<{
-  activeMode: 'cloud' | 'hybrid';
-  selectionMode: 'single' | 'batch';
+  activeMode: "cloud" | "hybrid";
+  selectionMode: "single" | "batch";
   selectedDisk: DiskInfo | null;
   selectedDevices: Set<string>;
   diskList: DiskInfo[];
@@ -566,7 +623,17 @@ const props = defineProps<{
   isDeploying: boolean;
   isPreflight?: boolean;
   deployProgress: number;
-  batchDeployInfo?: { totalDisks: number; currentDiskIndex: number; currentDisk: string; currentStage: string; diskProgress: number; overallProgress: number; speedMBps: number; elapsedSec: number; etaSec: number } | null;
+  batchDeployInfo?: {
+    totalDisks: number;
+    currentDiskIndex: number;
+    currentDisk: string;
+    currentStage: string;
+    diskProgress: number;
+    overallProgress: number;
+    speedMBps: number;
+    elapsedSec: number;
+    etaSec: number;
+  } | null;
   speedMBps?: number;
   elapsedSec?: number;
   etaSec?: number;
@@ -594,31 +661,31 @@ const props = defineProps<{
 }>();
 
 function formatStatsTime(seconds?: number): string {
-  if (!seconds || seconds <= 0) return '00:00';
+  if (!seconds || seconds <= 0) return "00:00";
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
-  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
 const emit = defineEmits<{
-  (e: 'update:selectedFsType', fs: string): void;
-  (e: 'update:selectedBootMode', mode: string): void;
-  (e: 'update:selectedVMType', type: string): void;
-  (e: 'update:vmCpuCores', cores: number): void;
-  (e: 'update:vmMemoryMB', ram: number): void;
-  (e: 'update:vmDisplayAccel', accel: boolean): void;
-  (e: 'open-settings-ventoy'): void;
-  (e: 'select-iso'): void;
-  (e: 'remove-iso', index: number): void;
-  (e: 'clear-iso'): void;
-  (e: 'drop-iso-paths', paths: string[]): void;
-  (e: 'deploy-click'): void;
-  (e: 'cancel-deploy'): void;
-  (e: 'dismiss-success-banner'): void;
-  (e: 'safely-eject-success'): void;
-  (e: 'launch-vm'): void;
-  (e: 'stop-vm'): void;
-  (e: 'update:isVerifying', verifying: boolean): void;
+  (e: "update:selectedFsType", fs: string): void;
+  (e: "update:selectedBootMode", mode: string): void;
+  (e: "update:selectedVMType", type: string): void;
+  (e: "update:vmCpuCores", cores: number): void;
+  (e: "update:vmMemoryMB", ram: number): void;
+  (e: "update:vmDisplayAccel", accel: boolean): void;
+  (e: "open-settings-ventoy"): void;
+  (e: "select-iso"): void;
+  (e: "remove-iso", index: number): void;
+  (e: "clear-iso"): void;
+  (e: "drop-iso-paths", paths: string[]): void;
+  (e: "deploy-click"): void;
+  (e: "cancel-deploy"): void;
+  (e: "dismiss-success-banner"): void;
+  (e: "safely-eject-success"): void;
+  (e: "launch-vm"): void;
+  (e: "stop-vm"): void;
+  (e: "update:isVerifying", verifying: boolean): void;
 }>();
 
 // Drag & Drop State & Handlers
@@ -634,7 +701,7 @@ function handleDragEnter(e: DragEvent) {
 function handleDragOver(e: DragEvent) {
   e.preventDefault();
   if (e.dataTransfer) {
-    e.dataTransfer.dropEffect = 'copy';
+    e.dataTransfer.dropEffect = "copy";
   }
   isDragOver.value = true;
 }
@@ -656,7 +723,7 @@ function handleDrop(e: DragEvent) {
 
   // In native Wails desktop runtime, OnFileDrop receives the system absolute paths.
   // Only fall back to HTML5 File API in pure browser demo mode.
-  const isWailsDesktop = typeof (window as any).runtime?.OnFileDrop === 'function';
+  const isWailsDesktop = typeof (window as any).runtime?.OnFileDrop === "function";
   if (!isWailsDesktop && e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
     const paths: string[] = [];
     for (let i = 0; i < e.dataTransfer.files.length; i++) {
@@ -665,7 +732,7 @@ function handleDrop(e: DragEvent) {
       if (p) paths.push(p);
     }
     if (paths.length > 0) {
-      emit('drop-iso-paths', paths);
+      emit("drop-iso-paths", paths);
     }
   }
 }
@@ -679,11 +746,11 @@ const canConfigureVm = computed(() => props.canConfigureVm ?? (!props.isDeployin
 
 // Checksum State & Logic
 const selectedChecksumIsoIndex = ref(0);
-const selectedAlgo = ref('sha256');
+const selectedAlgo = ref("sha256");
 const isCalculatingHash = ref(false);
-const calculatedHash = ref('');
-const currentChecksumAlgo = ref('sha256');
-const expectedHashInput = ref('');
+const calculatedHash = ref("");
+const currentChecksumAlgo = ref("sha256");
+const expectedHashInput = ref("");
 const isHashCopied = ref(false);
 const sumsFileInputRef = ref<HTMLInputElement | null>(null);
 
@@ -695,7 +762,7 @@ interface ChecksumCache {
 export interface IsoChecksumStatus {
   calculated: string;
   expected: string;
-  status: 'idle' | 'calculating' | 'match' | 'mismatch' | 'no-expected';
+  status: "idle" | "calculating" | "match" | "mismatch" | "no-expected";
   algo: string;
 }
 
@@ -705,49 +772,55 @@ const loadedSumsFileCount = ref(0);
 const isBatchCalculating = ref(false);
 const batchProgress = ref({ current: 0, total: 0, matched: 0, mismatched: 0 });
 const cachedHashCount = computed(() => Object.keys(checksumCache.value).length);
-const checksumActiveTab = ref<'batch' | 'single'>('batch');
+const checksumActiveTab = ref<"batch" | "single">("batch");
 const isChecksumPanelExpanded = ref(false);
 const hasAnyChecksumResult = computed(() => {
-  return Object.values(isoChecksumStatuses.value).some(
-    s => s && (s.status === 'match' || s.status === 'mismatch')
-  );
+  return Object.values(isoChecksumStatuses.value).some((s) => s && (s.status === "match" || s.status === "mismatch"));
 });
 
 // 智能默认聚焦 Tab：当镜像数量从 <= 1 增加到多个时，自动聚焦「批量校验」；仅有 1 个或没有时聚焦「单个校验」
-watch(() => props.selectedIsoFiles.length, (newCount, oldCount) => {
-  if (newCount > 1 && (oldCount === undefined || oldCount <= 1)) {
-    checksumActiveTab.value = 'batch';
-  } else if (newCount <= 1) {
-    checksumActiveTab.value = 'single';
-  }
-}, { immediate: true });
-
-watch(() => props.selectedIsoFiles, (newFiles: any[]) => {
-  if (selectedChecksumIsoIndex.value >= newFiles.length) {
-    selectedChecksumIsoIndex.value = 0;
-  }
-  calculatedHash.value = '';
-
-  // 当选择新 ISO 时，自动从缓存中查找期望值
-  if (newFiles.length > 0 && selectedChecksumIsoIndex.value < newFiles.length) {
-    const currentFile = newFiles[selectedChecksumIsoIndex.value];
-    const cachedHash = checksumCache.value[currentFile.name];
-    if (cachedHash && !expectedHashInput.value) {
-      expectedHashInput.value = cachedHash;
+watch(
+  () => props.selectedIsoFiles.length,
+  (newCount, oldCount) => {
+    if (newCount > 1 && (oldCount === undefined || oldCount <= 1)) {
+      checksumActiveTab.value = "batch";
+    } else if (newCount <= 1) {
+      checksumActiveTab.value = "single";
     }
-  }
-}, { deep: true });
+  },
+  { immediate: true }
+);
+
+watch(
+  () => props.selectedIsoFiles,
+  (newFiles: any[]) => {
+    if (selectedChecksumIsoIndex.value >= newFiles.length) {
+      selectedChecksumIsoIndex.value = 0;
+    }
+    calculatedHash.value = "";
+
+    // 当选择新 ISO 时，自动从缓存中查找期望值
+    if (newFiles.length > 0 && selectedChecksumIsoIndex.value < newFiles.length) {
+      const currentFile = newFiles[selectedChecksumIsoIndex.value];
+      const cachedHash = checksumCache.value[currentFile.name];
+      if (cachedHash && !expectedHashInput.value) {
+        expectedHashInput.value = cachedHash;
+      }
+    }
+  },
+  { deep: true }
+);
 
 watch(
   () => isCalculatingHash.value || isBatchCalculating.value,
   (verifying) => {
-    emit('update:isVerifying', verifying);
+    emit("update:isVerifying", verifying);
   }
 );
 
 function inspectSingleIso(index: number) {
   selectedChecksumIsoIndex.value = index;
-  checksumActiveTab.value = 'single';
+  checksumActiveTab.value = "single";
   isChecksumPanelExpanded.value = true;
 }
 
@@ -758,33 +831,33 @@ watch(selectedChecksumIsoIndex, () => {
     if (status && status.calculated) {
       calculatedHash.value = status.calculated;
       currentChecksumAlgo.value = status.algo || selectedAlgo.value;
-      expectedHashInput.value = status.expected || checksumCache.value[currentFile.name] || '';
+      expectedHashInput.value = status.expected || checksumCache.value[currentFile.name] || "";
     } else {
-      calculatedHash.value = '';
+      calculatedHash.value = "";
       const cachedHash = checksumCache.value[currentFile.name];
-      expectedHashInput.value = cachedHash || '';
+      expectedHashInput.value = cachedHash || "";
     }
   } else {
-    calculatedHash.value = '';
-    expectedHashInput.value = '';
+    calculatedHash.value = "";
+    expectedHashInput.value = "";
   }
 });
 
 function selectIsoForChecksum(index: number) {
   selectedChecksumIsoIndex.value = index;
-  calculatedHash.value = '';
+  calculatedHash.value = "";
 }
 
 function parseExpectedHashString(rawInput: string, currentFileName: string): string {
-  if (!rawInput) return '';
+  if (!rawInput) return "";
   const trimmed = rawInput.trim();
 
   // If it's a multi-line checksum file content (e.g. SHA256SUMS file)
-  if (trimmed.includes('\n')) {
-    const lines = trimmed.split('\n');
+  if (trimmed.includes("\n")) {
+    const lines = trimmed.split("\n");
     for (const line of lines) {
       const lineTrimmed = line.trim();
-      if (!lineTrimmed || lineTrimmed.startsWith('#')) continue;
+      if (!lineTrimmed || lineTrimmed.startsWith("#")) continue;
       // Line format: "hash_string  filename" or "hash_string *filename"
       if (currentFileName && lineTrimmed.toLowerCase().includes(currentFileName.toLowerCase())) {
         const parts = lineTrimmed.split(/\s+/);
@@ -800,7 +873,7 @@ function parseExpectedHashString(rawInput: string, currentFileName: string): str
 
 const parsedExpectedHash = computed(() => {
   const targetIdx = selectedChecksumIsoIndex.value < props.selectedIsoFiles.length ? selectedChecksumIsoIndex.value : 0;
-  const currentFileName = props.selectedIsoFiles.length > 0 ? props.selectedIsoFiles[targetIdx].name : '';
+  const currentFileName = props.selectedIsoFiles.length > 0 ? props.selectedIsoFiles[targetIdx].name : "";
   return parseExpectedHashString(expectedHashInput.value, currentFileName);
 });
 
@@ -811,7 +884,7 @@ const isHashMatching = computed(() => {
 
 function triggerSumsFilePick() {
   if (sumsFileInputRef.value) {
-    sumsFileInputRef.value.value = '';
+    sumsFileInputRef.value.value = "";
     sumsFileInputRef.value.click();
   }
 }
@@ -819,17 +892,17 @@ function triggerSumsFilePick() {
 // 解析校验文件内容，提取所有文件名->哈希值映射；支持纯哈希纯文本自动关联当前选中 ISO
 function parseChecksumFileContent(content: string, currentSelectedFileName?: string): ChecksumCache {
   const cache: ChecksumCache = {};
-  const lines = content.split('\n');
+  const lines = content.split("\n");
 
   for (const line of lines) {
     const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
+    if (!trimmed || trimmed.startsWith("#")) continue;
 
     // 支持标准格式：hash  filename 或 hash *filename 或 hash  ./path/to/filename
     const match = trimmed.match(/^([a-fA-F0-9]+)\s+\*?(.+)$/);
     if (match) {
       const [, hash, filepath] = match;
-      const filename = filepath.split('/').pop()?.trim() || filepath.trim();
+      const filename = filepath.split("/").pop()?.trim() || filepath.trim();
       cache[filename] = hash.toLowerCase();
     } else if (currentSelectedFileName && /^[a-fA-F0-9]{32,128}$/.test(trimmed)) {
       // 兼容单文件纯哈希文件（无文件名）：自动关联给当前选中的 ISO
@@ -845,7 +918,7 @@ function readFileAsText(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      resolve(e.target?.result as string || '');
+      resolve((e.target?.result as string) || "");
     };
     reader.onerror = () => {
       reject(reader.error);
@@ -858,24 +931,37 @@ function readFileAsText(file: File): Promise<string> {
 function detectChecksumAlgorithm(fileNames: string[], hashes: string[]): string | null {
   // 1. 优先检查文件名与扩展名
   for (const name of fileNames) {
-    const lower = (name || '').toLowerCase();
-    if (lower.includes('sha256') || lower.endsWith('.sha256') || lower.endsWith('.sha256sum') || lower.endsWith('.sha256sums')) return 'sha256';
-    if (lower.includes('sha512') || lower.endsWith('.sha512') || lower.endsWith('.sha512sum') || lower.endsWith('.sha512sums')) return 'sha512';
-    if (lower.includes('sha384') || lower.endsWith('.sha384') || lower.endsWith('.sha384sum')) return 'sha384';
-    if (lower.includes('sha1') || lower.endsWith('.sha1') || lower.endsWith('.sha1sum')) return 'sha1';
-    if (lower.includes('md5') || lower.endsWith('.md5') || lower.endsWith('.md5sum') || lower.endsWith('.md5sums')) return 'md5';
-    if (lower.includes('crc32') || lower.endsWith('.crc') || lower.endsWith('.sfv')) return 'crc32';
+    const lower = (name || "").toLowerCase();
+    if (
+      lower.includes("sha256") ||
+      lower.endsWith(".sha256") ||
+      lower.endsWith(".sha256sum") ||
+      lower.endsWith(".sha256sums")
+    )
+      return "sha256";
+    if (
+      lower.includes("sha512") ||
+      lower.endsWith(".sha512") ||
+      lower.endsWith(".sha512sum") ||
+      lower.endsWith(".sha512sums")
+    )
+      return "sha512";
+    if (lower.includes("sha384") || lower.endsWith(".sha384") || lower.endsWith(".sha384sum")) return "sha384";
+    if (lower.includes("sha1") || lower.endsWith(".sha1") || lower.endsWith(".sha1sum")) return "sha1";
+    if (lower.includes("md5") || lower.endsWith(".md5") || lower.endsWith(".md5sum") || lower.endsWith(".md5sums"))
+      return "md5";
+    if (lower.includes("crc32") || lower.endsWith(".crc") || lower.endsWith(".sfv")) return "crc32";
   }
 
   // 2. 次选：根据已提取到的哈希值长度进行密码学特征推断
   for (const h of hashes) {
-    const clean = (h || '').trim();
-    if (/^[a-fA-F0-9]{64}$/.test(clean)) return 'sha256';
-    if (/^[a-fA-F0-9]{128}$/.test(clean)) return 'sha512';
-    if (/^[a-fA-F0-9]{32}$/.test(clean)) return 'md5';
-    if (/^[a-fA-F0-9]{40}$/.test(clean)) return 'sha1';
-    if (/^[a-fA-F0-9]{96}$/.test(clean)) return 'sha384';
-    if (/^[a-fA-F0-9]{8}$/.test(clean)) return 'crc32';
+    const clean = (h || "").trim();
+    if (/^[a-fA-F0-9]{64}$/.test(clean)) return "sha256";
+    if (/^[a-fA-F0-9]{128}$/.test(clean)) return "sha512";
+    if (/^[a-fA-F0-9]{32}$/.test(clean)) return "md5";
+    if (/^[a-fA-F0-9]{40}$/.test(clean)) return "sha1";
+    if (/^[a-fA-F0-9]{96}$/.test(clean)) return "sha384";
+    if (/^[a-fA-F0-9]{8}$/.test(clean)) return "crc32";
   }
 
   return null;
@@ -884,13 +970,20 @@ function detectChecksumAlgorithm(fileNames: string[], hashes: string[]): string 
 // 格式化算法展示名称
 function formatAlgoDisplayName(algo: string): string {
   switch (algo.toLowerCase()) {
-    case 'sha256': return 'SHA-256';
-    case 'sha512': return 'SHA-512';
-    case 'sha384': return 'SHA-384';
-    case 'sha1': return 'SHA-1';
-    case 'md5': return 'MD5';
-    case 'crc32': return 'CRC32';
-    default: return algo.toUpperCase();
+    case "sha256":
+      return "SHA-256";
+    case "sha512":
+      return "SHA-512";
+    case "sha384":
+      return "SHA-384";
+    case "sha1":
+      return "SHA-1";
+    case "md5":
+      return "MD5";
+    case "crc32":
+      return "CRC32";
+    default:
+      return algo.toUpperCase();
   }
 }
 
@@ -911,7 +1004,7 @@ watch(expectedHashInput, (newVal) => {
         existing.expected = parsed;
         existing.algo = selectedAlgo.value;
         if (existing.calculated) {
-          existing.status = existing.calculated.toLowerCase() === parsed.toLowerCase() ? 'match' : 'mismatch';
+          existing.status = existing.calculated.toLowerCase() === parsed.toLowerCase() ? "match" : "mismatch";
         }
       }
     }
@@ -926,9 +1019,10 @@ async function handleSumsFileSelected(event: Event) {
   let totalLoaded = 0;
   let totalHashes = 0;
 
-  const currentFile = (props.selectedIsoFiles.length > 0 && selectedChecksumIsoIndex.value < props.selectedIsoFiles.length)
-    ? props.selectedIsoFiles[selectedChecksumIsoIndex.value]
-    : undefined;
+  const currentFile =
+    props.selectedIsoFiles.length > 0 && selectedChecksumIsoIndex.value < props.selectedIsoFiles.length
+      ? props.selectedIsoFiles[selectedChecksumIsoIndex.value]
+      : undefined;
 
   // 逐个读取所有选中的文件
   for (const file of files) {
@@ -955,33 +1049,33 @@ async function handleSumsFileSelected(event: Event) {
   // 显示加载结果并同步所有 ISO 的校验状态
   if (totalLoaded > 0) {
     // 自动检测校验文件对应的 Hash 算法并联动切换
-    const fileNames = files.map(f => f.name);
+    const fileNames = files.map((f) => f.name);
     const allHashes = Object.values(checksumCache.value);
     const detectedAlgo = detectChecksumAlgorithm(fileNames, allHashes);
-    let algoSwitchedMsg = '';
+    let algoSwitchedMsg = "";
 
     if (detectedAlgo && detectedAlgo !== selectedAlgo.value) {
       selectedAlgo.value = detectedAlgo;
       currentChecksumAlgo.value = detectedAlgo;
       const displayAlgo = formatAlgoDisplayName(detectedAlgo);
-      algoSwitchedMsg = `\n${t('checksum.auto_algo_switched', { algo: displayAlgo })}`;
+      algoSwitchedMsg = `\n${t("checksum.auto_algo_switched", { algo: displayAlgo })}`;
     }
 
     // 自动为当前所有文件匹配期望值
-    props.selectedIsoFiles.forEach(file => {
+    props.selectedIsoFiles.forEach((file) => {
       const cached = checksumCache.value[file.name];
       if (cached) {
         const existing = isoChecksumStatuses.value[file.name];
         if (existing && existing.calculated) {
           existing.expected = cached;
-          existing.status = existing.calculated.toLowerCase() === cached.toLowerCase() ? 'match' : 'mismatch';
+          existing.status = existing.calculated.toLowerCase() === cached.toLowerCase() ? "match" : "mismatch";
           existing.algo = selectedAlgo.value;
         } else if (!existing) {
           isoChecksumStatuses.value[file.name] = {
-            calculated: '',
+            calculated: "",
             expected: cached,
-            status: 'idle',
-            algo: selectedAlgo.value
+            status: "idle",
+            algo: selectedAlgo.value,
           };
         }
       }
@@ -990,27 +1084,33 @@ async function handleSumsFileSelected(event: Event) {
     if (props.selectedIsoFiles.length > 0 && selectedChecksumIsoIndex.value < props.selectedIsoFiles.length) {
       const currentFile = props.selectedIsoFiles[selectedChecksumIsoIndex.value];
       const cachedHash = checksumCache.value[currentFile.name];
-      expectedHashInput.value = cachedHash || '';
+      expectedHashInput.value = cachedHash || "";
     } else {
-      expectedHashInput.value = '';
+      expectedHashInput.value = "";
     }
 
-    alert(t('checksum.cache_loaded', { count: totalHashes }) + algoSwitchedMsg);
+    alert(t("checksum.cache_loaded", { count: totalHashes }) + algoSwitchedMsg);
   } else {
-    expectedHashInput.value = '';
-    alert(t('checksum.no_valid_hashes'));
+    expectedHashInput.value = "";
+    alert(t("checksum.no_valid_hashes"));
   }
 }
 
 async function handleCalculateChecksum() {
-  if (props.selectedIsoFiles.length === 0 || !canVerifyHash.value || isCalculatingHash.value || isBatchCalculating.value) return;
+  if (
+    props.selectedIsoFiles.length === 0 ||
+    !canVerifyHash.value ||
+    isCalculatingHash.value ||
+    isBatchCalculating.value
+  )
+    return;
   const targetIdx = selectedChecksumIsoIndex.value < props.selectedIsoFiles.length ? selectedChecksumIsoIndex.value : 0;
   const fileToVerify = props.selectedIsoFiles[targetIdx];
   isCalculatingHash.value = true;
   isHashCopied.value = false;
   try {
     const w = window as any;
-    if (w.go && w.go.main && w.go.main.App && typeof w.go.main.App.CalculateFileChecksum === 'function') {
+    if (w.go && w.go.main && w.go.main.App && typeof w.go.main.App.CalculateFileChecksum === "function") {
       const res = await w.go.main.App.CalculateFileChecksum(fileToVerify.path, selectedAlgo.value);
       if (res && res.hash) {
         calculatedHash.value = res.hash.toLowerCase();
@@ -1018,36 +1118,44 @@ async function handleCalculateChecksum() {
       }
     } else {
       // Standalone preview mock hash calculation
-      await new Promise(resolve => setTimeout(resolve, 500));
-      calculatedHash.value = selectedAlgo.value === 'md5'
-        ? 'e10adc3949ba59abbe56e057f20f883e'
-        : '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824';
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      calculatedHash.value =
+        selectedAlgo.value === "md5"
+          ? "e10adc3949ba59abbe56e057f20f883e"
+          : "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824";
       currentChecksumAlgo.value = selectedAlgo.value;
     }
 
     // 同步更新单个文件的状态
     if (calculatedHash.value) {
       const exp = parseExpectedHashString(expectedHashInput.value, fileToVerify.name);
-      let statusType: 'match' | 'mismatch' | 'no-expected' = 'no-expected';
+      let statusType: "match" | "mismatch" | "no-expected" = "no-expected";
       if (exp) {
-        statusType = exp.toLowerCase() === calculatedHash.value.toLowerCase() ? 'match' : 'mismatch';
+        statusType = exp.toLowerCase() === calculatedHash.value.toLowerCase() ? "match" : "mismatch";
       }
       isoChecksumStatuses.value[fileToVerify.name] = {
         calculated: calculatedHash.value,
         expected: exp,
         status: statusType,
-        algo: currentChecksumAlgo.value
+        algo: currentChecksumAlgo.value,
       };
     }
   } catch (e) {
-    console.error('Checksum calculation error:', e);
+    console.error("Checksum calculation error:", e);
   } finally {
     isCalculatingHash.value = false;
   }
 }
 
 async function handleBatchChecksum() {
-  if (!props.selectedIsoFiles || props.selectedIsoFiles.length === 0 || !canVerifyHash.value || isBatchCalculating.value || isCalculatingHash.value) return;
+  if (
+    !props.selectedIsoFiles ||
+    props.selectedIsoFiles.length === 0 ||
+    !canVerifyHash.value ||
+    isBatchCalculating.value ||
+    isCalculatingHash.value
+  )
+    return;
 
   isBatchCalculating.value = true;
   const total = props.selectedIsoFiles.length;
@@ -1061,26 +1169,27 @@ async function handleBatchChecksum() {
     const file = props.selectedIsoFiles[i];
     batchProgress.value.current = i + 1;
 
-    const expected = checksumCache.value[file.name] || '';
+    const expected = checksumCache.value[file.name] || "";
     isoChecksumStatuses.value[file.name] = {
-      calculated: '',
+      calculated: "",
       expected,
-      status: 'calculating',
-      algo: selectedAlgo.value
+      status: "calculating",
+      algo: selectedAlgo.value,
     };
 
-    let computedHash = '';
+    let computedHash = "";
     try {
-      if (w.go && w.go.main && w.go.main.App && typeof w.go.main.App.CalculateFileChecksum === 'function') {
+      if (w.go && w.go.main && w.go.main.App && typeof w.go.main.App.CalculateFileChecksum === "function") {
         const res = await w.go.main.App.CalculateFileChecksum(file.path, selectedAlgo.value);
         if (res && res.hash) {
           computedHash = res.hash.toLowerCase();
         }
       } else {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        computedHash = selectedAlgo.value === 'md5'
-          ? 'e10adc3949ba59abbe56e057f20f883e'
-          : '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824';
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        computedHash =
+          selectedAlgo.value === "md5"
+            ? "e10adc3949ba59abbe56e057f20f883e"
+            : "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824";
       }
     } catch (err) {
       console.error(`Batch checksum failed for ${file.name}:`, err);
@@ -1088,13 +1197,13 @@ async function handleBatchChecksum() {
 
     if (computedHash) {
       const isMatch = expected && computedHash === expected.toLowerCase();
-      let statusType: 'match' | 'mismatch' | 'no-expected' = 'no-expected';
+      let statusType: "match" | "mismatch" | "no-expected" = "no-expected";
       if (expected) {
         if (isMatch) {
-          statusType = 'match';
+          statusType = "match";
           matched++;
         } else {
-          statusType = 'mismatch';
+          statusType = "mismatch";
           mismatched++;
         }
       }
@@ -1102,14 +1211,14 @@ async function handleBatchChecksum() {
         calculated: computedHash,
         expected,
         status: statusType,
-        algo: selectedAlgo.value
+        algo: selectedAlgo.value,
       };
     } else {
       isoChecksumStatuses.value[file.name] = {
-        calculated: '',
+        calculated: "",
         expected,
-        status: 'mismatch',
-        algo: selectedAlgo.value
+        status: "mismatch",
+        algo: selectedAlgo.value,
       };
       mismatched++;
     }
@@ -1136,40 +1245,55 @@ function getIsoChecksumStatus(fileName: string): IsoChecksumStatus | undefined {
 
 function getIsoChecksumStatusIcon(fileName: string): string {
   const s = isoChecksumStatuses.value[fileName];
-  if (!s) return '';
+  if (!s) return "";
   switch (s.status) {
-    case 'calculating': return '⏳';
-    case 'match': return '✓';
-    case 'mismatch': return '✕';
-    case 'no-expected': return '❓';
-    default: return '';
+    case "calculating":
+      return "⏳";
+    case "match":
+      return "✓";
+    case "mismatch":
+      return "✕";
+    case "no-expected":
+      return "❓";
+    default:
+      return "";
   }
 }
 
 function getIsoChecksumStatusText(fileName: string): string {
   const s = isoChecksumStatuses.value[fileName];
-  if (!s) return '';
+  if (!s) return "";
   switch (s.status) {
-    case 'calculating': return t('checksum.status_calculating');
-    case 'match': return t('checksum.status_match');
-    case 'mismatch': return t('checksum.status_mismatch');
-    case 'no-expected': return t('checksum.status_no_expected');
-    default: return t('checksum.status_idle');
+    case "calculating":
+      return t("checksum.status_calculating");
+    case "match":
+      return t("checksum.status_match");
+    case "mismatch":
+      return t("checksum.status_mismatch");
+    case "no-expected":
+      return t("checksum.status_no_expected");
+    default:
+      return t("checksum.status_idle");
   }
 }
 
 const batchSummaryText = computed(() => {
-  if (batchProgress.value.total === 0) return '';
+  if (batchProgress.value.total === 0) return "";
   if (isBatchCalculating.value) {
-    return t('checksum.batch_verifying', { current: batchProgress.value.current, total: batchProgress.value.total });
+    return t("checksum.batch_verifying", { current: batchProgress.value.current, total: batchProgress.value.total });
   }
-  return t('checksum.batch_result', { matched: batchProgress.value.matched, mismatched: batchProgress.value.mismatched });
+  return t("checksum.batch_result", {
+    matched: batchProgress.value.matched,
+    mismatched: batchProgress.value.mismatched,
+  });
 });
 
 const isAllBatchMatched = computed(() => {
-  return batchProgress.value.total > 0 &&
-         !isBatchCalculating.value &&
-         batchProgress.value.matched === batchProgress.value.total;
+  return (
+    batchProgress.value.total > 0 &&
+    !isBatchCalculating.value &&
+    batchProgress.value.matched === batchProgress.value.total
+  );
 });
 
 function copyHashToClipboard() {
@@ -1182,15 +1306,27 @@ function copyHashToClipboard() {
 }
 
 function getFileIcon(filename: string): string {
-  const ext = filename.split('.').pop()?.toLowerCase();
+  const ext = filename.split(".").pop()?.toLowerCase();
   switch (ext) {
-    case 'iso': return '💿';
-    case 'wim': return '📦';
-    case 'img': case 'raw': return '💾';
-    case 'vhd': case 'vhdx': case 'vti': return '💽';
-    case 'efi': case 'bin': return '⚙️';
-    case 'xz': case 'gz': return '🗜️';
-    default: return '📄';
+    case "iso":
+      return "💿";
+    case "wim":
+      return "📦";
+    case "img":
+    case "raw":
+      return "💾";
+    case "vhd":
+    case "vhdx":
+    case "vti":
+      return "💽";
+    case "efi":
+    case "bin":
+      return "⚙️";
+    case "xz":
+    case "gz":
+      return "🗜️";
+    default:
+      return "📄";
   }
 }
 </script>
@@ -1390,26 +1526,34 @@ function getFileIcon(filename: string): string {
   color: var(--accent-cyan);
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 4px rgba(0, 229, 255, 0.15);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 4px rgba(0, 229, 255, 0.15);
 }
 
 .add-iso-btn:hover {
   background: linear-gradient(180deg, rgba(0, 229, 255, 0.3) 0%, rgba(0, 229, 255, 0.15) 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 3px 10px rgba(0, 229, 255, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 3px 10px rgba(0, 229, 255, 0.3);
 }
 
 [data-theme="light"] .add-iso-btn {
   background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
   border: 1px solid #38bdf8;
   color: #0284c7;
-  box-shadow: inset 0 1px 0 #ffffff, 0 1px 3px rgba(2, 132, 199, 0.1);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 1px 3px rgba(2, 132, 199, 0.1);
 }
 
 [data-theme="light"] .add-iso-btn:hover {
   background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 100%);
   border-color: #0284c7;
   color: #0369a1;
-  box-shadow: inset 0 1px 0 #ffffff, 0 3px 8px rgba(2, 132, 199, 0.2);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 3px 8px rgba(2, 132, 199, 0.2);
 }
 
 .deploy-btn {
@@ -1423,29 +1567,39 @@ function getFileIcon(filename: string): string {
   color: #070a12;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 4px 15px rgba(0, 229, 255, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 4px 15px rgba(0, 229, 255, 0.35);
 }
 
 .deploy-btn:hover:not(:disabled) {
   transform: translateY(-1.5px);
   background: linear-gradient(135deg, #38f9ff 0%, #1a8cff 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 20px rgba(0, 229, 255, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 6px 20px rgba(0, 229, 255, 0.5);
 }
 
 [data-theme="light"] .deploy-btn {
   background: linear-gradient(135deg, #0284c7 0%, #1d4ed8 100%);
   color: #ffffff;
   border: 1px solid rgba(2, 132, 199, 0.3);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 4px 14px rgba(2, 132, 199, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 4px 14px rgba(2, 132, 199, 0.35);
 }
 
 [data-theme="light"] .deploy-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, #0369a1 0%, #1e40af 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 20px rgba(2, 132, 199, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 6px 20px rgba(2, 132, 199, 0.45);
 }
 
 .iso-card {
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .iso-card.is-drag-over {
@@ -1491,8 +1645,12 @@ function getFileIcon(filename: string): string {
 }
 
 @keyframes dragBounce {
-  from { transform: translateY(0); }
-  to { transform: translateY(-5px); }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-5px);
+  }
 }
 
 .iso-empty-state {
@@ -2156,15 +2314,22 @@ function getFileIcon(filename: string): string {
   background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
   color: #ffffff;
   border: 1px solid rgba(245, 158, 11, 0.4);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 4px 15px rgba(245, 158, 11, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 4px 15px rgba(245, 158, 11, 0.3);
   opacity: 0.85;
   cursor: wait;
   animation: preflight-pulse 1.2s ease-in-out infinite;
 }
 
 @keyframes preflight-pulse {
-  0%, 100% { opacity: 0.85; }
-  50% { opacity: 0.65; }
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 0.65;
+  }
 }
 
 .preflight-spinner {
@@ -2173,20 +2338,28 @@ function getFileIcon(filename: string): string {
 }
 
 @keyframes spinner-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .deploy-btn.safe-btn {
   background: linear-gradient(135deg, #10b981 0%, #047857 100%);
   color: #ffffff;
   border: 1px solid rgba(16, 185, 129, 0.4);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 4px 15px rgba(16, 185, 129, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 .deploy-btn.safe-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, #34d399 0%, #059669 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 20px rgba(16, 185, 129, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 6px 20px rgba(16, 185, 129, 0.45);
 }
 
 .deploy-success-banner {
@@ -2362,13 +2535,17 @@ function getFileIcon(filename: string): string {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 4px 16px rgba(0, 229, 255, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 4px 16px rgba(0, 229, 255, 0.35);
 }
 
 .vm-launch-btn:hover:not(:disabled) {
   transform: translateY(-1.5px);
   background: linear-gradient(135deg, #38f9ff 0%, #1a8cff 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 6px 22px rgba(0, 229, 255, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 6px 22px rgba(0, 229, 255, 0.5);
 }
 
 .vm-launch-btn:disabled {
@@ -2383,12 +2560,17 @@ function getFileIcon(filename: string): string {
   background: linear-gradient(135deg, #0396e6 0%, #0284c7 45%, #2563eb 100%);
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 4px 16px rgba(2, 132, 199, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    0 4px 16px rgba(2, 132, 199, 0.35);
 }
 
 [data-theme="light"] .vm-launch-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, #38bdf8 0%, #0284c7 45%, #1d4ed8 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 6px 20px rgba(2, 132, 199, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 6px 20px rgba(2, 132, 199, 0.45);
 }
 
 .btn-secondary {
@@ -2740,7 +2922,7 @@ function getFileIcon(filename: string): string {
 .batch-disk-name {
   font-size: 0.75rem;
   color: var(--text-secondary);
-  font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+  font-family: "SF Mono", Monaco, "Courier New", monospace;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

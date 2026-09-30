@@ -1,7 +1,7 @@
 // Copyright (c) 2026 SnowdreamTech. All rights reserved.
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
-import type { DiskInfo } from '../components/DiskPanel.vue';
+import type { DiskInfo } from "../components/DiskPanel.vue";
 
 /**
  * UniBoot engine status (cross-platform, native pure Go implementation).
@@ -13,7 +13,7 @@ export interface UniBootStatus {
   /** Current built-in/embedded UniBoot firmware version (e.g. "1.0.0"). */
   version: string;
   /** Lightweight status code: 'ready' | 'updating' | 'offline'. */
-  code: 'ready' | 'updating' | 'offline';
+  code: "ready" | "updating" | "offline";
   /** Optional human-readable detail or diagnostics message. */
   message?: string;
 }
@@ -35,28 +35,24 @@ export interface UniBootDiskStatus {
 /**
  * Extracts UniBoot status from a given DiskInfo.
  */
-export function getDiskUniBootStatus(disk: DiskInfo | null, engineVersion = '1.0.0'): UniBootDiskStatus {
+export function getDiskUniBootStatus(disk: DiskInfo | null, engineVersion = "1.0.0"): UniBootDiskStatus {
   if (!disk) {
     return {
       installed: false,
-      version: '',
-      mode: '',
+      version: "",
+      mode: "",
       upgradeable: false,
     };
   }
 
   const anyDisk = disk as any;
   const installed = Boolean(
-    disk.unibootVersion ||
-    disk.unibootMode ||
-    anyDisk.isCloudMode ||
-    anyDisk.isRealVentoy ||
-    anyDisk.ventoy_version
+    disk.unibootVersion || disk.unibootMode || anyDisk.isCloudMode || anyDisk.isRealVentoy || anyDisk.ventoy_version
   );
 
-  const version = disk.unibootVersion || anyDisk.ventoy_version || '';
-  const mode = disk.unibootMode || (anyDisk.isCloudMode ? 'cloud' : (anyDisk.isRealVentoy ? 'hybrid' : ''));
-  const upgradeable = installed && version !== '' && version !== engineVersion;
+  const version = disk.unibootVersion || anyDisk.ventoy_version || "";
+  const mode = disk.unibootMode || (anyDisk.isCloudMode ? "cloud" : anyDisk.isRealVentoy ? "hybrid" : "");
+  const upgradeable = installed && version !== "" && version !== engineVersion;
 
   return {
     installed,

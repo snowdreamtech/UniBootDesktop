@@ -99,7 +99,8 @@ export const svSe: TranslationDict = {
   "disk.tag_boot_hybrid": "Hybridstart",
   "disk.tag_boot_thirdparty": "Tredjepartsstart",
   "confirm.cloud_to_hybrid_warn_title": "Obs: Byte till hybridläge kräver fullständig formatering",
-  "confirm.cloud_to_hybrid_warn_desc": "Den här disken är i rent molnstartläge. Ventoy-hybridläge kräver ombyggnad av MBR och partitionstabell, vilket kommer att RADERA all data och ISO-filer!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Den här disken är i rent molnstartläge. Ventoy-hybridläge kräver ombyggnad av MBR och partitionstabell, vilket kommer att RADERA all data och ISO-filer!",
   "disk.tag_ssd": "Bärbar SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Krypterad enhet",
@@ -127,9 +128,11 @@ export const svSe: TranslationDict = {
   "log.level_error": "FEL",
   "log.level_debug": "Felsökning",
   "safe.title_cloud": "Befintlig Ventoy/UniBoot-enhet upptäckt (Molnläge uppdaterar endast ESP-partitionen)",
-  "safe.desc_cloud": "Molnläge bevarar UNIBOOT dubbelpartitionslayout. Uppdatering av ESP lämnar alla ISO-filer och användardata intakta!",
+  "safe.desc_cloud":
+    "Molnläge bevarar UNIBOOT dubbelpartitionslayout. Uppdatering av ESP lämnar alla ISO-filer och användardata intakta!",
   "safe.title_hybrid": "Befintlig Ventoy-enhet upptäckt (Uppdatering på plats i hybridläge)",
-  "safe.desc_hybrid": "Hybridläge bevarar alla befintliga ISO-filer utan formatering och injicerar UniBoot mörkt tema och molnmeny säkert!",
+  "safe.desc_hybrid":
+    "Hybridläge bevarar alla befintliga ISO-filer utan formatering och injicerar UniBoot mörkt tema och molnmeny säkert!",
   "common.optional": "Valfritt",
   "common.optional_test": "Valfritt test",
   "iso.title": "Lokala systemavbildningskällor (ISO / IMG / WIM / VHD)",
@@ -144,7 +147,8 @@ export const svSe: TranslationDict = {
   "iso.drag_unsupported": "Inga avbildningsfiler som stöds hittades (.iso, .wim, .img osv.)",
   "iso.preflight_title": "Kontroll före skrivning",
   "iso.conflict_title": "Filnamnet finns redan",
-  "iso.conflict_desc": "En fil med samma namn finns redan i mål-USB-enhetens iso-mapp. Välj åtgärd. Hashvärden jämförs inte.",
+  "iso.conflict_desc":
+    "En fil med samma namn finns redan i mål-USB-enhetens iso-mapp. Välj åtgärd. Hashvärden jämförs inte.",
   "iso.conflict_action": "Åtgärd",
   "iso.conflict_keep_both": "Behåll",
   "iso.conflict_replace": "Skriv över",
@@ -154,13 +158,16 @@ export const svSe: TranslationDict = {
   "iso.conflict_confirm": "Bekräfta och fortsätt",
   "iso.preflight_failed": "Kontrollen före skrivning misslyckades",
   "deploy.title": "Skapa startbar enhet och QEMU-test",
-  "deploy.desc_cloud": "Ren iPXE molnstart • Ultrasnabb installation med två partitioner och multi-arch iPXE-nätverksfirmware.",
+  "deploy.desc_cloud":
+    "Ren iPXE molnstart • Ultrasnabb installation med två partitioner och multi-arch iPXE-nätverksfirmware.",
   "deploy.desc_hybrid": "Ventoy CLI lokal motor • Ventoy hybrid-partitionsinstallation med lokal ISO-hantering.",
   "deploy.target_device": "Målenhet:",
   "deploy.batch_target": "{count} USB-enhet(er) valda",
   "deploy.start_create": "Skapa startdisk",
-  "deploy.tip_batch_update_all": "Säker uppdatering: Alla {count} valda USB-enheter uppdateras direkt (data & ISO bevaras)",
-  "deploy.tip_batch_mixed": "Blandad installation: {bootCount} enheter uppdateras direkt, {blankCount} enheter formateras om",
+  "deploy.tip_batch_update_all":
+    "Säker uppdatering: Alla {count} valda USB-enheter uppdateras direkt (data & ISO bevaras)",
+  "deploy.tip_batch_mixed":
+    "Blandad installation: {bootCount} enheter uppdateras direkt, {blankCount} enheter formateras om",
   "deploy.start_update": "Uppgradering på plats (Datasäker)",
   "deploy.batch_create": "Starta gruppskapande ({count} enheter)",
   "deploy.writing": "Skriver boot-firmwarepaket...",
@@ -175,18 +182,22 @@ export const svSe: TranslationDict = {
   "deploy.tip_writing": "Skriver startfirmware...",
   "deploy.tip_select_single": "Vänligen välj en mål-USB-enhet först",
   "deploy.tip_select_batch": "Kontrollera mål-USB-enheter för batchdistribution",
-  "deploy.tip_macos_unsupported": "macOS stödjer inte nyformatering i hybridläge (använd molnläge eller initiera på Win/Linux först)",
+  "deploy.tip_macos_unsupported":
+    "macOS stödjer inte nyformatering i hybridläge (använd molnläge eller initiera på Win/Linux först)",
   "deploy.tip_need_ventoy": "Hybridläge kräver lokala Ventoy CLI-verktyg. Vi rekommenderar Molnläge!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Fresh-formatering stöds inte",
-  "deploy.macos_alert_desc": "Officiella Ventoy stödjer inte att köra formateringsprogrammet på macOS ännu. För att skapa en ny [Hybrid-disk] krävs Ventoy CLI. Det rekommenderas att använda [Molnläge (1-sekunds molnbootdisk)]!",
+  "deploy.macos_alert_desc":
+    "Officiella Ventoy stödjer inte att köra formateringsprogrammet på macOS ännu. För att skapa en ny [Hybrid-disk] krävs Ventoy CLI. Det rekommenderas att använda [Molnläge (1-sekunds molnbootdisk)]!",
   "deploy.no_ventoy_title": "Ventoy CLI körbar ej upptäckt",
-  "deploy.no_ventoy_desc": "Skapande av [Hybrid-disk] kräver lokalt installerad Ventoy CLI. Välj det stödda [Molnläget]!",
+  "deploy.no_ventoy_desc":
+    "Skapande av [Hybrid-disk] kräver lokalt installerad Ventoy CLI. Välj det stödda [Molnläget]!",
   "deploy.result_batch_success": "1-sekunds molninstallationsdisk distribuerades till {count} disk(ar)!",
   "deploy.result_success": "Läge {mode} distribuerades till {targets}",
   "deploy.alert_success": "Distributionen lyckades!",
   "deploy.safely_eject_btn": "Mata ut USB-enhet säkert",
   "deploy.success_banner_title": "Startenhet skapad med framgång!",
-  "deploy.success_banner_desc": "Startfiler och fast programvara har skrivits. Mata ut säkert innan du kopplar bort för att förhindra dataförlust.",
+  "deploy.success_banner_desc":
+    "Startfiler och fast programvara har skrivits. Mata ut säkert innan du kopplar bort för att förhindra dataförlust.",
   "deploy.toast_auto_ejected": "Klart! Automatisk säker utmatning av {count} USB-enheter.",
   "deploy.confirm_auto_eject_title": "Skrivning slutförd — Mata ut säkert?",
   "deploy.confirm_auto_eject_desc": "All data har skrivits säkert. Vill du mata ut USB-enheten säkert nu?",
@@ -225,7 +236,8 @@ export const svSe: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Klicka först för att välja en USB-enhet från den vänstra panelen!",
-  "vm.toast_not_installed": "QEMU-emulatorn hittades inte! Installera QEMU (brygginstallera qemu eller portinstallera qemu)",
+  "vm.toast_not_installed":
+    "QEMU-emulatorn hittades inte! Installera QEMU (brygginstallera qemu eller portinstallera qemu)",
   "vm.cfg_secure_boot": "SecureBoot-simulering",
   "vm.cfg_accel": "Hårdvaruacceleration",
   "vm.cfg_ram": "RAM-allokering",
@@ -279,7 +291,8 @@ export const svSe: TranslationDict = {
   "settings.ventoy_timeout": "Ventoy Menu Timeout (sekunder):",
   "confirm.title": "High-Risk Format Varning",
   "confirm.warning_title": "Varning: Formatting will erase all data!",
-  "confirm.warning_desc": "Den valda USB-enheten kommer att ompartitioneras och formateras. Alla befintliga filer kommer att raderas helt. Se till att du har säkerhetskopierat viktig data!",
+  "confirm.warning_desc":
+    "Den valda USB-enheten kommer att ompartitioneras och formateras. Alla befintliga filer kommer att raderas helt. Se till att du har säkerhetskopierat viktig data!",
   "confirm.mode_title": "Implementeringsläge:",
   "confirm.fs_title": "Målfilsystem:",
   "confirm.disks_title": "USB-enheter att formatera ({count}):",
@@ -289,11 +302,14 @@ export const svSe: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Bekräftaation",
   "confirm.title_danger": "Format Varning: Disk Initialization",
   "confirm.safe_banner_title": "Inkrementell uppdatering på plats (datasäker)",
-  "confirm.safe_banner_desc": "Ventoy / UniBoot startstruktur upptäckt på målenheten. Systemet kommer att utföra ett inkrementellt uppdateringsformat som hoppar över. Alla befintliga filer och ISO:er är 100% bevarade!",
-  "confirm.mixed_banner_title": "Smart blandat läge: uppdatering på plats för startenheter, formatering för tomma enheter",
+  "confirm.safe_banner_desc":
+    "Ventoy / UniBoot startstruktur upptäckt på målenheten. Systemet kommer att utföra ett inkrementellt uppdateringsformat som hoppar över. Alla befintliga filer och ISO:er är 100% bevarade!",
+  "confirm.mixed_banner_title":
+    "Smart blandat läge: uppdatering på plats för startenheter, formatering för tomma enheter",
   "confirm.mixed_banner_desc": "{ventoyCount} startenheter och {blankCount} tomma enheter valda.",
   "confirm.danger_banner_title": "Varning: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "När du skriver ompartitioneras och formateras målenheten (MBR/GPT). Alla befintliga filer på utvalda enheter kommer att raderas helt!",
+  "confirm.danger_banner_desc":
+    "När du skriver ompartitioneras och formateras målenheten (MBR/GPT). Alla befintliga filer på utvalda enheter kommer att raderas helt!",
   "confirm.summary_title": "Målenheter för startdistribution:",
   "confirm.smart_safe_tag": "Smart skydd",
   "confirm.ventoy_group_title": "Uppgraderingsenheter på plats (alla ISO:er bevarade):",
@@ -312,9 +328,12 @@ export const svSe: TranslationDict = {
   "confirm.will_format": "Fullständig formatering",
   "confirm.no_format": "Intelligent uppgradering på plats",
   "deploy.toast_target_changed": "Den valda måldisken har ändrats eller är inte längre tillgänglig. Skanna igen.",
-  "deploy.toast_some_disks_removed": "{count} otillgängliga diskar borttagna automatiskt, fortsätter med återstående diskar",
-  "deploy.error_system_disk_blocked": "⛔ Blockerad: {disks} är en systemdisk. Det går inte att distribuera USB-startdisk till systemenheten!",
-  "deploy.error_readonly_disk": "🔒 Skrivskyddad: {disks} är skrivskyddad. Ta bort skrivskyddet eller använd en annan USB",
+  "deploy.toast_some_disks_removed":
+    "{count} otillgängliga diskar borttagna automatiskt, fortsätter med återstående diskar",
+  "deploy.error_system_disk_blocked":
+    "⛔ Blockerad: {disks} är en systemdisk. Det går inte att distribuera USB-startdisk till systemenheten!",
+  "deploy.error_readonly_disk":
+    "🔒 Skrivskyddad: {disks} är skrivskyddad. Ta bort skrivskyddet eller använd en annan USB",
   "deploy.start_cloud_create": "Skapa molnstartdisk",
   "deploy.batch_update": "Starta säker gruppuppdatering ({count} enheter)",
   "deploy.batch_mixed": "Starta blandad gruppinstallation ({count} enheter)",
@@ -445,8 +464,10 @@ export const svSe: TranslationDict = {
   "diag.action_reformat_title": "Omformatera (reformat)",
   "diag.action_remount_title": "Återmontera (remount)",
   "diag.action_retry_title": "Försök igen (retry)",
-  "diag.action_reformat_desc": "Avbrott i skrivningen skadade partitionstabellen eller filsystemet. Ny omformatering rekommenderas.",
-  "diag.action_remount_desc": "Målets monteringssökväg kopplades från under skrivning. Sätt i USB-enheten igen eller återmontera volymen.",
+  "diag.action_reformat_desc":
+    "Avbrott i skrivningen skadade partitionstabellen eller filsystemet. Ny omformatering rekommenderas.",
+  "diag.action_remount_desc":
+    "Målets monteringssökväg kopplades från under skrivning. Sätt i USB-enheten igen eller återmontera volymen.",
   "diag.action_retry_desc": "Miljön och enhetens status är intakta. Du kan säkert försöka installera igen.",
   "about.updating": "Uppdaterar ({progress}%)",
   "about.updateTo": "Onlineuppdatering till {tag}",
@@ -463,7 +484,8 @@ export const svSe: TranslationDict = {
   "dialog.textFilesFilter": "Textfiler (*.txt)",
   "dialog.allFilesFilter": "Alla filer (*.*)",
   "dialog.selectIsoTitle": "Välj systemavbildningsfiler (*.iso, *.wim, *.img osv.)",
-  "dialog.ventoyFilter": "Ventoy-källavbildningar (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy-källavbildningar (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Beräkna Hash",
   "checksum.calculating": "Beräknar Hash...",
   "checksum.algo_label": "Algoritm",
@@ -509,7 +531,8 @@ export const svSe: TranslationDict = {
   "privilege.modal_title": "Administratörsbehörighet krävs",
   "privilege.modal_subtitle": "Systemauktorisering krävs för att läsa startdata och skriva till diskar",
   "privilege.reason_title": "Varför krävs administratörsbehörighet?",
-  "privilege.reason_desc": "Operativsystemet isolerar råsektorer och EFI-partitioner. Auktorisering möjliggör direkt identifiering och säker skapande.",
+  "privilege.reason_desc":
+    "Operativsystemet isolerar råsektorer och EFI-partitioner. Auktorisering möjliggör direkt identifiering och säker skapande.",
   "privilege.scope_title": "Åtkomstomfång",
   "privilege.scope_desc": "Strikt begränsat till valda externa USB-enheter. Interna systemdiskar berörs aldrig.",
   "privilege.safety_title": "Säkerhet & Transparens",

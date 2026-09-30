@@ -149,4 +149,3 @@ func (d *KVMDriver) Launch(ctx context.Context, diskPath string, bootMode string
 func (d *KVMDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
 	return d.Launch(ctx, diskPath, cfg.BootMode)
 }
-

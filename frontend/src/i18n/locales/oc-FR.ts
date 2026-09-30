@@ -24,7 +24,8 @@ export const ocFr: TranslationDict = {
   "common.langAuto": "Lenga (Auto)",
   "common.lang": "Lenga",
   "vm.startSuccess": "Simulacion de maquina virtuala aviada amb capitada pel disc : {disk} ({device})",
-  "vm.backendNotReady": "L'API de Backend pas prèsta : las ligasons Wails en cargament, mercés de reaviar l'aplicacion UniBoot.",
+  "vm.backendNotReady":
+    "L'API de Backend pas prèsta : las ligasons Wails en cargament, mercés de reaviar l'aplicacion UniBoot.",
   "vm.demoModeStart": "[Mode Demò] Començament de la verificacion del simulator QEMU: {disk} ({device})",
   "vm.startFailed": "Fracàs al lançar lo simulator QEMU : {error}",
   "disk.writingImageProgress": "Escritura de l'imatge ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -99,7 +100,8 @@ export const ocFr: TranslationDict = {
   "disk.tag_boot_hybrid": "Aviada Ibrida",
   "disk.tag_boot_thirdparty": "Aviada Tèrça",
   "confirm.cloud_to_hybrid_warn_title": "Avís: Bascular en mòde Ibrid requerís un formatatge complet",
-  "confirm.cloud_to_hybrid_warn_desc": "Aqueste disc es en mòde Aviada Nívol pur. Lo mòde Ibrid Ventoy requerís de tornar bastir lo MBR e la taula de particions, çò que SUPRIMIRÀ totas las donadas e imatges ISO!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Aqueste disc es en mòde Aviada Nívol pur. Lo mòde Ibrid Ventoy requerís de tornar bastir lo MBR e la taula de particions, çò que SUPRIMIRÀ totas las donadas e imatges ISO!",
   "disk.tag_ssd": "SSD portatil",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Unitat chifrada",
@@ -127,13 +129,16 @@ export const ocFr: TranslationDict = {
   "log.level_error": "ERROR",
   "log.level_debug": "Desbugatge",
   "safe.title_cloud": "Lectur Ventoy/UniBoot existent detectat (Lo mòde Cloud reflasca sonque la particion ESP)",
-  "safe.desc_cloud": "Lo mòde Cloud conserva la disposicion UNIBOOT. Lo refrescament de l'ESP diriga cap al menú sens tocar als ISOs!",
+  "safe.desc_cloud":
+    "Lo mòde Cloud conserva la disposicion UNIBOOT. Lo refrescament de l'ESP diriga cap al menú sens tocar als ISOs!",
   "safe.title_hybrid": "Lectur Ventoy existent detectat (Meza a jorn sus plaça en mòde Hibrid)",
-  "safe.desc_hybrid": "Lo mòde Hibrid conserva tots los fichièrs ISO sens formatar, en injectant lo temà escur de UniBoot e lo menú Cloud!",
+  "safe.desc_hybrid":
+    "Lo mòde Hibrid conserva tots los fichièrs ISO sens formatar, en injectant lo temà escur de UniBoot e lo menú Cloud!",
   "common.optional": "Opcionau",
   "common.optional_test": "Test opcionau",
   "iso.title": "Fonts d'imatge del sistèma local (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Apondre de fichièrs ISO per una còpia automatica dins lo repertòri /UNIBOOT/iso/ per l'arrenjament dirècte Ventoy / UniBoot.",
+  "iso.desc":
+    "Apondre de fichièrs ISO per una còpia automatica dins lo repertòri /UNIBOOT/iso/ per l'arrenjament dirècte Ventoy / UniBoot.",
   "iso.add_btn": "Apondre de fichièrs d'imatge",
   "iso.empty_title": "Clicatz per apondre de fichièrs d'imatge (Suporta la seleccion unica o per lot)",
   "iso.empty_sub": "Pren en carga los formats .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -144,7 +149,8 @@ export const ocFr: TranslationDict = {
   "iso.drag_unsupported": "Cap de fichièr imatge pres en carga detectat (.iso, .wim, .img, etc.)",
   "iso.preflight_title": "Verificacion abans de l’escritura",
   "iso.conflict_title": "Nom de fichièr ja present",
-  "iso.conflict_desc": "Un fichièr amb lo meteis nom existís ja dins lo repertòri iso de l’USB cibla. Causissètz una accion. Los hash son pas comparats.",
+  "iso.conflict_desc":
+    "Un fichièr amb lo meteis nom existís ja dins lo repertòri iso de l’USB cibla. Causissètz una accion. Los hash son pas comparats.",
   "iso.conflict_action": "Accion",
   "iso.conflict_keep_both": "Conservar",
   "iso.conflict_replace": "Remplaçar",
@@ -154,13 +160,16 @@ export const ocFr: TranslationDict = {
   "iso.conflict_confirm": "Confirmar e contunhar",
   "iso.preflight_failed": "La verificacion abans de l’escritura a fracassat",
   "deploy.title": "Creacion de disc d'amorsatge e test QEMU",
-  "deploy.desc_cloud": "Amorsatge nívol iPXE pur • Configuracion ultra-rapida de doas particions amb firmware ret iPXE.",
+  "deploy.desc_cloud":
+    "Amorsatge nívol iPXE pur • Configuracion ultra-rapida de doas particions amb firmware ret iPXE.",
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuracion de particion hibrida Ventoy amb gestion ISO locala.",
   "deploy.target_device": "Dispositiu cibla:",
   "deploy.batch_target": "{count} clau(s) USB seleccionada(s)",
   "deploy.start_create": "Crear un disc de darrancament",
-  "deploy.tip_batch_update_all": "Mesa a jorn sens pèrda en lòt : Totas las {count} claus seleccionadas seràn mesas a jorn al luòc",
-  "deploy.tip_batch_mixed": "Desplaçament mixte en lòt : {bootCount} clau(s) mesa a jorn sens pèrda, {blankCount} clau(s) formatatge complet",
+  "deploy.tip_batch_update_all":
+    "Mesa a jorn sens pèrda en lòt : Totas las {count} claus seleccionadas seràn mesas a jorn al luòc",
+  "deploy.tip_batch_mixed":
+    "Desplaçament mixte en lòt : {bootCount} clau(s) mesa a jorn sens pèrda, {blankCount} clau(s) formatatge complet",
   "deploy.start_update": "Mesa a jorn en plaça (Data Safe)",
   "deploy.batch_create": "Aviar lo desplegament per lots ({count} discs)",
   "deploy.writing": "Escriure de paquets de micrologicial d'arrenjament...",
@@ -175,21 +184,27 @@ export const ocFr: TranslationDict = {
   "deploy.tip_writing": "Redaccion de micrologicial d'arrenjament...",
   "deploy.tip_select_single": "Seleccionatz d'en primièr una unitat USB cibla",
   "deploy.tip_select_batch": "Mercés de verificar las unitats USB ciblas pel desplegament per lots",
-  "deploy.tip_macos_unsupported": "macOS supòrta pas lo formatatge inicial en Mòde Ibrid (utilizatz lo Mòde Núvol o inicializatz sus Win/Linux d'en primièr)",
+  "deploy.tip_macos_unsupported":
+    "macOS supòrta pas lo formatatge inicial en Mòde Ibrid (utilizatz lo Mòde Núvol o inicializatz sus Win/Linux d'en primièr)",
   "deploy.tip_need_ventoy": "Lo Mòde Ibrid demanda d'aisines localas Ventoy CLI. Recomandam lo Mòde Núvol !",
   "deploy.macos_alert_title": "MacOS Ventoy CLI Formatatge novèl pas suportat",
-  "deploy.macos_alert_desc": "Lo Ventoy oficial supòrta pas encara l'execucion del programa de formatatge sus macOS. Per crear un novèl [Disque Ibrid] es necessari Ventoy CLI. Es recomandat d'utilizar lo [Mòde Núvol (disque d'amorsatge núvol 1s)] !",
+  "deploy.macos_alert_desc":
+    "Lo Ventoy oficial supòrta pas encara l'execucion del programa de formatatge sus macOS. Per crear un novèl [Disque Ibrid] es necessari Ventoy CLI. Es recomandat d'utilizar lo [Mòde Núvol (disque d'amorsatge núvol 1s)] !",
   "deploy.no_ventoy_title": "Executable de Ventoy CLI pas detectat",
-  "deploy.no_ventoy_desc": "La creacion d'un [Disque Ibrid] demanda Ventoy CLI installat localament. Causissètz lo [Mòde Núvol] suportat !",
+  "deploy.no_ventoy_desc":
+    "La creacion d'un [Disque Ibrid] demanda Ventoy CLI installat localament. Causissètz lo [Mòde Núvol] suportat !",
   "deploy.result_batch_success": "Disc d'installacion sul nívol en 1 s desplegat amb capitada sus {count} disc(s) !",
   "deploy.result_success": "Mòde {mode} desplegat amb capitada sus {targets}",
   "deploy.alert_success": "Desplegament reüssit !",
   "deploy.safely_eject_btn": "Ejectar l'unitat USB en seguretat",
   "deploy.success_banner_title": "Unitat d'amorsatge creada amb succès !",
-  "deploy.success_banner_desc": "Fichièrs d'aviada e microprogramari escriches. Ejectatz en tota seguretat abans de desbrancar per evitar tota pèrda de donadas.",
-  "deploy.toast_auto_ejected": "Creacion acabada ! {count} clau(s) USB ejectada(s) en seguretat. Totas las donadas son salvadas.",
+  "deploy.success_banner_desc":
+    "Fichièrs d'aviada e microprogramari escriches. Ejectatz en tota seguretat abans de desbrancar per evitar tota pèrda de donadas.",
+  "deploy.toast_auto_ejected":
+    "Creacion acabada ! {count} clau(s) USB ejectada(s) en seguretat. Totas las donadas son salvadas.",
   "deploy.confirm_auto_eject_title": "Escritura acabada — Ejectar en seguretat ?",
-  "deploy.confirm_auto_eject_desc": "Toteis lei donadas son estadas escritas amb succès. Volètz ejectar l'unitat USB en seguretat ara ?",
+  "deploy.confirm_auto_eject_desc":
+    "Toteis lei donadas son estadas escritas amb succès. Volètz ejectar l'unitat USB en seguretat ara ?",
   "deploy.confirm_auto_eject_yes": "Ejectar en seguretat",
   "deploy.confirm_auto_eject_no": "Pas ara",
   "deploy.alert_fail": "Fracàs del desplegament :",
@@ -225,7 +240,8 @@ export const ocFr: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Mercés de clicar per seleccionar una unitat USB cibla del panèl esquèrra d'en primièr!",
-  "vm.toast_not_installed": "L'emulator QEMU pas trobat ! Mercés de installar QEMU (brew install qemu o port install qemu)",
+  "vm.toast_not_installed":
+    "L'emulator QEMU pas trobat ! Mercés de installar QEMU (brew install qemu o port install qemu)",
   "vm.cfg_secure_boot": "Simulation SecureBoot",
   "vm.cfg_accel": "Accélération matérielle",
   "vm.cfg_ram": "Allocation RAM",
@@ -279,7 +295,8 @@ export const ocFr: TranslationDict = {
   "settings.ventoy_timeout": "Temps d'espèra del menú Ventoy (Segondas):",
   "confirm.title": "High-Risk Format Avertiment",
   "confirm.warning_title": "Avertiment: Formatting will erase all data!",
-  "confirm.warning_desc": "La unitat USB seleccionada serà reparticionada e formatada. Totes los fichièrs existents seràn completament escafats. Asseguratz-vos d'aver fach una còpia de seguretat de donadas importantas!",
+  "confirm.warning_desc":
+    "La unitat USB seleccionada serà reparticionada e formatada. Totes los fichièrs existents seràn completament escafats. Asseguratz-vos d'aver fach una còpia de seguretat de donadas importantas!",
   "confirm.mode_title": "Mòde de desplegament :",
   "confirm.fs_title": "Sistèma de fichièrs cibla :",
   "confirm.disks_title": "Las discs a formatar ({count}):",
@@ -289,11 +306,15 @@ export const ocFr: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Confirmaration",
   "confirm.title_danger": "Format Avertiment: Disk Initialization",
   "confirm.safe_banner_title": "Avís de mesa a jorn incrementala en plaça (Data Safe)",
-  "confirm.safe_banner_desc": "Estructura d'arrenjament Ventoy / UniBoot detectada sus unitat cibla. Lo sistèma realizarà una mesa a jorn incrementala en sautant lo format. Totes los fichièrs e ISO existents son 100% conservats!",
-  "confirm.mixed_banner_title": "Mòde mixte intelligent: Mesa a jorn en plaça per las discs d'arrenjament, format per las discs blancas",
-  "confirm.mixed_banner_desc": "Seleccionat {ventoyCount} disc(s) d'arrenjament(s) (mesa a jorn en plaça) e {blankCount} disc(s) blanc(s) (Format complet).",
+  "confirm.safe_banner_desc":
+    "Estructura d'arrenjament Ventoy / UniBoot detectada sus unitat cibla. Lo sistèma realizarà una mesa a jorn incrementala en sautant lo format. Totes los fichièrs e ISO existents son 100% conservats!",
+  "confirm.mixed_banner_title":
+    "Mòde mixte intelligent: Mesa a jorn en plaça per las discs d'arrenjament, format per las discs blancas",
+  "confirm.mixed_banner_desc":
+    "Seleccionat {ventoyCount} disc(s) d'arrenjament(s) (mesa a jorn en plaça) e {blankCount} disc(s) blanc(s) (Format complet).",
   "confirm.danger_banner_title": "Avertiment: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "L'escritura tornarà particionar e formatar lo periferic cibla (MBR/GPT). Totes los fichièrs existents sus de disc(s) seleccionats seràn completament escafats !",
+  "confirm.danger_banner_desc":
+    "L'escritura tornarà particionar e formatar lo periferic cibla (MBR/GPT). Totes los fichièrs existents sus de disc(s) seleccionats seràn completament escafats !",
   "confirm.summary_title": "Dics cibla per lo desplegament d'arrenjament :",
   "confirm.smart_safe_tag": "Proteccion Intelligenta",
   "confirm.ventoy_group_title": "Unitats de mesa a jorn en plaça (Totas las ISOs conservadas):",
@@ -311,10 +332,14 @@ export const ocFr: TranslationDict = {
   "confirm.no": "Anullar",
   "confirm.will_format": "Formatatge complet",
   "confirm.no_format": "Mesa a jorn intelligenta in-situ",
-  "deploy.toast_target_changed": "Lo disque de destinacion seleccionat a cambiat o es pas mai disponible. Tornatz scanar.",
-  "deploy.toast_some_disks_removed": "{count} disc(s) indisponible(s) levat(s) automaticament, contunhament amb los disques restants",
-  "deploy.error_system_disk_blocked": "⛔ Blocat : {disks} es un disc del sistèma. Impossible de desplegar un disc d'aviada USB sul disc del sistèma !",
-  "deploy.error_readonly_disk": "🔒 Protegit en escritura : {disks} es en lectura sola. Levatz la proteccion en escritura o utilizatz una clau USB diferenta",
+  "deploy.toast_target_changed":
+    "Lo disque de destinacion seleccionat a cambiat o es pas mai disponible. Tornatz scanar.",
+  "deploy.toast_some_disks_removed":
+    "{count} disc(s) indisponible(s) levat(s) automaticament, contunhament amb los disques restants",
+  "deploy.error_system_disk_blocked":
+    "⛔ Blocat : {disks} es un disc del sistèma. Impossible de desplegar un disc d'aviada USB sul disc del sistèma !",
+  "deploy.error_readonly_disk":
+    "🔒 Protegit en escritura : {disks} es en lectura sola. Levatz la proteccion en escritura o utilizatz una clau USB diferenta",
   "deploy.start_cloud_create": "Crear un disc de darrancament en la Nívol",
   "deploy.batch_update": "Començar la mesa a jorn en lòt sens pèrda de donadas ({count} claus USB)",
   "deploy.batch_mixed": "Començar lo desplaçament mixte en lòt ({count} claus USB)",
@@ -445,9 +470,12 @@ export const ocFr: TranslationDict = {
   "diag.action_reformat_title": "Tornar formatar (reformat)",
   "diag.action_remount_title": "Tornar montar (remount)",
   "diag.action_retry_title": "Tornar ensajar (retry)",
-  "diag.action_reformat_desc": "L'interrupcion de l'escritura a malahat la taula de particions o lo sistèma de fichièrs. Es recomandat de tornar formatar.",
-  "diag.action_remount_desc": "Lo camin de montatge de destinacion es estat desconnectat pendent l'escritura. Tornatz inserir l'unitat USB o tornatz montar lo volum.",
-  "diag.action_retry_desc": "L'environament e l'estat del periferic son intactes. Podètz tornar ensajar l'installacion en seguretat.",
+  "diag.action_reformat_desc":
+    "L'interrupcion de l'escritura a malahat la taula de particions o lo sistèma de fichièrs. Es recomandat de tornar formatar.",
+  "diag.action_remount_desc":
+    "Lo camin de montatge de destinacion es estat desconnectat pendent l'escritura. Tornatz inserir l'unitat USB o tornatz montar lo volum.",
+  "diag.action_retry_desc":
+    "L'environament e l'estat del periferic son intactes. Podètz tornar ensajar l'installacion en seguretat.",
   "about.updating": "Actualizacion ({progress}%)",
   "about.updateTo": "Mesa a jorn en linha cap a {tag}",
   "about.downloading": "Telecargament {progress}%",
@@ -463,7 +491,8 @@ export const ocFr: TranslationDict = {
   "dialog.textFilesFilter": "Fichièrs tèxte (*.txt)",
   "dialog.allFilesFilter": "Totes los fichièrs (*.*)",
   "dialog.selectIsoTitle": "Seleccionar de fichièrs d'imatge sistèma (*.iso, *.wim, *.img, etc.)",
-  "dialog.ventoyFilter": "Imatges font Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Imatges font Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Calcular lo hash",
   "checksum.calculating": "Calcul del hash en cors...",
   "checksum.algo_label": "Algoritme",
@@ -507,13 +536,17 @@ export const ocFr: TranslationDict = {
   "privilege.status_standard": "Non autorizat",
   "privilege.btn_elevate": "Demandar l'accès administrator",
   "privilege.modal_title": "Autorizacion d'administrator requerida",
-  "privilege.modal_subtitle": "Autorizacion del sistèma requerida per legir las donadas d'amorsatge e escriure suls disques",
+  "privilege.modal_subtitle":
+    "Autorizacion del sistèma requerida per legir las donadas d'amorsatge e escriure suls disques",
   "privilege.reason_title": "Per que cal de privilègis d'administrator ?",
-  "privilege.reason_desc": "Lo sistèma operatiu isola los sectors bruts e las particions EFI. L'autorizacion permet la deteccion dirècta e la creacion segura.",
+  "privilege.reason_desc":
+    "Lo sistèma operatiu isola los sectors bruts e las particions EFI. L'autorizacion permet la deteccion dirècta e la creacion segura.",
   "privilege.scope_title": "Perimètre d'accès",
-  "privilege.scope_desc": "Estricteament limitat a las claus USB extèrnas seleccionadas. Los disques intèrnes son pas jamai tocats.",
+  "privilege.scope_desc":
+    "Estricteament limitat a las claus USB extèrnas seleccionadas. Los disques intèrnes son pas jamai tocats.",
   "privilege.safety_title": "Seguretat e transparéncia",
-  "privilege.safety_desc": "L'inspeccion es unicament en lectura sola e pas destructiva; lo còdi font es totalament dobèrt.",
+  "privilege.safety_desc":
+    "L'inspeccion es unicament en lectura sola e pas destructiva; lo còdi font es totalament dobèrt.",
   "privilege.confirm_btn": "Autorizar ara",
   "privilege.cancel_btn": "Anullar",
   "privilege.success_msg": "Privilègis d'administrator acordats",

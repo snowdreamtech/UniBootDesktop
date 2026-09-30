@@ -217,4 +217,3 @@ func TestApp_UniBootOperations(t *testing.T) {
 	appInfo := app.GetAppInfo()
 	assert.Equal(t, env.ProjectName, appInfo.ProjectName)
 }
-

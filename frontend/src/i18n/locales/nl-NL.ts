@@ -99,7 +99,8 @@ export const nlNl: TranslationDict = {
   "disk.tag_boot_hybrid": "Hybride-opstart",
   "disk.tag_boot_thirdparty": "Opstart van derden",
   "confirm.cloud_to_hybrid_warn_title": "Let op: overschakelen naar hybride modus vereist volledige formattering",
-  "confirm.cloud_to_hybrid_warn_desc": "Deze schijf staat in de pure cloud-opstartmodus. Ventoy hybride modus vereist het opnieuw opbouwen van de MBR en partitietabel, waardoor alle gegevens en ISO's worden gewist!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Deze schijf staat in de pure cloud-opstartmodus. Ventoy hybride modus vereist het opnieuw opbouwen van de MBR en partitietabel, waardoor alle gegevens en ISO's worden gewist!",
   "disk.tag_ssd": "Draagbare SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Gecodeerde schijf",
@@ -127,13 +128,16 @@ export const nlNl: TranslationDict = {
   "log.level_error": "FOUT",
   "log.level_debug": "Foutopsporing",
   "safe.title_cloud": "Bestaande Ventoy/UniBoot-schijf gedetecteerd (Cloudmodus vernieuwt alleen ESP-partitie)",
-  "safe.desc_cloud": "Cloudmodus behoudt UNIBOOT-dubbele partitie-indeling. ESP vernieuwen laat alle ISO's en bestanden intact!",
+  "safe.desc_cloud":
+    "Cloudmodus behoudt UNIBOOT-dubbele partitie-indeling. ESP vernieuwen laat alle ISO's en bestanden intact!",
   "safe.title_hybrid": "Bestaande Ventoy-schijf gedetecteerd (In-place update in hybride modus)",
-  "safe.desc_hybrid": "Hybride modus behoudt alle bestaande ISO-bestanden zonder te formatteren en voegt het UniBoot-thema en cloudmenu toe!",
+  "safe.desc_hybrid":
+    "Hybride modus behoudt alle bestaande ISO-bestanden zonder te formatteren en voegt het UniBoot-thema en cloudmenu toe!",
   "common.optional": "Optioneel",
   "common.optional_test": "Optionele test",
   "iso.title": "Lokale systeemkopiebronnen (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Voeg ISO-bestanden toe voor automatisch kopiëren naar /UNIBOOT/iso/ voor direct opstarten via Ventoy / UniBoot.",
+  "iso.desc":
+    "Voeg ISO-bestanden toe voor automatisch kopiëren naar /UNIBOOT/iso/ voor direct opstarten via Ventoy / UniBoot.",
   "iso.add_btn": "Afbeeldingsbestanden toevoegen",
   "iso.empty_title": "Klik om afbeeldingsbestanden toe te voegen (ondersteunt enkelvoudige of batchselectie)",
   "iso.empty_sub": "Ondersteunt de formaten .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -144,7 +148,8 @@ export const nlNl: TranslationDict = {
   "iso.drag_unsupported": "Geen ondersteunde beeldbestanden gedetecteerd (.iso, .wim, .img, etc.)",
   "iso.preflight_title": "Controle vóór schrijven",
   "iso.conflict_title": "Bestandsnaam bestaat al",
-  "iso.conflict_desc": "In de iso-map van de doel-USB staat al een bestand met deze naam. Kies wat er moet gebeuren. Hashes worden niet vergeleken.",
+  "iso.conflict_desc":
+    "In de iso-map van de doel-USB staat al een bestand met deze naam. Kies wat er moet gebeuren. Hashes worden niet vergeleken.",
   "iso.conflict_action": "Actie",
   "iso.conflict_keep_both": "Behouden",
   "iso.conflict_replace": "Overschrijven",
@@ -154,13 +159,16 @@ export const nlNl: TranslationDict = {
   "iso.conflict_confirm": "Bevestigen en doorgaan",
   "iso.preflight_failed": "Controle vóór schrijven mislukt",
   "deploy.title": "Aanmaken van opstartbare schijf & QEMU-test",
-  "deploy.desc_cloud": "Puur iPXE Cloud-boot • Ultrasnelle installatie met twee partities en multi-arch iPXE-netwerkfirmware.",
+  "deploy.desc_cloud":
+    "Puur iPXE Cloud-boot • Ultrasnelle installatie met twee partities en multi-arch iPXE-netwerkfirmware.",
   "deploy.desc_hybrid": "Ventoy CLI lokale engine • Ventoy hybride partitie-installatie met lokaal ISO-beheer.",
   "deploy.target_device": "Doelapparaat:",
   "deploy.batch_target": "{count} USB-station(s) geselecteerd",
   "deploy.start_create": "Opstartschijf maken",
-  "deploy.tip_batch_update_all": "Update zonder gegevensverlies: Alle {count} geselecteerde stations worden direct bijgewerkt",
-  "deploy.tip_batch_mixed": "Gemengde uitrol: {bootCount} stations direct bijgewerkt, {blankCount} stations opnieuw geformatteerd",
+  "deploy.tip_batch_update_all":
+    "Update zonder gegevensverlies: Alle {count} geselecteerde stations worden direct bijgewerkt",
+  "deploy.tip_batch_mixed":
+    "Gemengde uitrol: {bootCount} stations direct bijgewerkt, {blankCount} stations opnieuw geformatteerd",
   "deploy.start_update": "In-place upgrade (gegevenskluis)",
   "deploy.batch_create": "Start batchaanmaak ({count} stations)",
   "deploy.writing": "Opstartfirmwarepakketten schrijven...",
@@ -175,21 +183,27 @@ export const nlNl: TranslationDict = {
   "deploy.tip_writing": "Opstartfirmware schrijven...",
   "deploy.tip_select_single": "Selecteer eerst een doel-USB-station",
   "deploy.tip_select_batch": "Controleer de doel-USB-drives op batchimplementatie",
-  "deploy.tip_macos_unsupported": "macOS ondersteunt geen nieuwe formattering in hybride modus (gebruik Cloud-modus of initialiseer eerst op Win/Linux)",
+  "deploy.tip_macos_unsupported":
+    "macOS ondersteunt geen nieuwe formattering in hybride modus (gebruik Cloud-modus of initialiseer eerst op Win/Linux)",
   "deploy.tip_need_ventoy": "Hybridemodus vereist lokale Ventoy CLI-toolchain. We raden Cloudmodus aan!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Fresh-opmaak niet ondersteund",
-  "deploy.macos_alert_desc": "Officiële Ventoy ondersteunt het uitvoeren van het formatteerprogramma op macOS nog niet. Voor een nieuwe [Hybride Schijf] is Ventoy CLI vereist. Het wordt aanbevolen om [Cloudmodus (1s cloud opstartschijf)] te gebruiken!",
+  "deploy.macos_alert_desc":
+    "Officiële Ventoy ondersteunt het uitvoeren van het formatteerprogramma op macOS nog niet. Voor een nieuwe [Hybride Schijf] is Ventoy CLI vereist. Het wordt aanbevolen om [Cloudmodus (1s cloud opstartschijf)] te gebruiken!",
   "deploy.no_ventoy_title": "Ventoy CLI-uitvoerbaar bestand niet gedetecteerd",
-  "deploy.no_ventoy_desc": "Het maken van een [Hybride Schijf] vereist een lokaal geïnstalleerde Ventoy CLI. Kies de ondersteunde [Cloudmodus]!",
-  "deploy.result_batch_success": "1-seconde cloud-installatieschijf succesvol geïmplementeerd op {count} schijf/schijven!",
+  "deploy.no_ventoy_desc":
+    "Het maken van een [Hybride Schijf] vereist een lokaal geïnstalleerde Ventoy CLI. Kies de ondersteunde [Cloudmodus]!",
+  "deploy.result_batch_success":
+    "1-seconde cloud-installatieschijf succesvol geïmplementeerd op {count} schijf/schijven!",
   "deploy.result_success": "Modus {mode} succesvol geïmplementeerd naar {targets}",
   "deploy.alert_success": "Implementatie geslaagd!",
   "deploy.safely_eject_btn": "USB-schijf veilig uitwerpen",
   "deploy.success_banner_title": "Opstartschijf succesvol aangemaakt!",
-  "deploy.success_banner_desc": "Opstartbestanden en firmware geschreven. Veilig uitwerpen voor het loskoppelen om gegevensverlies te voorkomen.",
+  "deploy.success_banner_desc":
+    "Opstartbestanden en firmware geschreven. Veilig uitwerpen voor het loskoppelen om gegevensverlies te voorkomen.",
   "deploy.toast_auto_ejected": "Voltooid! {count} USB-stations automatisch veilig uitgeworpen.",
   "deploy.confirm_auto_eject_title": "Schrijven voltooid — Veilig uitwerpen?",
-  "deploy.confirm_auto_eject_desc": "Alle gegevens zijn succesvol geschreven. Wilt u de USB-schijf nu veilig uitwerpen?",
+  "deploy.confirm_auto_eject_desc":
+    "Alle gegevens zijn succesvol geschreven. Wilt u de USB-schijf nu veilig uitwerpen?",
   "deploy.confirm_auto_eject_yes": "Veilig uitwerpen",
   "deploy.confirm_auto_eject_no": "Niet nu",
   "deploy.alert_fail": "Implementatie mislukt:",
@@ -279,7 +293,8 @@ export const nlNl: TranslationDict = {
   "settings.ventoy_timeout": "Ventoy-menutime-out (seconden):",
   "confirm.title": "High-Risk Format Waarschuwing",
   "confirm.warning_title": "Waarschuwing: Formatting will erase all data!",
-  "confirm.warning_desc": "Het geselecteerde USB-station wordt opnieuw gepartitioneerd en geformatteerd. Alle bestaande bestanden worden volledig gewist. Zorg ervoor dat u een back-up van belangrijke gegevens hebt gemaakt!",
+  "confirm.warning_desc":
+    "Het geselecteerde USB-station wordt opnieuw gepartitioneerd en geformatteerd. Alle bestaande bestanden worden volledig gewist. Zorg ervoor dat u een back-up van belangrijke gegevens hebt gemaakt!",
   "confirm.mode_title": "Implementatiemodus:",
   "confirm.fs_title": "Doelbestandssysteem:",
   "confirm.disks_title": "Te formatteren USB-stations ({count}):",
@@ -289,11 +304,14 @@ export const nlNl: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Bevestigenation",
   "confirm.title_danger": "Format Waarschuwing: Disk Initialization",
   "confirm.safe_banner_title": "Kennisgeving van incrementele updates (gegevens veilig)",
-  "confirm.safe_banner_desc": "Ventoy / UniBoot-opstartstructuur gedetecteerd op doelstation. Het systeem voert een incrementeel update-skipping-formaat uit. Alle bestaande bestanden en ISO's blijven 100% behouden!",
-  "confirm.mixed_banner_title": "Slimme gemengde modus: in-place update voor opstartschijven, formatteren voor lege schijven",
+  "confirm.safe_banner_desc":
+    "Ventoy / UniBoot-opstartstructuur gedetecteerd op doelstation. Het systeem voert een incrementeel update-skipping-formaat uit. Alle bestaande bestanden en ISO's blijven 100% behouden!",
+  "confirm.mixed_banner_title":
+    "Slimme gemengde modus: in-place update voor opstartschijven, formatteren voor lege schijven",
   "confirm.mixed_banner_desc": "{ventoyCount} opstartstations en {blankCount} lege stations geselecteerd.",
   "confirm.danger_banner_title": "Waarschuwing: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Schrijven zal het doelapparaat (MBR/GPT) opnieuw partitioneren en formatteren. Alle bestaande bestanden op geselecteerde schijven worden volledig gewist!",
+  "confirm.danger_banner_desc":
+    "Schrijven zal het doelapparaat (MBR/GPT) opnieuw partitioneren en formatteren. Alle bestaande bestanden op geselecteerde schijven worden volledig gewist!",
   "confirm.summary_title": "Doelschijven voor opstartimplementatie:",
   "confirm.smart_safe_tag": "Slimme bescherming",
   "confirm.ventoy_group_title": "In-place upgrade-schijven (alle ISO's behouden):",
@@ -312,9 +330,12 @@ export const nlNl: TranslationDict = {
   "confirm.will_format": "Volledige formattering",
   "confirm.no_format": "Slimme in-place upgrade",
   "deploy.toast_target_changed": "De geselecteerde doelschijf is gewijzigd of niet meer beschikbaar. Scan opnieuw.",
-  "deploy.toast_some_disks_removed": "{count} niet-beschikbare schijf/schijven automatisch verwijderd, doorgaan met resterende schijven",
-  "deploy.error_system_disk_blocked": "⛔ Geblokkeerd: {disks} is een systeemschijf. USB-opstartschijf kan niet worden geïmplementeerd op systeemstation!",
-  "deploy.error_readonly_disk": "🔒 Schrijfbeschermd: {disks} is alleen-lezen. Verwijder de schrijfbeveiliging of gebruik een andere USB",
+  "deploy.toast_some_disks_removed":
+    "{count} niet-beschikbare schijf/schijven automatisch verwijderd, doorgaan met resterende schijven",
+  "deploy.error_system_disk_blocked":
+    "⛔ Geblokkeerd: {disks} is een systeemschijf. USB-opstartschijf kan niet worden geïmplementeerd op systeemstation!",
+  "deploy.error_readonly_disk":
+    "🔒 Schrijfbeschermd: {disks} is alleen-lezen. Verwijder de schrijfbeveiliging of gebruik een andere USB",
   "deploy.start_cloud_create": "Cloud-opstartschijf maken",
   "deploy.batch_update": "Start update zonder gegevensverlies ({count} stations)",
   "deploy.batch_mixed": "Start gemengde batchuitrol ({count} stations)",
@@ -339,7 +360,8 @@ export const nlNl: TranslationDict = {
   "inspector.fake_title": "Fake USB 3.0 Waarschuwing Alert!",
   "inspector.fake_desc": "Apparaat vermeldt USB 3.0, maar werkelijke PHY-snelheid is slechts {speed} (USB 2.0 PHY).",
   "inspector.genuine_title": "Fysieke hardwareverificatie geslaagd (origineel USB 3.0+ apparaat)",
-  "inspector.genuine_desc": "Fysieke PHY-laag onderhandelde over authentieke SuperSpeed/SuperSpeed+-verbinding van {speed}.",
+  "inspector.genuine_desc":
+    "Fysieke PHY-laag onderhandelde over authentieke SuperSpeed/SuperSpeed+-verbinding van {speed}.",
   "inspector.usb2_title": "Standaard USB 2.0-interface",
   "inspector.usb2_desc": "Apparaathardware is USB 2.0, theoretische fysieke maximale snelheid 480 Mb/s.",
   "inspector.section_basic": "Basisapparaatinformatie",
@@ -445,8 +467,10 @@ export const nlNl: TranslationDict = {
   "diag.action_reformat_title": "Herformatteren (reformat)",
   "diag.action_remount_title": "Herkoppelen (remount)",
   "diag.action_retry_title": "Opnieuw proberen (retry)",
-  "diag.action_reformat_desc": "Onderbreking van het schrijven heeft de partitietabel of het bestandssysteem beschadigd. Nieuwe formattering wordt aanbevolen.",
-  "diag.action_remount_desc": "Doelkoppelpad is verbroken tijdens het schrijven. Sluit de USB-schijf opnieuw aan of koppel het volume opnieuw.",
+  "diag.action_reformat_desc":
+    "Onderbreking van het schrijven heeft de partitietabel of het bestandssysteem beschadigd. Nieuwe formattering wordt aanbevolen.",
+  "diag.action_remount_desc":
+    "Doelkoppelpad is verbroken tijdens het schrijven. Sluit de USB-schijf opnieuw aan of koppel het volume opnieuw.",
   "diag.action_retry_desc": "Omgeving en apparaatstatus zijn intact. U kunt de installatie veilig opnieuw proberen.",
   "about.updating": "Bijwerken ({progress}%)",
   "about.updateTo": "Online bijwerken naar {tag}",
@@ -463,7 +487,8 @@ export const nlNl: TranslationDict = {
   "dialog.textFilesFilter": "Tekstbestanden (*.txt)",
   "dialog.allFilesFilter": "Alle bestanden (*.*)",
   "dialog.selectIsoTitle": "Systeembestandbestanden selecteren (*.iso, *.wim, *.img enz.)",
-  "dialog.ventoyFilter": "Ventoy bronbestanden (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy bronbestanden (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Bereken Hash",
   "checksum.calculating": "Hash berekenen...",
   "checksum.algo_label": "Algoritme",
@@ -509,9 +534,11 @@ export const nlNl: TranslationDict = {
   "privilege.modal_title": "Beheerdersrechten vereist",
   "privilege.modal_subtitle": "Systeemautorisatie vereist om opstartgegevens te lezen en schijven te schrijven",
   "privilege.reason_title": "Waarom zijn beheerdersrechten vereist?",
-  "privilege.reason_desc": "Het besturingssysteem isoleert ruwe sectoren en EFI-partities. Autorisatie maakt directe detectie en veilige schijfcreatie mogelijk.",
+  "privilege.reason_desc":
+    "Het besturingssysteem isoleert ruwe sectoren en EFI-partities. Autorisatie maakt directe detectie en veilige schijfcreatie mogelijk.",
   "privilege.scope_title": "Toegangsbereik",
-  "privilege.scope_desc": "Strikt beperkt tot geselecteerde externe USB-stations. Interne schijven worden nooit aangeraakt.",
+  "privilege.scope_desc":
+    "Strikt beperkt tot geselecteerde externe USB-stations. Interne schijven worden nooit aangeraakt.",
   "privilege.safety_title": "Veiligheid & Transparantie",
   "privilege.safety_desc": "Inspectie is uitsluitend alleen-lezen en niet-destructief; broncode is volledig open.",
   "privilege.confirm_btn": "Nu autoriseren",

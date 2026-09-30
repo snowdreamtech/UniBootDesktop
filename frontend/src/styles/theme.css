@@ -449,9 +449,9 @@ select::placeholder {
     0 4px 12px rgba(2, 132, 199, 0.15);
 }
 
-/* ==========================================================================
-   GLOBAL COMPONENT UN-SCOPED THEME OVERRIDES (Solving SFC Specificity Bug)
-   ========================================================================== */
+/* ========================================================================== */
+/* GLOBAL COMPONENT UN-SCOPED THEME OVERRIDES (Solving SFC Specificity Bug)   */
+/* ========================================================================== */
 
 /* App Header Global Theme Styles */
 [data-theme="light"] .app-header h1 {

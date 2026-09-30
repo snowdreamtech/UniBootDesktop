@@ -4,28 +4,28 @@
       <div class="modal-header danger-header">
         <div class="header-title">
           <span class="warning-icon">⚠️</span>
-          <h3>{{ title || t('ventoy_alert.default_title') }}</h3>
+          <h3>{{ title || t("ventoy_alert.default_title") }}</h3>
         </div>
         <button class="close-btn" @click="close">✕</button>
       </div>
 
       <div class="modal-body">
         <div class="alert-banner">
-          <div class="banner-title"><span class="banner-icon">💡</span> {{ t('ventoy_alert.banner_title') }}</div>
+          <div class="banner-title"><span class="banner-icon">💡</span> {{ t("ventoy_alert.banner_title") }}</div>
           <div class="banner-desc">{{ message }}</div>
         </div>
 
         <div class="action-buttons-group">
           <button v-if="actionType === 'open_settings'" class="btn-primary flex-btn" @click="onAction">
             <span class="btn-icon">⚙️</span>
-            <span>{{ t('ventoy_alert.goto_settings') }}</span>
+            <span>{{ t("ventoy_alert.goto_settings") }}</span>
           </button>
           <button class="btn-accent flex-btn" @click="onSwitchB">
             <span class="btn-icon">🚀</span>
-            <span>{{ t('ventoy_alert.switch_b') }}</span>
+            <span>{{ t("ventoy_alert.switch_b") }}</span>
           </button>
           <button class="btn-secondary flex-btn" @click="close">
-            <span>{{ t('ventoy_alert.close') }}</span>
+            <span>{{ t("ventoy_alert.close") }}</span>
           </button>
         </div>
       </div>
@@ -34,27 +34,27 @@
 </template>
 
 <script setup lang="ts">
-import { t } from '../i18n';
+import { t } from "../i18n";
 
 defineProps<{
   isOpen: boolean;
   title: string;
   message: string;
-  actionType: 'open_settings' | 'switch_b';
+  actionType: "open_settings" | "switch_b";
 }>();
 
-const emit = defineEmits(['close', 'action', 'switch-b']);
+const emit = defineEmits(["close", "action", "switch-b"]);
 
 function close() {
-  emit('close');
+  emit("close");
 }
 
 function onAction() {
-  emit('action');
+  emit("action");
 }
 
 function onSwitchB() {
-  emit('switch-b');
+  emit("switch-b");
 }
 </script>
 

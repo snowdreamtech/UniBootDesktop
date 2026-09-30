@@ -266,5 +266,3 @@ func TestIsProcessAlive(t *testing.T) {
 		t.Fatal("expected non-existent process 99999999 to be reported dead")
 	}
 }
-
-

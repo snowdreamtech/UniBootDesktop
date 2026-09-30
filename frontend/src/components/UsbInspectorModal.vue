@@ -5,7 +5,7 @@
         <div class="header-title">
           <span class="modal-icon">ℹ️</span>
           <div>
-            <h3>{{ t('inspector.title') }}</h3>
+            <h3>{{ t("inspector.title") }}</h3>
             <p class="subtitle">PHY Protocol, Speed & Hardware Analysis</p>
           </div>
         </div>
@@ -17,170 +17,189 @@
         <div v-if="disk.isFakeUsb3" class="audit-banner fake-alert">
           <div class="banner-icon">⚠️</div>
           <div class="banner-text">
-            <h4>{{ t('inspector.fake_title') }}</h4>
-            <p>{{ t('inspector.fake_desc', { speed: disk.usbSpeed || '480 Mb/s' }) }}</p>
+            <h4>{{ t("inspector.fake_title") }}</h4>
+            <p>{{ t("inspector.fake_desc", { speed: disk.usbSpeed || "480 Mb/s" }) }}</p>
           </div>
         </div>
 
-        <div v-else-if="disk.protocolCode === 'usb3_0' || disk.protocolCode === 'usb3_1' || disk.protocolCode === 'usb3_2' || disk.protocolCode === 'usb4'" class="audit-banner genuine-pass">
+        <div
+          v-else-if="
+            disk.protocolCode === 'usb3_0' ||
+            disk.protocolCode === 'usb3_1' ||
+            disk.protocolCode === 'usb3_2' ||
+            disk.protocolCode === 'usb4'
+          "
+          class="audit-banner genuine-pass"
+        >
           <div class="banner-icon">✅</div>
           <div class="banner-text">
-            <h4>{{ t('inspector.genuine_title') }}</h4>
-            <p>{{ t('inspector.genuine_desc', { speed: disk.usbSpeed || '5 Gb/s' }) }}</p>
+            <h4>{{ t("inspector.genuine_title") }}</h4>
+            <p>{{ t("inspector.genuine_desc", { speed: disk.usbSpeed || "5 Gb/s" }) }}</p>
           </div>
         </div>
 
         <div v-else class="audit-banner usb2-info">
           <div class="banner-icon">ℹ️</div>
           <div class="banner-text">
-            <h4>{{ t('inspector.usb2_title') }}</h4>
-            <p>{{ t('inspector.usb2_desc') }}</p>
+            <h4>{{ t("inspector.usb2_title") }}</h4>
+            <p>{{ t("inspector.usb2_desc") }}</p>
           </div>
         </div>
 
         <!-- Basic Device Info Header & Grid -->
         <div class="section-divider">
-          <span>📊 {{ t('inspector.section_basic') }}</span>
+          <span>📊 {{ t("inspector.section_basic") }}</span>
         </div>
 
         <div class="spec-grid">
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_name') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_name") }}</span>
             <span class="spec-val highlight">{{ disk.name }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_vendor') }}</span>
-            <span class="spec-val">{{ disk.vendor || 'Generic USB Device' }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_vendor") }}</span>
+            <span class="spec-val">{{ disk.vendor || "Generic USB Device" }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_size') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_size") }}</span>
             <span class="spec-val">{{ formatDiskCapacity(disk.formatted) }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_free') }}</span>
-            <span class="spec-val highlight">{{ disk.freeFormatted || 'N/A' }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_free") }}</span>
+            <span class="spec-val highlight">{{ disk.freeFormatted || "N/A" }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_protocol') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_protocol") }}</span>
             <span class="spec-val badge-val" :class="disk.protocolCode || 'usb2'">
-              {{ disk.usbVersion || 'USB 2.0' }}
+              {{ disk.usbVersion || "USB 2.0" }}
             </span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_speed') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_speed") }}</span>
             <span class="spec-val speed-val" :class="{ 'slow-speed': disk.isFakeUsb3 }">
-              ⚡ {{ disk.usbSpeed || '480 Mb/s' }}
+              ⚡ {{ disk.usbSpeed || "480 Mb/s" }}
             </span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_fs') }}</span>
-            <span class="spec-val highlight">{{ disk.fileSystem || 'ExFAT / FAT32' }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_fs") }}</span>
+            <span class="spec-val highlight">{{ disk.fileSystem || "ExFAT / FAT32" }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_scheme') }}</span>
-            <span class="spec-val highlight">{{ disk.partitionScheme || 'GPT / MBR' }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_scheme") }}</span>
+            <span class="spec-val highlight">{{ disk.partitionScheme || "GPT / MBR" }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_mount') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_mount") }}</span>
             <span class="spec-val code">{{ disk.device }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_perm') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_perm") }}</span>
             <span class="spec-val" :class="disk.writable !== false ? 'pass-val' : 'warn-val'">
-              <span class="val-icon">{{ disk.writable !== false ? '✅' : '🔒' }}</span>
-              <span>{{ disk.writable !== false ? t('inspector.val_rw') : t('inspector.val_ro') }}</span>
+              <span class="val-icon">{{ disk.writable !== false ? "✅" : "🔒" }}</span>
+              <span>{{ disk.writable !== false ? t("inspector.val_rw") : t("inspector.val_ro") }}</span>
             </span>
           </div>
 
           <div class="spec-item spec-full">
-            <span class="spec-label">{{ t('inspector.lbl_boot_status') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_boot_status") }}</span>
             <span class="spec-val highlight">{{ formatBootStatus(disk) }}</span>
           </div>
 
           <div class="spec-item spec-full" v-if="disk.isRealVentoy || disk.bootStatus">
-            <span class="spec-label">{{ t('inspector.lbl_esp_partition') }}</span>
-            <span class="spec-val highlight">{{ t('inspector.val_esp_partition') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_esp_partition") }}</span>
+            <span class="spec-val highlight">{{ t("inspector.val_esp_partition") }}</span>
           </div>
         </div>
 
         <!-- Hardware Details Header & Grid -->
         <div class="section-divider">
-          <span>🛠️ {{ t('inspector.section_hw') }}</span>
+          <span>🛠️ {{ t("inspector.section_hw") }}</span>
         </div>
 
         <div class="spec-grid advanced-grid">
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_smart') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_smart") }}</span>
             <span class="spec-val" :class="disk.smartStatus === 'Verified' ? 'pass-val' : 'highlight'">
               <span class="val-icon" v-if="disk.smartStatus === 'Verified'">✅</span>
-              <span>{{ disk.smartStatus === 'Verified' ? t('inspector.val_smart_good') : (disk.smartStatus || 'ℹ️ N/A') }}</span>
+              <span>{{
+                disk.smartStatus === "Verified" ? t("inspector.val_smart_good") : disk.smartStatus || "ℹ️ N/A"
+              }}</span>
             </span>
           </div>
 
           <div class="spec-item" v-if="disk.busPower || disk.busPowerUsed">
-            <span class="spec-label">{{ t('inspector.lbl_bus_power') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_bus_power") }}</span>
             <span class="spec-val highlight">
-              {{ formatPower(disk.busPowerUsed || disk.busPower) }} {{ t('inspector.val_power_limit', { limit: formatPower(disk.busPower) }) }}
+              {{ formatPower(disk.busPowerUsed || disk.busPower) }}
+              {{ t("inspector.val_power_limit", { limit: formatPower(disk.busPower) }) }}
             </span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_transport') }}</span>
-            <span class="spec-val highlight">{{ disk.transportProtocol || 'BOT (Bulk-Only Transport)' }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_transport") }}</span>
+            <span class="spec-val highlight">{{ disk.transportProtocol || "BOT (Bulk-Only Transport)" }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_sector') }}</span>
-            <span class="spec-val highlight">{{ disk.sectorSize || '512 Bytes (512n/512e)' }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_sector") }}</span>
+            <span class="spec-val highlight">{{ disk.sectorSize || "512 Bytes (512n/512e)" }}</span>
           </div>
 
           <div class="spec-item">
-            <span class="spec-label">{{ t('inspector.lbl_controller') }}</span>
-            <span class="spec-val highlight">{{ disk.controllerVendor || t('inspector.std_controller') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_controller") }}</span>
+            <span class="spec-val highlight">{{ disk.controllerVendor || t("inspector.std_controller") }}</span>
           </div>
 
           <div class="spec-item" v-if="disk.vendorId || disk.productId">
-            <span class="spec-label">{{ t('inspector.lbl_vid_pid') }}</span>
-            <span class="spec-val code">VID: {{ disk.vendorId || 'N/A' }} | PID: {{ disk.productId || 'N/A' }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_vid_pid") }}</span>
+            <span class="spec-val code">VID: {{ disk.vendorId || "N/A" }} | PID: {{ disk.productId || "N/A" }}</span>
           </div>
 
           <div class="spec-item spec-full" v-if="disk.serialNumber">
-            <span class="spec-label">{{ t('inspector.lbl_serial') }}</span>
+            <span class="spec-label">{{ t("inspector.lbl_serial") }}</span>
             <span class="spec-val code">{{ disk.serialNumber }}</span>
           </div>
         </div>
 
         <!-- Protocol Compatibility Matrix -->
         <div class="protocol-matrix">
-          <h4>{{ t('inspector.ext_protocols') }}</h4>
+          <h4>{{ t("inspector.ext_protocols") }}</h4>
           <div class="matrix-pills">
             <span class="matrix-pill" :class="{ active: disk.protocolCode === 'usb2' }">USB 2.0 (480 Mbps)</span>
-            <span class="matrix-pill" :class="{ active: disk.protocolCode === 'usb3_0' }">USB 3.0 / 3.2 Gen 1 (5 Gbps)</span>
-            <span class="matrix-pill" :class="{ active: disk.protocolCode === 'usb3_1' }">USB 3.1 / 3.2 Gen 2 (10 Gbps)</span>
-            <span class="matrix-pill" :class="{ active: disk.protocolCode === 'usb3_2' }">USB 3.2 Gen 2x2 (20 Gbps)</span>
-            <span class="matrix-pill" :class="{ active: disk.protocolCode === 'usb4' }">USB4 / Thunderbolt 4 (40 Gbps)</span>
+            <span class="matrix-pill" :class="{ active: disk.protocolCode === 'usb3_0' }"
+              >USB 3.0 / 3.2 Gen 1 (5 Gbps)</span
+            >
+            <span class="matrix-pill" :class="{ active: disk.protocolCode === 'usb3_1' }"
+              >USB 3.1 / 3.2 Gen 2 (10 Gbps)</span
+            >
+            <span class="matrix-pill" :class="{ active: disk.protocolCode === 'usb3_2' }"
+              >USB 3.2 Gen 2x2 (20 Gbps)</span
+            >
+            <span class="matrix-pill" :class="{ active: disk.protocolCode === 'usb4' }"
+              >USB4 / Thunderbolt 4 (40 Gbps)</span
+            >
           </div>
         </div>
       </div>
 
       <div class="modal-footer">
-        <button class="btn-primary" @click="closeModal">{{ t('inspector.close') }}</button>
+        <button class="btn-primary" @click="closeModal">{{ t("inspector.close") }}</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { disk } from '../../wailsjs/go/models';
+import type { disk } from "../../wailsjs/go/models";
 
 type DiskInfo = disk.DiskInfo;
 
@@ -189,84 +208,85 @@ defineProps<{
   disk: DiskInfo | null;
 }>();
 
-import { t, formatDiskCapacity } from '../i18n';
+import { t, formatDiskCapacity } from "../i18n";
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(["close"]);
 
 function formatPower(val?: string): string {
-  if (!val) return '500 mA';
+  if (!val) return "500 mA";
   const str = val.trim();
-  if (!str.toLowerCase().includes('ma') && !str.toLowerCase().includes('a')) {
+  if (!str.toLowerCase().includes("ma") && !str.toLowerCase().includes("a")) {
     return `${str} mA`;
   }
   return str;
 }
 
 function formatBootStatus(disk?: any): string {
-  if (!disk) return t('inspector.val_data_disk');
+  if (!disk) return t("inspector.val_data_disk");
 
   const code = disk.bootStatusCode;
   const toolCode = disk.thirdPartyBootCode;
 
-  if (code === 'uniboot_cloud') {
-    return t('inspector.val_boot_cloud');
+  if (code === "uniboot_cloud") {
+    return t("inspector.val_boot_cloud");
   }
-  if (code === 'uniboot_hybrid') {
-    return t('inspector.val_boot_hybrid');
+  if (code === "uniboot_hybrid") {
+    return t("inspector.val_boot_hybrid");
   }
-  if (code === 'ventoy_pure') {
-    return t('inspector.val_boot_ventoy_pure' as any) || t('inspector.val_boot_hybrid');
+  if (code === "ventoy_pure") {
+    return t("inspector.val_boot_ventoy_pure" as any) || t("inspector.val_boot_hybrid");
   }
-  if (code === 'third_party_boot') {
+  if (code === "third_party_boot") {
     if (toolCode) {
       const toolKey = `inspector.tool_${toolCode}` as any;
       const toolName = t(toolKey);
       if (toolName && toolName !== toolKey) {
-        const prefix = t('inspector.prefix_third_party' as any) || '第三方引导';
+        const prefix = t("inspector.prefix_third_party" as any) || "第三方引导";
         return `${prefix}: ${toolName}`;
       }
     }
     if (disk.thirdPartyBootType) {
       return `第三方引导: ${disk.thirdPartyBootType}`;
     }
-    return t('inspector.val_boot_thirdparty');
+    return t("inspector.val_boot_thirdparty");
   }
-  if (code === 'gpt_data') {
-    return t('inspector.val_boot_gpt_data');
+  if (code === "gpt_data") {
+    return t("inspector.val_boot_gpt_data");
   }
-  if (code === 'mbr_data') {
-    return t('inspector.val_boot_mbr_data');
+  if (code === "mbr_data") {
+    return t("inspector.val_boot_mbr_data");
   }
-  if (code === 'needs_privilege') {
-    return t('inspector.val_needs_privilege');
+  if (code === "needs_privilege") {
+    return t("inspector.val_needs_privilege");
   }
-  if (code === 'data_storage') {
-    return t('inspector.val_data_disk');
+  if (code === "data_storage") {
+    return t("inspector.val_data_disk");
   }
 
   // Fallback to legacy string check if bootStatusCode is not yet populated
-  const status = typeof disk === 'string' ? disk : (disk.bootStatus || '');
-  if (status.includes('混合模式') || status.includes('Hybrid')) return t('inspector.val_boot_hybrid');
-  if (status.includes('1秒极速云引导盘') || status.includes('Cloud Mode')) return t('inspector.val_boot_cloud');
-  if (status.includes('原生 Ventoy')) return t('inspector.val_boot_ventoy_pure' as any) || '原生 Ventoy 启动盘 (可无损升级)';
-  if (status.includes('第三方引导')) return t('inspector.val_boot_thirdparty');
-  if (status.includes('GPT 数据盘')) return t('inspector.val_boot_gpt_data');
-  if (status.includes('MBR 数据盘')) return t('inspector.val_boot_mbr_data');
-  if (status.includes('数据存储盘')) return t('inspector.val_data_disk');
+  const status = typeof disk === "string" ? disk : disk.bootStatus || "";
+  if (status.includes("混合模式") || status.includes("Hybrid")) return t("inspector.val_boot_hybrid");
+  if (status.includes("1秒极速云引导盘") || status.includes("Cloud Mode")) return t("inspector.val_boot_cloud");
+  if (status.includes("原生 Ventoy"))
+    return t("inspector.val_boot_ventoy_pure" as any) || "原生 Ventoy 启动盘 (可无损升级)";
+  if (status.includes("第三方引导")) return t("inspector.val_boot_thirdparty");
+  if (status.includes("GPT 数据盘")) return t("inspector.val_boot_gpt_data");
+  if (status.includes("MBR 数据盘")) return t("inspector.val_boot_mbr_data");
+  if (status.includes("数据存储盘")) return t("inspector.val_data_disk");
 
-  return status || t('inspector.val_data_disk');
+  return status || t("inspector.val_data_disk");
 }
 
-const logUserAction = (level: string, message: string, details: string = '') => {
+const logUserAction = (level: string, message: string, details: string = "") => {
   const app = (window as any)?.go?.main?.App;
-  if (app && typeof app.LogAction === 'function') {
+  if (app && typeof app.LogAction === "function") {
     app.LogAction(level, message, details);
   }
 };
 
 function closeModal() {
-  logUserAction('INFO', 'User closed USB hardware inspector modal');
-  emit('close');
+  logUserAction("INFO", "User closed USB hardware inspector modal");
+  emit("close");
 }
 </script>
 
@@ -511,7 +531,8 @@ function closeModal() {
   color: #00e5ff;
 }
 
-.badge-val.usb3_1, .badge-val.usb3_2 {
+.badge-val.usb3_1,
+.badge-val.usb3_2 {
   background: rgba(157, 78, 221, 0.25);
   color: #c084fc;
 }

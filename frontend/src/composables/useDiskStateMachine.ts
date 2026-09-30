@@ -1,10 +1,10 @@
 // Copyright (c) 2026 SnowdreamTech. All rights reserved.
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
-import { ref, computed, type Ref, type ComputedRef } from 'vue';
-import type { DiskInfo } from '../components/DiskPanel.vue';
+import { ref, computed, type Ref, type ComputedRef } from "vue";
+import type { DiskInfo } from "../components/DiskPanel.vue";
 
-import type { VentoyValidation } from '../utils/ventoyValidation';
+import type { VentoyValidation } from "../utils/ventoyValidation";
 
 /**
  * Finite disk lifecycle states managed by the unified State Machine.
@@ -22,7 +22,7 @@ export type DiskState =
    * - Restrictions: Non-destructive update is disabled; VM preview testing is strictly disabled
    *   because the drive has no bootable firmware.
    */
-  | 'UNDEPLOYED'
+  | "UNDEPLOYED"
 
   /**
    * DEPLOYED:
@@ -34,7 +34,7 @@ export type DiskState =
    * - Primary Action: "Non-destructive Update" (无损更新) - updates bootloader without wiping user ISO data.
    * - Secondary Action: "Simulate Test" (启动模拟测试) - ready to boot in QEMU / VMware / VirtualBox.
    */
-  | 'DEPLOYED'
+  | "DEPLOYED"
 
   /**
    * DEPLOYING:
@@ -46,7 +46,7 @@ export type DiskState =
    * - Primary Action: Displays "Cancel" button to safely abort deployment.
    * - Restrictions: All other operations (VM simulation, disk switching) are strictly locked to prevent corruption.
    */
-  | 'DEPLOYING'
+  | "DEPLOYING"
 
   /**
    * VERIFYING:
@@ -57,7 +57,7 @@ export type DiskState =
    * - UI Display: Shows hash computation progress spinner; deploy button displays busy state.
    * - Restrictions: VM testing and write operations are temporarily locked to prevent I/O race conditions.
    */
-  | 'VERIFYING'
+  | "VERIFYING"
 
   /**
    * TESTING:
@@ -70,7 +70,7 @@ export type DiskState =
    * - Restrictions: Host OS write operations are strictly locked (deployDisabledReason = vm.tip_running).
    * - Exit: When VM powers off, host OS remounts partitions, and state transitions back to DEPLOYED.
    */
-  | 'TESTING'
+  | "TESTING"
 
   /**
    * READONLY:
@@ -81,7 +81,7 @@ export type DiskState =
    * - UI Display: Deploy button is disabled; displays permission/read-only alert.
    * - Restrictions: Write operations are forbidden until hardware switch is toggled or privilege helper elevates access.
    */
-  | 'READONLY'
+  | "READONLY"
 
   /**
    * EJECTED:
@@ -92,7 +92,7 @@ export type DiskState =
    * - UI Display: All action buttons are disabled; shows prompt that device has been safely ejected.
    * - Exit: Drive must be physically re-plugged or remounted before new actions can run.
    */
-  | 'EJECTED'
+  | "EJECTED"
 
   /**
    * ERROR:
@@ -102,12 +102,12 @@ export type DiskState =
    * - Trigger: Device disconnected during write, I/O hardware error, or damaged partition table.
    * - UI Display: Disables non-destructive update; prompts user to perform clean format and re-install.
    */
-  | 'ERROR';
+  | "ERROR";
 
 export interface DiskStateMachineOptions {
   t: (key: string, params?: Record<string, any>) => string;
-  activeMode: Ref<'cloud' | 'hybrid'>;
-  selectionMode: Ref<'single' | 'batch'>;
+  activeMode: Ref<"cloud" | "hybrid">;
+  selectionMode: Ref<"single" | "batch">;
   selectedDisk: Ref<DiskInfo | null>;
   selectedDevices: Ref<Set<string>>;
   diskList: Ref<DiskInfo[]>;
@@ -119,7 +119,7 @@ export interface DiskStateMachineOptions {
   isVerifying?: Ref<boolean>;
   hypervisorCount?: Ref<number>;
   isLaunchingQemu?: Ref<boolean>;
-  checkDiskCanUpdateNonDestructively: (disk: DiskInfo, mode: 'cloud' | 'hybrid') => boolean;
+  checkDiskCanUpdateNonDestructively: (disk: DiskInfo, mode: "cloud" | "hybrid") => boolean;
   getVentoyValidationMessage: (status: VentoyValidation) => string;
 }
 
@@ -276,48 +276,48 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
 
   // Pure function evaluating the finite state of a single disk
   function getDiskState(disk: DiskInfo | null): DiskState {
-    if (!disk) return 'UNDEPLOYED';
+    if (!disk) return "UNDEPLOYED";
 
     if (runningVmTarget.value?.device === disk.device) {
-      return 'TESTING';
+      return "TESTING";
     }
 
     if (isDeploying.value) {
       if (deployingTargets.value.has(disk.device)) {
-        return 'DEPLOYING';
+        return "DEPLOYING";
       }
       if (options.pendingTargets && options.pendingTargets.value.includes(disk.device)) {
-        return 'DEPLOYING';
+        return "DEPLOYING";
       }
-      if (selectionMode.value === 'single' && selectedDisk.value?.device === disk.device) {
-        return 'DEPLOYING';
+      if (selectionMode.value === "single" && selectedDisk.value?.device === disk.device) {
+        return "DEPLOYING";
       }
-      if (selectionMode.value === 'batch' && selectedDevices.value.has(disk.device)) {
-        return 'DEPLOYING';
+      if (selectionMode.value === "batch" && selectedDevices.value.has(disk.device)) {
+        return "DEPLOYING";
       }
     }
 
     if (verifyingDevices.value.has(disk.device) || (options.isVerifying && options.isVerifying.value)) {
-      return 'VERIFYING';
+      return "VERIFYING";
     }
 
     if ((disk as any).is_ejected) {
-      return 'EJECTED';
+      return "EJECTED";
     }
 
     if (disk.writable === false || (disk as any).is_readonly) {
-      return 'READONLY';
+      return "READONLY";
     }
 
     if (errorDevices.value.has(disk.device) || (disk as any).is_error) {
-      return 'ERROR';
+      return "ERROR";
     }
 
     if (checkDiskCanUpdateNonDestructively(disk, activeMode.value)) {
-      return 'DEPLOYED';
+      return "DEPLOYED";
     }
 
-    return 'UNDEPLOYED';
+    return "UNDEPLOYED";
   }
 
   // Active target device resolution (preserves device during VM run when unmounted)
@@ -325,13 +325,13 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     if (runningVmTarget.value && runningVmTarget.value.device) {
       return runningVmTarget.value.device;
     }
-    if (selectionMode.value === 'single') {
-      return selectedDisk.value?.device || '';
+    if (selectionMode.value === "single") {
+      return selectedDisk.value?.device || "";
     }
     if (selectedDevices.value.size > 0) {
       return Array.from(selectedDevices.value)[0];
     }
-    return '';
+    return "";
   });
 
   // Active target name resolution
@@ -339,34 +339,34 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     if (runningVmTarget.value && runningVmTarget.value.name) {
       return runningVmTarget.value.name;
     }
-    if (selectionMode.value === 'single') {
-      return selectedDisk.value?.name || selectedDisk.value?.device || '';
+    if (selectionMode.value === "single") {
+      return selectedDisk.value?.name || selectedDisk.value?.device || "";
     }
     if (selectedDevices.value.size > 0) {
       const firstDev = Array.from(selectedDevices.value)[0];
       const found = diskList.value.find((d) => d.device === firstDev);
       return found?.name || firstDev;
     }
-    return '';
+    return "";
   });
 
   // Consolidated state for current active selection context
   const currentDiskState = computed<DiskState>(() => {
     if (runningVmTarget.value) {
-      return 'TESTING';
+      return "TESTING";
     }
 
-    if (selectionMode.value === 'single') {
+    if (selectionMode.value === "single") {
       return getDiskState(selectedDisk.value);
     }
 
     // Batch mode: evaluate collective state across selected disks
     if (selectedDevices.value.size === 0) {
-      return 'UNDEPLOYED';
+      return "UNDEPLOYED";
     }
 
     if (isDeploying.value) {
-      return 'DEPLOYING';
+      return "DEPLOYING";
     }
 
     let allDeployed = true;
@@ -378,49 +378,49 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     selectedDevices.value.forEach((dev) => {
       const d = diskList.value.find((disk) => disk.device === dev);
       const st = getDiskState(d || null);
-      if (st !== 'DEPLOYED') {
+      if (st !== "DEPLOYED") {
         allDeployed = false;
       }
-      if (st === 'VERIFYING') {
+      if (st === "VERIFYING") {
         anyVerifying = true;
       }
-      if (st === 'READONLY') {
+      if (st === "READONLY") {
         anyReadonly = true;
       }
-      if (st === 'EJECTED') {
+      if (st === "EJECTED") {
         anyEjected = true;
       }
-      if (st === 'ERROR') {
+      if (st === "ERROR") {
         anyError = true;
       }
     });
 
-    if (anyVerifying) return 'VERIFYING';
-    if (anyReadonly) return 'READONLY';
-    if (anyEjected) return 'EJECTED';
-    if (anyError) return 'ERROR';
-    if (allDeployed) return 'DEPLOYED';
-    return 'UNDEPLOYED';
+    if (anyVerifying) return "VERIFYING";
+    if (anyReadonly) return "READONLY";
+    if (anyEjected) return "EJECTED";
+    if (anyError) return "ERROR";
+    if (allDeployed) return "DEPLOYED";
+    return "UNDEPLOYED";
   });
 
   // 1. isNonDestructive
   const isNonDestructive = computed(() => {
-    if (selectionMode.value === 'single') {
-      return currentDiskState.value === 'DEPLOYED';
+    if (selectionMode.value === "single") {
+      return currentDiskState.value === "DEPLOYED";
     }
     if (selectedDevices.value.size === 0) return false;
     return Array.from(selectedDevices.value).every((dev) => {
       const d = diskList.value.find((disk) => disk.device === dev);
-      return d ? getDiskState(d) === 'DEPLOYED' : false;
+      return d ? getDiskState(d) === "DEPLOYED" : false;
     });
   });
 
   const ventoyCountInBatch = computed(() => {
-    if (selectionMode.value !== 'batch' || selectedDevices.value.size === 0) return 0;
+    if (selectionMode.value !== "batch" || selectedDevices.value.size === 0) return 0;
     let count = 0;
     selectedDevices.value.forEach((dev) => {
       const d = diskList.value.find((disk) => disk.device === dev);
-      if (d && getDiskState(d) === 'DEPLOYED') {
+      if (d && getDiskState(d) === "DEPLOYED") {
         count++;
       }
     });
@@ -429,13 +429,13 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
 
   // 2. deployBtnText
   const deployBtnText = computed(() => {
-    if (isDeploying.value) return t('deploy.writing');
+    if (isDeploying.value) return t("deploy.writing");
 
-    if (selectionMode.value === 'single') {
+    if (selectionMode.value === "single") {
       if (isNonDestructive.value) {
-        return t('deploy.start_update');
+        return t("deploy.start_update");
       }
-      return activeMode.value === 'cloud' ? t('deploy.start_cloud_create') : t('deploy.start_create');
+      return activeMode.value === "cloud" ? t("deploy.start_cloud_create") : t("deploy.start_create");
     }
 
     const total = selectedDevices.value.size;
@@ -443,11 +443,11 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     const blankCount = total - bootCount;
 
     if (bootCount === total && total > 0) {
-      return t('deploy.batch_update', { count: total });
+      return t("deploy.batch_update", { count: total });
     } else if (blankCount === total && total > 0) {
-      return t('deploy.batch_create', { count: total });
+      return t("deploy.batch_create", { count: total });
     } else {
-      return t('deploy.batch_mixed', { count: total });
+      return t("deploy.batch_mixed", { count: total });
     }
   });
 
@@ -455,16 +455,16 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
   const isDeployDisabled = computed(() => {
     if (isDeploying.value) return true;
     if (options.isPreflight && options.isPreflight.value) return true;
-    if (currentDiskState.value === 'TESTING') return true;
-    if (currentDiskState.value === 'VERIFYING') return true;
-    if (currentDiskState.value === 'READONLY') return true;
-    if (currentDiskState.value === 'EJECTED') return true;
+    if (currentDiskState.value === "TESTING") return true;
+    if (currentDiskState.value === "VERIFYING") return true;
+    if (currentDiskState.value === "READONLY") return true;
+    if (currentDiskState.value === "EJECTED") return true;
 
-    if (selectionMode.value === 'single' && !selectedDisk.value) return true;
-    if (selectionMode.value === 'batch' && selectedDevices.value.size === 0) return true;
+    if (selectionMode.value === "single" && !selectedDisk.value) return true;
+    if (selectionMode.value === "batch" && selectedDevices.value.size === 0) return true;
 
     // Guard: Hybrid mode Ventoy requirement on fresh drive
-    if (activeMode.value === 'hybrid' && !isNonDestructive.value && !ventoyStatus.value.valid) {
+    if (activeMode.value === "hybrid" && !isNonDestructive.value && !ventoyStatus.value.valid) {
       return true;
     }
 
@@ -472,13 +472,13 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
   });
 
   const deployDisabledReason = computed(() => {
-    if (isDeploying.value) return t('deploy.tip_writing');
-    if (options.isPreflight && options.isPreflight.value) return t('deploy.checking');
-    if (currentDiskState.value === 'TESTING') return t('vm.tip_running');
-    if (currentDiskState.value === 'VERIFYING') return t('checksum.calculating');
+    if (isDeploying.value) return t("deploy.tip_writing");
+    if (options.isPreflight && options.isPreflight.value) return t("deploy.checking");
+    if (currentDiskState.value === "TESTING") return t("vm.tip_running");
+    if (currentDiskState.value === "VERIFYING") return t("checksum.calculating");
 
-    if (currentDiskState.value === 'READONLY') {
-      if (selectionMode.value === 'batch') {
+    if (currentDiskState.value === "READONLY") {
+      if (selectionMode.value === "batch") {
         const roNames: string[] = [];
         selectedDevices.value.forEach((dev) => {
           const d = diskList.value.find((disk) => disk.device === dev);
@@ -486,52 +486,52 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
             roNames.push(d.name || d.device);
           }
         });
-        return t('deploy.error_readonly_disk', { disks: roNames.join(', ') || 'Selected disks' });
+        return t("deploy.error_readonly_disk", { disks: roNames.join(", ") || "Selected disks" });
       }
-      const devName = selectedDisk.value?.name || activeVmTargetName.value || activeVmTargetDevice.value || '';
-      return t('deploy.error_readonly_disk', { disks: devName });
+      const devName = selectedDisk.value?.name || activeVmTargetName.value || activeVmTargetDevice.value || "";
+      return t("deploy.error_readonly_disk", { disks: devName });
     }
 
-    if (currentDiskState.value === 'EJECTED') {
-      return t('disk.toast_ejected_success', { device: activeVmTargetDevice.value, name: activeVmTargetName.value });
+    if (currentDiskState.value === "EJECTED") {
+      return t("disk.toast_ejected_success", { device: activeVmTargetDevice.value, name: activeVmTargetName.value });
     }
 
-    if (currentDiskState.value === 'ERROR') {
+    if (currentDiskState.value === "ERROR") {
       const dev = selectedDisk.value?.device || activeVmTargetDevice.value;
       if (dev && errorDevices.value.has(dev)) {
         return errorDevices.value.get(dev)!;
       }
     }
 
-    if (selectionMode.value === 'single' && !selectedDisk.value) return t('deploy.tip_select_single');
-    if (selectionMode.value === 'batch' && selectedDevices.value.size === 0) return t('deploy.tip_select_batch');
+    if (selectionMode.value === "single" && !selectedDisk.value) return t("deploy.tip_select_single");
+    if (selectionMode.value === "batch" && selectedDevices.value.size === 0) return t("deploy.tip_select_batch");
 
     // Guard: Hybrid mode Ventoy requirement on fresh drive
-    if (activeMode.value === 'hybrid' && !isNonDestructive.value && !ventoyStatus.value.valid) {
+    if (activeMode.value === "hybrid" && !isNonDestructive.value && !ventoyStatus.value.valid) {
       if (isMacOs.value) {
-        return t('deploy.tip_macos_unsupported');
+        return t("deploy.tip_macos_unsupported");
       }
-      return getVentoyValidationMessage(ventoyStatus.value) || t('deploy.tip_need_ventoy');
+      return getVentoyValidationMessage(ventoyStatus.value) || t("deploy.tip_need_ventoy");
     }
 
-    if (selectionMode.value === 'batch') {
+    if (selectionMode.value === "batch") {
       const total = selectedDevices.value.size;
       const bootCount = ventoyCountInBatch.value;
       const blankCount = total - bootCount;
       if (bootCount > 0 && blankCount > 0) {
-        return t('deploy.tip_batch_mixed', { bootCount, blankCount });
+        return t("deploy.tip_batch_mixed", { bootCount, blankCount });
       }
       if (bootCount === total && total > 0) {
-        return t('deploy.tip_batch_update_all', { count: total });
+        return t("deploy.tip_batch_update_all", { count: total });
       }
     }
 
-    return '';
+    return "";
   });
 
   // 4. isVmRunning
   const isVmRunning = computed(() => {
-    return currentDiskState.value === 'TESTING';
+    return currentDiskState.value === "TESTING";
   });
 
   // 5. isVmDisabled
@@ -542,13 +542,13 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
     if (!activeVmTargetDevice.value) return true;
 
     // Blank disks (UNDEPLOYED) or corrupted (ERROR) disks cannot be tested in VM
-    if (currentDiskState.value === 'UNDEPLOYED') return true;
-    if (currentDiskState.value === 'ERROR') return true;
-    if (currentDiskState.value === 'EJECTED') return true;
-    if (currentDiskState.value === 'VERIFYING') return true;
+    if (currentDiskState.value === "UNDEPLOYED") return true;
+    if (currentDiskState.value === "ERROR") return true;
+    if (currentDiskState.value === "EJECTED") return true;
+    if (currentDiskState.value === "VERIFYING") return true;
 
     // When testing is active, allow clicking stop VM
-    if (currentDiskState.value === 'TESTING') return false;
+    if (currentDiskState.value === "TESTING") return false;
 
     return false;
   });
@@ -556,55 +556,55 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
   // 6. vmDisabledReason
   const vmDisabledReason = computed(() => {
     if (isLaunchingVm.value) {
-      return t('vm.tip_launching');
+      return t("vm.tip_launching");
     }
     if (isDeploying.value) {
-      return t('vm.tip_deploying');
+      return t("vm.tip_deploying");
     }
-    if (currentDiskState.value === 'VERIFYING') {
-      return t('checksum.calculating');
+    if (currentDiskState.value === "VERIFYING") {
+      return t("checksum.calculating");
     }
     if (localHypervisorCount.value === 0) {
-      return t('vm.tip_not_installed');
+      return t("vm.tip_not_installed");
     }
     if (!activeVmTargetDevice.value) {
-      return t('vm.tip_select_target');
+      return t("vm.tip_select_target");
     }
-    if (currentDiskState.value === 'EJECTED') {
-      return t('vm.tip_select_target');
+    if (currentDiskState.value === "EJECTED") {
+      return t("vm.tip_select_target");
     }
-    if (currentDiskState.value === 'UNDEPLOYED') {
-      return t('vm.tip_select_target');
+    if (currentDiskState.value === "UNDEPLOYED") {
+      return t("vm.tip_select_target");
     }
-    if (currentDiskState.value === 'ERROR') {
+    if (currentDiskState.value === "ERROR") {
       const dev = selectedDisk.value?.device || activeVmTargetDevice.value;
       if (dev && errorDevices.value.has(dev)) {
         return errorDevices.value.get(dev)!;
       }
-      return t('vm.tip_select_target');
+      return t("vm.tip_select_target");
     }
-    if (currentDiskState.value === 'TESTING') {
-      return t('vm.tip_running');
+    if (currentDiskState.value === "TESTING") {
+      return t("vm.tip_running");
     }
-    return t('vm.tip_ready');
+    return t("vm.tip_ready");
   });
 
   // 7. isDiskLocked & diskLockReason (prevents switching disk, rescanning, or altering mode mid-operation)
   const isDiskLocked = computed(() => {
     return (
       isDeploying.value ||
-      currentDiskState.value === 'TESTING' ||
-      currentDiskState.value === 'VERIFYING' ||
+      currentDiskState.value === "TESTING" ||
+      currentDiskState.value === "VERIFYING" ||
       Boolean(isPreflight.value)
     );
   });
 
   const diskLockReason = computed(() => {
-    if (isDeploying.value) return t('deploy.tip_writing');
-    if (currentDiskState.value === 'TESTING') return t('vm.tip_running');
-    if (currentDiskState.value === 'VERIFYING') return t('checksum.calculating');
-    if (isPreflight.value) return t('deploy.checking');
-    return '';
+    if (isDeploying.value) return t("deploy.tip_writing");
+    if (currentDiskState.value === "TESTING") return t("vm.tip_running");
+    if (currentDiskState.value === "VERIFYING") return t("checksum.calculating");
+    if (isPreflight.value) return t("deploy.checking");
+    return "";
   });
 
   // Fine-grained action capabilities driven 100% by State Machine
@@ -612,12 +612,28 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
   const canLaunchVm = computed(() => !isVmDisabled.value && !isVmRunning.value);
   const canStopVm = computed(() => isVmRunning.value);
   const canSelectDisk = computed(() => !isDiskLocked.value);
-  const canEjectDisk = computed(() => !isDiskLocked.value && currentDiskState.value !== 'EJECTED');
+  const canEjectDisk = computed(() => !isDiskLocked.value && currentDiskState.value !== "EJECTED");
   const canSwitchMode = computed(() => !isDiskLocked.value);
-  const canChangeFs = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING' && !isDiskLocked.value);
-  const canManageIso = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING');
-  const canVerifyHash = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING');
-  const canConfigureVm = computed(() => !isDeploying.value && currentDiskState.value !== 'DEPLOYING' && currentDiskState.value !== 'TESTING' && !isLaunchingVm.value);
+  const canChangeFs = computed(
+    () =>
+      !isDeploying.value &&
+      currentDiskState.value !== "DEPLOYING" &&
+      currentDiskState.value !== "TESTING" &&
+      !isDiskLocked.value
+  );
+  const canManageIso = computed(
+    () => !isDeploying.value && currentDiskState.value !== "DEPLOYING" && currentDiskState.value !== "TESTING"
+  );
+  const canVerifyHash = computed(
+    () => !isDeploying.value && currentDiskState.value !== "DEPLOYING" && currentDiskState.value !== "TESTING"
+  );
+  const canConfigureVm = computed(
+    () =>
+      !isDeploying.value &&
+      currentDiskState.value !== "DEPLOYING" &&
+      currentDiskState.value !== "TESTING" &&
+      !isLaunchingVm.value
+  );
 
   return {
     currentDiskState,

@@ -104,9 +104,9 @@ func RunWails() error {
 		Title:       "UniBootDesktop",
 		Width:       1180,
 		Height:      820,
-		MinWidth:         1024,
-		MinHeight:        728,
-		StartHidden:      true,
+		MinWidth:    1024,
+		MinHeight:   728,
+		StartHidden: true,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
@@ -116,15 +116,15 @@ func RunWails() error {
 			EnableFileDrop:     true,
 			DisableWebViewDrop: false,
 		},
-		OnStartup:        app.startup,
+		OnStartup: app.startup,
 		OnDomReady: func(ctx context.Context) {
 			time.AfterFunc(50*time.Millisecond, func() {
 				wailsRuntime.Show(ctx)
 				wailsRuntime.WindowShow(ctx)
 			})
 		},
-		OnShutdown:       app.shutdown,
-		OnBeforeClose:    app.beforeClose,
+		OnShutdown:    app.shutdown,
+		OnBeforeClose: app.beforeClose,
 		SingleInstanceLock: &options.SingleInstanceLock{
 			UniqueId:               "com.snowdreamtech.unibootdesktop",
 			OnSecondInstanceLaunch: app.onSecondInstanceLaunch,
