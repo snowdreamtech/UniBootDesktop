@@ -19,3 +19,18 @@ if (signature !== "89504e470d0a1a0a") {
 }
 
 console.log(`Prepared Wails App Icon: ${targetPath}`);
+
+// Ensure macOS app bundle localization folders if building on darwin
+const darwinLocales = ["zh-Hans", "zh_CN", "zh-Hant", "zh_TW", "en", "ja", "ko", "de", "fr", "es", "ru", "pt", "it"];
+const devResources = resolve(projectRoot, "build/bin/UniBootDesktop.app/Contents/Resources");
+try {
+  const resStat = await stat(devResources);
+  if (resStat.isDirectory()) {
+    for (const loc of darwinLocales) {
+      const lproj = resolve(devResources, `${loc}.lproj`);
+      await mkdir(lproj, { recursive: true });
+    }
+  }
+} catch {
+  // Ignore if dev bundle does not exist yet
+}

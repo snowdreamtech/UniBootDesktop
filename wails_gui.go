@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	goRuntime "runtime"
 	"time"
 
 	"github.com/snowdreamtech/unibootdesktop/cmd"
@@ -54,8 +55,39 @@ func resolveWindowsUserDataPath() string {
 	return filepath.Join(env.GetDataDir(), "webview2")
 }
 
+// ensureDarwinLocalizations ensures macOS App bundle has necessary .lproj directories
+// so that native system dialogs (e.g. NSOpenPanel, NSSavePanel) automatically localize to the user's OS language.
+func ensureDarwinLocalizations() {
+	if goRuntime.GOOS != "darwin" {
+		return
+	}
+	exePath, err := os.Executable()
+	if err != nil {
+		return
+	}
+	macosDir := filepath.Dir(exePath)
+	if filepath.Base(macosDir) != "MacOS" {
+		return
+	}
+	contentsDir := filepath.Dir(macosDir)
+	if filepath.Base(contentsDir) != "Contents" {
+		return
+	}
+	resourcesDir := filepath.Join(contentsDir, "Resources")
+	locales := []string{"zh-Hans", "zh_CN", "zh-Hant", "zh_TW", "en", "ja", "ko", "de", "fr", "es", "ru", "pt", "it"}
+	for _, loc := range locales {
+		lprojDir := filepath.Join(resourcesDir, loc+".lproj")
+		_ = os.MkdirAll(lprojDir, 0o755)
+		stringsFile := filepath.Join(lprojDir, "InfoPlist.strings")
+		if _, err := os.Stat(stringsFile); os.IsNotExist(err) {
+			_ = os.WriteFile(stringsFile, []byte("/* Localized versions of Info.plist keys */\n"), 0o644)
+		}
+	}
+}
+
 // RunWails initializes and launches the Wails v2 desktop GUI application.
 func RunWails() error {
+	ensureDarwinLocalizations()
 	fmt.Println(">>> Starting Wails GUI Runtime...")
 	app := NewApp()
 
