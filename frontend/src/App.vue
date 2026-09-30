@@ -288,13 +288,21 @@ onUnmounted(() => {
   --wails-draggable: drag;
 }
 
+/* Header can also drag the window, while actions inside remain clickable */
+.app-header {
+  --wails-draggable: drag;
+}
+
 /* Ensure interactive components remain clickable while background can drag window */
-.app-header,
+.header-actions,
 .main-content,
 button,
 input,
 select,
-a {
+textarea,
+a,
+.lang-dropdown-menu,
+.settings-modal-card {
   --wails-draggable: no-drag;
 }
 

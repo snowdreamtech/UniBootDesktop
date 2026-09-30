@@ -102,6 +102,44 @@ select:focus::placeholder {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Desktop Native App UI Normalization */
+html,
+body,
+#app {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
+}
+
+/* Allow text selection in inputs and explicit selectable elements */
+input,
+textarea,
+[contenteditable="true"],
+.selectable,
+[data-selectable] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Prevent browser ghost dragging on media and link elements */
+img,
+a,
+svg {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+/* Clean focus outline for mouse clicks while keeping keyboard accessibility */
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
 body {
