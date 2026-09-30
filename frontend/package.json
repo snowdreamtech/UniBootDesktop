@@ -4,6 +4,7 @@
   "version": "0.7.0",
   "type": "module",
   "scripts": {
+    "predev": "node ../scripts/ensure-wailsjs.mjs",
     "dev": "vite",
     "prebuild": "node ../scripts/ensure-wailsjs.mjs",
     "build": "vue-tsc && vite build",
