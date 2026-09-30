@@ -79,5 +79,14 @@ window.addEventListener("gestureend", (e: Event) => e.preventDefault());
 window.addEventListener("dragover", (e: DragEvent) => e.preventDefault(), false);
 window.addEventListener("drop", (e: DragEvent) => e.preventDefault(), false);
 
+// 6. Native Window Focus / Blur State Adaptation
+window.addEventListener("focus", () => {
+  document.documentElement.classList.remove("window-inactive");
+});
+window.addEventListener("blur", () => {
+  document.documentElement.classList.add("window-inactive");
+});
+
 createApp(App).mount("#app");
+
 
