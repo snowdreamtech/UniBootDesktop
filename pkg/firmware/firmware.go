@@ -1,0 +1,591 @@
+// Copyright (c) 2026 SnowdreamTech. All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+package firmware
+
+import (
+	"bufio"
+	"context"
+	"crypto/sha256"
+	"embed"
+	"encoding/hex"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
+	"sync"
+	"time"
+
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	pkgHttp "github.com/snowdreamtech/unibootdesktop/internal/http"
+	"github.com/snowdreamtech/unibootdesktop/pkg/updater"
+)
+
+var (
+	customFirmwareDir   string
+	customFirmwareMutex sync.RWMutex
+)
+
+// SetCustomUniBootDir sets user-specified custom UniBoot firmware directory.
+func SetCustomUniBootDir(dir string) {
+	customFirmwareMutex.Lock()
+	defer customFirmwareMutex.Unlock()
+	customFirmwareDir = strings.TrimSpace(dir)
+}
+
+// GetCustomUniBootDir returns user-specified custom UniBoot firmware directory.
+func GetCustomUniBootDir() string {
+	customFirmwareMutex.RLock()
+	defer customFirmwareMutex.RUnlock()
+	return customFirmwareDir
+}
+
+// GetEffectiveFirmwareDir returns user-customized firmware directory if set and accessible, otherwise the default app local firmware dir.
+func GetEffectiveFirmwareDir() string {
+	custom := GetCustomUniBootDir()
+	if custom != "" {
+		if fi, err := os.Stat(custom); err == nil && fi.IsDir() {
+			return custom
+		}
+	}
+	return env.GetFirmwareDir()
+}
+
+//go:embed assets/*
+var embeddedAssets embed.FS
+
+func parseChecksumManifest(manifest []byte) (map[string]string, error) {
+	checksums := make(map[string]string)
+	scanner := bufio.NewScanner(strings.NewReader(string(manifest)))
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+
+		parts := strings.Fields(line)
+		if len(parts) < 2 {
+			continue
+		}
+		checksums[parts[1]] = strings.ToLower(parts[0])
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("failed to parse UniBoot checksum manifest: %w", err)
+	}
+
+	return checksums, nil
+}
+
+func firmwareChecksumManifest() (map[string]string, error) {
+	// Priority 1: Check effective firmware directory for custom/downloaded checksums
+	customManifestPath := filepath.Join(GetEffectiveFirmwareDir(), "checksums.sha256")
+	if manifest, err := os.ReadFile(customManifestPath); err == nil {
+		if checksums, err := parseChecksumManifest(manifest); err == nil && len(checksums) > 0 {
+			return checksums, nil
+		}
+	}
+
+	// Priority 2: Fallback to embedded checksums
+	manifest, err := embeddedAssets.ReadFile("assets/checksums.sha256")
+	if err != nil {
+		return nil, fmt.Errorf("failed to read UniBoot checksum manifest: %w", err)
+	}
+
+	return parseChecksumManifest(manifest)
+}
+
+func validateFirmwareAssetData(releaseName string, data []byte) error {
+	manifest, err := firmwareChecksumManifest()
+	if err != nil {
+		return err
+	}
+
+	expected, ok := manifest[releaseName]
+	if !ok {
+		return fmt.Errorf("missing checksum entry for %s", releaseName)
+	}
+
+	actual := sha256.Sum256(data)
+	actualHex := hex.EncodeToString(actual[:])
+	if strings.ToLower(actualHex) != strings.ToLower(expected) {
+		return fmt.Errorf("checksum mismatch for %s: expected %s, got %s", releaseName, expected, actualHex)
+	}
+
+	return nil
+}
+
+func validateFirmwareAssetFile(filePath string, releaseName string) error {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf("failed to read %s: %w", filePath, err)
+	}
+	return validateFirmwareAssetData(releaseName, data)
+}
+
+// FirmwareMapping defines the mapping between a UniBoot release asset name and its UEFI/BIOS standard target path.
+type FirmwareMapping struct {
+	ReleaseName string `json:"releaseName"` // Original Release asset filename (e.g. ipxe-x86_64.efi, undionly.kpxe)
+	TargetPath  string `json:"targetPath"`  // Standard target path in UNIBOOTEFI / U-disk (e.g. EFI/BOOT/BOOTX64.EFI, undionly.kpxe)
+	Description string `json:"description"` // Architecture / target description
+	IsReserved  bool   `json:"isReserved"`  // Whether this is a reserved / optional firmware module (e.g. undionly.kpxe)
+}
+
+// UniBootReleaseAsset represents a file asset attached to a UniBoot GitHub release.
+type UniBootReleaseAsset struct {
+	Name               string `json:"name"`
+	BrowserDownloadURL string `json:"browser_download_url"`
+	Size               int64  `json:"size"`
+}
+
+// UniBootReleaseInfo represents release metadata fetched from GitHub API for UniBoot repository.
+type UniBootReleaseInfo struct {
+	TagName     string                `json:"tagName"`
+	Name        string                `json:"name"`
+	PublishedAt string                `json:"publishedAt"`
+	Body        string                `json:"body"`
+	Assets      []UniBootReleaseAsset `json:"assets"`
+	LocalTag    string                `json:"localTag"`
+	HasUpdate   bool                  `json:"hasUpdate"`
+}
+
+// StandardFirmwareMappings defines the full matrix of UniBoot firmware files to be deployed.
+var StandardFirmwareMappings = []FirmwareMapping{
+	// UEFI Architectures
+	{ReleaseName: "ipxe-x86_64.efi", TargetPath: "EFI/BOOT/BOOTX64.EFI", Description: "UEFI x86_64 (Intel/AMD 64-bit)", IsReserved: false},
+	{ReleaseName: "ipxe-arm64.efi", TargetPath: "EFI/BOOT/BOOTAA64.EFI", Description: "UEFI ARM64 (Apple Silicon Mac / ARM Server)", IsReserved: false},
+	{ReleaseName: "ipxe-arm.efi", TargetPath: "EFI/BOOT/BOOTARM.EFI", Description: "UEFI ARM32 (32-bit ARM)", IsReserved: false},
+	{ReleaseName: "ipxe-i386.efi", TargetPath: "EFI/BOOT/BOOTIA32.EFI", Description: "UEFI IA32 (32-bit x86 Tablets/Board)", IsReserved: false},
+	{ReleaseName: "ipxe-loongarch64.efi", TargetPath: "EFI/BOOT/BOOTLOONGARCH64.EFI", Description: "UEFI LoongArch64 (Loongson 64-bit)", IsReserved: false},
+	{ReleaseName: "ipxe-riscv64.efi", TargetPath: "EFI/BOOT/BOOTRISCV64.EFI", Description: "UEFI RISC-V 64-bit", IsReserved: false},
+	{ReleaseName: "ipxe-riscv32.efi", TargetPath: "EFI/BOOT/BOOTRISCV32.EFI", Description: "UEFI RISC-V 32-bit", IsReserved: false},
+
+	// Legacy BIOS / MBR Boot Images
+	{ReleaseName: "ipxe.lkrn", TargetPath: "ipxe.lkrn", Description: "Legacy BIOS U-disk MBR Kernel Boot Image (x86)", IsReserved: false},
+	{ReleaseName: "ipxe-riscv64.lkrn", TargetPath: "ipxe-riscv64.lkrn", Description: "Legacy MBR Kernel Boot Image (RISC-V 64-bit)", IsReserved: false},
+	{ReleaseName: "ipxe-riscv32.lkrn", TargetPath: "ipxe-riscv32.lkrn", Description: "Legacy MBR Kernel Boot Image (RISC-V 32-bit)", IsReserved: false},
+	{ReleaseName: "undionly.kpxe", TargetPath: "undionly.kpxe", Description: "Legacy BIOS UNDI PXE Network Boot Firmware", IsReserved: true},
+
+	// Entry Scripts & Theme Background Assets
+	{ReleaseName: "boot.ipxe", TargetPath: "boot.ipxe", Description: "iPXE Global Entry Script", IsReserved: false},
+	{ReleaseName: "uniboot.ipxe", TargetPath: "uniboot.ipxe", Description: "UniBoot Main Interactive Menu Script", IsReserved: false},
+	{ReleaseName: "background.png", TargetPath: "background.png", Description: "UniBoot 1:1 Ventoy Theme Background Image (PNG)", IsReserved: false},
+	{ReleaseName: "UniBoot.iso", TargetPath: "iso/UniBoot.iso", Description: "UniBoot Full UEFI/BIOS Hybrid Boot ISO Image", IsReserved: true},
+}
+
+// GetFirmwareMappings returns a copy of all standard firmware mappings.
+func GetFirmwareMappings() []FirmwareMapping {
+	mappings := make([]FirmwareMapping, len(StandardFirmwareMappings))
+	copy(mappings, StandardFirmwareMappings)
+	return mappings
+}
+
+// GetMappingByReleaseName looks up a firmware mapping by its release asset name.
+func GetMappingByReleaseName(name string) (FirmwareMapping, bool) {
+	for _, m := range StandardFirmwareMappings {
+		if m.ReleaseName == name {
+			return m, true
+		}
+	}
+	return FirmwareMapping{}, false
+}
+
+// TargetPathForReleaseAsset returns the target path for a given release asset filename,
+// or empty string if not recognized.
+func TargetPathForReleaseAsset(name string) string {
+	if m, ok := GetMappingByReleaseName(name); ok {
+		return m.TargetPath
+	}
+	return ""
+}
+
+// GetLocalUniBootVersion returns current local/cached UniBoot version tag.
+func GetLocalUniBootVersion() string {
+	versionFile := filepath.Join(GetEffectiveFirmwareDir(), "version.json")
+	if data, err := os.ReadFile(versionFile); err == nil {
+		var ver struct {
+			TagName string `json:"tagName"`
+		}
+		if err := json.Unmarshal(data, &ver); err == nil && ver.TagName != "" {
+			return ver.TagName
+		}
+	}
+
+	// Priority 2: Read baseline version declared in embedded assets
+	if data, err := embeddedAssets.ReadFile("assets/version.json"); err == nil {
+		var ver struct {
+			TagName string `json:"tagName"`
+			Version string `json:"version"`
+		}
+		if err := json.Unmarshal(data, &ver); err == nil {
+			if ver.TagName != "" {
+				return ver.TagName + " (Embedded)"
+			}
+			if ver.Version != "" {
+				return "v" + ver.Version + " (Embedded)"
+			}
+		}
+	}
+
+	return "v1.0.0 (Embedded)"
+}
+
+// GetCleanUniBootVersion returns a normalized SemVer string (e.g. "1.0.0") without 'v' prefix or "(Embedded)" suffix.
+func GetCleanUniBootVersion() string {
+	raw := GetLocalUniBootVersion()
+	raw = strings.TrimSpace(strings.TrimSuffix(raw, "(Embedded)"))
+	raw = strings.TrimPrefix(raw, "v")
+	raw = strings.TrimPrefix(raw, "V")
+	if raw == "" {
+		return "1.0.0"
+	}
+	return raw
+}
+
+// FetchLatestUniBootRelease queries https://api.github.com/repos/snowdreamtech/UniBoot/releases/latest.
+func FetchLatestUniBootRelease(ctx context.Context, proxyPrefix string) (*UniBootReleaseInfo, error) {
+	apiURL := "https://api.github.com/repos/snowdreamtech/UniBoot/releases/latest"
+	finalURL := updater.BuildProxyURL(apiURL, proxyPrefix)
+
+	ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, finalURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create release request: %w", err)
+	}
+	req.Header.Set("Accept", "application/vnd.github.v3+json")
+	req.Header.Set("User-Agent", "UniBootDesktop/1.0")
+
+	client := pkgHttp.NewClientWithTimeout(15 * time.Second)
+	resp, err := client.Do(req)
+
+	// Fallback to direct URL if proxy request fails
+	if (err != nil || resp.StatusCode != http.StatusOK) && finalURL != apiURL {
+		if resp != nil {
+			resp.Body.Close()
+		}
+		fallbackReq, fallbackErr := http.NewRequestWithContext(ctx, http.MethodGet, apiURL, nil)
+		if fallbackErr == nil {
+			fallbackReq.Header.Set("Accept", "application/vnd.github.v3+json")
+			fallbackReq.Header.Set("User-Agent", "UniBootDesktop/1.0")
+			resp, err = client.Do(fallbackReq)
+		}
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to query UniBoot latest release: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("GitHub API returned status code %d for %s", resp.StatusCode, finalURL)
+	}
+
+	// 限制响应体大小为10MB，防止内存耗尽
+	var ghRelease struct {
+		TagName     string `json:"tag_name"`
+		Name        string `json:"name"`
+		PublishedAt string `json:"published_at"`
+		Body        string `json:"body"`
+		Assets      []struct {
+			Name               string `json:"name"`
+			BrowserDownloadURL string `json:"browser_download_url"`
+			Size               int64  `json:"size"`
+		} `json:"assets"`
+	}
+
+	limitedReader := io.LimitReader(resp.Body, 10*1024*1024)
+
+	if err := json.NewDecoder(limitedReader).Decode(&ghRelease); err != nil {
+		return nil, fmt.Errorf("failed to decode GitHub release response: %w", err)
+	}
+
+	localTag := GetLocalUniBootVersion()
+	hasUpdate := localTag != ghRelease.TagName
+
+	releaseInfo := &UniBootReleaseInfo{
+		TagName:     ghRelease.TagName,
+		Name:        ghRelease.Name,
+		PublishedAt: ghRelease.PublishedAt,
+		Body:        ghRelease.Body,
+		LocalTag:    localTag,
+		HasUpdate:   hasUpdate,
+	}
+
+	for _, a := range ghRelease.Assets {
+		releaseInfo.Assets = append(releaseInfo.Assets, UniBootReleaseAsset{
+			Name:               a.Name,
+			BrowserDownloadURL: a.BrowserDownloadURL,
+			Size:               a.Size,
+		})
+	}
+
+	return releaseInfo, nil
+}
+
+// SyncUniBootFirmware downloads release assets from latest UniBoot release into GetDataDir()/firmware/<releaseName>.
+func SyncUniBootFirmware(ctx context.Context, proxyPrefix string) (*UniBootReleaseInfo, error) {
+	rel, err := FetchLatestUniBootRelease(ctx, proxyPrefix)
+	if err != nil {
+		return nil, err
+	}
+
+	firmwareDir := GetEffectiveFirmwareDir()
+	if err := os.MkdirAll(firmwareDir, 0755); err != nil {
+		return nil, fmt.Errorf("failed to create firmware cache dir: %w", err)
+	}
+
+	expectedAssets := make(map[string]bool)
+	for _, m := range StandardFirmwareMappings {
+		expectedAssets[m.ReleaseName] = true
+	}
+
+	var assetsToDownload []UniBootReleaseAsset
+	for _, asset := range rel.Assets {
+		if expectedAssets[asset.Name] {
+			assetsToDownload = append(assetsToDownload, asset)
+		}
+	}
+
+	if len(assetsToDownload) == 0 {
+		return nil, fmt.Errorf("firmware upgrade incomplete: no matching assets found in release")
+	}
+
+	type downloadOutcome struct {
+		name string
+		err  error
+	}
+
+	outcomeCh := make(chan downloadOutcome, len(assetsToDownload))
+	const maxConcurrency = 5
+	sem := make(chan struct{}, maxConcurrency)
+	var wg sync.WaitGroup
+
+	for _, a := range assetsToDownload {
+		wg.Add(1)
+		go func(asset UniBootReleaseAsset) {
+			defer wg.Done()
+			sem <- struct{}{}
+			defer func() { <-sem }()
+
+			destPath := filepath.Join(firmwareDir, asset.Name)
+			if err := updater.DownloadFileWithProxy(ctx, asset.BrowserDownloadURL, destPath, proxyPrefix); err != nil {
+				outcomeCh <- downloadOutcome{name: asset.Name, err: err}
+				return
+			}
+			if err := validateFirmwareAssetFile(destPath, asset.Name); err != nil {
+				_ = os.Remove(destPath)
+				outcomeCh <- downloadOutcome{
+					name: asset.Name,
+					err:  fmt.Errorf("downloaded firmware asset %s failed checksum validation: %w", asset.Name, err),
+				}
+				return
+			}
+			outcomeCh <- downloadOutcome{name: asset.Name, err: nil}
+		}(a)
+	}
+
+	wg.Wait()
+	close(outcomeCh)
+
+	downloadedCount := 0
+	var firstErr error
+	for oc := range outcomeCh {
+		if oc.err != nil {
+			if firstErr == nil {
+				firstErr = oc.err
+			}
+		} else {
+			downloadedCount++
+		}
+	}
+
+	if !firmwareSyncComplete(downloadedCount, len(expectedAssets)) {
+		if firstErr != nil {
+			return nil, fmt.Errorf("firmware upgrade incomplete: %w", firstErr)
+		}
+		return nil, fmt.Errorf("firmware upgrade incomplete: downloaded %d of %d required assets", downloadedCount, len(expectedAssets))
+	}
+
+	versionFile := filepath.Join(firmwareDir, "version.json")
+	versionData, _ := json.MarshalIndent(map[string]interface{}{
+		"tagName":   rel.TagName,
+		"updatedAt": time.Now().Format(time.RFC3339),
+		"count":     downloadedCount,
+	}, "", "  ")
+	_ = os.WriteFile(versionFile, versionData, 0644)
+
+	rel.LocalTag = rel.TagName
+	rel.HasUpdate = false
+
+	return rel, nil
+}
+
+func firmwareSyncComplete(downloadedCount int, expectedCount int) bool {
+	return expectedCount > 0 && downloadedCount == expectedCount
+}
+
+// GetFirmwareData retrieves binary data for a firmware asset based on priority:
+// Priority 1: User specified custom directory / cached firmware in GetEffectiveFirmwareDir()/<releaseName>
+// Priority 2: Built-in embedded binary (embed.FS)
+func GetFirmwareData(releaseName string) ([]byte, string, error) {
+	// Check user data directory or custom directory for firmware
+	localPath := filepath.Join(GetEffectiveFirmwareDir(), releaseName)
+	if info, err := os.Stat(localPath); err == nil && !info.IsDir() && info.Size() > 0 {
+		data, err := os.ReadFile(localPath)
+		if err == nil {
+			if err := validateFirmwareAssetData(releaseName, data); err == nil {
+				return data, fmt.Sprintf("Local Firmware (%s)", localPath), nil
+			}
+			if GetCustomUniBootDir() == "" {
+				_ = os.Remove(localPath)
+			}
+		}
+	}
+
+	// Fallback: Read from built-in embedded binary
+	embeddedPath := "assets/" + releaseName
+	data, err := embeddedAssets.ReadFile(embeddedPath)
+	if err != nil {
+		return nil, "", fmt.Errorf("firmware asset %s not found: %w", releaseName, err)
+	}
+	if err := validateFirmwareAssetData(releaseName, data); err != nil {
+		return nil, "", fmt.Errorf("firmware asset %s failed checksum validation: %w", releaseName, err)
+	}
+	return data, "Embedded Binary (embed.FS)", nil
+}
+
+// ExtractFirmwareToDir extracts firmware files to the specified target directory using priority selection.
+// It populates standard UEFI/BIOS paths (EFI/BOOT/...) as well as UniBoot structure (ipxe/, iso/).
+func ExtractFirmwareToDir(targetDir string) error {
+	if targetDir == "" {
+		return fmt.Errorf("target directory cannot be empty")
+	}
+
+	for _, mapping := range StandardFirmwareMappings {
+		data, _, err := GetFirmwareData(mapping.ReleaseName)
+		if err != nil {
+			return fmt.Errorf("failed to load firmware asset %s: %w", mapping.ReleaseName, err)
+		}
+
+		// 1. Primary target path (e.g. EFI/BOOT/BOOTX64.EFI or root)
+		destPath := filepath.Join(targetDir, filepath.FromSlash(mapping.TargetPath))
+		if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
+			return fmt.Errorf("failed to create directory for %s: %w", destPath, err)
+		}
+
+		if err := os.WriteFile(destPath, data, 0644); err != nil {
+			return fmt.Errorf("failed to extract firmware asset to %s: %w", destPath, err)
+		}
+
+		// 2. Extra UniBoot structure sync: populate ipxe/ for Ventoy menu integration
+		if strings.HasSuffix(mapping.ReleaseName, ".efi") ||
+			strings.HasSuffix(mapping.ReleaseName, ".lkrn") ||
+			strings.HasSuffix(mapping.ReleaseName, ".kpxe") ||
+			strings.HasSuffix(mapping.ReleaseName, ".png") ||
+			strings.HasSuffix(mapping.ReleaseName, ".ipxe") {
+			ipxePath := filepath.Join(targetDir, "ipxe", mapping.ReleaseName)
+			if err := os.MkdirAll(filepath.Dir(ipxePath), 0755); err == nil {
+				_ = os.WriteFile(ipxePath, data, 0644)
+			}
+		}
+	}
+
+	return nil
+}
+
+// ExtractFirmwareHybridMode extracts Hybrid Mode assets (ipxe/ & iso/) directly to the main data partition (Partition 1),
+// without redundantly polluting the data partition with EFI/BOOT/ files (handled by Ventoy Partition 2).
+func ExtractFirmwareHybridMode(dataMountDir string) error {
+	if dataMountDir == "" {
+		return fmt.Errorf("data mount directory cannot be empty")
+	}
+
+	for _, mapping := range StandardFirmwareMappings {
+		data, _, err := GetFirmwareData(mapping.ReleaseName)
+		if err != nil {
+			return fmt.Errorf("failed to load firmware asset %s: %w", mapping.ReleaseName, err)
+		}
+
+		// 1. Populate ipxe/ directory for Ventoy F6 custom menu integration
+		if strings.HasSuffix(mapping.ReleaseName, ".efi") ||
+			strings.HasSuffix(mapping.ReleaseName, ".lkrn") ||
+			strings.HasSuffix(mapping.ReleaseName, ".kpxe") ||
+			strings.HasSuffix(mapping.ReleaseName, ".png") ||
+			strings.HasSuffix(mapping.ReleaseName, ".ipxe") {
+			ipxePath := filepath.Join(dataMountDir, "ipxe", mapping.ReleaseName)
+			if err := os.MkdirAll(filepath.Dir(ipxePath), 0755); err != nil {
+				return fmt.Errorf("failed to create directory for %s: %w", ipxePath, err)
+			}
+			if err := os.WriteFile(ipxePath, data, 0644); err != nil {
+				return fmt.Errorf("failed to write %s: %w", ipxePath, err)
+			}
+		}
+
+		// 2. Populate iso/ directory for UniBoot ISO placement
+		if mapping.ReleaseName == "UniBoot.iso" {
+			isoPath := filepath.Join(dataMountDir, "iso", "UniBoot.iso")
+			if err := os.MkdirAll(filepath.Dir(isoPath), 0755); err != nil {
+				return fmt.Errorf("failed to create directory for %s: %w", isoPath, err)
+			}
+			if err := os.WriteFile(isoPath, data, 0644); err != nil {
+				return fmt.Errorf("failed to write %s: %w", isoPath, err)
+			}
+		}
+	}
+	return nil
+}
+
+// CleanDirectoryContents removes all files and subdirectories inside dirPath without deleting dirPath itself.
+func CleanDirectoryContents(dirPath string) error {
+	cleanPath := filepath.Clean(dirPath)
+	tempPath := filepath.Clean(os.TempDir())
+	if cleanPath == "" || cleanPath == "/" || cleanPath == "." || cleanPath == tempPath {
+		return fmt.Errorf("refusing to clean unsafe root or temporary directory: %q", dirPath)
+	}
+	entries, err := os.ReadDir(dirPath)
+	if err != nil {
+		return err
+	}
+	for _, entry := range entries {
+		path := filepath.Join(dirPath, entry.Name())
+		_ = os.RemoveAll(path)
+	}
+	return nil
+}
+
+// ExtractFirmwareCloudMode extracts Cloud Mode assets (EFI/BOOT/ & root scripts & background image) directly to ESP partition (Partition 2),
+// providing 100% native iPXE cloud boot matching 1:1 Ventoy theme design.
+func ExtractFirmwareCloudMode(efiMountDir string) error {
+	if efiMountDir == "" {
+		return fmt.Errorf("EFI mount directory cannot be empty")
+	}
+
+	// Wipe all stale files/directories inside ESP partition before extracting fresh Cloud Mode firmware
+	_ = CleanDirectoryContents(efiMountDir)
+
+	for _, mapping := range StandardFirmwareMappings {
+		// Cloud Mode executes directly from ESP partition (64MB) and does NOT need 18.5MB UniBoot.iso
+		if mapping.ReleaseName == "UniBoot.iso" || (mapping.IsReserved && strings.HasSuffix(mapping.ReleaseName, ".iso")) {
+			continue
+		}
+
+		data, _, err := GetFirmwareData(mapping.ReleaseName)
+		if err != nil {
+			return fmt.Errorf("failed to load firmware asset %s: %w", mapping.ReleaseName, err)
+		}
+
+		// Cloud Mode writes EFI/BOOT/ BOOTX64.EFI, BOOTAA64.EFI, boot.ipxe, uniboot.ipxe, background.png to ESP partition
+		destPath := filepath.Join(efiMountDir, filepath.FromSlash(mapping.TargetPath))
+		if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
+			return fmt.Errorf("failed to create directory for %s: %w", destPath, err)
+		}
+		if err := os.WriteFile(destPath, data, 0644); err != nil {
+			return fmt.Errorf("failed to extract firmware asset to %s: %w", destPath, err)
+		}
+	}
+	return nil
+}

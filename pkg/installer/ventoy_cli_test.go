@@ -1,0 +1,142 @@
+// Copyright (c) 2026 SnowdreamTech. All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+package installer
+
+import (
+	"encoding/json"
+	"os"
+	"path/filepath"
+	"runtime"
+	"testing"
+)
+
+func TestValidateVentoyCliEmptyPath(t *testing.T) {
+	if runtime.GOOS == "darwin" {
+		t.Skip("macOS validation stops before path validation")
+	}
+
+	res := ValidateVentoyCli("")
+	if res.Valid {
+		t.Errorf("Expected invalid result for empty path, got valid")
+	}
+	if res.Code != "path_empty" {
+		t.Errorf("Expected empty path code, got %q", res.Code)
+	}
+}
+
+func TestVentoyCliValidationMessageIsNotSerialized(t *testing.T) {
+	result := &VentoyCliValidationResult{
+		Valid:   false,
+		Code:    "path_missing",
+		Detail:  "/tmp/ventoy",
+		Message: "backend-only diagnostic",
+	}
+
+	encoded, err := json.Marshal(result)
+	if err != nil {
+		t.Fatalf("json.Marshal() error = %v", err)
+	}
+	if string(encoded) == "" || string(encoded) == "{}" {
+		t.Fatalf("expected validation fields in JSON, got %s", encoded)
+	}
+	if string(encoded) != `{"valid":false,"version":"","code":"path_missing","detail":"/tmp/ventoy","executablePath":""}` {
+		t.Fatalf("unexpected validation JSON: %s", encoded)
+	}
+}
+
+func TestValidateVentoyCliNonExistentPath(t *testing.T) {
+	if runtime.GOOS == "darwin" {
+		t.Skip("macOS validation stops before path validation")
+	}
+
+	res := ValidateVentoyCli("/path/to/nonexistent/ventoy")
+	if res.Valid {
+		t.Errorf("Expected invalid result for nonexistent path, got valid")
+	}
+	if res.Code != "path_missing" {
+		t.Errorf("Expected missing path code, got %q", res.Code)
+	}
+}
+
+func TestValidateVentoyCliMacOSReturnsLocalizedStatusCode(t *testing.T) {
+	if runtime.GOOS != "darwin" {
+		t.Skip("macOS-specific Ventoy validation")
+	}
+
+	res := ValidateVentoyCli("/tmp/ventoy")
+	if res.Valid {
+		t.Fatal("Expected macOS Ventoy validation to be invalid")
+	}
+	if res.Code != "macos_unsupported" {
+		t.Fatalf("Expected macOS unsupported status code, got %q", res.Code)
+	}
+}
+
+func TestExtractVentoyVersion(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"Ventoy2Disk.sh v1.0.99", "v1.0.99"},
+		{"Ventoy2Disk version 1.0.88", "v1.0.88"},
+		{"v1.0.95 (c) Ventoy", "v1.0.95"},
+		{"No version number here", ""},
+	}
+
+	for _, tt := range tests {
+		got := extractVentoyVersion(tt.input)
+		if got != tt.expected {
+			t.Errorf("extractVentoyVersion(%q) = %q, want %q", tt.input, got, tt.expected)
+		}
+	}
+}
+
+func TestNormalizeVentoyCliInput(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{name: "trim spaces", input: "  /opt/ventoy/  ", expected: "/opt/ventoy"},
+		{name: "strip trailing separator", input: "/opt/ventoy/", expected: "/opt/ventoy"},
+		{name: "keep executable path", input: " /opt/ventoy/Ventoy2Disk.sh ", expected: "/opt/ventoy/Ventoy2Disk.sh"},
+		{name: "windows dir", input: `C:\\Ventoy\\`, expected: `C:\Ventoy`},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := normalizeVentoyCliInput(tt.input)
+			if got != tt.expected {
+				t.Fatalf("normalizeVentoyCliInput(%q) = %q, want %q", tt.input, got, tt.expected)
+			}
+		})
+	}
+}
+
+func TestValidateVentoyCliDummyScript(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Skipping bash script test on Windows")
+	}
+	t.Setenv("UNIBOOT_DRY_RUN", "1")
+
+	tmpDir, err := os.MkdirTemp("", "ventoy-test-*")
+	if err != nil {
+		t.Fatalf("Failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	scriptPath := filepath.Join(tmpDir, "Ventoy2Disk.sh")
+	scriptContent := "#!/bin/sh\necho \"Ventoy2Disk.sh v1.0.99\"\nexit 0\n"
+	if err := os.WriteFile(scriptPath, []byte(scriptContent), 0755); err != nil {
+		t.Fatalf("Failed to write mock script: %v", err)
+	}
+
+	res := ValidateVentoyCli(tmpDir)
+	if !res.Valid {
+		t.Errorf("Expected valid result for mock script dir, got invalid: %s", res.Message)
+	}
+	if res.Version != "v1.0.99" && res.Version != "v1.0.99 (Dry-Run)" {
+		t.Errorf("Expected version v1.0.99 or v1.0.99 (Dry-Run), got %s", res.Version)
+	}
+}

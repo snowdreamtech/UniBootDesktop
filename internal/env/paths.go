@@ -78,6 +78,26 @@ func GetDatabasePath() string {
 	return filepath.Join(GetDataDir(), "unibootdesktop.db")
 }
 
+// GetFirmwareDir returns the default directory for local UniBoot firmware downloads and updates.
+func GetFirmwareDir() string {
+	return filepath.Join(GetDataDir(), "firmware")
+}
+
+// GetVentoyDir returns the default directory for local Ventoy installation files.
+func GetVentoyDir() string {
+	return filepath.Join(GetDataDir(), "ventoy")
+}
+
+// EnsureAppDirs creates the default application data folders used by firmware and Ventoy.
+func EnsureAppDirs() error {
+	for _, dir := range []string{GetDataDir(), GetFirmwareDir(), GetVentoyDir()} {
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // GetCacheDir returns the directory where cache files are stored.
 // It follows XDG Base Directory Specification for cache home.
 func GetCacheDir() string {
