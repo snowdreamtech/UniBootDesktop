@@ -17,13 +17,13 @@ import (
 
 	"github.com/mattn/go-isatty"
 	"github.com/pterm/pterm"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
-	"github.com/snowdreamtech/unigodesktop/internal/version"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	pkgHttp "github.com/snowdreamtech/unibootdesktop/internal/http"
+	"github.com/snowdreamtech/unibootdesktop/internal/version"
 )
 
 const (
-	githubAPIURL = "https://api.github.com/repos/snowdreamtech/UniGoDesktop/releases/latest"
+	githubAPIURL = "https://api.github.com/repos/snowdreamtech/UniBootDesktop/releases/latest"
 	cacheFile    = "update-cache.json"
 	checkPeriod  = 24 * time.Hour
 	promptPeriod = 24 * time.Hour
@@ -241,8 +241,8 @@ func PromptIfAvailable(currentVersion string, cmdName string) {
 	}
 
 	// Print prompt to Stderr
-	pterm.Warning.Printf("unigodesktop version %s available\n", cache.LatestVersion)
-	pterm.Warning.Printf("To update, run `unigodesktop self-update`\n")
+	pterm.Warning.Printf("unibootdesktop version %s available\n", cache.LatestVersion)
+	pterm.Warning.Printf("To update, run `unibootdesktop self-update`\n")
 
 	// Update prompt time
 	cache.LastPrompted = time.Now()

@@ -30,7 +30,7 @@ var manpageCmd = &cobra.Command{
 		}
 
 		header := &doc.GenManHeader{
-			Title:   "UNIGODESKTOP",
+			Title:   "UNIBOOTDESKTOP",
 			Section: "1",
 		}
 

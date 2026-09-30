@@ -6,16 +6,16 @@ package cmd
 import (
 	"context"
 
-	"github.com/snowdreamtech/unigodesktop/internal/desktop"
-	"github.com/snowdreamtech/unigodesktop/pkg/config"
+	"github.com/snowdreamtech/unibootdesktop/internal/desktop"
+	"github.com/snowdreamtech/unibootdesktop/pkg/config"
 	"github.com/spf13/cobra"
 )
 
 var guiCmd = &cobra.Command{
 	Use:     "gui",
 	Aliases: []string{"desktop"},
-	Short:   "Launch the UniGoDesktop graphical user interface",
-	Long:    `Launch the UniGoDesktop interactive Wails / Webview graphical desktop interface and system tray.`,
+	Short:   "Launch the UniBootDesktop graphical user interface",
+	Long:    `Launch the UniBootDesktop interactive Wails / Webview graphical desktop interface and system tray.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if WailsRunner != nil {
 			return WailsRunner()

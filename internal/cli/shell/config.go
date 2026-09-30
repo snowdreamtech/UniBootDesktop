@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/snowdreamtech/unigodesktop/internal/cli/output"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/cli/output"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
 )
 
 // ShellConfigManager handles persistent configuration changes in shell RC files.
@@ -65,14 +65,14 @@ func (m *ShellConfigManager) Inject(shell ShellType, marker string, content stri
 		return fmt.Errorf("failed to read config file: %w", err)
 	}
 
-	searchPattern := fmt.Sprintf("unigodesktop %s activation", marker)
+	searchPattern := fmt.Sprintf("unibootdesktop %s activation", marker)
 	fullBlock := fmt.Sprintf("\n# %s\n%s\n", searchPattern, content)
 
 	rawContentStr := string(rawContent)
 	if strings.Contains(rawContentStr, searchPattern) {
 		// Already present, check if we need to update
 		if strings.Contains(rawContentStr, content) {
-			m.formatter.Info(fmt.Sprintf("UniGoDesktop %s logic already up to date in %s", marker, configFile), nil)
+			m.formatter.Info(fmt.Sprintf("UniBootDesktop %s logic already up to date in %s", marker, configFile), nil)
 			return nil
 		}
 
@@ -159,7 +159,7 @@ func (m *ShellConfigManager) Remove(shell ShellType, marker string) error {
 		return fmt.Errorf("failed to read config file: %w", err)
 	}
 
-	searchPattern := fmt.Sprintf("unigodesktop %s activation", marker)
+	searchPattern := fmt.Sprintf("unibootdesktop %s activation", marker)
 	rawContentStr := string(rawContent)
 
 	if !strings.Contains(rawContentStr, searchPattern) {

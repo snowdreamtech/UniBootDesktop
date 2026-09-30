@@ -11,11 +11,11 @@ import (
 
 func TestGet(t *testing.T) {
 	// Setup
-	t.Setenv("UNIGODESKTOP_TEST_KEY_1", "val1")
+	t.Setenv("UNIBOOTDESKTOP_TEST_KEY_1", "val1")
 
 	t.Setenv("TEST_KEY_2", "val2")
 
-	t.Setenv("UNIGODESKTOP_TEST_KEY_3", "val3_unigo")
+	t.Setenv("UNIBOOTDESKTOP_TEST_KEY_3", "val3_uniboot")
 	t.Setenv("TEST_KEY_3", "val3_raw")
 
 	tests := []struct {
@@ -24,7 +24,7 @@ func TestGet(t *testing.T) {
 	}{
 		{"TEST_KEY_1", "val1"},
 		{"TEST_KEY_2", "val2"},
-		{"TEST_KEY_3", "val3_unigo"},
+		{"TEST_KEY_3", "val3_uniboot"},
 		{"TEST_KEY_NONEXISTENT", ""},
 		{"PATH", os.Getenv("PATH")},
 	}

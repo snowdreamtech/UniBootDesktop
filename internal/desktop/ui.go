@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
 )
 
 // UIRunner manages the web backend server bridge and UI window binding.
@@ -41,7 +41,7 @@ func (r *UIRunner) Start(ctx context.Context) error {
 	// Provide health/status API endpoint for desktop UI
 	mux.HandleFunc("/api/v1/status", func(w http.ResponseWriter, req *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprintf(w, `{"status":"ok","app":"UniGoDesktop","state":"%s","uptime":"%s"}`,
+		fmt.Fprintf(w, `{"status":"ok","app":"UniBootDesktop","state":"%s","uptime":"%s"}`,
 			r.app.GetState(), r.app.Uptime().String())
 	})
 

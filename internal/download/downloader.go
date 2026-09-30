@@ -102,7 +102,7 @@ type DownloadOptions struct {
 
 	// VerifyGPG indicates whether the downloader should attempt to fetch
 	// a detached GPG signature (.sig or .asc) and verify the downloaded file
-	// against the UniGoDesktop keyring.
+	// against the UniBootDesktop keyring.
 	VerifyGPG bool
 
 	// GPGResult points to a struct that will be populated with the result

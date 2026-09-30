@@ -11,8 +11,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/snowdreamtech/unigodesktop/cmd"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/cmd"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -42,10 +42,10 @@ func resolveWindowsUserDataPath() string {
 	}
 
 	if localAppData := os.Getenv("LOCALAPPDATA"); localAppData != "" {
-		return filepath.Join(localAppData, "UniGoDesktop", "webview2")
+		return filepath.Join(localAppData, "UniBootDesktop", "webview2")
 	}
 	if appData := os.Getenv("APPDATA"); appData != "" {
-		return filepath.Join(appData, "UniGoDesktop", "webview2")
+		return filepath.Join(appData, "UniBootDesktop", "webview2")
 	}
 	return filepath.Join(env.GetDataDir(), "webview2")
 }
@@ -56,7 +56,7 @@ func RunWails() error {
 	app := NewApp()
 
 	return wails.Run(&options.App{
-		Title:       "UniGoDesktop",
+		Title:       "UniBootDesktop",
 		Width:       1180,
 		Height:      820,
 		MinWidth:    1024,
@@ -70,7 +70,7 @@ func RunWails() error {
 		OnShutdown:       app.shutdown,
 		OnBeforeClose:    app.beforeClose,
 		SingleInstanceLock: &options.SingleInstanceLock{
-			UniqueId:               "com.snowdreamtech.unigodesktop",
+			UniqueId:               "com.snowdreamtech.unibootdesktop",
 			OnSecondInstanceLaunch: app.onSecondInstanceLaunch,
 		},
 		Bind: []interface{}{
@@ -90,7 +90,7 @@ func RunWails() error {
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{
-				Title:   "UniGoDesktop",
+				Title:   "UniBootDesktop",
 				Message: fmt.Sprintf("Universal Go Desktop Suite\nVersion %s", env.GitTag),
 				Icon:    appIcon,
 			},
@@ -98,7 +98,7 @@ func RunWails() error {
 		Linux: &linux.Options{
 			Icon:                appIcon,
 			WindowIsTranslucent: false,
-			ProgramName:         "unigodesktop",
+			ProgramName:         "unibootdesktop",
 			WebviewGpuPolicy:    linux.WebviewGpuPolicyOnDemand,
 		},
 	})

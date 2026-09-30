@@ -8,18 +8,18 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	"github.com/snowdreamtech/unigodesktop/pkg/config"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/pkg/config"
 	"github.com/spf13/cobra"
 )
 
 var editCmd = &cobra.Command{
 	Use:   "edit",
 	Short: "Open the config file in $EDITOR",
-	Long: `Open the UniGoDesktop config file in your preferred editor.
+	Long: `Open the UniBootDesktop config file in your preferred editor.
 
 Priority for finding an editor:
-1.  UNIGODESKTOP_EDITOR environment variable
+1.  UNIBOOTDESKTOP_EDITOR environment variable
 2.  VISUAL environment variable
 3.  EDITOR environment variable
 4.  Standard system defaults (vim, nano, notepad)`,

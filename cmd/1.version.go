@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/common-nighthawk/go-figure"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	"github.com/snowdreamtech/unigodesktop/internal/sysinfo"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/sysinfo"
 	"github.com/spf13/cobra"
 )
 

@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/pterm/pterm"
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
-	"github.com/snowdreamtech/unigodesktop/pkg/config"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/pkg/config"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +26,7 @@ func init() {
 var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "Manage configuration",
-	Long:  "Query or modify the UniGoDesktop configuration settings stored in unigodesktop.toml.",
+	Long:  "Query or modify the UniBootDesktop configuration settings stored in unibootdesktop.toml.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return configListCmd.RunE(cmd, args)
 	},
@@ -55,7 +55,7 @@ var configListCmd = &cobra.Command{
 			{"proxyUser", cfg.ProxyUser},
 		}
 
-		pterm.DefaultSection.Println("⚙️ UniGoDesktop Configuration")
+		pterm.DefaultSection.Println("⚙️ UniBootDesktop Configuration")
 		return pterm.DefaultTable.WithHasHeader().WithData(tableData).Render()
 	},
 }
@@ -157,7 +157,7 @@ var configSetCmd = &cobra.Command{
 			return err
 		}
 
-		pterm.Success.Printf("Set '%s' to '%s' in unigodesktop.toml\n", args[0], val)
+		pterm.Success.Printf("Set '%s' to '%s' in unibootdesktop.toml\n", args[0], val)
 		return nil
 	},
 }

@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/snowdreamtech/unigodesktop/cmd"
+	"github.com/snowdreamtech/unibootdesktop/cmd"
 )
 
 func main() {

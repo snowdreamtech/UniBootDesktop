@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/pelletier/go-toml/v2"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
 )
 
 // AppConfig represents universal desktop application settings.
