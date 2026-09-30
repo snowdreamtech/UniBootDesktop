@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.7.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.6.0...v0.7.0) (2026-09-30)
+
+
+### 🚀 Features
+
+* **config:** add enableTray and closeAction configuration options ([020ec09](https://github.com/snowdreamtech/UniGoDesktop/commit/020ec090eb9cbf734492ae95263bd97ccf635b9f))
+* **gui:** add system tray and close action controls in settings modal ([31cacc0](https://github.com/snowdreamtech/UniGoDesktop/commit/31cacc0bff99dd22cf5e7bb3bf508b5fe7474ec9))
+* **gui:** block mouse navigation side-buttons and history navigation shortcuts ([d944c95](https://github.com/snowdreamtech/UniGoDesktop/commit/d944c957e0d53500a1fd5b2d673cfbf265bf4279))
+* **gui:** eliminate cold start flash using StartHidden and WindowShow ([c370160](https://github.com/snowdreamtech/UniGoDesktop/commit/c3701608da93fd8bd6b5527044357da2f88041f9))
+* **gui:** enable HideWindowOnClose for macOS native lifecycle ([0f4185d](https://github.com/snowdreamtech/UniGoDesktop/commit/0f4185d93634b12588b88af80b1ba191f69c1e01))
+* **gui:** enable single instance lock to prevent duplicate app launches ([225af85](https://github.com/snowdreamtech/UniGoDesktop/commit/225af855f89d1f95d36183b57911f0b69ad87341))
+* **gui:** implement macOS hidden inset titlebar and dynamic theme sync ([8951bb3](https://github.com/snowdreamtech/UniGoDesktop/commit/8951bb3f02e7eed2fbc3b0db4e0482f07e0d1740))
+* **gui:** implement native window focus and blur visual adaptation ([fd3b5fb](https://github.com/snowdreamtech/UniGoDesktop/commit/fd3b5fbc59bf35bd0ef3c2559c2e7f58b9bd2752))
+* **gui:** implement OnBeforeClose lifecycle hook for tray close action ([659d14e](https://github.com/snowdreamtech/UniGoDesktop/commit/659d14efed409d36661089474d6c51f3a1d077bc))
+* **gui:** listen for OS system theme changes in real-time ([73902f6](https://github.com/snowdreamtech/UniGoDesktop/commit/73902f6f3264d2d0ce74acf0e4e6b24730be31e3))
+* **gui:** prevent browser reload shortcuts, gesture pinch zoom, and drop navigation ([2bd723d](https://github.com/snowdreamtech/UniGoDesktop/commit/2bd723dc41017fd9c979f41707288c3eb51bf02b))
+* **gui:** support Cmd+, and Ctrl+, shortcut to open preferences ([76e3379](https://github.com/snowdreamtech/UniGoDesktop/commit/76e3379b9e8249f005c373ed1a008b101a34a062))
+* **gui:** support Esc key dismissal for modals and dropdown menus ([aadbc75](https://github.com/snowdreamtech/UniGoDesktop/commit/aadbc75cb392a0eecb4ccf43353dc0e9c1c37821))
+* **gui:** support titlebar double-click window toggle maximise and refine cursor styles ([39f13d4](https://github.com/snowdreamtech/UniGoDesktop/commit/39f13d4970e2e674075e9a9bed9b36e96c7b0510))
+
+
+### 🐛 Bug Fixes
+
+* **build:** prevent dev workflow from dirtying workspace files ([4dd62ad](https://github.com/snowdreamtech/UniGoDesktop/commit/4dd62ad45f2fc170fe93dd934f2dcc847533527e))
+* **build:** record wailsjs runtime files as 100644 to match template extraction permissions ([89d1522](https://github.com/snowdreamtech/UniGoDesktop/commit/89d1522cc73e0156b81ce7d7a984d68443ad1022))
+* **build:** remove executable bit from generated wailsjs frontend files ([d22ae39](https://github.com/snowdreamtech/UniGoDesktop/commit/d22ae399ee6f53925bfac28adecec10acd3544b4))
+* **build:** track wailsjs files with executable mode to match Wails generator output ([027f204](https://github.com/snowdreamtech/UniGoDesktop/commit/027f20422991d26b768e77c4c58e3c81d5b0fbba))
+* **gui:** remove HideWindowOnClose to allow window close normally ([1e4fdea](https://github.com/snowdreamtech/UniGoDesktop/commit/1e4fdeaa3dba8526abe3019f3881d76d2bac9cc3))
+* **security:** resolve brace-expansion vulnerability and format code ([e8158c2](https://github.com/snowdreamtech/UniGoDesktop/commit/e8158c2a0e904e3100b8be97c04038d0296d2971))
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** sync dependabot config and unirtm toolchain ([fc2e0c8](https://github.com/snowdreamtech/UniGoDesktop/commit/fc2e0c877dd49f1d9ea02f630bdd58c9e91fc36f))
+
 ## [0.6.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.5.1...v0.6.0) (2026-09-29)
 
 
