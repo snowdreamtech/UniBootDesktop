@@ -7,63 +7,67 @@
         <span class="sub-brand">{{ t("app.subtitle") }}</span>
       </div>
     </div>
-    <div class="mode-tabs" :class="{ 'is-busy': isActionBusy }">
-      <div v-if="isActionBusy" class="local-action-overlay" aria-hidden="true"></div>
-      <button class="tab-btn" :class="{ active: activeMode === 'cloud' }" :disabled="isActionBusy" @click="emit('select-mode', 'cloud')">
-        <span class="btn-icon">⚡</span>
-        <span>{{ t("mode.cloud") }}</span>
-      </button>
-      <button class="tab-btn" :class="{ active: activeMode === 'hybrid' }" :disabled="isActionBusy" @click="emit('select-mode', 'hybrid')">
-        <span class="btn-icon">🛠️</span>
-        <span>{{ t("mode.hybrid") }}</span>
-      </button>
-
-      <!-- Header Quick Language Switcher Dropdown -->
-      <div class="lang-selector-header" ref="langDropdownRef">
-        <button class="lang-pill-btn" :title="t('settings.language')" @click.stop="toggleLangMenu">
-          <span class="lang-icon">🌐</span>
-          <span class="lang-label">{{ currentLangLabel }}</span>
-          <span class="dropdown-caret">▾</span>
+    <div class="header-right">
+      <div class="mode-tabs" :class="{ 'is-busy': isActionBusy }">
+        <div v-if="isActionBusy" class="local-action-overlay" aria-hidden="true"></div>
+        <button class="tab-btn" :class="{ active: activeMode === 'cloud' }" :disabled="isActionBusy" @click="emit('select-mode', 'cloud')">
+          <span class="btn-icon">⚡</span>
+          <span>{{ t("mode.cloud") }}</span>
         </button>
-
-        <transition name="dropdown-fade">
-          <div v-if="isLangMenuOpen" class="lang-dropdown-menu" @click.stop>
-            <button
-              v-for="opt in langOptions"
-              :key="opt.value"
-              class="lang-option"
-              :class="{ active: currentLang === opt.value }"
-              @click="selectLanguage(opt.value)"
-            >
-              <span class="opt-text">{{ opt.label }}</span>
-              <span v-if="currentLang === opt.value" class="opt-check">✓</span>
-            </button>
-          </div>
-        </transition>
+        <button class="tab-btn" :class="{ active: activeMode === 'hybrid' }" :disabled="isActionBusy" @click="emit('select-mode', 'hybrid')">
+          <span class="btn-icon">🛠️</span>
+          <span>{{ t("mode.hybrid") }}</span>
+        </button>
       </div>
 
-      <!-- Header Quick Theme Switcher Button -->
-      <button
-        class="settings-icon-btn theme-toggle-btn"
-        :title="currentTheme === 'light' ? (t('settings.theme_dark') || 'Dark Theme') : (t('settings.theme_light') || 'Light Theme')"
-        @click="handleToggleTheme"
-      >
-        <span v-if="currentTheme === 'light'">🌙</span>
-        <span v-else>☀️</span>
-      </button>
+      <div class="header-actions">
+        <!-- Header Quick Language Switcher Dropdown -->
+        <div class="lang-selector-header" ref="langDropdownRef">
+          <button class="lang-pill-btn" :title="t('settings.language')" @click.stop="toggleLangMenu">
+            <span class="lang-icon">🌐</span>
+            <span class="lang-label">{{ currentLangLabel }}</span>
+            <span class="dropdown-caret">▾</span>
+          </button>
 
-      <button
-        class="settings-icon-btn log-toggle-btn"
-        :class="{ active: isLogCardVisible }"
-        :title="t('log.title')"
-        @click="handleToggleLog"
-      >
-        📜
-      </button>
+          <transition name="dropdown-fade">
+            <div v-if="isLangMenuOpen" class="lang-dropdown-menu" @click.stop>
+              <button
+                v-for="opt in langOptions"
+                :key="opt.value"
+                class="lang-option"
+                :class="{ active: currentLang === opt.value }"
+                @click="selectLanguage(opt.value)"
+              >
+                <span class="opt-text">{{ opt.label }}</span>
+                <span v-if="currentLang === opt.value" class="opt-check">✓</span>
+              </button>
+            </div>
+          </transition>
+        </div>
 
-      <button class="settings-icon-btn" :title="t('settings.title')" @click="handleOpenSettings">⚙️</button>
+        <!-- Header Quick Theme Switcher Button -->
+        <button
+          class="settings-icon-btn theme-toggle-btn"
+          :title="currentTheme === 'light' ? (t('settings.theme_dark') || 'Dark Theme') : (t('settings.theme_light') || 'Light Theme')"
+          @click="handleToggleTheme"
+        >
+          <span v-if="currentTheme === 'light'">🌙</span>
+          <span v-else>☀️</span>
+        </button>
 
-      <button class="settings-icon-btn" :title="t('about.title')" @click="handleOpenAbout">ℹ️</button>
+        <button
+          class="settings-icon-btn log-toggle-btn"
+          :class="{ active: isLogCardVisible }"
+          :title="t('log.title')"
+          @click="handleToggleLog"
+        >
+          📜
+        </button>
+
+        <button class="settings-icon-btn" :title="t('settings.title')" @click="handleOpenSettings">⚙️</button>
+
+        <button class="settings-icon-btn" :title="t('about.title')" @click="handleOpenAbout">ℹ️</button>
+      </div>
     </div>
   </header>
 </template>
@@ -194,13 +198,31 @@ onUnmounted(() => {
   -webkit-app-region: drag;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  --wails-draggable: no-drag;
+  -webkit-app-region: no-drag;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+  --wails-draggable: no-drag;
+  -webkit-app-region: no-drag;
+}
+
 .brand,
 .mode-tabs,
 button,
 input,
 select,
 a,
-.lang-selector-header {
+.lang-selector-header,
+.lang-dropdown-menu {
   --wails-draggable: no-drag;
   -webkit-app-region: no-drag;
 }
@@ -371,11 +393,13 @@ h1 {
   border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 0.45rem;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
-  z-index: 1000;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  z-index: 2000;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  --wails-draggable: no-drag;
+  -webkit-app-region: no-drag;
 }
 
 .lang-option {
