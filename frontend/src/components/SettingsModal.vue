@@ -36,6 +36,8 @@
           v-model:language="appLanguage"
           v-model:theme="appTheme"
           v-model:auto-check-update="autoCheckUpdate"
+          v-model:enable-tray="enableTray"
+          v-model:close-action="closeAction"
           :language-options="languageSelectOptions"
           :theme-options="themeSelectOptions"
           @language-change="onLanguageChange"
@@ -95,6 +97,8 @@ const saveStatusText = ref("");
 const appLanguage = ref(selectedLangSetting.value || "auto");
 const appTheme = ref("dark");
 const autoCheckUpdate = ref(true);
+const enableTray = ref(false);
+const closeAction = ref("quit");
 
 // Network Settings
 const proxyInputUrl = ref("");
@@ -161,6 +165,8 @@ async function loadFullConfig() {
         autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
         appTheme.value = cfg.theme || "dark";
         appLanguage.value = cfg.language || "auto";
+        enableTray.value = (cfg as any).enableTray === true;
+        closeAction.value = (cfg as any).closeAction || "quit";
         setLanguage(appLanguage.value);
         applyTheme(appTheme.value);
 
@@ -192,6 +198,8 @@ function triggerAutoSave() {
       language: appLanguage.value,
       theme: appTheme.value,
       autoCheckUpdate: autoCheckUpdate.value,
+      enableTray: enableTray.value,
+      closeAction: closeAction.value,
       githubProxy: proxyInputUrl.value.trim(),
       proxyProtocol: proxyProtocol.value,
       proxyHost: proxyHost.value.trim(),
