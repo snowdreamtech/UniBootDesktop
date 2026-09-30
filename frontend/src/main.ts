@@ -5,12 +5,7 @@ import "./styles/theme.css";
 // 1. Prevent default browser context menu on non-editable UI elements
 window.addEventListener("contextmenu", (e: MouseEvent) => {
   const target = e.target as HTMLElement | null;
-  if (
-    target &&
-    (target.tagName === "INPUT" ||
-      target.tagName === "TEXTAREA" ||
-      target.isContentEditable)
-  ) {
+  if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
     return;
   }
   e.preventDefault();
@@ -88,5 +83,3 @@ window.addEventListener("blur", () => {
 });
 
 createApp(App).mount("#app");
-
-

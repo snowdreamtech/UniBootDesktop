@@ -114,7 +114,9 @@
                   @change="onCloseActionChange('minimize_to_tray')"
                 />
                 <div class="option-content">
-                  <span class="option-title">{{ t("settings.close_action_minimize") || "Minimize to system tray" }}</span>
+                  <span class="option-title">{{
+                    t("settings.close_action_minimize") || "Minimize to system tray"
+                  }}</span>
                 </div>
               </label>
             </div>
@@ -189,7 +191,9 @@ function onCloseActionChange(val: string) {
   border-radius: 12px;
   padding: 1.15rem 1.25rem;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .settings-section.appearance-card {
