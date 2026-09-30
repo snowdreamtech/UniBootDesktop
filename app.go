@@ -9,13 +9,11 @@ import (
 	"context"
 	"fmt"
 	"net"
-	"net/http"
 	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -49,67 +47,23 @@ type AppInfo struct {
 	OsArch         string `json:"osArch"`
 }
 
-// SystemInfo holds runtime and OS metadata.
-type SystemInfo struct {
-	OS        string `json:"os"`
-	Arch      string `json:"arch"`
-	GoVersion string `json:"goVersion"`
-	AppName   string `json:"appName"`
-	Version   string `json:"version"`
-	Commit    string `json:"commit"`
-	BuildTime string `json:"buildTime"`
-	DataDir   string `json:"dataDir"`
-	ConfigDir string `json:"configDir"`
-}
-
-// NetworkTestResult holds connectivity test metrics.
-type NetworkTestResult struct {
-	Connected bool   `json:"connected"`
-	LatencyMs int64  `json:"latencyMs"`
-	TargetURL string `json:"targetUrl"`
-	Error     string `json:"error,omitempty"`
-}
-
-// HelloInfo provides greeting and runtime demonstration.
-type HelloInfo struct {
-	Greeting  string `json:"greeting"`
-	OS        string `json:"os"`
-	Arch      string `json:"arch"`
-	Timestamp string `json:"timestamp"`
-}
-
-// UniBootStatus represents the lightweight cross-platform ready status of native UniBoot engine.
-type UniBootStatus struct {
-	Ready   bool   `json:"ready"`
-	Version string `json:"version"`
-	Code    string `json:"code"`
-	Message string `json:"message,omitempty"`
-}
-
-// BatchEjectResult describes the outcome of a concurrent multi-disk ejection.
-type BatchEjectResult struct {
-	Success []string          `json:"success"`
-	Failed  map[string]string `json:"failed"`
+// execCommand is a package-level variable to allow tests to mock OS process creation.
+var execCommand = func(name string, args ...string) *exec.Cmd {
+	return newDetachedCmd(name, args...)
 }
 
 // App struct manages Wails GUI lifecycle and frontend bound APIs.
 type App struct {
 	ctx              context.Context
 	cancel           context.CancelFunc
+	mu               sync.Mutex
 	deployCancelFunc context.CancelFunc
 	cancelMutex      sync.Mutex
-	mu               sync.Mutex
 }
 
 // NewApp creates a new App application struct.
 func NewApp() *App {
 	return &App{}
-}
-
-func (a *App) emitEvent(eventName string, optionalData ...interface{}) {
-	if a.ctx != nil && a.ctx.Value("frontend") != nil {
-		wailsRuntime.EventsEmit(a.ctx, eventName, optionalData...)
-	}
 }
 
 func (a *App) initDeployContext() context.Context {
@@ -142,7 +96,7 @@ func (a *App) CancelDeployment() bool {
 // startup is called when the Wails application starts up.
 func (a *App) startup(ctx context.Context) {
 	a.ctx, a.cancel = context.WithCancel(ctx)
-	logger.SetWailsContext(ctx)
+	logger.SetWailsContext(a.ctx)
 	logger.Info(fmt.Sprintf("UniBootDesktop Wails GUI runtime started successfully (%s/%s)", runtime.GOOS, runtime.GOARCH))
 	if err := env.EnsureAppDirs(); err != nil {
 		logger.Warn("Failed to ensure default app directories exist", "error", err)
@@ -150,9 +104,9 @@ func (a *App) startup(ctx context.Context) {
 	if cfg, err := config.Load(); err == nil && cfg != nil && cfg.UniBootPath != "" {
 		firmware.SetCustomUniBootDir(cfg.UniBootPath)
 	}
-	disk.StartHotplugMonitor(ctx, func() {
+	disk.StartHotplugMonitor(a.ctx, func() {
 		logger.Info("Removable disk change detected, refreshing drive list")
-		a.emitEvent("disk-list-changed")
+		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
 	})
 
 	hypervisor.RegisterVMExitHandler(func(targetDisk string, vmErr error) {
@@ -161,8 +115,8 @@ func (a *App) startup(ctx context.Context) {
 		if a.ctx != nil {
 			wailsRuntime.WindowUnminimise(a.ctx)
 			wailsRuntime.WindowShow(a.ctx)
-			a.emitEvent("disk-list-changed")
-			a.emitEvent("vm-session-ended", map[string]interface{}{
+			wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
+			wailsRuntime.EventsEmit(a.ctx, "vm-session-ended", map[string]interface{}{
 				"disk":    targetDisk,
 				"success": vmErr == nil,
 				"error": func() string {
@@ -178,10 +132,11 @@ func (a *App) startup(ctx context.Context) {
 
 // shutdown is called automatically when the Wails application is closing.
 func (a *App) shutdown(ctx context.Context) {
+	logger.Info("UniBootDesktop Wails GUI runtime shutting down; safe policy is to only remount tracked VM disks, never eject arbitrary USB media")
+
 	if a.cancel != nil {
 		a.cancel()
 	}
-	logger.Info("UniBootDesktop Wails GUI runtime shutting down")
 
 	cleanupDone := make(chan struct{})
 	go func() {
@@ -193,39 +148,13 @@ func (a *App) shutdown(ctx context.Context) {
 	case <-cleanupDone:
 		logger.Info("Tracked hypervisor disk cleanup completed before shutdown timeout")
 	case <-time.After(5 * time.Second):
-		logger.Warn("Tracked hypervisor disk cleanup hit shutdown timeout; continuing app exit")
+		logger.Warn("Tracked hypervisor disk cleanup hit shutdown timeout; continuing app exit without forcing arbitrary USB ejection")
 	}
 
+	// Cleanly disconnect and terminate active privileged worker session
 	if client := privilege.GetActiveWorkerClient(); client != nil {
 		_ = client.Close()
 		privilege.SetActiveWorkerClient(nil)
-	}
-}
-
-// beforeClose is invoked before the application window closes.
-// If EnableTray is true and CloseAction is "minimize_to_tray", the window is hidden instead of exiting.
-func (a *App) beforeClose(ctx context.Context) (prevent bool) {
-	cfg, err := config.Load()
-	if err != nil {
-		cfg = config.GetDefaultConfig()
-	}
-
-	if cfg.EnableTray && cfg.CloseAction == "minimize_to_tray" {
-		logger.Info("Window close intercepted: hiding window to tray as configured")
-		wailsRuntime.WindowHide(ctx)
-		return true
-	}
-
-	logger.Info("Window close proceeding: quitting application")
-	return false
-}
-
-// onSecondInstanceLaunch is invoked when a second instance of the application attempts to start.
-func (a *App) onSecondInstanceLaunch(secondInstanceData options.SecondInstanceData) {
-	logger.Info(fmt.Sprintf("Second instance launch detected with args: %v", secondInstanceData.Args))
-	if a.ctx != nil {
-		wailsRuntime.WindowShow(a.ctx)
-		wailsRuntime.WindowUnminimise(a.ctx)
 	}
 }
 
@@ -241,8 +170,9 @@ func (a *App) ClearLogs() {
 
 // LogAction allows the frontend to log user UI interaction events directly into the Log Center.
 func (a *App) LogAction(level string, message string, details string) {
+	// 验证日志级别
 	validLevels := map[string]bool{
-		"":      true,
+		"":      true, // 空字符串默认为INFO
 		"DEBUG": true,
 		"INFO":  true,
 		"WARN":  true,
@@ -253,6 +183,7 @@ func (a *App) LogAction(level string, message string, details string) {
 		level = "INFO"
 	}
 
+	// 限制消息和详情长度，防止日志洪水攻击
 	const maxMessageLen = 1000
 	const maxDetailsLen = 5000
 
@@ -294,9 +225,12 @@ func (a *App) GetDiskList() ([]disk.DiskInfo, error) {
 
 // EjectDisk safely unmounts and ejects the target removable storage disk.
 func (a *App) EjectDisk(targetDisk string) error {
+	// 验证输入不为空
 	if strings.TrimSpace(targetDisk) == "" {
 		return fmt.Errorf("target disk path cannot be empty")
 	}
+
+	// 验证路径长度，防止过长路径攻击
 	if len(targetDisk) > 512 {
 		return fmt.Errorf("target disk path too long (max 512 characters)")
 	}
@@ -312,7 +246,15 @@ func (a *App) EjectDisk(targetDisk string) error {
 	return nil
 }
 
+// BatchEjectResult describes the outcome of a concurrent multi-disk ejection.
+type BatchEjectResult struct {
+	Success []string          `json:"success"`
+	Failed  map[string]string `json:"failed"`
+}
+
 // BatchEjectDisks safely unmounts and ejects multiple removable storage disks.
+// Disks are verified up-front and ejected sequentially to prevent OS disk arbitration daemon
+// (e.g. macOS diskarbitrationd) lock contention and timeouts.
 func (a *App) BatchEjectDisks(targetDisks []string) BatchEjectResult {
 	result := BatchEjectResult{
 		Success: make([]string, 0, len(targetDisks)),
@@ -325,6 +267,7 @@ func (a *App) BatchEjectDisks(targetDisks []string) BatchEjectResult {
 
 	logger.Info("Requesting user-initiated safe batch ejection", "count", len(targetDisks), "disks", targetDisks)
 
+	// Step 1: Pre-validate all target disks up-front against current removable inventory
 	currentDisks, err := disk.GetRemovableDisks()
 	if err != nil {
 		logger.Error("Failed to fetch removable disk inventory for batch eject preflight", "error", err)
@@ -361,6 +304,7 @@ func (a *App) BatchEjectDisks(targetDisks []string) BatchEjectResult {
 		validTargets = append(validTargets, devTrimmed)
 	}
 
+	// Step 2: Eject valid targets sequentially to avoid OS disk arbitration collisions
 	for _, target := range validTargets {
 		err := disk.EjectDisk(target)
 		if err == nil {
@@ -373,6 +317,7 @@ func (a *App) BatchEjectDisks(targetDisks []string) BatchEjectResult {
 	}
 
 	if len(result.Success) > 0 {
+		// Allow macOS/Windows kernel brief window to complete IOKit/device node teardown
 		time.Sleep(300 * time.Millisecond)
 		disk.InvalidateDiskCache()
 	}
@@ -380,7 +325,7 @@ func (a *App) BatchEjectDisks(targetDisks []string) BatchEjectResult {
 	return result
 }
 
-// SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files.
+// SelectIsoFiles opens a native multi-file open dialog for selecting Ventoy-supported system image files (.iso, .wim, .img, .vhd, etc.).
 func (a *App) SelectIsoFiles(title string, ventoyFilter string, allFilter string) ([]string, error) {
 	if title == "" {
 		title = "Select System Image Files (*.iso, *.wim, *.img, *.vhd, etc.)"
@@ -448,13 +393,17 @@ func (a *App) SelectDirectory(title string) (string, error) {
 
 // CalculateFileChecksum computes MD5, SHA256, or SHA512 hash for the specified image file.
 func (a *App) CalculateFileChecksum(filePath string, algo string) (*utils.ChecksumResult, error) {
+	// 验证输入
 	if strings.TrimSpace(filePath) == "" {
 		return nil, fmt.Errorf("file path cannot be empty")
 	}
+
+	// 验证路径长度
 	if len(filePath) > 4096 {
 		return nil, fmt.Errorf("file path too long (max 4096 characters)")
 	}
 
+	// 验证算法参数
 	validAlgos := map[string]bool{
 		"md5":    true,
 		"sha1":   true,
@@ -464,7 +413,7 @@ func (a *App) CalculateFileChecksum(filePath string, algo string) (*utils.Checks
 	}
 	algoLower := strings.ToLower(strings.TrimSpace(algo))
 	if algoLower == "" {
-		algoLower = "sha256"
+		algoLower = "sha256" // 默认使用SHA256
 	}
 	if !validAlgos[algoLower] {
 		return nil, fmt.Errorf("invalid checksum algorithm: %s (supported: md5, sha1, sha256, sha384, sha512)", algo)
@@ -516,23 +465,43 @@ func (a *App) ExportLogs(content string, title string, logFilter string, textFil
 	})
 	if err != nil {
 		logger.Error("Failed to open save file dialog for log export", "error", err)
-		return "", err
+		return "", fmt.Errorf("open save file dialog: %w", err)
 	}
 	if filePath == "" {
-		return "", nil
+		return "", nil // User cancelled
 	}
-
-	if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
-		logger.Error("Failed to write exported logs to file", "path", filePath, "error", err)
-		return "", err
+	if err := os.WriteFile(filePath, []byte(content), 0600); err != nil {
+		logger.Error("Failed to write log export file", "path", filePath, "error", err)
+		return "", fmt.Errorf("write log file: %w", err)
 	}
-
-	logger.Info("Successfully exported log file", "path", filePath)
+	logger.Info("Logs exported successfully", "path", filePath)
 	return filePath, nil
 }
 
-// ValidateVentoyCli validates whether the target path contains a functional Ventoy installation executable.
+// DeployHybridMode triggers Hybrid Mode (Hybrid Pro Mode - Ventoy + iPXE) with customizable file system and optional ISO files.
+func (a *App) DeployHybridMode(targetDisk string, fsType string, isoPaths []string, expected disk.DiskInfo) (*installer.DeployResult, error) {
+	logger.Info("User confirmed Hybrid Mode boot disk creation", "disk", targetDisk, "fs", fsType, "isoCount", len(isoPaths))
+	deployCtx := a.initDeployContext()
+	defer a.clearDeployContext()
+
+	cfg, _ := config.Load()
+	ventoyPath := ""
+	if cfg != nil {
+		ventoyPath = cfg.VentoyPath
+	}
+	progressCb := func(p installer.IsoCopyProgress) {
+		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
+	}
+	res, err := installer.DeployHybridModeWithExpectedDisk(deployCtx, targetDisk, fsType, ventoyPath, isoPaths, progressCb, expected)
+	if err != nil && res != nil {
+		return res, nil
+	}
+	return res, err
+}
+
+// ValidateVentoyCli verifies the user-specified Ventoy CLI path.
 func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidationResult {
+	// 验证路径输入
 	if strings.TrimSpace(ventoyPath) == "" {
 		return &installer.VentoyCliValidationResult{
 			Valid:   false,
@@ -540,6 +509,8 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 			Message: "Ventoy CLI path cannot be empty",
 		}
 	}
+
+	// 验证路径长度
 	if len(ventoyPath) > 4096 {
 		return &installer.VentoyCliValidationResult{
 			Valid:   false,
@@ -547,7 +518,16 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 			Message: "Ventoy CLI path too long (max 4096 characters)",
 		}
 	}
+
 	return installer.ValidateVentoyCli(ventoyPath)
+}
+
+// UniBootStatus represents the lightweight cross-platform ready status of native UniBoot engine.
+type UniBootStatus struct {
+	Ready   bool   `json:"ready"`
+	Version string `json:"version"`
+	Code    string `json:"code"`
+	Message string `json:"message,omitempty"`
 }
 
 // GetUniBootStatus returns the cross-platform ready status of native UniBoot engine.
@@ -572,15 +552,16 @@ func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPath
 		ventoyPath = cfg.VentoyPath
 	}
 	progressCb := func(p installer.IsoCopyProgress) {
-		a.emitEvent("iso-copy-progress", p)
+		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
 	}
 	batchProgressCb := func(p installer.BatchDeployProgress) {
-		a.emitEvent("deploy-batch-progress", p)
+		wailsRuntime.EventsEmit(a.ctx, "deploy-batch-progress", p)
 	}
 	return installer.DeployHybridModeBatchWithAllProgress(deployCtx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected, batchProgressCb)
 }
 
 // PreflightIsoCopy checks existing target filenames before any deployment writes begin.
+// Each disk is checked concurrently to minimize total latency in batch scenarios.
 func (a *App) PreflightIsoCopy(targetDisks []string, isoPaths []string) ([]installer.IsoCopyConflict, error) {
 	type result struct {
 		conflicts []installer.IsoCopyConflict
@@ -627,10 +608,10 @@ func (a *App) DeployHybridModeBatchWithPlans(targetDisks []string, fsType string
 		ventoyPath = cfg.VentoyPath
 	}
 	progressCb := func(p installer.IsoCopyProgress) {
-		a.emitEvent("iso-copy-progress", p)
+		wailsRuntime.EventsEmit(a.ctx, "iso-copy-progress", p)
 	}
 	batchProgressCb := func(p installer.BatchDeployProgress) {
-		a.emitEvent("deploy-batch-progress", p)
+		wailsRuntime.EventsEmit(a.ctx, "deploy-batch-progress", p)
 	}
 	return installer.DeployHybridModeBatchWithIsoPlans(deployCtx, targetDisks, fsType, ventoyPath, isoPaths, plans, progressCb, expected, batchProgressCb)
 }
@@ -641,8 +622,9 @@ func (a *App) DeployCloudMode(targetDisk string, fsType string, expected disk.Di
 	deployCtx := a.initDeployContext()
 	defer a.clearDeployContext()
 
+	// Create progress callback to emit real-time progress events
 	progressCallback := func(progress int) {
-		a.emitEvent("cloud-deploy-progress", progress)
+		wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-progress", progress)
 	}
 
 	res, err := installer.DeployCloudModeWithExpectedDisk(deployCtx, targetDisk, fsType, expected, progressCallback)
@@ -658,9 +640,10 @@ func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected
 	deployCtx := a.initDeployContext()
 	defer a.clearDeployContext()
 
+	// Create batch progress callback to emit real-time progress events with disk-level details
 	progressCallback := func(progress installer.BatchDeployProgress) {
-		a.emitEvent("deploy-batch-progress", progress)
-		a.emitEvent("cloud-deploy-batch-progress", progress)
+		wailsRuntime.EventsEmit(a.ctx, "deploy-batch-progress", progress)
+		wailsRuntime.EventsEmit(a.ctx, "cloud-deploy-batch-progress", progress)
 	}
 
 	results, err := installer.DeployCloudModeBatchWithExpectedDisks(deployCtx, targetDisks, fsType, expected, progressCallback)
@@ -699,7 +682,7 @@ func (a *App) DetectBestHypervisor() *hypervisor.VMStatus {
 	return hypervisor.GetManager().DetectBest()
 }
 
-// LaunchQEMU triggers virtual machine test instance using highest priority available hypervisor.
+// LaunchQEMU triggers virtual machine test instance using highest priority available hypervisor (QEMU, UTM, VMware, VirtualBox).
 func (a *App) LaunchQEMU(targetDisk string) error {
 	if err := disk.ValidateUserEjectTarget(targetDisk); err != nil {
 		return fmt.Errorf("unsafe VM target disk: %w", err)
@@ -713,13 +696,14 @@ func (a *App) LaunchQEMU(targetDisk string) error {
 	logger.Info("Hypervisor preview test launched successfully", "disk", targetDisk)
 	disk.InvalidateDiskCache()
 	if a.ctx != nil {
-		a.emitEvent("disk-list-changed")
+		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
 	}
 	return nil
 }
 
 // LaunchVM launches a specified or best available virtual machine with boot mode (uefi, bios, auto).
 func (a *App) LaunchVM(targetDisk string, vmType string, bootMode string) error {
+	// 验证targetDisk
 	if strings.TrimSpace(targetDisk) == "" {
 		return fmt.Errorf("target disk path cannot be empty")
 	}
@@ -727,8 +711,9 @@ func (a *App) LaunchVM(targetDisk string, vmType string, bootMode string) error 
 		return fmt.Errorf("target disk path too long")
 	}
 
+	// 验证vmType
 	validVMTypes := map[string]bool{
-		"":           true,
+		"":           true, // 空表示auto
 		"auto":       true,
 		"qemu":       true,
 		"utm":        true,
@@ -740,8 +725,9 @@ func (a *App) LaunchVM(targetDisk string, vmType string, bootMode string) error 
 		return fmt.Errorf("invalid VM type: %s (supported: auto, qemu, utm, vmware, virtualbox)", vmType)
 	}
 
+	// 验证bootMode
 	validBootModes := map[string]bool{
-		"":     true,
+		"":     true, // 空表示auto
 		"auto": true,
 		"uefi": true,
 		"bios": true,
@@ -771,6 +757,7 @@ func (a *App) GetDefaultVMConfig() *hypervisor.VMConfig {
 
 // LaunchVMWithConfig launches a virtual machine with full custom VMConfig options.
 func (a *App) LaunchVMWithConfig(targetDisk string, vmType string, cfg hypervisor.VMConfig) error {
+	// 验证targetDisk
 	if strings.TrimSpace(targetDisk) == "" {
 		return fmt.Errorf("target disk path cannot be empty")
 	}
@@ -781,10 +768,11 @@ func (a *App) LaunchVMWithConfig(targetDisk string, vmType string, cfg hyperviso
 		return fmt.Errorf("unsafe VM target disk: %w", err)
 	}
 
+	// 验证VMConfig参数范围
 	if cfg.CpuCores < 0 || cfg.CpuCores > 256 {
 		return fmt.Errorf("invalid CPU cores: %d (must be 0-256)", cfg.CpuCores)
 	}
-	if cfg.MemoryMB < 0 || cfg.MemoryMB > 1048576 {
+	if cfg.MemoryMB < 0 || cfg.MemoryMB > 1048576 { // 最大1TB
 		return fmt.Errorf("invalid memory: %d MB (must be 0-1048576)", cfg.MemoryMB)
 	}
 
@@ -812,29 +800,25 @@ func (a *App) LaunchVMWithConfig(targetDisk string, vmType string, cfg hyperviso
 	logger.Info("Specified hypervisor test launched successfully with VMConfig", "disk", targetDisk, "vmType", vmType)
 	disk.InvalidateDiskCache()
 	if a.ctx != nil {
-		a.emitEvent("disk-list-changed")
+		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
 	}
 	return nil
 }
 
-// StopVM manually stops any active virtual machine simulation session.
+// StopVM manually stops any active virtual machine simulation session, remounts target disks, and resets UI state.
 func (a *App) StopVM() error {
 	logger.Info("User manually requested VM simulation session stop")
 	hypervisor.StopActiveVMSession()
 	hypervisor.GetManager().CleanupAllUnmountedDisks()
 	if a.ctx != nil {
-		a.emitEvent("vm-session-ended")
+		wailsRuntime.EventsEmit(a.ctx, "vm-session-ended")
 	}
 	return nil
 }
 
 // CheckUpdate returns GitHub release update metadata.
 func (a *App) CheckUpdate() *updater.UpdateStatus {
-	ctx := a.ctx
-	if ctx == nil {
-		ctx = context.Background()
-	}
-	return updater.CheckUpdate(ctx)
+	return updater.CheckUpdate(a.ctx)
 }
 
 // GetConfig loads the application settings.
@@ -855,6 +839,7 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		cfg.UniBootPath = env.GetFirmwareDir()
 	}
 
+	// Validate GithubProxy URL format
 	if cfg.GithubProxy != "" && cfg.GithubProxy != "direct" {
 		proxyURL, err := url.Parse(cfg.GithubProxy)
 		if err != nil {
@@ -871,11 +856,13 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		}
 	}
 
+	// Validate ProxyPort range (1-65535)
 	if cfg.ProxyPort < 0 || cfg.ProxyPort > 65535 {
 		logger.Error("Invalid proxy port", "port", cfg.ProxyPort)
 		return fmt.Errorf("proxy port must be between 0 and 65535 (got %d)", cfg.ProxyPort)
 	}
 
+	// Normalize proxy configuration: if direct or host is empty, reset port to 0
 	if cfg.ProxyProtocol == "direct" || cfg.ProxyHost == "" {
 		cfg.ProxyPort = 0
 	} else if cfg.ProxyPort > 0 && cfg.ProxyHost == "" {
@@ -883,16 +870,74 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		return fmt.Errorf("proxy host cannot be empty when proxy port is configured")
 	}
 
-	if cfg.Language == "" {
-		cfg.Language = "auto"
+	// Validate Language enum (supporting all 52 internationalized locales + auto)
+	validLanguages := map[string]bool{
+		"auto":    true,
+		"zh-CN":   true,
+		"en-US":   true,
+		"zh-TW":   true,
+		"ja-JP":   true,
+		"ko-KR":   true,
+		"de-DE":   true,
+		"fr-FR":   true,
+		"es-ES":   true,
+		"es-LA":   true,
+		"ru-RU":   true,
+		"pt-BR":   true,
+		"pt-PT":   true,
+		"it-IT":   true,
+		"tr-TR":   true,
+		"pl-PL":   true,
+		"vi-VN":   true,
+		"ar-SA":   true,
+		"ur-PK":   true,
+		"az-AZ":   true,
+		"da-DK":   true,
+		"ka-GE":   true,
+		"fa-IR":   true,
+		"sl-SI":   true,
+		"oc-FR":   true,
+		"cs-CZ":   true,
+		"sk-SK":   true,
+		"bn-BD":   true,
+		"hi-IN":   true,
+		"nl-NL":   true,
+		"ro-RO":   true,
+		"hr-HR":   true,
+		"hu-HU":   true,
+		"sr-Latn": true,
+		"sr-Cyrl": true,
+		"th-TH":   true,
+		"lt-LT":   true,
+		"mk-MK":   true,
+		"he-IL":   true,
+		"id-ID":   true,
+		"nb-NO":   true,
+		"uk-UA":   true,
+		"el-GR":   true,
+		"sv-SE":   true,
+		"bg-BG":   true,
+		"hy-AM":   true,
+		"fi-FI":   true,
+		"gl-ES":   true,
+		"ca-ES":   true,
+		"ta-IN":   true,
+		"be-BY":   true,
+		"ml-IN":   true,
+		"et-EE":   true,
+	}
+	if !validLanguages[cfg.Language] {
+		logger.Error("Invalid language code", "language", cfg.Language)
+		return fmt.Errorf("invalid language code: %s", cfg.Language)
 	}
 
-	if cfg.Theme != "light" && cfg.Theme != "dark" && cfg.Theme != "system" {
-		cfg.Theme = "system"
+	// Normalize theme preference
+	if cfg.Theme != "light" && cfg.Theme != "dark" {
+		cfg.Theme = "dark"
 	}
 
+	// Validate FileSystem enum
 	validFileSystems := map[string]bool{
-		"":      true,
 		"exFAT": true,
 		"NTFS":  true,
 		"FAT32": true,
@@ -903,13 +948,14 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		return fmt.Errorf("invalid file system: %s (must be one of: exFAT, NTFS, FAT32, ext4)", cfg.FileSystem)
 	}
 
-	if cfg.Mode != "" && cfg.Mode != "cloud" && cfg.Mode != "hybrid" {
+	// Validate Mode enum
+	if cfg.Mode != "cloud" && cfg.Mode != "hybrid" {
 		logger.Error("Invalid mode", "mode", cfg.Mode)
 		return fmt.Errorf("invalid mode: %s (must be 'cloud' or 'hybrid')", cfg.Mode)
 	}
 
+	// Validate ProxyProtocol enum
 	validProxyProtocols := map[string]bool{
-		"":       true,
 		"direct": true,
 		"http":   true,
 		"https":  true,
@@ -1007,143 +1053,66 @@ func (a *App) GetAppInfo() AppInfo {
 	}
 }
 
-// GetSystemInfo returns system environment and runtime diagnostic metadata.
-func (a *App) GetSystemInfo() *SystemInfo {
-	return &SystemInfo{
-		OS:        runtime.GOOS,
-		Arch:      runtime.GOARCH,
-		GoVersion: runtime.Version(),
-		AppName:   "UniBootDesktop",
-		Version:   env.GitTag,
-		Commit:    env.CommitHash,
-		BuildTime: env.BuildTime,
-		DataDir:   env.GetDataDir(),
-		ConfigDir: env.GetConfigDir(),
-	}
-}
-
-// GetHelloInfo returns structured hello greeting and runtime environment details.
-func (a *App) GetHelloInfo() *HelloInfo {
-	return &HelloInfo{
-		Greeting:  "Hello World From UniBootDesktop!",
-		OS:        runtime.GOOS,
-		Arch:      runtime.GOARCH,
-		Timestamp: time.Now().Format(time.RFC3339),
-	}
-}
-
-// Greet returns a friendly greeting for demonstration.
-func (a *App) Greet(name string) string {
-	if name == "" {
-		name = "World"
-	}
-	return fmt.Sprintf("Hello %s, Welcome to UniBootDesktop!", name)
-}
-
-// TestNetwork checks network connectivity and latency against target endpoint.
-func (a *App) TestNetwork(targetURL string) *NetworkTestResult {
-	if targetURL == "" {
-		targetURL = "https://api.github.com"
-	}
-	start := time.Now()
-	client := &http.Client{Timeout: 5 * time.Second}
-	resp, err := client.Get(targetURL)
-	latency := time.Since(start).Milliseconds()
-
-	if err != nil {
-		return &NetworkTestResult{
-			Connected: false,
-			LatencyMs: latency,
-			TargetURL: targetURL,
-			Error:     err.Error(),
-		}
-	}
-	defer resp.Body.Close()
-
-	return &NetworkTestResult{
-		Connected: resp.StatusCode >= 200 && resp.StatusCode < 400,
-		LatencyMs: latency,
-		TargetURL: targetURL,
-	}
-}
-
-// PerformGuiUpdate performs background download and staging of the latest GUI release.
+// PerformGuiUpdate downloads the latest GUI release package with progress events.
 func (a *App) PerformGuiUpdate() (*updater.GuiUpdateResult, error) {
 	if !a.mu.TryLock() {
-		return nil, fmt.Errorf("update is already in progress")
+		return nil, fmt.Errorf("update already in progress")
 	}
 	defer a.mu.Unlock()
 
-	ctx := a.ctx
-	if ctx == nil {
-		ctx = context.Background()
+	cfg, _ := config.Load()
+	proxy := ""
+	if cfg != nil {
+		proxy = cfg.GithubProxy
 	}
-
-	proxyPrefix := ""
-	cfg, err := config.Load()
-	if err == nil && cfg != nil {
-		proxyPrefix = cfg.GithubProxy
+	progressCb := func(p updater.UpdateProgress) {
+		wailsRuntime.EventsEmit(a.ctx, "gui-update-progress", p)
 	}
-	if proxyPrefix == "" {
-		proxyPrefix = env.GithubProxy()
-	}
-
-	progressCallback := func(p updater.UpdateProgress) {
-		if a.ctx != nil {
-			a.emitEvent("gui-update-progress", p)
-		}
-	}
-
-	return updater.PerformGuiUpdate(ctx, proxyPrefix, progressCallback)
+	return updater.PerformGuiUpdate(a.ctx, proxy, progressCb)
 }
 
 // OpenBrowserURL opens the target URL in the user's default system browser.
+// Only HTTPS URLs are allowed for security (prevents file://, javascript:, etc.)
 func (a *App) OpenBrowserURL(targetURL string) error {
+	// Parse and validate URL
 	u, err := url.Parse(targetURL)
 	if err != nil {
 		logger.Error("Failed to parse URL for browser open", "url", targetURL, "error", err)
 		return fmt.Errorf("invalid URL: %w", err)
 	}
 
+	// Protocol whitelist: only allow HTTPS for security
+	// Prevents: file:/// (local file access), javascript: (XSS), data: (data URI), etc.
 	if u.Scheme != "https" {
 		logger.Warn("Blocked non-HTTPS URL from being opened in browser", "url", targetURL, "scheme", u.Scheme)
 		return fmt.Errorf("only HTTPS URLs are allowed for security reasons (got: %s://)", u.Scheme)
 	}
 
+	// Validate host is not empty
 	if u.Host == "" {
 		logger.Error("URL has no host", "url", targetURL)
 		return fmt.Errorf("invalid URL: missing host")
 	}
 
+	// SSRF防护: 阻止内网IP地址和本地主机访问
 	if isPrivateOrLocalIP(u.Hostname()) {
 		logger.Warn("Blocked private/local IP address from being opened", "url", targetURL, "host", u.Hostname())
 		return fmt.Errorf("access to private/local IP addresses is not allowed for security reasons")
 	}
 
 	logger.Info("Opening URL in system browser", "url", targetURL)
-	if a.ctx != nil && a.ctx.Value("frontend") != nil {
-		wailsRuntime.BrowserOpenURL(a.ctx, targetURL)
-	}
+	wailsRuntime.BrowserOpenURL(a.ctx, targetURL)
 	return nil
-}
-
-// OpenURL opens the specified URL in the native desktop browser (backward compatible).
-func (a *App) OpenURL(rawURL string) {
-	if rawURL != "" {
-		_ = a.OpenBrowserURL(rawURL)
-	}
 }
 
 // OpenAboutModal emits an event to the frontend to trigger the About dialog.
 func (a *App) OpenAboutModal() {
-	if a.ctx != nil {
-		a.emitEvent("open-about-modal")
-	}
+	wailsRuntime.EventsEmit(a.ctx, "open-about-modal")
 }
 
 // ReloadAppMenu rebuilds and updates the native application menu with the specified language.
 func (a *App) ReloadAppMenu(lang string) error {
-	if a.ctx == nil || a.ctx.Value("frontend") == nil {
+	if a.ctx == nil {
 		return nil
 	}
 	appMenu := BuildAppMenu(a, lang)
@@ -1152,6 +1121,9 @@ func (a *App) ReloadAppMenu(lang string) error {
 	return nil
 }
 
+// isPrivateOrLocalIP reports whether host is loopback, link-local, or RFC1918/ULA.
+// host should come from url.Hostname() (no port). IPv4-mapped addresses are
+// checked via net.IP.IsPrivate, not via ip[0] on the 16-byte form.
 func isPrivateOrLocalIP(host string) bool {
 	host = strings.ToLower(strings.TrimSpace(host))
 	if host == "" {
@@ -1193,6 +1165,7 @@ func (a *App) RequestPrivilegeElevation() (bool, error) {
 	_, err := privilege.StartOrConnectWorker(prompt)
 	if err != nil {
 		errStr := strings.ToLower(err.Error())
+		// If user actively cancelled the prompt, do not pop up a second prompt
 		if strings.Contains(errStr, "canceled") || strings.Contains(errStr, "cancelled") || strings.Contains(errStr, "user declined") || strings.Contains(errStr, "-128") {
 			logger.Info("User dismissed privilege elevation prompt")
 			return false, err
@@ -1208,40 +1181,166 @@ func (a *App) RequestPrivilegeElevation() (bool, error) {
 	return true, nil
 }
 
-var execCommand = exec.Command
+// emitEvent safely emits a Wails event if the app context is ready.
+func (a *App) emitEvent(eventName string, optionalData ...interface{}) {
+	if a.ctx == nil {
+		return
+	}
+	if len(optionalData) > 0 {
+		wailsRuntime.EventsEmit(a.ctx, eventName, optionalData...)
+	} else {
+		wailsRuntime.EventsEmit(a.ctx, eventName)
+	}
+}
 
-// RestartApp gracefully quits and restarts the application or applies pending updates.
-func (a *App) RestartApp() error {
-	pending, err := updater.GetPendingUpdate(env.GetDataDir())
-	if err == nil && pending != nil && pending.ScriptPath != "" {
-		if _, err := os.Stat(pending.ScriptPath); err == nil {
-			var cmd *exec.Cmd
-			if runtime.GOOS == "windows" {
-				cmd = execCommand(pending.Shell, "/c", pending.ScriptPath, strconv.Itoa(os.Getpid()), pending.Target, pending.Staged, filepath.Dir(pending.ScriptPath))
-			} else {
-				cmd = execCommand(pending.Shell, pending.ScriptPath, strconv.Itoa(os.Getpid()), pending.Target, pending.Staged, filepath.Dir(pending.ScriptPath))
-			}
-			detachProcess(cmd)
-			if err := cmd.Start(); err == nil {
-				if a.ctx != nil && a.ctx.Value("frontend") != nil {
-					wailsRuntime.Quit(a.ctx)
-				}
-				return nil
-			}
+// beforeClose is called when the user attempts to close the application window.
+// It returns true to prevent the default close behavior (e.g. to minimize to tray instead).
+func (a *App) beforeClose(ctx context.Context) (prevent bool) {
+	cfg, err := config.Load()
+	if err != nil || cfg == nil {
+		return false
+	}
+	if cfg.EnableTray && cfg.CloseAction == "minimize_to_tray" {
+		wailsRuntime.WindowHide(ctx)
+		return true
+	}
+	return false
+}
+
+// onSecondInstanceLaunch is called when a second instance of the application is launched.
+func (a *App) onSecondInstanceLaunch(secondInstanceData options.SecondInstanceData) {
+	if a.ctx != nil {
+		wailsRuntime.WindowUnminimise(a.ctx)
+		wailsRuntime.WindowShow(a.ctx)
+	}
+}
+
+// SystemInfo holds runtime and OS metadata.
+type SystemInfo struct {
+	OS        string `json:"os"`
+	Arch      string `json:"arch"`
+	GoVersion string `json:"goVersion"`
+	AppName   string `json:"appName"`
+	Version   string `json:"version"`
+	Commit    string `json:"commit"`
+	BuildTime string `json:"buildTime"`
+	DataDir   string `json:"dataDir"`
+	ConfigDir string `json:"configDir"`
+}
+
+// NetworkTestResult holds connectivity test metrics.
+type NetworkTestResult struct {
+	Connected bool   `json:"connected"`
+	LatencyMs int64  `json:"latencyMs"`
+	TargetURL string `json:"targetUrl"`
+	Error     string `json:"error,omitempty"`
+}
+
+// HelloInfo provides greeting and runtime demonstration.
+type HelloInfo struct {
+	Greeting  string `json:"greeting"`
+	OS        string `json:"os"`
+	Arch      string `json:"arch"`
+	GoVersion string `json:"goVersion"`
+}
+
+// GetSystemInfo returns comprehensive runtime and environment info.
+func (a *App) GetSystemInfo() *SystemInfo {
+	return &SystemInfo{
+		OS:        runtime.GOOS,
+		Arch:      runtime.GOARCH,
+		GoVersion: runtime.Version(),
+		AppName:   "UniBootDesktop",
+		Version:   env.GitTag,
+		Commit:    env.CommitHash,
+		BuildTime: env.BuildTime,
+		DataDir:   env.GetDataDir(),
+		ConfigDir: filepath.Dir(env.GetGlobalConfigPath()),
+	}
+}
+
+// GetHelloInfo returns a simple greeting and runtime context for demos.
+func (a *App) GetHelloInfo() *HelloInfo {
+	return &HelloInfo{
+		Greeting:  "Hello World, Welcome to UniBootDesktop!",
+		OS:        runtime.GOOS,
+		Arch:      runtime.GOARCH,
+		GoVersion: runtime.Version(),
+	}
+}
+
+// Greet returns a personalised greeting string (used in tests and demos).
+func (a *App) Greet(name string) string {
+	if name == "" {
+		return "Hello World, Welcome to UniBootDesktop!"
+	}
+	return fmt.Sprintf("Hello %s, Welcome to UniBootDesktop!", name)
+}
+
+// TestNetwork performs a quick connectivity probe to the specified URL and returns latency.
+func (a *App) TestNetwork(targetURL string) *NetworkTestResult {
+	if targetURL == "" {
+		targetURL = "https://www.google.com"
+	}
+	start := time.Now()
+	result := &NetworkTestResult{TargetURL: targetURL}
+
+	parsed, err := url.Parse(targetURL)
+	if err != nil {
+		result.Error = fmt.Sprintf("invalid URL: %v", err)
+		return result
+	}
+	host := parsed.Hostname()
+	if host == "" {
+		result.Error = "empty host"
+		return result
+	}
+	port := parsed.Port()
+	if port == "" {
+		switch parsed.Scheme {
+		case "https":
+			port = "443"
+		case "http":
+			port = "80"
+		default:
+			port = "80"
 		}
 	}
 
+	conn, err := net.DialTimeout("tcp", net.JoinHostPort(host, port), 5*time.Second)
+	if err != nil {
+		result.Error = err.Error()
+		return result
+	}
+	conn.Close()
+	result.Connected = true
+	result.LatencyMs = time.Since(start).Milliseconds()
+	return result
+}
+
+// OpenURL opens the given URL in the user's default system browser.
+func (a *App) OpenURL(rawURL string) {
+	if a.ctx == nil {
+		return
+	}
+	wailsRuntime.BrowserOpenURL(a.ctx, rawURL)
+}
+
+// RestartApp relaunches the application binary as a detached child and then quits the current instance.
+func (a *App) RestartApp() error {
 	exe, err := os.Executable()
 	if err != nil {
-		return fmt.Errorf("failed to get executable path: %w", err)
+		return fmt.Errorf("cannot determine executable path: %w", err)
 	}
-
-	cmd := execCommand(exe, os.Args[1:]...)
+	execPath, err := filepath.EvalSymlinks(exe)
+	if err != nil {
+		execPath = exe
+	}
+	cmd := execCommand(execPath)
 	if err := cmd.Start(); err != nil {
-		return fmt.Errorf("failed to restart application: %w", err)
+		return fmt.Errorf("failed to start new instance: %w", err)
 	}
-
-	if a.ctx != nil && a.ctx.Value("frontend") != nil {
+	if a.ctx != nil {
 		wailsRuntime.Quit(a.ctx)
 	}
 	return nil

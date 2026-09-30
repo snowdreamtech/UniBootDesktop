@@ -16,3 +16,10 @@ func detachProcess(cmd *exec.Cmd) {
 	}
 	cmd.SysProcAttr.CreationFlags = 0x00000008 // DETACHED_PROCESS
 }
+
+// newDetachedCmd creates a new exec.Cmd configured to run detached from the current process group.
+func newDetachedCmd(name string, args ...string) *exec.Cmd {
+	cmd := exec.Command(name, args...)
+	detachProcess(cmd)
+	return cmd
+}
