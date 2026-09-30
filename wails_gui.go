@@ -68,6 +68,7 @@ func RunWails() error {
 		BackgroundColour: &options.RGBA{R: 7, G: 10, B: 18, A: 255},
 		OnStartup:        app.startup,
 		OnShutdown:       app.shutdown,
+		OnBeforeClose:    app.beforeClose,
 		SingleInstanceLock: &options.SingleInstanceLock{
 			UniqueId:               "com.snowdreamtech.unigodesktop",
 			OnSecondInstanceLaunch: app.onSecondInstanceLaunch,
