@@ -1,9 +1,9 @@
 <template>
   <div class="tab-content">
-    <div class="settings-section">
+    <!-- Card 1: Appearance & Language -->
+    <div class="settings-section appearance-card">
       <h4 class="section-title">
-        <span>⚙️ {{ t("settings.tab_general") || "General Preferences" }}</span>
-        <span class="badge info">{{ t("settings.realtime_save") || "Auto-Saved" }}</span>
+        <span>🎨 {{ t("settings.section_appearance") || "Appearance & Language" }}</span>
       </h4>
 
       <div class="grid-form">
@@ -18,76 +18,108 @@
           <label class="form-label">🎨 {{ t("settings.theme") || "Appearance Theme" }}</label>
           <CustomSelect :model-value="theme" :options="themeOptions" @change="onThemeChange" />
         </div>
+      </div>
+    </div>
 
-        <!-- Auto Check Updates -->
-        <div class="form-group span-full">
-          <label class="form-label">🔄 {{ t("settings.app_update") || "Software Updates" }}</label>
-          <div class="radio-group horizontal">
-            <label class="radio-label">
-              <input
-                type="radio"
-                :value="true"
-                :checked="autoCheckUpdate === true"
-                @change="onAutoCheckUpdateChange(true)"
-              />
-              <span>{{ t("settings.update_auto") || "Automatically check on startup" }}</span>
-            </label>
-            <label class="radio-label">
-              <input
-                type="radio"
-                :value="false"
-                :checked="autoCheckUpdate === false"
-                @change="onAutoCheckUpdateChange(false)"
-              />
-              <span>{{ t("settings.update_manual") || "Manual check only" }}</span>
-            </label>
+    <!-- Card 2: Software Updates -->
+    <div class="settings-section">
+      <h4 class="section-title">
+        <span>🔄 {{ t("settings.app_update") || "Software Updates" }}</span>
+      </h4>
+
+      <div class="card-options">
+        <label class="option-card" :class="{ selected: autoCheckUpdate === true }">
+          <input
+            type="radio"
+            name="autoCheckUpdate"
+            :value="true"
+            :checked="autoCheckUpdate === true"
+            @change="onAutoCheckUpdateChange(true)"
+          />
+          <div class="option-content">
+            <span class="option-title">{{ t("settings.update_auto") || "Automatically check on startup" }}</span>
+            <span class="option-desc">
+              {{ t("settings.update_auto_desc") || "Check for new releases in the background when app launches" }}
+            </span>
           </div>
+        </label>
+
+        <label class="option-card" :class="{ selected: autoCheckUpdate === false }">
+          <input
+            type="radio"
+            name="autoCheckUpdate"
+            :value="false"
+            :checked="autoCheckUpdate === false"
+            @change="onAutoCheckUpdateChange(false)"
+          />
+          <div class="option-content">
+            <span class="option-title">{{ t("settings.update_manual") || "Manual check only" }}</span>
+            <span class="option-desc">
+              {{ t("settings.update_manual_desc") || "Only check for new versions when manually triggered" }}
+            </span>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Card 3: System Tray & Window Behavior -->
+    <div class="settings-section">
+      <h4 class="section-title">
+        <span>📌 {{ t("settings.tray_section") || "System Tray & Window Behavior" }}</span>
+      </h4>
+
+      <div class="tray-content">
+        <div class="switch-row">
+          <div class="switch-label-group">
+            <span class="switch-title">{{ t("settings.enable_tray") || "Enable System Tray" }}</span>
+            <span class="switch-desc">
+              {{ t("settings.enable_tray_desc") || "Keep app alive in system tray / menu bar (disabled by default)" }}
+            </span>
+          </div>
+          <label class="toggle-switch">
+            <input
+              type="checkbox"
+              :checked="enableTray === true"
+              @change="onEnableTrayChange(($event.target as HTMLInputElement).checked)"
+            />
+            <span class="slider"></span>
+          </label>
         </div>
 
-        <!-- System Tray & Window Close Action -->
-        <div class="form-group span-full">
-          <label class="form-label">📌 {{ t("settings.tray_section") || "System Tray & Window Behavior" }}</label>
-          <div class="tray-setting-card">
-            <div class="switch-row">
-              <div class="switch-label-group">
-                <span class="switch-title">{{ t("settings.enable_tray") || "Enable System Tray" }}</span>
-                <span class="switch-desc">{{ t("settings.enable_tray_desc") || "Keep app alive in system tray / menu bar (disabled by default)" }}</span>
-              </div>
-              <label class="toggle-switch">
+        <transition name="slide-fade">
+          <div v-if="enableTray" class="close-action-section">
+            <label class="form-label sub-label">
+              {{ t("settings.close_action") || "When clicking window close button:" }}
+            </label>
+            <div class="card-options horizontal">
+              <label class="option-card compact" :class="{ selected: closeAction === 'quit' }">
                 <input
-                  type="checkbox"
-                  :checked="enableTray === true"
-                  @change="onEnableTrayChange(($event.target as HTMLInputElement).checked)"
+                  type="radio"
+                  name="closeAction"
+                  value="quit"
+                  :checked="closeAction === 'quit'"
+                  @change="onCloseActionChange('quit')"
                 />
-                <span class="slider"></span>
+                <div class="option-content">
+                  <span class="option-title">{{ t("settings.close_action_quit") || "Quit application" }}</span>
+                </div>
+              </label>
+
+              <label class="option-card compact" :class="{ selected: closeAction === 'minimize_to_tray' }">
+                <input
+                  type="radio"
+                  name="closeAction"
+                  value="minimize_to_tray"
+                  :checked="closeAction === 'minimize_to_tray'"
+                  @change="onCloseActionChange('minimize_to_tray')"
+                />
+                <div class="option-content">
+                  <span class="option-title">{{ t("settings.close_action_minimize") || "Minimize to system tray" }}</span>
+                </div>
               </label>
             </div>
-
-            <div v-if="enableTray" class="close-action-group">
-              <label class="form-label sub-label">{{ t("settings.close_action") || "When clicking window close button:" }}</label>
-              <div class="radio-group horizontal">
-                <label class="radio-label">
-                  <input
-                    type="radio"
-                    value="quit"
-                    :checked="closeAction === 'quit'"
-                    @change="onCloseActionChange('quit')"
-                  />
-                  <span>{{ t("settings.close_action_quit") || "Quit application" }}</span>
-                </label>
-                <label class="radio-label">
-                  <input
-                    type="radio"
-                    value="minimize_to_tray"
-                    :checked="closeAction === 'minimize_to_tray'"
-                    @change="onCloseActionChange('minimize_to_tray')"
-                  />
-                  <span>{{ t("settings.close_action_minimize") || "Minimize to system tray" }}</span>
-                </label>
-              </div>
-            </div>
           </div>
-        </div>
+        </transition>
       </div>
     </div>
   </div>
@@ -148,35 +180,30 @@ function onCloseActionChange(val: string) {
 .tab-content {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .settings-section {
   background: var(--section-bg);
   border: 1px solid var(--card-border);
   border-radius: 12px;
-  padding: 1.25rem;
+  padding: 1.15rem 1.25rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.settings-section.appearance-card {
+  position: relative;
+  z-index: 10;
 }
 
 .section-title {
-  font-size: 0.95rem;
+  font-size: 0.925rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--accent-cyan);
-}
-
-.badge {
-  font-size: 0.725rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-weight: 600;
-}
-
-.badge.info {
-  background: rgba(0, 229, 255, 0.12);
   color: var(--accent-cyan);
 }
 
@@ -184,10 +211,6 @@ function onCloseActionChange(val: string) {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-}
-
-.span-full {
-  grid-column: span 2;
 }
 
 .form-group {
@@ -209,40 +232,89 @@ function onCloseActionChange(val: string) {
 
 .sub-label {
   font-size: 0.78rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
 }
 
 .highlight-label {
   color: var(--accent-cyan);
 }
 
-.radio-group {
+/* Card Options (Radios as Cards) */
+.card-options {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  margin-top: 0.2rem;
-}
-
-.radio-group.horizontal {
-  flex-direction: row;
-  gap: 1.5rem;
-}
-
-.radio-label {
-  display: flex;
-  align-items: center;
   gap: 0.5rem;
-  font-size: 0.8rem;
-  color: var(--text-main);
+}
+
+.card-options.horizontal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.option-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.02);
   cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.option-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(0, 229, 255, 0.35);
+}
+
+.option-card.selected {
+  background: rgba(0, 229, 255, 0.07);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
+}
+
+.option-card.compact {
+  padding: 0.65rem 0.85rem;
+  align-items: center;
+}
+
+.option-card input[type="radio"] {
+  accent-color: var(--accent-cyan);
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.option-card.compact input[type="radio"] {
+  margin-top: 0;
+}
+
+.option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.option-title {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+.option-desc {
+  font-size: 0.735rem;
+  color: var(--text-muted);
+  line-height: 1.35;
 }
 
 /* Tray setting card */
-.tray-setting-card {
-  background: rgba(0, 0, 0, 0.15);
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  padding: 0.85rem 1rem;
+.tray-content {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -267,16 +339,28 @@ function onCloseActionChange(val: string) {
 }
 
 .switch-desc {
-  font-size: 0.72rem;
+  font-size: 0.735rem;
   color: var(--text-muted);
 }
 
-.close-action-group {
-  padding-top: 0.65rem;
+.close-action-section {
+  padding-top: 0.75rem;
   border-top: 1px dashed var(--card-border);
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.5rem;
+}
+
+/* Slide Fade Transition */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.22s ease-out;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
 }
 
 /* Modern Toggle Switch */
@@ -330,9 +414,8 @@ input:checked + .slider:before {
   .grid-form {
     grid-template-columns: 1fr;
   }
-  .span-full {
-    grid-column: span 1;
+  .card-options.horizontal {
+    grid-template-columns: 1fr;
   }
 }
 </style>
-
