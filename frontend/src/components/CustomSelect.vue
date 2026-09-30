@@ -1,6 +1,6 @@
 <template>
-  <div class="custom-select-container" ref="containerRef" :class="{ open: isOpen }">
-    <div class="select-trigger" @click="toggleOpen">
+  <div class="custom-select-container" ref="containerRef" :class="{ open: isOpen, disabled: props.disabled }">
+    <div class="select-trigger" :class="{ disabled: props.disabled }" @click="!props.disabled && toggleOpen()">
       <span class="selected-label">{{ selectedOption?.label || modelValue }}</span>
       <span class="chevron-icon">▾</span>
     </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 export interface SelectOption {
   value: string;
@@ -33,15 +33,16 @@ export interface SelectOption {
 const props = defineProps<{
   modelValue: string;
   options: SelectOption[];
+  disabled?: boolean;
 }>();
 
-const emit = defineEmits(["update:modelValue", "change"]);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 const isOpen = ref(false);
 const containerRef = ref<HTMLElement | null>(null);
 
 const selectedOption = computed(() => {
-  return props.options.find((o) => o.value === props.modelValue);
+  return props.options.find(o => o.value === props.modelValue);
 });
 
 function toggleOpen() {
@@ -49,8 +50,8 @@ function toggleOpen() {
 }
 
 function selectOption(val: string) {
-  emit("update:modelValue", val);
-  emit("change", val);
+  emit('update:modelValue', val);
+  emit('change', val);
   isOpen.value = false;
 }
 
@@ -61,11 +62,11 @@ function handleClickOutside(e: MouseEvent) {
 }
 
 onMounted(() => {
-  document.addEventListener("click", handleClickOutside);
+  document.addEventListener('click', handleClickOutside);
 });
 
 onUnmounted(() => {
-  document.removeEventListener("click", handleClickOutside);
+  document.removeEventListener('click', handleClickOutside);
 });
 </script>
 
@@ -94,8 +95,10 @@ onUnmounted(() => {
   border-color: var(--card-border-active);
 }
 
-.custom-select-container.open {
-  z-index: 1000;
+.select-trigger.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .custom-select-container.open .select-trigger {

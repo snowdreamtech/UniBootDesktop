@@ -1,0 +1,977 @@
+<template>
+  <div
+    class="glass-card disk-card"
+    :class="{ selected: isSelected, 'is-ejecting': isEjecting, 'is-locked': isLocked }"
+    @click="$emit('select', disk)"
+  >
+    <div class="disk-checkbox-container" v-if="isBatchMode">
+      <input
+        type="checkbox"
+        class="disk-checkbox"
+        :checked="isSelected"
+        :disabled="isLocked"
+        @click.stop="$emit('toggle', disk)"
+      />
+    </div>
+
+    <!-- Dynamic SVG Disk Icon -->
+    <div
+      class="disk-icon-wrapper"
+      :class="diskType"
+      :title="isLocked ? lockReason : t('disk.change_icon')"
+      @click.stop="$emit('pick-icon', disk)"
+    >
+      <!-- Boot USB Icon with Lightning -->
+      <svg
+        v-if="diskType === 'boot'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <path d="M6 7h12a1.5 1.5 0 0 1 1.5 1.5v10a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-10A1.5 1.5 0 0 1 6 7z" />
+        <polygon
+          points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10"
+          fill="currentColor"
+          stroke="none"
+        />
+      </svg>
+      <!-- Portable SSD Icon -->
+      <svg
+        v-else-if="diskType === 'ssd'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="3" y="5" width="18" height="14" rx="3" />
+        <line x1="7" y1="9" x2="11" y2="9" />
+        <line x1="7" y1="12" x2="17" y2="12" />
+        <circle cx="17" cy="9" r="1" fill="currentColor" />
+      </svg>
+      <!-- Type-C Dual Icon -->
+      <svg
+        v-else-if="diskType === 'typec'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="8" y="2" width="8" height="4" rx="2" />
+        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z" />
+        <rect x="9" y="20" width="6" height="3" rx="0.5" />
+      </svg>
+      <!-- Secure USB Icon -->
+      <svg
+        v-else-if="diskType === 'secure'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
+        <circle cx="10" cy="11" r="0.8" fill="currentColor" />
+        <circle cx="12" cy="11" r="0.8" fill="currentColor" />
+        <circle cx="14" cy="11" r="0.8" fill="currentColor" />
+        <circle cx="10" cy="14" r="0.8" fill="currentColor" />
+        <circle cx="12" cy="14" r="0.8" fill="currentColor" />
+        <circle cx="14" cy="14" r="0.8" fill="currentColor" />
+      </svg>
+      <!-- Card Reader Icon -->
+      <svg
+        v-else-if="diskType === 'reader'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <rect x="5" y="7" width="14" height="14" rx="2" />
+        <rect x="8" y="11" width="8" height="6" rx="1" stroke-dasharray="2 2" />
+      </svg>
+      <!-- Mobile HDD Icon -->
+      <svg
+        v-else-if="diskType === 'hdd'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="4" y="4" width="16" height="16" rx="2" />
+        <circle cx="12" cy="11" r="4" />
+        <circle cx="12" cy="11" r="1.5" />
+        <line x1="6" y1="17" x2="8" y2="17" />
+      </svg>
+      <!-- Security Key Icon -->
+      <svg
+        v-else-if="diskType === 'key'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="7.5" cy="12.5" r="3.5" />
+        <path d="M11 12.5h9.5M16 12.5v2.5M18.5 12.5v2" />
+      </svg>
+      <!-- CD-ROM ISO Icon -->
+      <svg
+        v-else-if="diskType === 'cdrom'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="9" />
+        <circle cx="12" cy="12" r="3" />
+        <circle cx="12" cy="12" r="1" />
+      </svg>
+      <!-- Traditional USB 2.0 Icon -->
+      <svg
+        v-else-if="diskType === 'usb2'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <rect x="10.5" y="3.5" width="3" height="2" fill="currentColor" opacity="0.4" />
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
+        <circle cx="12" cy="18" r="1.2" />
+      </svg>
+      <!-- USB 3.1 Gen 2 (10G Speed Ring) Icon -->
+      <svg
+        v-else-if="diskType === 'usb3_1'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
+        <circle cx="12" cy="13" r="3" stroke-dasharray="4 2" />
+        <path d="M12 11v4M10.5 13h3" />
+      </svg>
+      <!-- USB 3.2 Gen 2x2 (20G Dual Channel Speed Lightning) Icon -->
+      <svg
+        v-else-if="diskType === 'usb3_2'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="8" y="2" width="8" height="4" rx="2" />
+        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z" />
+        <polygon
+          points="12.8 9.5 10 13.5 12.2 13.5 11 17.5 15 12.5 12.8 12.5 13.2 9.5"
+          fill="currentColor"
+          stroke="none"
+        />
+      </svg>
+      <!-- USB4 / Thunderbolt 4 (40G Flagship) Icon -->
+      <svg
+        v-else-if="diskType === 'usb4'"
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="8" y="2" width="8" height="4" rx="2" />
+        <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z" />
+        <polygon points="13 9 10 13.5 12.5 13.5 11 18 15 12.5 12.5 12.5 13 9" fill="currentColor" stroke="none" />
+      </svg>
+      <!-- USB 3.0 SuperSpeed Flash Drive Icon -->
+      <svg
+        v-else
+        class="disk-svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <!-- Metal USB-A Plug Head -->
+        <rect x="9" y="2" width="6" height="5" rx="0.5" />
+        <circle cx="10.8" cy="4" r="0.6" fill="currentColor" />
+        <circle cx="13.2" cy="4" r="0.6" fill="currentColor" />
+        <!-- USB Main Body -->
+        <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
+        <!-- SuperSpeed Lightning Emblem -->
+        <polygon
+          points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10"
+          fill="currentColor"
+          stroke="none"
+        />
+      </svg>
+    </div>
+
+    <div class="disk-details">
+      <div class="disk-name-row">
+        <span class="disk-name" :title="disk.name || disk.device">
+          <template v-if="diskNameParts.suffix">
+            <span class="disk-name-prefix">{{ diskNameParts.prefix }}</span>
+            <span class="disk-name-suffix"> {{ diskNameParts.suffix }}</span>
+          </template>
+          <template v-else>{{ diskNameParts.prefix }}</template>
+        </span>
+        <span v-if="disk.isFakeUsb3" class="fake-badge" :title="t('disk.fake_usb3_warning')"> ⚠️ Fake USB 3.0 </span>
+      </div>
+      <div class="disk-meta">
+        {{ disk.device }} • {{ formatDiskCapacity(disk.formatted) }}
+        <span class="speed-tag" :class="disk.protocolCode || 'usb2'">
+          {{ disk.usbVersion || "USB 2.0" }} • {{ disk.usbSpeed || "480 Mb/s" }}
+        </span>
+      </div>
+    </div>
+
+    <div class="disk-tags">
+      <span class="disk-badge" :class="[diskType, bootSubtype ? `boot-${bootSubtype}` : '']" :title="bootTooltip">{{
+        diskTagLabel
+      }}</span>
+      <button class="btn-inspect" :title="t('disk.hw_inspect')" @click.stop="$emit('inspect', disk)">
+        ℹ️ {{ t("disk.details") }}
+      </button>
+      <button
+        class="btn-eject"
+        :title="isLocked ? lockReason : t('disk.eject')"
+        :disabled="isLocked || isEjecting"
+        @click.stop="$emit('eject', disk)"
+      >
+        <span class="eject-button-icon" :class="{ 'is-spinning': isEjecting }">⏏️</span>
+        {{ t("disk.eject") }}
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed } from "vue";
+import type { disk } from "../../wailsjs/go/models";
+import { formatDiskCapacity, t } from "../i18n";
+
+type DiskInfo = disk.DiskInfo;
+
+const props = withDefaults(
+  defineProps<{
+    disk: DiskInfo;
+    isSelected: boolean;
+    isBatchMode?: boolean;
+    isEjecting?: boolean;
+    isLocked?: boolean;
+    lockReason?: string;
+    customIcon?: string;
+  }>(),
+  {
+    isBatchMode: false,
+    isEjecting: false,
+    isLocked: false,
+    lockReason: "",
+  }
+);
+
+defineEmits(["select", "toggle", "pick-icon", "inspect", "eject"]);
+
+const diskType = computed<
+  | "boot"
+  | "ssd"
+  | "typec"
+  | "secure"
+  | "reader"
+  | "hdd"
+  | "key"
+  | "cdrom"
+  | "usb2"
+  | "usb3_1"
+  | "usb3_2"
+  | "usb4"
+  | "usb"
+>(() => {
+  if (
+    props.customIcon &&
+    [
+      "boot",
+      "ssd",
+      "typec",
+      "secure",
+      "reader",
+      "hdd",
+      "key",
+      "cdrom",
+      "usb2",
+      "usb3_1",
+      "usb3_2",
+      "usb4",
+      "usb",
+    ].includes(props.customIcon)
+  ) {
+    return props.customIcon as any;
+  }
+
+  const nameUpper = (props.disk.name || "").toUpperCase();
+  const vendorUpper = (props.disk.vendor || "").toUpperCase();
+  const controllerUpper = (props.disk.controllerVendor || "").toUpperCase();
+  const vidUpper = (props.disk.vendorId || "").toUpperCase();
+
+  const isReader =
+    nameUpper.includes("CARD") ||
+    nameUpper.includes("READER") ||
+    nameUpper.includes("SD") ||
+    nameUpper.includes("MICROSD") ||
+    nameUpper.includes("TF") ||
+    vendorUpper.includes("CARD") ||
+    vendorUpper.includes("READER") ||
+    vendorUpper.includes("SD") ||
+    controllerUpper.includes("CARD") ||
+    controllerUpper.includes("READER") ||
+    controllerUpper.includes("读卡器") ||
+    controllerUpper.includes("CHIPSBANK") ||
+    controllerUpper.includes("CHIPSBRAND") ||
+    vidUpper.includes("0X1E3D") ||
+    vidUpper.includes("0X0BDA") ||
+    vidUpper.includes("0X05E3");
+
+  const isBoot =
+    props.disk.isRealVentoy ||
+    props.disk.isCloudMode ||
+    props.disk.isGenericBoot ||
+    props.disk.bootStatusCode === "uniboot_cloud" ||
+    props.disk.bootStatusCode === "uniboot_hybrid" ||
+    props.disk.bootStatusCode === "ventoy_pure" ||
+    props.disk.bootStatusCode === "third_party_boot";
+  if (isBoot) {
+    return "boot";
+  }
+  if (isReader) {
+    return "reader";
+  }
+  if (nameUpper.includes("SECURE") || nameUpper.includes("VAULT") || nameUpper.includes("LOCK")) {
+    return "secure";
+  }
+  if (nameUpper.includes("FIDO") || nameUpper.includes("KEY") || nameUpper.includes("YUBI")) {
+    return "key";
+  }
+  if (nameUpper.includes("CDROM") || nameUpper.includes("ISO") || nameUpper.includes("VIRTUAL")) {
+    return "cdrom";
+  }
+  if (nameUpper.includes("HDD") || nameUpper.includes("DISK DRIVE")) {
+    return "hdd";
+  }
+  if (nameUpper.includes("TYPE-C") || nameUpper.includes("TYPEC") || nameUpper.includes("DUAL")) {
+    return "typec";
+  }
+  if (props.disk.size >= 128 * 1024 * 1024 * 1024 || nameUpper.includes("SSD") || nameUpper.includes("NVME")) {
+    return "ssd";
+  }
+  if (props.disk.protocolCode === "usb4" || props.disk.usbVersion === "USB4") {
+    return "usb4";
+  }
+  if (props.disk.protocolCode === "usb3_2" || props.disk.usbVersion === "USB 3.2") {
+    return "usb3_2";
+  }
+  if (props.disk.protocolCode === "usb3_1" || props.disk.usbVersion === "USB 3.1") {
+    return "usb3_1";
+  }
+  if (props.disk.protocolCode === "usb2" || props.disk.usbVersion === "USB 2.0") {
+    return "usb2";
+  }
+  return "usb";
+});
+
+const bootTooltip = computed(() => {
+  if (diskType.value === "boot") {
+    if (props.disk.isRealVentoy) {
+      return t("disk.tooltip_uniboot_hybrid");
+    }
+    if (props.disk.isCloudMode) {
+      return t("disk.tooltip_uniboot_cloud");
+    }
+    if (props.disk.thirdPartyBootCode) {
+      const toolKey = `inspector.tool_${props.disk.thirdPartyBootCode}` as any;
+      const toolName = t(toolKey);
+      if (toolName && toolName !== toolKey) {
+        return toolName;
+      }
+    }
+    if (props.disk.thirdPartyBootType) {
+      return props.disk.thirdPartyBootType;
+    }
+    if (props.disk.bootStatusCode === "needs_privilege") {
+      return t("disk.tooltip_needs_privilege");
+    }
+    return t("disk.tooltip_third_party_boot");
+  }
+  return "";
+});
+
+const bootSubtype = computed<"hybrid" | "cloud" | "thirdparty" | "needs_privilege" | null>(() => {
+  if (diskType.value !== "boot") return null;
+  if (props.disk.bootStatusCode === "needs_privilege") return "needs_privilege";
+  if (props.disk.isRealVentoy) return "hybrid";
+  if (props.disk.isCloudMode) return "cloud";
+  return "thirdparty";
+});
+
+const diskTagLabel = computed(() => {
+  if (props.disk.bootStatusCode === "needs_privilege") return t("disk.tag_needs_privilege");
+  if (diskType.value === "boot") {
+    if (bootSubtype.value === "hybrid") return t("disk.tag_boot_hybrid");
+    if (bootSubtype.value === "cloud") return t("disk.tag_boot_cloud");
+    if (props.disk.thirdPartyBootCode) {
+      const toolKey = `inspector.tool_${props.disk.thirdPartyBootCode}` as any;
+      const toolName = t(toolKey);
+      if (toolName && toolName !== toolKey) {
+        return toolName;
+      }
+    }
+    if (props.disk.thirdPartyBootType) {
+      return props.disk.thirdPartyBootType;
+    }
+    return t("disk.tag_boot_thirdparty");
+  }
+  if (diskType.value === "ssd") return t("disk.tag_ssd");
+  if (diskType.value === "typec") return t("disk.tag_typec");
+  if (diskType.value === "secure") return t("disk.tag_secure");
+  if (diskType.value === "reader") return t("disk.tag_reader");
+  if (diskType.value === "hdd") return t("disk.tag_hdd");
+  if (diskType.value === "key") return t("disk.tag_key");
+  if (diskType.value === "cdrom") return t("disk.tag_cdrom");
+  if (diskType.value === "usb2") return "USB 2.0";
+  if (diskType.value === "usb3_1") return "USB 3.1";
+  if (diskType.value === "usb3_2") return "USB 3.2";
+  if (diskType.value === "usb4") return "USB4";
+  return "USB 3.0";
+});
+
+const diskNameParts = computed(() => {
+  const name = props.disk.name || props.disk.device;
+  const suffixMatch = name.match(/^(.*?)(\s+\d+)$/);
+
+  if (!suffixMatch || suffixMatch[1].length < 8) {
+    return { prefix: name, suffix: "" };
+  }
+
+  return { prefix: suffixMatch[1], suffix: suffixMatch[2].trim() };
+});
+</script>
+
+<style scoped>
+.disk-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  margin-bottom: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.disk-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .disk-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .disk-card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.disk-card.selected {
+  border-color: var(--accent-cyan);
+  background: var(--accent-cyan-glow);
+}
+
+.disk-icon-wrapper {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 229, 255, 0.1);
+  color: var(--accent-cyan);
+  transition: all 0.2s ease;
+}
+
+.disk-icon-wrapper.boot {
+  background: var(--badge-boot-bg);
+  color: var(--badge-boot-text);
+}
+
+.disk-icon-wrapper.ssd {
+  background: rgba(157, 78, 221, 0.15);
+  color: #9d4edd;
+}
+
+.disk-icon-wrapper.typec {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.disk-icon-wrapper.secure {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.disk-icon-wrapper.reader {
+  background: rgba(99, 102, 241, 0.15);
+  color: #6366f1;
+}
+
+.disk-icon-wrapper.hdd {
+  background: rgba(14, 165, 233, 0.15);
+  color: #38bdf8;
+}
+
+.disk-icon-wrapper.key {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+}
+
+.disk-icon-wrapper.cdrom {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+}
+
+.disk-icon-wrapper.usb2 {
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
+}
+
+.disk-icon-wrapper.usb3_1 {
+  background: rgba(157, 78, 221, 0.15);
+  color: #c084fc;
+}
+
+.disk-icon-wrapper.usb3_2 {
+  background: rgba(168, 85, 247, 0.2);
+  color: #d8b4fe;
+}
+
+.disk-icon-wrapper.usb4 {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.disk-svg {
+  width: 22px;
+  height: 22px;
+}
+
+.disk-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.disk-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.disk-name {
+  display: flex;
+  min-width: 0;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.disk-name-prefix {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.disk-name-suffix {
+  flex-shrink: 0;
+}
+
+.fake-badge {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.725rem;
+  font-weight: 700;
+  animation: pulse-warn 2s infinite ease-in-out;
+}
+
+@keyframes pulse-warn {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.disk-meta {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.speed-tag {
+  font-size: 0.725rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: var(--input-bg);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.speed-tag.usb2 {
+  color: var(--text-muted);
+}
+
+.speed-tag.usb3_0 {
+  color: var(--accent-cyan);
+}
+
+.speed-tag.usb3_1,
+.speed-tag.usb3_2 {
+  color: #c084fc;
+}
+
+.speed-tag.usb4 {
+  color: #fbbf24;
+}
+
+.disk-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.btn-inspect {
+  background: var(--btn-sec-bg);
+  color: var(--btn-sec-text);
+  border: 1px solid var(--btn-sec-border);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-inspect:hover {
+  background: var(--btn-sec-hover-bg);
+  color: var(--btn-sec-hover-text);
+  border-color: var(--btn-sec-hover-border);
+}
+
+.btn-eject {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  background: var(--btn-sec-bg);
+  color: var(--btn-sec-text);
+  border: 1px solid var(--btn-sec-border);
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-eject:hover {
+  background: var(--badge-danger-bg);
+  color: var(--danger);
+  border-color: var(--alert-danger-border);
+}
+
+.eject-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.eject-button-icon.is-spinning {
+  animation: eject-spin 0.8s linear infinite;
+}
+
+@keyframes eject-spin {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  to {
+    transform: rotate(360deg) scale(1.05);
+  }
+}
+
+@keyframes eject-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.disk-badge {
+  background: var(--accent-cyan-glow);
+  color: var(--accent-cyan);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.disk-badge.needs_privilege {
+  background: rgba(245, 158, 11, 0.14);
+  color: #f59e0b;
+  border: 1px dashed rgba(245, 158, 11, 0.45);
+}
+
+.disk-badge.boot {
+  background: var(--badge-boot-bg);
+  color: var(--badge-boot-text);
+}
+
+.disk-badge.boot-hybrid {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.disk-badge.boot-cloud {
+  background: rgba(14, 165, 233, 0.18);
+  color: #38bdf8;
+  border: 1px solid rgba(14, 165, 233, 0.35);
+}
+
+.disk-badge.boot-thirdparty {
+  background: rgba(148, 163, 184, 0.18);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.disk-badge.ssd {
+  background: rgba(157, 78, 221, 0.15);
+  color: #c084fc;
+}
+
+.disk-badge.typec {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.disk-badge.secure {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.disk-badge.reader {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+
+.disk-badge.hdd {
+  background: rgba(14, 165, 233, 0.15);
+  color: #38bdf8;
+}
+
+.disk-badge.key {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+}
+
+.disk-badge.cdrom {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+}
+
+.disk-badge.usb2 {
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--text-muted);
+}
+
+.disk-badge.usb3_1 {
+  background: rgba(157, 78, 221, 0.15);
+  color: #c084fc;
+}
+
+.disk-badge.usb3_2 {
+  background: rgba(168, 85, 247, 0.2);
+  color: #d8b4fe;
+}
+
+.disk-badge.usb4 {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.disk-checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-right: 0.25rem;
+}
+
+.disk-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-cyan);
+  cursor: pointer;
+}
+
+/* Light Theme Overrides for DiskCard */
+[data-theme="light"] .speed-tag {
+  background: #e2e8f0;
+  color: #475569;
+  font-weight: 600;
+}
+
+[data-theme="light"] .speed-tag.usb2 {
+  color: #475569;
+}
+
+[data-theme="light"] .speed-tag.usb3_0 {
+  color: #0284c7;
+}
+
+[data-theme="light"] .speed-tag.usb3_1,
+[data-theme="light"] .speed-tag.usb3_2 {
+  color: #7c3aed;
+}
+
+[data-theme="light"] .speed-tag.usb4 {
+  color: #d97706;
+}
+
+[data-theme="light"] .fake-badge {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+/* Light Theme Badge Overrides - High Contrast & Clear Legibility */
+[data-theme="light"] .disk-badge.boot-hybrid {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  font-weight: 700;
+}
+
+[data-theme="light"] .disk-badge.boot-cloud {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #7dd3fc;
+  font-weight: 700;
+}
+
+[data-theme="light"] .disk-badge.boot-thirdparty {
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.needs_privilege {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px dashed #f59e0b;
+  font-weight: 700;
+}
+
+[data-theme="light"] .disk-badge.ssd {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #d8b4fe;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.typec {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.secure {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.reader {
+  background: #e0e7ff;
+  color: #3730a3;
+  border: 1px solid #a5b4fc;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.hdd {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #7dd3fc;
+  font-weight: 600;
+}
+
+[data-theme="light"] .disk-badge.usb4 {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  font-weight: 700;
+}
+</style>
