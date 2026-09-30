@@ -120,7 +120,6 @@ select:-webkit-autofill:focus {
   caret-color: var(--text-main);
 }
 
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -365,4 +364,3 @@ html[dir="ltr"] textarea {
 .window-inactive .logo-img {
   filter: grayscale(0.2) opacity(0.88);
 }
-

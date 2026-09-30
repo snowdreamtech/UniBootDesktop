@@ -54,7 +54,8 @@ export const itIt: TranslationDict = {
   "settings.update_manual_desc": "Controlla gli aggiornamenti solo cliccando manualmente nella finestra Informazioni",
   "settings.tray_section": "Vassoio di sistema e comportamento finestra",
   "settings.enable_tray": "Abilita icona nel vassoio di sistema",
-  "settings.enable_tray_desc": "Mantieni l'icona nel vassoio / barra dei menu (disabilitato per impostazione predefinita)",
+  "settings.enable_tray_desc":
+    "Mantieni l'icona nel vassoio / barra dei menu (disabilitato per impostazione predefinita)",
   "settings.close_action": "Alla chiusura della finestra:",
   "settings.close_action_quit": "Esci dall'applicazione",
   "settings.close_action_minimize": "Riduci a icona nel vassoio di sistema",
