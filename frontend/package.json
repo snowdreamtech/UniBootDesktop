@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node ../scripts/ensure-wailsjs.mjs",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
+    "pretest": "node ../scripts/ensure-wailsjs.mjs",
     "test": "vitest run",
     "i18n:check": "node ../scripts/update-locales.mjs --check",
     "i18n:sync": "node ../scripts/update-locales.mjs"

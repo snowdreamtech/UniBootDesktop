@@ -233,6 +233,7 @@ jobs:
       - name: "🛠️ Verify Frontend Assets & TypeScript"
         shell: bash
         run: |
+          unirtm exec -- wails generate module
           cd frontend
           unirtm exec -- npm ci
           unirtm exec -- npm run i18n:check

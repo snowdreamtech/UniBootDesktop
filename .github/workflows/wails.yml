@@ -177,6 +177,10 @@ jobs:
           cd frontend
           unirtm exec -- npm ci
 
+      - name: Generate Wails bindings
+        shell: bash
+        run: unirtm exec -- wails generate module
+
       - name: Build frontend assets
         shell: bash
         run: |
