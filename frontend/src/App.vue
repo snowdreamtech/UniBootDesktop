@@ -4,7 +4,7 @@
     <ToastNotification :message="toastMessage" :type="toastType" @close="toastMessage = ''" />
 
     <!-- Header -->
-    <header class="app-header">
+    <header class="app-header" @dblclick="handleHeaderDblClick">
       <div class="brand">
         <img src="/logo.png" alt="UniGo" class="logo-img" />
         <div>
@@ -94,11 +94,34 @@ import {
   WindowSetLightTheme,
   WindowSetSystemDefaultTheme,
   WindowSetBackgroundColour,
+  WindowToggleMaximise,
 } from "../wailsjs/runtime/runtime";
 import { isWails, isWailsRuntime } from "./utils/wails";
 import type { config } from "../wailsjs/go/models";
 
 type AppConfigType = config.AppConfig;
+
+function handleHeaderDblClick(e: MouseEvent) {
+  const target = e.target as HTMLElement | null;
+  // Ignore double clicks on interactive controls inside the header
+  if (
+    target &&
+    (target.closest("button") ||
+      target.closest("input") ||
+      target.closest("select") ||
+      target.closest("a") ||
+      target.closest(".lang-dropdown-menu"))
+  ) {
+    return;
+  }
+  if (isWailsRuntime()) {
+    try {
+      WindowToggleMaximise();
+    } catch (err) {
+      console.warn("Failed to toggle maximise:", err);
+    }
+  }
+}
 
 const isSettingsOpen = ref(false);
 const isAboutOpen = ref(false);
@@ -285,11 +308,13 @@ onUnmounted(() => {
   padding: 2.25rem 2rem 1.5rem;
   box-sizing: border-box;
   overflow-x: hidden;
+  cursor: default;
   --wails-draggable: drag;
 }
 
 /* Header can also drag the window, while actions inside remain clickable */
 .app-header {
+  cursor: default;
   --wails-draggable: drag;
 }
 
