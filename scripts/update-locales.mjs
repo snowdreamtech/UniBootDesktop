@@ -49,7 +49,8 @@ function generateLocaleContent(varName, entries) {
   ];
 
   for (const [key, value] of entries) {
-    const escapedValue = value.replace(/"/g, '\\"');
+    const raw = value.replace(/\\"/g, '"');
+    const escapedValue = raw.replace(/"/g, '\\"');
     lines.push(`  "${key}": "${escapedValue}",`);
   }
 
