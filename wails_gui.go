@@ -15,6 +15,7 @@ import (
 
 	"github.com/snowdreamtech/unibootdesktop/cmd"
 	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/pkg/config"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -58,6 +59,15 @@ func RunWails() error {
 	fmt.Println(">>> Starting Wails GUI Runtime...")
 	app := NewApp()
 
+	// Determine Mac native appearance from saved user theme preference so the
+	// native title bar matches the WebView content theme on first launch.
+	macAppearance := mac.NSAppearanceNameDarkAqua
+	backgroundColour := &options.RGBA{R: 11, G: 15, B: 25, A: 255}
+	if cfg, err := config.Load(); err == nil && cfg != nil && cfg.Theme == "light" {
+		macAppearance = mac.NSAppearanceNameAqua
+		backgroundColour = &options.RGBA{R: 248, G: 250, B: 252, A: 255}
+	}
+
 	return wails.Run(&options.App{
 		Title:       "UniBootDesktop",
 		Width:       1180,
@@ -68,6 +78,7 @@ func RunWails() error {
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
+		BackgroundColour: backgroundColour,
 		Menu:             BuildAppMenu(app, "auto"),
 		DragAndDrop: &options.DragAndDrop{
 			EnableFileDrop:     true,
@@ -98,8 +109,13 @@ func RunWails() error {
 			BackdropType:         windows.Auto,
 		},
 		Mac: &mac.Options{
-			TitleBar:             mac.TitleBarHiddenInset(),
-			Appearance:           mac.DefaultAppearance,
+			TitleBar: &mac.TitleBar{
+				TitlebarAppearsTransparent: false,
+				HideTitle:                  false,
+				HideTitleBar:               false,
+				FullSizeContent:            false,
+			},
+			Appearance:           macAppearance,
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{
