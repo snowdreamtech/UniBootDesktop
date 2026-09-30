@@ -52,15 +52,34 @@ elif command -v dnf >/dev/null 2>&1 || command -v yum >/dev/null 2>&1; then
     PKG_MGR="yum"
   fi
   echo "Detected RedHat/Fedora/CentOS-based system ($PKG_MGR)."
-  $SUDO "$PKG_MGR" install -y epel-release || true
-  $SUDO "$PKG_MGR" install -y \
-    gcc \
-    gcc-c++ \
-    make \
-    pkgconf-pkg-config \
-    gtk3-devel
-  if ! $SUDO "$PKG_MGR" install -y webkit2gtk3-devel; then
-    $SUDO "$PKG_MGR" install -y webkit2gtk4.1-devel || true
+
+  # Enable PowerTools (CentOS/RHEL 8) or CRB (CentOS/RHEL 9) if available
+  if command -v dnf >/dev/null 2>&1; then
+    $SUDO dnf config-manager --set-enabled powertools 2>/dev/null || true
+    $SUDO dnf config-manager --set-enabled crb 2>/dev/null || true
+    $SUDO dnf config-manager --enable powertools 2>/dev/null || true
+    $SUDO dnf config-manager --enable crb 2>/dev/null || true
+  fi
+  $SUDO "$PKG_MGR" install -y epel-release 2>/dev/null || true
+
+  # Install build toolchain and GTK3
+  $SUDO "$PKG_MGR" install -y gcc gcc-c++ make gtk3-devel
+
+  # Install pkg-config with backward-compatible package name fallback
+  if ! $SUDO "$PKG_MGR" install -y pkgconf-pkg-config 2>/dev/null; then
+    $SUDO "$PKG_MGR" install -y pkgconfig 2>/dev/null || $SUDO "$PKG_MGR" install -y pkgconf 2>/dev/null || true
+  fi
+
+  # Attempt WebKit2GTK candidate packages across different RHEL/CentOS/Fedora versions
+  WEBKIT_INSTALLED=0
+  for pkg in webkit2gtk4.1-devel webkit2gtk4.0-devel webkit2gtk3-devel webkitgtk4-devel; do
+    if $SUDO "$PKG_MGR" install -y "$pkg" 2>/dev/null; then
+      WEBKIT_INSTALLED=1
+      break
+    fi
+  done
+  if [ "$WEBKIT_INSTALLED" -eq 0 ]; then
+    echo "WARNING: Could not install WebKit2GTK devel packages via $PKG_MGR standard repositories." >&2
   fi
 
 elif command -v apk >/dev/null 2>&1; then
@@ -97,4 +116,15 @@ elif command -v zypper >/dev/null 2>&1; then
 
 else
   echo "WARNING: Unsupported Linux package manager. Please ensure GTK3, WebKit2GTK, and pkg-config are installed." >&2
+fi
+
+# Final verification
+if command -v pkg-config >/dev/null 2>&1 &&
+  pkg-config --exists gtk+-3.0 &&
+  (pkg-config --exists webkit2gtk-4.0 || pkg-config --exists webkit2gtk-4.1); then
+  echo "✓ Linux GUI build dependencies (GTK3 & WebKit2GTK) verified."
+  exit 0
+else
+  echo "ERROR: Linux GUI build dependencies could not be verified via pkg-config." >&2
+  exit 1
 fi
