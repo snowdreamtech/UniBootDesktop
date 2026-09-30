@@ -32,6 +32,12 @@ func NewUIRunner(app *App) *UIRunner {
 
 // Start boots the embedded HTTP server for web assets and backend API bridge.
 func (r *UIRunner) Start(ctx context.Context) error {
+	select {
+	case <-ctx.Done():
+		return nil
+	default:
+	}
+
 	r.mu.Lock()
 	mux := http.NewServeMux()
 
@@ -52,20 +58,21 @@ func (r *UIRunner) Start(ctx context.Context) error {
 		return fmt.Errorf("failed to bind local desktop port: %w", err)
 	}
 
-	r.listener = ln
-	r.port = ln.Addr().(*net.TCPAddr).Port
-
-	r.server = &http.Server{
+	srv := &http.Server{
 		Handler:      mux,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
+
+	r.listener = ln
+	r.port = ln.Addr().(*net.TCPAddr).Port
+	r.server = srv
 	r.mu.Unlock()
 
 	logger.Info("Desktop Web Bridge Server started", "url", fmt.Sprintf("http://127.0.0.1:%d", r.port))
 
 	// Listen and serve
-	if err := r.server.Serve(ln); err != nil && err != http.ErrServerClosed {
+	if err := srv.Serve(ln); err != nil && err != http.ErrServerClosed {
 		return fmt.Errorf("desktop web server error: %w", err)
 	}
 
