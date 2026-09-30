@@ -57,10 +57,8 @@ You **MUST** consider the user input before proceeding (if not empty).
 
      **Binary downloads (actionlint / hadolint / gitleaks — macOS & Linux fallback):**
 
-     > `GITHUB_PROXY` is set to `https://gh-proxy.sn0wdr1am.com/` by default to ensure reliable downloads in restricted network environments.
-
      ```sh
-     GITHUB_PROXY="${GITHUB_PROXY:-https://gh-proxy.sn0wdr1am.com/}"
+     GITHUB_PROXY="${GITHUB_PROXY:-}"
 
      # actionlint (latest version, dynamically fetched)
      ACTIONLINT_VER=$(curl -sSf --retry 5 --retry-delay 2 --retry-connrefused --connect-timeout 10 --max-time 60 \
