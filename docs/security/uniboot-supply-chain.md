@@ -1,14 +1,14 @@
-# unigo Supply Chain Security Analysis
+# uniboot Supply Chain Security Analysis
 
 ## Overview
 
-This document analyzes the supply chain risks associated with unigo's default registry and provides mitigation strategies.
+This document analyzes the supply chain risks associated with uniboot's default registry and provides mitigation strategies.
 
 ## Risk Analysis
 
 ### 1. Implicit Registry Redirection
 
-**Risk**: unigo's built-in registry can silently redirect tool installations to different backends.
+**Risk**: uniboot's built-in registry can silently redirect tool installations to different backends.
 
 **Example**:
 
@@ -16,7 +16,7 @@ This document analyzes the supply chain risks associated with unigo's default re
 # You specify:
 "github:checkmake/checkmake" = "v0.3.2"
 
-# But unigo's registry maps 'checkmake' to:
+# But uniboot's registry maps 'checkmake' to:
 aqua:mrtazz/checkmake
 ```
 
@@ -24,11 +24,11 @@ aqua:mrtazz/checkmake
 
 - Different maintainer (`mrtazz` vs `checkmake` organization)
 - Additional layer (aqua registry) increases attack surface
-- Potential for supply chain attacks if registry is comprounigod
+- Potential for supply chain attacks if registry is comprounibootd
 
 ### 2. Affected Tools in This Project
 
-Based on unigo registry inspection, the following tools have registry mappings:
+Based on uniboot registry inspection, the following tools have registry mappings:
 
 ```bash
 checkmake                     aqua:mrtazz/checkmake
@@ -40,7 +40,7 @@ hadolint                      aqua:hadolint/hadolint
 
 ### ✅ Already Implemented
 
-1. **Explicit Backend Specification**: All tools in `.unigodesktop.toml` use explicit backends:
+1. **Explicit Backend Specification**: All tools in `.unibootdesktop.toml` use explicit backends:
    - `github:owner/repo` for GitHub releases
    - `npm:package` for npm packages
    - `pipx:package` for Python packages
@@ -54,13 +54,13 @@ hadolint                      aqua:hadolint/hadolint
      ;;
    ```
 
-3. **Version Pinning**: All tools are pinned to specific versions in `.unigodesktop.toml`
+3. **Version Pinning**: All tools are pinned to specific versions in `.unibootdesktop.toml`
 
 ### 🔒 Additional Recommendations
 
-#### 1. Disable unigo Registry (Future)
+#### 1. Disable uniboot Registry (Future)
 
-When unigo supports it, consider disabling the default registry:
+When uniboot supports it, consider disabling the default registry:
 
 ```toml
 [settings]
@@ -72,29 +72,29 @@ disable_default_registry = true  # Not yet supported
 Regularly verify that installed tools match expected sources:
 
 ```bash
-# Check what unigo actually installed
-unigo list
+# Check what uniboot actually installed
+uniboot list
 
 # Verify binary checksums against official releases
-unigo exec -- <tool> --version
+uniboot exec -- <tool> --version
 ```
 
-#### 3. Use unigo.lock for Reproducibility
+#### 3. Use uniboot.lock for Reproducibility
 
-The `unigo.lock` file ensures consistent installations across environments:
+The `uniboot.lock` file ensures consistent installations across environments:
 
 ```bash
 # Verify lock file matches configuration
-unigo install --frozen
+uniboot install --frozen
 ```
 
-#### 4. Monitor unigo Registry Changes
+#### 4. Monitor uniboot Registry Changes
 
-Watch for changes in unigo's registry that might affect your tools:
+Watch for changes in uniboot's registry that might affect your tools:
 
 ```bash
 # Check current registry mappings
-unigo registry | grep -E "(checkmake|gitleaks|hadolint)"
+uniboot registry | grep -E "(checkmake|gitleaks|hadolint)"
 ```
 
 ## Verification Steps
@@ -104,13 +104,13 @@ unigo registry | grep -E "(checkmake|gitleaks|hadolint)"
 1. **Verify Tool Sources**:
 
    ```bash
-   unigo list | grep -v "npm:" | grep -v "pipx:"
+   uniboot list | grep -v "npm:" | grep -v "pipx:"
    ```
 
 2. **Check for Unexpected Backends**:
 
    ```bash
-   unigo list | grep "aqua:"
+   uniboot list | grep "aqua:"
    ```
 
    Should only show tools you explicitly configured with aqua backend.
@@ -119,39 +119,39 @@ unigo registry | grep -E "(checkmake|gitleaks|hadolint)"
 
    ```bash
    # For GitHub releases, verify against official checksums
-   unigo where github:checkmake/checkmake
-   sha256sum $(unigo where github:checkmake/checkmake)/bin/checkmake
+   uniboot where github:checkmake/checkmake
+   sha256sum $(uniboot where github:checkmake/checkmake)/bin/checkmake
    ```
 
 ### During CI/CD
 
 Our CI workflows already implement:
 
-- ✅ Locked unigo versions (`UNIRTM_LOCKED=1`)
+- ✅ Locked uniboot versions (`UNIRTM_LOCKED=1`)
 - ✅ Explicit tool specs in lint-wrapper.sh
-- ✅ Version pinning in .unigodesktop.toml
-- ✅ unigo.lock committed to repository
+- ✅ Version pinning in .unibootdesktop.toml
+- ✅ uniboot.lock committed to repository
 
 ## Related Security Measures
 
-1. **Dependabot**: Monitors unigo tool versions
+1. **Dependabot**: Monitors uniboot tool versions
 2. **Trivy**: Scans for vulnerabilities in binaries
 3. **SBOM Generation**: Documents all tool dependencies
 4. **Signed Commits**: Ensures code integrity
 
 ## References
 
-- [unigo Registry Documentation](https://github.com/snowdreamtech/UniGoDesktopregistry.html)
-- [unigo Security Policy](https://github.com/jdx/unigo/blob/main/SECURITY.md)
-- [unigo Paranoid Mode](https://github.com/snowdreamtech/UniGoDesktopparanoid)
+- [uniboot Registry Documentation](https://github.com/snowdreamtech/UniBootDesktopregistry.html)
+- [uniboot Security Policy](https://github.com/jdx/uniboot/blob/main/SECURITY.md)
+- [uniboot Paranoid Mode](https://github.com/snowdreamtech/UniBootDesktopparanoid)
 - [SLSA Framework](https://slsa.dev/)
 
 ## Action Items
 
-- [ ] Monitor unigo for registry disable feature
+- [ ] Monitor uniboot for registry disable feature
 - [ ] Set up automated alerts for registry changes
 - [ ] Document tool source verification in CI
-- [ ] Consider contributing to unigo for better registry transparency
+- [ ] Consider contributing to uniboot for better registry transparency
 
 ---
 

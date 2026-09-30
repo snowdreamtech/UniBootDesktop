@@ -1,33 +1,33 @@
-# .unigodesktop.toml Commands
+# .unibootdesktop.toml Commands
 
-All common tasks are unified under `make`. Run `unigo run help` to see all available targets.
+All common tasks are unified under `make`. Run `uniboot run help` to see all available targets.
 
 ## Setup & Installation
 
 ```bash
-unigo run setup    # Install system-level tools (Homebrew/APT/Scoop depending on OS)
-unigo run install  # Install project language dependencies
+uniboot run setup    # Install system-level tools (Homebrew/APT/Scoop depending on OS)
+uniboot run install  # Install project language dependencies
 ```
 
 ### On-Demand Module Installation
 
-By default, `unigo run setup` installs only commonly-used tools. For specialized tools, install them explicitly:
+By default, `uniboot run setup` installs only commonly-used tools. For specialized tools, install them explicitly:
 
 ```bash
 # Install SQL linting tools (when working with .sql files)
-unigo run setup sql
+uniboot run setup sql
 
 # Install API contract tools (when working with OpenAPI/Swagger specs)
-unigo run setup openapi
+uniboot run setup openapi
 
 # Install Protobuf tools (when working with .proto files)
-unigo run setup protobuf
+uniboot run setup protobuf
 
 # Install task runners (when using Taskfile or justfile)
-unigo run setup runners
+uniboot run setup runners
 
 # Install multiple modules at once
-unigo run setup sql openapi protobuf
+uniboot run setup sql openapi protobuf
 ```
 
 These tools are automatically detected and installed when relevant files exist in your project.
@@ -35,16 +35,16 @@ These tools are automatically detected and installed when relevant files exist i
 ## Quality Gates
 
 ```bash
-unigo run lint     # Run ALL linting checks (pre-commit hooks)
+uniboot run lint     # Run ALL linting checks (pre-commit hooks)
 make format   # Auto-format code across all languages
-unigo run test     # Run the test suite
+uniboot run test     # Run the test suite
 make check    # Run lint + test in sequence
 ```
 
 ## Build & Release
 
 ```bash
-unigo run build    # Build the project binary/artifacts
+uniboot run build    # Build the project binary/artifacts
 make clean    # Remove build artifacts and temporary files
 ```
 
@@ -64,7 +64,7 @@ make clean    # Remove build artifacts and temporary files
 
 ## Cross-Platform Behavior
 
-The .unigodesktop.toml automatically detects your operating system and uses the appropriate package manager:
+The .unibootdesktop.toml automatically detects your operating system and uses the appropriate package manager:
 
 | OS                    | Package Manager   |
 | --------------------- | ----------------- |

@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-UniGoDesktop supports optional network proxy authentication (HTTP/HTTPS/SOCKS4/SOCKS5) requiring username and password fields configured by users through the graphical preferences modal or command-line parameters.
+UniBootDesktop supports optional network proxy authentication (HTTP/HTTPS/SOCKS4/SOCKS5) requiring username and password fields configured by users through the graphical preferences modal or command-line parameters.
 
 Storing credentials raises security and platform-compatibility challenges across desktop operating systems:
 
@@ -35,7 +35,7 @@ We adopt a two-phase credential storage and protection architecture:
    - Under macOS, delegate storage to macOS Keychain via native APIs.
    - Under Windows, delegate to Windows Credential Manager.
    - Under Linux desktop environments, communicate with the Secret Service D-Bus interface.
-3. **Graceful Fallback:** If the system credential service is unavailable (e.g. headless Linux servers, Docker containers, or minimal CI runners), the application gracefully falls back to encrypted local storage derived from user-scoped machine keys or environment variables (`UNIGO_PROXY_PASSWORD`).
+3. **Graceful Fallback:** If the system credential service is unavailable (e.g. headless Linux servers, Docker containers, or minimal CI runners), the application gracefully falls back to encrypted local storage derived from user-scoped machine keys or environment variables (`UNIBOOT_PROXY_PASSWORD`).
 
 ## Consequences
 

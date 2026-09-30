@@ -243,7 +243,7 @@ jobs:
           echo "Warming up Go Proxy for ${TAG}..."
           # Wait up to 60 seconds for Go proxy to sync the new tag
           for i in $(seq 1 12); do
-            if curl -s -f "https://proxy.golang.org/github.com/snowdreamtech/unigodesktop/@v/${TAG}.info" > /dev/null; then
+            if curl -s -f "https://proxy.golang.org/github.com/snowdreamtech/unibootdesktop/@v/${TAG}.info" > /dev/null; then
               echo "✅ Go Proxy is ready!"
               exit 0
             fi
@@ -313,8 +313,8 @@ jobs:
           GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
         run: |
           gh release download "$TAG" \
-            --repo snowdreamtech/UniGoDesktop \
-            --pattern 'unigodesktop-cli_*linux_amd64.tar.gz' \
+            --repo snowdreamtech/UniBootDesktop \
+            --pattern 'unibootdesktop-cli_*linux_amd64.tar.gz' \
             --pattern 'checksums.txt' \
             --pattern 'checksums.txt.sigstore.json'
 
@@ -324,7 +324,7 @@ jobs:
       - name: "🔒 Verify cosign signature"
         run: |
           cosign verify-blob \
-            --certificate-identity "https://github.com/snowdreamtech/UniGoDesktop/.github/workflows/goreleaser.yml@refs/tags/$TAG" \
+            --certificate-identity "https://github.com/snowdreamtech/UniBootDesktop/.github/workflows/goreleaser.yml@refs/tags/$TAG" \
             --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
             --bundle checksums.txt.sigstore.json \
             checksums.txt
@@ -333,7 +333,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
         run: |
-          TARGET_ASSET=$(find . -maxdepth 1 -name 'unigodesktop-cli_*linux_amd64.tar.gz' | head -n 1)
+          TARGET_ASSET=$(find . -maxdepth 1 -name 'unibootdesktop-cli_*linux_amd64.tar.gz' | head -n 1)
           gh attestation verify "$TARGET_ASSET" \
-            --repo snowdreamtech/UniGoDesktop \
-            --signer-repo snowdreamtech/UniGoDesktop
+            --repo snowdreamtech/UniBootDesktop \
+            --signer-repo snowdreamtech/UniBootDesktop

@@ -6,7 +6,7 @@
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
 
 version: 2
-project_name: unigodesktop
+project_name: unibootdesktop
 
 report_sizes: true
 
@@ -31,8 +31,8 @@ before:
     - go run -tags nogui . generate manpage -d ./manpages
 
 builds:
-  - id: unigodesktop-cli
-    binary: unigodesktop
+  - id: unibootdesktop-cli
+    binary: unibootdesktop
     env:
       - CGO_ENABLED=0
     flags:
@@ -40,14 +40,14 @@ builds:
       - -tags=nogui
     ldflags:
       - -s -w
-      - -X 'github.com/snowdreamtech/unigodesktop/internal/env.ProjectName=unigodesktop'
-      - -X 'github.com/snowdreamtech/unigodesktop/internal/env.Author=Snowdream Tech <snowdreamtech@qq.com>'
-      - -X github.com/snowdreamtech/unigodesktop/internal/env.BuildTime={{.Date}}
-      - -X github.com/snowdreamtech/unigodesktop/internal/env.CommitHash={{.ShortCommit}}
-      - -X github.com/snowdreamtech/unigodesktop/internal/env.CommitHashFull={{.FullCommit}}
-      - -X github.com/snowdreamtech/unigodesktop/internal/env.GitTag={{.Tag}}
-      - -X 'github.com/snowdreamtech/unigodesktop/internal/env.COPYRIGHT=Copyright (c) 2026-present SnowdreamTech Inc.'
-      - -X 'github.com/snowdreamtech/unigodesktop/internal/env.LICENSE=MIT <https://github.com/snowdreamtech/unigodesktop/blob/main/LICENSE>'
+      - -X 'github.com/snowdreamtech/unibootdesktop/internal/env.ProjectName=unibootdesktop'
+      - -X 'github.com/snowdreamtech/unibootdesktop/internal/env.Author=Snowdream Tech <snowdreamtech@qq.com>'
+      - -X github.com/snowdreamtech/unibootdesktop/internal/env.BuildTime={{.Date}}
+      - -X github.com/snowdreamtech/unibootdesktop/internal/env.CommitHash={{.ShortCommit}}
+      - -X github.com/snowdreamtech/unibootdesktop/internal/env.CommitHashFull={{.FullCommit}}
+      - -X github.com/snowdreamtech/unibootdesktop/internal/env.GitTag={{.Tag}}
+      - -X 'github.com/snowdreamtech/unibootdesktop/internal/env.COPYRIGHT=Copyright (c) 2026-present SnowdreamTech Inc.'
+      - -X 'github.com/snowdreamtech/unibootdesktop/internal/env.LICENSE=MIT <https://github.com/snowdreamtech/unibootdesktop/blob/main/LICENSE>'
     goos:
       - linux
       - darwin
@@ -69,7 +69,7 @@ builds:
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 archives:
-  - id: unigodesktop-cli
+  - id: unibootdesktop-cli
     formats: [tar.gz]
     # This name template makes the OS and Arch compatible with uname and includes the version.
     name_template: >-
@@ -129,17 +129,17 @@ release:
   prerelease: auto
   github:
     owner: snowdreamtech
-    name: unigodesktop
+    name: unibootdesktop
   # GUI installers/packages are produced by the dedicated Wails workflow on
   # native OS runners and uploaded separately to this GitHub Release.
   header: |
-    **UniGoDesktop** is a modern, high-performance cross-platform desktop application built with Go, Wails, and Vue 3.
+    **UniBootDesktop** is a modern, high-performance cross-platform desktop application built with Go, Wails, and Vue 3.
   footer: |
-    **Full Changelog**: https://github.com/snowdreamtech/unigodesktop/compare/{{ .PreviousTag }}...{{ .Tag }}
+    **Full Changelog**: https://github.com/snowdreamtech/unibootdesktop/compare/{{ .PreviousTag }}...{{ .Tag }}
 
     ## 🤝 Contributing
 
-    Contributions are welcome! Please read our [Contributing Guide](https://github.com/snowdreamtech/unigodesktop/blob/main/CONTRIBUTING.md) first.
+    Contributions are welcome! Please read our [Contributing Guide](https://github.com/snowdreamtech/unibootdesktop/blob/main/CONTRIBUTING.md) first.
 
 source:
   enabled: true
@@ -189,10 +189,10 @@ changelog:
 nfpms:
   - id: default
     file_name_template: "{{ .ProjectName }}-cli_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    homepage: https://github.com/snowdreamtech/unigodesktop
+    homepage: https://github.com/snowdreamtech/unibootdesktop
     maintainer: "Snowdream Tech <snowdreamtech@qq.com>"
     description: |-
-      UniGoDesktop is a modern cross-platform desktop application built with Go, Wails, and Vue 3.
+      UniBootDesktop is a modern cross-platform desktop application built with Go, Wails, and Vue 3.
     license: MIT
     vendor: SnowdreamTech
     bindir: /usr/bin
@@ -206,18 +206,18 @@ nfpms:
     dependencies:
       - git
     contents:
-      - src: ./completions/unigodesktop.bash
-        dst: /usr/share/bash-completion/completions/unigodesktop
+      - src: ./completions/unibootdesktop.bash
+        dst: /usr/share/bash-completion/completions/unibootdesktop
         file_info:
           mode: 0644
           mtime: "{{ .CommitDate }}"
-      - src: ./completions/unigodesktop.zsh
-        dst: /usr/share/zsh/vendor-completions/_unigodesktop
+      - src: ./completions/unibootdesktop.zsh
+        dst: /usr/share/zsh/vendor-completions/_unibootdesktop
         file_info:
           mode: 0644
           mtime: "{{ .CommitDate }}"
-      - src: ./completions/unigodesktop.fish
-        dst: /usr/share/fish/vendor_completions.d/unigodesktop.fish
+      - src: ./completions/unibootdesktop.fish
+        dst: /usr/share/fish/vendor_completions.d/unibootdesktop.fish
         file_info:
           mode: 0644
           mtime: "{{ .CommitDate }}"
@@ -227,7 +227,7 @@ nfpms:
           mode: 0644
           mtime: "{{ .CommitDate }}"
       - src: LICENSE
-        dst: /usr/share/doc/unigodesktop/copyright
+        dst: /usr/share/doc/unibootdesktop/copyright
         file_info:
           mode: 0644
           mtime: "{{ .CommitDate }}"
@@ -246,7 +246,7 @@ snapcrafts:
   - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     summary: Modern cross-platform desktop application built with Go, Wails, and Vue 3
     description: |
-      UniGoDesktop is a modern, extensible cross-platform desktop application built with Go, Wails, and Vue 3.
+      UniBootDesktop is a modern, extensible cross-platform desktop application built with Go, Wails, and Vue 3.
     grade: stable
     confinement: classic
     publish: false

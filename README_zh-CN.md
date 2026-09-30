@@ -1,13 +1,13 @@
-# UniGoDesktop
+# UniBootDesktop
 
-[![CI 流水线](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGoDesktop/wails.yml?branch=main&label=CI%20Pipeline)](https://github.com/snowdreamtech/UniGoDesktop/actions/workflows/wails.yml)
-[![多平台验证](https://img.shields.io/badge/Verified-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/snowdreamtech/UniGoDesktop/actions/workflows/wails.yml)
+[![CI 流水线](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniBootDesktop/wails.yml?branch=main&label=CI%20Pipeline)](https://github.com/snowdreamtech/UniBootDesktop/actions/workflows/wails.yml)
+[![多平台验证](https://img.shields.io/badge/Verified-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/snowdreamtech/UniBootDesktop/actions/workflows/wails.yml)
 [![开源协议: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/license/MIT)
-[![最新发布](https://img.shields.io/github/v/release/snowdreamtech/UniGoDesktop?logo=github&sort=semver)](https://github.com/snowdreamtech/UniGoDesktop/releases/latest)
+[![最新发布](https://img.shields.io/github/v/release/snowdreamtech/UniBootDesktop?logo=github&sort=semver)](https://github.com/snowdreamtech/UniBootDesktop/releases/latest)
 
 [English](README.md) | [简体中文](README_zh-CN.md)
 
-**UniGoDesktop** 是一套现代化、高颜值、企业级通用的跨平台桌面应用模版，基于 **Go + Wails v2 + Vue 3 + TypeScript** 架构构建。原生支持 **macOS (Apple Silicon M系列及 Intel 原生)、Windows 以及 Linux**。
+**UniBootDesktop** 是一套现代化、高颜值、企业级通用的跨平台桌面应用模版，基于 **Go + Wails v2 + Vue 3 + TypeScript** 架构构建。原生支持 **macOS (Apple Silicon M系列及 Intel 原生)、Windows 以及 Linux**。
 
 ---
 
@@ -65,23 +65,23 @@ npm --prefix frontend run build
 
 ## 📖 CLI 命令行说明
 
-UniGoDesktop 提供了基于 Cobra 的完整命令行接口：
+UniBootDesktop 提供了基于 Cobra 的完整命令行接口：
 
 ```bash
 # 1. 交互式 Hello 问候演示
-unigodesktop hello
+unibootdesktop hello
 
 # 2. 系统诊断与运行环境检查
-unigodesktop doctor
+unibootdesktop doctor
 
 # 3. 检查数据目录空间占用
-unigodesktop df
+unibootdesktop df
 
 # 4. 检查版本更新
-unigodesktop update --check
+unibootdesktop update --check
 
 # 5. 启动桌面 GUI 界面
-unigodesktop --desktop
+unibootdesktop --desktop
 ```
 
 ---

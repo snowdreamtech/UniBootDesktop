@@ -1,13 +1,13 @@
-# UniGoDesktop
+# UniBootDesktop
 
-[![CI Pipeline](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGoDesktop/wails.yml?branch=main&label=CI%20Pipeline)](https://github.com/snowdreamtech/UniGoDesktop/actions/workflows/wails.yml)
-[![Multi-OS Verified](https://img.shields.io/badge/Verified-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/snowdreamtech/UniGoDesktop/actions/workflows/wails.yml)
+[![CI Pipeline](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniBootDesktop/wails.yml?branch=main&label=CI%20Pipeline)](https://github.com/snowdreamtech/UniBootDesktop/actions/workflows/wails.yml)
+[![Multi-OS Verified](https://img.shields.io/badge/Verified-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/snowdreamtech/UniBootDesktop/actions/workflows/wails.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/license/MIT)
-[![Release](https://img.shields.io/github/v/release/snowdreamtech/UniGoDesktop?logo=github&sort=semver)](https://github.com/snowdreamtech/UniGoDesktop/releases/latest)
+[![Release](https://img.shields.io/github/v/release/snowdreamtech/UniBootDesktop?logo=github&sort=semver)](https://github.com/snowdreamtech/UniBootDesktop/releases/latest)
 
 [English](README.md) | [简体中文](README_zh-CN.md)
 
-**UniGoDesktop** is an enterprise-ready, cross-platform desktop application template powered by **Go + Wails v2 + Vue 3 + TypeScript**. It natively supports **macOS (Apple Silicon & Intel), Windows, and Linux**.
+**UniBootDesktop** is an enterprise-ready, cross-platform desktop application template powered by **Go + Wails v2 + Vue 3 + TypeScript**. It natively supports **macOS (Apple Silicon & Intel), Windows, and Linux**.
 
 ---
 
@@ -66,23 +66,23 @@ npm --prefix frontend run build
 
 ## 📖 CLI Usage
 
-UniGoDesktop provides powerful CLI commands via Cobra:
+UniBootDesktop provides powerful CLI commands via Cobra:
 
 ```bash
 # 1. Show interactive greeting
-unigodesktop hello
+unibootdesktop hello
 
 # 2. Check system diagnostics and environment specs
-unigodesktop doctor
+unibootdesktop doctor
 
 # 3. Check data directory space usage
-unigodesktop df
+unibootdesktop df
 
 # 4. Check for application releases and updates
-unigodesktop update --check
+unibootdesktop update --check
 
 # 5. Launch desktop GUI
-unigodesktop --desktop
+unibootdesktop --desktop
 ```
 
 ---

@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-UniGoDesktop is a cross-platform desktop application built with Go, Wails v2, and Vue 3 / TypeScript. As a desktop application supporting multi-platform runtime environments (macOS, Windows, Linux) and self-updating capabilities, the application faces several critical architectural challenges:
+UniBootDesktop is a cross-platform desktop application built with Go, Wails v2, and Vue 3 / TypeScript. As a desktop application supporting multi-platform runtime environments (macOS, Windows, Linux) and self-updating capabilities, the application faces several critical architectural challenges:
 
 1. **Context Lifecycle & Resource Safety:** Long-running background operations (such as asset downloads, network diagnostics, and update staging) must cleanly terminate when the GUI window is closed or the runtime is shutting down, preventing goroutine and socket leaks.
 2. **Concurrency Protection:** User-triggered actions such as in-app GUI updates must be guarded against concurrent executions (e.g. repeated user clicks).
