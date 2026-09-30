@@ -6,10 +6,12 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/snowdreamtech/unibootdesktop/cmd"
 	"github.com/snowdreamtech/unibootdesktop/internal/env"
@@ -19,6 +21,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/linux"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
+	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 //go:embed all:frontend/dist
@@ -65,8 +68,18 @@ func RunWails() error {
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
-		BackgroundColour: &options.RGBA{R: 7, G: 10, B: 18, A: 255},
+		Menu:             BuildAppMenu(app, "auto"),
+		DragAndDrop: &options.DragAndDrop{
+			EnableFileDrop:     true,
+			DisableWebViewDrop: false,
+		},
 		OnStartup:        app.startup,
+		OnDomReady: func(ctx context.Context) {
+			time.AfterFunc(50*time.Millisecond, func() {
+				wailsRuntime.Show(ctx)
+				wailsRuntime.WindowShow(ctx)
+			})
+		},
 		OnShutdown:       app.shutdown,
 		OnBeforeClose:    app.beforeClose,
 		SingleInstanceLock: &options.SingleInstanceLock{

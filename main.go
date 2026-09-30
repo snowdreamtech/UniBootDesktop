@@ -8,9 +8,19 @@ import (
 	"os"
 
 	"github.com/snowdreamtech/unibootdesktop/cmd"
+	"github.com/snowdreamtech/unibootdesktop/pkg/privilege"
 )
 
 func main() {
+	for i, arg := range os.Args {
+		if arg == "--privileged-worker" {
+			if err := privilege.RunWorkerFromArgs(os.Args[i+1:]); err != nil {
+				fmt.Fprintf(os.Stderr, "Privileged worker error: %v\n", err)
+				os.Exit(1)
+			}
+			return
+		}
+	}
 	// When built with GUI support (default, no build tags), WailsRunner is
 	// set by wails_gui.go's init(). In CLI-only builds (-tags nogui),
 	// WailsRunner remains nil and we fall through to the CLI.
