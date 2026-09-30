@@ -1,3 +1,6 @@
+// Copyright (c) 2026 SnowdreamTech. All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 import { ref, computed } from "vue";
 import type { TranslationDict } from "./types";
 export type { TranslationDict };
@@ -41,12 +44,12 @@ export const SUPPORTED_LANGUAGES = [
   { code: "sr-Latn", name: "Srpski", nativeName: "Srpski" },
   { code: "sr-Cyrl", name: "Српски", nativeName: "Српски" },
   { code: "th-TH", name: "ไทย", nativeName: "ไทย" },
-  { code: "no-NO", name: "Norsk", nativeName: "Norsk" },
   { code: "lt-LT", name: "Lietuvių", nativeName: "Lietuvių" },
   { code: "mk-MK", name: "Македонски", nativeName: "Македонски" },
   { code: "he-IL", name: "עברית", nativeName: "עברית" },
   { code: "id-ID", name: "Bahasa Indonesia", nativeName: "Bahasa Indonesia" },
   { code: "nb-NO", name: "Norsk Bokmål", nativeName: "Norsk Bokmål" },
+  { code: "no-NO", name: "Norsk", nativeName: "Norsk" },
   { code: "uk-UA", name: "Українська", nativeName: "Українська" },
   { code: "el-GR", name: "Ελληνικά", nativeName: "Ελληνικά" },
   { code: "sv-SE", name: "Svenska", nativeName: "Svenska" },
@@ -61,7 +64,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: "et-EE", name: "Eesti", nativeName: "Eesti" },
 ];
 
-// Vite glob import for dynamic lazy-loading locale chunks (excluding pre-bundled zh-CN and en-US)
+// Vite glob import for dynamic lazy-loading locale chunks
 const localeLoaders = import.meta.glob<Record<string, any>>([
   "./locales/*.ts",
   "!./locales/zh-CN.ts",
@@ -83,12 +86,19 @@ export function detectSystemLocale(): string {
   return matched ? matched.code : DEFAULT_LOCALE;
 }
 
-function getInitialLocale(): string {
+export function resolveAutoLocale(): string {
+  return detectSystemLocale();
+}
+
+export function getInitialLocale(): string {
   const saved = typeof localStorage !== "undefined" ? localStorage.getItem("uniboot_locale") : null;
-  if (saved && saved !== "auto" && SUPPORTED_LANGUAGES.some((l) => l.code === saved)) {
+  if (saved === "auto") {
+    return resolveAutoLocale();
+  }
+  if (saved && SUPPORTED_LANGUAGES.some((l) => l.code === saved)) {
     return saved;
   }
-  return detectSystemLocale();
+  return resolveAutoLocale();
 }
 
 export const selectedLangSetting = ref<string>(
@@ -100,9 +110,8 @@ export const currentLang = currentLocale;
 export async function setLocale(locale: string) {
   selectedLangSetting.value = locale;
   let targetLocale = locale;
-
   if (locale === "auto") {
-    targetLocale = detectSystemLocale();
+    targetLocale = resolveAutoLocale();
     if (typeof localStorage !== "undefined") {
       localStorage.setItem("uniboot_locale", "auto");
     }
@@ -133,12 +142,32 @@ export async function setLocale(locale: string) {
 
   currentLocale.value = targetLocale;
   updateDocumentDir();
+
+  const app = typeof window !== "undefined" ? (window as any)?.go?.main?.App : undefined;
+  if (app && typeof app.LogAction === "function") {
+    app.LogAction("INFO", "Application display language changed", targetLocale);
+  }
 }
 
 export const setLanguage = setLocale;
 
+// Asynchronously load initial locale if not pre-bundled
+const initLoc = getInitialLocale();
+if (initLoc !== "zh-CN" && initLoc !== "en-US") {
+  setLocale(initLoc);
+} else {
+  updateDocumentDir();
+}
+
 export const isRtl = computed(() => {
-  return ["ar-SA", "he-IL", "fa-IR", "ur-PK"].includes(currentLocale.value);
+  const lang = currentLocale.value.toLowerCase();
+  return (
+    ["ar-sa", "he-il", "fa-ir", "ur-pk"].includes(lang) ||
+    lang.startsWith("ar") ||
+    lang.startsWith("he") ||
+    lang.startsWith("fa") ||
+    lang.startsWith("ur")
+  );
 });
 
 export function updateDocumentDir() {
@@ -146,15 +175,10 @@ export function updateDocumentDir() {
     const dir = isRtl.value ? "rtl" : "ltr";
     document.documentElement.setAttribute("dir", dir);
     document.documentElement.dir = dir;
+    if (document.body) {
+      document.body.setAttribute("dir", dir);
+    }
   }
-}
-
-// Asynchronously load initial locale if not pre-bundled
-const initLoc = getInitialLocale();
-if (initLoc !== "zh-CN" && initLoc !== "en-US") {
-  setLocale(selectedLangSetting.value === "auto" ? "auto" : initLoc);
-} else {
-  updateDocumentDir();
 }
 
 export function t(key: keyof TranslationDict, params?: Record<string, string | number>): string {
@@ -168,4 +192,10 @@ export function t(key: keyof TranslationDict, params?: Record<string, string | n
   }
 
   return text;
+}
+
+export function formatDiskCapacity(formattedStr: string): string {
+  if (!formattedStr) return "";
+  const nominalWord = t("disk.nominal" as any) || "Nominal";
+  return formattedStr.replace(/\(Nominal /g, `(${nominalWord} `);
 }

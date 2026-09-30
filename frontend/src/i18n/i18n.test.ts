@@ -9,12 +9,12 @@ describe("i18n module", () => {
   it("translates pre-bundled en-US string correctly", () => {
     expect(currentLocale.value).toBe("en-US");
     const appTitle = t("app.title");
-    expect(appTitle).toBe("UniBootDesktop");
+    expect(appTitle).toBe("UniBoot Desktop");
   });
 
   it("interpolates parameters correctly with {key}", async () => {
     await setLanguage("en-US");
-    const notice = t("about.newVersionNotice", { tag: "v1.2.3" });
+    const notice = t("about.updateTo", { tag: "v1.2.3" });
     expect(notice).toContain("v1.2.3");
   });
 

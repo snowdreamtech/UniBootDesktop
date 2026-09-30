@@ -1,79 +1,189 @@
 <template>
   <div class="app-container">
-    <!-- Global Toast Notification -->
-    <ToastNotification :message="toastMessage" :type="toastType" @close="toastMessage = ''" />
-
-    <!-- Header -->
-    <header class="app-header" @dblclick="handleHeaderDblClick">
-      <div class="brand">
-        <img src="/logo.png" alt="UniBoot" class="logo-img" />
-        <div>
-          <h1>{{ t("app.title") || "UniBootDesktop" }}</h1>
-          <span class="sub-brand">{{ t("app.subtitle") || "Universal Cross-Platform Desktop Template" }}</span>
-        </div>
+    <!-- Global App Toast Notification -->
+    <transition name="toast-fade">
+      <div v-if="toastMessage" class="global-toast" :class="toastType">
+        <span class="toast-icon">
+          <template v-if="toastType === 'warning'">⚠️</template>
+          <template v-else-if="toastType === 'error'">❌</template>
+          <template v-else-if="toastType === 'success'">🎉</template>
+          <template v-else>ℹ️</template>
+        </span>
+        <span class="toast-text">{{ toastMessage }}</span>
+        <button class="toast-close" @click="dismissToast">✕</button>
       </div>
+    </transition>
 
-      <div class="header-actions">
-        <!-- Quick Language Switcher Dropdown -->
-        <div class="lang-selector-header" ref="langDropdownRef">
-          <button class="lang-pill-btn" :title="t('settings.language') || 'Language'" @click.stop="toggleLangMenu">
-            <span class="lang-icon">🌐</span>
-            <span class="lang-label">{{ currentLangLabel }}</span>
-            <span class="dropdown-caret">▾</span>
-          </button>
+    <!-- Header Component -->
+    <AppHeader
+      :activeMode="activeMode"
+      :isLogCardVisible="isLogCardVisible"
+      :currentLang="currentLang"
+      :isActionBusy="!canSwitchMode"
+      @select-mode="selectMode"
+      @toggle-log="toggleLogCard"
+      @open-settings="(tab) => openSettings(tab as any)"
+      @open-about="isAboutOpen = true"
+      @select-lang="selectLanguage"
+    />
 
-          <transition name="dropdown-fade">
-            <div v-if="isLangMenuOpen" class="lang-dropdown-menu" @click.stop>
-              <button
-                v-for="opt in langOptions"
-                :key="opt.value"
-                class="lang-option"
-                :class="{ active: selectedLangSetting === opt.value }"
-                @click="selectLanguage(opt.value)"
-              >
-                <span class="opt-text">{{ opt.label }}</span>
-                <span v-if="selectedLangSetting === opt.value" class="opt-check">✓</span>
-              </button>
-            </div>
-          </transition>
-        </div>
+    <!-- Main Grid -->
+    <main class="content-grid">
+      <!-- Left: Disk Selection Panel Component -->
+      <DiskPanel
+        :diskList="diskList"
+        :selectionMode="selectionMode"
+        :selectedDisk="selectedDisk"
+        :selectedDevices="selectedDevices"
+        :ejectingDevices="ejectingDevices"
+        :isScanningDisks="isScanningDisks"
+        :customIcons="customIcons"
+        :isLocked="!canSelectDisk"
+        :lockReason="diskLockReason"
+        @set-selection-mode="setSelectionMode"
+        @select-all="selectAllDisks"
+        @deselect-all="deselectAllDisks"
+        @batch-eject="handleBatchEjectDisks"
+        @select-disk="onDiskSelect"
+        @toggle-disk="onDiskToggle"
+        @pick-icon="openIconPicker"
+        @inspect-disk="openInspector"
+        @eject-disk="handleEjectDisk"
+        @refresh-disks="refreshDisks"
+      />
 
-        <!-- Quick Theme Toggle -->
-        <button
-          class="icon-action-btn"
-          :title="
-            isDarkTheme
-              ? t('theme.toggleLight') || 'Switch to Light Theme'
-              : t('theme.toggleDark') || 'Switch to Dark Theme'
-          "
-          @click="toggleTheme"
-        >
-          <span>{{ isDarkTheme ? "🌙" : "☀️" }}</span>
-        </button>
+      <!-- Right: Deployment & Testing Panel Component -->
+      <DeployPanel
+        :activeMode="activeMode"
+        :selectionMode="selectionMode"
+        :selectedDisk="selectedDisk"
+        :selectedDevices="selectedDevices"
+        :diskList="diskList"
+        v-model:selectedFsType="selectedFsType"
+        :isNonDestructive="isNonDestructive"
+        :isMacOs="isMacOs"
+        :ventoyStatus="ventoyStatus"
+        :selectedIsoFiles="selectedIsoFiles"
+        :isDeploying="isDeploying"
+        :isPreflight="isPreflight"
+        :deployProgress="deployProgress"
+        :batchDeployInfo="batchDeployInfo"
+        :speedMBps="deploySpeedMBps"
+        :elapsedSec="deployElapsedSec"
+        :etaSec="deployEtaSec"
+        :deployBtnText="deployBtnText"
+        :isDeployDisabled="isDeployDisabled"
+        :deployDisabledReason="deployDisabledReason"
+        :showDeploySuccessBanner="showDeploySuccessBanner"
+        :deploySuccessBanner="deploySuccessBanner"
+        :hypervisorList="hypervisorList"
+        v-model:selectedBootMode="selectedBootMode"
+        v-model:selectedVMType="selectedVMType"
+        v-model:vmCpuCores="vmCpuCores"
+        v-model:vmMemoryMB="vmMemoryMB"
+        v-model:vmDisplayAccel="vmDisplayAccel"
+        :isVmDisabled="isVmDisabled"
+        :vmDisabledReason="vmDisabledReason"
+        :isLaunchingQemu="isLaunchingQemu"
+        :isVmRunning="isVmRunning"
+        :activeVmTargetName="activeVmTargetName"
+        :activeVmTargetDevice="activeVmTargetDevice"
+        :canChangeFs="canChangeFs"
+        :canManageIso="canManageIso"
+        :canVerifyHash="canVerifyHash"
+        :canConfigureVm="canConfigureVm"
+        @open-settings-ventoy="openSettings('ventoy')"
+        @select-iso="handleSelectIsoFiles"
+        @drop-iso-paths="addIsoFilesByPaths"
+        @remove-iso="removeIsoFile"
+        @clear-iso="clearIsoFiles"
+        @deploy-click="handleDeployBtnClick"
+        @cancel-deploy="handleCancelDeploy"
+        @dismiss-success-banner="dismissDeploySuccessBanner"
+        @safely-eject-success="handleSafelyEjectAfterDeploy"
+        @launch-vm="launchVM"
+        @stop-vm="stopVM"
+        @update:is-verifying="(val: boolean) => fsm.setVerifyingDevice(activeVmTargetDevice, val)"
+      />
 
-        <!-- Settings Button -->
-        <button class="icon-action-btn" :title="t('settings.title') || 'Settings'" @click="openSettings">
-          <span>⚙️</span>
-        </button>
-
-        <!-- About Button -->
-        <button class="icon-action-btn" :title="t('about.title') || 'About'" @click="openAbout">
-          <span>ℹ️</span>
-        </button>
-      </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main class="main-content">
-      <HelloPanel :appConfig="appConfig" @open-settings="openSettings" @open-about="openAbout" />
+      <!-- Embedded Log Center Component -->
+      <LogPanel
+        :isVisible="isLogCardVisible"
+        v-model:autoScroll="embeddedAutoScroll"
+        v-model:currentLogFilter="currentEmbeddedLogFilter"
+        :filteredLogs="filteredEmbeddedLogs"
+        :logLevels="logLevels"
+        @copy-logs="handleCopyEmbeddedLogs"
+        @export-logs="handleExportEmbeddedLogs"
+        @clear-logs="handleClearEmbeddedLogs"
+        @close-log="toggleLogCard"
+      />
     </main>
 
-    <!-- Settings Modal -->
+    <!-- Icon Picker Modal -->
+    <IconPickerModal
+      :isOpen="isPickerOpen"
+      :diskName="targetPickerDisk?.name || targetPickerDisk?.device || ''"
+      :currentIcon="
+        targetPickerDisk
+          ? customIcons[getDiskFingerprint(targetPickerDisk)] || customIcons[targetPickerDisk.device]
+          : undefined
+      "
+      @close="isPickerOpen = false"
+      @select-icon="onIconSelected"
+      @reset-icon="onIconReset"
+    />
+
+    <!-- USB Hardware Inspector Modal -->
+    <UsbInspectorModal :isOpen="isInspectorOpen" :disk="targetInspectorDisk" @close="isInspectorOpen = false" />
+
+    <!-- High-Risk Format Confirmation Modal -->
+    <DeployConfirmModal
+      :isOpen="isDeployConfirmOpen"
+      :mode="activeMode"
+      :fsType="selectedFsType"
+      :targetDisk="selectedDisk"
+      :targetDisks="pendingTargets"
+      :allDisks="diskList"
+      @close="isDeployConfirmOpen = false"
+      @confirm="startDeployment"
+    />
+
+    <IsoConflictModal
+      :isOpen="isIsoConflictOpen"
+      :conflicts="isoConflicts"
+      @cancel="cancelIsoConflictPreflight"
+      @confirm="confirmIsoConflictPreflight"
+    />
+
+    <!-- Settings & GitHub Proxy Modal -->
     <SettingsModal
       :isOpen="isSettingsOpen"
-      :currentProxy="appConfig?.githubProxy"
+      :initialTab="settingsInitialTab"
+      :currentProxy="currentGithubProxy"
       @close="isSettingsOpen = false"
       @save="onSaveSettings"
+    />
+
+    <!-- Ventoy Missing Alert Modal -->
+    <VentoyAlertModal
+      :isOpen="isVentoyAlertOpen"
+      :title="ventoyAlertTitle"
+      :message="ventoyAlertMessage"
+      :actionType="ventoyAlertAction"
+      @close="isVentoyAlertOpen = false"
+      @action="handleVentoyAlertAction"
+      @switch-b="handleVentoyAlertSwitchB"
+    />
+
+    <!-- Diagnostics Modal -->
+    <DiagnosticsModal
+      :isOpen="isDiagnosticsOpen"
+      :diagnostics="currentDiagnostics"
+      :errorMsg="currentDiagErrorMsg"
+      @close="isDiagnosticsOpen = false"
+      @retry="handleRetryDeploy"
+      @copy-report="handleCopyReport"
     />
 
     <!-- About Modal -->
@@ -82,505 +192,332 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
-import HelloPanel from "./components/HelloPanel.vue";
-import SettingsModal from "./components/SettingsModal.vue";
 import AboutModal from "./components/AboutModal.vue";
-import ToastNotification from "./components/ToastNotification.vue";
-import { t, currentLang, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from "./i18n";
-import { GetConfig, SaveConfig, CheckUpdate } from "../wailsjs/go/main/App";
-import {
-  WindowSetDarkTheme,
-  WindowSetLightTheme,
-  WindowSetSystemDefaultTheme,
-  WindowSetBackgroundColour,
-  WindowToggleMaximise,
-  WindowShow,
-} from "../wailsjs/runtime/runtime";
-import { isWails, isWailsRuntime } from "./utils/wails";
-import type { config } from "../wailsjs/go/models";
+import AppHeader from "./components/AppHeader.vue";
+import DeployConfirmModal from "./components/DeployConfirmModal.vue";
+import DeployPanel from "./components/DeployPanel.vue";
+import DiagnosticsModal from "./components/DiagnosticsModal.vue";
+import DiskPanel from "./components/DiskPanel.vue";
+import IconPickerModal from "./components/IconPickerModal.vue";
+import IsoConflictModal from "./components/IsoConflictModal.vue";
+import LogPanel from "./components/LogPanel.vue";
+import SettingsModal from "./components/SettingsModal.vue";
+import UsbInspectorModal from "./components/UsbInspectorModal.vue";
+import VentoyAlertModal from "./components/VentoyAlertModal.vue";
+import { useAppRuntimeEvents } from "./composables/useAppRuntimeEvents";
+import { useAppSettings } from "./composables/useAppSettings";
+import { useDeployment } from "./composables/useDeployment";
+import { getDiskFingerprint, useDiskSelection } from "./composables/useDiskSelection";
+import { useIsoManager } from "./composables/useIsoManager";
+import { useLogPanel } from "./composables/useLogPanel";
+import { useToast } from "./composables/useToast";
+import { useVirtualMachine } from "./composables/useVirtualMachine";
+import { currentLang, t } from "./i18n";
 
-type AppConfigType = config.AppConfig;
+// 1. Global Toast
+const { toastMessage, toastType, showToast, dismissToast } = useToast();
 
-function handleHeaderDblClick(e: MouseEvent) {
-  const target = e.target as HTMLElement | null;
-  // Ignore double clicks on interactive controls inside the header
-  if (
-    target &&
-    (target.closest("button") ||
-      target.closest("input") ||
-      target.closest("select") ||
-      target.closest("a") ||
-      target.closest(".lang-dropdown-menu"))
-  ) {
-    return;
-  }
-  if (isWailsRuntime()) {
-    try {
-      WindowToggleMaximise();
-    } catch (err) {
-      console.warn("Failed to toggle maximise:", err);
+// 2. ISO Manager
+const { selectedIsoFiles, isoCopyStatus, addIsoFilesByPaths, handleSelectIsoFiles, removeIsoFile, clearIsoFiles } =
+  useIsoManager(showToast);
+
+// 3. Disk Selection
+const {
+  selectionMode,
+  diskList,
+  selectedDisk,
+  selectedDevices,
+  ejectingDevices,
+  customIcons,
+  isPickerOpen,
+  targetPickerDisk,
+  isInspectorOpen,
+  targetInspectorDisk,
+  isScanningDisks,
+  setSelectionMode,
+  selectAllDisks,
+  deselectAllDisks,
+  onDiskSelect,
+  onDiskToggle,
+  openInspector,
+  openIconPicker,
+  onIconSelected,
+  onIconReset,
+  handleEjectDisk,
+  handleBatchEjectDisks,
+  handleSafelyEjectAfterDeploy,
+  refreshDisks,
+  setPendingRestoreDevice,
+} = useDiskSelection({
+  t,
+  showToast,
+  getTargetsToEject: () => deploySuccessBanner.value.targets,
+  isLocked: () => isDiskLocked.value,
+  lockReason: () => diskLockReason.value,
+  onEjectSuccess: (device) => {
+    if (deploySuccessBanner.value.targets.includes(device)) {
+      deploySuccessBanner.value.dismissed = true;
+      deploySuccessBanner.value.visible = false;
     }
-  }
-}
-
-const isSettingsOpen = ref(false);
-const isAboutOpen = ref(false);
-const appConfig = ref<AppConfigType | null>(null);
-
-const isLangMenuOpen = ref(false);
-const langDropdownRef = ref<HTMLElement | null>(null);
-
-const toastMessage = ref("");
-const toastType = ref<"info" | "success" | "warning" | "error">("info");
-let toastTimer: any = null;
-
-const currentTheme = ref("dark");
-const isDarkTheme = computed(() => currentTheme.value !== "light");
-
-const langOptions = computed(() => [
-  { value: "auto", label: "🌐 " + (t("common.autoDetect") || "Auto Detect") },
-  ...SUPPORTED_LANGUAGES.map((item) => ({
-    value: item.code,
-    label: item.nativeName,
-  })),
-]);
-
-const currentLangLabel = computed(() => {
-  if (selectedLangSetting.value === "auto") {
-    return t("common.langAuto") || "Auto";
-  }
-  const opt = langOptions.value.find((o) => o.value === currentLang.value);
-  return opt ? opt.label : "Language";
+  },
+  onSafelyEjectSuccess: () => {
+    deploySuccessBanner.value.dismissed = true;
+    deploySuccessBanner.value.visible = false;
+  },
 });
 
-function showToast(msg: string, type: "info" | "success" | "warning" | "error" = "info") {
-  toastMessage.value = msg;
-  toastType.value = type;
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
-    toastMessage.value = "";
-  }, 4000);
-}
+// 4. App Settings & Theme (Declared early so openSettings callback can be passed to useDeployment)
+let openSettingsFn: (tab?: "general" | "network" | "uniboot" | "ventoy") => void;
 
-function toggleLangMenu() {
-  isLangMenuOpen.value = !isLangMenuOpen.value;
-}
-
-function selectLanguage(langVal: string) {
-  setLanguage(langVal);
-  isLangMenuOpen.value = false;
-  if (appConfig.value) {
-    appConfig.value.language = langVal;
-    saveConfigToBackend(appConfig.value);
-  }
-}
-
-function toggleTheme() {
-  const nextTheme = currentTheme.value === "light" ? "dark" : "light";
-  applyTheme(nextTheme);
-  if (appConfig.value) {
-    appConfig.value.theme = nextTheme;
-    saveConfigToBackend(appConfig.value);
-  }
-}
-
-function applyTheme(themeName: string) {
-  currentTheme.value = themeName;
-  let applied = themeName;
-  if (themeName === "system") {
-    const isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    applied = isDark ? "dark" : "light";
-  }
-  document.documentElement.setAttribute("data-theme", applied);
-
-  if (isWailsRuntime()) {
-    try {
-      if (themeName === "system") {
-        WindowSetSystemDefaultTheme();
-      } else if (applied === "dark") {
-        WindowSetDarkTheme();
-        WindowSetBackgroundColour(7, 10, 18, 255);
-      } else {
-        WindowSetLightTheme();
-        WindowSetBackgroundColour(241, 245, 249, 255);
-      }
-    } catch (e) {
-      console.warn("Failed to synchronize window theme:", e);
-    }
-  }
-}
-
-function openSettings() {
-  isSettingsOpen.value = true;
-}
-
-function openAbout() {
-  isAboutOpen.value = true;
-}
-
-function onSaveSettings(savedCfg: any) {
-  appConfig.value = { ...(appConfig.value || {}), ...savedCfg } as any;
-  if (savedCfg.theme) {
-    applyTheme(savedCfg.theme);
-  }
-  if (savedCfg.language) {
-    setLanguage(savedCfg.language);
-  }
-}
-
-async function saveConfigToBackend(cfg: any) {
-  if (isWails()) {
-    try {
-      await SaveConfig(cfg);
-    } catch (e) {
-      console.warn("Failed to save config:", e);
-    }
-  }
-}
-
-async function initApp() {
-  if (isWails()) {
-    try {
-      const cfg = await GetConfig();
-      if (cfg) {
-        appConfig.value = cfg;
-        if (cfg.language) {
-          setLanguage(cfg.language);
-        }
-        if (cfg.theme) {
-          applyTheme(cfg.theme);
-        } else {
-          applyTheme("dark");
-        }
-
-        // Auto check updates if enabled (throttled to at most once per 24 hours)
-        if (cfg.autoCheckUpdate !== false) {
-          const LAST_CHECK_KEY = "uniboot_last_auto_check_update";
-          const now = Date.now();
-          const lastCheck = parseInt(localStorage.getItem(LAST_CHECK_KEY) || "0", 10);
-          const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
-
-          if (now - lastCheck >= TWENTY_FOUR_HOURS) {
-            CheckUpdate()
-              .then((res) => {
-                localStorage.setItem(LAST_CHECK_KEY, String(Date.now()));
-                if (res && res.hasUpdate) {
-                  showToast(t("about.newVersionNotice", { tag: res.latestTag }), "info");
-                }
-              })
-              .catch(() => {});
-          }
-        }
-      }
-    } catch (e) {
-      console.warn("Failed to load initial config from backend:", e);
-      applyTheme("dark");
-    } finally {
-      if (isWailsRuntime()) {
-        try {
-          WindowShow();
-        } catch (err) {
-          console.warn("Failed to show window:", err);
-        }
-      }
-    }
-  } else {
-    applyTheme("dark");
-  }
-}
-
-function handleGlobalClick(e: MouseEvent) {
-  if (isLangMenuOpen.value && langDropdownRef.value && !langDropdownRef.value.contains(e.target as Node)) {
-    isLangMenuOpen.value = false;
-  }
-}
-
-function handleGlobalKeydown(e: KeyboardEvent) {
-  if (e.key === "Escape") {
-    if (isLangMenuOpen.value) {
-      isLangMenuOpen.value = false;
-      return;
-    }
-    if (isAboutOpen.value) {
-      isAboutOpen.value = false;
-      return;
-    }
-    if (isSettingsOpen.value) {
-      isSettingsOpen.value = false;
-      return;
-    }
-  }
-
-  // Support Cmd+, (macOS) and Ctrl+, (Windows/Linux) to toggle settings dialog
-  const isCmdOrCtrl = e.metaKey || e.ctrlKey;
-  if (isCmdOrCtrl && e.key === ",") {
-    e.preventDefault();
-    isSettingsOpen.value = !isSettingsOpen.value;
-    return;
-  }
-}
-
-let mediaQueryList: MediaQueryList | null = null;
-
-function handleSystemThemeChange() {
-  if (currentTheme.value === "system" || !currentTheme.value) {
-    applyTheme("system");
-  }
-}
-
-onMounted(() => {
-  initApp();
-  window.addEventListener("click", handleGlobalClick);
-  window.addEventListener("keydown", handleGlobalKeydown);
-
-  if (window.matchMedia) {
-    mediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
-    mediaQueryList.addEventListener("change", handleSystemThemeChange);
-  }
+// 5. Deployment Engine
+const {
+  activeMode,
+  selectedFsType,
+  autoEjectAfterDeploy,
+  isDeploying,
+  deployProgress,
+  batchDeployInfo,
+  deploySpeedMBps,
+  deployElapsedSec,
+  deployEtaSec,
+  isDeployConfirmOpen,
+  isIsoConflictOpen,
+  isoConflicts,
+  isPreflight,
+  pendingTargets,
+  isVentoyAlertOpen,
+  ventoyAlertTitle,
+  ventoyAlertMessage,
+  ventoyAlertAction,
+  ventoyStatus,
+  isDiagnosticsOpen,
+  currentDiagnostics,
+  currentDiagErrorMsg,
+  deploySuccessBanner,
+  isMacOs,
+  isNonDestructive,
+  deployBtnText,
+  isDeployDisabled,
+  deployDisabledReason,
+  isDiskLocked,
+  diskLockReason,
+  canSelectDisk,
+  canSwitchMode,
+  canChangeFs,
+  canManageIso,
+  canVerifyHash,
+  canConfigureVm,
+  setRunningVmTarget,
+  clearRunningVmTarget,
+  activeVmTargetDevice,
+  activeVmTargetName,
+  showDeploySuccessBanner,
+  checkVentoyStatus,
+  selectMode,
+  handleVentoyAlertAction,
+  handleVentoyAlertSwitchB,
+  handleCopyReport,
+  handleRetryDeploy,
+  handleDeployBtnClick,
+  cancelIsoConflictPreflight,
+  confirmIsoConflictPreflight,
+  startDeployment,
+  handleCancelDeploy,
+  dismissDeploySuccessBanner,
+  fsm,
+} = useDeployment({
+  t,
+  showToast,
+  selectionMode,
+  selectedDisk,
+  selectedDevices,
+  diskList,
+  selectedIsoFiles,
+  refreshDisks,
+  openSettings: (tab) => openSettingsFn(tab),
 });
 
-onUnmounted(() => {
-  window.removeEventListener("click", handleGlobalClick);
-  window.removeEventListener("keydown", handleGlobalKeydown);
+// 6. Virtual Machine / Hypervisor
+const {
+  hypervisorList,
+  selectedBootMode,
+  selectedVMType,
+  vmCpuCores,
+  vmMemoryMB,
+  vmDisplayAccel,
+  isLaunchingQemu,
+  isVmRunning,
+  isVmDisabled,
+  vmDisabledReason,
+  checkQemu,
+  launchVM,
+  stopVM,
+} = useVirtualMachine({
+  activeVmTargetDevice,
+  activeVmTargetName,
+  diskList,
+  isDeploying,
+  showToast,
+  refreshDisks,
+  fsm,
+  onVmSessionStarted: (dev, name) => {
+    setRunningVmTarget(dev, name);
+    setPendingRestoreDevice(dev);
+  },
+  onVmSessionEnded: () => {
+    clearRunningVmTarget();
+  },
+});
 
-  if (mediaQueryList) {
-    mediaQueryList.removeEventListener("change", handleSystemThemeChange);
-    mediaQueryList = null;
-  }
+// 7. Log Center Panel
+const {
+  isLogCardVisible,
+  embeddedAutoScroll,
+  currentEmbeddedLogFilter,
+  logLevels,
+  filteredEmbeddedLogs,
+  toggleLogCard,
+  handleCopyEmbeddedLogs,
+  handleExportEmbeddedLogs,
+  handleClearEmbeddedLogs,
+  appendLogEntry,
+  setInitialLogs,
+} = useLogPanel({
+  t,
+  showToast,
+});
+
+// 8. App Settings & Theme
+const {
+  settingsInitialTab,
+  isSettingsOpen,
+  isAboutOpen,
+  currentGithubProxy,
+  openSettings,
+  selectLanguage,
+  loadConfig,
+  onSaveSettings,
+} = useAppSettings({
+  selectedFsType,
+  activeMode,
+  autoEjectAfterDeploy,
+});
+
+openSettingsFn = openSettings;
+
+// 9. Wails Global Events & Lifecycle
+useAppRuntimeEvents({
+  t,
+  loadConfig,
+  refreshDisks,
+  checkQemu,
+  checkVentoyStatus,
+  setInitialLogs,
+  appendLogEntry,
+  isoCopyStatus,
+  deployProgress,
+  deploySpeedMBps,
+  deployElapsedSec,
+  deployEtaSec,
+  isDeploying,
+  isAboutOpen,
+  addIsoFilesByPaths,
+  batchDeployInfo,
+  showToast,
 });
 </script>
 
 <style scoped>
 .app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100vw;
-  background-color: var(--bg-color);
-  color: var(--text-main);
-  padding: 2.25rem 2rem 1.5rem;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  cursor: default;
-  --wails-draggable: drag;
+  max-width: 1280px;
+  width: 95%;
+  margin: 0 auto;
+  padding: 2.2rem;
 }
 
-/* Header can also drag the window, while actions inside remain clickable */
-.app-header {
-  cursor: default;
-  --wails-draggable: drag;
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.75rem;
 }
 
-/* Ensure interactive components remain clickable while background can drag window */
-.header-actions,
-.main-content,
-button,
-input,
-select,
-textarea,
-a,
-.lang-dropdown-menu,
-.settings-modal-card {
-  --wails-draggable: no-drag;
+@media (max-width: 960px) {
+  .content-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
-/* Header */
-.app-header {
-  position: relative;
-  z-index: 100;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1.75rem;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 14px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.brand {
+/* Global App Toast Notification Styles */
+.global-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-}
-
-.logo {
-  font-size: 2rem;
-  filter: drop-shadow(0 0 10px var(--accent-cyan-glow));
-}
-
-.logo-img {
-  width: 38px;
-  height: 38px;
-  border-radius: 9px;
-  object-fit: cover;
-  box-shadow: 0 0 10px var(--accent-cyan-glow);
-}
-
-.brand h1 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--text-main) 60%, var(--accent-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 1.2;
-}
-
-.sub-brand {
-  font-size: 0.775rem;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.icon-action-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--card-border);
-  color: var(--text-main);
-  width: 36px;
-  height: 36px;
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.05rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.icon-action-btn:hover {
-  background: rgba(0, 229, 255, 0.15);
-  border-color: var(--accent-cyan);
-  transform: translateY(-1px);
-}
-
-/* Quick Language Dropdown */
-.lang-selector-header {
-  position: relative;
-  z-index: 101;
-}
-
-.lang-pill-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--card-border);
-  color: var(--text-main);
-  padding: 0.45rem 0.85rem;
-  border-radius: 9px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.lang-pill-btn:hover {
-  background: rgba(0, 229, 255, 0.12);
-  border-color: var(--accent-cyan);
-}
-
-.lang-dropdown-menu {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  width: 240px;
-  max-height: 340px;
-  overflow-y: auto;
-  background: var(--modal-bg);
-  border: 1px solid var(--card-border);
+  gap: 10px;
+  padding: 12px 24px;
   border-radius: 12px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
-  z-index: 1000;
-  padding: 0.4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-
-:global([dir="rtl"]) .lang-dropdown-menu {
-  right: auto;
-  left: 0;
-}
-
-.lang-option {
-  background: none;
-  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
   color: var(--text-main);
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  box-shadow: 0 12px 32px var(--modal-backdrop);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+}
+
+.global-toast.warning {
+  background: var(--alert-warning-bg);
+  border-color: var(--alert-warning-border);
+  color: var(--alert-warning-title);
+}
+
+.global-toast.error {
+  background: var(--alert-danger-bg);
+  border-color: var(--alert-danger-border);
+  color: var(--alert-danger-title);
+}
+
+.global-toast.success {
+  background: var(--alert-success-bg);
+  border-color: var(--alert-success-border);
+  color: var(--alert-success-title);
+}
+
+.global-toast.info {
+  background: var(--alert-info-bg);
+  border-color: var(--alert-info-border);
+  color: var(--alert-info-title);
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  color: currentColor;
+  font-size: 1rem;
   cursor: pointer;
-  text-align: left;
-  transition: all 0.15s ease;
+  opacity: 0.8;
+  margin-left: 8px;
+  transition: opacity 0.2s ease;
 }
 
-:global([dir="rtl"]) .lang-option {
-  text-align: right;
+.toast-close:hover {
+  opacity: 1;
 }
 
-.lang-option:hover {
-  background: rgba(0, 229, 255, 0.1);
-  color: var(--accent-cyan);
+.toast-fade-enter-active,
+.toast-fade-leave-active {
+  transition:
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.lang-option.active {
-  background: rgba(0, 229, 255, 0.15);
-  color: var(--accent-cyan);
-  font-weight: 700;
-}
-
-.opt-check {
-  color: var(--accent-cyan);
-}
-
-/* Main Content */
-.main-content {
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Transitions */
-.dropdown-fade-enter-active,
-.dropdown-fade-leave-active {
-  transition: all 0.2s ease;
-}
-
-.dropdown-fade-enter-from,
-.dropdown-fade-leave-to {
+.toast-fade-enter-from,
+.toast-fade-leave-to {
   opacity: 0;
-  transform: translateY(4px);
-}
-
-@media (max-width: 768px) {
-  .app-container {
-    padding: 1rem;
-  }
-  .app-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  .header-actions {
-    width: 100%;
-    justify-content: flex-end;
-  }
+  transform: translate(-50%, -20px);
 }
 </style>
