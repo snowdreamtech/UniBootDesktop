@@ -1,5 +1,5 @@
 <template>
-  <header class="app-header">
+  <header class="app-header" @dblclick="handleHeaderDblClick">
     <div class="brand">
       <span class="logo">🚀</span>
       <div>
@@ -42,6 +42,16 @@
         </transition>
       </div>
 
+      <!-- Header Quick Theme Switcher Button -->
+      <button
+        class="settings-icon-btn theme-toggle-btn"
+        :title="currentTheme === 'light' ? (t('settings.theme_dark') || 'Dark Theme') : (t('settings.theme_light') || 'Light Theme')"
+        @click="handleToggleTheme"
+      >
+        <span v-if="currentTheme === 'light'">🌙</span>
+        <span v-else>☀️</span>
+      </button>
+
       <button
         class="settings-icon-btn log-toggle-btn"
         :class="{ active: isLogCardVisible }"
@@ -66,12 +76,14 @@ const props = defineProps<{
   activeMode: "cloud" | "hybrid";
   isLogCardVisible: boolean;
   currentLang: string;
+  currentTheme?: string;
   isActionBusy?: boolean;
 }>();
 
 const emit = defineEmits<{
   (e: "select-mode", mode: "cloud" | "hybrid"): void;
   (e: "toggle-log"): void;
+  (e: "toggle-theme"): void;
   (e: "open-settings", tab: string): void;
   (e: "open-about"): void;
   (e: "select-lang", lang: string): void;
@@ -97,6 +109,32 @@ const currentLangLabel = computed(() => {
   const opt = langOptions.value.find((o) => o.value === props.currentLang);
   return opt ? opt.label : t("common.lang");
 });
+
+function handleHeaderDblClick(e: MouseEvent) {
+  const target = e.target as HTMLElement | null;
+  if (
+    target &&
+    (target.closest("button") ||
+      target.closest("input") ||
+      target.closest("select") ||
+      target.closest("a") ||
+      target.closest(".lang-dropdown-menu"))
+  ) {
+    return;
+  }
+  if (typeof window !== "undefined" && typeof (window as any).runtime?.WindowToggleMaximise === "function") {
+    try {
+      (window as any).runtime.WindowToggleMaximise();
+    } catch (err) {
+      console.warn("Failed to toggle maximise:", err);
+    }
+  }
+}
+
+function handleToggleTheme() {
+  triggerActionFeedback();
+  emit("toggle-theme");
+}
 
 function triggerActionFeedback() {
   localActionBusy.value = true;
@@ -150,6 +188,21 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  user-select: none;
+  -webkit-user-select: none;
+  --wails-draggable: drag;
+  -webkit-app-region: drag;
+}
+
+.brand,
+.mode-tabs,
+button,
+input,
+select,
+a,
+.lang-selector-header {
+  --wails-draggable: no-drag;
+  -webkit-app-region: no-drag;
 }
 
 .brand {

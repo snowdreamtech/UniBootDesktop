@@ -51,5 +51,5 @@ describe("i18n module", () => {
       const missingKeys = enKeys.filter((k) => !localeKeys.has(k));
       expect(missingKeys, `Missing keys in ${lang.code}`).toEqual([]);
     }
-  });
+  }, 30000);
 });

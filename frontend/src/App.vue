@@ -19,9 +19,11 @@
       :activeMode="activeMode"
       :isLogCardVisible="isLogCardVisible"
       :currentLang="currentLang"
+      :currentTheme="currentTheme"
       :isActionBusy="!canSwitchMode"
       @select-mode="selectMode"
       @toggle-log="toggleLogCard"
+      @toggle-theme="handleToggleTheme"
       @open-settings="(tab) => openSettings(tab as any)"
       @open-about="isAboutOpen = true"
       @select-lang="selectLanguage"
@@ -393,6 +395,8 @@ const {
   isSettingsOpen,
   isAboutOpen,
   currentGithubProxy,
+  currentTheme,
+  applyTheme,
   openSettings,
   selectLanguage,
   loadConfig,
@@ -404,6 +408,12 @@ const {
 });
 
 openSettingsFn = openSettings;
+
+function handleToggleTheme() {
+  const next = currentTheme.value === "dark" ? "light" : "dark";
+  applyTheme(next);
+  onSaveSettings({ theme: next });
+}
 
 // 9. Wails Global Events & Lifecycle
 useAppRuntimeEvents({
@@ -433,6 +443,7 @@ useAppRuntimeEvents({
   width: 95%;
   margin: 0 auto;
   padding: 2.2rem;
+  padding-top: 2.4rem;
 }
 
 .content-grid {
