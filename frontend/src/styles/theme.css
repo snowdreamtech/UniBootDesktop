@@ -1,4 +1,4 @@
-/* UniGoDesktop Theme CSS & Global Design System */
+/* UniBootDesktop Theme CSS & Global Design System */
 html {
   margin: 0;
   padding: 0;
@@ -7,6 +7,9 @@ html {
   overflow-x: hidden;
   overflow-y: scroll;
   scrollbar-gutter: stable;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -16,13 +19,51 @@ body {
   height: 100%;
   overflow-x: hidden;
   font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", sans-serif;
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "SF Pro Display",
+    "Segoe UI Variable Text",
+    "Segoe UI Variable Display",
+    "Segoe UI",
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei UI",
+    "Microsoft YaHei",
+    "Inter",
+    "Roboto",
+    "Ubuntu",
+    "Cantarell",
+    "Noto Sans",
+    "Noto Sans CJK SC",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Noto Color Emoji";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   background-color: var(--bg-color);
   background-image:
     radial-gradient(circle at 15% 15%, rgba(0, 229, 255, 0.08) 0%, transparent 40%),
     radial-gradient(circle at 85% 85%, rgba(157, 78, 221, 0.08) 0%, transparent 40%);
   color: var(--text-main);
   min-height: 100vh;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Allow text selection in code, log, inputs, textareas */
+input,
+textarea,
+pre,
+code,
+.log-line,
+.terminal-body,
+[contenteditable="true"] {
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 #app {
@@ -605,4 +646,17 @@ html[dir="rtl"] .dropdown-caret,
 html[dir="rtl"] .opt-check {
   margin-left: 0;
   margin-right: auto;
+}
+
+/* Native Window Focus / Blur State Visual Adaptation */
+.window-inactive {
+  --accent-cyan-glow: rgba(0, 229, 255, 0.12);
+}
+
+.window-inactive .app-header {
+  opacity: 0.94;
+}
+
+.window-inactive .logo {
+  filter: grayscale(0.2) opacity(0.88);
 }

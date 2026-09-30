@@ -36,6 +36,32 @@ window.setTimeout(() => {
 window.addEventListener("dragover", (e: DragEvent) => e.preventDefault(), false);
 window.addEventListener("drop", (e: DragEvent) => e.preventDefault(), false);
 
+// Prevent default browser context menu except on text inputs and textareas
+window.addEventListener("contextmenu", (e: MouseEvent) => {
+  const target = e.target as HTMLElement | null;
+  if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
+    return;
+  }
+  e.preventDefault();
+});
+
+// Prevent browser zoom shortcuts (Cmd/Ctrl + +/-/0) and pinch/wheel zoom
+window.addEventListener(
+  "wheel",
+  (e: WheelEvent) => {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+    }
+  },
+  { passive: false }
+);
+
+window.addEventListener("keydown", (e: KeyboardEvent) => {
+  if ((e.ctrlKey || e.metaKey) && (e.key === "=" || e.key === "-" || e.key === "0" || e.key === "+")) {
+    e.preventDefault();
+  }
+});
+
 // Native Window Focus / Blur State Adaptation
 window.addEventListener("focus", () => {
   document.documentElement.classList.remove("window-inactive");

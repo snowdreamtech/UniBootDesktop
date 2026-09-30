@@ -40,6 +40,29 @@ export function useTheme() {
     } catch (e) {
       // localStorage may be unavailable
     }
+
+    if (typeof window !== "undefined" && (window as any).runtime) {
+      try {
+        if (theme === "dark") {
+          if (typeof (window as any).runtime.WindowSetDarkTheme === "function") {
+            (window as any).runtime.WindowSetDarkTheme();
+          }
+          if (typeof (window as any).runtime.WindowSetBackgroundColour === "function") {
+            (window as any).runtime.WindowSetBackgroundColour(11, 15, 25, 255);
+          }
+        } else {
+          if (typeof (window as any).runtime.WindowSetLightTheme === "function") {
+            (window as any).runtime.WindowSetLightTheme();
+          }
+          if (typeof (window as any).runtime.WindowSetBackgroundColour === "function") {
+            (window as any).runtime.WindowSetBackgroundColour(248, 250, 252, 255);
+          }
+        }
+      } catch (e) {
+        // Ignore errors in non-wails environment
+      }
+    }
+
     return theme;
   }
 
