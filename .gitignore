@@ -741,7 +741,7 @@ coverage.svg
 sbom.json
 completions/
 manpages/
-unigo
+uniboot
 frontend/package.json.md5
 .downloads/
 internal/database/file:

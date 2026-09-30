@@ -179,7 +179,7 @@ jobs:
           cd frontend
           unirtm exec -- npm run build
 
-      - name: Prepare UniGoDesktop App Icon
+      - name: Prepare UniBootDesktop App Icon
         shell: bash
         run: unirtm exec -- node scripts/prepare-app-icon.mjs
 
@@ -273,7 +273,7 @@ jobs:
           mkdir -p build/bin/dmg-src
           cp -R "$APP_PATH" "build/bin/dmg-src/${APP_NAME}"
           ln -s /Applications "build/bin/dmg-src/Applications"
-          DMG_NAME="unigodesktop-gui_${CLEAN_VERSION}_darwin_universal.dmg"
+          DMG_NAME="unibootdesktop-gui_${CLEAN_VERSION}_darwin_universal.dmg"
           hdiutil create -volname "${APP_NAME%.app}" -srcfolder build/bin/dmg-src -ov -format UDZO "build/bin/${DMG_NAME}"
           rm -rf build/bin/dmg-src
           DMG_PATH="build/bin/${DMG_NAME}"
@@ -336,7 +336,7 @@ jobs:
             echo "Windows installer executable (*installer*.exe) not found in build/bin" >&2
             exit 1
           fi
-          INSTALLER_TARGET="build/bin/unigodesktop-gui_${CLEAN_VERSION}_windows_amd64_installer.exe"
+          INSTALLER_TARGET="build/bin/unibootdesktop-gui_${CLEAN_VERSION}_windows_amd64_installer.exe"
           if [ "${INSTALLER}" != "${INSTALLER_TARGET}" ]; then
             mv "${INSTALLER}" "${INSTALLER_TARGET}"
           fi
@@ -347,27 +347,27 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          EXE_PATH="$(find build/bin -maxdepth 1 \( -iname 'unigodesktop.exe' -o -iname "${PROJECT_NAME}.exe" \) -print -quit 2>/dev/null || true)"
+          EXE_PATH="$(find build/bin -maxdepth 1 \( -iname 'unibootdesktop.exe' -o -iname "${PROJECT_NAME}.exe" \) -print -quit 2>/dev/null || true)"
           if [ -z "${EXE_PATH}" ] || [ ! -f "${EXE_PATH}" ]; then
-            echo "Windows executable (unigodesktop.exe) not found in build/bin" >&2
+            echo "Windows executable (unibootdesktop.exe) not found in build/bin" >&2
             ls -la build/bin/
             exit 1
           fi
-          PORTABLE_DIR="build/bin/unigodesktop-portable"
+          PORTABLE_DIR="build/bin/unibootdesktop-portable"
           mkdir -p "${PORTABLE_DIR}"
-          cp "${EXE_PATH}" "${PORTABLE_DIR}/unigodesktop.exe"
+          cp "${EXE_PATH}" "${PORTABLE_DIR}/unibootdesktop.exe"
           touch "${PORTABLE_DIR}/portable.dat"
           if [ -f "build/windows/icon.ico" ]; then
             cp "build/windows/icon.ico" "${PORTABLE_DIR}/icon.ico"
           fi
           printf '%s\n' \
-            'UniGoDesktop Portable Edition' \
+            'UniBootDesktop Portable Edition' \
             '-----------------------------' \
-            'This is the standalone portable edition of UniGoDesktop.' \
+            'This is the standalone portable edition of UniBootDesktop.' \
             'All user configuration, local caches, and WebView2 runtime data are isolated in the local "data" directory.' \
             'Please do not delete portable.dat if you wish to keep portable mode active.' \
             > "${PORTABLE_DIR}/README.txt"
-          PORTABLE_ZIP="build/bin/unigodesktop-gui_${CLEAN_VERSION}_windows_amd64_portable.zip"
+          PORTABLE_ZIP="build/bin/unibootdesktop-gui_${CLEAN_VERSION}_windows_amd64_portable.zip"
           if command -v 7z >/dev/null 2>&1; then
             7z a -tzip "${PORTABLE_ZIP}" "./${PORTABLE_DIR}/*"
           else
@@ -387,17 +387,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          APP_BIN="build/bin/unigodesktop"
+          APP_BIN="build/bin/unibootdesktop"
           if [ ! -f "$APP_BIN" ]; then
             echo "Linux binary not found at $APP_BIN" >&2
             exit 1
           fi
           LINUX_ARCH="${TARGET##*/}"
           mkdir -p build/bin/linux-dist
-          cp "$APP_BIN" build/bin/linux-dist/unigodesktop
-          cp build/linux/unigodesktop.desktop build/bin/linux-dist/unigodesktop.desktop
-          cp build/appicon.png build/bin/linux-dist/unigodesktop.png
-          tar -czf "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.tar.gz" -C build/bin/linux-dist unigodesktop unigodesktop.desktop unigodesktop.png
+          cp "$APP_BIN" build/bin/linux-dist/unibootdesktop
+          cp build/linux/unibootdesktop.desktop build/bin/linux-dist/unibootdesktop.desktop
+          cp build/appicon.png build/bin/linux-dist/unibootdesktop.png
+          tar -czf "build/bin/unibootdesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.tar.gz" -C build/bin/linux-dist unibootdesktop unibootdesktop.desktop unibootdesktop.png
           rm -rf build/bin/linux-dist
 
       - name: Package Linux packages (deb, rpm, AppImage)
@@ -430,7 +430,7 @@ jobs:
           fi
 
           cat << EOF > /tmp/nfpm.yaml
-          name: "unigodesktop"
+          name: "unibootdesktop"
           arch: "${LINUX_ARCH}"
           platform: "linux"
           version: "${CLEAN_VERSION}"
@@ -439,19 +439,19 @@ jobs:
           maintainer: "SnowdreamTech <snowdreamtech@qq.com>"
           description: "Universal Go Desktop Suite"
           vendor: "SnowdreamTech"
-          homepage: "https://github.com/snowdreamtech/UniGoDesktop"
+          homepage: "https://github.com/snowdreamtech/UniBootDesktop"
           license: "MIT"
           contents:
-            - src: "build/bin/unigodesktop"
-              dst: "/usr/bin/unigodesktop"
-            - src: "build/linux/unigodesktop.desktop"
-              dst: "/usr/share/applications/unigodesktop.desktop"
+            - src: "build/bin/unibootdesktop"
+              dst: "/usr/bin/unibootdesktop"
+            - src: "build/linux/unibootdesktop.desktop"
+              dst: "/usr/share/applications/unibootdesktop.desktop"
             - src: "build/appicon.png"
-              dst: "/usr/share/icons/hicolor/512x512/apps/unigodesktop.png"
+              dst: "/usr/share/icons/hicolor/512x512/apps/unibootdesktop.png"
           EOF
 
-          nfpm package --config /tmp/nfpm.yaml --packager deb --target "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.deb"
-          nfpm package --config /tmp/nfpm.yaml --packager rpm --target "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.rpm"
+          nfpm package --config /tmp/nfpm.yaml --packager deb --target "build/bin/unibootdesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.deb"
+          nfpm package --config /tmp/nfpm.yaml --packager rpm --target "build/bin/unibootdesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.rpm"
           rm -f /tmp/nfpm.yaml
           echo "Linux deb and rpm packages created successfully"
 
@@ -477,19 +477,19 @@ jobs:
           APPDIR="build/bin/AppDir"
           rm -rf "${APPDIR}"
           mkdir -p "${APPDIR}/usr/bin"
-          cp build/bin/unigodesktop "${APPDIR}/usr/bin/unigodesktop"
-          cp build/linux/unigodesktop.desktop "${APPDIR}/unigodesktop.desktop"
-          cp build/appicon.png "${APPDIR}/unigodesktop.png"
+          cp build/bin/unibootdesktop "${APPDIR}/usr/bin/unibootdesktop"
+          cp build/linux/unibootdesktop.desktop "${APPDIR}/unibootdesktop.desktop"
+          cp build/appicon.png "${APPDIR}/unibootdesktop.png"
           cp build/appicon.png "${APPDIR}/.DirIcon"
 
           cat << 'EOF' > "${APPDIR}/AppRun"
           #!/bin/sh
           HERE="$(dirname "$(readlink -f "${0}")")"
-          exec "${HERE}/usr/bin/unigodesktop" "$@"
+          exec "${HERE}/usr/bin/unibootdesktop" "$@"
           EOF
           chmod +x "${APPDIR}/AppRun"
 
-          ARCH="${APPIMAGE_ARCH}" "${APPIMAGETOOL}" --appimage-extract-and-run "${APPDIR}" "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.AppImage"
+          ARCH="${APPIMAGE_ARCH}" "${APPIMAGETOOL}" --appimage-extract-and-run "${APPDIR}" "build/bin/unibootdesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.AppImage"
           rm -rf "${APPDIR}"
           echo "Linux AppImage created successfully"
 
@@ -521,7 +521,7 @@ jobs:
             fi
           done
 
-          CHECKSUM_FILE="build/bin/unigodesktop-gui_${CLEAN_VERSION}_${TARGET_OS}_${TARGET_ARCH}.sha256"
+          CHECKSUM_FILE="build/bin/unibootdesktop-gui_${CLEAN_VERSION}_${TARGET_OS}_${TARGET_ARCH}.sha256"
           rm -f "${CHECKSUM_FILE}"
 
           for ASSET in "${MATCHED_ASSETS[@]}"; do
@@ -580,7 +580,7 @@ jobs:
         run: |
           set -euo pipefail
           upload_assets=()
-          CHECKSUM_FILE="${CHECKSUM_FILE:-build/bin/unigodesktop-gui_${CLEAN_VERSION}_${TARGET_OS}_${TARGET_ARCH}.sha256}"
+          CHECKSUM_FILE="${CHECKSUM_FILE:-build/bin/unibootdesktop-gui_${CLEAN_VERSION}_${TARGET_OS}_${TARGET_ARCH}.sha256}"
           if [ -f "${CHECKSUM_FILE}" ]; then
             upload_assets+=("${CHECKSUM_FILE}")
           fi

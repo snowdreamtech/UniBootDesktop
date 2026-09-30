@@ -35,10 +35,10 @@ Invoke with `/snowdreamtech.init` in any AI IDE.
 - Checks all required tools are available on `PATH`
 - Reports any missing or misconfigured tools
 
-## Equivalent .unigodesktop.toml Command
+## Equivalent .unibootdesktop.toml Command
 
 ```bash
-unigo run setup
+uniboot run setup
 ```
 
 ## Manual Steps (if needed)

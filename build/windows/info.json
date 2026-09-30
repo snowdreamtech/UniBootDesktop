@@ -21,13 +21,13 @@
   "StringFileInfo": {
     "Comments": "Universal Go Desktop Suite",
     "CompanyName": "SnowdreamTech",
-    "FileDescription": "UniGoDesktop",
+    "FileDescription": "UniBootDesktop",
     "FileVersion": "0.3.4",
-    "InternalName": "unigodesktop",
+    "InternalName": "unibootdesktop",
     "LegalCopyright": "Copyright (c) 2026 SnowdreamTech. All rights reserved.",
     "LegalTrademarks": "",
-    "OriginalFilename": "unigodesktop.exe",
-    "ProductName": "UniGoDesktop",
+    "OriginalFilename": "unibootdesktop.exe",
+    "ProductName": "UniBootDesktop",
     "ProductVersion": "0.3.4"
   },
   "VarFileInfo": {

@@ -22,7 +22,7 @@ scripts in `scripts/`:
 
 ### Principle 1: Idempotency
 
-Every script MUST be safely re-executable without side effects or errors. Running `unigo run setup` ten
+Every script MUST be safely re-executable without side effects or errors. Running `uniboot run setup` ten
 times must produce the same result as running it once. This means:
 
 - Tools are only installed if not already present at the required version.
@@ -93,14 +93,14 @@ Maintain separate scripts for macOS, Linux, and Windows with no shared code.
 Use a higher-level language (Python or Node.js) for all automation to gain native cross-platform
 support and richer libraries.
 
-- **Reason rejected:** Requires Python or Node.js to be pre-installed before `unigo run setup` can run,
+- **Reason rejected:** Requires Python or Node.js to be pre-installed before `uniboot run setup` can run,
   creating a bootstrapping paradox. POSIX shell is universally available on all target platforms and
   has zero external dependencies.
 
-### Option C: .unigodesktop.toml-only Automation
+### Option C: .unibootdesktop.toml-only Automation
 
-Express all automation as .unigodesktop.toml targets with no shell scripts.
+Express all automation as .unibootdesktop.toml targets with no shell scripts.
 
 - **Reason rejected:** GNU Make has subtle cross-platform differences, particularly regarding
   Windows compatibility. Complex conditional logic (OS detection, retry loops) is unwieldy in
-  .unigodesktop.toml syntax. A hybrid approach (`.unigodesktop.toml` targets invoke `scripts/*.sh`) is used instead.
+  .unibootdesktop.toml syntax. A hybrid approach (`.unibootdesktop.toml` targets invoke `scripts/*.sh`) is used instead.

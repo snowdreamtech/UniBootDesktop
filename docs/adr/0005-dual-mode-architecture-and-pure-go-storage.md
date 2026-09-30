@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-UniGoDesktop is a desktop application suite combining an interactive graphical interface with headless/command-line automation capabilities across macOS, Windows, and Linux. When designing the application foundation, four key architectural challenges emerged:
+UniBootDesktop is a desktop application suite combining an interactive graphical interface with headless/command-line automation capabilities across macOS, Windows, and Linux. When designing the application foundation, four key architectural challenges emerged:
 
 1. **GUI and CLI Binary Coexistence:** The project needed to support both an interactive GUI desktop app and headless/command-line operational modes without duplicating business logic, database migrations, or configuration schemas across separate repositories.
 2. **Cross-Compilation Simplicity:** Standard Go SQLite drivers (such as `mattn/go-sqlite3`) require `CGO_ENABLED=1` and platform-specific C cross-compilers (`gcc`, `mingw-w64`, `musl-gcc`). In GitHub Actions and automated release matrices (x86_64, aarch64, Windows, macOS, Linux), CGO introduces high build complexity, linker fragility, and cross-compilation bottlenecks.

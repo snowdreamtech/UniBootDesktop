@@ -4,5 +4,5 @@
 ---
 scan:
   skip-dirs:
-    - "unigodesktop_data"
-    - "cmd/unigodesktop_data"
+    - "unibootdesktop_data"
+    - "cmd/unibootdesktop_data"

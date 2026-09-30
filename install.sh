@@ -2,26 +2,26 @@
 # Copyright (c) 2026 SnowdreamTech. All rights reserved.
 # Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
-# install.sh — UniGoDesktop installer for Linux and macOS
+# install.sh — UniBootDesktop installer for Linux and macOS
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/snowdreamtech/UniGoDesktop/main/install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/snowdreamtech/UniBootDesktop/main/install.sh | sh
 #   sh install.sh --version v0.7.0
 #
 # Environment variables:
 #   GITHUB_PROXY  — Optional proxy prefix for GitHub downloads (e.g. https://proxy.example.com/)
 #                   Default: empty (direct connection)
-#   INSTALL_DIR   — Directory to install the binary (default: ~/.unigodesktop/bin, or /usr/local/bin if root)
-#   UNIGODESKTOP_VERSION — Target version (overridden by --version flag)
+#   INSTALL_DIR   — Directory to install the binary (default: ~/.unibootdesktop/bin, or /usr/local/bin if root)
+#   UNIBOOTDESKTOP_VERSION — Target version (overridden by --version flag)
 
 set -eu
 
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-REPO="snowdreamtech/UniGoDesktop"
-BINARY="unigodesktop"
+REPO="snowdreamtech/UniBootDesktop"
+BINARY="unibootdesktop"
 GITHUB_PROXY="${GITHUB_PROXY:-}"
-UNIGODESKTOP_VERSION="${UNIGODESKTOP_VERSION:-}"
+UNIBOOTDESKTOP_VERSION="${UNIBOOTDESKTOP_VERSION:-}"
 
 # Retry config
 CURL_RETRY_COUNT=5
@@ -78,7 +78,7 @@ parse_args() {
     case "$1" in
     --version | -v)
       shift
-      UNIGODESKTOP_VERSION="$1"
+      UNIBOOTDESKTOP_VERSION="$1"
       ;;
     --install-dir)
       shift
@@ -143,9 +143,9 @@ detect_platform() {
 # Resolve target version
 # ---------------------------------------------------------------------------
 resolve_version() {
-  if [ -n "$UNIGODESKTOP_VERSION" ]; then
+  if [ -n "$UNIBOOTDESKTOP_VERSION" ]; then
     # Normalize: strip leading 'v' for comparison but keep tag form for URL
-    VERSION="$UNIGODESKTOP_VERSION"
+    VERSION="$UNIBOOTDESKTOP_VERSION"
     # Ensure v-prefix for tag
     case "$VERSION" in
     v*) ;;
@@ -418,10 +418,10 @@ verify_install() {
     die "Verification failed: binary not found at ${INSTALLED}"
   fi
 
-  INSTALLED_VER="$("$INSTALLED" version 2>/dev/null | grep '^unigodesktop version' || echo 'unknown')"
+  INSTALLED_VER="$("$INSTALLED" version 2>/dev/null | grep '^unibootdesktop version' || echo 'unknown')"
   printf '\033[0;32m\n'
   printf '  ==============================\n'
-  printf '  UniGoDesktop %s installed!\n' "${VERSION}"
+  printf '  UniBootDesktop %s installed!\n' "${VERSION}"
   printf '  Binary : %s/%s\n' "${INSTALL_DIR}" "${BINARY}"
   printf '  Version: %s\n' "${INSTALLED_VER}"
   printf '  ==============================\n'

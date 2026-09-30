@@ -29,7 +29,7 @@ These tools provide universal security coverage regardless of project language o
 
 ```bash
 # In CI workflows
-unigo run setup security
+uniboot run setup security
 ```
 
 ---
@@ -57,10 +57,10 @@ These tools are language-specific and only relevant when the corresponding langu
 
 ```bash
 # Installed automatically when language files are detected
-unigo run setup go      # Installs govulncheck
-unigo run setup rust    # Installs cargo-audit
-unigo run setup node    # npm-audit is part of npm
-unigo run setup python  # Installs pip-audit
+uniboot run setup go      # Installs govulncheck
+uniboot run setup rust    # Installs cargo-audit
+uniboot run setup node    # npm-audit is part of npm
+uniboot run setup python  # Installs pip-audit
 ```
 
 ---
@@ -83,14 +83,14 @@ unigo run setup python  # Installs pip-audit
 ```bash
 # Universal Security Scanners - Critical CI-only (1, 1)
 check_tool_version "OSV-scanner" "osv-scanner" \
-  "$(get_unigo_tool_version osv-scanner)" \
+  "$(get_uniboot_tool_version osv-scanner)" \
   "osv-scanner --version" \
   1 \  # CRITICAL=1 (required)
   1 \  # CI_ONLY=1 (CI only)
   "osv-scanner" "OSV_FORCE_INSTALL"
 
 check_tool_version "Zizmor" "zizmor" \
-  "$(get_unigo_tool_version zizmor)" \
+  "$(get_uniboot_tool_version zizmor)" \
   "zizmor --version" \
   1 \  # CRITICAL=1 (required)
   1 \  # CI_ONLY=1 (CI only)
@@ -123,7 +123,7 @@ fi
 
 if has_lang_files "requirements.txt pyproject.toml" "*.py"; then
   check_tool_version "Pip-audit" "pip-audit" \
-    "$(get_unigo_tool_version pip-audit)" \
+    "$(get_uniboot_tool_version pip-audit)" \
     "pip-audit --version" \
     0 \  # CRITICAL=0 (optional)
     1 \  # CI_ONLY=1 (CI only)
@@ -143,7 +143,7 @@ Workflows that require universal security scanning must explicitly install these
 - name: "🔒 Install Security Tools"
   shell: sh
   run: |
-    unigo run setup security
+    uniboot run setup security
 ```
 
 Or include in the main setup:
@@ -152,25 +152,25 @@ Or include in the main setup:
 - name: "🚀 Initialize Development Environment"
   shell: sh
   run: |
-    unigo run setup security  # Install universal security tools
-    unigo run install
-    unigo run check-env
+    uniboot run setup security  # Install universal security tools
+    uniboot run install
+    uniboot run check-env
 ```
 
 ### For Workflows Not Using Security Scanners
 
-If a workflow doesn't need security scanning (e.g., documentation builds), it will fail at `unigo run check-env` unless security tools are installed. Options:
+If a workflow doesn't need security scanning (e.g., documentation builds), it will fail at `uniboot run check-env` unless security tools are installed. Options:
 
 1. **Install security tools** (recommended):
 
    ```yaml
-   run: unigo run setup security && unigo run check-env
+   run: uniboot run setup security && uniboot run check-env
    ```
 
 2. **Skip check-env** (not recommended):
 
    ```yaml
-   run: unigo run setup && unigo run install
+   run: uniboot run setup && uniboot run install
    # Skip check-env
    ```
 
@@ -201,7 +201,7 @@ If adding a new universal security scanner (applicable to all projects):
 
    ```bash
    check_tool_version "NewTool" "newtool" \
-     "$(get_unigo_tool_version newtool)" \
+     "$(get_uniboot_tool_version newtool)" \
      "newtool --version" \
      1 1 "newtool" "NEWTOOL_FORCE_INSTALL"
    ```
@@ -252,7 +252,7 @@ If you have existing workflows that relied on the old Optional CI-only behavior 
 
 ```yaml
 - name: "Check Environment"
-  run: unigo run check-env
+  run: uniboot run check-env
   # Would warn but not fail if OSV-scanner missing
 ```
 
@@ -260,10 +260,10 @@ If you have existing workflows that relied on the old Optional CI-only behavior 
 
 ```yaml
 - name: "Install Security Tools"
-  run: unigo run setup security
+  run: uniboot run setup security
 
 - name: "Check Environment"
-  run: unigo run check-env
+  run: uniboot run check-env
   # Will fail if OSV-scanner missing
 ```
 
@@ -275,17 +275,17 @@ If you have existing workflows that relied on the old Optional CI-only behavior 
 
 ```bash
 # Test check-env without security tools (should skip)
-unigo run check-env
+uniboot run check-env
 
 # Force install security tools locally
-OSV_FORCE_INSTALL=1 ZIZMOR_FORCE_INSTALL=1 unigo run check-env
+OSV_FORCE_INSTALL=1 ZIZMOR_FORCE_INSTALL=1 uniboot run check-env
 ```
 
 ### CI Testing
 
 ```bash
 # Simulate CI environment
-CI=true unigo run check-env
+CI=true uniboot run check-env
 # Should fail if universal security tools are missing
 ```
 

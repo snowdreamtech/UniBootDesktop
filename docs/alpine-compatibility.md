@@ -13,7 +13,7 @@ Alpine Linux 使用 musl libc 而不是 glibc，这会影响某些预编译二�
 **原因**: Go 官方二进制是静态链接的，不依赖 libc
 
 ```toml
-# .unigodesktop.toml - 无需修改
+# .unibootdesktop.toml - 无需修改
 go = "1.27.0"
 ```
 
@@ -28,16 +28,16 @@ ldd $(which go)
 
 ### 2. Python ✅ 支持 musl
 
-**状态**: unigo 自动检测并使用 musl 版本
+**状态**: uniboot 自动检测并使用 musl 版本
 
 **原因**: python-build-standalone 项目提供 musl 预编译包
 
 ```toml
-# .unigodesktop.toml - 无需修改
+# .unibootdesktop.toml - 无需修改
 python = "3.14.3"
 ```
 
-**unigo 自动选择**:
+**uniboot 自动选择**:
 
 - glibc 系统: `x86_64-unknown-linux-gnu`
 - musl 系统: `x86_64-unknown-linux-musl`
@@ -45,7 +45,7 @@ python = "3.14.3"
 **验证**:
 
 ```bash
-ldd $(unigo where python)/bin/python3
+ldd $(uniboot where python)/bin/python3
 # Alpine 上会显示 musl 依赖
 ```
 
@@ -60,15 +60,15 @@ ldd $(unigo where python)/bin/python3
 #### 解决方案 1: 使用非官方 musl 构建（推荐）
 
 ```bash
-# 配置 unigo 使用非官方构建
-unigo settings set node.mirror_url=https://unofficial-builds.nodejs.org/download/release/
-unigo settings set node.flavor=musl
+# 配置 uniboot 使用非官方构建
+uniboot settings set node.mirror_url=https://unofficial-builds.nodejs.org/download/release/
+uniboot settings set node.flavor=musl
 ```
 
 或在配置文件中设置：
 
 ```toml
-# .unigodesktop.toml
+# .unibootdesktop.toml
 [settings]
 node.mirror_url = "https://unofficial-builds.nodejs.org/download/release/"
 node.flavor = "musl"
@@ -86,7 +86,7 @@ FROM alpine:3.19
 # 使用 Alpine 官方 Node.js 包
 RUN apk add --no-cache nodejs npm
 
-# 然后使用 unigo 管理其他工具
+# 然后使用 uniboot 管理其他工具
 ```
 
 #### 解决方案 3: 从源码编译（不推荐）
@@ -95,15 +95,15 @@ RUN apk add --no-cache nodejs npm
 # 需要安装编译依赖
 apk add --no-cache python3 make g++ linux-headers
 
-# unigo 会自动从源码编译（较慢）
-unigo settings set node.compile=true
+# uniboot 会自动从源码编译（较慢）
+uniboot settings set node.compile=true
 ```
 
 ---
 
 ## 推荐的 Alpine Dockerfile 配置
 
-### 方案 A: 完全使用 unigo（推荐用于开发环境）
+### 方案 A: 完全使用 uniboot（推荐用于开发环境）
 
 ```dockerfile
 FROM alpine:3.19
@@ -115,19 +115,19 @@ RUN apk add --no-cache \
     git \
     ca-certificates
 
-# 安装 unigo
-RUN curl https://unigo.run | sh
+# 安装 uniboot
+RUN curl https://uniboot.run | sh
 ENV PATH="/root/.local/bin:$PATH"
 
 # 配置 Node.js 使用 musl 构建
-RUN unigo settings set node.mirror_url=https://unofficial-builds.nodejs.org/download/release/ && \
-    unigo settings set node.flavor=musl
+RUN uniboot settings set node.mirror_url=https://unofficial-builds.nodejs.org/download/release/ && \
+    uniboot settings set node.flavor=musl
 
 # 复制配置文件
-COPY .unigodesktop.toml .
+COPY .unibootdesktop.toml .
 
 # 安装所有工具
-RUN unigo install
+RUN uniboot install
 
 # Go 和 Python 会自动使用兼容的版本
 # Node.js 会使用 musl 构建
@@ -149,18 +149,18 @@ RUN apk add --no-cache \
     curl \
     git
 
-# 安装 unigo 用于管理开发工具
-RUN curl https://unigo.run | sh
+# 安装 uniboot 用于管理开发工具
+RUN curl https://uniboot.run | sh
 ENV PATH="/root/.local/bin:$PATH"
 
 # 复制配置文件（注释掉 node/python/go）
-COPY .unigodesktop.toml .
+COPY .unibootdesktop.toml .
 
 # 只安装开发工具（linters, formatters 等）
-RUN unigo install
+RUN uniboot install
 ```
 
-对应的 `.unigodesktop.toml`:
+对应的 `.unibootdesktop.toml`:
 
 ```toml
 # 生产环境配置 - 使用系统包
@@ -168,7 +168,7 @@ RUN unigo install
 # python = "3.14.3"  # 注释掉，使用 apk 安装
 # go = "1.27.0"  # 注释掉，使用 apk 安装
 
-# 开发工具仍然使用 unigo
+# 开发工具仍然使用 uniboot
 "github:astral-sh/ruff" = "0.15.9"
 "github:gitleaks/gitleaks" = "8.30.1"
 # ... 其他工具
@@ -192,25 +192,25 @@ RUN unigo install
 
 ### Q1: 为什么 Node.js 在 Alpine 上安装失败？
 
-**A**: 默认情况下，unigo 尝试下载 glibc 版本的 Node.js，不兼容 Alpine。
+**A**: 默认情况下，uniboot 尝试下载 glibc 版本的 Node.js，不兼容 Alpine。
 
 **解决**: 配置使用 musl 构建：
 
 ```bash
-unigo settings set node.flavor=musl
-unigo settings set node.mirror_url=https://unofficial-builds.nodejs.org/download/release/
+uniboot settings set node.flavor=musl
+uniboot settings set node.mirror_url=https://unofficial-builds.nodejs.org/download/release/
 ```
 
 ### Q2: Python 在 Alpine 上需要特殊配置吗？
 
-**A**: 不需要。unigo 会自动检测 musl 并下载正确的版本。
+**A**: 不需要。uniboot 会自动检测 musl 并下载正确的版本。
 
-### Q3: 应该使用 Alpine 官方包还是 unigo？
+### Q3: 应该使用 Alpine 官方包还是 uniboot？
 
 **A**:
 
 - **生产环境**: 推荐使用 Alpine 官方包（更稳定、更小）
-- **开发环境**: 可以使用 unigo（版本管理更灵活）
+- **开发环境**: 可以使用 uniboot（版本管理更灵活）
 
 ### Q4: 如何验证使用的是 musl 版本？
 
@@ -218,11 +218,11 @@ unigo settings set node.mirror_url=https://unofficial-builds.nodejs.org/download
 
 ```bash
 # 检查二进制依赖
-ldd $(unigo where node)/bin/node
+ldd $(uniboot where node)/bin/node
 # 应该显示 musl 相关的库
 
 # 或检查文件类型
-file $(unigo where node)/bin/node
+file $(uniboot where node)/bin/node
 # 应该包含 "dynamically linked" 和 musl 路径
 ```
 
@@ -232,11 +232,11 @@ file $(unigo where node)/bin/node
 
 ### ✅ 推荐做法
 
-1. **Go**: 直接使用 unigo，无需特殊配置
-2. **Python**: 直接使用 unigo，自动处理 musl
+1. **Go**: 直接使用 uniboot，无需特殊配置
+2. **Python**: 直接使用 uniboot，自动处理 musl
 3. **Node.js**: 配置使用 musl 构建或使用 Alpine 官方包
 4. **生产环境**: 优先使用 Alpine 官方包
-5. **开发环境**: 可以使用 unigo + musl 构建
+5. **开发环境**: 可以使用 uniboot + musl 构建
 
 ### ❌ 避免做法
 
@@ -250,7 +250,7 @@ file $(unigo where node)/bin/node
 
 - [Node.js Unofficial Builds](https://unofficial-builds.nodejs.org/)
 - [python-build-standalone](https://github.com/indygreg/python-build-standalone)
-- [unigo Node.js 文档](https://github.com/snowdreamtech/UniGoDesktoplang/node.html)
+- [uniboot Node.js 文档](https://github.com/snowdreamtech/UniBootDesktoplang/node.html)
 - [Alpine Linux 包搜索](https://pkgs.alpinelinux.org/packages)
 - [musl libc 官网](https://musl.libc.org/)
 

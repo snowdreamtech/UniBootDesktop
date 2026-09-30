@@ -1,15 +1,15 @@
 [Desktop Entry]
 Type=Application
-Name=UniGoDesktop
-Name[zh_CN]=UniGo桌面
+Name=UniBootDesktop
+Name[zh_CN]=UniBoot桌面
 GenericName=Go Development Toolkit
 GenericName[zh_CN]=Go 开发工具集
 Comment=Universal Go Desktop Suite
 Comment[zh_CN]=通用 Go 桌面工具套件
-Exec=unigodesktop %u
-Icon=unigodesktop
+Exec=unibootdesktop %u
+Icon=unibootdesktop
 Terminal=false
 Categories=Utility;Development;
-StartupWMClass=unigodesktop
+StartupWMClass=unibootdesktop
 Keywords=go;golang;development;tools;
 StartupNotify=true

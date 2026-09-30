@@ -41,9 +41,9 @@ To skip hooks for a single commit (emergency use only):
 git commit --no-verify -m "chore: emergency fix"
 ```
 
-## UniGoDesktop Tool Manager Configuration
+## UniBootDesktop Tool Manager Configuration
 
-The project uses [unigo](https://github.com/snowdreamtech/UniGoDesktop) for managing development tools. Configuration is in `.unigodesktop.toml`.
+The project uses [uniboot](https://github.com/snowdreamtech/UniBootDesktop) for managing development tools. Configuration is in `.unibootdesktop.toml`.
 
 ### Important Security Requirements
 
@@ -67,7 +67,7 @@ aqua.minisign = false
 asdf_compat = true
 ```
 
-For detailed unigo configuration guidelines, see:
+For detailed uniboot configuration guidelines, see:
 
-- [UniGoDesktop Configuration Best Practices](../reference/unigo-configuration.md)
-- [UniGoDesktop Attestation Error Troubleshooting](../troubleshooting/unigo-attestation-error.md)
+- [UniBootDesktop Configuration Best Practices](../reference/uniboot-configuration.md)
+- [UniBootDesktop Attestation Error Troubleshooting](../troubleshooting/uniboot-attestation-error.md)
