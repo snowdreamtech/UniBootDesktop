@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	goRuntime "runtime"
 	"time"
 
 	"github.com/snowdreamtech/unibootdesktop/cmd"
@@ -74,7 +75,8 @@ func RunWails() error {
 		Height:      820,
 		MinWidth:    1024,
 		MinHeight:   728,
-		StartHidden: true,
+		StartHidden:       true,
+		HideWindowOnClose: goRuntime.GOOS == "darwin",
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
@@ -109,12 +111,7 @@ func RunWails() error {
 			BackdropType:         windows.Auto,
 		},
 		Mac: &mac.Options{
-			TitleBar: &mac.TitleBar{
-				TitlebarAppearsTransparent: false,
-				HideTitle:                  false,
-				HideTitleBar:               false,
-				FullSizeContent:            false,
-			},
+			TitleBar:             mac.TitleBarHiddenInset(),
 			Appearance:           macAppearance,
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
