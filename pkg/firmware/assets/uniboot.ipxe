@@ -1,0 +1,6 @@
+#!ipxe
+# UniBoot Custom iPXE Menu
+# Copyright (c) 2026-present SnowdreamTech Inc.
+
+# Enter the network center.
+chain https://boot.netboot.xyz/menu.ipxe

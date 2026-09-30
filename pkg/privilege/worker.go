@@ -1,0 +1,625 @@
+// Copyright (c) 2026 SnowdreamTech. All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+package privilege
+
+import (
+	"crypto/rand"
+	"crypto/subtle"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"net"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"runtime"
+	"strings"
+	"sync"
+	"time"
+
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
+)
+
+const (
+	WorkerActionPing        = "ping"
+	WorkerActionAcquireDisk = "acquire_disk"
+	WorkerActionReleaseDisk = "release_disk"
+	WorkerActionReadSector  = "read_sector"
+	WorkerActionRunCommand  = "run_command"
+	WorkerActionExit        = "exit"
+
+	defaultWorkerIdleTimeout = 30 * time.Minute
+)
+
+// StartWorkerMutex synchronizes concurrent elevation attempts across goroutines.
+var StartWorkerMutex sync.Mutex
+
+// WorkerRequest represents an RPC request from main application to privileged worker.
+type WorkerRequest struct {
+	Token    string   `json:"token"`
+	Action   string   `json:"action"`
+	Paths    []string `json:"paths,omitempty"`
+	Path     string   `json:"path,omitempty"`
+	Command  string   `json:"command,omitempty"`
+	Args     []string `json:"args,omitempty"`
+	NumBytes int      `json:"num_bytes,omitempty"`
+	UID      int      `json:"uid,omitempty"`
+	GID      int      `json:"gid,omitempty"`
+}
+
+// WorkerResponse represents an RPC response from privileged worker.
+type WorkerResponse struct {
+	Success bool   `json:"success"`
+	Error   string `json:"error,omitempty"`
+	Data    []byte `json:"data,omitempty"`
+	Output  string `json:"output,omitempty"`
+}
+
+// diskSnapshot stores original ownership and permissions for automatic restoration.
+type diskSnapshot struct {
+	path      string
+	perm      os.FileMode
+	uid       int
+	gid       int
+	haveOwner bool
+}
+
+// WorkerClient maintains a persistent RPC connection to the background privileged worker.
+type WorkerClient struct {
+	mu         sync.Mutex
+	conn       net.Conn
+	token      string
+	socketPath string
+	closed     bool
+	lastPing   time.Time
+}
+
+var (
+	globalWorkerMutex  sync.RWMutex
+	globalWorkerClient *WorkerClient
+	lastWorkerSocket   string
+	lastWorkerToken    string
+)
+
+// GenerateRandomToken generates a secure hex-encoded 256-bit token.
+func GenerateRandomToken() (string, error) {
+	bytes := make([]byte, 32)
+	if _, err := rand.Read(bytes); err != nil {
+		return "", fmt.Errorf("failed to generate random token: %w", err)
+	}
+	return hex.EncodeToString(bytes), nil
+}
+
+// GetActiveWorkerClient returns the active connected WorkerClient if available and healthy.
+func GetActiveWorkerClient() *WorkerClient {
+	globalWorkerMutex.RLock()
+	client := globalWorkerClient
+	sock := lastWorkerSocket
+	tok := lastWorkerToken
+	globalWorkerMutex.RUnlock()
+
+	if client != nil && client.IsAlive() {
+		return client
+	}
+
+	// If client is disconnected/nil but active worker credentials are known, auto-reconnect silently
+	if sock != "" && tok != "" {
+		newClient := &WorkerClient{
+			socketPath: sock,
+			token:      tok,
+		}
+		if newClient.reconnectLocked() == nil {
+			SetActiveWorkerClient(newClient)
+			return newClient
+		}
+	}
+
+	return nil
+}
+
+// SetActiveWorkerClient sets or resets the active WorkerClient.
+func SetActiveWorkerClient(client *WorkerClient) {
+	globalWorkerMutex.Lock()
+	defer globalWorkerMutex.Unlock()
+	globalWorkerClient = client
+	if client != nil {
+		if client.socketPath != "" {
+			lastWorkerSocket = client.socketPath
+		}
+		if client.token != "" {
+			lastWorkerToken = client.token
+		}
+	}
+}
+
+// markFailedLocked tears down broken connection and clears global reference.
+func (c *WorkerClient) markFailedLocked() {
+	if c.closed {
+		return
+	}
+	c.closed = true
+	if c.conn != nil {
+		_ = c.conn.Close()
+		c.conn = nil
+	}
+	SetActiveWorkerClient(nil)
+}
+
+// reconnectLocked dials the worker socket using the saved socket path and performs handshake.
+func (c *WorkerClient) reconnectLocked() error {
+	if c.socketPath == "" || c.token == "" {
+		return errors.New("cannot reconnect: missing socket path or token")
+	}
+	if c.conn != nil {
+		_ = c.conn.Close()
+		c.conn = nil
+	}
+
+	conn, err := dialWorkerSocket(c.socketPath)
+	if err != nil {
+		return err
+	}
+
+	_ = conn.SetDeadline(time.Now().Add(2 * time.Second))
+	req := WorkerRequest{
+		Token:  c.token,
+		Action: WorkerActionPing,
+	}
+	if err := json.NewEncoder(conn).Encode(req); err != nil {
+		_ = conn.Close()
+		return err
+	}
+	var resp WorkerResponse
+	if err := json.NewDecoder(conn).Decode(&resp); err != nil || !resp.Success {
+		_ = conn.Close()
+		return errors.New("handshake failed on reconnect")
+	}
+	_ = conn.SetDeadline(time.Time{})
+
+	c.conn = conn
+	c.closed = false
+	c.lastPing = time.Now()
+	return nil
+}
+
+// IsAlive checks whether the client connection is currently active and responding.
+func (c *WorkerClient) IsAlive() bool {
+	if c == nil {
+		return false
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	// Rate-limit ping roundtrips if connection is healthy and verified within last 3 seconds
+	if !c.closed && c.conn != nil && time.Since(c.lastPing) < 3*time.Second {
+		return true
+	}
+
+	if c.closed || c.conn == nil {
+		if c.reconnectLocked() == nil {
+			return true
+		}
+		return false
+	}
+
+	// Non-blocking ping with 2-second deadline
+	_ = c.conn.SetDeadline(time.Now().Add(2 * time.Second))
+	defer func() {
+		if c.conn != nil {
+			_ = c.conn.SetDeadline(time.Time{})
+		}
+	}()
+
+	req := WorkerRequest{
+		Token:  c.token,
+		Action: WorkerActionPing,
+	}
+	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		if c.reconnectLocked() == nil {
+			return true
+		}
+		c.markFailedLocked()
+		return false
+	}
+
+	var resp WorkerResponse
+	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		if c.reconnectLocked() == nil {
+			return true
+		}
+		c.markFailedLocked()
+		return false
+	}
+	if !resp.Success {
+		c.markFailedLocked()
+		return false
+	}
+	c.lastPing = time.Now()
+	return true
+}
+
+// AcquireDiskAccess requests the privileged worker to grant the current user access to disk nodes.
+func (c *WorkerClient) AcquireDiskAccess(paths []string) error {
+	if c == nil {
+		return errors.New("worker client is not connected")
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.closed || c.conn == nil {
+		return errors.New("worker connection is closed")
+	}
+
+	req := WorkerRequest{
+		Token:  c.token,
+		Action: WorkerActionAcquireDisk,
+		Paths:  paths,
+		UID:    os.Getuid(),
+		GID:    os.Getgid(),
+	}
+
+	_ = c.conn.SetDeadline(time.Now().Add(5 * time.Second))
+	defer func() {
+		if c.conn != nil {
+			_ = c.conn.SetDeadline(time.Time{})
+		}
+	}()
+
+	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		c.markFailedLocked()
+		return fmt.Errorf("failed to send acquire disk request: %w", err)
+	}
+
+	var resp WorkerResponse
+	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		c.markFailedLocked()
+		return fmt.Errorf("failed to read acquire disk response: %w", err)
+	}
+	if !resp.Success {
+		return fmt.Errorf("worker failed to acquire disk access: %s", resp.Error)
+	}
+	return nil
+}
+
+// ReleaseDiskAccess requests the privileged worker to restore original disk node permissions.
+func (c *WorkerClient) ReleaseDiskAccess(paths []string) error {
+	if c == nil {
+		return nil
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.closed || c.conn == nil {
+		return nil
+	}
+
+	req := WorkerRequest{
+		Token:  c.token,
+		Action: WorkerActionReleaseDisk,
+		Paths:  paths,
+	}
+
+	_ = c.conn.SetDeadline(time.Now().Add(5 * time.Second))
+	defer func() {
+		if c.conn != nil {
+			_ = c.conn.SetDeadline(time.Time{})
+		}
+	}()
+
+	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		c.markFailedLocked()
+		return fmt.Errorf("failed to send release disk request: %w", err)
+	}
+
+	var resp WorkerResponse
+	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		c.markFailedLocked()
+		return fmt.Errorf("failed to read release disk response: %w", err)
+	}
+	if !resp.Success {
+		return fmt.Errorf("worker failed to release disk access: %s", resp.Error)
+	}
+	return nil
+}
+
+// ReadSector requests the privileged worker to read raw bytes directly from a storage device.
+func (c *WorkerClient) ReadSector(devicePath string, numBytes int) ([]byte, error) {
+	if c == nil {
+		return nil, errors.New("worker client is not connected")
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.closed || c.conn == nil {
+		return nil, errors.New("worker connection is closed")
+	}
+
+	req := WorkerRequest{
+		Token:    c.token,
+		Action:   WorkerActionReadSector,
+		Path:     devicePath,
+		NumBytes: numBytes,
+	}
+
+	_ = c.conn.SetDeadline(time.Now().Add(5 * time.Second))
+	defer func() {
+		if c.conn != nil {
+			_ = c.conn.SetDeadline(time.Time{})
+		}
+	}()
+
+	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		c.markFailedLocked()
+		return nil, fmt.Errorf("failed to send read sector request: %w", err)
+	}
+
+	var resp WorkerResponse
+	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		c.markFailedLocked()
+		return nil, fmt.Errorf("failed to read read sector response: %w", err)
+	}
+	if !resp.Success {
+		return nil, fmt.Errorf("worker failed to read sector: %s", resp.Error)
+	}
+	return resp.Data, nil
+}
+
+// RunCommand executes a validated allowlisted system command inside the privileged worker process.
+func (c *WorkerClient) RunCommand(name string, args ...string) (string, error) {
+	if c == nil {
+		return "", errors.New("worker client is not connected")
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.closed || c.conn == nil {
+		return "", errors.New("worker connection is closed")
+	}
+
+	req := WorkerRequest{
+		Token:   c.token,
+		Action:  WorkerActionRunCommand,
+		Command: name,
+		Args:    args,
+	}
+
+	_ = c.conn.SetDeadline(time.Now().Add(60 * time.Second))
+	defer func() {
+		if c.conn != nil {
+			_ = c.conn.SetDeadline(time.Time{})
+		}
+	}()
+
+	if err := json.NewEncoder(c.conn).Encode(req); err != nil {
+		c.markFailedLocked()
+		return "", fmt.Errorf("failed to send run command request: %w", err)
+	}
+
+	var resp WorkerResponse
+	if err := json.NewDecoder(c.conn).Decode(&resp); err != nil {
+		c.markFailedLocked()
+		return "", fmt.Errorf("failed to read run command response: %w", err)
+	}
+	if !resp.Success {
+		return resp.Output, fmt.Errorf("worker command failed: %s", resp.Error)
+	}
+	return resp.Output, nil
+}
+
+// Close closes the connection to the worker.
+func (c *WorkerClient) Close() error {
+	if c == nil {
+		return nil
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.closed {
+		return nil
+	}
+	c.closed = true
+	if c.conn != nil {
+		_ = c.conn.Close()
+	}
+	return nil
+}
+
+// handleWorkerConnection handles RPC requests from the main application.
+func handleWorkerConnection(conn net.Conn, expectedToken string, snapshots map[string]diskSnapshot, mu *sync.Mutex) {
+	defer conn.Close()
+
+	decoder := json.NewDecoder(conn)
+	encoder := json.NewEncoder(conn)
+
+	for {
+		var req WorkerRequest
+		if err := decoder.Decode(&req); err != nil {
+			if errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) {
+				logger.Info("Privileged worker client disconnected")
+			} else {
+				logger.Warn("Privileged worker decode error", "error", err)
+			}
+			return
+		}
+
+		if subtle.ConstantTimeCompare([]byte(req.Token), []byte(expectedToken)) != 1 {
+			_ = encoder.Encode(WorkerResponse{Success: false, Error: "invalid token"})
+			return
+		}
+
+		switch req.Action {
+		case WorkerActionPing:
+			_ = encoder.Encode(WorkerResponse{Success: true})
+
+		case WorkerActionAcquireDisk:
+			mu.Lock()
+			err := applyDiskAcquisition(req.Paths, req.UID, req.GID, snapshots)
+			mu.Unlock()
+			if err != nil {
+				_ = encoder.Encode(WorkerResponse{Success: false, Error: err.Error()})
+			} else {
+				_ = encoder.Encode(WorkerResponse{Success: true})
+			}
+
+		case WorkerActionReleaseDisk:
+			mu.Lock()
+			applyDiskRelease(req.Paths, snapshots)
+			mu.Unlock()
+			_ = encoder.Encode(WorkerResponse{Success: true})
+
+		case WorkerActionReadSector:
+			data, err := applyReadSector(req.Path, req.NumBytes)
+			if err != nil {
+				_ = encoder.Encode(WorkerResponse{Success: false, Error: err.Error()})
+			} else {
+				_ = encoder.Encode(WorkerResponse{Success: true, Data: data})
+			}
+
+		case WorkerActionRunCommand:
+			out, err := applyRunCommand(req.Command, req.Args)
+			if err != nil {
+				_ = encoder.Encode(WorkerResponse{Success: false, Error: err.Error(), Output: out})
+			} else {
+				_ = encoder.Encode(WorkerResponse{Success: true, Output: out})
+			}
+
+		case WorkerActionExit:
+			mu.Lock()
+			restoreAllSnapshots(snapshots)
+			mu.Unlock()
+			_ = encoder.Encode(WorkerResponse{Success: true})
+			os.Exit(0)
+
+		default:
+			_ = encoder.Encode(WorkerResponse{Success: false, Error: fmt.Sprintf("unknown action: %s", req.Action)})
+		}
+	}
+}
+
+func applyReadSector(devicePath string, numBytes int) ([]byte, error) {
+	if err := ValidateRawDevicePath(devicePath); err != nil {
+		return nil, fmt.Errorf("unsafe device path: %w", err)
+	}
+	if numBytes <= 0 || numBytes > 65536 {
+		return nil, fmt.Errorf("invalid byte count: %d", numBytes)
+	}
+	f, err := os.Open(devicePath)
+	if err != nil && runtime.GOOS == "darwin" {
+		alt := devicePath
+		if strings.HasPrefix(devicePath, "/dev/disk") {
+			alt = "/dev/r" + strings.TrimPrefix(devicePath, "/dev/")
+		} else if strings.HasPrefix(devicePath, "/dev/rdisk") {
+			alt = "/dev/" + strings.TrimPrefix(devicePath, "/dev/r")
+		}
+		if alt != devicePath {
+			f, err = os.Open(alt)
+		}
+	}
+	if err != nil {
+		return nil, fmt.Errorf("failed to open device %s: %w", devicePath, err)
+	}
+	defer f.Close()
+
+	buf := make([]byte, numBytes)
+	n, err := io.ReadFull(f, buf)
+	if err != nil && err != io.EOF && err != io.ErrUnexpectedEOF {
+		return nil, fmt.Errorf("failed to read from device %s: %w", devicePath, err)
+	}
+	return buf[:n], nil
+}
+
+func applyRunCommand(name string, args []string) (string, error) {
+	if err := ValidateCommandName(name); err != nil {
+		return "", fmt.Errorf("invalid command name: %w", err)
+	}
+
+	base := strings.ToLower(filepath.Base(name))
+	disallowedInWorker := map[string]struct{}{
+		"sh": {}, "bash": {}, "zsh": {}, "csh": {}, "ksh": {},
+		"cmd": {}, "cmd.exe": {}, "powershell": {}, "powershell.exe": {}, "pwsh": {},
+		"osascript": {}, "sudo": {}, "pkexec": {}, "su": {},
+	}
+	if _, bad := disallowedInWorker[base]; bad {
+		return "", fmt.Errorf("command %q is forbidden in privileged worker", name)
+	}
+
+	for _, arg := range args {
+		if err := ValidateCommandArgument(arg); err != nil {
+			return "", fmt.Errorf("invalid command argument: %w", err)
+		}
+		if strings.HasPrefix(arg, "/dev/") || strings.HasPrefix(arg, `\\.\PhysicalDrive`) {
+			if err := ValidateRawDevicePath(arg); err != nil {
+				return "", fmt.Errorf("unsafe disk device argument %q: %w", arg, err)
+			}
+		}
+	}
+	cmd := exec.Command(name, args...)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return string(out), fmt.Errorf("%w: %s", err, strings.TrimSpace(string(out)))
+	}
+	return string(out), nil
+}
+
+func applyDiskAcquisition(paths []string, targetUID, targetGID int, snapshots map[string]diskSnapshot) error {
+	for _, raw := range paths {
+		path := raw
+		if path == "" {
+			continue
+		}
+		if err := ValidateRawDevicePath(path); err != nil {
+			return fmt.Errorf("unsafe device path %q: %w", path, err)
+		}
+
+		info, err := os.Stat(path)
+		if err != nil {
+			continue
+		}
+
+		if _, exists := snapshots[path]; !exists {
+			origPerm := info.Mode().Perm()
+			uid, gid, haveOwner := snapshotOwner(info)
+			snapshots[path] = diskSnapshot{
+				path:      path,
+				perm:      origPerm,
+				uid:       uid,
+				gid:       gid,
+				haveOwner: haveOwner,
+			}
+		}
+
+		if targetUID >= 0 && targetGID >= 0 {
+			_ = chownPath(path, targetUID, targetGID)
+		}
+		_ = chmodPath(path, temporaryRawDiskPerm)
+		logger.Info("Privileged worker granted disk access", "path", path, "uid", targetUID, "gid", targetGID)
+	}
+	return nil
+}
+
+func applyDiskRelease(paths []string, snapshots map[string]diskSnapshot) {
+	for _, raw := range paths {
+		path := raw
+		if snap, ok := snapshots[path]; ok {
+			if snap.haveOwner {
+				_ = chownPath(snap.path, snap.uid, snap.gid)
+			}
+			_ = chmodPath(snap.path, snap.perm)
+			delete(snapshots, path)
+			logger.Info("Privileged worker restored disk permissions", "path", path)
+		}
+	}
+}
+
+func restoreAllSnapshots(snapshots map[string]diskSnapshot) {
+	for path, snap := range snapshots {
+		if snap.haveOwner {
+			_ = chownPath(snap.path, snap.uid, snap.gid)
+		}
+		_ = chmodPath(snap.path, snap.perm)
+		logger.Info("Privileged worker emergency restored disk permissions", "path", path)
+	}
+}
