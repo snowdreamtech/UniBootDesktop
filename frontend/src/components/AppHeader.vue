@@ -1,6 +1,11 @@
 <template>
-  <header class="app-header" @dblclick="handleHeaderDblClick">
-    <div class="brand">
+  <header
+    class="app-header"
+    style="--wails-draggable:drag"
+    @mousedown="handleHeaderMouseDown"
+    @dblclick="handleHeaderDblClick"
+  >
+    <div class="brand" style="--wails-draggable:drag">
       <img src="/logo.png" alt="UniBoot" class="logo-img" />
       <div>
         <h1>{{ t("app.title") }}</h1>
@@ -114,6 +119,23 @@ const currentLangLabel = computed(() => {
   return opt ? opt.label : t("common.lang");
 });
 
+function handleHeaderMouseDown(e: MouseEvent) {
+  // Only trigger on primary button without modifiers or multi-clicks
+  if (e.buttons !== 1 || e.detail > 1) {
+    return;
+  }
+  const target = e.target as HTMLElement | null;
+  if (target && target.closest("button, input, select, a, .lang-dropdown-menu, .mode-tabs")) {
+    return;
+  }
+  const w = window as any;
+  if (typeof w.WailsInvoke === "function") {
+    w.WailsInvoke("drag");
+  } else if (w.runtime && typeof w.runtime.WindowStartDrag === "function") {
+    w.runtime.WindowStartDrag();
+  }
+}
+
 function handleHeaderDblClick(e: MouseEvent) {
   const target = e.target as HTMLElement | null;
   if (
@@ -198,12 +220,16 @@ onUnmounted(() => {
   -webkit-app-region: drag;
 }
 
+.brand,
+.brand * {
+  --wails-draggable: drag;
+  -webkit-app-region: drag;
+}
+
 .header-right {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  --wails-draggable: no-drag;
-  -webkit-app-region: no-drag;
 }
 
 .header-actions {
@@ -211,18 +237,18 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.4rem;
   position: relative;
-  --wails-draggable: no-drag;
-  -webkit-app-region: no-drag;
 }
 
-.brand,
 .mode-tabs,
+.mode-tabs *,
+.header-actions button,
+.lang-selector-header,
+.lang-dropdown-menu,
+.lang-dropdown-menu *,
 button,
 input,
 select,
-a,
-.lang-selector-header,
-.lang-dropdown-menu {
+a {
   --wails-draggable: no-drag;
   -webkit-app-region: no-drag;
 }

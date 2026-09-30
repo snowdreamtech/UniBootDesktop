@@ -1,5 +1,8 @@
 <template>
   <div class="app-container">
+    <!-- Window drag strip for seamless macOS/frameless window dragging -->
+    <div class="window-drag-strip" style="--wails-draggable:drag" @mousedown="handleWindowDrag" />
+
     <!-- Global App Toast Notification -->
     <transition name="toast-fade">
       <div v-if="toastMessage" class="global-toast" :class="toastType">
@@ -415,6 +418,16 @@ function handleToggleTheme() {
   onSaveSettings({ theme: next });
 }
 
+function handleWindowDrag(e: MouseEvent) {
+  if (e.buttons !== 1 || e.detail > 1) return;
+  const w = window as any;
+  if (typeof w.WailsInvoke === "function") {
+    w.WailsInvoke("drag");
+  } else if (w.runtime && typeof w.runtime.WindowStartDrag === "function") {
+    w.runtime.WindowStartDrag();
+  }
+}
+
 // 9. Wails Global Events & Lifecycle
 useAppRuntimeEvents({
   t,
@@ -438,6 +451,18 @@ useAppRuntimeEvents({
 </script>
 
 <style scoped>
+.window-drag-strip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  z-index: 99;
+  pointer-events: auto;
+  --wails-draggable: drag;
+  -webkit-app-region: drag;
+}
+
 .app-container {
   max-width: 1280px;
   width: 95%;
