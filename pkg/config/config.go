@@ -19,6 +19,8 @@ type AppConfig struct {
 	AutoCheckUpdate bool   `json:"autoCheckUpdate" toml:"autoCheckUpdate"` // Automatically check for updates
 	Theme           string `json:"theme" toml:"theme"`                     // UI theme preference (dark, light, system)
 	Language        string `json:"language" toml:"language"`               // UI Language (auto, zh-CN, en-US, etc.)
+	EnableTray      bool   `json:"enableTray" toml:"enableTray"`           // Whether to enable system tray (default: false)
+	CloseAction     string `json:"closeAction" toml:"closeAction"`         // Window close action: "quit" or "minimize_to_tray" (default: "quit")
 	GithubProxy     string `json:"githubProxy" toml:"githubProxy"`         // GitHub proxy acceleration mirror
 	ProxyProtocol   string `json:"proxyProtocol" toml:"proxyProtocol"`     // Network proxy protocol: direct, http, https, socks5
 	ProxyHost       string `json:"proxyHost" toml:"proxyHost"`             // Network proxy server host
@@ -34,6 +36,8 @@ func GetDefaultConfig() *AppConfig {
 		AutoCheckUpdate: true,
 		Theme:           "system",
 		Language:        "auto", // Auto detect OS system language by default
+		EnableTray:      false,  // Disabled by default
+		CloseAction:     "quit", // Quit application on close by default
 		GithubProxy:     "",     // Direct connection by default
 		ProxyProtocol:   "direct",
 		ProxyHost:       "",
