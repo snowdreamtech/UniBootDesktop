@@ -6,12 +6,17 @@
         <div class="modal-header">
           <div class="shield-badge">
             <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+              />
             </svg>
           </div>
           <div class="header-text">
-            <h2 class="title">{{ t('privilege.modal_title') }}</h2>
-            <p class="subtitle">{{ t('privilege.modal_subtitle') }}</p>
+            <h2 class="title">{{ t("privilege.modal_title") }}</h2>
+            <p class="subtitle">{{ t("privilege.modal_subtitle") }}</p>
           </div>
           <button class="close-btn" @click="handleCancel" aria-label="Close">
             <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
@@ -21,85 +26,85 @@
           </button>
         </div>
 
-      <!-- Trust Pillars -->
-      <div class="trust-pillars">
-        <!-- Pillar 1: Why Needed -->
-        <div class="pillar-card">
-          <div class="pillar-icon-box blue">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-              <line x1="6" y1="6" x2="6.01" y2="6"></line>
-              <line x1="6" y1="18" x2="6.01" y2="18"></line>
-            </svg>
+        <!-- Trust Pillars -->
+        <div class="trust-pillars">
+          <!-- Pillar 1: Why Needed -->
+          <div class="pillar-card">
+            <div class="pillar-icon-box blue">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                <line x1="6" y1="18" x2="6.01" y2="18"></line>
+              </svg>
+            </div>
+            <div class="pillar-content">
+              <h4>{{ t("privilege.reason_title") }}</h4>
+              <p>{{ t("privilege.reason_desc") }}</p>
+            </div>
           </div>
-          <div class="pillar-content">
-            <h4>{{ t('privilege.reason_title') }}</h4>
-            <p>{{ t('privilege.reason_desc') }}</p>
+
+          <!-- Pillar 2: Restricted Scope -->
+          <div class="pillar-card">
+            <div class="pillar-icon-box green">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+            </div>
+            <div class="pillar-content">
+              <h4>{{ t("privilege.scope_title") }}</h4>
+              <p>{{ t("privilege.scope_desc") }}</p>
+            </div>
+          </div>
+
+          <!-- Pillar 3: Read-Only Safety -->
+          <div class="pillar-card">
+            <div class="pillar-icon-box amber">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 14 14"></polyline>
+              </svg>
+            </div>
+            <div class="pillar-content">
+              <h4>{{ t("privilege.safety_title") }}</h4>
+              <p>{{ t("privilege.safety_desc") }}</p>
+            </div>
           </div>
         </div>
 
-        <!-- Pillar 2: Restricted Scope -->
-        <div class="pillar-card">
-          <div class="pillar-icon-box green">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
-          </div>
-          <div class="pillar-content">
-            <h4>{{ t('privilege.scope_title') }}</h4>
-            <p>{{ t('privilege.scope_desc') }}</p>
-          </div>
+        <!-- Action Buttons -->
+        <div class="modal-footer">
+          <button class="btn btn-secondary" @click="handleCancel" :disabled="authorizing">
+            {{ t("privilege.cancel_btn") }}
+          </button>
+          <button class="btn btn-primary" @click="handleConfirm" :disabled="authorizing">
+            <span v-if="authorizing" class="spinner"></span>
+            <span v-else>{{ t("privilege.confirm_btn") }}</span>
+          </button>
         </div>
-
-        <!-- Pillar 3: Read-Only Safety -->
-        <div class="pillar-card">
-          <div class="pillar-icon-box amber">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 14 14"></polyline>
-            </svg>
-          </div>
-          <div class="pillar-content">
-            <h4>{{ t('privilege.safety_title') }}</h4>
-            <p>{{ t('privilege.safety_desc') }}</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="modal-footer">
-        <button class="btn btn-secondary" @click="handleCancel" :disabled="authorizing">
-          {{ t('privilege.cancel_btn') }}
-        </button>
-        <button class="btn btn-primary" @click="handleConfirm" :disabled="authorizing">
-          <span v-if="authorizing" class="spinner"></span>
-          <span v-else>{{ t('privilege.confirm_btn') }}</span>
-        </button>
-      </div>
       </div>
     </div>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { t } from '../i18n';
+import { ref } from "vue";
+import { t } from "../i18n";
 
 defineProps<{
   visible: boolean;
 }>();
 
 const emit = defineEmits<{
-  (e: 'update:visible', val: boolean): void;
-  (e: 'authorized'): void;
+  (e: "update:visible", val: boolean): void;
+  (e: "authorized"): void;
 }>();
 
 const authorizing = ref(false);
 
 const handleCancel = () => {
   if (authorizing.value) return;
-  emit('update:visible', false);
+  emit("update:visible", false);
 };
 
 const handleConfirm = async () => {
@@ -109,16 +114,16 @@ const handleConfirm = async () => {
     if (wailsAny.go && wailsAny.go.main && wailsAny.go.main.App && wailsAny.go.main.App.RequestPrivilegeElevation) {
       const ok = await wailsAny.go.main.App.RequestPrivilegeElevation();
       if (ok) {
-        emit('authorized');
-        emit('update:visible', false);
+        emit("authorized");
+        emit("update:visible", false);
       }
     } else {
       // Fallback for standalone mock/dev
-      emit('authorized');
-      emit('update:visible', false);
+      emit("authorized");
+      emit("update:visible", false);
     }
   } catch (err) {
-    console.error('Elevation request error:', err);
+    console.error("Elevation request error:", err);
   } finally {
     authorizing.value = false;
   }
@@ -150,7 +155,9 @@ const handleConfirm = async () => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: background 0.3s ease, border-color 0.3s ease;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .modal-header {
@@ -230,7 +237,9 @@ const handleConfirm = async () => {
   border-radius: 0.75rem;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .pillar-icon-box {
@@ -335,12 +344,20 @@ const handleConfirm = async () => {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.98); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Light Theme Overrides */

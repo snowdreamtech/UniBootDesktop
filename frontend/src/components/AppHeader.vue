@@ -1,11 +1,11 @@
 <template>
   <header
     class="app-header"
-    style="--wails-draggable:drag"
+    style="--wails-draggable: drag"
     @mousedown="handleHeaderMouseDown"
     @dblclick="handleHeaderDblClick"
   >
-    <div class="brand" style="--wails-draggable:drag">
+    <div class="brand" style="--wails-draggable: drag">
       <img src="/logo.png" alt="UniBoot" class="logo-img" />
       <div>
         <h1>{{ t("app.title") }}</h1>
@@ -15,11 +15,21 @@
     <div class="header-right">
       <div class="mode-tabs" :class="{ 'is-busy': isActionBusy }">
         <div v-if="isActionBusy" class="local-action-overlay" aria-hidden="true"></div>
-        <button class="tab-btn" :class="{ active: activeMode === 'cloud' }" :disabled="isActionBusy" @click="emit('select-mode', 'cloud')">
+        <button
+          class="tab-btn"
+          :class="{ active: activeMode === 'cloud' }"
+          :disabled="isActionBusy"
+          @click="emit('select-mode', 'cloud')"
+        >
           <span class="btn-icon">⚡</span>
           <span>{{ t("mode.cloud") }}</span>
         </button>
-        <button class="tab-btn" :class="{ active: activeMode === 'hybrid' }" :disabled="isActionBusy" @click="emit('select-mode', 'hybrid')">
+        <button
+          class="tab-btn"
+          :class="{ active: activeMode === 'hybrid' }"
+          :disabled="isActionBusy"
+          @click="emit('select-mode', 'hybrid')"
+        >
           <span class="btn-icon">🛠️</span>
           <span>{{ t("mode.hybrid") }}</span>
         </button>
@@ -53,7 +63,11 @@
         <!-- Header Quick Theme Switcher Button -->
         <button
           class="settings-icon-btn theme-toggle-btn"
-          :title="currentTheme === 'light' ? (t('settings.theme_dark') || 'Dark Theme') : (t('settings.theme_light') || 'Light Theme')"
+          :title="
+            currentTheme === 'light'
+              ? t('settings.theme_dark') || 'Dark Theme'
+              : t('settings.theme_light') || 'Light Theme'
+          "
           @click="handleToggleTheme"
         >
           <span v-if="currentTheme === 'light'">🌙</span>

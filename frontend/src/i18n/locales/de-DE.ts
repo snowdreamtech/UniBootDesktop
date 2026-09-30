@@ -99,7 +99,8 @@ export const deDe: TranslationDict = {
   "disk.tag_boot_hybrid": "Hybrid-Boot",
   "disk.tag_boot_thirdparty": "Drittanbieter-Boot",
   "confirm.cloud_to_hybrid_warn_title": "Hinweis: Wechsel zum Hybridmodus erfordert vollständige Formatierung",
-  "confirm.cloud_to_hybrid_warn_desc": "Dieser Datenträger befindet sich im reinen Cloud-Boot-Modus. Der Ventoy-Hybridmodus erfordert den Neuaufbau des MBR und der Partitionstabelle, wodurch alle Daten und ISOs gelöscht werden!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Dieser Datenträger befindet sich im reinen Cloud-Boot-Modus. Der Ventoy-Hybridmodus erfordert den Neuaufbau des MBR und der Partitionstabelle, wodurch alle Daten und ISOs gelöscht werden!",
   "disk.tag_ssd": "Externe SSD",
   "disk.tag_typec": "Type-C Laufwerk",
   "disk.tag_secure": "Verschlüsseltes Laufwerk",
@@ -109,7 +110,8 @@ export const deDe: TranslationDict = {
   "disk.tag_cdrom": "Virtuelles CD-Laufwerk",
   "disk.tooltip_uniboot_hybrid": "Ventoy / UniBoot-Bootlaufwerk (Hybrid-Modus, zerstörungsfreies Upgrade)",
   "disk.tooltip_uniboot_cloud": "UniBoot Cloud-Bootlaufwerk (Cloud-Modus, zerstörungsfreie Aktualisierung)",
-  "disk.tooltip_third_party_boot": "Drittanbieter-Bootlaufwerk (Enthält Rufus/PE/ISO-Struktur, Neuformatierung erforderlich)",
+  "disk.tooltip_third_party_boot":
+    "Drittanbieter-Bootlaufwerk (Enthält Rufus/PE/ISO-Struktur, Neuformatierung erforderlich)",
   "log.title": "Log-Center",
   "log.live": "Echtzeit",
   "log.search_placeholder": "Protokolle durchsuchen...",
@@ -127,13 +129,16 @@ export const deDe: TranslationDict = {
   "log.level_error": "FEHLER",
   "log.level_debug": "Debug",
   "safe.title_cloud": "Bestehendes Ventoy/UniBoot-Laufwerk erkannt (Cloud-Modus aktualisiert nur ESP-Partition)",
-  "safe.desc_cloud": "Der Cloud-Modus bewahrt das UNIBOOT-Layout. Das Aktualisieren der ESP-Partition lässt alle ISOs und Dateien intakt!",
+  "safe.desc_cloud":
+    "Der Cloud-Modus bewahrt das UNIBOOT-Layout. Das Aktualisieren der ESP-Partition lässt alle ISOs und Dateien intakt!",
   "safe.title_hybrid": "Bestehendes Ventoy-Laufwerk erkannt (Hybrid-Modus In-Place-Update)",
-  "safe.desc_hybrid": "Der Hybrid-Modus bewahrt alle bestehenden ISO-Dateien ohne Formatierung und fügt das UniBoot-Theme und Cloud-Menü sicher ein!",
+  "safe.desc_hybrid":
+    "Der Hybrid-Modus bewahrt alle bestehenden ISO-Dateien ohne Formatierung und fügt das UniBoot-Theme und Cloud-Menü sicher ein!",
   "common.optional": "Freigestellt",
   "common.optional_test": "Optionaler Test",
   "iso.title": "Lokale System-Image-Quellen (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Fügen Sie ISO-Dateien hinzu, um sie automatisch in das Verzeichnis /UNIBOOT/iso/ für den Ventoy / UniBoot-Start zu kopieren.",
+  "iso.desc":
+    "Fügen Sie ISO-Dateien hinzu, um sie automatisch in das Verzeichnis /UNIBOOT/iso/ für den Ventoy / UniBoot-Start zu kopieren.",
   "iso.add_btn": "Image-Dateien hinzufügen",
   "iso.empty_title": "Klicken, um Image-Dateien hinzuzufügen (Einzel- oder Mehrfachauswahl)",
   "iso.empty_sub": "Unterstützt die Formate .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -144,7 +149,8 @@ export const deDe: TranslationDict = {
   "iso.drag_unsupported": "Keine unterstützten Image-Dateien erkannt (.iso, .wim, .img usw.)",
   "iso.preflight_title": "Prüfung vor dem Schreiben",
   "iso.conflict_title": "Dateiname bereits vorhanden",
-  "iso.conflict_desc": "Im iso-Ordner des Ziel-USB-Laufwerks ist bereits eine Datei mit diesem Namen vorhanden. Wählen Sie eine Aktion. Hashes werden nicht verglichen.",
+  "iso.conflict_desc":
+    "Im iso-Ordner des Ziel-USB-Laufwerks ist bereits eine Datei mit diesem Namen vorhanden. Wählen Sie eine Aktion. Hashes werden nicht verglichen.",
   "iso.conflict_action": "Aktion",
   "iso.conflict_keep_both": "Behalten",
   "iso.conflict_replace": "Überschreiben",
@@ -154,13 +160,16 @@ export const deDe: TranslationDict = {
   "iso.conflict_confirm": "Bestätigen und fortfahren",
   "iso.preflight_failed": "Prüfung vor dem Schreiben fehlgeschlagen",
   "deploy.title": "Erstellung von bootfähigen Laufwerken & QEMU-Test",
-  "deploy.desc_cloud": "Reines iPXE Cloud-Boot • Ultraschnelle Zwei-Partitions-Einrichtung mit Multi-Arch iPXE Netzwerk-Firmware.",
+  "deploy.desc_cloud":
+    "Reines iPXE Cloud-Boot • Ultraschnelle Zwei-Partitions-Einrichtung mit Multi-Arch iPXE Netzwerk-Firmware.",
   "deploy.desc_hybrid": "Ventoy CLI Lokale Engine • Ventoy Hybrid-Partitions-Einrichtung mit lokaler ISO-Verwaltung.",
   "deploy.target_device": "Zielgerät:",
   "deploy.batch_target": "{count} Datenträger(e) ausgewählt",
   "deploy.start_create": "Boot-Disk erstellen",
-  "deploy.tip_batch_update_all": "Unterbrechungsfreies Gruppenupdate: Alle {count} ausgewählten Datenträgere werden direkt aktualisiert",
-  "deploy.tip_batch_mixed": "Gemischte Bereitstellung: {bootCount} Datenträgere aktualisiert, {blankCount} Laufwerke neu formatiert",
+  "deploy.tip_batch_update_all":
+    "Unterbrechungsfreies Gruppenupdate: Alle {count} ausgewählten Datenträgere werden direkt aktualisiert",
+  "deploy.tip_batch_mixed":
+    "Gemischte Bereitstellung: {bootCount} Datenträgere aktualisiert, {blankCount} Laufwerke neu formatiert",
   "deploy.start_update": "In-Place-Upgrade starten (Daten sicher)",
   "deploy.batch_create": "Stapel-Erstellung starten ({count} Laufwerke)",
   "deploy.writing": "Boot-Firmware-Pakete werden geschrieben...",
@@ -175,21 +184,26 @@ export const deDe: TranslationDict = {
   "deploy.tip_writing": "Boot-Firmware wird geschrieben...",
   "deploy.tip_select_single": "Bitte zuerst ein Ziel-Datenträger auswählen",
   "deploy.tip_select_batch": "Bitte Ziel-Datenträgere für Batch-Erstellung auswählen",
-  "deploy.tip_macos_unsupported": "macOS unterstützt keine Hybrid-Modus-Erstformatierung (Cloud-Modus verwenden oder zuerst auf Win/Linux initialisieren)",
+  "deploy.tip_macos_unsupported":
+    "macOS unterstützt keine Hybrid-Modus-Erstformatierung (Cloud-Modus verwenden oder zuerst auf Win/Linux initialisieren)",
   "deploy.tip_need_ventoy": "Hybrid-Modus-Erstformatierung erfordert lokale Ventoy CLI",
   "deploy.macos_alert_title": "macOS Ventoy CLI Neuformatierung nicht unterstützt",
-  "deploy.macos_alert_desc": "Ventoy unterstützt keine direkte Formatierung unter macOS. Verwenden Sie den Cloud-Modus für native Unterstützung oder initialisieren Sie Ventoy zunächst unter Windows/Linux und führen Sie dann eine In-Place-Aktualisierung unter macOS durch.",
+  "deploy.macos_alert_desc":
+    "Ventoy unterstützt keine direkte Formatierung unter macOS. Verwenden Sie den Cloud-Modus für native Unterstützung oder initialisieren Sie Ventoy zunächst unter Windows/Linux und führen Sie dann eine In-Place-Aktualisierung unter macOS durch.",
   "deploy.no_ventoy_title": "Ventoy CLI Ausführungsdatei nicht erkannt",
   "deploy.no_ventoy_desc": "Hybridmodus erfordert lokale Ventoy CLI-Toolchain. Wir empfehlen den Cloud-Modus!",
-  "deploy.result_batch_success": "1-Sekunden-Cloud-Installationsdatenträger erfolgreich auf {count} Laufwerken bereitgestellt!",
+  "deploy.result_batch_success":
+    "1-Sekunden-Cloud-Installationsdatenträger erfolgreich auf {count} Laufwerken bereitgestellt!",
   "deploy.result_success": "Modus {mode} erfolgreich auf {targets} bereitgestellt",
   "deploy.alert_success": "Bereitstellung erfolgreich!",
   "deploy.safely_eject_btn": "Datenträger sicher auswerfen",
   "deploy.success_banner_title": "Boot-Laufwerk erfolgreich erstellt!",
-  "deploy.success_banner_desc": "Boot-Dateien und Firmware geschrieben. Vor dem Trennen sicher auswerfen, um Datenverlust zu vermeiden.",
+  "deploy.success_banner_desc":
+    "Boot-Dateien und Firmware geschrieben. Vor dem Trennen sicher auswerfen, um Datenverlust zu vermeiden.",
   "deploy.toast_auto_ejected": "Erstellung abgeschlossen! {count} Datenträgere automatisch sicher ausgeworfen.",
   "deploy.confirm_auto_eject_title": "Schreibvorgang abgeschlossen — Sicher auswerfen?",
-  "deploy.confirm_auto_eject_desc": "Alle Daten wurden erfolgreich geschrieben. Möchten Sie das Datenträger jetzt sicher auswerfen?",
+  "deploy.confirm_auto_eject_desc":
+    "Alle Daten wurden erfolgreich geschrieben. Möchten Sie das Datenträger jetzt sicher auswerfen?",
   "deploy.confirm_auto_eject_yes": "Sicher auswerfen",
   "deploy.confirm_auto_eject_no": "Nicht jetzt",
   "deploy.alert_fail": "Bereitstellung fehlgeschlagen:",
@@ -279,7 +293,8 @@ export const deDe: TranslationDict = {
   "settings.ventoy_timeout": "Ventoy-Menü-Time-out (Sekunden):",
   "confirm.title": "Hochrisiko-Formatierungswarnung",
   "confirm.warning_title": "Warnung: Formatierung löscht alle Daten!",
-  "confirm.warning_desc": "Das ausgewählte Datenträger wird neu partitioniert und formatiert. Alle vorhandenen Dateien werden vollständig gelöscht. Stellen Sie sicher, dass Sie wichtige Daten gesichert haben!",
+  "confirm.warning_desc":
+    "Das ausgewählte Datenträger wird neu partitioniert und formatiert. Alle vorhandenen Dateien werden vollständig gelöscht. Stellen Sie sicher, dass Sie wichtige Daten gesichert haben!",
   "confirm.mode_title": "Bereitstellungsmodus:",
   "confirm.fs_title": "Ziel-Dateisystem:",
   "confirm.disks_title": "Zu formatierende Datenträgere ({count}):",
@@ -289,11 +304,14 @@ export const deDe: TranslationDict = {
   "confirm.title_mixed": "Intelligente hybride Bereitstellungsbestätigung",
   "confirm.title_danger": "Formatierungswarnung: Festplatteninitialisierung",
   "confirm.safe_banner_title": "Hinweis zum inkrementellen In-Place-Update (Datensicherheit)",
-  "confirm.safe_banner_desc": "Ventoy / UniBoot-Bootstruktur auf dem Ziel-Datenträger erkannt. Das System führt ein inkrementelles Update durch und überspringt die Formatierung. Alle vorhandenen Dateien und ISO-Images bleiben zu 100 % erhalten!",
-  "confirm.mixed_banner_title": "Intelligenter Hybridmodus: In-Place-Update für Boot-Laufwerke, Formatierung für leere Laufwerke",
+  "confirm.safe_banner_desc":
+    "Ventoy / UniBoot-Bootstruktur auf dem Ziel-Datenträger erkannt. Das System führt ein inkrementelles Update durch und überspringt die Formatierung. Alle vorhandenen Dateien und ISO-Images bleiben zu 100 % erhalten!",
+  "confirm.mixed_banner_title":
+    "Intelligenter Hybridmodus: In-Place-Update für Boot-Laufwerke, Formatierung für leere Laufwerke",
   "confirm.mixed_banner_desc": "{ventoyCount} Boot-Laufwerke und {blankCount} leere Laufwerke ausgewählt.",
   "confirm.danger_banner_title": "Warnung: Formatierung ist unwiderruflich!",
-  "confirm.danger_banner_desc": "Der Schreibvorgang partitioniert und formatiert das Zielgerät neu (MBR/GPT). Alle vorhandenen Daten werden vollständig gelöscht!",
+  "confirm.danger_banner_desc":
+    "Der Schreibvorgang partitioniert und formatiert das Zielgerät neu (MBR/GPT). Alle vorhandenen Daten werden vollständig gelöscht!",
   "confirm.summary_title": "Ziel-Datenträgere für die Boot-Bereitstellung:",
   "confirm.smart_safe_tag": "Smart-Sicher",
   "confirm.ventoy_group_title": "In-Place-Upgrade-Laufwerke (Alle ISOs bleiben erhalten):",
@@ -311,10 +329,14 @@ export const deDe: TranslationDict = {
   "confirm.no": "Abbrechen",
   "confirm.will_format": "Vollständige Formatierung",
   "confirm.no_format": "Intelligente Vor-Ort-Aktualisierung",
-  "deploy.toast_target_changed": "Der ausgewählte Zieldatenträger hat sich geändert oder ist nicht mehr verfügbar. Bitte erneut scannen.",
-  "deploy.toast_some_disks_removed": "{count} nicht verfügbare Festplatte(n) automatisch entfernt, fahre mit verbleibenden Festplatten fort",
-  "deploy.error_system_disk_blocked": "⛔ Blockiert: {disks} ist eine Systemfestplatte. USB-Startdisk kann nicht auf Systemlaufwerk bereitgestellt werden!",
-  "deploy.error_readonly_disk": "🔒 Schreibgeschützt: {disks} ist schreibgeschützt. Bitte entfernen Sie den Schreibschutz oder verwenden Sie ein anderes USB-Gerät",
+  "deploy.toast_target_changed":
+    "Der ausgewählte Zieldatenträger hat sich geändert oder ist nicht mehr verfügbar. Bitte erneut scannen.",
+  "deploy.toast_some_disks_removed":
+    "{count} nicht verfügbare Festplatte(n) automatisch entfernt, fahre mit verbleibenden Festplatten fort",
+  "deploy.error_system_disk_blocked":
+    "⛔ Blockiert: {disks} ist eine Systemfestplatte. USB-Startdisk kann nicht auf Systemlaufwerk bereitgestellt werden!",
+  "deploy.error_readonly_disk":
+    "🔒 Schreibgeschützt: {disks} ist schreibgeschützt. Bitte entfernen Sie den Schreibschutz oder verwenden Sie ein anderes USB-Gerät",
   "deploy.start_cloud_create": "Cloud-Boot-Disk erstellen",
   "deploy.batch_update": "Stapel-Update ohne Datenverlust starten ({count} Laufwerke)",
   "deploy.batch_mixed": "Gemischte Stapel-Bereitstellung starten ({count} Laufwerke)",
@@ -332,16 +354,20 @@ export const deDe: TranslationDict = {
   "inspector.vendor": "Hersteller / Marke:",
   "inspector.bus_speed": "Bus-Protokoll & Geschwindigkeit:",
   "inspector.fake_report": "Gefälschte/Herabgestufte USB 3.0 Analyse:",
-  "inspector.fake_text": "Herabgestuftes gefälschtes USB 3.0 (blauer/schwarzer Port, aber internes Protokoll auf USB 2.0 480Mb/s ausgehandelt)",
+  "inspector.fake_text":
+    "Herabgestuftes gefälschtes USB 3.0 (blauer/schwarzer Port, aber internes Protokoll auf USB 2.0 480Mb/s ausgehandelt)",
   "inspector.genuine_text": "Echter High-Speed USB 3.0/3.1 Controller",
   "inspector.smart": "SMART-Gesundheit:",
   "inspector.sector": "Sektorgröße:",
   "inspector.fake_title": "Warnung vor gefälschtem USB 3.0!",
-  "inspector.fake_desc": "Gerät wirbt mit USB 3.0/3.1, aber die tatsächliche PHY-Geschwindigkeit beträgt nur {speed} (USB 2.0 PHY).",
+  "inspector.fake_desc":
+    "Gerät wirbt mit USB 3.0/3.1, aber die tatsächliche PHY-Geschwindigkeit beträgt nur {speed} (USB 2.0 PHY).",
   "inspector.genuine_title": "Physikalische Hardwareüberprüfung bestanden (Echtes USB 3.0+ Gerät)",
-  "inspector.genuine_desc": "Physikalische PHY-Schicht handelte echte SuperSpeed/SuperSpeed+-Verbindung mit {speed} aus.",
+  "inspector.genuine_desc":
+    "Physikalische PHY-Schicht handelte echte SuperSpeed/SuperSpeed+-Verbindung mit {speed} aus.",
   "inspector.usb2_title": "Standard USB 2.0 Schnittstelle",
-  "inspector.usb2_desc": "Gerätehardware entspricht USB 2.0 Spezifikation mit einer theoretischen Höchstgeschwindigkeit von 480 Mb/s.",
+  "inspector.usb2_desc":
+    "Gerätehardware entspricht USB 2.0 Spezifikation mit einer theoretischen Höchstgeschwindigkeit von 480 Mb/s.",
   "inspector.section_basic": "Grundlegende Geräteinformationen",
   "inspector.section_hw": "Hardware-Details",
   "inspector.lbl_name": "Gerätename",
@@ -445,8 +471,10 @@ export const deDe: TranslationDict = {
   "diag.action_reformat_title": "Neu formatieren (reformat)",
   "diag.action_remount_title": "Neu einbinden (remount)",
   "diag.action_retry_title": "Wiederholen (retry)",
-  "diag.action_reformat_desc": "Unterbrechung der Bereitstellung hat Partitionstabelle oder Dateisystem beschädigt. Neuformatierung wird empfohlen.",
-  "diag.action_remount_desc": "Zieleinhängepunkt während des Schreibens getrennt. Bitte Datenträger-Gerät neu einstecken oder Volume neu einhängen.",
+  "diag.action_reformat_desc":
+    "Unterbrechung der Bereitstellung hat Partitionstabelle oder Dateisystem beschädigt. Neuformatierung wird empfohlen.",
+  "diag.action_remount_desc":
+    "Zieleinhängepunkt während des Schreibens getrennt. Bitte Datenträger-Gerät neu einstecken oder Volume neu einhängen.",
   "diag.action_retry_desc": "Umgebung und Gerätestatus sind intakt. Sie können die Bereitstellung sicher wiederholen.",
   "about.updating": "Aktualisierung läuft ({progress}%)",
   "about.updateTo": "Online-Update auf {tag}",
@@ -463,7 +491,8 @@ export const deDe: TranslationDict = {
   "dialog.textFilesFilter": "Textdateien (*.txt)",
   "dialog.allFilesFilter": "Alle Dateien (*.*)",
   "dialog.selectIsoTitle": "Systemabbild-Dateien auswählen (*.iso, *.wim, *.img usw.)",
-  "dialog.ventoyFilter": "Ventoy-Quellabbilder (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy-Quellabbilder (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Hash berechnen",
   "checksum.calculating": "Hash wird berechnet...",
   "checksum.algo_label": "Algorithmus",
@@ -507,13 +536,17 @@ export const deDe: TranslationDict = {
   "privilege.status_standard": "Nicht autorisiert",
   "privilege.btn_elevate": "Admin-Rechte anfordern",
   "privilege.modal_title": "Administratorrechte erforderlich",
-  "privilege.modal_subtitle": "Systemautorisierung zum Lesen von Boot-Daten und Schreiben von Datenträgern erforderlich",
+  "privilege.modal_subtitle":
+    "Systemautorisierung zum Lesen von Boot-Daten und Schreiben von Datenträgern erforderlich",
   "privilege.reason_title": "Warum sind Administratorrechte erforderlich?",
-  "privilege.reason_desc": "Das Betriebssystem isoliert Raw-Sektoren und EFI-Partitionen. Die Autorisierung ermöglicht das direkte Auslesen und die sichere Erstellung.",
+  "privilege.reason_desc":
+    "Das Betriebssystem isoliert Raw-Sektoren und EFI-Partitionen. Die Autorisierung ermöglicht das direkte Auslesen und die sichere Erstellung.",
   "privilege.scope_title": "Berechtigungsumfang",
-  "privilege.scope_desc": "Ausschließlich auf ausgewählte externe USB-Laufwerke beschränkt. Interne Systemlaufwerke werden niemals berührt.",
+  "privilege.scope_desc":
+    "Ausschließlich auf ausgewählte externe USB-Laufwerke beschränkt. Interne Systemlaufwerke werden niemals berührt.",
   "privilege.safety_title": "Sicherheit & Transparenz",
-  "privilege.safety_desc": "Die Inspektion ist rein schreibgeschützt und zerstört keine Daten; der Quellcode ist vollständig quelloffen.",
+  "privilege.safety_desc":
+    "Die Inspektion ist rein schreibgeschützt und zerstört keine Daten; der Quellcode ist vollständig quelloffen.",
   "privilege.confirm_btn": "Jetzt autorisieren",
   "privilege.cancel_btn": "Abbrechen",
   "privilege.success_msg": "Administratorrechte gewährt",

@@ -13,7 +13,6 @@ import (
 	"regexp"
 	"runtime"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/snowdreamtech/unibootdesktop/internal/logger"
@@ -191,22 +190,6 @@ func extractPlistString(plistStr string, key string) string {
 	return strings.TrimSpace(rest[:endStr])
 }
 
-// canAccessDeviceNode checks whether the current process has read-write access to path.
-// On Unix (macOS, Linux), syscall.Access tests R_OK|W_OK without opening a character device descriptor,
-// crucially preventing macOS kernel from firing media-update notifications to diskarbitrationd upon fd close.
-func canAccessDeviceNode(path string) bool {
-	if runtime.GOOS == "windows" {
-		f, err := os.OpenFile(path, os.O_RDWR, 0)
-		if err == nil {
-			_ = f.Close()
-			return true
-		}
-		return false
-	}
-	// 6 = R_OK (4) | W_OK (2)
-	return syscall.Access(path, 6) == nil
-}
-
 func ensureDiskPermissions(targetPath string) (func(), error) {
 	noop := func() {}
 	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" || !strings.HasPrefix(targetPath, "/dev/") {
@@ -379,9 +362,7 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 		var stderr bytes.Buffer
 		cmd.Stderr = &stderr
 
-		if runtime.GOOS != "windows" {
-			cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true}
-		}
+		setQEMUSysProcAttr(cmd)
 
 		if err := cmd.Start(); err != nil {
 			remountTargetDisk(targetPath)

@@ -147,7 +147,8 @@ export const enUs: TranslationDict = {
   "iso.drag_unsupported": "No supported image files detected (.iso, .wim, .img, etc.)",
   "iso.preflight_title": "Preflight Check",
   "iso.conflict_title": "Duplicate Filename Found",
-  "iso.conflict_desc": "A file with the same name already exists in the target USB iso directory. Choose how to handle it. Hashes are not compared.",
+  "iso.conflict_desc":
+    "A file with the same name already exists in the target USB iso directory. Choose how to handle it. Hashes are not compared.",
   "iso.conflict_action": "Action",
   "iso.conflict_keep_both": "Keep",
   "iso.conflict_replace": "Overwrite",
@@ -325,9 +326,12 @@ export const enUs: TranslationDict = {
   "confirm.will_format": "Full Format",
   "confirm.no_format": "Smart In-Place Update",
   "deploy.toast_target_changed": "The selected target disk changed or is no longer available. Please scan again.",
-  "deploy.toast_some_disks_removed": "{count} unavailable disk(s) removed automatically, continuing with remaining disks",
-  "deploy.error_system_disk_blocked": "⛔ Blocked: {disks} is a system disk. Cannot deploy USB boot disk to system drive!",
-  "deploy.error_readonly_disk": "🔒 Write-protected: {disks} is read-only. Please remove write protection or use a different USB",
+  "deploy.toast_some_disks_removed":
+    "{count} unavailable disk(s) removed automatically, continuing with remaining disks",
+  "deploy.error_system_disk_blocked":
+    "⛔ Blocked: {disks} is a system disk. Cannot deploy USB boot disk to system drive!",
+  "deploy.error_readonly_disk":
+    "🔒 Write-protected: {disks} is read-only. Please remove write protection or use a different USB",
   "deploy.start_cloud_create": "Start Creating Cloud Boot Disk",
   "deploy.batch_update": "Start Batch In-Place Update ({count} disks)",
   "deploy.batch_mixed": "Start Batch Mixed Deploy ({count} disks)",

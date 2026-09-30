@@ -99,7 +99,8 @@ export const daDk: TranslationDict = {
   "disk.tag_boot_hybrid": "Hybrid-start",
   "disk.tag_boot_thirdparty": "Tredjeparts-start",
   "confirm.cloud_to_hybrid_warn_title": "Bemærk: Skift til hybridtilstand kræver fuld formatering",
-  "confirm.cloud_to_hybrid_warn_desc": "Denne disk er i ren Cloud-starttilstand. Ventoy-hybridtilstand kræver genopbygning af MBR og partitionstabel, hvilket vil SLETTE alle data og ISO'er!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Denne disk er i ren Cloud-starttilstand. Ventoy-hybridtilstand kræver genopbygning af MBR og partitionstabel, hvilket vil SLETTE alle data og ISO'er!",
   "disk.tag_ssd": "Bærbar SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Krypteret drev",
@@ -107,7 +108,8 @@ export const daDk: TranslationDict = {
   "disk.tag_hdd": "Bærbar HDD",
   "disk.tag_key": "Sikkerhedsnøgle",
   "disk.tag_cdrom": "Virtuel CD-ROM",
-  "disk.tooltip_uniboot_hybrid": "Ventoy / UniBoot bootdrev (Hybrid-tilstand, ikke-destruktiv opgradering understøttet)",
+  "disk.tooltip_uniboot_hybrid":
+    "Ventoy / UniBoot bootdrev (Hybrid-tilstand, ikke-destruktiv opgradering understøttet)",
   "disk.tooltip_uniboot_cloud": "UniBoot Cloud-bootdrev (Cloud-tilstand, ikke-destruktiv opdatering understøttet)",
   "disk.tooltip_third_party_boot": "Tredjeparts bootstruktur fundet",
   "log.title": "Logcenter",
@@ -127,9 +129,11 @@ export const daDk: TranslationDict = {
   "log.level_error": "FEJL",
   "log.level_debug": "Fejlfinding",
   "safe.title_cloud": "Eksisterende Ventoy/UniBoot-drev fundet (Cloud-tilstand genopfrisker kun ESP-partitionen)",
-  "safe.desc_cloud": "Cloud-tilstand bevarer UNIBOOT-dobbeltpartitionslayout. Genopfriskning af ESP lader alle ISO-filer og data være intakte!",
+  "safe.desc_cloud":
+    "Cloud-tilstand bevarer UNIBOOT-dobbeltpartitionslayout. Genopfriskning af ESP lader alle ISO-filer og data være intakte!",
   "safe.title_hybrid": "Eksisterende Ventoy-drev fundet (In-place opdatering i hybrid-tilstand)",
-  "safe.desc_hybrid": "Hybrid-tilstand bevarer alle eksisterende ISO-filer uden formatering og indsætter UniBoot mørkt tema og cloud-menu sikkert!",
+  "safe.desc_hybrid":
+    "Hybrid-tilstand bevarer alle eksisterende ISO-filer uden formatering og indsætter UniBoot mørkt tema og cloud-menu sikkert!",
   "common.optional": "Valgfrit",
   "common.optional_test": "Valgfri test",
   "iso.title": "Lokale systembilledekilder (ISO / IMG / WIM / VHD)",
@@ -144,7 +148,8 @@ export const daDk: TranslationDict = {
   "iso.drag_unsupported": "Ingen understøttede billedfiler fundet (.iso, .wim, .img osv.)",
   "iso.preflight_title": "Kontrol før skrivning",
   "iso.conflict_title": "Filnavnet findes allerede",
-  "iso.conflict_desc": "Der findes allerede en fil med samme navn i mål-USB'ens iso-mappe. Vælg en handling. Hash sammenlignes ikke.",
+  "iso.conflict_desc":
+    "Der findes allerede en fil med samme navn i mål-USB'ens iso-mappe. Vælg en handling. Hash sammenlignes ikke.",
   "iso.conflict_action": "Handling",
   "iso.conflict_keep_both": "Behold",
   "iso.conflict_replace": "Overskriv",
@@ -154,13 +159,15 @@ export const daDk: TranslationDict = {
   "iso.conflict_confirm": "Bekræft og fortsæt",
   "iso.preflight_failed": "Kontrollen før skrivning mislykkedes",
   "deploy.title": "Oprettelse af bootbart drev og QEMU-test",
-  "deploy.desc_cloud": "Ren iPXE Cloud-boot • Ultrahurtig opsætning af to partitioner med multi-arch iPXE-netværksfirmware.",
+  "deploy.desc_cloud":
+    "Ren iPXE Cloud-boot • Ultrahurtig opsætning af to partitioner med multi-arch iPXE-netværksfirmware.",
   "deploy.desc_hybrid": "Ventoy CLI lokal motor • Ventoy hybrid-partition opsætning med lokal ISO-styring.",
   "deploy.target_device": "Målenhed:",
   "deploy.batch_target": "Valgt {count} USB-drev",
   "deploy.start_create": "Opret bootdisk",
   "deploy.tip_batch_update_all": "Batch-opdatering uden datatab: Alle {count} valgte USB-drev opdateres direkte",
-  "deploy.tip_batch_mixed": "Blandet batch-implementering: {bootCount} drev opdatering uden datatab, {blankCount} drev ny formatering",
+  "deploy.tip_batch_mixed":
+    "Blandet batch-implementering: {bootCount} drev opdatering uden datatab, {blankCount} drev ny formatering",
   "deploy.start_update": "Opgradering på stedet (Datasikker)",
   "deploy.batch_create": "Start batch-oprettelse ({count} drev)",
   "deploy.writing": "Skriver boot-firmwarepakker...",
@@ -175,19 +182,24 @@ export const daDk: TranslationDict = {
   "deploy.tip_writing": "Skriver boot-firmware...",
   "deploy.tip_select_single": "Vælg venligst et USB-måldrev først",
   "deploy.tip_select_batch": "Tjek venligst mål-USB-drev for batch-implementering",
-  "deploy.tip_macos_unsupported": "macOS understøtter ikke ny formatering i hybridtilstand (brug Cloud-tilstand eller initialiser på Win/Linux først)",
+  "deploy.tip_macos_unsupported":
+    "macOS understøtter ikke ny formatering i hybridtilstand (brug Cloud-tilstand eller initialiser på Win/Linux først)",
   "deploy.tip_need_ventoy": "Hybrid-tilstand kræver lokalt Ventoy CLI-værktøjssæt. Vi anbefaler Sky-tilstand!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Fresh-formatering understøttes ikke",
-  "deploy.macos_alert_desc": "Officiel Ventoy understøtter endnu ikke kørsel af formateringsprogrammet på macOS. For at oprette et nyt [Hybrid-drev] kræves Ventoy CLI. Det anbefales at bruge [Sky-tilstand (1-sekunds cloud-bootdrev)]!",
+  "deploy.macos_alert_desc":
+    "Officiel Ventoy understøtter endnu ikke kørsel af formateringsprogrammet på macOS. For at oprette et nyt [Hybrid-drev] kræves Ventoy CLI. Det anbefales at bruge [Sky-tilstand (1-sekunds cloud-bootdrev)]!",
   "deploy.no_ventoy_title": "Ventoy CLI eksekverbar ikke fundet",
-  "deploy.no_ventoy_desc": "Oprettelse af [Hybrid-drev] kræver lokalt installeret Ventoy CLI. Vælg venligst den understøttede [Sky-tilstand]!",
+  "deploy.no_ventoy_desc":
+    "Oprettelse af [Hybrid-drev] kræver lokalt installeret Ventoy CLI. Vælg venligst den understøttede [Sky-tilstand]!",
   "deploy.result_batch_success": "1-sekunds cloud-installationsdisk udrullet til {count} drev!",
   "deploy.result_success": "Tilstand {mode} udrullet til {targets}",
   "deploy.alert_success": "Udrulning gennemført!",
   "deploy.safely_eject_btn": "Sikker udskubning af USB-drev",
   "deploy.success_banner_title": "Startdisk oprettet med succes!",
-  "deploy.success_banner_desc": "Bootfiler og firmware er skrevet. Skub sikkert ud, før du frakobler, for at undgå datatab.",
-  "deploy.toast_auto_ejected": "Oprettelse fuldført! {count} USB-drev er automatisk blevet skånsomt skubbet ud. Alle data er gemt.",
+  "deploy.success_banner_desc":
+    "Bootfiler og firmware er skrevet. Skub sikkert ud, før du frakobler, for at undgå datatab.",
+  "deploy.toast_auto_ejected":
+    "Oprettelse fuldført! {count} USB-drev er automatisk blevet skånsomt skubbet ud. Alle data er gemt.",
   "deploy.confirm_auto_eject_title": "Skrivning fuldført — Skub ud sikkert?",
   "deploy.confirm_auto_eject_desc": "Alle data blev skrevet igennem. Vil du skubbe USB-drevet ud sikkert nu?",
   "deploy.confirm_auto_eject_yes": "Skub sikkert ud",
@@ -225,7 +237,8 @@ export const daDk: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Klik venligst for at vælge et USB-måldrev fra venstre panel først!",
-  "vm.toast_not_installed": "QEMU-emulator blev ikke fundet! Installer venligst QEMU (bryginstaller qemu eller portinstaller qemu)",
+  "vm.toast_not_installed":
+    "QEMU-emulator blev ikke fundet! Installer venligst QEMU (bryginstaller qemu eller portinstaller qemu)",
   "vm.cfg_secure_boot": "SecureBoot-simulering",
   "vm.cfg_accel": "Hardwareacceleration",
   "vm.cfg_ram": "RAM-tildeling",
@@ -279,7 +292,8 @@ export const daDk: TranslationDict = {
   "settings.ventoy_timeout": "Ventoy Menu Timeout (sekunder):",
   "confirm.title": "High-Risk Format Advarsel",
   "confirm.warning_title": "Advarsel: Formatting will erase all data!",
-  "confirm.warning_desc": "Det valgte USB-drev vil blive re-partitioneret og formateret. Alle eksisterende filer vil blive slettet fuldstændigt. Sørg for, at du har sikkerhedskopieret vigtige data!",
+  "confirm.warning_desc":
+    "Det valgte USB-drev vil blive re-partitioneret og formateret. Alle eksisterende filer vil blive slettet fuldstændigt. Sørg for, at du har sikkerhedskopieret vigtige data!",
   "confirm.mode_title": "Implementeringstilstand:",
   "confirm.fs_title": "Målfilsystem:",
   "confirm.disks_title": "Drev, der skal formateres ({count}):",
@@ -289,11 +303,14 @@ export const daDk: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Bekræftation",
   "confirm.title_danger": "Format Advarsel: Disk Initialization",
   "confirm.safe_banner_title": "In-Place Incremental Update Notice (Datasikker)",
-  "confirm.safe_banner_desc": "Ventoy / UniBoot boot-struktur fundet på måldrevet. Systemet vil udføre et trinvist opdaterings-springningsformat. Alle eksisterende filer og ISO'er er 100% bevarede!",
+  "confirm.safe_banner_desc":
+    "Ventoy / UniBoot boot-struktur fundet på måldrevet. Systemet vil udføre et trinvist opdaterings-springningsformat. Alle eksisterende filer og ISO'er er 100% bevarede!",
   "confirm.mixed_banner_title": "Smart blandet tilstand: Opdatering på stedet til opstartsdrev, format til tomme drev",
-  "confirm.mixed_banner_desc": "Valgte {ventoyCount} opstartsdrev (på stedet opdatering) og {blankCount} tomme drev (fuldt format).",
+  "confirm.mixed_banner_desc":
+    "Valgte {ventoyCount} opstartsdrev (på stedet opdatering) og {blankCount} tomme drev (fuldt format).",
   "confirm.danger_banner_title": "Advarsel: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Skrivning vil re-partitionere og formatere målenheden (MBR/GPT). Alle eksisterende filer på udvalgte drev vil blive fuldstændigt slettet!",
+  "confirm.danger_banner_desc":
+    "Skrivning vil re-partitionere og formatere målenheden (MBR/GPT). Alle eksisterende filer på udvalgte drev vil blive fuldstændigt slettet!",
   "confirm.summary_title": "Måldrev til opstartsimplementering:",
   "confirm.smart_safe_tag": "Smart-beskyttelse",
   "confirm.ventoy_group_title": "Opgraderingsdrev på stedet (alle ISO'er bevaret):",
@@ -311,10 +328,13 @@ export const daDk: TranslationDict = {
   "confirm.no": "Annuller",
   "confirm.will_format": "Fuld formatering",
   "confirm.no_format": "Intelligent opgradering på stedet",
-  "deploy.toast_target_changed": "Det valgte måldrev har ændret sig eller er ikke længere tilgængeligt. Scan venligst igen.",
+  "deploy.toast_target_changed":
+    "Det valgte måldrev har ændret sig eller er ikke længere tilgængeligt. Scan venligst igen.",
   "deploy.toast_some_disks_removed": "{count} utilgængelige diske fjernet automatisk, fortsætter med resterende diske",
-  "deploy.error_system_disk_blocked": "⛔ Blokeret: {disks} er en systemdisk. Kan ikke implementere USB-opstartsdisk til systemdrevet!",
-  "deploy.error_readonly_disk": "🔒 Skrivebeskyttet: {disks} er skrivebeskyttet. Fjern skrivebeskyttelsen eller brug en anden USB",
+  "deploy.error_system_disk_blocked":
+    "⛔ Blokeret: {disks} er en systemdisk. Kan ikke implementere USB-opstartsdisk til systemdrevet!",
+  "deploy.error_readonly_disk":
+    "🔒 Skrivebeskyttet: {disks} er skrivebeskyttet. Fjern skrivebeskyttelsen eller brug en anden USB",
   "deploy.start_cloud_create": "Opret cloud-bootdisk",
   "deploy.batch_update": "Start batch-opdatering uden datatab ({count} USB-drev)",
   "deploy.batch_mixed": "Start blandet batch-implementering ({count} USB-drev)",
@@ -337,7 +357,8 @@ export const daDk: TranslationDict = {
   "inspector.smart": "SMART helbredsstatus:",
   "inspector.sector": "Sektorstørrelse:",
   "inspector.fake_title": "Fake USB 3.0 Advarsel Alert!",
-  "inspector.fake_desc": "Enheden annoncerer USB 3.0/3.1, men den faktiske fysiske laghastighed forhandles kun ved {speed} (USB 2.0 High-Speed PHY). Dette drev har sandsynligvis spoofet firmware eller en falsk blå port.",
+  "inspector.fake_desc":
+    "Enheden annoncerer USB 3.0/3.1, men den faktiske fysiske laghastighed forhandles kun ved {speed} (USB 2.0 High-Speed PHY). Dette drev har sandsynligvis spoofet firmware eller en falsk blå port.",
   "inspector.genuine_title": "Fysisk hardwarebekræftelse bestået (ægte USB 3.0+-enhed)",
   "inspector.genuine_desc": "Fysisk PHY-lag etablerede ægte SuperSpeed/SuperSpeed+-forbindelse med {speed}.",
   "inspector.usb2_title": "Standard USB 2.0-grænseflade",
@@ -445,8 +466,10 @@ export const daDk: TranslationDict = {
   "diag.action_reformat_title": "Genformater (reformat)",
   "diag.action_remount_title": "Genmonter (remount)",
   "diag.action_retry_title": "Prøv igen (retry)",
-  "diag.action_reformat_desc": "Afbrydelse af skrivning beskadigede partitionstabellen eller filsystemet. En ny formatering anbefales.",
-  "diag.action_remount_desc": "Målets monteringssti blev afbrudt under skrivning. Genindsæt USB-drevet eller genmonter disken.",
+  "diag.action_reformat_desc":
+    "Afbrydelse af skrivning beskadigede partitionstabellen eller filsystemet. En ny formatering anbefales.",
+  "diag.action_remount_desc":
+    "Målets monteringssti blev afbrudt under skrivning. Genindsæt USB-drevet eller genmonter disken.",
   "diag.action_retry_desc": "Miljøet og enhedsstatus er intakt. Du kan sikkert prøve installationen igen.",
   "about.updating": "Opdaterer ({progress}%)",
   "about.updateTo": "Online opdatering til {tag}",
@@ -463,7 +486,8 @@ export const daDk: TranslationDict = {
   "dialog.textFilesFilter": "Tekstfiler (*.txt)",
   "dialog.allFilesFilter": "Alle filer (*.*)",
   "dialog.selectIsoTitle": "Vælg systemaftryksfiler (*.iso, *.wim, *.img osv.)",
-  "dialog.ventoyFilter": "Ventoy-kildeaftryk (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy-kildeaftryk (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Beregne Hash",
   "checksum.calculating": "Beregner Hash...",
   "checksum.algo_label": "Algoritme",
@@ -509,7 +533,8 @@ export const daDk: TranslationDict = {
   "privilege.modal_title": "Administratoradgang påkrævet",
   "privilege.modal_subtitle": "Systemgodkendelse påkrævet for at læse startdata og skrive til diske",
   "privilege.reason_title": "Hvorfor kræves administratorrettigheder?",
-  "privilege.reason_desc": "Styresystemet isolerer rå sektorer og EFI-partitioner. Godkendelse muliggør direkte detektion og sikker diskoprettelse.",
+  "privilege.reason_desc":
+    "Styresystemet isolerer rå sektorer og EFI-partitioner. Godkendelse muliggør direkte detektion og sikker diskoprettelse.",
   "privilege.scope_title": "Adgangsomfang",
   "privilege.scope_desc": "Strengt begrænset til valgte eksterne USB-drev. Interne systemdiske berøres aldrig.",
   "privilege.safety_title": "Sikkerhed og gennemsigtighed",

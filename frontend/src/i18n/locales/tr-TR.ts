@@ -24,7 +24,8 @@ export const trTr: TranslationDict = {
   "common.langAuto": "Dil / Lang (Otomatik)",
   "common.lang": "Dil / Lang",
   "vm.startSuccess": "Disk için sanal makine simülasyonu başarıyla başlatıldı: {disk} ({device})",
-  "vm.backendNotReady": "Arka plan API hazır değil: Wails bağlama arayüzleri yükleniyor, lütfen UniBoot'u yeniden başlatın.",
+  "vm.backendNotReady":
+    "Arka plan API hazır değil: Wails bağlama arayüzleri yükleniyor, lütfen UniBoot'u yeniden başlatın.",
   "vm.demoModeStart": "[Demo Modu] QEMU simülatör doğrulaması başlatılıyor: {disk} ({device})",
   "vm.startFailed": "QEMU simülatörü başlatılamadı: {error}",
   "disk.writingImageProgress": "Imaj yazılıyor ({fileIndex}/{totalFiles}): {currentFile} (%{progress})",
@@ -99,7 +100,8 @@ export const trTr: TranslationDict = {
   "disk.tag_boot_hybrid": "Hibrit Önyükleme",
   "disk.tag_boot_thirdparty": "3. Taraf Önyükleme",
   "confirm.cloud_to_hybrid_warn_title": "Bildirim: Hibrit moda geçiş tam biçimlendirme gerektirir",
-  "confirm.cloud_to_hybrid_warn_desc": "Bu disk saf Bulut Önyükleme modundadır. Ventoy Hibrit modu, MBR ve bölüm tablosunun yeniden oluşturulmasını gerektirir ve tüm verileri ile ISO'ları SİLECEKTİR!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Bu disk saf Bulut Önyükleme modundadır. Ventoy Hibrit modu, MBR ve bölüm tablosunun yeniden oluşturulmasını gerektirir ve tüm verileri ile ISO'ları SİLECEKTİR!",
   "disk.tag_ssd": "Taşınabilir SSD",
   "disk.tag_typec": "Type-C sürücü",
   "disk.tag_secure": "Şifreli Sürücü",
@@ -109,7 +111,8 @@ export const trTr: TranslationDict = {
   "disk.tag_cdrom": "Sanal CD-ROM",
   "disk.tooltip_uniboot_hybrid": "Ventoy / UniBoot Önyükleme Sürücüsü (Karma Mod, Yükseltme desteklenir)",
   "disk.tooltip_uniboot_cloud": "UniBoot Bulut Önyükleme Sürücüsü (Bulut Modu, Veri kayıpsız güncelleme)",
-  "disk.tooltip_third_party_boot": "Üçüncü taraf önyükleme sürücüsü (Rufus/PE/ISO yapısı içerir, biçimlendirme gerekli)",
+  "disk.tooltip_third_party_boot":
+    "Üçüncü taraf önyükleme sürücüsü (Rufus/PE/ISO yapısı içerir, biçimlendirme gerekli)",
   "log.title": "Günlük Merkezi",
   "log.live": "Canlı",
   "log.search_placeholder": "Günlüklerde ara...",
@@ -127,13 +130,16 @@ export const trTr: TranslationDict = {
   "log.level_error": "HATA",
   "log.level_debug": "Hata ayıklama",
   "safe.title_cloud": "Mevcut Ventoy/UniBoot Sürücüsü Algılandı (Bulut Modu yalnızca ESP bölümünü yeniler)",
-  "safe.desc_cloud": "Bulut Modu standart UNIBOOT çift bölüm düzenini korur. ESP bölümünü yenilemek tüm ISO ve dosyaları korur!",
+  "safe.desc_cloud":
+    "Bulut Modu standart UNIBOOT çift bölüm düzenini korur. ESP bölümünü yenilemek tüm ISO ve dosyaları korur!",
   "safe.title_hybrid": "Mevcut Ventoy Sürücüsü Algılandı (Karma Modda yerinde güncelleme)",
-  "safe.desc_hybrid": "Karma Mod tüm mevcut ISO dosyalarını biçimlendirmeden korur, UniBoot karanlık temasını ve bulut menüsünü güvenle ekler!",
+  "safe.desc_hybrid":
+    "Karma Mod tüm mevcut ISO dosyalarını biçimlendirmeden korur, UniBoot karanlık temasını ve bulut menüsünü güvenle ekler!",
   "common.optional": "İsteğe bağlı",
   "common.optional_test": "İsteğe bağlı test",
   "iso.title": "Yerel Sistem Görüntü Kaynakları (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Ventoy / UniBoot doğrudan önyükleme için /UNIBOOT/iso/ dizinine otomatik kopyalanacak ISO dosyalarını ekleyin.",
+  "iso.desc":
+    "Ventoy / UniBoot doğrudan önyükleme için /UNIBOOT/iso/ dizinine otomatik kopyalanacak ISO dosyalarını ekleyin.",
   "iso.add_btn": "Görüntü Dosyaları Ekle",
   "iso.empty_title": "Görüntü Dosyaları Eklemeniz İçin Tıklayın (Tekli veya Toplu Seçim)",
   "iso.empty_sub": ".iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw biçimlerini destekler",
@@ -144,7 +150,8 @@ export const trTr: TranslationDict = {
   "iso.drag_unsupported": "Desteklenen imaj dosyası algılanmadı (.iso, .wim, .img vb.)",
   "iso.preflight_title": "Yazma öncesi kontrol",
   "iso.conflict_title": "Aynı ada sahip dosya bulundu",
-  "iso.conflict_desc": "Hedef USB’nin iso klasöründe aynı ada sahip bir dosya zaten var. Nasıl işleneceğini seçin. Hash karşılaştırılmaz.",
+  "iso.conflict_desc":
+    "Hedef USB’nin iso klasöründe aynı ada sahip bir dosya zaten var. Nasıl işleneceğini seçin. Hash karşılaştırılmaz.",
   "iso.conflict_action": "İşlem",
   "iso.conflict_keep_both": "Sakla",
   "iso.conflict_replace": "Üzerine yaz",
@@ -154,13 +161,16 @@ export const trTr: TranslationDict = {
   "iso.conflict_confirm": "Onayla ve devam et",
   "iso.preflight_failed": "Yazma öncesi kontrol başarısız oldu",
   "deploy.title": "Önyüklenebilir Sürücü Oluşturma ve QEMU Testi",
-  "deploy.desc_cloud": "Saf iPXE Bulut Önyüklemesi • Çoklu mimari iPXE ağ bellenimi ile ultra hızlı çift bölüm kurulumu.",
+  "deploy.desc_cloud":
+    "Saf iPXE Bulut Önyüklemesi • Çoklu mimari iPXE ağ bellenimi ile ultra hızlı çift bölüm kurulumu.",
   "deploy.desc_hybrid": "Ventoy CLI Yerel Motoru • Yerel ISO yönetimi ile Ventoy hibrit bölüm kurulumu.",
   "deploy.target_device": "Hedef Cihaz:",
   "deploy.batch_target": "Seçilen {count} USB Sürücü",
   "deploy.start_create": "Önyükleme Diski Oluştur",
-  "deploy.tip_batch_update_all": "Kayıpsız toplu güncelleme: Seçilen tüm {count} USB sürücü yerinde güncellenecektir (veri ve ISO korunur)",
-  "deploy.tip_batch_mixed": "Karma dağıtım: {bootCount} sürücü yerinde güncellenir, {blankCount} sürücü sıfırdan biçimlendirilir",
+  "deploy.tip_batch_update_all":
+    "Kayıpsız toplu güncelleme: Seçilen tüm {count} USB sürücü yerinde güncellenecektir (veri ve ISO korunur)",
+  "deploy.tip_batch_mixed":
+    "Karma dağıtım: {bootCount} sürücü yerinde güncellenir, {blankCount} sürücü sıfırdan biçimlendirilir",
   "deploy.start_update": "Yerinde Yükseltmeyi Başlat (Veri Güvenli)",
   "deploy.batch_create": "Toplu Oluşturmayı Başlat ({count} Sürücü)",
   "deploy.writing": "Önyükleme Ürün Yazılımı Paketleri Yazılıyor...",
@@ -175,10 +185,12 @@ export const trTr: TranslationDict = {
   "deploy.tip_writing": "Önyükleme ürün yazılımı yazılıyor...",
   "deploy.tip_select_single": "Lütfen önce bir hedef USB sürücüsü seçin",
   "deploy.tip_select_batch": "Lütfen toplu oluşturma için hedef USB sürücülerini işaretleyin",
-  "deploy.tip_macos_unsupported": "macOS, Hibrit Mod'da ilk biçimlendirmeyi desteklemiyor (Bulut Modu kullanın veya Win/Linux'ta önce başlatın)",
+  "deploy.tip_macos_unsupported":
+    "macOS, Hibrit Mod'da ilk biçimlendirmeyi desteklemiyor (Bulut Modu kullanın veya Win/Linux'ta önce başlatın)",
   "deploy.tip_need_ventoy": "Hibrit Mod'da ilk biçimlendirme, yerel Ventoy CLI gerektirir",
   "deploy.macos_alert_title": "macOS üzerinde Ventoy CLI Sıfırdan Biçimlendirme Desteklenmiyor",
-  "deploy.macos_alert_desc": "Ventoy, macOS'ta doğrudan biçimlendirmeyi desteklemiyor. Yerel destek için Bulut Modunu kullanın veya önce Windows/Linux'ta Ventoy'u başlatın, ardından macOS'ta yerinde yükseltme yapın.",
+  "deploy.macos_alert_desc":
+    "Ventoy, macOS'ta doğrudan biçimlendirmeyi desteklemiyor. Yerel destek için Bulut Modunu kullanın veya önce Windows/Linux'ta Ventoy'u başlatın, ardından macOS'ta yerinde yükseltme yapın.",
   "deploy.no_ventoy_title": "Ventoy CLI Çalıştırılabilir Dosyası Algılanamadı",
   "deploy.no_ventoy_desc": "Hibrit Modu, yerel Ventoy CLI araç zinciri gerektirir. Bulut Modunu öneririz!",
   "deploy.result_batch_success": "1 Saniyede Bulut Kurulum Diski {count} diske başarıyla dağıtıldı!",
@@ -186,7 +198,8 @@ export const trTr: TranslationDict = {
   "deploy.alert_success": "Dağıtım Başarılı!",
   "deploy.safely_eject_btn": "USB'yi güvenle çıkar",
   "deploy.success_banner_title": "Önyükleme Sürücüsü Başarıyla Oluşturuldu!",
-  "deploy.success_banner_desc": "Önyükleme dosyaları ve bellenim yazıldı. Veri kaybını önlemek için çıkarmadan önce güvenle çıkarın.",
+  "deploy.success_banner_desc":
+    "Önyükleme dosyaları ve bellenim yazıldı. Veri kaybını önlemek için çıkarmadan önce güvenle çıkarın.",
   "deploy.toast_auto_ejected": "Tamamlandı! {count} USB sürücü otomatik olarak güvenle çıkarıldı.",
   "deploy.confirm_auto_eject_title": "Yazma tamamlandı — Güvenli çıkarılsın mı?",
   "deploy.confirm_auto_eject_desc": "Tüm veriler başarıyla yazıldı. USB sürücüyü şimdi güvenle çıkarmak ister misiniz?",
@@ -279,7 +292,8 @@ export const trTr: TranslationDict = {
   "settings.ventoy_timeout": "Ventoy Menü Zaman Aşımı (Saniye):",
   "confirm.title": "Yüksek Riskli Biçimlendirme Uyarısı",
   "confirm.warning_title": "Uyarı: Biçimlendirme tüm verileri silecektir!",
-  "confirm.warning_desc": "Seçilen USB sürücü yeniden bölümlenecek ve biçimlendirilecektir. Mevcut tüm dosyalar tamamen silinecektir. Önemli verilerinizi yedeklediğinizden emin olun!",
+  "confirm.warning_desc":
+    "Seçilen USB sürücü yeniden bölümlenecek ve biçimlendirilecektir. Mevcut tüm dosyalar tamamen silinecektir. Önemli verilerinizi yedeklediğinizden emin olun!",
   "confirm.mode_title": "Dağıtım Modu:",
   "confirm.fs_title": "Hedef Dosya Sistemi:",
   "confirm.disks_title": "Biçimlendirilecek USB Sürücüler ({count}):",
@@ -289,11 +303,14 @@ export const trTr: TranslationDict = {
   "confirm.title_mixed": "Akıllı Hibrit Dağıtım Onayı",
   "confirm.title_danger": "Biçimlendirme Uyarısı: Disk Başlatma",
   "confirm.safe_banner_title": "Artımlı Güncelleme Bildirimi (Veri Güvenliği)",
-  "confirm.safe_banner_desc": "Hedef USB sürücüsünde Ventoy / UniBoot önyükleme yapısı tespit edildi. Sistem biçimlendirmeyi atlayarak artımlı güncelleme gerçekleştirecektir. Mevcut tüm dosyalar ve ISO görüntüleri %100 korunur!",
-  "confirm.mixed_banner_title": "Akıllı Hibrit Mod: Önyükleme sürücüleri için yerinde güncelleme, boş sürücüler için biçimlendirme",
+  "confirm.safe_banner_desc":
+    "Hedef USB sürücüsünde Ventoy / UniBoot önyükleme yapısı tespit edildi. Sistem biçimlendirmeyi atlayarak artımlı güncelleme gerçekleştirecektir. Mevcut tüm dosyalar ve ISO görüntüleri %100 korunur!",
+  "confirm.mixed_banner_title":
+    "Akıllı Hibrit Mod: Önyükleme sürücüleri için yerinde güncelleme, boş sürücüler için biçimlendirme",
   "confirm.mixed_banner_desc": "{ventoyCount} önyükleme sürücüsü ve {blankCount} boş sürücü seçildi.",
   "confirm.danger_banner_title": "Uyarı: Biçimlendirme işlemi geri alınamaz!",
-  "confirm.danger_banner_desc": "Yazma işlemi hedef cihazı yeniden bölümlendirecek ve biçimlendirecektir (MBR/GPT). Mevcut tüm veriler tamamen silinecektir!",
+  "confirm.danger_banner_desc":
+    "Yazma işlemi hedef cihazı yeniden bölümlendirecek ve biçimlendirecektir (MBR/GPT). Mevcut tüm veriler tamamen silinecektir!",
   "confirm.summary_title": "Önyükleme Dağıtımı İçin Hedef USB Sürücüleri:",
   "confirm.smart_safe_tag": "Akıllı Güvenli",
   "confirm.ventoy_group_title": "Yerinde Güncellenen Sürücüler (Tüm ISO'lar Korundu):",
@@ -312,9 +329,12 @@ export const trTr: TranslationDict = {
   "confirm.will_format": "Tam format",
   "confirm.no_format": "Akıllı yerinde güncelleme",
   "deploy.toast_target_changed": "Seçilen hedef disk değişti veya artık mevcut değil. Lütfen tekrar tarayın.",
-  "deploy.toast_some_disks_removed": "{count} kullanılamayan disk otomatik olarak kaldırıldı, kalan disklerle devam ediliyor",
-  "deploy.error_system_disk_blocked": "⛔ Engellendi: {disks} bir sistem diskidir. USB önyükleme diski sistem sürücüsüne dağıtılamaz!",
-  "deploy.error_readonly_disk": "🔒 Yazma korumalı: {disks} salt okunur. Yazma korumasını kaldırın veya farklı bir USB kullanın",
+  "deploy.toast_some_disks_removed":
+    "{count} kullanılamayan disk otomatik olarak kaldırıldı, kalan disklerle devam ediliyor",
+  "deploy.error_system_disk_blocked":
+    "⛔ Engellendi: {disks} bir sistem diskidir. USB önyükleme diski sistem sürücüsüne dağıtılamaz!",
+  "deploy.error_readonly_disk":
+    "🔒 Yazma korumalı: {disks} salt okunur. Yazma korumasını kaldırın veya farklı bir USB kullanın",
   "deploy.start_cloud_create": "Bulut Önyükleme Diski Oluştur",
   "deploy.batch_update": "Kayıpsız Toplu Güncellemeyi Başlat ({count} Sürücü)",
   "deploy.batch_mixed": "Karma Toplu Dağıtımı Başlat ({count} Sürücü)",
@@ -339,7 +359,8 @@ export const trTr: TranslationDict = {
   "inspector.fake_title": "Sahte USB 3.0 Uyarısı!",
   "inspector.fake_desc": "Cihaz USB 3.0 bildiriyor, ancak fiziksel hız yalnızca {speed} (USB 2.0 PHY).",
   "inspector.genuine_title": "Fiziksel Donanım Doğrulaması Başarılı (Orijinal USB 3.0+ Cihaz)",
-  "inspector.genuine_desc": "Fiziksel PHY katmanı, ölçülen {speed} hızında orijinal SuperSpeed/SuperSpeed+ bağlantısı kurdu.",
+  "inspector.genuine_desc":
+    "Fiziksel PHY katmanı, ölçülen {speed} hızında orijinal SuperSpeed/SuperSpeed+ bağlantısı kurdu.",
   "inspector.usb2_title": "Standart USB 2.0 arayüzü",
   "inspector.usb2_desc": "Standart USB 2.0 donanımı, teorik maksimum hız 480 Mb/s.",
   "inspector.section_basic": "Temel Cihaz Bilgileri",
@@ -445,8 +466,10 @@ export const trTr: TranslationDict = {
   "diag.action_reformat_title": "Yeniden biçimlendir (reformat)",
   "diag.action_remount_title": "Yeniden bağla (remount)",
   "diag.action_retry_title": "Yeniden dene (retry)",
-  "diag.action_reformat_desc": "Dağıtım kesintisi, bölüm tablosunu veya dosya sistemini bozdu. Yeniden biçimlendirme önerilir.",
-  "diag.action_remount_desc": "Hedef bağlama yolu, yazma sırasında bağlantısı kesildi. Lütfen USB'yi yeniden takın veya birimi yeniden bağlayın.",
+  "diag.action_reformat_desc":
+    "Dağıtım kesintisi, bölüm tablosunu veya dosya sistemini bozdu. Yeniden biçimlendirme önerilir.",
+  "diag.action_remount_desc":
+    "Hedef bağlama yolu, yazma sırasında bağlantısı kesildi. Lütfen USB'yi yeniden takın veya birimi yeniden bağlayın.",
   "diag.action_retry_desc": "Ortam ve aygıt durumu sağlamdır. Dağıtımı güvenle yeniden deneyebilirsiniz.",
   "about.updating": "Güncelleniyor (%{progress})",
   "about.updateTo": "Çevrim İçi Güncelleme: {tag}",
@@ -463,7 +486,8 @@ export const trTr: TranslationDict = {
   "dialog.textFilesFilter": "Metin dosyaları (*.txt)",
   "dialog.allFilesFilter": "Tüm dosyalar (*.*)",
   "dialog.selectIsoTitle": "Sistem görüntü dosyalarını seçin (*.iso, *.wim, *.img vb.)",
-  "dialog.ventoyFilter": "Ventoy kaynak görüntüleri (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy kaynak görüntüleri (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Hash Hesapla",
   "checksum.calculating": "Hash hesaplanıyor...",
   "checksum.algo_label": "Algoritma",
@@ -509,7 +533,8 @@ export const trTr: TranslationDict = {
   "privilege.modal_title": "Yönetici İzni Gerekli",
   "privilege.modal_subtitle": "Önyükleme verilerini okumak ve diske yazmak için sistem yetkilendirmesi gereklidir",
   "privilege.reason_title": "Neden Yönetici Ayrıcalığı Gereklidir?",
-  "privilege.reason_desc": "İşletim sistemi ham sektörleri ve EFI bölümlerini yalıtır. Yetkilendirme doğrudan algılamayı ve güvenli disk oluşturmayı sağlar.",
+  "privilege.reason_desc":
+    "İşletim sistemi ham sektörleri ve EFI bölümlerini yalıtır. Yetkilendirme doğrudan algılamayı ve güvenli disk oluşturmayı sağlar.",
   "privilege.scope_title": "Erişim Kapsamı",
   "privilege.scope_desc": "Yalnızca seçilen harici USB sürücülerle sınırlıdır. Dahili disklere asla dokunulmaz.",
   "privilege.safety_title": "Güvenlik ve Şeffaflık",

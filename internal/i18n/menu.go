@@ -12,22 +12,22 @@ import (
 
 // MenuTranslations holds localized titles for OS native menu bar items.
 type MenuTranslations struct {
-	App        string
-	About      string
-	Hide       string
-	ShowAll    string
-	Quit       string
-	Edit       string
-	Undo       string
-	Redo       string
-	Cut        string
-	Copy       string
-	Paste      string
-	SelectAll  string
-	Window     string
-	Minimize   string
-	Zoom       string
-	Help       string
+	App       string
+	About     string
+	Hide      string
+	ShowAll   string
+	Quit      string
+	Edit      string
+	Undo      string
+	Redo      string
+	Cut       string
+	Copy      string
+	Paste     string
+	SelectAll string
+	Window    string
+	Minimize  string
+	Zoom      string
+	Help      string
 }
 
 // menuDataStores stores localized menu titles across all 53 supported locales.
@@ -389,7 +389,7 @@ func GetMenuTranslations(langCode string) MenuTranslations {
 	if t, exists := menuDataStores[normalized]; exists {
 		return t
 	}
-	
+
 	// Prefix match fallback (e.g. en-GB -> en-US, zh-HK -> zh-TW)
 	prefix := strings.Split(normalized, "-")[0]
 	for k, t := range menuDataStores {

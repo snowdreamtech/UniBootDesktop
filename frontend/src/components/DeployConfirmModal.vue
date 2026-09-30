@@ -14,7 +14,9 @@
       <div class="modal-body">
         <!-- Special Warning Banner for Cloud Boot Disk converting to Hybrid Mode -->
         <div v-if="hasCloudToHybrid" class="cloud-to-hybrid-banner">
-          <div class="banner-title"><span class="banner-icon">⚠️</span> {{ t("confirm.cloud_to_hybrid_warn_title") }}</div>
+          <div class="banner-title">
+            <span class="banner-icon">⚠️</span> {{ t("confirm.cloud_to_hybrid_warn_title") }}
+          </div>
           <div class="banner-desc">
             {{ t("confirm.cloud_to_hybrid_warn_desc") }}
           </div>
@@ -65,18 +67,32 @@
               <span class="pill-tag safe-tag" v-if="isAllVentoy">{{ t("confirm.smart_safe_tag") }}</span>
             </div>
             <div class="target-disk-details">
-              <div class="detail-item"><strong>{{ t("confirm.vendor") }}:</strong> {{ targetDisk.vendor || t("confirm.unknown") }}</div>
-              <div class="detail-item"><strong>{{ t("confirm.serial") }}:</strong> {{ targetDisk.serialNumber || t("confirm.unavailable") }}</div>
-              <div class="detail-item"><strong>{{ t("confirm.system_disk") }}:</strong> {{ targetDisk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
-              <div class="detail-item"><strong>{{ t("confirm.mounted") }}:</strong> {{ targetDisk.mountPoint || t("confirm.unavailable") }}</div>
-              <div class="detail-item full-width"><strong>{{ t("confirm.format_action") }}:</strong> {{ isAllVentoy ? t("confirm.no_format") : t("confirm.will_format") }}</div>
+              <div class="detail-item">
+                <strong>{{ t("confirm.vendor") }}:</strong> {{ targetDisk.vendor || t("confirm.unknown") }}
+              </div>
+              <div class="detail-item">
+                <strong>{{ t("confirm.serial") }}:</strong> {{ targetDisk.serialNumber || t("confirm.unavailable") }}
+              </div>
+              <div class="detail-item">
+                <strong>{{ t("confirm.system_disk") }}:</strong>
+                {{ targetDisk.isSystem ? t("confirm.yes") : t("confirm.no") }}
+              </div>
+              <div class="detail-item">
+                <strong>{{ t("confirm.mounted") }}:</strong> {{ targetDisk.mountPoint || t("confirm.unavailable") }}
+              </div>
+              <div class="detail-item full-width">
+                <strong>{{ t("confirm.format_action") }}:</strong>
+                {{ isAllVentoy ? t("confirm.no_format") : t("confirm.will_format") }}
+              </div>
             </div>
           </div>
 
           <!-- Batch Disks Mixed Summary -->
           <div v-else-if="isMixed" class="batch-summary">
             <div class="mixed-group" v-if="ventoyDisks.length > 0">
-              <div class="group-title safe-title"><span class="group-icon">🛡️</span> {{ t("confirm.ventoy_group_title") }}</div>
+              <div class="group-title safe-title">
+                <span class="group-icon">🛡️</span> {{ t("confirm.ventoy_group_title") }}
+              </div>
               <div class="batch-device-list">
                 <div v-for="disk in ventoyDiskDetails" :key="disk.device" class="batch-device-detail safe-dev-tag">
                   <div class="batch-dev-header">
@@ -84,17 +100,31 @@
                     <span class="batch-dev-path">{{ disk.device }}</span>
                   </div>
                   <div class="batch-dev-info-grid">
-                    <div><span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
-                    <div><strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}</div>
-                    <div><strong>{{ t("confirm.system_disk") }}:</strong> {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
-                    <div><strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}</div>
-                    <div class="full-width action-text safe-action"><strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.no_format") }}</div>
+                    <div>
+                      <span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> ·
+                      <span>{{ disk.vendor || t("confirm.unknown") }}</span>
+                    </div>
+                    <div>
+                      <strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}
+                    </div>
+                    <div>
+                      <strong>{{ t("confirm.system_disk") }}:</strong>
+                      {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}
+                    </div>
+                    <div>
+                      <strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}
+                    </div>
+                    <div class="full-width action-text safe-action">
+                      <strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.no_format") }}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="mixed-group" v-if="blankDisks.length > 0">
-              <div class="group-title danger-title"><span class="group-icon">⚠️</span> {{ t("confirm.blank_group_title") }}</div>
+              <div class="group-title danger-title">
+                <span class="group-icon">⚠️</span> {{ t("confirm.blank_group_title") }}
+              </div>
               <div class="batch-device-list">
                 <div v-for="disk in blankDiskDetails" :key="disk.device" class="batch-device-detail danger-dev-tag">
                   <div class="batch-dev-header">
@@ -102,11 +132,23 @@
                     <span class="batch-dev-path">{{ disk.device }}</span>
                   </div>
                   <div class="batch-dev-info-grid">
-                    <div><span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
-                    <div><strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}</div>
-                    <div><strong>{{ t("confirm.system_disk") }}:</strong> {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
-                    <div><strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}</div>
-                    <div class="full-width action-text danger-action"><strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.will_format") }}</div>
+                    <div>
+                      <span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> ·
+                      <span>{{ disk.vendor || t("confirm.unknown") }}</span>
+                    </div>
+                    <div>
+                      <strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}
+                    </div>
+                    <div>
+                      <strong>{{ t("confirm.system_disk") }}:</strong>
+                      {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}
+                    </div>
+                    <div>
+                      <strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}
+                    </div>
+                    <div class="full-width action-text danger-action">
+                      <strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.will_format") }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -116,7 +158,9 @@
           <!-- Batch Disks Pure Non-destructive Summary -->
           <div v-else-if="isAllVentoy" class="batch-summary">
             <div class="mixed-group">
-              <div class="group-title safe-title"><span class="group-icon">🛡️</span> {{ t("confirm.ventoy_group_title") }}</div>
+              <div class="group-title safe-title">
+                <span class="group-icon">🛡️</span> {{ t("confirm.ventoy_group_title") }}
+              </div>
               <div class="batch-device-list">
                 <div v-for="disk in ventoyDiskDetails" :key="disk.device" class="batch-device-detail safe-dev-tag">
                   <div class="batch-dev-header">
@@ -124,11 +168,23 @@
                     <span class="batch-dev-path">{{ disk.device }}</span>
                   </div>
                   <div class="batch-dev-info-grid">
-                    <div><span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
-                    <div><strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}</div>
-                    <div><strong>{{ t("confirm.system_disk") }}:</strong> {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
-                    <div><strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}</div>
-                    <div class="full-width action-text safe-action"><strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.no_format") }}</div>
+                    <div>
+                      <span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> ·
+                      <span>{{ disk.vendor || t("confirm.unknown") }}</span>
+                    </div>
+                    <div>
+                      <strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}
+                    </div>
+                    <div>
+                      <strong>{{ t("confirm.system_disk") }}:</strong>
+                      {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}
+                    </div>
+                    <div>
+                      <strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}
+                    </div>
+                    <div class="full-width action-text safe-action">
+                      <strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.no_format") }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -145,11 +201,23 @@
                   <span class="batch-dev-path">{{ disk.device }}</span>
                 </div>
                 <div class="batch-dev-info-grid">
-                  <div><span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> · <span>{{ disk.vendor || t("confirm.unknown") }}</span></div>
-                  <div><strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}</div>
-                  <div><strong>{{ t("confirm.system_disk") }}:</strong> {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}</div>
-                  <div><strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}</div>
-                  <div class="full-width action-text danger-action"><strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.will_format") }}</div>
+                  <div>
+                    <span>{{ formatDiskCapacity(disk.formatted) || t("confirm.unavailable") }}</span> ·
+                    <span>{{ disk.vendor || t("confirm.unknown") }}</span>
+                  </div>
+                  <div>
+                    <strong>{{ t("confirm.serial") }}:</strong> {{ disk.serialNumber || t("confirm.unavailable") }}
+                  </div>
+                  <div>
+                    <strong>{{ t("confirm.system_disk") }}:</strong>
+                    {{ disk.isSystem ? t("confirm.yes") : t("confirm.no") }}
+                  </div>
+                  <div>
+                    <strong>{{ t("confirm.mounted") }}:</strong> {{ disk.mountPoint || t("confirm.unavailable") }}
+                  </div>
+                  <div class="full-width action-text danger-action">
+                    <strong>{{ t("confirm.format_action") }}:</strong> {{ t("confirm.will_format") }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -166,7 +234,7 @@
       <div class="modal-footer">
         <button class="btn-cancel" @click="close">{{ t("confirm.cancel_btn") }}</button>
         <button :class="isAllVentoy || isMixed ? 'btn-safe-confirm' : 'btn-danger-confirm'" @click="confirm">
-          <span class="btn-icon">{{ isAllVentoy ? '🛡️' : (isMixed ? '⚡' : '🔥') }}</span>
+          <span class="btn-icon">{{ isAllVentoy ? "🛡️" : isMixed ? "⚡" : "🔥" }}</span>
           <span>{{ confirmBtnText }}</span>
         </button>
       </div>
@@ -288,9 +356,7 @@ const isMixed = computed(() => {
 
 const confirmBtnText = computed(() => {
   if (props.targetDisks.length === 1) {
-    return isAllVentoy.value
-      ? t("deploy.start_update")
-      : t("confirm.confirm_btn");
+    return isAllVentoy.value ? t("deploy.start_update") : t("confirm.confirm_btn");
   }
 
   if (isAllVentoy.value) {
@@ -305,9 +371,9 @@ const confirmBtnText = computed(() => {
   }
 });
 
-const logUserAction = (level: string, message: string, details: string = '') => {
+const logUserAction = (level: string, message: string, details: string = "") => {
   const app = (window as any)?.go?.main?.App;
-  if (app && typeof app.LogAction === 'function') {
+  if (app && typeof app.LogAction === "function") {
     app.LogAction(level, message, details);
   }
 };
@@ -316,7 +382,7 @@ let isSubmitting = false;
 
 function close() {
   isSubmitting = false;
-  logUserAction('INFO', 'User closed deployment confirmation modal');
+  logUserAction("INFO", "User closed deployment confirmation modal");
   emit("close");
 }
 

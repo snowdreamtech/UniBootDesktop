@@ -99,7 +99,8 @@ export const ruRu: TranslationDict = {
   "disk.tag_boot_hybrid": "Гибридная загрузка",
   "disk.tag_boot_thirdparty": "Сторонняя загрузка",
   "confirm.cloud_to_hybrid_warn_title": "Внимание: Переключение в гибридный режим требует полного форматирования",
-  "confirm.cloud_to_hybrid_warn_desc": "Этот диск находится в режиме чистой облачной загрузки. Гибридный режим Ventoy требует пересоздания MBR и таблицы разделов, что сотрет все данные и ISO!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Этот диск находится в режиме чистой облачной загрузки. Гибридный режим Ventoy требует пересоздания MBR и таблицы разделов, что сотрет все данные и ISO!",
   "disk.tag_ssd": "Внешний SSD",
   "disk.tag_typec": "Диск Type-C",
   "disk.tag_secure": "Зашифрованный диск",
@@ -109,7 +110,8 @@ export const ruRu: TranslationDict = {
   "disk.tag_cdrom": "Виртуальный CD-ROM",
   "disk.tooltip_uniboot_hybrid": "Загрузочный диск Ventoy / UniBoot (Гибридный режим, обновление без удаления)",
   "disk.tooltip_uniboot_cloud": "Облачный загрузочный диск UniBoot (Обновление без удаления данных)",
-  "disk.tooltip_third_party_boot": "Сторонний загрузочный диск (Содержит структуру Rufus/PE/ISO, требуется форматирование)",
+  "disk.tooltip_third_party_boot":
+    "Сторонний загрузочный диск (Содержит структуру Rufus/PE/ISO, требуется форматирование)",
   "log.title": "Журнал событий",
   "log.live": "В реальном времени",
   "log.search_placeholder": "Поиск в логах...",
@@ -127,13 +129,16 @@ export const ruRu: TranslationDict = {
   "log.level_error": "ОШИБКА",
   "log.level_debug": "Отладка",
   "safe.title_cloud": "Обнаружен диск Ventoy/UniBoot (Облачный режим обновляет только раздел ESP)",
-  "safe.desc_cloud": "Облачный режим сохраняет структуру двух разделов UNIBOOT. Обновление ESP оставляет все файлы ISO и данные нетронутыми!",
+  "safe.desc_cloud":
+    "Облачный режим сохраняет структуру двух разделов UNIBOOT. Обновление ESP оставляет все файлы ISO и данные нетронутыми!",
   "safe.title_hybrid": "Обнаружен диск Ventoy (Обновление на месте в гибридном режиме)",
-  "safe.desc_hybrid": "Гибридный режим сохраняет все файлы ISO без форматирования, безопасно внедряя темную тему UniBoot и меню облачной загрузки!",
+  "safe.desc_hybrid":
+    "Гибридный режим сохраняет все файлы ISO без форматирования, безопасно внедряя темную тему UniBoot и меню облачной загрузки!",
   "common.optional": "Необязательно",
   "common.optional_test": "Необязательный тест",
   "iso.title": "Локальные образы системы (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Добавьте файлы ISO для автоматического копирования в каталог /UNIBOOT/iso/ для прямой загрузки Ventoy / UniBoot.",
+  "iso.desc":
+    "Добавьте файлы ISO для автоматического копирования в каталог /UNIBOOT/iso/ для прямой загрузки Ventoy / UniBoot.",
   "iso.add_btn": "Добавить файлы образов",
   "iso.empty_title": "Нажмите, чтобы добавить файлы образов (Одиночный или пакетный выбор)",
   "iso.empty_sub": "Поддерживает форматы .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -144,7 +149,8 @@ export const ruRu: TranslationDict = {
   "iso.drag_unsupported": "Поддерживаемые файлы образов не обнаружены (.iso, .wim, .img и др.)",
   "iso.preflight_title": "Проверка перед записью",
   "iso.conflict_title": "Файл с таким именем уже существует",
-  "iso.conflict_desc": "В папке iso целевого USB уже есть файл с таким именем. Выберите действие. Хеши не сравниваются.",
+  "iso.conflict_desc":
+    "В папке iso целевого USB уже есть файл с таким именем. Выберите действие. Хеши не сравниваются.",
   "iso.conflict_action": "Действие",
   "iso.conflict_keep_both": "Сохранить",
   "iso.conflict_replace": "Перезаписать",
@@ -155,12 +161,15 @@ export const ruRu: TranslationDict = {
   "iso.preflight_failed": "Не удалось выполнить проверку перед записью",
   "deploy.title": "Создание загрузочного диска и тест QEMU",
   "deploy.desc_cloud": "Чистая облачная загрузка iPXE • Сверхбыстрая настройка двух разделов с сетевой прошивкой iPXE.",
-  "deploy.desc_hybrid": "Локальный движок Ventoy CLI • Настройка гибридного раздела Ventoy с локальным управлением ISO.",
+  "deploy.desc_hybrid":
+    "Локальный движок Ventoy CLI • Настройка гибридного раздела Ventoy с локальным управлением ISO.",
   "deploy.target_device": "Целевое устройство:",
   "deploy.batch_target": "Выбрано дисков: {count}",
   "deploy.start_create": "Создать загрузочный диск",
-  "deploy.tip_batch_update_all": "Пакетное обновление: Все выбранные накопители ({count}) будут обновлены без потери данных",
-  "deploy.tip_batch_mixed": "Смешанное развертывание: {bootCount} обновляются без потери данных, {blankCount} форматируются",
+  "deploy.tip_batch_update_all":
+    "Пакетное обновление: Все выбранные накопители ({count}) будут обновлены без потери данных",
+  "deploy.tip_batch_mixed":
+    "Смешанное развертывание: {bootCount} обновляются без потери данных, {blankCount} форматируются",
   "deploy.start_update": "Обновление на месте (Без потери данных)",
   "deploy.batch_create": "Начать пакетное создание ({count} накопителей)",
   "deploy.writing": "Запись пакетов прошивки загрузчика...",
@@ -175,18 +184,22 @@ export const ruRu: TranslationDict = {
   "deploy.tip_writing": "Запись прошивки загрузчика...",
   "deploy.tip_select_single": "Пожалуйста, сначала выберите целевой диск",
   "deploy.tip_select_batch": "Отметьте целевые диски для пакетного создания",
-  "deploy.tip_macos_unsupported": "macOS не поддерживает свежее форматирование гибридного режима (используйте облачный режим или сначала инициализируйте на Win/Linux)",
+  "deploy.tip_macos_unsupported":
+    "macOS не поддерживает свежее форматирование гибридного режима (используйте облачный режим или сначала инициализируйте на Win/Linux)",
   "deploy.tip_need_ventoy": "Свежее форматирование гибридного режима требует локальный Ventoy CLI",
   "deploy.macos_alert_title": "Новое форматирование через CLI Ventoy macOS не поддерживается",
-  "deploy.macos_alert_desc": "Ventoy не поддерживает форматирование на macOS напрямую. Используйте облачный режим для нативной поддержки или сначала инициализируйте Ventoy на Windows/Linux, затем выполните обновление на macOS.",
+  "deploy.macos_alert_desc":
+    "Ventoy не поддерживает форматирование на macOS напрямую. Используйте облачный режим для нативной поддержки или сначала инициализируйте Ventoy на Windows/Linux, затем выполните обновление на macOS.",
   "deploy.no_ventoy_title": "Исполняемый файл Ventoy CLI не обнаружен",
-  "deploy.no_ventoy_desc": "Гибридный режим требует локальной цепочки инструментов Ventoy CLI. Мы рекомендуем облачный режим!",
+  "deploy.no_ventoy_desc":
+    "Гибридный режим требует локальной цепочки инструментов Ventoy CLI. Мы рекомендуем облачный режим!",
   "deploy.result_batch_success": "Облачный установочный диск (1 сек) успешно развернут на {count} диск(ов)!",
   "deploy.result_success": "Режим {mode} успешно развернут на {targets}",
   "deploy.alert_success": "Развертывание успешно!",
   "deploy.safely_eject_btn": "Безопасно извлечь диск",
   "deploy.success_banner_title": "Загрузочный диск успешно создан!",
-  "deploy.success_banner_desc": "Файлы загрузки и прошивки записаны. Безопасно извлеките устройство перед отключением во избежание потери данных.",
+  "deploy.success_banner_desc":
+    "Файлы загрузки и прошивки записаны. Безопасно извлеките устройство перед отключением во избежание потери данных.",
   "deploy.toast_auto_ejected": "Готово! Автоматически извлечено {count} дисков.",
   "deploy.confirm_auto_eject_title": "Запись завершена — Безопасно извлечь?",
   "deploy.confirm_auto_eject_desc": "Все данные успешно записаны. Безопасно извлечь диск сейчас?",
@@ -279,7 +292,8 @@ export const ruRu: TranslationDict = {
   "settings.ventoy_timeout": "Таймаут меню Ventoy (Секунды):",
   "confirm.title": "Предупреждение об опасном форматировании",
   "confirm.warning_title": "Внимание: форматирование удалит все данные!",
-  "confirm.warning_desc": "Выбранный диск будет заново размечен и отформатирован. Все существующие файлы будут полностью удалены. Убедитесь, что вы создали резервную копию важных данных!",
+  "confirm.warning_desc":
+    "Выбранный диск будет заново размечен и отформатирован. Все существующие файлы будут полностью удалены. Убедитесь, что вы создали резервную копию важных данных!",
   "confirm.mode_title": "Режим развертывания:",
   "confirm.fs_title": "Целевая файловая система:",
   "confirm.disks_title": "диски для форматирования ({count}):",
@@ -289,11 +303,14 @@ export const ruRu: TranslationDict = {
   "confirm.title_mixed": "Подтверждение умного гибридного развертывания",
   "confirm.title_danger": "Предупреждение о форматировании: Инициализация диска",
   "confirm.safe_banner_title": "Уведомление об инкрементном обновлении (Безопасность данных)",
-  "confirm.safe_banner_desc": "Обнаружена структура загрузки Ventoy / UniBoot на целевом USB-накопителе. Система выполнит инкрементное обновление, пропустив форматирование. Все существующие файлы и образ ISO сохраняются на 100%!",
-  "confirm.mixed_banner_title": "Умный гибридный режим: Обновление на месте для загрузочных дисков, форматирование для пустых",
+  "confirm.safe_banner_desc":
+    "Обнаружена структура загрузки Ventoy / UniBoot на целевом USB-накопителе. Система выполнит инкрементное обновление, пропустив форматирование. Все существующие файлы и образ ISO сохраняются на 100%!",
+  "confirm.mixed_banner_title":
+    "Умный гибридный режим: Обновление на месте для загрузочных дисков, форматирование для пустых",
   "confirm.mixed_banner_desc": "Выбрано загрузочных накопителей: {ventoyCount}, пустых: {blankCount}.",
   "confirm.danger_banner_title": "Внимание: Форматирование необратимо!",
-  "confirm.danger_banner_desc": "Операция заново разметит и отформатирует целевое устройство (MBR/GPT). Все существующие данные будут полностью удалены!",
+  "confirm.danger_banner_desc":
+    "Операция заново разметит и отформатирует целевое устройство (MBR/GPT). Все существующие данные будут полностью удалены!",
   "confirm.summary_title": "Целевые диски для развертывания:",
   "confirm.smart_safe_tag": "Умная защита",
   "confirm.ventoy_group_title": "Накопители для обновления на месте (Все ISO сохранены):",
@@ -311,10 +328,14 @@ export const ruRu: TranslationDict = {
   "confirm.no": "Отмена",
   "confirm.will_format": "Полное форматирование",
   "confirm.no_format": "Умное обновление на месте",
-  "deploy.toast_target_changed": "Выбранный целевой диск изменился или больше не доступен. Пожалуйста, выполните повторное сканирование.",
-  "deploy.toast_some_disks_removed": "{count} недоступных дисков автоматически удалено, продолжение с оставшимися дисками",
-  "deploy.error_system_disk_blocked": "⛔ Заблокировано: {disks} — это системный диск. Невозможно развернуть загрузочный USB-диск на системный диск!",
-  "deploy.error_readonly_disk": "🔒 Защита от записи: {disks} только для чтения. Снимите защиту от записи или используйте другой USB",
+  "deploy.toast_target_changed":
+    "Выбранный целевой диск изменился или больше не доступен. Пожалуйста, выполните повторное сканирование.",
+  "deploy.toast_some_disks_removed":
+    "{count} недоступных дисков автоматически удалено, продолжение с оставшимися дисками",
+  "deploy.error_system_disk_blocked":
+    "⛔ Заблокировано: {disks} — это системный диск. Невозможно развернуть загрузочный USB-диск на системный диск!",
+  "deploy.error_readonly_disk":
+    "🔒 Защита от записи: {disks} только для чтения. Снимите защиту от записи или используйте другой USB",
   "deploy.start_cloud_create": "Создать облачный загрузочный диск",
   "deploy.batch_update": "Начать обновление без потери данных ({count} накопителей)",
   "deploy.batch_mixed": "Начать смешанное развертывание ({count} накопителей)",
@@ -332,14 +353,16 @@ export const ruRu: TranslationDict = {
   "inspector.vendor": "Производитель / Бренд:",
   "inspector.bus_speed": "Протокол шины и скорость:",
   "inspector.fake_report": "Анализ поддельного/заниженного USB 3.0:",
-  "inspector.fake_text": "Заниженный поддельный USB 3.0 (синий/черный разъем, но внутренний протокол согласован как USB 2.0 480Мб/с)",
+  "inspector.fake_text":
+    "Заниженный поддельный USB 3.0 (синий/черный разъем, но внутренний протокол согласован как USB 2.0 480Мб/с)",
   "inspector.genuine_text": "Подлинный высокоскоростной контроллер USB 3.0/3.1",
   "inspector.smart": "SMART здоровье:",
   "inspector.sector": "Размер сектора:",
   "inspector.fake_title": "Предупреждение о поддельном USB 3.0!",
   "inspector.fake_desc": "Устройство заявлено как USB 3.0, но реальная скорость составляет {speed} (USB 2.0 PHY).",
   "inspector.genuine_title": "Аппаратная проверка пройдена (Подлинное устройство USB 3.0+)",
-  "inspector.genuine_desc": "Физический уровень PHY установил подлинное соединение SuperSpeed/SuperSpeed+ со скоростью {speed}.",
+  "inspector.genuine_desc":
+    "Физический уровень PHY установил подлинное соединение SuperSpeed/SuperSpeed+ со скоростью {speed}.",
   "inspector.usb2_title": "Стандартный USB 2.0 интерфейс",
   "inspector.usb2_desc": "Оборудование стандарта USB 2.0, теоретическая максимальная скорость 480 Мб/с.",
   "inspector.section_basic": "Базовая информация об устройстве",
@@ -445,8 +468,10 @@ export const ruRu: TranslationDict = {
   "diag.action_reformat_title": "Переформатировать (reformat)",
   "diag.action_remount_title": "Перемонтировать (remount)",
   "diag.action_retry_title": "Повторить (retry)",
-  "diag.action_reformat_desc": "Прерывание развёртывания повредило таблицу разделов или файловую систему. Рекомендуется переформатирование.",
-  "diag.action_remount_desc": "Целевой путь монтирования отключился во время записи. Пожалуйста, переподключите USB или перемонтируйте том.",
+  "diag.action_reformat_desc":
+    "Прерывание развёртывания повредило таблицу разделов или файловую систему. Рекомендуется переформатирование.",
+  "diag.action_remount_desc":
+    "Целевой путь монтирования отключился во время записи. Пожалуйста, переподключите USB или перемонтируйте том.",
   "diag.action_retry_desc": "Среда и состояние устройства в порядке. Вы можете безопасно повторить развёртывание.",
   "about.updating": "Обновление ({progress}%)",
   "about.updateTo": "Онлайн-обновление до {tag}",
@@ -463,7 +488,8 @@ export const ruRu: TranslationDict = {
   "dialog.textFilesFilter": "Текстовые файлы (*.txt)",
   "dialog.allFilesFilter": "Все файлы (*.*)",
   "dialog.selectIsoTitle": "Выберите файлы образов системы (*.iso, *.wim, *.img и т.д.)",
-  "dialog.ventoyFilter": "Исходные образы Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Исходные образы Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Рассчитать хэш",
   "checksum.calculating": "Вычисление хэша...",
   "checksum.algo_label": "Алгоритм",
@@ -509,11 +535,14 @@ export const ruRu: TranslationDict = {
   "privilege.modal_title": "Требуются права администратора",
   "privilege.modal_subtitle": "Требуется системное разрешение для чтения загрузочных секторов и записи дисков",
   "privilege.reason_title": "Зачем нужны права администратора?",
-  "privilege.reason_desc": "ОС изолирует необработанные сектора диска и разделы EFI. Повышение прав позволяет напрямую обнаружить загрузчик и безопасно записать диск.",
+  "privilege.reason_desc":
+    "ОС изолирует необработанные сектора диска и разделы EFI. Повышение прав позволяет напрямую обнаружить загрузчик и безопасно записать диск.",
   "privilege.scope_title": "Область доступа",
-  "privilege.scope_desc": "Строго ограничено выбранными внешними USB-накопителями. Внутренние системные диски не затрагиваются.",
+  "privilege.scope_desc":
+    "Строго ограничено выбранными внешними USB-накопителями. Внутренние системные диски не затрагиваются.",
   "privilege.safety_title": "Безопасность и прозрачность",
-  "privilege.safety_desc": "Проверка выполняется только для чтения и без разрушения данных; исходный код полностью открыт.",
+  "privilege.safety_desc":
+    "Проверка выполняется только для чтения и без разрушения данных; исходный код полностью открыт.",
   "privilege.confirm_btn": "Авторизовать",
   "privilege.cancel_btn": "Отмена",
   "privilege.success_msg": "Права администратора успешно предоставлены",

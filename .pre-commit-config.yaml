@@ -77,7 +77,8 @@ repos:
             examples/plugin-go/unirtm-plugin-example|
             docs/tapes/demo\.gif|
             docs/public/logo-1024\.png|
-            assets/branding/app-icon\.png
+            assets/branding/app-icon\.png|
+            pkg/firmware/assets/.*
           )
         stages: [pre-commit, pre-merge-commit]
         description: "Prevent large files (>1MB) from being committed."
@@ -303,6 +304,7 @@ repos:
             .*\.bat|.*\.ps1|.*\.cmd|.*\.exe|
             .*\.txt|.*\.pdf|.*\.docx?|.*\.ini|.*\.editorconfig|.*\.properties|.*\.env.*|
             .*\.lock|.*\.lockb|.*\.sum|.*\.resolved|
+            .*\.ipxe|pkg/firmware/assets/.*|
             \.gitignore|\.gitattributes|Makefile|LICENSE
           )$
         description: "Executable scripts MUST start with a shebang (!#)."
@@ -318,6 +320,7 @@ repos:
             .*\.bat|.*\.ps1|.*\.cmd|.*\.exe|
             .*\.txt|.*\.pdf|.*\.docx?|.*\.ini|.*\.editorconfig|.*\.properties|.*\.env.*|
             .*\.lock|.*\.lockb|.*\.sum|.*\.resolved|
+            .*\.ipxe|pkg/firmware/assets/.*|
             \.gitignore|\.gitattributes|Makefile|LICENSE
           )$
         description: "Scripts with shebangs MUST have the executable bit set."

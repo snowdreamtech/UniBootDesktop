@@ -99,7 +99,8 @@ export const heIl: TranslationDict = {
   "disk.tag_boot_hybrid": "אתחול היברידי",
   "disk.tag_boot_thirdparty": "אתחול צד שלישי",
   "confirm.cloud_to_hybrid_warn_title": "הודעה: מעבר למצב היברידי דורש פירמוט מלא",
-  "confirm.cloud_to_hybrid_warn_desc": "דיסק זה נמצא במצב אתחול ענן טהור. מצב Ventoy היברידי דורש בנייה מחדש של ה-MBR וטבלת המחיצות, מה שימחק את כל הנתונים וה-ISO!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "דיסק זה נמצא במצב אתחול ענן טהור. מצב Ventoy היברידי דורש בנייה מחדש של ה-MBR וטבלת המחיצות, מה שימחק את כל הנתונים וה-ISO!",
   "disk.tag_ssd": "SSD נייד",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "כונן מוצפן",
@@ -127,9 +128,11 @@ export const heIl: TranslationDict = {
   "log.level_error": "שגיאה",
   "log.level_debug": "דיבאג",
   "safe.title_cloud": "זיהה כונן Ventoy/UniBoot קיים (מצב ענן מרענן את מחיצת ESP בלבד)",
-  "safe.desc_cloud": "מצב ענן שומר על מבנה שני המחיצות של UNIBOOT. רענון מחיצת ESP שומר על כל קובצי ה-ISO והנתונים ללא פגע!",
+  "safe.desc_cloud":
+    "מצב ענן שומר על מבנה שני המחיצות של UNIBOOT. רענון מחיצת ESP שומר על כל קובצי ה-ISO והנתונים ללא פגע!",
   "safe.title_hybrid": "זיהה כונן Ventoy קיים (עדכון במקום במצב משולב)",
-  "safe.desc_hybrid": "מצב משולב שומר על כל קובצי ה-ISO הקיימים ללא אתחול, ומזריק את ערכת הנושא הכהה של UniBoot ותפריט הענן בבטחה!",
+  "safe.desc_hybrid":
+    "מצב משולב שומר על כל קובצי ה-ISO הקיימים ללא אתחול, ומזריק את ערכת הנושא הכהה של UniBoot ותפריט הענן בבטחה!",
   "common.optional": "אופציונלי",
   "common.optional_test": "בדיקה אופציונלית",
   "iso.title": "מקורות תמונת מערכת מקומיים (ISO / IMG / WIM / VHD)",
@@ -159,8 +162,10 @@ export const heIl: TranslationDict = {
   "deploy.target_device": "מכשיר יעד:",
   "deploy.batch_target": "נבחרו {count} כונני דיסק",
   "deploy.start_create": "צור דיסק אתחול",
-  "deploy.tip_batch_update_all": "עדכון אצווה ללא אובדן נתונים: כל {count} הכוננים שנבחרו יעודכנו במקום (הנתונים וה-ISO יישמרו)",
-  "deploy.tip_batch_mixed": "הפצת אצווה מעורבת: {bootCount} כוננים יעברו עדכון במקום (נתונים יישמרו), {blankCount} כוננים יעברו אתחול מחדש",
+  "deploy.tip_batch_update_all":
+    "עדכון אצווה ללא אובדן נתונים: כל {count} הכוננים שנבחרו יעודכנו במקום (הנתונים וה-ISO יישמרו)",
+  "deploy.tip_batch_mixed":
+    "הפצת אצווה מעורבת: {bootCount} כוננים יעברו עדכון במקום (נתונים יישמרו), {blankCount} כוננים יעברו אתחול מחדש",
   "deploy.start_update": "שדרוג במקום (בטוח לנתונים)",
   "deploy.batch_create": "התחל פריסה אצווה ({count} כוננים)",
   "deploy.writing": "כתיבת חבילות קושחת אתחול...",
@@ -178,7 +183,8 @@ export const heIl: TranslationDict = {
   "deploy.tip_macos_unsupported": "macOS אינו תומך בפרמוט נקי במצב היברידי (השתמש במצב ענן או אתחל תחילה ב-Win/Linux)",
   "deploy.tip_need_ventoy": "מצב היברידי דורש כלים מקומיים של Ventoy CLI. אנו ממליצים על מצב ענן!",
   "deploy.macos_alert_title": "macOS Ventoy CLI פורמט טרי אינו נתמך",
-  "deploy.macos_alert_desc": "Ventoy הרשמי עדיין אינו תומך בהרצת תוכנית הפרמוט ב-macOS. ליצירת [כונן היברידי] חדש נדרש Ventoy CLI. מומלץ להשתמש ב-[מצב ענן (כונן אתחול ענן ב-1 שניה)]!",
+  "deploy.macos_alert_desc":
+    "Ventoy הרשמי עדיין אינו תומך בהרצת תוכנית הפרמוט ב-macOS. ליצירת [כונן היברידי] חדש נדרש Ventoy CLI. מומלץ להשתמש ב-[מצב ענן (כונן אתחול ענן ב-1 שניה)]!",
   "deploy.no_ventoy_title": "קובץ ההפעלה של Ventoy CLI לא זוהה",
   "deploy.no_ventoy_desc": "יצירת [כונן היברידי] דורשת Ventoy CLI מותקן מקומית. אנא בחר ב-[מצב ענן] הנתמך!",
   "deploy.result_batch_success": "כונן התקנת ענן בשנייה אחת נפרס בהצלחה ל-{count} דיסקים!",
@@ -279,7 +285,8 @@ export const heIl: TranslationDict = {
   "settings.ventoy_timeout": "פסק זמן לתפריט Ventoy (שניות):",
   "confirm.title": "High-Risk Format אזהרה",
   "confirm.warning_title": "אזהרה: Formatting will erase all data!",
-  "confirm.warning_desc": "כונן ה-USB שנבחר יחולק מחדש ויפורמט. כל הקבצים הקיימים יימחקו לחלוטין. ודא שגיבית נתונים חשובים!",
+  "confirm.warning_desc":
+    "כונן ה-USB שנבחר יחולק מחדש ויפורמט. כל הקבצים הקיימים יימחקו לחלוטין. ודא שגיבית נתונים חשובים!",
   "confirm.mode_title": "מצב פריסה:",
   "confirm.fs_title": "מערכת קבצים יעד:",
   "confirm.disks_title": "כוננים לעיצוב ({count}):",
@@ -289,11 +296,13 @@ export const heIl: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode אשרation",
   "confirm.title_danger": "Format אזהרה: Disk Initialization",
   "confirm.safe_banner_title": "הודעת עדכון מצטבר במקום (בטוח לנתונים)",
-  "confirm.safe_banner_desc": "מבנה האתחול של Ventoy / UniBoot זוהה בכונן היעד. המערכת תבצע פורמט דילוג על עדכון מצטבר. כל הקבצים וה-ISO הקיימים נשמרים ב-100%!",
+  "confirm.safe_banner_desc":
+    "מבנה האתחול של Ventoy / UniBoot זוהה בכונן היעד. המערכת תבצע פורמט דילוג על עדכון מצטבר. כל הקבצים וה-ISO הקיימים נשמרים ב-100%!",
   "confirm.mixed_banner_title": "מצב מעורב חכם: עדכון במקום עבור כונני אתחול, פורמט עבור כוננים ריקים",
   "confirm.mixed_banner_desc": "נבחרו {ventoyCount} כונני אתחול (עדכון במקום) ו-{blankCount} כוננים ריקים (פורמט מלא).",
   "confirm.danger_banner_title": "אזהרה: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "הכתיבה תחלק מחדש ותפרמט את מכשיר היעד (MBR/GPT). כל הקבצים הקיימים בכוננים נבחרים יימחקו לחלוטין!",
+  "confirm.danger_banner_desc":
+    "הכתיבה תחלק מחדש ותפרמט את מכשיר היעד (MBR/GPT). כל הקבצים הקיימים בכוננים נבחרים יימחקו לחלוטין!",
   "confirm.summary_title": "כונני יעד לפריסת אתחול:",
   "confirm.smart_safe_tag": "בטיחות חכמה",
   "confirm.ventoy_group_title": "כונני שדרוג במקום (כל ה-ISOs נשמרו):",
@@ -314,7 +323,8 @@ export const heIl: TranslationDict = {
   "deploy.toast_target_changed": "כונן היעד שנבחר השתנה או אינו זמין עוד. אנא סרוק שוב.",
   "deploy.toast_some_disks_removed": "{count} דיסקים לא זמינים הוסרו באופן אוטומטי, ממשיך עם הדיסקים הנותרים",
   "deploy.error_system_disk_blocked": "⛔ חסום: {disks} הוא דיסק מערכת. לא ניתן לפרוס דיסק אתחול USB לכונן המערכת!",
-  "deploy.error_readonly_disk": "🔒 מוגן מפני כתיבה: {disks} הוא לקריאה בלבד. אנא הסר את ההגנה מפני כתיבה או השתמש ב-USB אחר",
+  "deploy.error_readonly_disk":
+    "🔒 מוגן מפני כתיבה: {disks} הוא לקריאה בלבד. אנא הסר את ההגנה מפני כתיבה או השתמש ב-USB אחר",
   "deploy.start_cloud_create": "צור דיסק אתחול ענן",
   "deploy.batch_update": "התחל עדכון אצווה ללא אובדן נתונים ({count} כונני דיסק)",
   "deploy.batch_mixed": "התחל הפצת אצווה מעורבת ({count} כונני דיסק)",
@@ -337,7 +347,8 @@ export const heIl: TranslationDict = {
   "inspector.smart": "מצב בריאות SMART:",
   "inspector.sector": "גודל מגזר:",
   "inspector.fake_title": "Fake USB 3.0 אזהרה Alert!",
-  "inspector.fake_desc": "המכשיר מפרסם USB 3.0/3.1, אך מהירות השכבה הפיזית בפועל מתנהלת ב-{speed} בלבד (USB 2.0 High-Speed PHY). לכונן הזה יש כנראה קושחה מזויפת או יציאה כחולה מזויפת.",
+  "inspector.fake_desc":
+    "המכשיר מפרסם USB 3.0/3.1, אך מהירות השכבה הפיזית בפועל מתנהלת ב-{speed} בלבד (USB 2.0 High-Speed PHY). לכונן הזה יש כנראה קושחה מזויפת או יציאה כחולה מזויפת.",
   "inspector.genuine_title": "אימות החומרה הפיזי עבר (התקן USB 3.0+ מקורי)",
   "inspector.genuine_desc": "השכבה הפיזית PHY יצרה חיבור SuperSpeed/SuperSpeed+ מקורי במהירות של {speed}.",
   "inspector.usb2_title": "ממשק USB 2.0 סטנדרטי",
@@ -446,7 +457,8 @@ export const heIl: TranslationDict = {
   "diag.action_remount_title": "עגן מחדש (remount)",
   "diag.action_retry_title": "נסה שוב (retry)",
   "diag.action_reformat_desc": "הפרעת הכתיבה פגמה שטבלת המחיצות או במערכת הקבצים. מומלץ לפרמט מחדש.",
-  "diag.action_remount_desc": "נתיב העיגון של היעד התנתק במהלך הכתיבה. אנא הכנס את כונן ה-USB מחדש או עגן מחדש את הכרך.",
+  "diag.action_remount_desc":
+    "נתיב העיגון של היעד התנתק במהלך הכתיבה. אנא הכנס את כונן ה-USB מחדש או עגן מחדש את הכרך.",
   "diag.action_retry_desc": "הסביבה ומצב המכשיר תקינים. אתה יכול לנסות את ההתקנה מחדש בבטחה.",
   "about.updating": "מתעדכן ({progress}%)",
   "about.updateTo": "עדכון מקוון ל-{tag}",
@@ -463,7 +475,8 @@ export const heIl: TranslationDict = {
   "dialog.textFilesFilter": "קובצי טקסט (*.txt)",
   "dialog.allFilesFilter": "כל הקבצים (*.*)",
   "dialog.selectIsoTitle": "בחר קובצי תמונת מערכת (*.iso, *.wim, *.img וכו')",
-  "dialog.ventoyFilter": "תמונות מקור Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "תמונות מקור Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "חשב Hash",
   "checksum.calculating": "מחשב Hash...",
   "checksum.algo_label": "אלגוריתם",

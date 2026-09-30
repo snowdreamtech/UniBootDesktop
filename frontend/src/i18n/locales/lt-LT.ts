@@ -59,7 +59,8 @@ export const ltLt: TranslationDict = {
   "settings.directModeNotice": "Tiesioginis režimas (tarpinis serveris išjungtas)",
   "settings.proxyHostRequired": "Pirmiausia įveskite tarpinio serverio pagrindinio kompiuterio adresą",
   "settings.proxyTestSuccess": "{protocol} Tarpinis serveris prijungtas ({host}:{port})",
-  "settings.syncSuccessAlert": "Cloud UniBoot {tag} programinė įranga ir scenarijai sėkmingai atsisiųsta ir išsaugota talpykloje!",
+  "settings.syncSuccessAlert":
+    "Cloud UniBoot {tag} programinė įranga ir scenarijai sėkmingai atsisiųsta ir išsaugota talpykloje!",
   "settings.syncSuccessShortAlert": "„Cloud UniBoot“ pagrindinė programinė įranga sėkmingai sinchronizuota!",
   "settings.syncFailedAlert": "Programinės įrangos sinchronizavimas nepavyko: {error}",
   "settings.ventoyToolchain": "Ventoy įrankių rinkinys",
@@ -99,7 +100,8 @@ export const ltLt: TranslationDict = {
   "disk.tag_boot_hybrid": "Hibridinis paleidimas",
   "disk.tag_boot_thirdparty": "Trečiosios šalies paleidimas",
   "confirm.cloud_to_hybrid_warn_title": "Pastaba: Perjungiant į hibridinį režimą reikalingas visiškas formatavimas",
-  "confirm.cloud_to_hybrid_warn_desc": "Šis diskas veikia gryno debesies paleidimo režimu. Ventoy hibridinis režimas reikalauja iš naujo sukurti MBR ir skaidinių lentelę, o tai IŠTRINS visus duomenis ir ISO failus!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Šis diskas veikia gryno debesies paleidimo režimu. Ventoy hibridinis režimas reikalauja iš naujo sukurti MBR ir skaidinių lentelę, o tai IŠTRINS visus duomenis ir ISO failus!",
   "disk.tag_ssd": "Nešiojamas SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Šifruotas diskas",
@@ -108,7 +110,8 @@ export const ltLt: TranslationDict = {
   "disk.tag_key": "Saugos raktas",
   "disk.tag_cdrom": "Virtualus CD-ROM",
   "disk.tooltip_uniboot_hybrid": "„Ventoy / UniBoot“ paleisties diskas (Hibridinis režimas, saugus atnaujinimas)",
-  "disk.tooltip_uniboot_cloud": "„UniBoot“ debesies paleisties diskas (Debesies režimas, atnaujinimas be duomenų praradimo)",
+  "disk.tooltip_uniboot_cloud":
+    "„UniBoot“ debesies paleisties diskas (Debesies režimas, atnaujinimas be duomenų praradimo)",
   "disk.tooltip_third_party_boot": "Aptikta trečiosios šalies paleidimo struktūra",
   "log.title": "Žurnalų centras",
   "log.live": "Tiesioginis įvykių žurnalas",
@@ -127,13 +130,16 @@ export const ltLt: TranslationDict = {
   "log.level_error": "KLAIDA",
   "log.level_debug": "Derinimas",
   "safe.title_cloud": "Aptiktas esamas „Ventoy/UniBoot“ diskas (Debesies režimas atnaujina tik ESP skirsnį)",
-  "safe.desc_cloud": "Debesies režimas išsaugo UNIBOOT dviejų skirsnių struktūrą. ESP atnaujinimas palieka visus ISO ir failus nepaliestus!",
+  "safe.desc_cloud":
+    "Debesies režimas išsaugo UNIBOOT dviejų skirsnių struktūrą. ESP atnaujinimas palieka visus ISO ir failus nepaliestus!",
   "safe.title_hybrid": "Aptiktas esamas „Ventoy“ diskas (Atnaujinimas vietoje hibridiniu režimu)",
-  "safe.desc_hybrid": "Hibridinis režimas išsaugo visus esamus ISO failus be formatavimo, saugiai įterpdamas „UniBoot“ tamsiąją temą ir debesies meniu!",
+  "safe.desc_hybrid":
+    "Hibridinis režimas išsaugo visus esamus ISO failus be formatavimo, saugiai įterpdamas „UniBoot“ tamsiąją temą ir debesies meniu!",
   "common.optional": "Neprivaloma",
   "common.optional_test": "Neprivalomas testas",
   "iso.title": "Vietinės sistemos vaizdo šaltiniai (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Pridėkite ISO failus, kad galėtumėte automatiškai kopijuoti į /UNIBOOT/iso/ katalogą, kad būtų galima tiesiogiai paleisti Ventoy / UniBoot.",
+  "iso.desc":
+    "Pridėkite ISO failus, kad galėtumėte automatiškai kopijuoti į /UNIBOOT/iso/ katalogą, kad būtų galima tiesiogiai paleisti Ventoy / UniBoot.",
   "iso.add_btn": "Pridėti vaizdo failus",
   "iso.empty_title": "Spustelėkite, kad pridėtumėte vaizdo failus (palaiko vieną arba paketinį pasirinkimą)",
   "iso.empty_sub": "Palaiko .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw formatus",
@@ -144,7 +150,8 @@ export const ltLt: TranslationDict = {
   "iso.drag_unsupported": "Nepalaikomi atvaizdų failai neaptikti (.iso, .wim, .img ir kt.)",
   "iso.preflight_title": "Patikra prieš rašymą",
   "iso.conflict_title": "Failo pavadinimas jau naudojamas",
-  "iso.conflict_desc": "Paskirties USB iso aplanke jau yra failas tokiu pačiu pavadinimu. Pasirinkite veiksmą. Maišos reikšmės nelyginamos.",
+  "iso.conflict_desc":
+    "Paskirties USB iso aplanke jau yra failas tokiu pačiu pavadinimu. Pasirinkite veiksmą. Maišos reikšmės nelyginamos.",
   "iso.conflict_action": "Veiksmas",
   "iso.conflict_keep_both": "Išsaugoti abu",
   "iso.conflict_replace": "Pakeisti esamą failą",
@@ -154,13 +161,17 @@ export const ltLt: TranslationDict = {
   "iso.conflict_confirm": "Patvirtinti ir tęsti",
   "iso.preflight_failed": "Patikra prieš rašymą nepavyko",
   "deploy.title": "Bagažinės disko kūrimas ir QEMU testas",
-  "deploy.desc_cloud": "Grynasis iPXE debesų paleidimas • Itin greitas dviejų skSections nustatymas su kelių architektūrų iPXE tinklo aparatine įranga.",
-  "deploy.desc_hybrid": "„Ventoy CLI“ vietinis variklis • „Ventoy“ hibridinio skirsnio nustatymas su vietiniu ISO valdymu.",
+  "deploy.desc_cloud":
+    "Grynasis iPXE debesų paleidimas • Itin greitas dviejų skSections nustatymas su kelių architektūrų iPXE tinklo aparatine įranga.",
+  "deploy.desc_hybrid":
+    "„Ventoy CLI“ vietinis variklis • „Ventoy“ hibridinio skirsnio nustatymas su vietiniu ISO valdymu.",
   "deploy.target_device": "Tikslinis įrenginys:",
   "deploy.batch_target": "Pasirinkta {count} USB laikmenų",
   "deploy.start_create": "Sukurti paleidimo diską",
-  "deploy.tip_batch_update_all": "Grupinis atnaujinimas be duomenų praradimo: Visos {count} pasirinktos USB laikmenos bus atnaujintos vietoje",
-  "deploy.tip_batch_mixed": "Grupinis mišrus diegimas: {bootCount} laikmena(-os) atnaujinimas be praradimo, {blankCount} laikmena(-os) naujas formatavimas",
+  "deploy.tip_batch_update_all":
+    "Grupinis atnaujinimas be duomenų praradimo: Visos {count} pasirinktos USB laikmenos bus atnaujintos vietoje",
+  "deploy.tip_batch_mixed":
+    "Grupinis mišrus diegimas: {bootCount} laikmena(-os) atnaujinimas be praradimo, {blankCount} laikmena(-os) naujas formatavimas",
   "deploy.start_update": "Atnaujinimas vietoje (saugus duomenis)",
   "deploy.batch_create": "Pradėti paketinį diegimą ({count} diskai)",
   "deploy.writing": "Rašomi įkrovos programinės įrangos paketai...",
@@ -175,19 +186,25 @@ export const ltLt: TranslationDict = {
   "deploy.tip_writing": "Rašoma įkrovos programinė įranga...",
   "deploy.tip_select_single": "Pirmiausia pasirinkite tikslinį USB diską",
   "deploy.tip_select_batch": "Patikrinkite, ar tiksliniai USB diskai įdiegti paketiniu būdu",
-  "deploy.tip_macos_unsupported": "„macOS“ nepalaiko naujo formatavimo hibridiniu režimu (naudokite debesies režimą arba pirmiausia inicijuokite „Win/Linux“)",
-  "deploy.tip_need_ventoy": "Hibridiniam režimui reikalingi vietiniai Ventoy CLI įrankiai. Rekomenduojame Debesų režimą!",
+  "deploy.tip_macos_unsupported":
+    "„macOS“ nepalaiko naujo formatavimo hibridiniu režimu (naudokite debesies režimą arba pirmiausia inicijuokite „Win/Linux“)",
+  "deploy.tip_need_ventoy":
+    "Hibridiniam režimui reikalingi vietiniai Ventoy CLI įrankiai. Rekomenduojame Debesų režimą!",
   "deploy.macos_alert_title": "„macOS Ventoy CLI“ naujas formatavimas nepalaikomas",
-  "deploy.macos_alert_desc": "Oficialus Ventoy dar nepalaiko formatavimo programos paleidimo macOS sistemoje. Naujam [Hibridiniam diskui] sukurti reikalingas Ventoy CLI. Rekomenduojama naudoti [Debesų režimą (1s debesų paleidimo diskas)]!",
+  "deploy.macos_alert_desc":
+    "Oficialus Ventoy dar nepalaiko formatavimo programos paleidimo macOS sistemoje. Naujam [Hibridiniam diskui] sukurti reikalingas Ventoy CLI. Rekomenduojama naudoti [Debesų režimą (1s debesų paleidimo diskas)]!",
   "deploy.no_ventoy_title": "Ventoy CLI vykdomasis failas neaptiktas",
-  "deploy.no_ventoy_desc": "[Hibridiniam diskui] sukurti reikalingas vietiniame kompiuteryje įdiegtas Ventoy CLI. Pasirinkite palaikomą [Debesų režimą]!",
+  "deploy.no_ventoy_desc":
+    "[Hibridiniam diskui] sukurti reikalingas vietiniame kompiuteryje įdiegtas Ventoy CLI. Pasirinkite palaikomą [Debesų režimą]!",
   "deploy.result_batch_success": "1 sekundės debesies diegimo diskas sėkmingai įdiegtas į {count} diską (-us)!",
   "deploy.result_success": "Režimas {mode} sėkmingai pritaikytas įrenginiams {targets}",
   "deploy.alert_success": "Diegimas sėkmingas!",
   "deploy.safely_eject_btn": "Saugiai išstumti USB laikmeną",
   "deploy.success_banner_title": "Paleisties diskas sėkmingai sukurtas!",
-  "deploy.success_banner_desc": "Paleidimo failai ir programinė aparatinė įranga įrašyti. Saugiai išstumkite prieš atjungdami, kad neprarastumėte duomenų.",
-  "deploy.toast_auto_ejected": "Sukūrimas baigtas! Automatiškai saugiai išstumta {count} USB laikmena(-ų). Visi duomenys įrašyti.",
+  "deploy.success_banner_desc":
+    "Paleidimo failai ir programinė aparatinė įranga įrašyti. Saugiai išstumkite prieš atjungdami, kad neprarastumėte duomenų.",
+  "deploy.toast_auto_ejected":
+    "Sukūrimas baigtas! Automatiškai saugiai išstumta {count} USB laikmena(-ų). Visi duomenys įrašyti.",
   "deploy.confirm_auto_eject_title": "Rašymas baigtas — Saugiai išstumti?",
   "deploy.confirm_auto_eject_desc": "Visi duomenys sėkmingai įrašyti. Ar norite saugiai išstumti USB laikmeną dabar?",
   "deploy.confirm_auto_eject_yes": "Saugiai išstumti",
@@ -208,7 +225,8 @@ export const ltLt: TranslationDict = {
   "vm.boot_mode_bios": "BIOS (Legacy) režimas",
   "vm.boot_mode_auto": "Automatinis aptikimas",
   "vm.startSuccess_vm": "{name} simuliacijos testas sėkmingai pradėtas",
-  "vm.desc_optional": "Pasirinktinė funkcija: Peržiūrėkite USB paleistį virtualioje mašinoje nepaleisdami kompiuterio iš naujo.",
+  "vm.desc_optional":
+    "Pasirinktinė funkcija: Peržiūrėkite USB paleistį virtualioje mašinoje nepaleisdami kompiuterio iš naujo.",
   "vm.installed": "Aptikta QEMU",
   "vm.not_installed": "QEMU neaptikta",
   "vm.target": "Testo tikslas:",
@@ -221,7 +239,8 @@ export const ltLt: TranslationDict = {
   "vm.tip_deploying": "Diegiami įkrovos failai, palaukite, kol baigsis",
   "vm.tip_not_installed": "QEMU emuliatorius nerastas. Pirmiausia įdiekite QEMU (brew/port install qemu)",
   "vm.tip_select_target": "Pirmiausia kairiajame skydelyje pasirinkite tikslinį USB diską",
-  "vm.tip_ready": "Spustelėkite, kad paleistumėte QEMU VM, kad patikrintumėte USB įkrovos programą dabartiniame darbalaukyje",
+  "vm.tip_ready":
+    "Spustelėkite, kad paleistumėte QEMU VM, kad patikrintumėte USB įkrovos programą dabartiniame darbalaukyje",
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Pirmiausia spustelėkite, kad pasirinktumėte tikslinį USB diską kairiajame skydelyje!",
@@ -279,7 +298,8 @@ export const ltLt: TranslationDict = {
   "settings.ventoy_timeout": "Ventoy meniu skirtasis laikas (sekundėmis):",
   "confirm.title": "High-Risk Format Įspėjimas",
   "confirm.warning_title": "Įspėjimas: Formatting will erase all data!",
-  "confirm.warning_desc": "Pasirinktas USB diskas bus iš naujo padalintas ir suformatuotas. Visi esami failai bus visiškai ištrinti. Įsitikinkite, kad padarėte svarbių duomenų atsargines kopijas!",
+  "confirm.warning_desc":
+    "Pasirinktas USB diskas bus iš naujo padalintas ir suformatuotas. Visi esami failai bus visiškai ištrinti. Įsitikinkite, kad padarėte svarbių duomenų atsargines kopijas!",
   "confirm.mode_title": "Diegimo režimas:",
   "confirm.fs_title": "Tikslinė failų sistema:",
   "confirm.disks_title": "Diskai, kuriuos reikia formatuoti ({count}):",
@@ -289,11 +309,14 @@ export const ltLt: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Patvirtintiation",
   "confirm.title_danger": "Format Įspėjimas: Disk Initialization",
   "confirm.safe_banner_title": "Vietinis laipsniško atnaujinimo pranešimas (saugus duomenis)",
-  "confirm.safe_banner_desc": "„Ventoy“ / „UniBoot“ įkrovos struktūra aptikta tiksliniame diske. Sistema atliks laipsniško naujinimo praleidimo formatą. Visi esami failai ir ISO yra 100% išsaugoti!",
+  "confirm.safe_banner_desc":
+    "„Ventoy“ / „UniBoot“ įkrovos struktūra aptikta tiksliniame diske. Sistema atliks laipsniško naujinimo praleidimo formatą. Visi esami failai ir ISO yra 100% išsaugoti!",
   "confirm.mixed_banner_title": "Išmanusis mišrus režimas: įkrovos diskų atnaujinimas vietoje, tuščių diskų formatas",
-  "confirm.mixed_banner_desc": "Pasirinktas {ventoyCount} įkrovos diskas (-ai) (naujinimas vietoje) ir {blankCount} tuščias diskas (visas formatas).",
+  "confirm.mixed_banner_desc":
+    "Pasirinktas {ventoyCount} įkrovos diskas (-ai) (naujinimas vietoje) ir {blankCount} tuščias diskas (visas formatas).",
   "confirm.danger_banner_title": "Įspėjimas: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Rašant tikslinis įrenginys bus perskirstytas ir suformatuotas (MBR / GPT). Visi esami failai pasirinktame diske (-iuose) bus visiškai ištrinti!",
+  "confirm.danger_banner_desc":
+    "Rašant tikslinis įrenginys bus perskirstytas ir suformatuotas (MBR / GPT). Visi esami failai pasirinktame diske (-iuose) bus visiškai ištrinti!",
   "confirm.summary_title": "Tiksliniai įkrovos diegimo diskai:",
   "confirm.smart_safe_tag": "Išmanioji apsauga",
   "confirm.ventoy_group_title": "Vietiniai atnaujinimo diskai (išsaugoti visi ISO):",
@@ -312,9 +335,12 @@ export const ltLt: TranslationDict = {
   "confirm.will_format": "Pilnas formatavimas",
   "confirm.no_format": "Išmanusis atnaujinimas vietoje",
   "deploy.toast_target_changed": "Pasirinktas tikslinis diskas pasikeitė arba nebeegzistuoja. Nuskaitykite iš naujo.",
-  "deploy.toast_some_disks_removed": "{count} nepasiekiamas(-i) diskas(-ai) automatiškai pašalintas(-i), tęsiama su likusiais diskais",
-  "deploy.error_system_disk_blocked": "⛔ Užblokuota: {disks} yra sistemos diskas. Negalima įdiegti USB įkrovos disko į sistemos diską!",
-  "deploy.error_readonly_disk": "🔒 Apsaugota nuo rašymo: {disks} yra tik skaitymui. Pašalinkite rašymo apsaugą arba naudokite kitą USB",
+  "deploy.toast_some_disks_removed":
+    "{count} nepasiekiamas(-i) diskas(-ai) automatiškai pašalintas(-i), tęsiama su likusiais diskais",
+  "deploy.error_system_disk_blocked":
+    "⛔ Užblokuota: {disks} yra sistemos diskas. Negalima įdiegti USB įkrovos disko į sistemos diską!",
+  "deploy.error_readonly_disk":
+    "🔒 Apsaugota nuo rašymo: {disks} yra tik skaitymui. Pašalinkite rašymo apsaugą arba naudokite kitą USB",
   "deploy.start_cloud_create": "Sukurti debesies paleidimo diską",
   "deploy.batch_update": "Pradėti grupinį atnaujinimą be duomenų praradimo ({count} USB laikmenos)",
   "deploy.batch_mixed": "Pradėti grupinį mišrų diegimą ({count} USB laikmenos)",
@@ -332,14 +358,17 @@ export const ltLt: TranslationDict = {
   "inspector.vendor": "Pardavėjas / prekės ženklas:",
   "inspector.bus_speed": "Autobuso protokolas ir greitis:",
   "inspector.fake_report": "Netikros USB 3.0 analizė:",
-  "inspector.fake_text": "Sumažintas netikras USB 3.0 (mėlynas/juodas prievadas, bet vidinis protokolas yra USB 2.0 480 Mb/s)",
+  "inspector.fake_text":
+    "Sumažintas netikras USB 3.0 (mėlynas/juodas prievadas, bet vidinis protokolas yra USB 2.0 480 Mb/s)",
   "inspector.genuine_text": "Tikras didelės spartos USB 3.0/3.1 valdiklis",
   "inspector.smart": "SMART sveikatos būsena:",
   "inspector.sector": "Sektoriaus dydis:",
   "inspector.fake_title": "Fake USB 3.0 Įspėjimas Alert!",
-  "inspector.fake_desc": "Įrenginys reklamuoja USB 3.0 / 3.1, bet tikrasis fizinio sluoksnio greitis derinamas tik {speed} (USB 2.0 didelės spartos PHY). Tikėtina, kad šiame diske yra suklastota programinė įranga arba netikras mėlynas prievadas.",
+  "inspector.fake_desc":
+    "Įrenginys reklamuoja USB 3.0 / 3.1, bet tikrasis fizinio sluoksnio greitis derinamas tik {speed} (USB 2.0 didelės spartos PHY). Tikėtina, kad šiame diske yra suklastota programinė įranga arba netikras mėlynas prievadas.",
   "inspector.genuine_title": "Fizinės aparatinės įrangos patvirtinimas išlaikytas (autentiškas USB 3.0+ įrenginys)",
-  "inspector.genuine_desc": "Fizinis PHY sluoksnis suderino tikrą SuperSpeed/SuperSpeed+ ryšį, kurio sparta yra {speed}.",
+  "inspector.genuine_desc":
+    "Fizinis PHY sluoksnis suderino tikrą SuperSpeed/SuperSpeed+ ryšį, kurio sparta yra {speed}.",
   "inspector.usb2_title": "Standartinė USB 2.0 sąsaja",
   "inspector.usb2_desc": "Įrenginio techninė įranga yra USB 2.0, teorinis fizinis maksimalus greitis 480 Mb/s.",
   "inspector.section_basic": "Pagrindinė įrenginio informacija",
@@ -445,14 +474,17 @@ export const ltLt: TranslationDict = {
   "diag.action_reformat_title": "Performatuoti (reformat)",
   "diag.action_remount_title": "Prijungti iš naujo (remount)",
   "diag.action_retry_title": "Bandyti iš naujo (retry)",
-  "diag.action_reformat_desc": "Įrašymo nutraukimas pažeidė skaidinių lentelę arba failų sistemą. Rekomenduojama performatuoti iš naujo.",
-  "diag.action_remount_desc": "Tikslinis prijungimo kelias atsijungė įrašymo metu. Įkiškite USB laikmeną iš naujo arba vėl prijunkite tomą.",
+  "diag.action_reformat_desc":
+    "Įrašymo nutraukimas pažeidė skaidinių lentelę arba failų sistemą. Rekomenduojama performatuoti iš naujo.",
+  "diag.action_remount_desc":
+    "Tikslinis prijungimo kelias atsijungė įrašymo metu. Įkiškite USB laikmeną iš naujo arba vėl prijunkite tomą.",
   "diag.action_retry_desc": "Aplinka ir įrenginio būsena yra tvarkingos. Galite saugiai bandyti diegti iš naujo.",
   "about.updating": "Naujinama ({progress}%)",
   "about.updateTo": "Internetinis atnaujinimas į {tag}",
   "about.downloading": "Atsiunčiama {progress}%",
   "about.preparingDownload": "Ruošiamasi atsisiųsti paketą...",
-  "about.updateReady": "Atnaujinimas paruoštas! Atsiųsta į: {path}. Paleiskite paketą arba iš naujo paleiskite programą.",
+  "about.updateReady":
+    "Atnaujinimas paruoštas! Atsiųsta į: {path}. Paleiskite paketą arba iš naujo paleiskite programą.",
   "about.updateDownloadFailed": "Nepavyko atsisiųsti atnaujinimo paketo. Patikrinkite tinklo ryšį.",
   "about.downloadingGuiUpdate": "Atsiunčiamas GUI atnaujinimas ({progress}%)...",
   "about.updateCompleteRestart": "Atnaujinimo atsisiuntimas baigtas! Paleiskite programą iš naujo, kad pritaikytumėte.",
@@ -463,7 +495,8 @@ export const ltLt: TranslationDict = {
   "dialog.textFilesFilter": "Tekstiniai failai (*.txt)",
   "dialog.allFilesFilter": "Visi failai (*.*)",
   "dialog.selectIsoTitle": "Pasirinkite sistemos vaizdo failus (*.iso, *.wim, *.img ir kt.)",
-  "dialog.ventoyFilter": "Ventoy šaltinio vaizdai (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy šaltinio vaizdai (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Apskaičiuoti Hash",
   "checksum.calculating": "Apskaičiuojamas Hash...",
   "checksum.algo_label": "Algoritmas",
@@ -509,9 +542,11 @@ export const ltLt: TranslationDict = {
   "privilege.modal_title": "Reikalingas administratoriaus leidimas",
   "privilege.modal_subtitle": "Norint nuskaityti paleidimo duomenis ir rašyti į diskus, reikalingas sistemos leidimas",
   "privilege.reason_title": "Kodėl reikalingos administratoriaus teisės?",
-  "privilege.reason_desc": "Operacinė sistema izoliuoja neapdorotus sektorius ir EFI skirsnius. Leidimas leidžia tiesiogiai aptikti ir saugiai kurti diskus.",
+  "privilege.reason_desc":
+    "Operacinė sistema izoliuoja neapdorotus sektorius ir EFI skirsnius. Leidimas leidžia tiesiogiai aptikti ir saugiai kurti diskus.",
   "privilege.scope_title": "Prieigos apimtis",
-  "privilege.scope_desc": "Griežtai apribota pasirinktais išoriniais USB diskais. Vidiniai sistemos diskai niekada neliečiami.",
+  "privilege.scope_desc":
+    "Griežtai apribota pasirinktais išoriniais USB diskais. Vidiniai sistemos diskai niekada neliečiami.",
   "privilege.safety_title": "Saugumas ir skaidrumas",
   "privilege.safety_desc": "Tikrinimas yra griežtai tik skaitomas ir neardomasis; pradinis kodas yra visiškai atviras.",
   "privilege.confirm_btn": "Autorizuoti dabar",

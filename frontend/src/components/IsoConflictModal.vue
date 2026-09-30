@@ -5,8 +5,8 @@
         <div class="header-copy">
           <span class="header-mark" aria-hidden="true">!</span>
           <div>
-          <p class="eyebrow">{{ t("iso.preflight_title") }}</p>
-          <h2 :id="titleId">{{ t("iso.conflict_title") }}</h2>
+            <p class="eyebrow">{{ t("iso.preflight_title") }}</p>
+            <h2 :id="titleId">{{ t("iso.conflict_title") }}</h2>
           </div>
         </div>
         <button class="close-btn" type="button" :aria-label="t('iso.conflict_cancel')" @click="cancel">✕</button>
@@ -34,11 +34,27 @@
             <div v-if="group.hasSourceDuplicate" class="decision-block">
               <div class="choice-heading">
                 <span class="choice-label-title">{{ fileExtLabel(group.sourcePath) }}×2</span>
-                <span class="choice-current">{{ group.sourceAction === "rename" ? t("iso.conflict_keep_both") : t("iso.conflict_skip") }}</span>
+                <span class="choice-current">{{
+                  group.sourceAction === "rename" ? t("iso.conflict_keep_both") : t("iso.conflict_skip")
+                }}</span>
               </div>
               <div class="action-options compact-options" role="group">
-                <button type="button" class="action-option" :class="{ selected: group.sourceAction === 'rename' }" @click="updateSourceGroup(group, 'rename')">{{ t("iso.conflict_keep_both") }}</button>
-                <button type="button" class="action-option" :class="{ selected: group.sourceAction === 'skip' }" @click="updateSourceGroup(group, 'skip')">{{ t("iso.conflict_skip") }}</button>
+                <button
+                  type="button"
+                  class="action-option"
+                  :class="{ selected: group.sourceAction === 'rename' }"
+                  @click="updateSourceGroup(group, 'rename')"
+                >
+                  {{ t("iso.conflict_keep_both") }}
+                </button>
+                <button
+                  type="button"
+                  class="action-option"
+                  :class="{ selected: group.sourceAction === 'skip' }"
+                  @click="updateSourceGroup(group, 'skip')"
+                >
+                  {{ t("iso.conflict_skip") }}
+                </button>
               </div>
             </div>
             <div v-if="group.hasTargetExists" class="decision-block">
@@ -47,7 +63,12 @@
                 <span class="choice-current">{{ t(actionLabelKey(group.action)) }}</span>
               </div>
             </div>
-            <div v-if="group.hasTargetExists" class="action-options" role="group" :aria-label="t('iso.conflict_action')">
+            <div
+              v-if="group.hasTargetExists"
+              class="action-options"
+              role="group"
+              :aria-label="t('iso.conflict_action')"
+            >
               <button
                 v-for="option in targetActionOptions"
                 :key="option.value"
@@ -60,8 +81,22 @@
                 {{ t(option.label) }}
               </button>
             </div>
-            <div v-else-if="!group.hasSourceDuplicate" class="action-options" role="group" :aria-label="t('iso.conflict_action')">
-              <button v-for="option in targetActionOptions" :key="option.value" type="button" class="action-option" :class="{ selected: group.action === option.value }" @click="updateGroup(group, option.value)">{{ t(option.label) }}</button>
+            <div
+              v-else-if="!group.hasSourceDuplicate"
+              class="action-options"
+              role="group"
+              :aria-label="t('iso.conflict_action')"
+            >
+              <button
+                v-for="option in targetActionOptions"
+                :key="option.value"
+                type="button"
+                class="action-option"
+                :class="{ selected: group.action === option.value }"
+                @click="updateGroup(group, option.value)"
+              >
+                {{ t(option.label) }}
+              </button>
             </div>
           </div>
         </article>
@@ -69,7 +104,9 @@
 
       <label class="apply-all">
         <input v-model="applyToAll" type="checkbox" @change="applyAllDecision" />
-        <span><strong>{{ t("iso.conflict_apply_all") }}</strong></span>
+        <span
+          ><strong>{{ t("iso.conflict_apply_all") }}</strong></span
+        >
       </label>
 
       <footer class="modal-footer">
@@ -151,8 +188,10 @@ const conflictGroups = computed<IsoConflictGroup[]>(() => {
     }
     const duplicateOrder = (counters.get(conflict.fileName) || 0) + 1;
     counters.set(conflict.fileName, duplicateOrder);
-    const hasSourceDuplicate = conflict.conflictType === "source_duplicate" || conflict.conflictType === "source_duplicate_target_exists";
-    const hasTargetExists = conflict.conflictType === "target_exists" || conflict.conflictType === "source_duplicate_target_exists";
+    const hasSourceDuplicate =
+      conflict.conflictType === "source_duplicate" || conflict.conflictType === "source_duplicate_target_exists";
+    const hasTargetExists =
+      conflict.conflictType === "target_exists" || conflict.conflictType === "source_duplicate_target_exists";
     groups.set(key, {
       key,
       fileName: conflict.fileName,
@@ -187,7 +226,7 @@ const conflictGroupsWithBadges = computed<IsoConflictDisplayGroup[]>(() =>
         ? `${ext}×2`
         : "USB";
     return { ...group, kindBadge };
-  }),
+  })
 );
 
 function defaultDecision(conflict: IsoConflictItem): IsoConflictDecision {
@@ -207,7 +246,7 @@ watch(
       decisions.value = props.conflicts.map(defaultDecision);
     }
   },
-  { immediate: true },
+  { immediate: true }
 );
 
 function updateGroup(group: IsoConflictGroup, action: IsoConflictDecision["action"]) {
@@ -235,7 +274,7 @@ function applyDecision(
   group: IsoConflictGroup,
   conflict: IsoConflictItem,
   decision: IsoConflictDecision,
-  targetAction: IsoConflictDecision["action"],
+  targetAction: IsoConflictDecision["action"]
 ) {
   if (group.hasSourceDuplicate && group.sourceAction === "skip") {
     decision.action = "skip";
@@ -432,7 +471,9 @@ h2 {
   border: 1px solid var(--card-border);
   border-radius: 11px;
   background: var(--section-bg);
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .conflict-item:hover {

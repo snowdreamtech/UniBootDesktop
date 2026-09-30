@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!-- Window drag strip for seamless macOS/frameless window dragging -->
-    <div class="window-drag-strip" style="--wails-draggable:drag" @mousedown="handleWindowDrag" />
+    <div class="window-drag-strip" style="--wails-draggable: drag" @mousedown="handleWindowDrag" />
 
     <!-- Global App Toast Notification -->
     <transition name="toast-fade">

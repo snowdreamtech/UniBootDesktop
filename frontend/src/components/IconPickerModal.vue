@@ -2,15 +2,15 @@
   <div v-if="isOpen" class="modal-backdrop" @click="close">
     <div class="glass-card modal-content" @click.stop>
       <div class="modal-header">
-        <h3>🎨 {{ t('icon_picker.title') }}</h3>
+        <h3>🎨 {{ t("icon_picker.title") }}</h3>
         <button class="close-btn" @click="close">✕</button>
       </div>
-      <p class="modal-desc">{{ t('icon_picker.subtitle', { name: diskName }) }}</p>
+      <p class="modal-desc">{{ t("icon_picker.subtitle", { name: diskName }) }}</p>
 
       <div class="modal-scroll-body">
         <div class="icon-grid">
-          <div 
-            v-for="option in iconOptions" 
+          <div
+            v-for="option in iconOptions"
             :key="option.id"
             class="icon-card"
             :class="[option.id, { active: currentIcon === option.id }]"
@@ -18,92 +18,225 @@
           >
             <div class="icon-preview" :class="option.id">
               <!-- USB Standard 3.0 SuperSpeed -->
-              <svg v-if="option.id === 'usb'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-                <circle cx="10.8" cy="4" r="0.6" fill="currentColor"/>
-                <circle cx="13.2" cy="4" r="0.6" fill="currentColor"/>
-                <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
-                <polygon points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10" fill="currentColor" stroke="none"/>
+              <svg
+                v-if="option.id === 'usb'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="2" width="6" height="5" rx="0.5" />
+                <circle cx="10.8" cy="4" r="0.6" fill="currentColor" />
+                <circle cx="13.2" cy="4" r="0.6" fill="currentColor" />
+                <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
+                <polygon
+                  points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10"
+                  fill="currentColor"
+                  stroke="none"
+                />
               </svg>
               <!-- Traditional USB 2.0 -->
-              <svg v-else-if="option.id === 'usb2'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-                <rect x="10.5" y="3.5" width="3" height="2" fill="currentColor" opacity="0.4"/>
-                <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
-                <circle cx="12" cy="18" r="1.2"/>
+              <svg
+                v-else-if="option.id === 'usb2'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="2" width="6" height="5" rx="0.5" />
+                <rect x="10.5" y="3.5" width="3" height="2" fill="currentColor" opacity="0.4" />
+                <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
+                <circle cx="12" cy="18" r="1.2" />
               </svg>
               <!-- USB 3.1 Gen 2 (10G) -->
-              <svg v-else-if="option.id === 'usb3_1'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-                <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
-                <circle cx="12" cy="13" r="3" stroke-dasharray="4 2"/>
-                <path d="M12 11v4M10.5 13h3"/>
+              <svg
+                v-else-if="option.id === 'usb3_1'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="2" width="6" height="5" rx="0.5" />
+                <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
+                <circle cx="12" cy="13" r="3" stroke-dasharray="4 2" />
+                <path d="M12 11v4M10.5 13h3" />
               </svg>
               <!-- USB 3.2 Gen 2x2 (20G) -->
-              <svg v-else-if="option.id === 'usb3_2'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="8" y="2" width="8" height="4" rx="2"/>
-                <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
-                <polygon points="12.8 9.5 10 13.5 12.2 13.5 11 17.5 15 12.5 12.8 12.5 13.2 9.5" fill="currentColor" stroke="none"/>
+              <svg
+                v-else-if="option.id === 'usb3_2'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="8" y="2" width="8" height="4" rx="2" />
+                <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z" />
+                <polygon
+                  points="12.8 9.5 10 13.5 12.2 13.5 11 17.5 15 12.5 12.8 12.5 13.2 9.5"
+                  fill="currentColor"
+                  stroke="none"
+                />
               </svg>
               <!-- USB4 / Thunderbolt (40G) -->
-              <svg v-else-if="option.id === 'usb4'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="8" y="2" width="8" height="4" rx="2"/>
-                <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
-                <polygon points="13 9 10 13.5 12.5 13.5 11 18 15 12.5 12.5 12.5 13 9" fill="currentColor" stroke="none"/>
+              <svg
+                v-else-if="option.id === 'usb4'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="8" y="2" width="8" height="4" rx="2" />
+                <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z" />
+                <polygon
+                  points="13 9 10 13.5 12.5 13.5 11 18 15 12.5 12.5 12.5 13 9"
+                  fill="currentColor"
+                  stroke="none"
+                />
               </svg>
               <!-- Boot USB -->
-              <svg v-else-if="option.id === 'boot'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-                <path d="M6 7h12a1.5 1.5 0 0 1 1.5 1.5v10a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-10A1.5 1.5 0 0 1 6 7z"/>
-                <polygon points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10" fill="currentColor" stroke="none"/>
+              <svg
+                v-else-if="option.id === 'boot'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="2" width="6" height="5" rx="0.5" />
+                <path d="M6 7h12a1.5 1.5 0 0 1 1.5 1.5v10a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-10A1.5 1.5 0 0 1 6 7z" />
+                <polygon
+                  points="12.5 10 10 13.5 12 13.5 11.5 17 14.5 12.5 12.5 12.5 12.5 10"
+                  fill="currentColor"
+                  stroke="none"
+                />
               </svg>
               <!-- Portable SSD -->
-              <svg v-else-if="option.id === 'ssd'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="5" width="18" height="14" rx="3"/>
-                <line x1="7" y1="9" x2="11" y2="9"/>
-                <line x1="7" y1="12" x2="17" y2="12"/>
-                <circle cx="17" cy="9" r="1" fill="currentColor"/>
+              <svg
+                v-else-if="option.id === 'ssd'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="5" width="18" height="14" rx="3" />
+                <line x1="7" y1="9" x2="11" y2="9" />
+                <line x1="7" y1="12" x2="17" y2="12" />
+                <circle cx="17" cy="9" r="1" fill="currentColor" />
               </svg>
               <!-- Type-C Dual -->
-              <svg v-else-if="option.id === 'typec'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="8" y="2" width="8" height="4" rx="2"/>
-                <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z"/>
-                <rect x="9" y="20" width="6" height="3" rx="0.5"/>
+              <svg
+                v-else-if="option.id === 'typec'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="8" y="2" width="8" height="4" rx="2" />
+                <path d="M6.5 6h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V7.5A1.5 1.5 0 0 1 6.5 6z" />
+                <rect x="9" y="20" width="6" height="3" rx="0.5" />
               </svg>
               <!-- Secure USB -->
-              <svg v-else-if="option.id === 'secure'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-                <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z"/>
-                <circle cx="10" cy="11" r="0.8" fill="currentColor"/>
-                <circle cx="12" cy="11" r="0.8" fill="currentColor"/>
-                <circle cx="14" cy="11" r="0.8" fill="currentColor"/>
-                <circle cx="10" cy="14" r="0.8" fill="currentColor"/>
-                <circle cx="12" cy="14" r="0.8" fill="currentColor"/>
-                <circle cx="14" cy="14" r="0.8" fill="currentColor"/>
+              <svg
+                v-else-if="option.id === 'secure'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="2" width="6" height="5" rx="0.5" />
+                <path d="M6.5 7h11a1.5 1.5 0 0 1 1.5 1.5v9.5a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3V8.5A1.5 1.5 0 0 1 6.5 7z" />
+                <circle cx="10" cy="11" r="0.8" fill="currentColor" />
+                <circle cx="12" cy="11" r="0.8" fill="currentColor" />
+                <circle cx="14" cy="11" r="0.8" fill="currentColor" />
+                <circle cx="10" cy="14" r="0.8" fill="currentColor" />
+                <circle cx="12" cy="14" r="0.8" fill="currentColor" />
+                <circle cx="14" cy="14" r="0.8" fill="currentColor" />
               </svg>
               <!-- Card Reader -->
-              <svg v-else-if="option.id === 'reader'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="2" width="6" height="5" rx="0.5"/>
-                <rect x="5" y="7" width="14" height="14" rx="2"/>
-                <rect x="8" y="11" width="8" height="6" rx="1" stroke-dasharray="2 2"/>
+              <svg
+                v-else-if="option.id === 'reader'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="2" width="6" height="5" rx="0.5" />
+                <rect x="5" y="7" width="14" height="14" rx="2" />
+                <rect x="8" y="11" width="8" height="6" rx="1" stroke-dasharray="2 2" />
               </svg>
               <!-- Mobile HDD -->
-              <svg v-else-if="option.id === 'hdd'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="4" y="4" width="16" height="16" rx="2"/>
-                <circle cx="12" cy="11" r="4"/>
-                <circle cx="12" cy="11" r="1.5"/>
-                <line x1="6" y1="17" x2="8" y2="17"/>
+              <svg
+                v-else-if="option.id === 'hdd'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="4" y="4" width="16" height="16" rx="2" />
+                <circle cx="12" cy="11" r="4" />
+                <circle cx="12" cy="11" r="1.5" />
+                <line x1="6" y1="17" x2="8" y2="17" />
               </svg>
               <!-- Security Key -->
-              <svg v-else-if="option.id === 'key'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="7.5" cy="12.5" r="3.5"/>
-                <path d="M11 12.5h9.5M16 12.5v2.5M18.5 12.5v2"/>
+              <svg
+                v-else-if="option.id === 'key'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="7.5" cy="12.5" r="3.5" />
+                <path d="M11 12.5h9.5M16 12.5v2.5M18.5 12.5v2" />
               </svg>
               <!-- CD-ROM ISO -->
-              <svg v-else-if="option.id === 'cdrom'" class="disk-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="9"/>
-                <circle cx="12" cy="12" r="3"/>
-                <circle cx="12" cy="12" r="1"/>
+              <svg
+                v-else-if="option.id === 'cdrom'"
+                class="disk-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="3" />
+                <circle cx="12" cy="12" r="1" />
               </svg>
             </div>
             <div class="option-title">{{ option.label }}</div>
@@ -113,16 +246,29 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn-secondary" @click="resetToAuto">🔄 {{ t('icon_picker.reset') }}</button>
+        <button class="btn-secondary" @click="resetToAuto">🔄 {{ t("icon_picker.reset") }}</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { t } from '../i18n';
-export type DiskIconType = 'usb' | 'usb2' | 'usb3_1' | 'usb3_2' | 'usb4' | 'boot' | 'ssd' | 'typec' | 'secure' | 'reader' | 'hdd' | 'key' | 'cdrom';
+import { computed } from "vue";
+import { t } from "../i18n";
+export type DiskIconType =
+  | "usb"
+  | "usb2"
+  | "usb3_1"
+  | "usb3_2"
+  | "usb4"
+  | "boot"
+  | "ssd"
+  | "typec"
+  | "secure"
+  | "reader"
+  | "hdd"
+  | "key"
+  | "cdrom";
 
 defineProps<{
   isOpen: boolean;
@@ -130,34 +276,34 @@ defineProps<{
   currentIcon?: string;
 }>();
 
-const emit = defineEmits(['close', 'select-icon', 'reset-icon']);
+const emit = defineEmits(["close", "select-icon", "reset-icon"]);
 
 const iconOptions = computed<Array<{ id: DiskIconType; label: string; desc: string }>>(() => [
-  { id: 'usb', label: 'USB 3.0 (5 Gbps)', desc: t('icon_picker.usb_desc') },
-  { id: 'usb2', label: 'USB 2.0 (480 Mbps)', desc: t('icon_picker.usb2_desc') },
-  { id: 'usb3_1', label: 'USB 3.1 (10 Gbps)', desc: t('icon_picker.usb3_1_desc') },
-  { id: 'usb3_2', label: 'USB 3.2 (20 Gbps)', desc: t('icon_picker.usb3_2_desc') },
-  { id: 'usb4', label: 'USB4 / Thunderbolt 4 (40 Gbps)', desc: t('icon_picker.usb4_desc') },
-  { id: 'boot', label: 'BOOT Drive', desc: t('icon_picker.boot_desc') },
-  { id: 'ssd', label: 'PSSD', desc: t('icon_picker.ssd_desc') },
-  { id: 'typec', label: 'Type-C Drive', desc: t('icon_picker.typec_desc') },
-  { id: 'secure', label: 'Secure Encrypted USB', desc: t('icon_picker.secure_desc') },
-  { id: 'reader', label: 'Card Reader (SD / MicroSD)', desc: t('icon_picker.reader_desc') },
-  { id: 'hdd', label: 'Mechanical HDD', desc: t('icon_picker.hdd_desc') },
-  { id: 'key', label: 'FIDO2 Security Key', desc: t('icon_picker.key_desc') },
+  { id: "usb", label: "USB 3.0 (5 Gbps)", desc: t("icon_picker.usb_desc") },
+  { id: "usb2", label: "USB 2.0 (480 Mbps)", desc: t("icon_picker.usb2_desc") },
+  { id: "usb3_1", label: "USB 3.1 (10 Gbps)", desc: t("icon_picker.usb3_1_desc") },
+  { id: "usb3_2", label: "USB 3.2 (20 Gbps)", desc: t("icon_picker.usb3_2_desc") },
+  { id: "usb4", label: "USB4 / Thunderbolt 4 (40 Gbps)", desc: t("icon_picker.usb4_desc") },
+  { id: "boot", label: "BOOT Drive", desc: t("icon_picker.boot_desc") },
+  { id: "ssd", label: "PSSD", desc: t("icon_picker.ssd_desc") },
+  { id: "typec", label: "Type-C Drive", desc: t("icon_picker.typec_desc") },
+  { id: "secure", label: "Secure Encrypted USB", desc: t("icon_picker.secure_desc") },
+  { id: "reader", label: "Card Reader (SD / MicroSD)", desc: t("icon_picker.reader_desc") },
+  { id: "hdd", label: "Mechanical HDD", desc: t("icon_picker.hdd_desc") },
+  { id: "key", label: "FIDO2 Security Key", desc: t("icon_picker.key_desc") },
 ]);
 
 function close() {
-  emit('close');
+  emit("close");
 }
 
 function selectIcon(type: DiskIconType) {
-  emit('select-icon', type);
+  emit("select-icon", type);
   close();
 }
 
 function resetToAuto() {
-  emit('reset-icon');
+  emit("reset-icon");
   close();
 }
 </script>

@@ -11,7 +11,7 @@
         <button
           class="header-action-btn"
           :disabled="isScanningDisks || isLocked"
-          :title="isLocked ? lockReason : (isScanningDisks ? t('disk.scanning') : t('disk.rescan'))"
+          :title="isLocked ? lockReason : isScanningDisks ? t('disk.scanning') : t('disk.rescan')"
           @click="emit('refresh-disks')"
         >
           <svg
@@ -88,7 +88,12 @@
           >
             {{ t("disk.select_all") }}
           </button>
-          <button class="batch-btn" :disabled="isLocked || selectedDevices.size === 0" :title="isLocked ? lockReason : ''" @click="emit('deselect-all')">
+          <button
+            class="batch-btn"
+            :disabled="isLocked || selectedDevices.size === 0"
+            :title="isLocked ? lockReason : ''"
+            @click="emit('deselect-all')"
+          >
             {{ t("disk.clear_select") }}
           </button>
           <button

@@ -176,13 +176,13 @@ else
         elif [ "$grub_cpu" = "riscv32" ]; then
             set lkrn_file="/ipxe/ipxe-riscv32.lkrn"
         fi
-        
+
         search --no-floppy --set=root --file $lkrn_file
         if [ $? -ne 0 ]; then
             set lkrn_file="/ipxe.lkrn"
             search --no-floppy --set=root --file $lkrn_file
         fi
-        
+
         # x86 legacy bios uses linux16, others use linux
         if [ "$grub_cpu" = "i386" -o "$grub_cpu" = "x86_64" -o -z "$grub_cpu" ]; then
             linux16 $lkrn_file

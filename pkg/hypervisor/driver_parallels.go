@@ -125,4 +125,3 @@ func (d *ParallelsDriver) Launch(ctx context.Context, diskPath string, bootMode 
 func (d *ParallelsDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
 	return d.Launch(ctx, diskPath, cfg.BootMode)
 }
-

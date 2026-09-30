@@ -323,7 +323,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     try {
       const conflicts = ((await app.PreflightIsoCopy(
         targets,
-        selectedIsoFiles.value.map((file) => file.path),
+        selectedIsoFiles.value.map((file) => file.path)
       )) ?? []) as IsoCopyConflict[];
       if (conflicts.length > 0) {
         // pendingTargets and pendingTargetSnapshots were already locked by
@@ -353,11 +353,9 @@ export function useDeployment(options: UseDeploymentOptions) {
     pendingIsoFiles.value = [];
   }
 
-  function confirmIsoConflictPreflight(
-    decisions: Array<IsoCopyPlanEntry & { targetDisk: string }>,
-  ) {
+  function confirmIsoConflictPreflight(decisions: Array<IsoCopyPlanEntry & { targetDisk: string }>) {
     const decisionByKey = new Map(
-      decisions.map((decision) => [`${decision.targetDisk}\n${decision.sourcePath}`, decision]),
+      decisions.map((decision) => [`${decision.targetDisk}\n${decision.sourcePath}`, decision])
     );
     pendingIsoPlans.value = pendingIsoPlans.value.map((plan) => ({
       ...plan,
@@ -388,7 +386,14 @@ export function useDeployment(options: UseDeploymentOptions) {
     // even if a dialog is still open. isIsoConflictOpen / isDeployConfirmOpen
     // guard the remaining window so a second click cannot corrupt pendingTargets
     // while the user is resolving a conflict or reviewing the confirmation.
-    if (isDeployDisabled.value || isDeploying.value || isPreflight.value || isIsoConflictOpen.value || isDeployConfirmOpen.value) return;
+    if (
+      isDeployDisabled.value ||
+      isDeploying.value ||
+      isPreflight.value ||
+      isIsoConflictOpen.value ||
+      isDeployConfirmOpen.value
+    )
+      return;
 
     dismissDeploySuccessBanner();
 
@@ -430,9 +435,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     } else {
       // Verify all selected devices still exist in the current disk list
       const allSelectedDevices = Array.from(selectedDevices.value);
-      const validTargets = allSelectedDevices.filter((device) =>
-        diskList.value.some((d) => d.device === device)
-      );
+      const validTargets = allSelectedDevices.filter((device) => diskList.value.some((d) => d.device === device));
 
       if (validTargets.length === 0) {
         showToast(t("deploy.toast_target_changed"), "error");
@@ -442,10 +445,7 @@ export function useDeployment(options: UseDeploymentOptions) {
       // Warn user if some disks were removed
       if (validTargets.length < allSelectedDevices.length) {
         const removedCount = allSelectedDevices.length - validTargets.length;
-        showToast(
-          t("deploy.toast_some_disks_removed", { count: removedCount }),
-          "warning"
-        );
+        showToast(t("deploy.toast_some_disks_removed", { count: removedCount }), "warning");
       }
 
       targets = validTargets;
@@ -465,10 +465,7 @@ export function useDeployment(options: UseDeploymentOptions) {
           return disk ? `${disk.name} (${device})` : device;
         })
         .join(", ");
-      showToast(
-        t("deploy.error_system_disk_blocked", { disks: diskNames }),
-        "error"
-      );
+      showToast(t("deploy.error_system_disk_blocked", { disks: diskNames }), "error");
       logUserAction("CRITICAL", "System disk deployment blocked", diskNames);
       return;
     }
@@ -486,10 +483,7 @@ export function useDeployment(options: UseDeploymentOptions) {
           return disk ? `${disk.name} (${device})` : device;
         })
         .join(", ");
-      showToast(
-        t("deploy.error_readonly_disk", { disks: diskNames }),
-        "error"
-      );
+      showToast(t("deploy.error_readonly_disk", { disks: diskNames }), "error");
       logUserAction("WARN", "Read-only disk deployment blocked", diskNames);
       return;
     }
@@ -509,9 +503,7 @@ export function useDeployment(options: UseDeploymentOptions) {
     // This ensures both the conflict and no-conflict paths use the same
     // consistent snapshot captured at this exact moment, avoiding race
     // conditions where diskList changes between preflight and openDeployConfirm.
-    const currentSnapshots = targets.map((device) =>
-      diskList.value.find((disk) => disk.device === device)
-    );
+    const currentSnapshots = targets.map((device) => diskList.value.find((disk) => disk.device === device));
     if (currentSnapshots.some((disk) => !disk)) {
       // At least one target disk disappeared after validation — abort.
       showToast(t("deploy.toast_target_changed"), "error");
@@ -624,9 +616,7 @@ export function useDeployment(options: UseDeploymentOptions) {
 
       // Re-synchronize pendingTargetSnapshots with the latest diskList to guarantee
       // that any recent re-enumeration, hotplug, or hardware serial refresh is faithfully reflected.
-      const freshSnapshots = targets.map((device) =>
-        diskList.value.find((d) => d.device === device)
-      );
+      const freshSnapshots = targets.map((device) => diskList.value.find((d) => d.device === device));
       if (freshSnapshots.some((d) => !d)) {
         throw new Error(t("deploy.toast_target_changed"));
       }
@@ -644,7 +634,7 @@ export function useDeployment(options: UseDeploymentOptions) {
             selectedFsType.value,
             isoPaths,
             pendingIsoPlans.value,
-            [expected],
+            [expected]
           );
         } else {
           resList = await app.DeployHybridModeBatch(targets, selectedFsType.value, isoPaths, [expected]);
@@ -675,7 +665,7 @@ export function useDeployment(options: UseDeploymentOptions) {
             selectedFsType.value,
             isoPaths,
             pendingIsoPlans.value,
-            pendingTargetSnapshots.value,
+            pendingTargetSnapshots.value
           );
         } else {
           resList = await app.DeployHybridModeBatch(

@@ -130,4 +130,3 @@ func (d *HyperVDriver) Launch(ctx context.Context, diskPath string, bootMode str
 func (d *HyperVDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
 	return d.Launch(ctx, diskPath, cfg.BootMode)
 }
-

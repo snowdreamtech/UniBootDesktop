@@ -3,8 +3,8 @@
     <div class="modal-content glass-card log-modal">
       <div class="modal-header">
         <div class="title-with-badge">
-          <h3>📋 {{ t('log.title') }}</h3>
-          <span class="badge live-badge">● {{ t('log.live') }}</span>
+          <h3>📋 {{ t("log.title") }}</h3>
+          <span class="badge live-badge">● {{ t("log.live") }}</span>
         </div>
         <button class="btn-close" @click="$emit('close')">✕</button>
       </div>
@@ -25,19 +25,14 @@
           </div>
 
           <div class="search-box">
-            <input
-              type="text"
-              v-model="searchQuery"
-              :placeholder="t('log.search_placeholder')"
-              class="search-input"
-            />
+            <input type="text" v-model="searchQuery" :placeholder="t('log.search_placeholder')" class="search-input" />
           </div>
         </div>
 
         <!-- Terminal Log Window -->
         <div class="terminal-window" ref="terminalRef">
           <div v-if="filteredLogs.length === 0" class="empty-logs">
-            {{ t('log.empty') }}
+            {{ t("log.empty") }}
           </div>
           <div
             v-for="log in filteredLogs"
@@ -45,11 +40,19 @@
             class="log-row"
             :class="log.level.toLowerCase()"
           >
-            <span class="log-time"><bdi>{{ formatLogTime(log.timestamp) }}</bdi></span>
-            <span class="log-level-badge" :class="log.level.toLowerCase()"><bdi>[{{ log.level }}]</bdi></span>
+            <span class="log-time"
+              ><bdi>{{ formatLogTime(log.timestamp) }}</bdi></span
+            >
+            <span class="log-level-badge" :class="log.level.toLowerCase()"
+              ><bdi>[{{ log.level }}]</bdi></span
+            >
             <div class="log-content">
-              <span class="log-msg"><bdi>{{ log.message }}</bdi></span>
-              <span v-if="log.details" class="log-details"><bdi>{{ log.details }}</bdi></span>
+              <span class="log-msg"
+                ><bdi>{{ log.message }}</bdi></span
+              >
+              <span v-if="log.details" class="log-details"
+                ><bdi>{{ log.details }}</bdi></span
+              >
             </div>
           </div>
         </div>
@@ -59,21 +62,15 @@
         <div class="footer-left">
           <label class="auto-scroll-label">
             <input type="checkbox" v-model="autoScroll" />
-            {{ t('log.auto_scroll') }}
+            {{ t("log.auto_scroll") }}
           </label>
         </div>
         <div class="footer-actions">
-          <button class="btn btn-secondary" @click="copyAllLogs">
-            📋 {{ t('log.copy') }}
-          </button>
-          <button class="btn btn-secondary" @click="exportLogFile">
-            📥 {{ t('log.export') }}
-          </button>
-          <button class="btn btn-danger" @click="$emit('clear')">
-            🗑️ {{ t('log.clear') }}
-          </button>
+          <button class="btn btn-secondary" @click="copyAllLogs">📋 {{ t("log.copy") }}</button>
+          <button class="btn btn-secondary" @click="exportLogFile">📥 {{ t("log.export") }}</button>
+          <button class="btn btn-danger" @click="$emit('clear')">🗑️ {{ t("log.clear") }}</button>
           <button class="btn btn-primary" @click="$emit('close')">
-            {{ t('common.close') }}
+            {{ t("common.close") }}
           </button>
         </div>
       </div>
@@ -82,9 +79,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue';
-import { t } from '../i18n';
-import { formatLogTime, formatLogsToText } from '../utils/logFormatter';
+import { ref, computed, watch, nextTick } from "vue";
+import { t } from "../i18n";
+import { formatLogTime, formatLogsToText } from "../utils/logFormatter";
 
 export interface LogItem {
   id?: number;
@@ -99,38 +96,37 @@ const props = defineProps<{
   logs: LogItem[];
 }>();
 
-defineEmits(['close', 'clear']);
+defineEmits(["close", "clear"]);
 
-const currentFilter = ref('ALL');
-const searchQuery = ref('');
-const savedAutoScroll = localStorage.getItem('unibootdesktop_log_autoscroll');
-const autoScroll = ref(savedAutoScroll !== null ? savedAutoScroll === 'true' : true);
+const currentFilter = ref("ALL");
+const searchQuery = ref("");
+const savedAutoScroll = localStorage.getItem("unibootdesktop_log_autoscroll");
+const autoScroll = ref(savedAutoScroll !== null ? savedAutoScroll === "true" : true);
 const terminalRef = ref<HTMLDivElement | null>(null);
 
 watch(autoScroll, (val) => {
-  localStorage.setItem('unibootdesktop_log_autoscroll', String(val));
+  localStorage.setItem("unibootdesktop_log_autoscroll", String(val));
 });
 
 const logLevels = computed(() => [
-  { key: 'ALL', label: t('log.level_all') },
-  { key: 'INFO', label: t('log.level_info') },
-  { key: 'WARN', label: t('log.level_warn') },
-  { key: 'ERROR', label: t('log.level_error') },
-  { key: 'DEBUG', label: t('log.level_debug') }
+  { key: "ALL", label: t("log.level_all") },
+  { key: "INFO", label: t("log.level_info") },
+  { key: "WARN", label: t("log.level_warn") },
+  { key: "ERROR", label: t("log.level_error") },
+  { key: "DEBUG", label: t("log.level_debug") },
 ]);
 
 function getLevelCount(level: string): number {
-  if (level === 'ALL') return props.logs.length;
-  return props.logs.filter(l => (l.level || '').toUpperCase() === level).length;
+  if (level === "ALL") return props.logs.length;
+  return props.logs.filter((l) => (l.level || "").toUpperCase() === level).length;
 }
 
 const filteredLogs = computed(() => {
-  return props.logs.filter(log => {
-    const matchesLevel = currentFilter.value === 'ALL' || (log.level || '').toUpperCase() === currentFilter.value;
+  return props.logs.filter((log) => {
+    const matchesLevel = currentFilter.value === "ALL" || (log.level || "").toUpperCase() === currentFilter.value;
     const query = searchQuery.value.trim().toLowerCase();
-    const matchesQuery = !query ||
-      log.message.toLowerCase().includes(query) ||
-      (log.details && log.details.toLowerCase().includes(query));
+    const matchesQuery =
+      !query || log.message.toLowerCase().includes(query) || (log.details && log.details.toLowerCase().includes(query));
     return matchesLevel && matchesQuery;
   });
 });
@@ -145,45 +141,51 @@ function scrollToBottom() {
   }
 }
 
-const logUserAction = (level: string, message: string, details: string = '') => {
+const logUserAction = (level: string, message: string, details: string = "") => {
   const app = (window as any)?.go?.main?.App;
-  if (app && typeof app.LogAction === 'function') {
+  if (app && typeof app.LogAction === "function") {
     app.LogAction(level, message, details);
   }
 };
 
 watch(currentFilter, (val) => {
-  logUserAction('DEBUG', 'User switched log level filter tab in full Log Viewer modal', val);
+  logUserAction("DEBUG", "User switched log level filter tab in full Log Viewer modal", val);
 });
 
 watch(autoScroll, (val) => {
-  logUserAction('DEBUG', 'User toggled auto-scroll in full Log Viewer modal', val ? 'enabled' : 'disabled');
+  logUserAction("DEBUG", "User toggled auto-scroll in full Log Viewer modal", val ? "enabled" : "disabled");
 });
 
-watch(() => props.logs.length, () => {
-  scrollToBottom();
-});
-
-watch(() => props.isOpen, (newVal) => {
-  if (newVal) {
-    logUserAction('INFO', 'User opened full Log Viewer modal');
+watch(
+  () => props.logs.length,
+  () => {
     scrollToBottom();
   }
-});
+);
+
+watch(
+  () => props.isOpen,
+  (newVal) => {
+    if (newVal) {
+      logUserAction("INFO", "User opened full Log Viewer modal");
+      scrollToBottom();
+    }
+  }
+);
 
 function copyAllLogs() {
-  logUserAction('INFO', 'User copied logs from full Log Viewer modal');
+  logUserAction("INFO", "User copied logs from full Log Viewer modal");
   const text = formatLogsToText(filteredLogs.value);
   navigator.clipboard.writeText(text);
-  alert(t('log.copied_toast'));
+  alert(t("log.copied_toast"));
 }
 
 function exportLogFile() {
-  logUserAction('INFO', 'User exported logs from full Log Viewer modal');
+  logUserAction("INFO", "User exported logs from full Log Viewer modal");
   const text = formatLogsToText(filteredLogs.value);
-  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
   a.download = `uniboot_log_${new Date().toISOString().slice(0, 10)}.log`;
   a.click();
@@ -216,9 +218,15 @@ function exportLogFile() {
 }
 
 @keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.4; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .log-controls {
@@ -268,7 +276,7 @@ function exportLogFile() {
   color: var(--terminal-text);
   border-radius: 10px;
   padding: 1rem 1.15rem;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
   font-size: 0.82rem;
   line-height: 1.6;
   height: 480px;
@@ -296,7 +304,7 @@ function exportLogFile() {
 .terminal-window .log-time {
   color: #64748b;
   font-size: 0.78rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: "JetBrains Mono", monospace;
   white-space: nowrap;
   flex-shrink: 0;
   width: 100px;
@@ -368,10 +376,18 @@ function exportLogFile() {
   overflow-wrap: anywhere;
 }
 
-.terminal-window .log-row.info .log-msg { color: #f1f5f9; }
-.terminal-window .log-row.warn .log-msg { color: #fde047; }
-.terminal-window .log-row.error .log-msg { color: #fca5a5; }
-.terminal-window .log-row.debug .log-msg { color: #c084fc; }
+.terminal-window .log-row.info .log-msg {
+  color: #f1f5f9;
+}
+.terminal-window .log-row.warn .log-msg {
+  color: #fde047;
+}
+.terminal-window .log-row.error .log-msg {
+  color: #fca5a5;
+}
+.terminal-window .log-row.debug .log-msg {
+  color: #c084fc;
+}
 
 .terminal-window .log-details {
   color: #94a3b8;

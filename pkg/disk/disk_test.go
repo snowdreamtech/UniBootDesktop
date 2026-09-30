@@ -18,9 +18,9 @@ type fakeDirEntry struct {
 	name string
 }
 
-func (f fakeDirEntry) Name() string { return f.name }
-func (f fakeDirEntry) IsDir() bool { return false }
-func (f fakeDirEntry) Type() fs.FileMode { return 0 }
+func (f fakeDirEntry) Name() string               { return f.name }
+func (f fakeDirEntry) IsDir() bool                { return false }
+func (f fakeDirEntry) Type() fs.FileMode          { return 0 }
 func (f fakeDirEntry) Info() (os.FileInfo, error) { return nil, nil }
 
 func TestIsIgnoredVolume(t *testing.T) {
@@ -259,7 +259,7 @@ func TestDiskCacheShouldReuse(t *testing.T) {
 
 func TestDarwinVolumeSnapshotUsesDeviceIdentity(t *testing.T) {
 	infoMap := map[string]string{
-		"/Volumes/UNTITLED":    "<key>DeviceIdentifier</key><string>disk2</string>",
+		"/Volumes/UNTITLED":   "<key>DeviceIdentifier</key><string>disk2</string>",
 		"/Volumes/UNTITLED 1": "<key>DeviceIdentifier</key><string>disk3</string>",
 	}
 
@@ -276,10 +276,10 @@ func TestDarwinVolumeSnapshotUsesDeviceIdentity(t *testing.T) {
 
 func TestIdentifyThirdPartyBoot_Fingerprints(t *testing.T) {
 	tests := []struct {
-		name         string
-		relativeDirs []string
+		name          string
+		relativeDirs  []string
 		relativeFiles []string
-		expected     ThirdPartyBootType
+		expected      ThirdPartyBootType
 	}{
 		{
 			name:          "Rufus Disk with rufus.efi",

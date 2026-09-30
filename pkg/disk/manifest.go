@@ -21,13 +21,13 @@ const MagicUniBootDisk = "UNIBOOT_DISK"
 
 // UniBootManifest defines the structured specification for ipxe/uniboot.json.
 type UniBootManifest struct {
-	Magic     string      `json:"magic"`                // Must equal MagicUniBootDisk ("UNIBOOT_DISK")
-	Version   string      `json:"version"`              // Manifest and firmware version, e.g. "1.0.0"
-	Mode      string      `json:"mode"`                 // Deployment mode: "cloud" or "hybrid"
-	Arch      []string    `json:"arch,omitempty"`       // Supported architectures: ["x86_64", "arm64", "ia32"]
-	Engine    *EngineInfo `json:"engine,omitempty"`     // Core boot engine information
-	CreatedAt int64       `json:"created_at"`           // Creation/upgrade timestamp in Unix seconds
-	UUID      string      `json:"uuid,omitempty"`       // Unique installation instance UUID
+	Magic     string      `json:"magic"`            // Must equal MagicUniBootDisk ("UNIBOOT_DISK")
+	Version   string      `json:"version"`          // Manifest and firmware version, e.g. "1.0.0"
+	Mode      string      `json:"mode"`             // Deployment mode: "cloud" or "hybrid"
+	Arch      []string    `json:"arch,omitempty"`   // Supported architectures: ["x86_64", "arm64", "ia32"]
+	Engine    *EngineInfo `json:"engine,omitempty"` // Core boot engine information
+	CreatedAt int64       `json:"created_at"`       // Creation/upgrade timestamp in Unix seconds
+	UUID      string      `json:"uuid,omitempty"`   // Unique installation instance UUID
 }
 
 // EngineInfo describes the underlying bootloader engine.
@@ -106,10 +106,10 @@ func WriteUniBootManifest(mountPoint string, mode string, version string) error 
 	}
 
 	manifest := UniBootManifest{
-		Magic:     MagicUniBootDisk,
-		Version:   version,
-		Mode:      mode,
-		Arch:      []string{"x86_64", "arm64", "ia32"},
+		Magic:   MagicUniBootDisk,
+		Version: version,
+		Mode:    mode,
+		Arch:    []string{"x86_64", "arm64", "ia32"},
 		Engine: &EngineInfo{
 			Name:    engineName,
 			Version: engineVer,
@@ -174,4 +174,3 @@ func GetDiskUniBootManifest(targetDisk string) *UniBootManifest {
 
 	return nil
 }
-

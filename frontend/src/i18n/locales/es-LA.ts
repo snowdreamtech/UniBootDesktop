@@ -24,7 +24,8 @@ export const esLa: TranslationDict = {
   "common.langAuto": "Idioma (automático)",
   "common.lang": "Idioma",
   "vm.startSuccess": "Simulación en máquina virtual iniciada con éxito para el disco: {disk} ({device})",
-  "vm.backendNotReady": "La API de backend no está lista: los enlaces de Wails se cargan, reinicie la aplicación UniBoot.",
+  "vm.backendNotReady":
+    "La API de backend no está lista: los enlaces de Wails se cargan, reinicie la aplicación UniBoot.",
   "vm.demoModeStart": "[Modo Demo] Iniciando verificación del simulador QEMU: {disk} ({device})",
   "vm.startFailed": "Error al iniciar el simulador QEMU: {error}",
   "disk.writingImageProgress": "Imagen de escritura ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -59,7 +60,8 @@ export const esLa: TranslationDict = {
   "settings.directModeNotice": "Modo directo (Proxy deshabilitado)",
   "settings.proxyHostRequired": "Introduzca primero la dirección del host del servidor proxy",
   "settings.proxyTestSuccess": "Proxy {protocol} conectado ({host}:{port})",
-  "settings.syncSuccessAlert": "¡El firmware y los scripts de Cloud UniBoot {tag} se descargaron y almacenaron en caché correctamente!",
+  "settings.syncSuccessAlert":
+    "¡El firmware y los scripts de Cloud UniBoot {tag} se descargaron y almacenaron en caché correctamente!",
   "settings.syncSuccessShortAlert": "¡El firmware central de Cloud UniBoot se sincronizó correctamente!",
   "settings.syncFailedAlert": "Error en la sincronización del firmware: {error}",
   "settings.ventoyToolchain": "Cadena de herramientas Ventoy",
@@ -72,7 +74,8 @@ export const esLa: TranslationDict = {
   "mode.cloud": "Modo Nube",
   "mode.hybrid": "Modo Híbrido",
   "disk.select_title": "Seleccionar disco de destino",
-  "disk.select_desc": "Escanea unidades de disco extraíbles de forma segura. Las unidades del sistema están protegidas.",
+  "disk.select_desc":
+    "Escanea unidades de disco extraíbles de forma segura. Las unidades del sistema están protegidas.",
   "disk.single_mode": "Modo Individual",
   "disk.batch_mode": "Modo Lote",
   "disk.select_all": "Seleccionar todo",
@@ -91,7 +94,8 @@ export const esLa: TranslationDict = {
   "disk.eject": "Expulsar",
   "disk.batch_eject": "Expulsar",
   "disk.toast_batch_eject_success": "¡Se expulsaron con éxito {count} unidades de disco seleccionadas!",
-  "disk.toast_batch_eject_partial": "Expulsados {successCount} dispositivo(s), fallo al expulsar {failCount} dispositivo(s)",
+  "disk.toast_batch_eject_partial":
+    "Expulsados {successCount} dispositivo(s), fallo al expulsar {failCount} dispositivo(s)",
   "disk.toast_ejected_success": "¡La disco {name} ({device}) ha sido expulsada con seguridad!",
   "disk.toast_ejected_failed": "Error al expulsar el USB {device}: {error}",
   "disk.tag_boot": "Disco de arranque",
@@ -99,7 +103,8 @@ export const esLa: TranslationDict = {
   "disk.tag_boot_hybrid": "Arranque Híbrido",
   "disk.tag_boot_thirdparty": "Arranque de terceros",
   "confirm.cloud_to_hybrid_warn_title": "Aviso: Cambiar a modo híbrido requiere formateo completo",
-  "confirm.cloud_to_hybrid_warn_desc": "Este disco está en modo Cloud puro. El modo híbrido Ventoy requiere reconstruir el MBR y la tabla de particiones, borrando todos los datos e ISOs!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Este disco está en modo Cloud puro. El modo híbrido Ventoy requiere reconstruir el MBR y la tabla de particiones, borrando todos los datos e ISOs!",
   "disk.tag_ssd": "SSD portátil",
   "disk.tag_typec": "Disco Type-C",
   "disk.tag_secure": "Unidad cifrada",
@@ -107,9 +112,11 @@ export const esLa: TranslationDict = {
   "disk.tag_hdd": "Disco duro portátil",
   "disk.tag_key": "Clave de seguridad",
   "disk.tag_cdrom": "CD-ROM virtual",
-  "disk.tooltip_uniboot_hybrid": "Unidad de arranque Ventoy / UniBoot (Modo Híbrido, actualización sin pérdida de datos)",
+  "disk.tooltip_uniboot_hybrid":
+    "Unidad de arranque Ventoy / UniBoot (Modo Híbrido, actualización sin pérdida de datos)",
   "disk.tooltip_uniboot_cloud": "Unidad de arranque UniBoot Nube (Modo Nube, actualización sin pérdida de datos)",
-  "disk.tooltip_third_party_boot": "Disco de arranque de terceros (Contiene estructura Rufus/PE/ISO, formateo requerido)",
+  "disk.tooltip_third_party_boot":
+    "Disco de arranque de terceros (Contiene estructura Rufus/PE/ISO, formateo requerido)",
   "log.title": "Centro de registros",
   "log.live": "En vivo",
   "log.search_placeholder": "Buscar en los registros...",
@@ -127,13 +134,16 @@ export const esLa: TranslationDict = {
   "log.level_error": "ERROR",
   "log.level_debug": "Depuración",
   "safe.title_cloud": "Unidad Ventoy/UniBoot existente detectada (Modo Nube solo actualiza la partición ESP)",
-  "safe.desc_cloud": "El modo Nube conserva el diseño de doble partición UNIBOOT. ¡La actualización de ESP mantiene intactos los archivos e ISOs!",
+  "safe.desc_cloud":
+    "El modo Nube conserva el diseño de doble partición UNIBOOT. ¡La actualización de ESP mantiene intactos los archivos e ISOs!",
   "safe.title_hybrid": "Unidad Ventoy existente detectada (Actualización en el sitio en modo Híbrido)",
-  "safe.desc_hybrid": "El modo Híbrido conserva todos los archivos ISO existentes sin formatear, inyectando el tema oscuro de UniBoot y el menú Nube.",
+  "safe.desc_hybrid":
+    "El modo Híbrido conserva todos los archivos ISO existentes sin formatear, inyectando el tema oscuro de UniBoot y el menú Nube.",
   "common.optional": "Opcional",
   "common.optional_test": "Prueba opcional",
   "iso.title": "Fuentes de imágenes del sistema local (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Agregue archivos ISO para copiar automáticamente al directorio /UNIBOOT/iso/ para el arranque directo de Ventoy/UniBoot.",
+  "iso.desc":
+    "Agregue archivos ISO para copiar automáticamente al directorio /UNIBOOT/iso/ para el arranque directo de Ventoy/UniBoot.",
   "iso.add_btn": "Agregar archivos de imagen",
   "iso.empty_title": "Haga clic para agregar archivos de imagen (admite selección única o por lotes)",
   "iso.empty_sub": "Admite formatos .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -144,7 +154,8 @@ export const esLa: TranslationDict = {
   "iso.drag_unsupported": "No se detectaron archivos de imagen compatibles (.iso, .wim, .img, etc.)",
   "iso.preflight_title": "Comprobación antes de escribir",
   "iso.conflict_title": "Ya existe un archivo con ese nombre",
-  "iso.conflict_desc": "Ya existe un archivo con el mismo nombre en la carpeta iso del USB de destino. Elige cómo manejarlo. No se comparan los hashes.",
+  "iso.conflict_desc":
+    "Ya existe un archivo con el mismo nombre en la carpeta iso del USB de destino. Elige cómo manejarlo. No se comparan los hashes.",
   "iso.conflict_action": "Acción",
   "iso.conflict_keep_both": "Conservar",
   "iso.conflict_replace": "Sobrescribir",
@@ -154,13 +165,16 @@ export const esLa: TranslationDict = {
   "iso.conflict_confirm": "Confirmar y continuar",
   "iso.preflight_failed": "La comprobación antes de escribir falló",
   "deploy.title": "Creación de disco de arranque y prueba QEMU",
-  "deploy.desc_cloud": "Arranque en la nube iPXE puro • Configuración ultrarrápida de dos particiones con firmware de red iPXE multiarquitectura.",
+  "deploy.desc_cloud":
+    "Arranque en la nube iPXE puro • Configuración ultrarrápida de dos particiones con firmware de red iPXE multiarquitectura.",
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuración de partición híbrida Ventoy con gestión ISO local.",
   "deploy.target_device": "Dispositivo de destino:",
   "deploy.batch_target": "{count} unidades de disco seleccionadas",
   "deploy.start_create": "Crear disco de arranque",
-  "deploy.tip_batch_update_all": "Actualización por lotes sin pérdida: Las {count} unidades seleccionadas se actualizarán en el sitio (datos e ISOs conservados)",
-  "deploy.tip_batch_mixed": "Despliegue mixto por lotes: {bootCount} unidad(es) actualización sin pérdida de datos, {blankCount} unidad(es) formateo completo",
+  "deploy.tip_batch_update_all":
+    "Actualización por lotes sin pérdida: Las {count} unidades seleccionadas se actualizarán en el sitio (datos e ISOs conservados)",
+  "deploy.tip_batch_mixed":
+    "Despliegue mixto por lotes: {bootCount} unidad(es) actualización sin pérdida de datos, {blankCount} unidad(es) formateo completo",
   "deploy.start_update": "Actualización in situ (datos seguros)",
   "deploy.batch_create": "Iniciar implementación por lotes ({count} unidades)",
   "deploy.writing": "Escribiendo paquetes de firmware de arranque...",
@@ -168,26 +182,32 @@ export const esLa: TranslationDict = {
   "deploy.batch_overall_progress": "Progreso general",
   "deploy.toast_switched_b": "¡Cambiado al modo Nube con éxito!",
   "deploy.toast_added_iso": "Se agregaron con éxito {count} imagen(es) ISO",
-  "deploy.toast_added_demo_iso": "Se agregaron 2 archivos fuente de imagen de demostración (demostración del navegador)",
+  "deploy.toast_added_demo_iso":
+    "Se agregaron 2 archivos fuente de imagen de demostración (demostración del navegador)",
   "deploy.toast_select_target": "Primero seleccione una disco de destino en el panel izquierdo",
   "deploy.toast_select_batch": "Primero verifique las unidades de disco de destino para formatear por lotes",
   "deploy.toast_no_disks": "¡No se detectó ninguna disco! Inserte una disco e inténtelo de nuevo.",
   "deploy.tip_writing": "Escribiendo firmware de arranque...",
   "deploy.tip_select_single": "Seleccione primero una disco de destino",
   "deploy.tip_select_batch": "Verifique las unidades de disco de destino para la implementación por lotes",
-  "deploy.tip_macos_unsupported": "macOS no admite el formateo inicial en Modo Híbrido (usa Modo Nube o inicializa en Win/Linux primero)",
+  "deploy.tip_macos_unsupported":
+    "macOS no admite el formateo inicial en Modo Híbrido (usa Modo Nube o inicializa en Win/Linux primero)",
   "deploy.tip_need_ventoy": "El formateo inicial en Modo Híbrido requiere Ventoy CLI local",
   "deploy.macos_alert_title": "El formato nuevo de macOS Ventoy CLI no es compatible",
-  "deploy.macos_alert_desc": "Ventoy no admite el formateo en macOS directamente. Use el modo Nube para soporte nativo, o inicialice Ventoy en Windows/Linux primero y luego realice una actualización in situ en macOS.",
+  "deploy.macos_alert_desc":
+    "Ventoy no admite el formateo en macOS directamente. Use el modo Nube para soporte nativo, o inicialice Ventoy en Windows/Linux primero y luego realice una actualización in situ en macOS.",
   "deploy.no_ventoy_title": "Ejecutable CLI de Ventoy no detectado",
-  "deploy.no_ventoy_desc": "El modo Híbrido requiere la cadena de herramientas Ventoy CLI local. ¡Recomendamos el modo Nube!",
+  "deploy.no_ventoy_desc":
+    "El modo Híbrido requiere la cadena de herramientas Ventoy CLI local. ¡Recomendamos el modo Nube!",
   "deploy.result_batch_success": "¡Disco de instalación en la nube en 1 s implementado con éxito en {count} disco(s)!",
   "deploy.result_success": "Modo {mode} implementado con éxito en {targets}",
   "deploy.alert_success": "¡Implementación exitosa!",
   "deploy.safely_eject_btn": "Expulsar USB con seguridad",
   "deploy.success_banner_title": "¡Unidad de arranque creada con éxito!",
-  "deploy.success_banner_desc": "Archivos de arranque y firmware escritos. Expulse de forma segura antes de desconectar para evitar la pérdida de datos.",
-  "deploy.toast_auto_ejected": "¡Creación completada! Se expulsó con seguridad {count} unidad(es) USB. Todos los datos han sido guardados.",
+  "deploy.success_banner_desc":
+    "Archivos de arranque y firmware escritos. Expulse de forma segura antes de desconectar para evitar la pérdida de datos.",
+  "deploy.toast_auto_ejected":
+    "¡Creación completada! Se expulsó con seguridad {count} unidad(es) USB. Todos los datos han sido guardados.",
   "deploy.confirm_auto_eject_title": "Escritura completada — ¿Expulsar con seguridad?",
   "deploy.confirm_auto_eject_desc": "Todos los datos se escribieron correctamente. ¿Deseas expulsar la disco ahora?",
   "deploy.confirm_auto_eject_yes": "Expulsar con seguridad",
@@ -208,7 +228,8 @@ export const esLa: TranslationDict = {
   "vm.boot_mode_bios": "Modo BIOS (Heredado)",
   "vm.boot_mode_auto": "Detección Automática",
   "vm.startSuccess_vm": "Prueba de simulación {name} iniciada con éxito",
-  "vm.desc_optional": "Función opcional: Previsualice el arranque de disco en una máquina virtual sin reiniciar el equipo.",
+  "vm.desc_optional":
+    "Función opcional: Previsualice el arranque de disco en una máquina virtual sin reiniciar el equipo.",
   "vm.installed": "QEMU Detectado",
   "vm.not_installed": "QEMU No Detectado",
   "vm.target": "Objetivo de Prueba:",
@@ -279,7 +300,8 @@ export const esLa: TranslationDict = {
   "settings.ventoy_timeout": "Tiempo de espera del menú Ventoy (segundos):",
   "confirm.title": "High-Risk Format Advertencia",
   "confirm.warning_title": "Advertencia: Formatting will erase all data!",
-  "confirm.warning_desc": "La disco seleccionada se volverá a particionar y formatear. Todos los archivos existentes se borrarán por completo. ¡Asegúrese de haber realizado una copia de seguridad de los datos importantes!",
+  "confirm.warning_desc":
+    "La disco seleccionada se volverá a particionar y formatear. Todos los archivos existentes se borrarán por completo. ¡Asegúrese de haber realizado una copia de seguridad de los datos importantes!",
   "confirm.mode_title": "Modo de implementación:",
   "confirm.fs_title": "Sistema de archivos de destino:",
   "confirm.disks_title": "Unidades a formatear ({count}):",
@@ -289,11 +311,15 @@ export const esLa: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Confirmaration",
   "confirm.title_danger": "Format Advertencia: Disk Initialization",
   "confirm.safe_banner_title": "Aviso de actualización incremental local (datos seguros)",
-  "confirm.safe_banner_desc": "Estructura de arranque Ventoy/UniBoot detectada en la unidad de destino. El sistema realizará un formato de omisión de actualización incremental. ¡Todos los archivos e ISO existentes se conservan al 100%!",
-  "confirm.mixed_banner_title": "Modo mixto inteligente: actualización in situ para unidades de arranque, formato para unidades en blanco",
-  "confirm.mixed_banner_desc": "Unidades de arranque {ventoyCount} seleccionadas (actualización local) y unidades en blanco {blankCount} (formato completo).",
+  "confirm.safe_banner_desc":
+    "Estructura de arranque Ventoy/UniBoot detectada en la unidad de destino. El sistema realizará un formato de omisión de actualización incremental. ¡Todos los archivos e ISO existentes se conservan al 100%!",
+  "confirm.mixed_banner_title":
+    "Modo mixto inteligente: actualización in situ para unidades de arranque, formato para unidades en blanco",
+  "confirm.mixed_banner_desc":
+    "Unidades de arranque {ventoyCount} seleccionadas (actualización local) y unidades en blanco {blankCount} (formato completo).",
   "confirm.danger_banner_title": "Advertencia: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "La escritura volverá a particionar y formatear el dispositivo de destino (MBR/GPT). ¡Todos los archivos existentes en las unidades seleccionadas se borrarán por completo!",
+  "confirm.danger_banner_desc":
+    "La escritura volverá a particionar y formatear el dispositivo de destino (MBR/GPT). ¡Todos los archivos existentes en las unidades seleccionadas se borrarán por completo!",
   "confirm.summary_title": "Unidades de destino para la implementación de arranque:",
   "confirm.smart_safe_tag": "Protección Inteligente",
   "confirm.ventoy_group_title": "Unidades de actualización in situ (se conservan todos los ISO):",
@@ -311,10 +337,14 @@ export const esLa: TranslationDict = {
   "confirm.no": "Cancelar",
   "confirm.will_format": "Formateo completo",
   "confirm.no_format": "Actualización inteligente in situ",
-  "deploy.toast_target_changed": "El disco de destino seleccionado cambió o ya no está disponible. Por favor, escanea de nuevo.",
-  "deploy.toast_some_disks_removed": "{count} disco(s) no disponible(s) eliminado(s) automáticamente, continuando con los discos restantes",
-  "deploy.error_system_disk_blocked": "⛔ Bloqueado: {disks} es un disco del sistema. ¡No se puede implementar un disco de arranque USB en la unidad del sistema!",
-  "deploy.error_readonly_disk": "🔒 Protegido contra escritura: {disks} es de solo lectura. Elimine la protección contra escritura o use un USB diferente",
+  "deploy.toast_target_changed":
+    "El disco de destino seleccionado cambió o ya no está disponible. Por favor, escanea de nuevo.",
+  "deploy.toast_some_disks_removed":
+    "{count} disco(s) no disponible(s) eliminado(s) automáticamente, continuando con los discos restantes",
+  "deploy.error_system_disk_blocked":
+    "⛔ Bloqueado: {disks} es un disco del sistema. ¡No se puede implementar un disco de arranque USB en la unidad del sistema!",
+  "deploy.error_readonly_disk":
+    "🔒 Protegido contra escritura: {disks} es de solo lectura. Elimine la protección contra escritura o use un USB diferente",
   "deploy.start_cloud_create": "Crear disco de arranque en la Nube",
   "deploy.batch_update": "Iniciar actualización por lotes sin pérdida de datos ({count} unidades de disco)",
   "deploy.batch_mixed": "Iniciar despliegue mixto por lotes ({count} unidades de disco)",
@@ -337,7 +367,8 @@ export const esLa: TranslationDict = {
   "inspector.smart": "Salud SMART:",
   "inspector.sector": "Tamaño del sector:",
   "inspector.fake_title": "Fake USB 3.0 Advertencia Alert!",
-  "inspector.fake_desc": "El dispositivo indica USB 3.0, pero la velocidad real negociada es de solo {speed} (USB 2.0 PHY).",
+  "inspector.fake_desc":
+    "El dispositivo indica USB 3.0, pero la velocidad real negociada es de solo {speed} (USB 2.0 PHY).",
   "inspector.genuine_title": "Verificación de hardware físico aprobada (dispositivo de disco 3.0+ original)",
   "inspector.genuine_desc": "La capa física PHY negoció un enlace genuino SuperSpeed/SuperSpeed+ a {speed}.",
   "inspector.usb2_title": "Interfaz USB 2.0 estándar",
@@ -445,9 +476,12 @@ export const esLa: TranslationDict = {
   "diag.action_reformat_title": "Reformatear (reformat)",
   "diag.action_remount_title": "Remontar (remount)",
   "diag.action_retry_title": "Reintentar (retry)",
-  "diag.action_reformat_desc": "La interrupción del despliegue corrompió la tabla de particiones o el sistema de archivos. Se recomienda formatear de nuevo.",
-  "diag.action_remount_desc": "La ruta de montaje del destino se desconectó durante la escritura. Vuelve a insertar el USB o remonta el volumen.",
-  "diag.action_retry_desc": "El entorno y el estado del dispositivo están intactos. Puedes reintentar el despliegue con seguridad.",
+  "diag.action_reformat_desc":
+    "La interrupción del despliegue corrompió la tabla de particiones o el sistema de archivos. Se recomienda formatear de nuevo.",
+  "diag.action_remount_desc":
+    "La ruta de montaje del destino se desconectó durante la escritura. Vuelve a insertar el USB o remonta el volumen.",
+  "diag.action_retry_desc":
+    "El entorno y el estado del dispositivo están intactos. Puedes reintentar el despliegue con seguridad.",
   "about.updating": "Actualizando ({progress}%)",
   "about.updateTo": "Actualizar en línea a {tag}",
   "about.downloading": "Descargando {progress}%",
@@ -463,7 +497,8 @@ export const esLa: TranslationDict = {
   "dialog.textFilesFilter": "Archivos de texto (*.txt)",
   "dialog.allFilesFilter": "Todos los archivos (*.*)",
   "dialog.selectIsoTitle": "Seleccionar archivos de imagen del sistema (*.iso, *.wim, *.img, etc.)",
-  "dialog.ventoyFilter": "Imágenes de origen Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Imágenes de origen Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Calcular Hash",
   "checksum.calculating": "Calculando Hash...",
   "checksum.algo_label": "Algoritmo",
@@ -509,9 +544,11 @@ export const esLa: TranslationDict = {
   "privilege.modal_title": "Se requieren permisos de administrador",
   "privilege.modal_subtitle": "Se requiere autorización para leer datos de arranque y escribir en discos",
   "privilege.reason_title": "¿Por qué se requieren permisos de administrador?",
-  "privilege.reason_desc": "El sistema operativo aísla los sectores sin procesar y particiones EFI. La autorización permite la detección directa y creación segura.",
+  "privilege.reason_desc":
+    "El sistema operativo aísla los sectores sin procesar y particiones EFI. La autorización permite la detección directa y creación segura.",
   "privilege.scope_title": "Alcance del acceso",
-  "privilege.scope_desc": "Limitado estrictamente a unidades USB externas seleccionadas. Los discos internos nunca se tocan.",
+  "privilege.scope_desc":
+    "Limitado estrictamente a unidades USB externas seleccionadas. Los discos internos nunca se tocan.",
   "privilege.safety_title": "Seguridad y transparencia",
   "privilege.safety_desc": "La inspección es de solo lectura y no destructiva; el código es totalmente abierto.",
   "privilege.confirm_btn": "Autorizar ahora",

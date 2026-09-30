@@ -99,7 +99,8 @@ export const frFr: TranslationDict = {
   "disk.tag_boot_hybrid": "Boot Hybride",
   "disk.tag_boot_thirdparty": "Démarrage tiers",
   "confirm.cloud_to_hybrid_warn_title": "Attention : Le passage en mode hybride nécessite un formatage complet",
-  "confirm.cloud_to_hybrid_warn_desc": "Ce disque est en mode Cloud pur. Le mode hybride Ventoy nécessite la reconstruction du MBR et de la table de partition, ce qui effacera toutes les données et ISO !",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Ce disque est en mode Cloud pur. Le mode hybride Ventoy nécessite la reconstruction du MBR et de la table de partition, ce qui effacera toutes les données et ISO !",
   "disk.tag_ssd": "SSD externe",
   "disk.tag_typec": "Lecteur Type-C",
   "disk.tag_secure": "Disque chiffré",
@@ -127,13 +128,16 @@ export const frFr: TranslationDict = {
   "log.level_error": "ERREUR",
   "log.level_debug": "Débogage",
   "safe.title_cloud": "Lecteur Ventoy/UniBoot existant détecté (Le mode Cloud rafraîchit uniquement la partition ESP)",
-  "safe.desc_cloud": "Le mode Cloud conserve la disposition UNIBOOT. Le rafraîchissement de l'ESP préserve tous les ISO et fichiers utilisateur !",
+  "safe.desc_cloud":
+    "Le mode Cloud conserve la disposition UNIBOOT. Le rafraîchissement de l'ESP préserve tous les ISO et fichiers utilisateur !",
   "safe.title_hybrid": "Lecteur Ventoy existant détecté (Mise à jour sur place en mode Hybride)",
-  "safe.desc_hybrid": "Le mode Hybride conserve tous les fichiers ISO sans formatage, injectant le thème sombre UniBoot et le menu Cloud en toute sécurité !",
+  "safe.desc_hybrid":
+    "Le mode Hybride conserve tous les fichiers ISO sans formatage, injectant le thème sombre UniBoot et le menu Cloud en toute sécurité !",
   "common.optional": "Optionnel",
   "common.optional_test": "Test optionnel",
   "iso.title": "Sources d'images système locales (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Ajoutez des fichiers ISO à copier automatiquement dans le dossier /UNIBOOT/iso/ pour le démarrage direct Ventoy / UniBoot.",
+  "iso.desc":
+    "Ajoutez des fichiers ISO à copier automatiquement dans le dossier /UNIBOOT/iso/ pour le démarrage direct Ventoy / UniBoot.",
   "iso.add_btn": "Ajouter des fichiers image",
   "iso.empty_title": "Cliquer pour ajouter des fichiers image (Sélection unique ou multiple)",
   "iso.empty_sub": "Prend en charge les formats .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -144,7 +148,8 @@ export const frFr: TranslationDict = {
   "iso.drag_unsupported": "Aucun fichier image pris en charge détecté (.iso, .wim, .img, etc.)",
   "iso.preflight_title": "Vérification avant écriture",
   "iso.conflict_title": "Nom de fichier déjà utilisé",
-  "iso.conflict_desc": "Un fichier portant ce nom existe déjà dans le dossier iso de la clé USB cible. Choisissez une action. Les hachages ne sont pas comparés.",
+  "iso.conflict_desc":
+    "Un fichier portant ce nom existe déjà dans le dossier iso de la clé USB cible. Choisissez une action. Les hachages ne sont pas comparés.",
   "iso.conflict_action": "Action",
   "iso.conflict_keep_both": "Conserver",
   "iso.conflict_replace": "Écraser",
@@ -154,13 +159,16 @@ export const frFr: TranslationDict = {
   "iso.conflict_confirm": "Confirmer et continuer",
   "iso.preflight_failed": "Échec de la vérification avant écriture",
   "deploy.title": "Création de lecteur démarrable et test QEMU",
-  "deploy.desc_cloud": "Démarrage Cloud iPXE Pur • Configuration ultra-rapide à deux partitions avec micrologiciel réseau iPXE multi-arch.",
+  "deploy.desc_cloud":
+    "Démarrage Cloud iPXE Pur • Configuration ultra-rapide à deux partitions avec micrologiciel réseau iPXE multi-arch.",
   "deploy.desc_hybrid": "Moteur local Ventoy CLI • Configuration de partition hybride Ventoy avec gestion ISO locale.",
   "deploy.target_device": "Périphérique cible :",
   "deploy.batch_target": "{count} clé(s) USB sélectionnée(s)",
   "deploy.start_create": "Créer un disque de démarrage",
-  "deploy.tip_batch_update_all": "Mise à jour sans perte : les {count} disques sélectionnées seront mises à jour sur place",
-  "deploy.tip_batch_mixed": "Déploiement mixte : {bootCount} clé(s) mise(s) à jour sur place, {blankCount} clé(s) formatée(s)",
+  "deploy.tip_batch_update_all":
+    "Mise à jour sans perte : les {count} disques sélectionnées seront mises à jour sur place",
+  "deploy.tip_batch_mixed":
+    "Déploiement mixte : {bootCount} clé(s) mise(s) à jour sur place, {blankCount} clé(s) formatée(s)",
   "deploy.start_update": "Mise à niveau sur place (Données sécurisées)",
   "deploy.batch_create": "Démarrer le déploiement par lot ({count} clé(s))",
   "deploy.writing": "Écriture des paquets de micrologiciel d'amorçage...",
@@ -175,21 +183,26 @@ export const frFr: TranslationDict = {
   "deploy.tip_writing": "Écriture du micrologiciel...",
   "deploy.tip_select_single": "Veuillez d'abord sélectionner un disque USB cible",
   "deploy.tip_select_batch": "Veuillez cocher les disques USB cibles pour la création en lot",
-  "deploy.tip_macos_unsupported": "macOS ne supporte pas le formatage initial en mode hybride (utilisez Cloud Mode ou initialisez sur Win/Linux d'abord)",
+  "deploy.tip_macos_unsupported":
+    "macOS ne supporte pas le formatage initial en mode hybride (utilisez Cloud Mode ou initialisez sur Win/Linux d'abord)",
   "deploy.tip_need_ventoy": "Le formatage initial en mode hybride nécessite Ventoy CLI local",
   "deploy.macos_alert_title": "Formatage neuf par CLI Ventoy macOS non pris en charge",
-  "deploy.macos_alert_desc": "Ventoy ne prend pas en charge le formatage macOS directement. Utilisez le mode Cloud pour la prise en charge native, ou initialisez Ventoy sous Windows/Linux puis effectuez une mise à niveau en place sous macOS.",
+  "deploy.macos_alert_desc":
+    "Ventoy ne prend pas en charge le formatage macOS directement. Utilisez le mode Cloud pour la prise en charge native, ou initialisez Ventoy sous Windows/Linux puis effectuez une mise à niveau en place sous macOS.",
   "deploy.no_ventoy_title": "Exécutable CLI Ventoy non détecté",
-  "deploy.no_ventoy_desc": "Le mode hybride nécessite la chaîne d'outils Ventoy CLI locale. Nous recommandons le mode Cloud !",
+  "deploy.no_ventoy_desc":
+    "Le mode hybride nécessite la chaîne d'outils Ventoy CLI locale. Nous recommandons le mode Cloud !",
   "deploy.result_batch_success": "Disque d'installation cloud en 1 s déployé avec succès sur {count} disque(s) !",
   "deploy.result_success": "Mode {mode} déployé avec succès sur {targets}",
   "deploy.alert_success": "Déploiement réussi !",
   "deploy.safely_eject_btn": "Éjecter le disque en sécurité",
   "deploy.success_banner_title": "disque d'amorçage créée avec succès !",
-  "deploy.success_banner_desc": "Fichiers de démarrage et firmware écrits. Éjectez en toute sécurité avant de débrancher pour éviter toute perte de données.",
+  "deploy.success_banner_desc":
+    "Fichiers de démarrage et firmware écrits. Éjectez en toute sécurité avant de débrancher pour éviter toute perte de données.",
   "deploy.toast_auto_ejected": "Création terminée ! {count} clé(s) USB éjectée(s) automatiquement en toute sécurité.",
   "deploy.confirm_auto_eject_title": "Écriture terminée — Éjecter en toute sécurité ?",
-  "deploy.confirm_auto_eject_desc": "Toutes les données ont été écrites avec succès. Voulez-vous éjecter le disque maintenant ?",
+  "deploy.confirm_auto_eject_desc":
+    "Toutes les données ont été écrites avec succès. Voulez-vous éjecter le disque maintenant ?",
   "deploy.confirm_auto_eject_yes": "Éjecter en sécurité",
   "deploy.confirm_auto_eject_no": "Pas maintenant",
   "deploy.alert_fail": "Échec du déploiement :",
@@ -208,7 +221,8 @@ export const frFr: TranslationDict = {
   "vm.boot_mode_bios": "Mode BIOS (Legacy)",
   "vm.boot_mode_auto": "Détection automatique",
   "vm.startSuccess_vm": "Test de simulation {name} démarré avec succès",
-  "vm.desc_optional": "Fonction optionnelle : Prévisualisez le démarrage sur disque dans une machine virtuelle sans redémarrer le PC.",
+  "vm.desc_optional":
+    "Fonction optionnelle : Prévisualisez le démarrage sur disque dans une machine virtuelle sans redémarrer le PC.",
   "vm.installed": "QEMU détecté",
   "vm.not_installed": "QEMU non détecté",
   "vm.target": "Cible de test :",
@@ -279,7 +293,8 @@ export const frFr: TranslationDict = {
   "settings.ventoy_timeout": "Délai d'expiration du menu Ventoy (Secondes) :",
   "confirm.title": "Avertissement de formatage à haut risque",
   "confirm.warning_title": "Avertissement : Le formatage effacera toutes les données !",
-  "confirm.warning_desc": "La disque sélectionnée sera repartitionnée et formatée. Tous les fichiers existants seront complètement effacés. Assurez-vous d'avoir sauvegardé les données importantes !",
+  "confirm.warning_desc":
+    "La disque sélectionnée sera repartitionnée et formatée. Tous les fichiers existants seront complètement effacés. Assurez-vous d'avoir sauvegardé les données importantes !",
   "confirm.mode_title": "Mode de déploiement :",
   "confirm.fs_title": "Système de fichiers cible :",
   "confirm.disks_title": "disques à formater ({count}) :",
@@ -289,11 +304,14 @@ export const frFr: TranslationDict = {
   "confirm.title_mixed": "Confirmation du déploiement hybride intelligent",
   "confirm.title_danger": "Avertissement de formatage : Initialisation du disque",
   "confirm.safe_banner_title": "Notification de mise à jour incrémentielle (Sécurité des données)",
-  "confirm.safe_banner_desc": "Structure d'amorçage Ventoy / UniBoot détectée sur la disque. Le système effectuera une mise à jour incrémentielle en sautant le formatage. Tous les fichiers et images ISO existants sont conservés à 100 % !",
-  "confirm.mixed_banner_title": "Mode hybride intelligent : Mise à jour sur place pour les clés de démarrage, formatage pour les clés vierges",
+  "confirm.safe_banner_desc":
+    "Structure d'amorçage Ventoy / UniBoot détectée sur la disque. Le système effectuera une mise à jour incrémentielle en sautant le formatage. Tous les fichiers et images ISO existants sont conservés à 100 % !",
+  "confirm.mixed_banner_title":
+    "Mode hybride intelligent : Mise à jour sur place pour les clés de démarrage, formatage pour les clés vierges",
   "confirm.mixed_banner_desc": "{ventoyCount} clé(s) de démarrage et {blankCount} clé(s) vierge(s) sélectionnée(s).",
   "confirm.danger_banner_title": "Attention : Le formatage est irréversible !",
-  "confirm.danger_banner_desc": "L'opération réécrit la table de partition et formate le périphérique cible (MBR/GPT). Toutes les données existantes seront définitivement effacées !",
+  "confirm.danger_banner_desc":
+    "L'opération réécrit la table de partition et formate le périphérique cible (MBR/GPT). Toutes les données existantes seront définitivement effacées !",
   "confirm.summary_title": "disques cibles pour le déploiement :",
   "confirm.smart_safe_tag": "Protection Intelligente",
   "confirm.ventoy_group_title": "Clés en mise à niveau sur place (Toutes les ISO conservées) :",
@@ -311,10 +329,14 @@ export const frFr: TranslationDict = {
   "confirm.no": "Annuler",
   "confirm.will_format": "Formatage complet",
   "confirm.no_format": "Mise à jour intelligente sur place",
-  "deploy.toast_target_changed": "Le disque cible sélectionné a changé ou n'est plus disponible. Veuillez relancer l'analyse.",
-  "deploy.toast_some_disks_removed": "{count} disque(s) indisponible(s) supprimé(s) automatiquement, poursuite avec les disques restants",
-  "deploy.error_system_disk_blocked": "⛔ Bloqué : {disks} est un disque système. Impossible de déployer un disque de démarrage USB sur le lecteur système !",
-  "deploy.error_readonly_disk": "🔒 Protégé en écriture : {disks} est en lecture seule. Veuillez retirer la protection en écriture ou utiliser une clé USB différente",
+  "deploy.toast_target_changed":
+    "Le disque cible sélectionné a changé ou n'est plus disponible. Veuillez relancer l'analyse.",
+  "deploy.toast_some_disks_removed":
+    "{count} disque(s) indisponible(s) supprimé(s) automatiquement, poursuite avec les disques restants",
+  "deploy.error_system_disk_blocked":
+    "⛔ Bloqué : {disks} est un disque système. Impossible de déployer un disque de démarrage USB sur le lecteur système !",
+  "deploy.error_readonly_disk":
+    "🔒 Protégé en écriture : {disks} est en lecture seule. Veuillez retirer la protection en écriture ou utiliser une clé USB différente",
   "deploy.start_cloud_create": "Créer un disque de démarrage Cloud",
   "deploy.batch_update": "Démarrer la mise à jour sans perte ({count} disques)",
   "deploy.batch_mixed": "Démarrer le déploiement mixte ({count} disques)",
@@ -332,7 +354,8 @@ export const frFr: TranslationDict = {
   "inspector.vendor": "Fabricant / Marque :",
   "inspector.bus_speed": "Protocole de bus & Vitesse :",
   "inspector.fake_report": "Analyse USB 3.0 contrefait/dégradé :",
-  "inspector.fake_text": "USB 3.0 dégradé/contrefait (Port bleu/noir mais protocole interne négocié en USB 2.0 480Mb/s)",
+  "inspector.fake_text":
+    "USB 3.0 dégradé/contrefait (Port bleu/noir mais protocole interne négocié en USB 2.0 480Mb/s)",
   "inspector.genuine_text": "Contrôleur haute vitesse officiel USB 3.0/3.1",
   "inspector.smart": "Santé SMART:",
   "inspector.sector": "Taille de secteur :",
@@ -445,9 +468,12 @@ export const frFr: TranslationDict = {
   "diag.action_reformat_title": "Reformater (reformat)",
   "diag.action_remount_title": "Remonter (remount)",
   "diag.action_retry_title": "Réessayer (retry)",
-  "diag.action_reformat_desc": "L'interruption du déploiement a corrompu la table de partition ou le système de fichiers. Un reformatage est recommandé.",
-  "diag.action_remount_desc": "Le chemin de montage cible s'est déconnecté pendant l'écriture. Rebranchez le disque ou remontez le volume.",
-  "diag.action_retry_desc": "L'environnement et l'état de l'appareil sont intacts. Vous pouvez relancer le déploiement en toute sécurité.",
+  "diag.action_reformat_desc":
+    "L'interruption du déploiement a corrompu la table de partition ou le système de fichiers. Un reformatage est recommandé.",
+  "diag.action_remount_desc":
+    "Le chemin de montage cible s'est déconnecté pendant l'écriture. Rebranchez le disque ou remontez le volume.",
+  "diag.action_retry_desc":
+    "L'environnement et l'état de l'appareil sont intacts. Vous pouvez relancer le déploiement en toute sécurité.",
   "about.updating": "Mise à jour en cours ({progress}%)",
   "about.updateTo": "Mise à jour en ligne vers {tag}",
   "about.downloading": "Téléchargement {progress}%",
@@ -463,7 +489,8 @@ export const frFr: TranslationDict = {
   "dialog.textFilesFilter": "Fichiers texte (*.txt)",
   "dialog.allFilesFilter": "Tous les fichiers (*.*)",
   "dialog.selectIsoTitle": "Sélectionner les fichiers d'image système (*.iso, *.wim, *.img, etc.)",
-  "dialog.ventoyFilter": "Images sources Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Images sources Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Calculer le hash",
   "checksum.calculating": "Calcul du hash en cours...",
   "checksum.algo_label": "Algorithme",
@@ -509,11 +536,14 @@ export const frFr: TranslationDict = {
   "privilege.modal_title": "Autorisation administrateur requise",
   "privilege.modal_subtitle": "Autorisation requise pour lire les données d'amorçage et écrire sur les disques",
   "privilege.reason_title": "Pourquoi les privilèges administrateur sont-ils requis ?",
-  "privilege.reason_desc": "Le système d'exploitation isole les secteurs bruts et les partitions EFI. L'autorisation permet la détection directe et la création sécurisée.",
+  "privilege.reason_desc":
+    "Le système d'exploitation isole les secteurs bruts et les partitions EFI. L'autorisation permet la détection directe et la création sécurisée.",
   "privilege.scope_title": "Périmètre d'accès",
-  "privilege.scope_desc": "Strictement limité aux clés USB externes sélectionnées. Les disques système internes ne sont jamais touchés.",
+  "privilege.scope_desc":
+    "Strictement limité aux clés USB externes sélectionnées. Les disques système internes ne sont jamais touchés.",
   "privilege.safety_title": "Sécurité et transparence",
-  "privilege.safety_desc": "L'inspection est strictement en lecture seule sans altération de données ; code source totalement ouvert.",
+  "privilege.safety_desc":
+    "L'inspection est strictement en lecture seule sans altération de données ; code source totalement ouvert.",
   "privilege.confirm_btn": "Autoriser maintenant",
   "privilege.cancel_btn": "Annuler",
   "privilege.success_msg": "Privilèges administrateur accordés",
