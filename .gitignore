@@ -764,3 +764,4 @@ build/bin/
 !frontend/dist/
 frontend/dist/*
 !frontend/dist/.gitkeep
+frontend/wailsjs/
