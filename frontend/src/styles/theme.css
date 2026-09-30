@@ -54,13 +54,55 @@ body {
   -webkit-user-select: none;
 }
 
-/* Allow background and whitespace dragging while protecting interactive elements */
+/* Ensure main layout and content containers do not trigger window dragging */
 body,
 #app,
 .app-container,
 .content-grid {
-  --wails-draggable: drag;
-  -webkit-app-region: drag;
+  --wails-draggable: no-drag;
+  -webkit-app-region: no-drag;
+}
+
+/* Cross-Platform Modern Scrollbar & Strict Non-Draggable Behavior */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+::-webkit-scrollbar,
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-track-piece,
+::-webkit-scrollbar-corner,
+::-webkit-resizer {
+  --wails-draggable: no-drag !important;
+  -webkit-app-region: no-drag !important;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 button,
