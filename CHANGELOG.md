@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.8.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.7.0...v0.8.0) (2026-09-30)
+
+
+### 🚀 Features
+
+* **frontend:** ensure wails bindings before running dev server ([0c2d09e](https://github.com/snowdreamtech/UniGoDesktop/commit/0c2d09efecb13c2e81e9327ab9cfc74d59a10e62))
+
+
+### 🐛 Bug Fixes
+
+* **ci:** ensure Wails bindings are generated before frontend build ([92f43b6](https://github.com/snowdreamtech/UniGoDesktop/commit/92f43b680d825eb0a88930f35ba35a0424fd9491))
+* **ci:** make Linux GUI build dependencies installer cross-platform ([f268cf9](https://github.com/snowdreamtech/UniGoDesktop/commit/f268cf9f89f2b4f905fa1d303c7f345a88a618ac))
+* **proxy:** strip all hardcoded proxy URLs across workflows configs and docs ([a8760dc](https://github.com/snowdreamtech/UniGoDesktop/commit/a8760dc538975014ef47fad52cb031965b9d227b))
+* **scripts:** strengthen linux gui dependency installation on rhel and centos ([db648d7](https://github.com/snowdreamtech/UniGoDesktop/commit/db648d7a2dd0c7d14d1791a871ef2a5a58e03295))
+
+
+### ♻️ Miscellaneous Chores
+
+* **scripts:** sync package-lock.json along with package.json ([c428d21](https://github.com/snowdreamtech/UniGoDesktop/commit/c428d2143b6aeca44a2b31ea646ccda3a2532d2b))
+
 ## [0.7.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.6.0...v0.7.0) (2026-09-30)
 
 
