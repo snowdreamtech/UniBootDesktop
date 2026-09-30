@@ -8,7 +8,7 @@
   "frontend:dev:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
-  "devServer": "localhost:34120",
+  "devServer": "localhost:34115",
   "wailsjsdir": "./frontend",
   "preBuildHooks": {
     "*/*": "node -e \"import((require('node:fs').existsSync('scripts/prepare-app-icon.mjs')?'./scripts':'../../scripts')+'/prepare-app-icon.mjs')\""
