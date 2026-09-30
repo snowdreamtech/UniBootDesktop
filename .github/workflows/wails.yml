@@ -130,6 +130,12 @@ jobs:
           echo "PROJECT_NAME=${PROJECT_NAME}" >> "$GITHUB_ENV"
           echo "LDFLAGS=${LDFLAGS}" >> "$GITHUB_ENV"
 
+      - name: Install frontend dependencies
+        shell: bash
+        run: |
+          cd frontend
+          unirtm exec -- npm ci
+
       - name: Sync build metadata versions
         shell: bash
         run: unirtm exec -- node scripts/sync-build-metadata.mjs
@@ -149,21 +155,18 @@ jobs:
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          if (-not (Get-Command makensis -ErrorAction SilentlyContinue)) {
+          $nsisDefaultPath = "C:\Program Files (x86)\NSIS"
+          if (Test-Path "$nsisDefaultPath\makensis.exe") {
+            echo "$nsisDefaultPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            $env:PATH = "$nsisDefaultPath;$env:PATH"
+          } elseif (-not (Get-Command makensis -ErrorAction SilentlyContinue)) {
             choco install nsis -y --no-progress
-            $nsisPath = "C:\Program Files (x86)\NSIS"
-            if (Test-Path $nsisPath) {
-              echo "$nsisPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-              $env:PATH = "$nsisPath;$env:PATH"
+            if (Test-Path $nsisDefaultPath) {
+              echo "$nsisDefaultPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+              $env:PATH = "$nsisDefaultPath;$env:PATH"
             }
           }
           makensis /VERSION
-
-      - name: Install frontend dependencies
-        shell: bash
-        run: |
-          cd frontend
-          unirtm exec -- npm ci
 
       - name: Generate Wails bindings
         shell: bash
@@ -409,7 +412,7 @@ jobs:
             if [ "$(uname -m)" = "aarch64" ] || [ "${LINUX_ARCH}" = "arm64" ]; then
               NFPM_ARCH="arm64"
             fi
-            curl -sfL --retry 3 "${GITHUB_PROXY}https://github.com/goreleaser/nfpm/releases/download/v2.41.3/nfpm_2.41.3_Linux_${NFPM_ARCH}.tar.gz" | tar -xz -C /tmp nfpm
+            curl -sfL --connect-timeout 15 --max-time 180 --retry 3 --retry-delay 2 "${GITHUB_PROXY}https://github.com/goreleaser/nfpm/releases/download/v2.41.3/nfpm_2.41.3_Linux_${NFPM_ARCH}.tar.gz" | tar -xz -C /tmp nfpm
             sudo mv /tmp/nfpm /usr/local/bin/
             INSTALLED_NFPM_VER="$(nfpm --version 2>&1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
             if [ "${INSTALLED_NFPM_VER}" != "2.41.3" ]; then
@@ -453,7 +456,7 @@ jobs:
           fi
           APPIMAGETOOL="/tmp/appimagetool-${APPIMAGE_ARCH}"
           if [ ! -f "${APPIMAGETOOL}" ]; then
-            curl -sfL --retry 3 -o "${APPIMAGETOOL}" "${GITHUB_PROXY}https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${APPIMAGE_ARCH}.AppImage"
+            curl -sfL --connect-timeout 15 --max-time 180 --retry 3 --retry-delay 2 -o "${APPIMAGETOOL}" "${GITHUB_PROXY}https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${APPIMAGE_ARCH}.AppImage"
             chmod +x "${APPIMAGETOOL}"
             # Verify the downloaded binary is a valid executable (continuous tag has no stable checksum)
             if ! file "${APPIMAGETOOL}" | grep -qiE 'ELF|executable'; then
