@@ -59,8 +59,9 @@ func RunWails() error {
 		Title:     "UniGoDesktop",
 		Width:     1180,
 		Height:    820,
-		MinWidth:  1024,
-		MinHeight: 728,
+		MinWidth:         1024,
+		MinHeight:        728,
+		StartHidden:      true,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},

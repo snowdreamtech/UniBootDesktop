@@ -95,6 +95,7 @@ import {
   WindowSetSystemDefaultTheme,
   WindowSetBackgroundColour,
   WindowToggleMaximise,
+  WindowShow,
 } from "../wailsjs/runtime/runtime";
 import { isWails, isWailsRuntime } from "./utils/wails";
 import type { config } from "../wailsjs/go/models";
@@ -275,6 +276,14 @@ async function initApp() {
     } catch (e) {
       console.warn("Failed to load initial config from backend:", e);
       applyTheme("dark");
+    } finally {
+      if (isWailsRuntime()) {
+        try {
+          WindowShow();
+        } catch (err) {
+          console.warn("Failed to show window:", err);
+        }
+      }
     }
   } else {
     applyTheme("dark");
