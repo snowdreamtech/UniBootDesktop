@@ -84,3 +84,17 @@ try {
 } catch (e) {
   console.warn("Failed to update frontend/package.json:", e);
 }
+
+// 5. Update frontend/package-lock.json (if present)
+const lockPath = resolve(projectRoot, "frontend/package-lock.json");
+try {
+  const lockContent = JSON.parse(await readFile(lockPath, "utf-8"));
+  lockContent.version = cleanVer;
+  if (lockContent.packages && lockContent.packages[""]) {
+    lockContent.packages[""].version = cleanVer;
+  }
+  await writeFile(lockPath, JSON.stringify(lockContent, null, 2) + "\n", "utf-8");
+  console.log(`Updated frontend/package-lock.json version to ${cleanVer}`);
+} catch (e) {
+  console.warn("Failed to update frontend/package-lock.json:", e);
+}
