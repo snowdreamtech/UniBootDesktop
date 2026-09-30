@@ -44,26 +44,27 @@ async function main() {
 
   const backend = await findNextFreePort(preferredBackendPort);
   if (backend.switched) {
-    console.log(`\x1b[33m[SmartPort] Backend port ${preferredBackendPort} is in use; auto-switched to free port ${backend.port}\x1b[0m`);
+    console.log(
+      `\x1b[33m[SmartPort] Backend port ${preferredBackendPort} is in use; auto-switched to free port ${backend.port}\x1b[0m`
+    );
   } else {
     console.log(`\x1b[32m[SmartPort] Backend port ${backend.port} is available\x1b[0m`);
   }
 
   const frontend = await findNextFreePort(preferredFrontendPort);
   if (frontend.switched) {
-    console.log(`\x1b[33m[SmartPort] Frontend port ${preferredFrontendPort} is in use; auto-switched to free port ${frontend.port}\x1b[0m`);
+    console.log(
+      `\x1b[33m[SmartPort] Frontend port ${preferredFrontendPort} is in use; auto-switched to free port ${frontend.port}\x1b[0m`
+    );
   } else {
     console.log(`\x1b[32m[SmartPort] Frontend port ${frontend.port} is available\x1b[0m`);
   }
 
-  const args = [
-    "dev",
-    "-devserver",
-    `localhost:${backend.port}`,
-    ...process.argv.slice(2),
-  ];
+  const args = ["dev", "-devserver", `localhost:${backend.port}`, ...process.argv.slice(2)];
 
-  console.log(`\x1b[36m[SmartPort] Launching Wails Dev (Backend: localhost:${backend.port}, Frontend: localhost:${frontend.port})...\x1b[0m\n`);
+  console.log(
+    `\x1b[36m[SmartPort] Launching Wails Dev (Backend: localhost:${backend.port}, Frontend: localhost:${frontend.port})...\x1b[0m\n`
+  );
 
   const childEnv = {
     ...process.env,
