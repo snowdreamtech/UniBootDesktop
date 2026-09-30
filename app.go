@@ -80,6 +80,24 @@ func (a *App) shutdown(ctx context.Context) {
 	logger.Info("UniGoDesktop Wails GUI runtime shutting down")
 }
 
+// beforeClose is invoked before the application window closes.
+// If EnableTray is true and CloseAction is "minimize_to_tray", the window is hidden instead of exiting.
+func (a *App) beforeClose(ctx context.Context) (prevent bool) {
+	cfg, err := config.Load()
+	if err != nil {
+		cfg = config.GetDefaultConfig()
+	}
+
+	if cfg.EnableTray && cfg.CloseAction == "minimize_to_tray" {
+		logger.Info("Window close intercepted: hiding window to tray as configured")
+		wailsRuntime.WindowHide(ctx)
+		return true // prevent application exit
+	}
+
+	logger.Info("Window close proceeding: quitting application")
+	return false // allow application exit
+}
+
 // onSecondInstanceLaunch is invoked when a second instance of the application attempts to start.
 func (a *App) onSecondInstanceLaunch(secondInstanceData options.SecondInstanceData) {
 	logger.Info(fmt.Sprintf("Second instance launch detected with args: %v", secondInstanceData.Args))
