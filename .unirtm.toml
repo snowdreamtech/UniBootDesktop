@@ -73,12 +73,10 @@ python = "3.14.7"
 
 [tasks]
 [tasks.dev]
-description = "Launch Wails GUI application in development mode"
+description = "Launch Wails GUI application in development mode with smart port resolution"
 run = '''
   mkdir -p .cache/go .cache/go-tmp
-  lsof -ti :34115,5173 | xargs kill -9 2>/dev/null || true
-  pkill -f "unibootdesktop" 2>/dev/null || true
-  GOCACHE="$PWD/.cache/go" GOTMPDIR="$PWD/.cache/go-tmp" unirtm exec -- wails dev
+  GOCACHE="$PWD/.cache/go" GOTMPDIR="$PWD/.cache/go-tmp" unirtm exec -- node scripts/run-dev.mjs
 '''
 output = "interleaved"
 

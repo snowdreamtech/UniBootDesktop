@@ -21,7 +21,7 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    port: 5180,
+    port: process.env.PORT ? parseInt(process.env.PORT, 10) : 5173,
     strictPort: false,
   },
 });
