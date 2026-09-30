@@ -401,7 +401,7 @@ jobs:
           LINUX_ARCH="${TARGET##*/}"
 
           # 1. Package deb and rpm via nfpm
-          GITHUB_PROXY="${GITHUB_PROXY:-https://gh-proxy.sn0wdr1am.com/}"
+          GITHUB_PROXY="${GITHUB_PROXY:-}"
 
           if ! command -v nfpm >/dev/null 2>&1; then
             echo "Installing nfpm..."

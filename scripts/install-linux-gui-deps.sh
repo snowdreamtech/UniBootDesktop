@@ -29,6 +29,7 @@ fi
 # Detect package manager and install platform-specific packages
 if command -v apt-get >/dev/null 2>&1; then
   echo "Detected Debian/Ubuntu-based system (apt-get)."
+  export DEBIAN_FRONTEND=noninteractive
   retry=0
   while [ "$retry" -lt 3 ]; do
     if $SUDO apt-get update -qq; then
@@ -51,6 +52,7 @@ elif command -v dnf >/dev/null 2>&1 || command -v yum >/dev/null 2>&1; then
     PKG_MGR="yum"
   fi
   echo "Detected RedHat/Fedora/CentOS-based system ($PKG_MGR)."
+  $SUDO "$PKG_MGR" install -y epel-release || true
   $SUDO "$PKG_MGR" install -y \
     gcc \
     gcc-c++ \

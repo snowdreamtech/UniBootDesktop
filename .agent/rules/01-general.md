@@ -104,10 +104,10 @@ All automation scripts (especially those in `scripts/`) MUST strictly adhere to 
 
   Implement exponential backoff (1s → 2s → 4s → 8s) with a maximum of 5 attempts for application-level retries.
 
-- **Proxy**: When downloading GitHub resources, the `GITHUB_PROXY` **MUST** be set and prefixed to all GitHub URLs to ensure stable access in restricted network environments. The default proxy for this project is `https://gh-proxy.sn0wdr1am.com/`:
+- **Proxy**: When downloading GitHub resources, `GITHUB_PROXY` can be optionally prefixed to GitHub URLs to support customized mirrors or proxies. Never hardcode specific proxy domains; use the environment variable directly:
 
   ```bash
-  GITHUB_PROXY="${GITHUB_PROXY:-https://gh-proxy.sn0wdr1am.com/}"
+  GITHUB_PROXY="${GITHUB_PROXY:-}"
   curl "${GITHUB_PROXY}https://github.com/org/repo/archive/main.tar.gz" -o repo.tar.gz
   ```
 
