@@ -21,6 +21,7 @@ import (
 	"github.com/snowdreamtech/unigodesktop/internal/logger"
 	"github.com/snowdreamtech/unigodesktop/pkg/config"
 	"github.com/snowdreamtech/unigodesktop/pkg/updater"
+	"github.com/wailsapp/wails/v2/pkg/options"
 	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -77,6 +78,15 @@ func (a *App) shutdown(ctx context.Context) {
 		a.cancel()
 	}
 	logger.Info("UniGoDesktop Wails GUI runtime shutting down")
+}
+
+// onSecondInstanceLaunch is invoked when a second instance of the application attempts to start.
+func (a *App) onSecondInstanceLaunch(secondInstanceData options.SecondInstanceData) {
+	logger.Info(fmt.Sprintf("Second instance launch detected with args: %v", secondInstanceData.Args))
+	if a.ctx != nil {
+		wailsRuntime.WindowShow(a.ctx)
+		wailsRuntime.WindowUnminimise(a.ctx)
+	}
 }
 
 // Greet returns a friendly greeting for demonstration.
