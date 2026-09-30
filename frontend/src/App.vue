@@ -287,13 +287,32 @@ function handleGlobalClick(e: MouseEvent) {
   }
 }
 
+function handleGlobalKeydown(e: KeyboardEvent) {
+  if (e.key === "Escape") {
+    if (isLangMenuOpen.value) {
+      isLangMenuOpen.value = false;
+      return;
+    }
+    if (isAboutOpen.value) {
+      isAboutOpen.value = false;
+      return;
+    }
+    if (isSettingsOpen.value) {
+      isSettingsOpen.value = false;
+      return;
+    }
+  }
+}
+
 onMounted(() => {
   initApp();
   window.addEventListener("click", handleGlobalClick);
+  window.addEventListener("keydown", handleGlobalKeydown);
 });
 
 onUnmounted(() => {
   window.removeEventListener("click", handleGlobalClick);
+  window.removeEventListener("keydown", handleGlobalKeydown);
 });
 </script>
 

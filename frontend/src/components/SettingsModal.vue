@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isOpen" class="modal-overlay" @click.self="close">
+  <div v-if="isOpen" class="modal-overlay" @click.self="close" @keydown.esc="close" tabindex="-1">
     <div class="modal-card glass-modal">
       <!-- Modal Header -->
       <div class="modal-header">
