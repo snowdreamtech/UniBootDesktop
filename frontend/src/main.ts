@@ -37,9 +37,30 @@ window.addEventListener("keydown", (e: KeyboardEvent) => {
   if (isCmdOrCtrl && key === "s") {
     e.preventDefault();
   }
+  // Prevent browser history navigation: Alt+Left/Right, Cmd+[/]
+  if (
+    (e.altKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) ||
+    (e.metaKey && (e.key === "[" || e.key === "]"))
+  ) {
+    e.preventDefault();
+  }
 });
 
-// 3. Prevent pinch-to-zoom and Ctrl/Cmd + wheel zooming
+// 3. Prevent mouse navigation side-buttons (Back/Forward) from navigating webview
+window.addEventListener("mousedown", (e: MouseEvent) => {
+  if (e.button === 3 || e.button === 4) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+});
+window.addEventListener("mouseup", (e: MouseEvent) => {
+  if (e.button === 3 || e.button === 4) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+});
+
+// 4. Prevent pinch-to-zoom and Ctrl/Cmd + wheel zooming
 window.addEventListener(
   "wheel",
   (e: WheelEvent) => {
@@ -54,7 +75,7 @@ window.addEventListener("gesturestart", (e: Event) => e.preventDefault());
 window.addEventListener("gesturechange", (e: Event) => e.preventDefault());
 window.addEventListener("gestureend", (e: Event) => e.preventDefault());
 
-// 4. Prevent accidental external file drop from navigating away
+// 5. Prevent accidental external file drop from navigating away
 window.addEventListener("dragover", (e: DragEvent) => e.preventDefault(), false);
 window.addEventListener("drop", (e: DragEvent) => e.preventDefault(), false);
 
