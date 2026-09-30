@@ -70,6 +70,59 @@ window.addEventListener("blur", () => {
   document.documentElement.classList.add("window-inactive");
 });
 
+// Enable native window dragging when dragging on background blank areas
+window.addEventListener("mousedown", (e: MouseEvent) => {
+  // Only trigger on primary mouse button single clicks
+  if (e.buttons !== 1 || e.detail > 1) {
+    return;
+  }
+
+  const target = e.target as HTMLElement | null;
+  if (!target) return;
+
+  // Do not drag if interacting with buttons, inputs, links, list items, terminals, modals, etc.
+  const interactiveSelector = [
+    "button",
+    "input",
+    "textarea",
+    "select",
+    "option",
+    "a",
+    "pre",
+    "code",
+    ".disk-item",
+    ".iso-file-item",
+    ".mode-tabs",
+    ".lang-selector-header",
+    ".lang-dropdown-menu",
+    ".terminal-body",
+    ".log-line",
+    ".modal-container",
+    "[contenteditable='true']",
+    "[role='button']",
+    "[role='checkbox']",
+    "[role='radio']",
+    ".no-drag",
+  ].join(",");
+
+  if (target.closest(interactiveSelector)) {
+    return;
+  }
+
+  // Do not drag if user is selecting text
+  const selection = window.getSelection();
+  if (selection && selection.toString().length > 0 && selection.containsNode(target, true)) {
+    return;
+  }
+
+  const w = window as any;
+  if (typeof w.WailsInvoke === "function") {
+    w.WailsInvoke("drag");
+  } else if (w.runtime && typeof w.runtime.WindowStartDrag === "function") {
+    w.runtime.WindowStartDrag();
+  }
+});
+
 setStartupProgress(12);
 createApp(App).mount("#app");
 setStartupProgress(36);

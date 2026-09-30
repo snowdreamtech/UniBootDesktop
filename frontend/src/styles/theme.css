@@ -54,6 +54,35 @@ body {
   -webkit-user-select: none;
 }
 
+/* Allow background and whitespace dragging while protecting interactive elements */
+body,
+#app,
+.app-container,
+.content-grid {
+  --wails-draggable: drag;
+  -webkit-app-region: drag;
+}
+
+button,
+input,
+textarea,
+select,
+option,
+a,
+pre,
+code,
+.interactive,
+.disk-item,
+.iso-file-item,
+.terminal-body,
+.modal-container,
+.mode-tabs,
+.lang-selector-header,
+.lang-dropdown-menu {
+  --wails-draggable: no-drag;
+  -webkit-app-region: no-drag;
+}
+
 /* Allow text selection in code, log, inputs, textareas */
 input,
 textarea,
