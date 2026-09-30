@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const elGr: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "Πρότυπο εφαρμογής επιφάνειας εργασίας πολλαπλών πλατφορμών (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "Χαιρετισμούς από το UniGoDesktop!",
+  "app.greeting": "Χαιρετισμούς από το UniBootDesktop!",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript Desktopsjabloon",
   "app.template_desc": "Een modern, robuust en uitbreidbaar desktopsjabloon met i18n, thema's en netwerkversnelling.",
   "common.autoDetect": "Αυτόματος εντοπισμός",

@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const koKr: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "크로스 플랫폼 데스크톱 애플리케이션 템플릿 (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "UniGoDesktop에서 보내는 인사말!",
+  "app.greeting": "UniBootDesktop에서 보내는 인사말!",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript 데스크톱 템플릿",
   "app.template_desc": "국제화, 테마, 네트워크 가속 기능을 갖춘 현대적이고 확장 가능한 크로스 플랫폼 데스크톱 템플릿.",
   "common.autoDetect": "자동 감지",

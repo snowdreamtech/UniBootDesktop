@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const caEs: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "Plantilla d'aplicació d'escriptori multiplataforma (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "Salutacions des de UniGoDesktop!",
+  "app.greeting": "Salutacions des de UniBootDesktop!",
   "app.template_badge": "Plantilla de escritorio Go + Wails + Vue 3 + TypeScript",
   "app.template_desc":
     "Una plantilla de escritorio moderna, robusta y extensible con i18n, temas y aceleración de red.",

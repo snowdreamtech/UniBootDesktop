@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const thTh: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "เทมเพลตแอปพลิเคชันเดสก์ท็อปข้ามแพลตฟอร์ม (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "ทักทายจาก UniGoDesktop!",
+  "app.greeting": "ทักทายจาก UniBootDesktop!",
   "app.template_badge": "เทมเพลตเดสก์ท็อป Go + Wails + Vue 3 + TypeScript",
   "app.template_desc":
     "เทมเพลตแอปพลิเคชันเดสก์ท็อปที่ทันสมัย แข็งแกร่ง และขยายได้ พร้อมระบบหลายภาษา ธีม และการเร่งความเร็วเครือข่าย",

@@ -84,7 +84,7 @@ export function detectSystemLocale(): string {
 }
 
 function getInitialLocale(): string {
-  const saved = typeof localStorage !== "undefined" ? localStorage.getItem("unigo_locale") : null;
+  const saved = typeof localStorage !== "undefined" ? localStorage.getItem("uniboot_locale") : null;
   if (saved && saved !== "auto" && SUPPORTED_LANGUAGES.some((l) => l.code === saved)) {
     return saved;
   }
@@ -92,7 +92,7 @@ function getInitialLocale(): string {
 }
 
 export const selectedLangSetting = ref<string>(
-  (typeof localStorage !== "undefined" && localStorage.getItem("unigo_locale")) || "auto"
+  (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_locale")) || "auto"
 );
 export const currentLocale = ref<string>(getInitialLocale());
 export const currentLang = currentLocale;
@@ -104,11 +104,11 @@ export async function setLocale(locale: string) {
   if (locale === "auto") {
     targetLocale = detectSystemLocale();
     if (typeof localStorage !== "undefined") {
-      localStorage.setItem("unigo_locale", "auto");
+      localStorage.setItem("uniboot_locale", "auto");
     }
   } else {
     if (typeof localStorage !== "undefined") {
-      localStorage.setItem("unigo_locale", locale);
+      localStorage.setItem("uniboot_locale", locale);
     }
   }
 

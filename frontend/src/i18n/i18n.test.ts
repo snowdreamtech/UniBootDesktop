@@ -9,7 +9,7 @@ describe("i18n module", () => {
   it("translates pre-bundled en-US string correctly", () => {
     expect(currentLocale.value).toBe("en-US");
     const appTitle = t("app.title");
-    expect(appTitle).toBe("UniGoDesktop");
+    expect(appTitle).toBe("UniBootDesktop");
   });
 
   it("interpolates parameters correctly with {key}", async () => {

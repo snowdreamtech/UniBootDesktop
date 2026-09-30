@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const arSa: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "قالب تطبيق سطح مكتب متعدد المنصات (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "تحيات من UniGoDesktop!",
+  "app.greeting": "تحيات من UniBootDesktop!",
   "app.template_badge": "قالب سطح مكتب Go + Wails + Vue 3 + TypeScript",
   "app.template_desc": "قالب تطبيق سطح مكتب حديث وقوي وقابل للتوسيع مع دعم التدويل والسمات وتسريع الشبكة.",
   "common.autoDetect": "الكشف التلقائي",

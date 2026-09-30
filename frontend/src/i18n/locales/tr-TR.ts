@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const trTr: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "Çok platformlu masaüstü uygulama şablonu (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "UniGoDesktop'tan selamlar!",
+  "app.greeting": "UniBootDesktop'tan selamlar!",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript Masaüstü Şablonu",
   "app.template_desc":
     "Uluslararasılaştırma, temalar ve ağ hızlandırma içeren modern ve genişletilebilir masaüstü şablonu.",

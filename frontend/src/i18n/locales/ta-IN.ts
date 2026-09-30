@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const taIn: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "குறுக்கு-தள டெஸ்க்டாப் பயன்பாட்டு டெம்ப்ளேட் (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "UniGoDesktop-லிருந்து வாழ்த்துகள்!",
+  "app.greeting": "UniBootDesktop-லிருந்து வாழ்த்துகள்!",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript டெஸ்க்டாப் டெம்ப்ளேட்",
   "app.template_desc":
     "சர்வதேசமயமாக்கல், தீம்கள் மற்றும் நெட்வொர்க் முடுக்கம் கொண்ட நவீன, வலுவான மற்றும் விரிவாக்கக்கூடிய குறுக்கு-தள டெஸ்க்டாப் பயன்பாட்டு டெம்ப்ளேட்.",

@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const slSi: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "Wieloplatformowy szablon aplikacji desktopowej (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "Lep pozdrav iz UniGoDesktop!",
+  "app.greeting": "Lep pozdrav iz UniBootDesktop!",
   "app.template_badge": "Szablon aplikacji desktopowej Go + Wails + Vue 3 + TypeScript",
   "app.template_desc":
     "Nowoczesny, stabilny i rozszerzalny szablon aplikacji z wielojęzycznością, motywami i przyspieszeniem sieciowym.",

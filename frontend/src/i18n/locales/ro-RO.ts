@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const roRo: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "Çok platformlu masaüstü uygulama şablonu (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "Salutări de la UniGoDesktop!",
+  "app.greeting": "Salutări de la UniBootDesktop!",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript Masaüstü Şablonu",
   "app.template_desc":
     "Uluslararasılaştırma, temalar ve ağ hızlandırma içeren modern ve genişletilebilir masaüstü şablonu.",

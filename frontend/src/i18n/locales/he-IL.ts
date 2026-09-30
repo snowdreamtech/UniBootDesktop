@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const heIl: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "תבנית יישום שולחן עבודה חוצה פלטפורמות (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "ברכות מ-UniGoDesktop!",
+  "app.greeting": "ברכות מ-UniBootDesktop!",
   "app.template_badge": "תבנית Go + Wails + Vue 3 + TypeScript",
   "app.template_desc": "תבנית שולחן עבודה מודרנית, יציבה וניתנת להרחבה עם תמיכה בריבוי שפות, ערכות נושא והאצת רשת.",
   "common.autoDetect": "זיהוי אוטומטי",

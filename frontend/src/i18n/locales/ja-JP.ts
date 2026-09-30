@@ -1,9 +1,9 @@
 import type { TranslationDict } from "../types";
 
 export const jaJp: TranslationDict = {
-  "app.title": "UniGoDesktop",
+  "app.title": "UniBootDesktop",
   "app.subtitle": "クロスプラットフォームデスクトップアプリテンプレート (Go + Wails + Vue 3 + TypeScript)",
-  "app.greeting": "UniGoDesktop へようこそ！",
+  "app.greeting": "UniBootDesktop へようこそ！",
   "app.template_badge": "Go + Wails + Vue 3 + TypeScript アプリテンプレート",
   "app.template_desc":
     "国際化、ダーク/ライトテーマ、ネットワークアクセラレーションを備えた最新かつ堅牢なクロスプラットフォームアプリテンプレート。",
