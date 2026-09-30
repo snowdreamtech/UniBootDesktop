@@ -302,6 +302,14 @@ function handleGlobalKeydown(e: KeyboardEvent) {
       return;
     }
   }
+
+  // Support Cmd+, (macOS) and Ctrl+, (Windows/Linux) to toggle settings dialog
+  const isCmdOrCtrl = e.metaKey || e.ctrlKey;
+  if (isCmdOrCtrl && e.key === ",") {
+    e.preventDefault();
+    isSettingsOpen.value = !isSettingsOpen.value;
+    return;
+  }
 }
 
 onMounted(() => {
