@@ -149,16 +149,6 @@ export async function setLocale(locale: string) {
   }
 }
 
-export const setLanguage = setLocale;
-
-// Asynchronously load initial locale if not pre-bundled
-const initLoc = getInitialLocale();
-if (initLoc !== "zh-CN" && initLoc !== "en-US") {
-  setLocale(initLoc);
-} else {
-  updateDocumentDir();
-}
-
 export const isRtl = computed(() => {
   const lang = currentLocale.value.toLowerCase();
   return (
@@ -179,6 +169,16 @@ export function updateDocumentDir() {
       document.body.setAttribute("dir", dir);
     }
   }
+}
+
+export const setLanguage = setLocale;
+
+// Asynchronously load initial locale if not pre-bundled
+const initLoc = getInitialLocale();
+if (initLoc !== "zh-CN" && initLoc !== "en-US") {
+  setLocale(initLoc);
+} else {
+  updateDocumentDir();
 }
 
 export function t(key: keyof TranslationDict, params?: Record<string, string | number>): string {
