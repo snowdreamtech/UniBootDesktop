@@ -286,6 +286,9 @@ output = "interleaved"
 [tasks."test:wails"]
 description = "Fast compile check for Wails binary"
 run = '''
+if [ ! -f "frontend/dist/index.html" ]; then
+    unirtm run test:frontend
+fi
 BUILD_TAGS=()
 if [ "$(go env GOOS)" = "linux" ] && pkg-config --exists webkit2gtk-4.1 && ! pkg-config --exists webkit2gtk-4.0; then
     BUILD_TAGS+=("-tags" "webkit2_41")
