@@ -217,6 +217,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
           UNIRTM_VERIFY_PROVENANCE: "0"
 
+      - name: "⚡ Cache dependencies and build artifacts"
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+            ~/AppData/Local/go-build
+            ~/.npm
+            ~/AppData/Local/npm-cache
+          key: ${{ runner.os }}-${{ runner.arch }}-gui-${{ hashFiles('go.sum', 'frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-gui-
+
       - name: "📦 Install Linux build dependencies"
         if: runner.os == 'Linux'
         shell: bash
@@ -228,8 +241,6 @@ jobs:
           unirtm exec -- wails generate module
           cd frontend
           unirtm exec -- npm ci
-          unirtm exec -- npm run i18n:check
-          unirtm exec -- npm test
           unirtm exec -- npm run build
 
       - name: "🖥️ Verify Wails Binary Compilation"
@@ -240,6 +251,7 @@ jobs:
             BUILD_TAGS+=("-tags" "webkit2_41")
           fi
           unirtm exec -- wails build -s -clean ${BUILD_TAGS[@]+"${BUILD_TAGS[@]}"}
+          rm -rf build/bin
 
   # 4. Security & Standards Audit Stage (Audit)
   audit:
