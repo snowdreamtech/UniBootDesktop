@@ -96,6 +96,9 @@ run = '''
     PROJECT_NAME="${MODULE_PATH##*/}"
   GOCACHE="$PWD/.cache/go" GOTMPDIR="$PWD/.cache/go-tmp" unirtm exec -- wails build \
     -clean \
+    -trimpath \
+    -m \
+    -nosyncgomod \
     -ldflags "-s -w \
       -X '${PKG}.GitTag=${TAG}' \
       -X '${PKG}.CommitHash=${COMMIT}' \
