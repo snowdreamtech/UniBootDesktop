@@ -17,12 +17,10 @@
           <div class="about-hero">
             <div class="logo-wrapper">
               <div class="logo-glow"></div>
-              <svg class="app-logo-icon" viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <img src="/logo.png" alt="UniBootDesktop" class="app-logo-img" />
             </div>
             <h2 class="app-title">UniBootDesktop</h2>
-            <p class="app-subtitle">Universal Go Desktop Suite</p>
+            <p class="app-subtitle">{{ t('app.subtitle') }}</p>
             <div class="version-badge">
               <span class="badge-dot"></span>
               <span class="badge-text">{{ displayVersion }}</span>
@@ -436,10 +434,14 @@ const handlePerformUpdate = async () => {
   z-index: 0;
 }
 
-.app-logo-icon {
+.app-logo-img {
   position: relative;
   z-index: 1;
-  color: var(--accent-cyan);
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.25);
 }
 
 .app-title {

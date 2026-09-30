@@ -1,7 +1,7 @@
 <template>
   <header class="app-header" @dblclick="handleHeaderDblClick">
     <div class="brand">
-      <span class="logo">🚀</span>
+      <img src="/logo.png" alt="UniBoot" class="logo-img" />
       <div>
         <h1>{{ t("app.title") }}</h1>
         <span class="sub-brand">{{ t("app.subtitle") }}</span>
@@ -235,6 +235,16 @@ a,
 
 .logo {
   font-size: 2.5rem;
+}
+
+.logo-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  border-radius: 10px;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 h1 {
