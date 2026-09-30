@@ -44,19 +44,18 @@
             <div class="card-header">
               <div class="card-title">
                 <span class="card-icon">🎨</span>
-                <span>{{ t("settings.language") }} & {{ t("settings.theme") }}</span>
+                <span>{{ t("settings.group_appearance") }}</span>
               </div>
-              <span class="badge info">{{ t("settings.realtime_save") }}</span>
             </div>
 
             <div class="card-grid">
               <div class="form-group highlight-form-group">
-                <label class="form-label highlight-label">{{ t("settings.language") }}</label>
+                <label class="form-label highlight-label">{{ t("settings.language_label") }}</label>
                 <CustomSelect v-model="appLanguage" :options="languageSelectOptions" @change="onLanguageChange" />
               </div>
 
               <div class="form-group">
-                <label class="form-label">{{ t("settings.theme") }}</label>
+                <label class="form-label">{{ t("settings.theme_label") }}</label>
                 <CustomSelect v-model="appTheme" :options="themeSelectOptions" @change="onThemeChange" />
               </div>
             </div>
@@ -67,13 +66,13 @@
             <div class="card-header">
               <div class="card-title">
                 <span class="card-icon">🚀</span>
-                <span>{{ t("settings.default_mode") }} & {{ t("settings.default_fs") }}</span>
+                <span>{{ t("settings.group_defaults") }}</span>
               </div>
             </div>
 
             <div class="card-grid">
               <div class="form-group">
-                <label class="form-label">{{ t("settings.default_mode") }}</label>
+                <label class="form-label">{{ t("settings.default_mode_label") }}</label>
                 <CustomSelect
                   v-model="defaultMode"
                   :options="[
@@ -85,7 +84,7 @@
               </div>
 
               <div class="form-group">
-                <label class="form-label">{{ t("settings.default_fs") }}</label>
+                <label class="form-label">{{ t("settings.default_fs_label") }}</label>
                 <CustomSelect
                   v-model="defaultFs"
                   :options="[
@@ -119,13 +118,13 @@
             <div class="card-header">
               <div class="card-title">
                 <span class="card-icon">💻</span>
-                <span>{{ t("settings.app_update") }} & {{ t("settings.enable_tray") }}</span>
+                <span>{{ t("settings.group_system") }}</span>
               </div>
             </div>
 
             <div class="card-grid">
               <div class="form-group">
-                <label class="form-label">{{ t("settings.app_update") }}</label>
+                <label class="form-label">{{ t("settings.app_update_label") }}</label>
                 <div class="radio-row">
                   <label class="radio-label">
                     <input type="radio" :value="true" v-model="autoCheckUpdate" @change="triggerAutoSave" />

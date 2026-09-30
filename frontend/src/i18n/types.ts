@@ -239,6 +239,14 @@ export interface TranslationDict {
   "settings.tab_network": string;
   "settings.tab_uniboot": string;
   "settings.tab_ventoy": string;
+  "settings.group_appearance": string;
+  "settings.group_defaults": string;
+  "settings.group_system": string;
+  "settings.language_label": string;
+  "settings.theme_label": string;
+  "settings.default_mode_label": string;
+  "settings.default_fs_label": string;
+  "settings.app_update_label": string;
   "settings.language": string;
   "settings.theme": string;
   "settings.theme_dark": string;
