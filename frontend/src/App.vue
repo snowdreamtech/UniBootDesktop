@@ -89,7 +89,13 @@ import AboutModal from "./components/AboutModal.vue";
 import ToastNotification from "./components/ToastNotification.vue";
 import { t, currentLang, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from "./i18n";
 import { GetConfig, SaveConfig, CheckUpdate } from "../wailsjs/go/main/App";
-import { isWails } from "./utils/wails";
+import {
+  WindowSetDarkTheme,
+  WindowSetLightTheme,
+  WindowSetSystemDefaultTheme,
+  WindowSetBackgroundColour,
+} from "../wailsjs/runtime/runtime";
+import { isWails, isWailsRuntime } from "./utils/wails";
 import type { config } from "../wailsjs/go/models";
 
 type AppConfigType = config.AppConfig;
@@ -163,6 +169,22 @@ function applyTheme(themeName: string) {
     applied = isDark ? "dark" : "light";
   }
   document.documentElement.setAttribute("data-theme", applied);
+
+  if (isWailsRuntime()) {
+    try {
+      if (themeName === "system") {
+        WindowSetSystemDefaultTheme();
+      } else if (applied === "dark") {
+        WindowSetDarkTheme();
+        WindowSetBackgroundColour(7, 10, 18, 255);
+      } else {
+        WindowSetLightTheme();
+        WindowSetBackgroundColour(241, 245, 249, 255);
+      }
+    } catch (e) {
+      console.warn("Failed to synchronize window theme:", e);
+    }
+  }
 }
 
 function openSettings() {
@@ -260,9 +282,20 @@ onUnmounted(() => {
   width: 100vw;
   background-color: var(--bg-color);
   color: var(--text-main);
-  padding: 1.5rem 2rem;
+  padding: 2.25rem 2rem 1.5rem;
   box-sizing: border-box;
   overflow-x: hidden;
+  --wails-draggable: drag;
+}
+
+/* Ensure interactive components remain clickable while background can drag window */
+.app-header,
+.main-content,
+button,
+input,
+select,
+a {
+  --wails-draggable: no-drag;
 }
 
 /* Header */
