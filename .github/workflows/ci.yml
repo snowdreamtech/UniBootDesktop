@@ -250,7 +250,7 @@ jobs:
           if [ "${RUNNER_OS}" = "Linux" ] && pkg-config --exists webkit2gtk-4.1 && ! pkg-config --exists webkit2gtk-4.0; then
             BUILD_TAGS+=("-tags" "webkit2_41")
           fi
-          unirtm exec -- wails build -s -clean ${BUILD_TAGS[@]+"${BUILD_TAGS[@]}"}
+          unirtm exec -- wails build -s -clean -m -nosyncgomod ${BUILD_TAGS[@]+"${BUILD_TAGS[@]}"}
           rm -rf build/bin
 
   # 4. Security & Standards Audit Stage (Audit)

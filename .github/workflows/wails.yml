@@ -208,6 +208,9 @@ jobs:
           unirtm exec -- wails build \
             -s \
             -clean \
+            -trimpath \
+            -m \
+            -nosyncgomod \
             -platform "${TARGET}" \
             ${BUILD_TAGS[@]+"${BUILD_TAGS[@]}"} \
             -ldflags "${LDFLAGS}"
@@ -320,6 +323,9 @@ jobs:
           unirtm exec -- wails build \
             -s \
             -clean \
+            -trimpath \
+            -m \
+            -nosyncgomod \
             -platform windows/amd64 \
             -nsis \
             -ldflags "${LDFLAGS}"
