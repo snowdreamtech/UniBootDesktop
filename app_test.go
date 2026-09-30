@@ -180,3 +180,41 @@ func TestApp_ContextLifecycle(t *testing.T) {
 	assert.Error(t, app.ctx.Err())
 	assert.Equal(t, context.Canceled, app.ctx.Err())
 }
+
+func TestApp_UniBootOperations(t *testing.T) {
+	app := NewApp()
+	require.NotNil(t, app)
+
+	// Status
+	status := app.GetUniBootStatus()
+	assert.NotNil(t, status)
+	assert.True(t, status.Ready)
+
+	// Firmware mappings
+	mappings := app.GetFirmwareList()
+	assert.NotEmpty(t, mappings)
+
+	// Log buffer
+	app.LogAction("INFO", "test message", "test details")
+	logs := app.GetRecentLogs()
+	assert.NotEmpty(t, logs)
+	app.ClearLogs()
+	assert.Empty(t, app.GetRecentLogs())
+
+	// Hypervisor checks
+	qemuStatus := app.CheckQEMU()
+	assert.NotNil(t, qemuStatus)
+	assert.NotNil(t, app.DetectHypervisors())
+
+	// Deployment cancellation when no deployment is active
+	assert.False(t, app.CancelDeployment())
+
+	// Validate Ventoy CLI with empty or safe path
+	res := app.ValidateVentoyCli("non-existent-ventoy-path")
+	assert.NotNil(t, res)
+
+	// App info
+	appInfo := app.GetAppInfo()
+	assert.Equal(t, env.ProjectName, appInfo.ProjectName)
+}
+
