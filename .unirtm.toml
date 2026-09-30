@@ -258,17 +258,42 @@ unirtm exec -- pre-commit run --all-files || {
 output = "interleaved"
 
 [tasks.test]
-description = "Run Go unit tests for all packages recursively"
+description = "Run comprehensive tests (frontend build & unit tests, then Go unit tests)"
 # -timeout 10m : prevent a single hung test from consuming the entire CI budget (default: 10m)
 # -p 4         : limit the number of packages compiled/tested in parallel to prevent CI OOM
 #                (GitHub Actions ubuntu-latest has ~7GB RAM; -race multiplies usage 5-10x)
 # CGO_ENABLED=0: force pure-Go build — all test files must use modernc.org/sqlite, not mattn/go-sqlite3
 run = '''
-mkdir -p frontend/dist && touch frontend/dist/.gitkeep
+unirtm run test:frontend
 unirtm exec -- go test -cover -v -timeout 10m -p 4 ./...
 '''
 output = "interleaved"
 env = { GOTOOLCHAIN = 'auto', CGO_ENABLED = '0' }
+
+[tasks."test:frontend"]
+description = "Run frontend verification (i18n check, unit tests, and production build)"
+run = '''
+cd frontend
+if [ ! -d "node_modules" ]; then
+    unirtm exec -- npm ci
+fi
+unirtm exec -- npm run i18n:check
+unirtm exec -- npm test
+unirtm exec -- npm run build
+'''
+output = "interleaved"
+
+[tasks."test:wails"]
+description = "Fast compile check for Wails binary"
+run = '''
+BUILD_TAGS=()
+if [ "$(go env GOOS)" = "linux" ] && pkg-config --exists webkit2gtk-4.1 && ! pkg-config --exists webkit2gtk-4.0; then
+    BUILD_TAGS+=("-tags" "webkit2_41")
+fi
+unirtm exec -- wails build -s -clean ${BUILD_TAGS[@]+"${BUILD_TAGS[@]}"}
+rm -rf build/bin
+'''
+output = "interleaved"
 
 [tasks."test:shell"]
 description = "Run Bats tests for install.sh"
@@ -286,10 +311,11 @@ run = "pwsh -NoProfile -EncodedCommand JABjACAAPQAgAE4AZQB3AC0AUABlAHMAdABlAHIAQ
 output = "interleaved"
 
 [tasks.verify]
-description = "Run full local verification sequentially (lint-all, test, audit) to prevent CI OOM"
+description = "Run full local verification sequentially (lint-all, test, test:wails, audit) to prevent CI OOM"
 run = '''
 unirtm run lint-all
 unirtm run test
+unirtm run test:wails
 unirtm run audit
 '''
 output = "interleaved"
