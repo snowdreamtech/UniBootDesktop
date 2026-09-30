@@ -312,15 +312,33 @@ function handleGlobalKeydown(e: KeyboardEvent) {
   }
 }
 
+let mediaQueryList: MediaQueryList | null = null;
+
+function handleSystemThemeChange() {
+  if (currentTheme.value === "system" || !currentTheme.value) {
+    applyTheme("system");
+  }
+}
+
 onMounted(() => {
   initApp();
   window.addEventListener("click", handleGlobalClick);
   window.addEventListener("keydown", handleGlobalKeydown);
+
+  if (window.matchMedia) {
+    mediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
+    mediaQueryList.addEventListener("change", handleSystemThemeChange);
+  }
 });
 
 onUnmounted(() => {
   window.removeEventListener("click", handleGlobalClick);
   window.removeEventListener("keydown", handleGlobalKeydown);
+
+  if (mediaQueryList) {
+    mediaQueryList.removeEventListener("change", handleSystemThemeChange);
+    mediaQueryList = null;
+  }
 });
 </script>
 
