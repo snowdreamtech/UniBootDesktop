@@ -821,7 +821,7 @@ backend = "go"
 [tools."go:github.com/wailsapp/wails/v2/cmd/wails"."platforms.windows-arm64"]
 
 [[tools."go:github.com/wailsapp/wails/v2/cmd/wails"]]
-version = "v2.14.0"
+version = "v2.16.0"
 backend = "go"
 
 [tools."go:github.com/wailsapp/wails/v2/cmd/wails"."platforms.linux-amd64"]
