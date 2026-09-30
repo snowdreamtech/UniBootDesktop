@@ -208,7 +208,7 @@ func GetDefaultConfig() *AppConfig {
 		VentoyReserveSpace:   0,     // Official Ventoy default: 0 MB
 		VentoyWin11Bypass:    false, // Official Ventoy default: Disabled (False)
 		VentoyMenuTimeout:    0,     // Official Ventoy default: 0 (No timeout / wait indefinitely)
-		AutoEjectAfterDeploy: false, // Default: do NOT auto eject
+		AutoEjectAfterDeploy: false, // Default: do NOT auto eject — user should verify the disk first
 	}
 }
 
