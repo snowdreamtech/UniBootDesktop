@@ -37,19 +37,41 @@
       <!-- Modal Body -->
       <div class="modal-body">
         <!-- Tab 1: General Settings -->
+        <!-- Tab 1: General Settings (Card-based layout) -->
         <div v-if="activeTab === 'general'" class="tab-content">
-          <div class="settings-section">
-            <h4 class="section-title">
-              <span>{{ t("settings.tab_general") }}</span>
+          <!-- Card 1: Interface & Display -->
+          <div class="settings-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="card-icon">🎨</span>
+                <span>{{ t("settings.language") }} & {{ t("settings.theme") }}</span>
+              </div>
               <span class="badge info">{{ t("settings.realtime_save") }}</span>
-            </h4>
+            </div>
 
-            <div class="grid-form">
+            <div class="card-grid">
               <div class="form-group highlight-form-group">
                 <label class="form-label highlight-label">{{ t("settings.language") }}</label>
                 <CustomSelect v-model="appLanguage" :options="languageSelectOptions" @change="onLanguageChange" />
               </div>
 
+              <div class="form-group">
+                <label class="form-label">{{ t("settings.theme") }}</label>
+                <CustomSelect v-model="appTheme" :options="themeSelectOptions" @change="onThemeChange" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Boot Drive Defaults -->
+          <div class="settings-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="card-icon">🚀</span>
+                <span>{{ t("settings.default_mode") }} & {{ t("settings.default_fs") }}</span>
+              </div>
+            </div>
+
+            <div class="card-grid">
               <div class="form-group">
                 <label class="form-label">{{ t("settings.default_mode") }}</label>
                 <CustomSelect
@@ -76,9 +98,9 @@
                 />
               </div>
 
-              <div class="form-group">
+              <div class="form-group span-full">
                 <label class="form-label">{{ t("settings.auto_eject_after_deploy") }}</label>
-                <div class="radio-group">
+                <div class="radio-row">
                   <label class="radio-label">
                     <input type="radio" :value="false" v-model="autoEjectAfterDeploy" @change="triggerAutoSave" />
                     <span>{{ t("settings.auto_eject_disabled") }}</span>
@@ -89,10 +111,22 @@
                   </label>
                 </div>
               </div>
+            </div>
+          </div>
 
+          <!-- Card 3: System, Updates & Tray -->
+          <div class="settings-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="card-icon">💻</span>
+                <span>{{ t("settings.app_update") }} & {{ t("settings.enable_tray") }}</span>
+              </div>
+            </div>
+
+            <div class="card-grid">
               <div class="form-group">
                 <label class="form-label">{{ t("settings.app_update") }}</label>
-                <div class="radio-group">
+                <div class="radio-row">
                   <label class="radio-label">
                     <input type="radio" :value="true" v-model="autoCheckUpdate" @change="triggerAutoSave" />
                     <span>{{ t("settings.update_auto") }}</span>
@@ -105,27 +139,22 @@
               </div>
 
               <div class="form-group">
-                <label class="form-label">{{ t("settings.theme") }}</label>
-                <CustomSelect v-model="appTheme" :options="themeSelectOptions" @change="onThemeChange" />
-              </div>
-
-              <div class="form-group">
                 <label class="form-label">{{ t("settings.enable_tray") }}</label>
-                <div class="radio-group">
+                <div class="radio-row">
                   <label class="radio-label">
                     <input type="radio" :value="false" v-model="enableTray" @change="triggerAutoSave" />
-                    <span>{{ t("settings.auto_eject_disabled") }}</span>
+                    <span>{{ t("common.off") }}</span>
                   </label>
                   <label class="radio-label">
                     <input type="radio" :value="true" v-model="enableTray" @change="triggerAutoSave" />
-                    <span>{{ t("settings.auto_eject_enabled") }}</span>
+                    <span>{{ t("common.on") }}</span>
                   </label>
                 </div>
               </div>
 
-              <div v-if="enableTray" class="form-group">
+              <div v-if="enableTray" class="form-group span-full">
                 <label class="form-label">{{ t("settings.close_action") }}</label>
-                <div class="radio-group">
+                <div class="radio-row">
                   <label class="radio-label">
                     <input type="radio" value="quit" v-model="closeAction" @change="triggerAutoSave" />
                     <span>{{ t("settings.close_action_quit") }}</span>
@@ -1229,7 +1258,67 @@ onMounted(() => {
 .tab-content {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.1rem;
+}
+
+/* Card-based Settings Component */
+.settings-card {
+  background: var(--card-bg, rgba(17, 24, 39, 0.95));
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+[data-theme="light"] .settings-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+[data-theme="light"] .card-header {
+  border-bottom-color: #f1f5f9;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.925rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+[data-theme="light"] .card-title {
+  color: #0284c7;
+}
+
+.card-icon {
+  font-size: 1.1rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.15rem;
+}
+
+.radio-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 0.35rem;
+  padding: 0.4rem 0.2rem;
 }
 
 .settings-section {
