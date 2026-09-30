@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	goRuntime "runtime"
 	"time"
 
 	"github.com/snowdreamtech/unibootdesktop/cmd"
@@ -73,10 +72,9 @@ func RunWails() error {
 		Title:       "UniBootDesktop",
 		Width:       1180,
 		Height:      820,
-		MinWidth:    1024,
-		MinHeight:   728,
-		StartHidden:       true,
-		HideWindowOnClose: goRuntime.GOOS == "darwin",
+		MinWidth:         1024,
+		MinHeight:        728,
+		StartHidden:      true,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
