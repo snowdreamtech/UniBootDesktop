@@ -352,3 +352,17 @@ html[dir="ltr"] textarea {
 [dir="rtl"] .custom-select-container .dropdown-item {
   text-align: right;
 }
+
+/* Native Window Focus / Blur State Visual Adaptation */
+.window-inactive {
+  --accent-cyan-glow: rgba(0, 229, 255, 0.12);
+}
+
+.window-inactive .app-header {
+  opacity: 0.94;
+}
+
+.window-inactive .logo-img {
+  filter: grayscale(0.2) opacity(0.88);
+}
+
