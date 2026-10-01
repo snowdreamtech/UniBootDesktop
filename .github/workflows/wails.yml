@@ -229,7 +229,17 @@ jobs:
             echo "$nsisDefaultPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
             $env:PATH = "$nsisDefaultPath;$env:PATH"
           } elseif (-not (Get-Command makensis -ErrorAction SilentlyContinue)) {
-            choco install nsis -y --no-progress
+            for ($attempt = 1; $attempt -le 3; $attempt++) {
+              try {
+                choco install nsis -y --no-progress --timeout 300
+                if (Test-Path "$nsisDefaultPath\makensis.exe") {
+                  break
+                }
+              } catch {
+                Write-Host "Choco install NSIS attempt $attempt failed, retrying..."
+                Start-Sleep -Seconds 5
+              }
+            }
             if (Test-Path $nsisDefaultPath) {
               echo "$nsisDefaultPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
               $env:PATH = "$nsisDefaultPath;$env:PATH"
