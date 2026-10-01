@@ -14,6 +14,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/snowdreamtech/unibootdesktop/internal/env"
@@ -59,6 +60,13 @@ func TestResolveWindowsUserDataPath(t *testing.T) {
 	_ = path
 }
 
+func mockNoopCommand() *exec.Cmd {
+	if runtime.GOOS == "windows" {
+		return exec.Command("cmd.exe", "/c", "exit 0")
+	}
+	return exec.Command("true")
+}
+
 func TestApp_RestartApp(t *testing.T) {
 	app := NewApp()
 	require.NotNil(t, app)
@@ -68,8 +76,7 @@ func TestApp_RestartApp(t *testing.T) {
 	defer func() { execCommand = origExec }()
 
 	execCommand = func(name string, arg ...string) *exec.Cmd {
-		// Use echo or true which exits immediately
-		return exec.Command("true")
+		return mockNoopCommand()
 	}
 
 	err := app.RestartApp()
@@ -100,7 +107,7 @@ func TestApp_RestartApp_WithPendingUpdate(t *testing.T) {
 	var executedCmd string
 	execCommand = func(name string, arg ...string) *exec.Cmd {
 		executedCmd = name
-		return exec.Command("true")
+		return mockNoopCommand()
 	}
 
 	err := app.RestartApp()
