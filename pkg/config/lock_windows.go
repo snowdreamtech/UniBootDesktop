@@ -8,12 +8,16 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"golang.org/x/sys/windows"
 )
 
 func acquireConfigLock(cfgPath string) (*os.File, func(), error) {
 	lockPath := cfgPath + ".lock"
+	if err := os.MkdirAll(filepath.Dir(lockPath), 0o755); err != nil {
+		return nil, nil, fmt.Errorf("create config lock dir: %w", err)
+	}
 	file, err := os.OpenFile(lockPath, os.O_CREATE|os.O_RDWR, 0o600)
 	if err != nil {
 		return nil, nil, fmt.Errorf("open config lock: %w", err)

@@ -267,7 +267,7 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath string, bootMode strin
 
 func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
 	status := d.Detect()
-	if !status.Installed {
+	if !status.Installed && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 		return fmt.Errorf("QEMU simulator not detected! Please install QEMU first (e.g. via brew install qemu).")
 	}
 

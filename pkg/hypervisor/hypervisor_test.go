@@ -150,9 +150,26 @@ func TestLaunchSpecified_DryRun(t *testing.T) {
 }
 
 func TestResolveRawDiskDevice(t *testing.T) {
-	node := ResolveRawDiskDevice("/dev/disk2s1")
-	if node != "/dev/rdisk2" {
-		t.Errorf("expected /dev/rdisk2 for /dev/disk2s1, got %s", node)
+	switch runtime.GOOS {
+	case "darwin":
+		node := ResolveRawDiskDevice("/dev/disk2s1")
+		if node != "/dev/rdisk2" {
+			t.Errorf("expected /dev/rdisk2 for /dev/disk2s1, got %s", node)
+		}
+	case "linux":
+		node := ResolveRawDiskDevice("/dev/sdb1")
+		if node != "/dev/sdb" {
+			t.Errorf("expected /dev/sdb for /dev/sdb1, got %s", node)
+		}
+		nvmeNode := ResolveRawDiskDevice("/dev/nvme0n1p2")
+		if nvmeNode != "/dev/nvme0n1" {
+			t.Errorf("expected /dev/nvme0n1 for /dev/nvme0n1p2, got %s", nvmeNode)
+		}
+	case "windows":
+		node := ResolveRawDiskDevice("E:")
+		if node != `\\.\E:` {
+			t.Errorf(`expected \\.\E: for E:, got %s`, node)
+		}
 	}
 }
 

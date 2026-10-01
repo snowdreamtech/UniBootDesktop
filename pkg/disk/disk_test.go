@@ -87,7 +87,19 @@ func TestValidateTargetDisk(t *testing.T) {
 	assert.Error(t, ValidateTargetDisk(""))
 	assert.Error(t, ValidateTargetDisk("/"))
 	assert.Error(t, ValidateTargetDisk("C:"))
-	assert.NoError(t, ValidateTargetDisk("/Volumes/MyUSBKey"))
+
+	var validTarget string
+	switch runtime.GOOS {
+	case "darwin":
+		validTarget = "/Volumes/MyUSBKey"
+	case "linux":
+		validTarget = "/dev/sdz"
+	case "windows":
+		validTarget = `\\.\PhysicalDrive1`
+	default:
+		validTarget = "dummy_usb"
+	}
+	assert.NoError(t, ValidateTargetDisk(validTarget))
 }
 
 func TestParseWindowsDiskNumber(t *testing.T) {
@@ -125,8 +137,24 @@ func TestValidateUserEjectTarget(t *testing.T) {
 }
 
 func TestValidateTargetDiskSnapshot(t *testing.T) {
+	var validDev, diffDev string
+	switch runtime.GOOS {
+	case "darwin":
+		validDev = "/dev/disk4"
+		diffDev = "/dev/disk5"
+	case "linux":
+		validDev = "/dev/sdz"
+		diffDev = "/dev/sdy"
+	case "windows":
+		validDev = `\\.\PhysicalDrive1`
+		diffDev = `\\.\PhysicalDrive2`
+	default:
+		validDev = "dummy_usb"
+		diffDev = "dummy_usb2"
+	}
+
 	expected := DiskInfo{
-		Device:       "/dev/disk4",
+		Device:       validDev,
 		Size:         128000000000,
 		IsRemovable:  true,
 		IsSystem:     false,
@@ -145,7 +173,7 @@ func TestValidateTargetDiskSnapshot(t *testing.T) {
 		},
 		{
 			name:    "device path changed",
-			actual:  DiskInfo{Device: "/dev/disk5", Size: expected.Size, IsRemovable: true, SerialNumber: expected.SerialNumber, Vendor: expected.Vendor},
+			actual:  DiskInfo{Device: diffDev, Size: expected.Size, IsRemovable: true, SerialNumber: expected.SerialNumber, Vendor: expected.Vendor},
 			wantErr: true,
 		},
 		{
