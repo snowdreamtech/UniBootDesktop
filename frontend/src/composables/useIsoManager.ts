@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
 import { ref } from "vue";
-import { t } from "../i18n";
+import { currentLang, t } from "../i18n";
 import { SelectIsoFiles } from "../../wailsjs/go/main/App";
 import { logUserAction } from "../utils/logger";
 
@@ -41,6 +41,7 @@ export function useIsoManager(showToast: (msg: string, type: "info" | "warning" 
   function addIsoFilesByPaths(paths: string[]): number {
     if (!paths || paths.length === 0) return 0;
     let added = 0;
+    let duplicateCount = 0;
     let invalidCount = 0;
 
     for (const p of paths) {
@@ -62,6 +63,7 @@ export function useIsoManager(showToast: (msg: string, type: "info" | "warning" 
         ) {
           selectedIsoFiles.value[existingIndex].path = p;
         }
+        duplicateCount++;
         continue;
       }
 
@@ -72,7 +74,14 @@ export function useIsoManager(showToast: (msg: string, type: "info" | "warning" 
 
     if (added > 0) {
       showToast(t("deploy.toast_added_iso", { count: added }), "success");
-    } else if (invalidCount > 0 && selectedIsoFiles.value.length === 0) {
+    } else if (duplicateCount > 0) {
+      showToast(
+        currentLang.value.startsWith("zh")
+          ? "所选镜像文件已在列表中，已自动忽略重复项"
+          : "Selected image file is already in the list, duplicate ignored",
+        "info"
+      );
+    } else if (invalidCount > 0) {
       showToast(t("iso.drag_unsupported"), "warning");
     }
 
