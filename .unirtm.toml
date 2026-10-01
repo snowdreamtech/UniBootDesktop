@@ -59,7 +59,7 @@ node = "20.18.3"
 
 "npm:prettier" = "3.9.9"
 "npm:sort-package-json" = "4.0.0"
-"npm:stylelint" = "17.15.0"
+"npm:stylelint" = "17.16.0"
 "pipx:clang-format" = "23.1.1"
 "pipx:pip-audit" = "2.10.1"
 "pipx:pre-commit" = "4.6.2"

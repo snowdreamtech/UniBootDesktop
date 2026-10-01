@@ -1276,6 +1276,26 @@ backend = "npm"
 
 [tools."npm:stylelint"."platforms.windows-arm64"]
 
+[[tools."npm:stylelint"]]
+version = "17.16.0"
+backend = "npm"
+
+[tools."npm:stylelint"."platforms.linux-amd64"]
+
+[tools."npm:stylelint"."platforms.linux-amd64-musl"]
+
+[tools."npm:stylelint"."platforms.linux-arm64"]
+
+[tools."npm:stylelint"."platforms.linux-arm64-musl"]
+
+[tools."npm:stylelint"."platforms.macos-amd64"]
+
+[tools."npm:stylelint"."platforms.macos-arm64"]
+
+[tools."npm:stylelint"."platforms.windows-amd64"]
+
+[tools."npm:stylelint"."platforms.windows-arm64"]
+
 [[tools."pipx:clang-format"]]
 version = "23.1.0"
 backend = "pipx"
