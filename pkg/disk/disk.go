@@ -89,9 +89,11 @@ func ParseWindowsDiskNumber(targetDisk string) (int, error) {
 		return 0, fmt.Errorf("empty windows disk identifier")
 	}
 
-	normalized := filepath.Base(trimmed)
+	normalized := trimmed
 	normalized = strings.TrimPrefix(normalized, `\\.\`)
+	normalized = strings.TrimPrefix(normalized, `//./`)
 	normalized = strings.TrimPrefix(normalized, `\\?\`)
+	normalized = strings.TrimPrefix(normalized, `//?/`)
 	normalized = strings.TrimPrefix(normalized, "PhysicalDrive")
 	normalized = strings.TrimPrefix(normalized, "physicaldrive")
 	normalized = strings.TrimPrefix(normalized, "Disk")
@@ -100,7 +102,7 @@ func ParseWindowsDiskNumber(targetDisk string) (int, error) {
 	if normalized == "" {
 		return 0, fmt.Errorf("missing windows disk index in %q", targetDisk)
 	}
-	if strings.ContainsAny(normalized, "\"'`$;&|()[]{}<>\\") {
+	if strings.ContainsAny(normalized, "\"'`$;&|()[]{}<>\\/") {
 		return 0, fmt.Errorf("unsafe windows disk identifier: %q", targetDisk)
 	}
 
@@ -1075,7 +1077,7 @@ func buildDarwinVolumeSnapshot(entries []os.DirEntry, infoByPath map[string]stri
 		if e == nil || IsIgnoredVolume(e.Name()) {
 			continue
 		}
-		volPath := filepath.Join("/Volumes", e.Name())
+		volPath := filepath.ToSlash(filepath.Join("/Volumes", e.Name()))
 		id := e.Name()
 		if info, ok := infoByPath[volPath]; ok {
 			if device := extractPlistValue(info, "ParentWholeDisk"); device != "" {

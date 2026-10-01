@@ -127,13 +127,19 @@ func TestRelaxRawDiskPermissionsTemporarilyRestoresOwnedFile(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	restore := RelaxRawDiskPermissionsTemporarily(path)
-	info, err := os.Stat(path)
+	infoBefore, err := os.Stat(path)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if info.Mode().Perm() != 0640 {
-		t.Fatalf("non-device path must not be chmod'd, got %o", info.Mode().Perm())
+	origPerm := infoBefore.Mode().Perm()
+
+	restore := RelaxRawDiskPermissionsTemporarily(path)
+	infoAfter, err := os.Stat(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if infoAfter.Mode().Perm() != origPerm {
+		t.Fatalf("non-device path must not be chmod'd, want %o, got %o", origPerm, infoAfter.Mode().Perm())
 	}
 	restore()
 }
