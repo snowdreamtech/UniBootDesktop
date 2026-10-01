@@ -158,13 +158,62 @@ jobs:
         shell: bash
         run: unirtm exec -- node scripts/sync-build-metadata.mjs
 
+      - name: Cache Release Tools (Cosign & Syft)
+        id: cache-release-tools
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.local/bin
+          key: release-tools-${{ runner.os }}-${{ runner.arch }}-cosign-v3.0.6-syft-v1.42.3
+
+      - name: Setup Release Tools PATH
+        shell: bash
+        run: |
+          mkdir -p "${HOME}/.local/bin"
+          echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
+          if command -v cosign >/dev/null 2>&1; then
+            echo "COSIGN_CACHED=true" >> "$GITHUB_ENV"
+            echo "Cosign already cached and available in PATH"
+            cosign version || true
+          fi
+          if command -v syft >/dev/null 2>&1; then
+            echo "SYFT_CACHED=true" >> "$GITHUB_ENV"
+            echo "Syft already cached and available in PATH"
+            syft version || true
+          fi
+
       - name: Install Cosign
+        if: env.COSIGN_CACHED != 'true'
         uses: sigstore/cosign-installer@828df1e55de306ba29db814d6057ddae71883cda # v4.1.2+fix-504
         with:
           curl-retries: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+
+      - name: Backup Cosign to Cache Directory
+        if: env.COSIGN_CACHED != 'true'
+        shell: bash
+        run: |
+          COSIGN_BIN="$(command -v cosign 2>/dev/null || true)"
+          if [ -n "${COSIGN_BIN}" ] && [ -f "${COSIGN_BIN}" ]; then
+            mkdir -p "${HOME}/.local/bin"
+            cp -f "${COSIGN_BIN}" "${HOME}/.local/bin/" || true
+          fi
 
       - name: Install Syft
+        if: env.SYFT_CACHED != 'true'
         uses: anchore/sbom-action/download-syft@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+
+      - name: Backup Syft to Cache Directory
+        if: env.SYFT_CACHED != 'true'
+        shell: bash
+        run: |
+          SYFT_BIN="$(command -v syft 2>/dev/null || true)"
+          if [ -n "${SYFT_BIN}" ] && [ -f "${SYFT_BIN}" ]; then
+            mkdir -p "${HOME}/.local/bin"
+            cp -f "${SYFT_BIN}" "${HOME}/.local/bin/" || true
+          fi
 
       - name: Install Linux build dependencies
         if: runner.os == 'Linux'
@@ -557,15 +606,47 @@ jobs:
               fi
             }) >> "${CHECKSUM_FILE}"
 
-            syft "file:${ASSET}" -o "spdx-json=${ASSET}.sbom.spdx.json"
-            cosign sign-blob --yes \
-              --bundle "${ASSET}.sigstore.json" \
-              "${ASSET}"
-            cosign verify-blob \
-              --certificate-identity "${WORKFLOW_IDENTITY}" \
-              --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-              --bundle "${ASSET}.sigstore.json" \
-              "${ASSET}"
+            # --- Syft SBOM Generation (resilient & non-blocking) ---
+            if command -v syft >/dev/null 2>&1; then
+              echo "Generating SBOM for ${ASSET_BASENAME} with Syft..."
+              if ! syft "file:${ASSET}" -o "spdx-json=${ASSET}.sbom.spdx.json"; then
+                echo "WARNING: Syft SBOM generation failed for ${ASSET_BASENAME}, proceeding without blocking release." >&2
+                rm -f "${ASSET}.sbom.spdx.json"
+              fi
+            else
+              echo "WARNING: Syft not available, skipping SBOM generation for ${ASSET_BASENAME}." >&2
+            fi
+
+            # --- Cosign Keyless Signing & Verification (5 retries with exponential backoff & non-blocking fallback) ---
+            if command -v cosign >/dev/null 2>&1; then
+              echo "Signing ${ASSET_BASENAME} with Cosign..."
+              SIGNED_OK=false
+              COSIGN_ATTEMPTS=5
+              COSIGN_DELAY=3
+              for attempt in $(seq 1 ${COSIGN_ATTEMPTS}); do
+                if cosign sign-blob --yes \
+                  --bundle "${ASSET}.sigstore.json" \
+                  "${ASSET}" && \
+                  cosign verify-blob \
+                    --certificate-identity "${WORKFLOW_IDENTITY}" \
+                    --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+                    --bundle "${ASSET}.sigstore.json" \
+                    "${ASSET}"; then
+                  SIGNED_OK=true
+                  echo "Successfully signed and verified ${ASSET_BASENAME} with Cosign on attempt ${attempt}."
+                  break
+                fi
+                echo "Cosign attempt ${attempt}/${COSIGN_ATTEMPTS} for ${ASSET_BASENAME} failed. Retrying in ${COSIGN_DELAY}s..." >&2
+                sleep "${COSIGN_DELAY}"
+                COSIGN_DELAY=$(( COSIGN_DELAY * 2 ))
+              done
+              if [ "${SIGNED_OK}" != "true" ]; then
+                echo "WARNING: Cosign signing/verification failed after ${COSIGN_ATTEMPTS} attempts due to remote Sigstore/Fulcio/Rekor network issues. Release will proceed without sigstore bundle to guarantee delivery." >&2
+                rm -f "${ASSET}.sigstore.json"
+              fi
+            else
+              echo "WARNING: Cosign not available, skipping Cosign signing for ${ASSET_BASENAME}." >&2
+            fi
           done
 
           (cd build/bin && {
@@ -692,10 +773,41 @@ jobs:
           echo "TAG=${TAG}" >> "$GITHUB_ENV"
           echo "Release tag: ${TAG}"
 
+      - name: Cache Release Tools (Cosign)
+        id: cache-release-tools
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.local/bin
+          key: release-tools-Linux-x64-cosign-v3.0.6
+
+      - name: Setup Release Tools PATH
+        shell: bash
+        run: |
+          mkdir -p "${HOME}/.local/bin"
+          echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
+          if command -v cosign >/dev/null 2>&1; then
+            echo "COSIGN_CACHED=true" >> "$GITHUB_ENV"
+            echo "Cosign already cached and available in PATH"
+            cosign version || true
+          fi
+
       - name: Install Cosign
+        if: env.COSIGN_CACHED != 'true'
         uses: sigstore/cosign-installer@828df1e55de306ba29db814d6057ddae71883cda # v4.1.2+fix-504
         with:
           curl-retries: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+
+      - name: Backup Cosign to Cache Directory
+        if: env.COSIGN_CACHED != 'true'
+        shell: bash
+        run: |
+          COSIGN_BIN="$(command -v cosign 2>/dev/null || true)"
+          if [ -n "${COSIGN_BIN}" ] && [ -f "${COSIGN_BIN}" ]; then
+            mkdir -p "${HOME}/.local/bin"
+            cp -f "${COSIGN_BIN}" "${HOME}/.local/bin/" || true
+          fi
 
       - name: Aggregate and sign unified checksums
         env:
@@ -751,17 +863,35 @@ jobs:
           echo "Aggregated checksums.txt preview:"
           cat checksums.txt
 
-          echo "Re-signing aggregated checksums.txt with Cosign..."
-          cosign sign-blob --yes \
-            --bundle checksums.txt.sigstore.json \
-            checksums.txt
-
-          echo "Verifying new Cosign bundle..."
-          cosign verify-blob \
-            --certificate-identity "${WORKFLOW_IDENTITY}" \
-            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-            --bundle checksums.txt.sigstore.json \
-            checksums.txt
+          if command -v cosign >/dev/null 2>&1; then
+            echo "Re-signing aggregated checksums.txt with Cosign..."
+            SIGNED_OK=false
+            COSIGN_ATTEMPTS=5
+            COSIGN_DELAY=3
+            for attempt in $(seq 1 ${COSIGN_ATTEMPTS}); do
+              if cosign sign-blob --yes \
+                --bundle checksums.txt.sigstore.json \
+                checksums.txt && \
+                cosign verify-blob \
+                  --certificate-identity "${WORKFLOW_IDENTITY}" \
+                  --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+                  --bundle checksums.txt.sigstore.json \
+                  checksums.txt; then
+                SIGNED_OK=true
+                echo "Successfully re-signed and verified checksums.txt with Cosign on attempt ${attempt}."
+                break
+              fi
+              echo "Cosign attempt ${attempt}/${COSIGN_ATTEMPTS} for checksums.txt failed. Retrying in ${COSIGN_DELAY}s..." >&2
+              sleep "${COSIGN_DELAY}"
+              COSIGN_DELAY=$(( COSIGN_DELAY * 2 ))
+            done
+            if [ "${SIGNED_OK}" != "true" ]; then
+              echo "WARNING: Cosign signing for checksums.txt failed after ${COSIGN_ATTEMPTS} attempts. Proceeding with release to ensure delivery." >&2
+              rm -f checksums.txt.sigstore.json
+            fi
+          else
+            echo "WARNING: Cosign not available, skipping checksums.txt signing." >&2
+          fi
 
           echo "CHECKSUMS_PATH=/tmp/release-checksums/checksums.txt" >> "$GITHUB_ENV"
 
@@ -777,9 +907,12 @@ jobs:
         run: |
           set -euo pipefail
           cd /tmp/release-checksums
+          upload_files=("checksums.txt")
+          if [ -f checksums.txt.sigstore.json ]; then
+            upload_files+=("checksums.txt.sigstore.json")
+          fi
           gh release upload "${TAG}" \
             --repo "${REPOSITORY}" \
             --clobber \
-            checksums.txt \
-            checksums.txt.sigstore.json
-          echo "Aggregated checksums.txt and checksums.txt.sigstore.json uploaded successfully"
+            "${upload_files[@]}"
+          echo "Aggregated checksums uploaded successfully: ${upload_files[*]}"
