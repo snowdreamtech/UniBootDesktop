@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -111,8 +112,10 @@ func TestConfigSaveAndLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("stat saved config failed: %v", err)
 	}
-	if mode := info.Mode().Perm(); mode != 0600 {
-		t.Fatalf("expected config mode 0600, got %04o", mode)
+	if runtime.GOOS != "windows" {
+		if mode := info.Mode().Perm(); mode != 0600 {
+			t.Fatalf("expected config mode 0600, got %04o", mode)
+		}
 	}
 }
 
