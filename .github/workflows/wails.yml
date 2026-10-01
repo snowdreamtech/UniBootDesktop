@@ -62,6 +62,23 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Configure curl retry resilience
+        shell: bash
+        run: |
+          mkdir -p "${HOME}"
+          cat << 'EOF' > "${HOME}/.curlrc"
+          retry = 10
+          retry-delay = 5
+          retry-max-time = 120
+          retry-connrefused
+          EOF
+          cp "${HOME}/.curlrc" "${HOME}/_curlrc" 2>/dev/null || true
+          if [ -n "${USERPROFILE:-}" ]; then
+            cp "${HOME}/.curlrc" "${USERPROFILE}/.curlrc" 2>/dev/null || true
+            cp "${HOME}/.curlrc" "${USERPROFILE}/_curlrc" 2>/dev/null || true
+          fi
+          echo "CURL_HOME=${HOME}" >> "$GITHUB_ENV"
+
       - name: Resolve release tag
         env:
           INPUT_TAG: ${{ inputs.tag }}
@@ -637,6 +654,23 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
           fetch-depth: 0
           persist-credentials: false
+
+      - name: Configure curl retry resilience
+        shell: bash
+        run: |
+          mkdir -p "${HOME}"
+          cat << 'EOF' > "${HOME}/.curlrc"
+          retry = 10
+          retry-delay = 5
+          retry-max-time = 120
+          retry-connrefused
+          EOF
+          cp "${HOME}/.curlrc" "${HOME}/_curlrc" 2>/dev/null || true
+          if [ -n "${USERPROFILE:-}" ]; then
+            cp "${HOME}/.curlrc" "${USERPROFILE}/.curlrc" 2>/dev/null || true
+            cp "${HOME}/.curlrc" "${USERPROFILE}/_curlrc" 2>/dev/null || true
+          fi
+          echo "CURL_HOME=${HOME}" >> "$GITHUB_ENV"
 
       - name: Resolve release tag
         env:
