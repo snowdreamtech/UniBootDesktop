@@ -526,11 +526,14 @@ jobs:
 
           for ASSET in "${MATCHED_ASSETS[@]}"; do
             echo "Securing asset: ${ASSET}"
-            if command -v sha256sum >/dev/null 2>&1; then
-              sha256sum "${ASSET}" >> "${CHECKSUM_FILE}"
-            else
-              shasum -a 256 "${ASSET}" >> "${CHECKSUM_FILE}"
-            fi
+            ASSET_BASENAME="$(basename "${ASSET}")"
+            (cd "$(dirname "${ASSET}")" && {
+              if command -v sha256sum >/dev/null 2>&1; then
+                sha256sum "${ASSET_BASENAME}"
+              else
+                shasum -a 256 "${ASSET_BASENAME}"
+              fi
+            }) >> "${CHECKSUM_FILE}"
 
             syft "file:${ASSET}" -o "spdx-json=${ASSET}.sbom.spdx.json"
             cosign sign-blob --yes \
@@ -543,11 +546,13 @@ jobs:
               "${ASSET}"
           done
 
-          if command -v sha256sum >/dev/null 2>&1; then
-            sha256sum --check "${CHECKSUM_FILE}"
-          else
-            shasum -a 256 --check "${CHECKSUM_FILE}"
-          fi
+          (cd build/bin && {
+            if command -v sha256sum >/dev/null 2>&1; then
+              sha256sum --check "$(basename "${CHECKSUM_FILE}")"
+            else
+              shasum -a 256 --check "$(basename "${CHECKSUM_FILE}")"
+            fi
+          })
           echo "CHECKSUM_FILE=${CHECKSUM_FILE}" >> "$GITHUB_ENV"
 
       - name: Attest GUI artifact provenance
@@ -605,3 +610,135 @@ jobs:
             --repo "${REPOSITORY}" \
             --clobber \
             ${upload_assets[@]+"${upload_assets[@]}"}
+
+  aggregate-checksums:
+    name: "Aggregate and sign release checksums"
+    needs: [gui]
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+    env:
+      UNIRTM_LOCKED: 1
+      GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Resolve release tag
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --tags --force 2>/dev/null || true
+          if [ -n "$INPUT_TAG" ]; then
+            TAG="$INPUT_TAG"
+          else
+            TAG="$(git tag --points-at "$HEAD_SHA" | head -n 1)"
+          fi
+          if [ -z "$TAG" ]; then
+            echo "No release tag points at ${HEAD_SHA}" >&2
+            exit 1
+          fi
+          echo "TAG=${TAG}" >> "$GITHUB_ENV"
+          echo "Release tag: ${TAG}"
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+
+      - name: Aggregate and sign unified checksums
+        env:
+          REPOSITORY: ${{ github.repository }}
+          WORKFLOW_IDENTITY: https://github.com/${{ github.workflow_ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/release-checksums
+          cd /tmp/release-checksums
+
+          echo "Downloading checksums.txt and platform sha256 files from release ${TAG}..."
+          gh release download "${TAG}" \
+            --repo "${REPOSITORY}" \
+            --pattern 'checksums.txt' \
+            --pattern '*.sha256' || true
+
+          if [ ! -f checksums.txt ]; then
+            echo "checksums.txt not found in release ${TAG}, initializing empty file"
+            touch checksums.txt
+          fi
+
+          # Collect and normalize all sha256 entries
+          touch combined_raw.txt
+          cat checksums.txt >> combined_raw.txt
+          for sha_file in *.sha256; do
+            if [ -f "$sha_file" ]; then
+              cat "$sha_file" >> combined_raw.txt
+            fi
+          done
+
+          # Strip CR (\r), strip leading directory paths (e.g. build/bin/), strip leading asterisks from filename
+          # and deduplicate entries by filename while preserving the last valid hash
+          awk '{
+            gsub(/\r/, "");
+            if (NF >= 2) {
+              hash = $1;
+              file = $2;
+              sub(/^\*/, "", file);
+              n = split(file, parts, "/");
+              filename = parts[n];
+              if (length(hash) == 64 && filename != "") {
+                entries[filename] = hash;
+              }
+            }
+          }
+          END {
+            for (f in entries) {
+              printf "%s  %s\n", entries[f], f;
+            }
+          }' combined_raw.txt | sort -k2,2 > checksums.txt
+
+          echo "Aggregated checksums.txt preview:"
+          cat checksums.txt
+
+          echo "Re-signing aggregated checksums.txt with Cosign..."
+          cosign sign-blob --yes \
+            --bundle checksums.txt.sigstore.json \
+            checksums.txt
+
+          echo "Verifying new Cosign bundle..."
+          cosign verify-blob \
+            --certificate-identity "${WORKFLOW_IDENTITY}" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            --bundle checksums.txt.sigstore.json \
+            checksums.txt
+
+          echo "CHECKSUMS_PATH=/tmp/release-checksums/checksums.txt" >> "$GITHUB_ENV"
+
+      - name: Attest aggregated checksums provenance
+        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
+        with:
+          subject-checksums: ${{ env.CHECKSUMS_PATH }}
+
+      - name: Upload aggregated checksums to release
+        env:
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/release-checksums
+          gh release upload "${TAG}" \
+            --repo "${REPOSITORY}" \
+            --clobber \
+            checksums.txt \
+            checksums.txt.sigstore.json
+          echo "Aggregated checksums.txt and checksums.txt.sigstore.json uploaded successfully"
