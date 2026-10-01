@@ -79,8 +79,49 @@ export function useIsoManager(showToast: (msg: string, type: "info" | "warning" 
     return added;
   }
 
+  function triggerHtmlFileInput() {
+    if (typeof document === "undefined") return;
+    const input = document.createElement("input");
+    input.type = "file";
+    input.multiple = true;
+    input.accept = SUPPORTED_IMAGE_EXTS.join(",");
+    input.style.display = "none";
+
+    input.onchange = () => {
+      if (!input.files || input.files.length === 0) return;
+      const paths: string[] = [];
+      for (let i = 0; i < input.files.length; i++) {
+        const file = input.files[i];
+        // In WebKit/Electron or desktop webview, file.path or webkitRelativePath might exist
+        const resolvedPath = (file as any).path || file.name;
+        if (resolvedPath) {
+          paths.push(resolvedPath);
+        }
+      }
+      if (paths.length > 0) {
+        addIsoFilesByPaths(paths);
+      }
+      document.body.removeChild(input);
+    };
+
+    input.oncancel = () => {
+      try {
+        document.body.removeChild(input);
+      } catch {
+        // ignore
+      }
+    };
+
+    document.body.appendChild(input);
+    input.click();
+  }
+
   async function handleSelectIsoFiles() {
-    if (typeof SelectIsoFiles === "function") {
+    const hasWails =
+      typeof window !== "undefined" &&
+      typeof (window as any)?.go?.main?.App?.SelectIsoFiles === "function";
+
+    if (hasWails) {
       try {
         const paths: string[] = await SelectIsoFiles(
           t("dialog.selectIsoTitle"),
@@ -92,22 +133,11 @@ export function useIsoManager(showToast: (msg: string, type: "info" | "warning" 
         }
       } catch (err: any) {
         console.error("SelectIsoFiles error:", err);
+        showToast(err?.message || "打开原生文件选择器失败，已切换至备用文件选择", "warning");
+        triggerHtmlFileInput();
       }
     } else {
-      // Mock for browser demo
-      const mockFiles = [
-        { name: "ubuntu-24.04-desktop-amd64.iso", path: "/Users/demo/Downloads/ubuntu-24.04-desktop-amd64.iso" },
-        {
-          name: "Windows11_23H2_Chinese_Simplified_x64.iso",
-          path: "/Users/demo/Downloads/Windows11_23H2_Chinese_Simplified_x64.iso",
-        },
-      ];
-      for (const m of mockFiles) {
-        if (!selectedIsoFiles.value.some((f) => f.path === m.path)) {
-          selectedIsoFiles.value.push(m);
-        }
-      }
-      showToast(t("deploy.toast_added_demo_iso"), "info");
+      triggerHtmlFileInput();
     }
   }
 

@@ -338,9 +338,20 @@ func (a *App) SelectIsoFiles(title string, ventoyFilter string, allFilter string
 	}
 
 	logger.Info("Opening native system image file picker dialog")
-	paths, err := wailsRuntime.OpenMultipleFilesDialog(a.ctx, wailsRuntime.OpenDialogOptions{
-		Title: title,
-		Filters: []wailsRuntime.FileFilter{
+
+	var filters []wailsRuntime.FileFilter
+	if runtime.GOOS == "darwin" {
+		// On macOS (Cocoa), Wails translates patterns by stripping "*." and passing extensions to UTType / setAllowedFileTypes.
+		// Specifying "*.*" creates an invalid "*" extension that causes NSOpenPanel to throw an Objective-C exception or malfunction.
+		// On macOS we provide clean valid extensions, omitting "*.*".
+		filters = []wailsRuntime.FileFilter{
+			{
+				DisplayName: ventoyFilter,
+				Pattern:     "*.iso;*.img;*.wim;*.vhd;*.vhdx;*.vti;*.efi;*.bin;*.xz;*.gz;*.raw",
+			},
+		}
+	} else {
+		filters = []wailsRuntime.FileFilter{
 			{
 				DisplayName: ventoyFilter,
 				Pattern:     "*.iso;*.wim;*.img;*.vhd;*.vhdx;*.vti;*.efi;*.bin;*.xz;*.gz;*.raw",
@@ -349,7 +360,12 @@ func (a *App) SelectIsoFiles(title string, ventoyFilter string, allFilter string
 				DisplayName: allFilter,
 				Pattern:     "*.*",
 			},
-		},
+		}
+	}
+
+	paths, err := wailsRuntime.OpenMultipleFilesDialog(a.ctx, wailsRuntime.OpenDialogOptions{
+		Title:   title,
+		Filters: filters,
 	})
 	if err != nil {
 		logger.Error("Failed to open system image file picker", "error", err)
@@ -445,10 +461,20 @@ func (a *App) ExportLogs(content string, title string, logFilter string, textFil
 	}
 
 	defaultFilename := fmt.Sprintf("unibootdesktop-log-%s.log", time.Now().Format("2006-01-02-150405"))
-	filePath, err := wailsRuntime.SaveFileDialog(a.ctx, wailsRuntime.SaveDialogOptions{
-		Title:           title,
-		DefaultFilename: defaultFilename,
-		Filters: []wailsRuntime.FileFilter{
+	var saveFilters []wailsRuntime.FileFilter
+	if runtime.GOOS == "darwin" {
+		saveFilters = []wailsRuntime.FileFilter{
+			{
+				DisplayName: logFilter,
+				Pattern:     "*.log",
+			},
+			{
+				DisplayName: textFilter,
+				Pattern:     "*.txt",
+			},
+		}
+	} else {
+		saveFilters = []wailsRuntime.FileFilter{
 			{
 				DisplayName: logFilter,
 				Pattern:     "*.log",
@@ -461,7 +487,13 @@ func (a *App) ExportLogs(content string, title string, logFilter string, textFil
 				DisplayName: allFilter,
 				Pattern:     "*.*",
 			},
-		},
+		}
+	}
+
+	filePath, err := wailsRuntime.SaveFileDialog(a.ctx, wailsRuntime.SaveDialogOptions{
+		Title:           title,
+		DefaultFilename: defaultFilename,
+		Filters:         saveFilters,
 	})
 	if err != nil {
 		logger.Error("Failed to open save file dialog for log export", "error", err)
