@@ -388,6 +388,7 @@ func IsEmptyDirectory(mountPoint string) bool {
 }
 
 // HasVentoyEngineFiles verifies physical presence of Ventoy core engine files inside a mount directory.
+// Strictly inspects physical filesystem files and directories, NEVER relies on volume labels.
 func HasVentoyEngineFiles(mountPoint string) bool {
 	if mountPoint == "" || IsEmptyDirectory(mountPoint) {
 		return false
@@ -400,6 +401,13 @@ func HasVentoyEngineFiles(mountPoint string) bool {
 			"ventoy.disk.img",
 			"ventoy_os_list.json",
 			"ventoy.wim",
+			"ventoy.cpio",
+			"ventoy_x64.efi",
+			"ventoy_ia32.efi",
+			"ventoy_aa64.efi",
+			"vtoyutil_x64.efi",
+			"vtoyjump32.exe",
+			"vtoyjump64.exe",
 		}
 		for _, f := range engineFiles {
 			if _, statErr := os.Stat(filepath.Join(ventoyDir, f)); statErr == nil {
@@ -414,11 +422,17 @@ func HasVentoyEngineFiles(mountPoint string) bool {
 	if _, err := os.Stat(espVentoyImg); err == nil {
 		return true
 	}
+	// Also check if ESP partition has EFI/BOOT grub loader
+	grubEfi := filepath.Join(mountPoint, "EFI", "BOOT", "grubx64_real.efi")
+	if _, err := os.Stat(grubEfi); err == nil {
+		return true
+	}
 	return false
 }
 
 // CheckVentoyMbrSignature inspects MBR Sector 0 for Ventoy's bootloader magic byte signature.
 // Leverages direct raw read with privilege escalation fallback.
+// Strictly relies on physical MBR boot opcodes and partition structures, NEVER relies on volume labels.
 func CheckVentoyMbrSignature(targetDisk string) bool {
 	if targetDisk == "" {
 		return false
@@ -428,7 +442,51 @@ func CheckVentoyMbrSignature(targetDisk string) bool {
 		return false
 	}
 
-	return bytes.Contains(buf, []byte("Ventoy")) || bytes.Contains(buf, []byte("VENTOY"))
+	// 1. Direct ASCII check for custom or updated Ventoy bootloaders containing "Ventoy"
+	if bytes.Contains(buf, []byte("Ventoy")) || bytes.Contains(buf, []byte("VENTOY")) {
+		return true
+	}
+
+	// 2. Official Ventoy boot.img binary signatures:
+	// Ventoy's boot.S begins with short jump: 0xeb, 0x63, 0x90 (jmp + nop).
+	// Due to 446-byte MBR space constraints, Ventoy compresses error strings to "VT\x00Ge\x00HD\x00Rd\x00 Er\r\n".
+	if bytes.Contains(buf, []byte("VT\x00Ge\x00HD\x00Rd")) {
+		return true
+	}
+	if buf[0] == 0xeb && buf[1] == 0x63 && buf[2] == 0x90 && bytes.Contains(buf, []byte("VT\x00")) {
+		return true
+	}
+
+	// 3. Ventoy MBR partition table structure check:
+	// Partition 2 is exactly type 0xEF and size 32MB (65536 sectors = 0x00010000 in little-endian at offset 0x1D8).
+	// Partition 3 and Partition 4 are completely empty (all zeroes).
+	// Valid boot signature 0x55AA at offset 510.
+	if buf[510] == 0x55 && buf[511] == 0xaa {
+		p2Type := buf[0x1CE]
+		p2Sectors := uint32(buf[0x1D8]) | uint32(buf[0x1D9])<<8 | uint32(buf[0x1DA])<<16 | uint32(buf[0x1DB])<<24
+		p3Empty := true
+		for i := 0x1DE; i < 0x1EE; i++ {
+			if buf[i] != 0 {
+				p3Empty = false
+				break
+			}
+		}
+		p4Empty := true
+		for i := 0x1EE; i < 0x1FE; i++ {
+			if buf[i] != 0 {
+				p4Empty = false
+				break
+			}
+		}
+		if p2Type == 0xef && p2Sectors == 65536 && p3Empty && p4Empty {
+			// Ventoy standard 32MB VTOYEFI partition layout with Ventoy JMP opcode or VT prefix
+			if bytes.Contains(buf, []byte("VT\x00")) || (buf[0] == 0xeb && buf[1] == 0x63 && buf[2] == 0x90) {
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 // HasUniBootCloudFiles verifies physical presence of UniBoot Cloud iPXE firmware files inside ESP partition.
@@ -1584,6 +1642,9 @@ func inspectDarwinDisk(wholeDisk darwinDiskutilWholeDisk, usbMap map[string]*dar
 	protoCode := MapProtocolCode(usbVer, usbSpeed)
 
 	isRealVentoy := CheckVentoyMbrSignature(devNode)
+	if !isRealVentoy && privilege.IsElevated() {
+		isRealVentoy = IsVentoyDisk(devNode)
+	}
 	var manifest *UniBootManifest
 	for _, mp := range mountPoints {
 		if m, err := ReadUniBootManifest(mp); err == nil && m != nil {
