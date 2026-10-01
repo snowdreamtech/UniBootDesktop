@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.3.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.2.0...v0.3.0) (2026-10-01)
+
+
+### 🚀 Features
+
+* **iso:** provide explicit feedback when duplicate or unsupported files are dropped ([dea3386](https://github.com/snowdreamtech/UniBootDesktop/commit/dea3386b0c2d9be571073ef347f589eceefcdb2e))
+
+
+### 🐛 Bug Fixes
+
+* **ci:** allocate sufficient virtual volume size for macOS DMG packaging ([a5c4cf8](https://github.com/snowdreamtech/UniBootDesktop/commit/a5c4cf8ce72f87f2933cda4becf9b3ae627348d9))
+* **disk:** identify genuine Ventoy drives by physical MBR opcodes and partition geometry without relying on volume labels ([e6a53a6](https://github.com/snowdreamtech/UniBootDesktop/commit/e6a53a6e3c7ca1804e0fdb0b61abb41f5300d615))
+* **iso:** resolve file dialog freeze on macOS and add HTML5 fallback ([93be8fe](https://github.com/snowdreamtech/UniBootDesktop/commit/93be8febe1f01a9d234da20ebe69a7162c382a2b))
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** sync dependabot config and unirtm toolchain ([bbce6b2](https://github.com/snowdreamtech/UniBootDesktop/commit/bbce6b256715f7afcb9b5bbb4c20d91440fec973))
+
 ## [0.2.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.8.0...v0.2.0) (2026-10-01)
 
 
