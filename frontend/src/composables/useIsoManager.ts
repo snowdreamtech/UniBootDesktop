@@ -127,8 +127,7 @@ export function useIsoManager(showToast: (msg: string, type: "info" | "warning" 
 
   async function handleSelectIsoFiles() {
     const hasWails =
-      typeof window !== "undefined" &&
-      typeof (window as any)?.go?.main?.App?.SelectIsoFiles === "function";
+      typeof window !== "undefined" && typeof (window as any)?.go?.main?.App?.SelectIsoFiles === "function";
 
     if (hasWails) {
       try {
