@@ -818,45 +818,22 @@ func PerformGuiUpdate(
 	}
 
 	// Verify SHA-256 checksum if checksums file exists in release assets
-	var checksumsAsset *updater.ReleaseAsset
-	for _, a := range info.Assets {
-		if strings.EqualFold(a.Name, "checksums.txt") || strings.HasSuffix(strings.ToLower(a.Name), "_checksums.txt") {
-			checksumsAsset = &a
-			break
-		}
-	}
-
-	if checksumsAsset != nil {
+	expectedHash, checksumSource := ResolveExpectedChecksum(ctx, *asset, info.Assets, downloadDir, proxyPrefix)
+	if expectedHash != "" {
 		if onProgress != nil {
 			onProgress(UpdateProgress{
 				Percentage: 72,
 				Status:     "Verifying download checksum...",
 				Stage:      "verifying_checksum",
-				Detail:     checksumsAsset.Name,
+				Detail:     checksumSource,
 			})
 		}
-		checksumPath := filepath.Join(downloadDir, checksumsAsset.Name)
-		if err := DownloadFileWithProxy(ctx, checksumsAsset.BrowserDownloadURL, checksumPath, proxyPrefix); err == nil {
-			chkData, readErr := os.ReadFile(checksumPath)
-			if readErr == nil {
-				var expectedHash string
-				for _, line := range strings.Split(string(chkData), "\n") {
-					parts := strings.Fields(line)
-					if len(parts) >= 2 && parts[1] == asset.Name {
-						expectedHash = parts[0]
-						break
-					}
-				}
-				if expectedHash != "" {
-					if err := VerifyFileSHA256(destFile, expectedHash); err != nil {
-						_ = os.Remove(destFile)
-						return &GuiUpdateResult{
-							Success: false,
-							Message: fmt.Sprintf("Integrity verification failed: %v", err),
-						}, err
-					}
-				}
-			}
+		if err := VerifyFileSHA256(destFile, expectedHash); err != nil {
+			_ = os.Remove(destFile)
+			return &GuiUpdateResult{
+				Success: false,
+				Message: fmt.Sprintf("Integrity verification failed: %v", err),
+			}, err
 		}
 	}
 
@@ -917,4 +894,78 @@ func SavePendingUpdate(dataDir string, pending *PendingUpdate) error {
 func ClearPendingUpdate(dataDir string) error {
 	dir := filepath.Join(dataDir, "updates")
 	return os.RemoveAll(dir)
+}
+
+// ParseHashFromChecksumContent searches for targetFilename's SHA-256 hash in raw checksum file content.
+// It supports:
+// - Standard GNU/BSD sha256 output: "<hash>  <filename>", "<hash>  build/bin/<filename>", "<hash> *<filename>"
+// - Single raw 64-character hash content
+func ParseHashFromChecksumContent(chkContent string, targetFilename string) string {
+	cleanTarget := strings.ToLower(filepath.Base(strings.TrimSpace(targetFilename)))
+	lines := strings.Split(chkContent, "\n")
+	for _, rawLine := range lines {
+		line := strings.TrimSpace(rawLine)
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		parts := strings.Fields(line)
+		if len(parts) >= 2 {
+			entryFile := strings.ToLower(filepath.Base(strings.TrimPrefix(parts[1], "*")))
+			if entryFile == cleanTarget && len(parts[0]) == 64 {
+				return strings.ToLower(parts[0])
+			}
+		} else if len(parts) == 1 && len(parts[0]) == 64 && len(lines) <= 2 {
+			return strings.ToLower(parts[0])
+		}
+	}
+	return ""
+}
+
+// ResolveExpectedChecksum resolves the expected SHA-256 hash and the source asset name for targetAsset.
+// It searches in:
+// 1. Unified checksum files: "checksums.txt", "*_checksums.txt"
+// 2. Specific per-platform/per-asset checksum files: "<assetName>.sha256", "*.sha256"
+func ResolveExpectedChecksum(ctx context.Context, targetAsset updater.ReleaseAsset, allAssets []updater.ReleaseAsset, downloadDir string, proxyPrefix string) (string, string) {
+	// First pass: look for unified checksum files
+	for _, a := range allAssets {
+		lowerName := strings.ToLower(a.Name)
+		if strings.EqualFold(a.Name, "checksums.txt") || strings.HasSuffix(lowerName, "_checksums.txt") {
+			checksumPath := filepath.Join(downloadDir, a.Name)
+			if err := DownloadFileWithProxy(ctx, a.BrowserDownloadURL, checksumPath, proxyPrefix); err == nil {
+				if chkData, readErr := os.ReadFile(checksumPath); readErr == nil {
+					if hash := ParseHashFromChecksumContent(string(chkData), targetAsset.Name); hash != "" {
+						return hash, a.Name
+					}
+				}
+			}
+		}
+	}
+
+	// Second pass: look for target-specific checksum files (e.g. *.sha256)
+	var shaCandidates []updater.ReleaseAsset
+	targetPrefix := strings.TrimSuffix(strings.ToLower(targetAsset.Name), filepath.Ext(targetAsset.Name))
+	for _, a := range allAssets {
+		lowerName := strings.ToLower(a.Name)
+		if !strings.HasSuffix(lowerName, ".sha256") {
+			continue
+		}
+		if strings.EqualFold(a.Name, targetAsset.Name+".sha256") || strings.Contains(lowerName, targetPrefix) {
+			shaCandidates = append([]updater.ReleaseAsset{a}, shaCandidates...)
+		} else {
+			shaCandidates = append(shaCandidates, a)
+		}
+	}
+
+	for _, a := range shaCandidates {
+		checksumPath := filepath.Join(downloadDir, a.Name)
+		if err := DownloadFileWithProxy(ctx, a.BrowserDownloadURL, checksumPath, proxyPrefix); err == nil {
+			if chkData, readErr := os.ReadFile(checksumPath); readErr == nil {
+				if hash := ParseHashFromChecksumContent(string(chkData), targetAsset.Name); hash != "" {
+					return hash, a.Name
+				}
+			}
+		}
+	}
+
+	return "", ""
 }
