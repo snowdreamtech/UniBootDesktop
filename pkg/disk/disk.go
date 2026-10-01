@@ -1178,6 +1178,10 @@ func GetRemovableDisks() ([]DiskInfo, error) {
 		disks, err = getLinuxDisks()
 	}
 
+	if disks == nil && err == nil {
+		disks = []DiskInfo{}
+	}
+
 	if err == nil {
 		diskCacheMutex.Lock()
 		diskCacheList = disks
@@ -2133,7 +2137,7 @@ type linuxLsblkOutput struct {
 }
 
 func getLinuxDisks() ([]DiskInfo, error) {
-	var disks []DiskInfo
+	disks := make([]DiskInfo, 0)
 	cmd := execCommand("lsblk", "-J", "-b", "-o", "NAME,SIZE,FSAVAIL,RM,RO,TYPE,MOUNTPOINT,MODEL,VENDOR,TRAN,FSTYPE,PTTYPE")
 	output, err := cmd.Output()
 	if err != nil {
@@ -2362,7 +2366,7 @@ type winDiskDrive struct {
 }
 
 func getWindowsDisks() ([]DiskInfo, error) {
-	var disks []DiskInfo
+	disks := make([]DiskInfo, 0)
 	cmd := execCommand("powershell", "-NoProfile", "-Command",
 		"Get-CimInstance Win32_DiskDrive | Where-Object { ($_.InterfaceType -eq 'USB' -or ($_.MediaType -like '*Removable*' -and $_.MediaType -notlike '*Fixed*')) -and $_.Model -notmatch 'Virtual|VHD|ISO|CD-ROM|DVD' -and $_.InterfaceType -ne 'FileBackedVirtual' } | Select-Object DeviceID, Model, Size, InterfaceType, Caption | ConvertTo-Json")
 	output, err := cmd.Output()
