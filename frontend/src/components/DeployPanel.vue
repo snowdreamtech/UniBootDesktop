@@ -89,8 +89,8 @@
         <div
           v-if="selectedIsoFiles.length === 0"
           class="iso-empty-state"
-          :class="{ 'drag-active': isDragOver }"
-          @click="emit('select-iso')"
+          :class="{ 'drag-active': isDragOver, disabled: !canManageIso }"
+          @click="canManageIso && emit('select-iso')"
         >
           <span class="empty-icon">📥</span>
           <div class="empty-text">{{ isDragOver ? t("iso.drag_drop_tip") : t("iso.empty_title") }}</div>
@@ -1667,6 +1667,12 @@ function getFileIcon(filename: string): string {
 
 .iso-empty-state:hover {
   background: var(--btn-sec-hover-bg);
+}
+
+.iso-empty-state.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .iso-empty-state.drag-active {
