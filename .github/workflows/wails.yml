@@ -274,7 +274,10 @@ jobs:
           cp -R "$APP_PATH" "build/bin/dmg-src/${APP_NAME}"
           ln -s /Applications "build/bin/dmg-src/Applications"
           DMG_NAME="unibootdesktop-gui_${CLEAN_VERSION}_darwin_universal.dmg"
-          hdiutil create -volname "${APP_NAME%.app}" -srcfolder build/bin/dmg-src -ov -format UDZO "build/bin/${DMG_NAME}"
+          SRC_SIZE_MB="$(du -sm "build/bin/dmg-src" | awk '{print $1}')"
+          DMG_SIZE_MB=$(( SRC_SIZE_MB + 128 + SRC_SIZE_MB / 5 ))
+          echo "Source bundle size: ${SRC_SIZE_MB}MB, allocated virtual DMG size: ${DMG_SIZE_MB}MB"
+          hdiutil create -volname "${APP_NAME%.app}" -srcfolder build/bin/dmg-src -size "${DMG_SIZE_MB}m" -ov -format UDZO "build/bin/${DMG_NAME}"
           rm -rf build/bin/dmg-src
           DMG_PATH="build/bin/${DMG_NAME}"
           if [ ! -f "${DMG_PATH}" ]; then
