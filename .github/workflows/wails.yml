@@ -183,7 +183,7 @@ jobs:
 
       - name: Install Cosign
         if: env.COSIGN_CACHED != 'true'
-        uses: sigstore/cosign-installer@828df1e55de306ba29db814d6057ddae71883cda # v4.1.2+fix-504
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
         with:
           curl-retries: 10
         env:
@@ -803,7 +803,7 @@ jobs:
 
       - name: Install Cosign
         if: env.COSIGN_CACHED != 'true'
-        uses: sigstore/cosign-installer@828df1e55de306ba29db814d6057ddae71883cda # v4.1.2+fix-504
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
         with:
           curl-retries: 10
         env:
