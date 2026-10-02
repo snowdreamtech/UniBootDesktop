@@ -10,13 +10,14 @@
       (function () {
         try {
           var cachedTheme = localStorage.getItem("uniboot_theme_cache");
-          var systemTheme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          var systemTheme =
+            window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
           var theme = cachedTheme === "light" || cachedTheme === "dark" ? cachedTheme : systemTheme;
           document.documentElement.setAttribute("data-theme", theme);
         } catch (e) {
           document.documentElement.setAttribute(
             "data-theme",
-            window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"
+            window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
           );
         }
       })();

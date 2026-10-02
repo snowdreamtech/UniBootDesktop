@@ -565,6 +565,7 @@ const languageSelectOptions = computed(() => [
 ]);
 
 const themeSelectOptions = computed(() => [
+  { value: "system", label: `🖥️ ${t("settings.theme_system") || "System Default"}` },
   { value: "dark", label: `🌙 ${t("settings.theme_dark")}` },
   { value: "light", label: `☀️ ${t("settings.theme_light")}` },
 ]);
@@ -620,8 +621,6 @@ watch(
       if (props.initialTab) {
         activeTab.value = props.initialTab;
       }
-      // Always sync appTheme with the active DOM theme immediately upon opening
-      appTheme.value = getActiveTheme();
 
       const app = getWailsApp();
       if (!app) {
@@ -837,7 +836,7 @@ async function onThemeChange(val: string) {
 }
 
 watch(appTheme, (newTheme) => {
-  if (newTheme === "light" || newTheme === "dark") {
+  if (newTheme === "light" || newTheme === "dark" || newTheme === "system") {
     applyTheme(newTheme);
   }
 });
@@ -929,12 +928,12 @@ async function loadFullConfig() {
       autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
       enableTray.value = cfg.enableTray === true;
       closeAction.value = cfg.closeAction || "quit";
-      if (cfg.theme === "light" || cfg.theme === "dark") {
+      if (cfg.theme === "light" || cfg.theme === "dark" || cfg.theme === "system") {
         appTheme.value = cfg.theme;
-        applyTheme(cfg.theme);
       } else {
-        appTheme.value = getActiveTheme();
+        appTheme.value = "system";
       }
+      applyTheme(appTheme.value);
       appLanguage.value = cfg.language || "auto";
       setLanguage(appLanguage.value);
       proxyInputUrl.value = cfg.githubProxy || "";
