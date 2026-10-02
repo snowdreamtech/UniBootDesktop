@@ -13,7 +13,7 @@ export interface UseAppSettingsOptions {
 export function useAppSettings(options: UseAppSettingsOptions) {
   const { selectedFsType, activeMode, autoEjectAfterDeploy } = options;
 
-  const { currentTheme, applyTheme, getActiveTheme } = useTheme();
+  const { currentTheme, effectiveTheme, applyTheme, getActiveTheme, toggleTheme } = useTheme();
   const settingsInitialTab = ref<"general" | "network" | "uniboot" | "ventoy">("general");
   const isSettingsOpen = ref(false);
   const isAboutOpen = ref(false);
@@ -87,7 +87,7 @@ export function useAppSettings(options: UseAppSettingsOptions) {
             window.go.main.App.ReloadAppMenu(cfg.language).catch(() => {});
           }
         }
-        if (cfg.theme === "light" || cfg.theme === "dark") {
+        if (cfg.theme) {
           applyTheme(cfg.theme);
         }
         autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
@@ -164,8 +164,10 @@ export function useAppSettings(options: UseAppSettingsOptions) {
     isAboutOpen,
     currentGithubProxy,
     currentTheme,
+    effectiveTheme,
     applyTheme,
     getActiveTheme,
+    toggleTheme,
     openSettings,
     selectLanguage,
     loadConfig,

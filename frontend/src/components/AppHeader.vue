@@ -63,14 +63,10 @@
         <!-- Header Quick Theme Switcher Button -->
         <button
           class="settings-icon-btn theme-toggle-btn"
-          :title="
-            currentTheme === 'light'
-              ? t('settings.theme_dark') || 'Dark Theme'
-              : t('settings.theme_light') || 'Light Theme'
-          "
+          :title="isLight ? t('settings.theme_dark') || 'Dark Theme' : t('settings.theme_light') || 'Light Theme'"
           @click="handleToggleTheme"
         >
-          <span v-if="currentTheme === 'light'">🌙</span>
+          <span v-if="isLight">🌙</span>
           <span v-else>☀️</span>
         </button>
 
@@ -131,6 +127,12 @@ const currentLangLabel = computed(() => {
   }
   const opt = langOptions.value.find((o) => o.value === props.currentLang);
   return opt ? opt.label : t("common.lang");
+});
+
+const isLight = computed(() => {
+  if (props.currentTheme === "light") return true;
+  if (props.currentTheme === "dark") return false;
+  return typeof document !== "undefined" && document.documentElement.getAttribute("data-theme") === "light";
 });
 
 function handleHeaderMouseDown(e: MouseEvent) {

@@ -963,9 +963,9 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		return fmt.Errorf("invalid language code: %s", cfg.Language)
 	}
 
-	// Normalize theme preference
-	if cfg.Theme != "light" && cfg.Theme != "dark" {
-		cfg.Theme = "dark"
+	// Normalize theme preference (support "dark", "light", "system", defaulting to "system")
+	if cfg.Theme != "light" && cfg.Theme != "dark" && cfg.Theme != "system" {
+		cfg.Theme = "system"
 	}
 
 	// Validate FileSystem enum

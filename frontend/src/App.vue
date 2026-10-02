@@ -399,7 +399,7 @@ const {
   isAboutOpen,
   currentGithubProxy,
   currentTheme,
-  applyTheme,
+  toggleTheme,
   openSettings,
   selectLanguage,
   loadConfig,
@@ -413,8 +413,7 @@ const {
 openSettingsFn = openSettings;
 
 function handleToggleTheme() {
-  const next = currentTheme.value === "dark" ? "light" : "dark";
-  applyTheme(next);
+  const next = toggleTheme();
   onSaveSettings({ theme: next });
 }
 
