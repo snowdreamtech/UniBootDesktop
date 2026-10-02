@@ -70,6 +70,8 @@ window.addEventListener("blur", () => {
   document.documentElement.classList.add("window-inactive");
 });
 
+import { isClickOnScrollbar, triggerNativeDrag } from "./utils/windowDrag";
+
 // Enable native window dragging when dragging on background blank areas
 window.addEventListener("mousedown", (e: MouseEvent) => {
   // Only trigger on primary mouse button single clicks
@@ -77,10 +79,15 @@ window.addEventListener("mousedown", (e: MouseEvent) => {
     return;
   }
 
+  // 1. Strictly prevent dragging when clicking any scrollbar (viewport or container level)
+  if (isClickOnScrollbar(e)) {
+    return;
+  }
+
   const target = e.target as HTMLElement | null;
   if (!target) return;
 
-  // Do not drag if interacting with buttons, inputs, links, list items, terminals, modals, etc.
+  // 2. Do not drag if interacting with buttons, inputs, links, list items, terminals, modals, cards, etc.
   const interactiveSelector = [
     "button",
     "input",
@@ -90,37 +97,56 @@ window.addEventListener("mousedown", (e: MouseEvent) => {
     "a",
     "pre",
     "code",
+    "label",
+    "dialog",
+    ".modal-overlay",
+    ".modal-card",
+    ".modal-body",
+    ".modal-container",
+    ".glass-modal",
+    ".disk-list",
     ".disk-item",
+    ".iso-file-list",
     ".iso-file-item",
     ".mode-tabs",
     ".lang-selector-header",
     ".lang-dropdown-menu",
     ".terminal-body",
+    ".terminal-container",
     ".log-line",
-    ".modal-container",
+    ".card",
+    ".action-card",
+    ".status-card",
+    ".settings-section",
+    ".tab-content",
+    ".no-drag",
     "[contenteditable='true']",
     "[role='button']",
     "[role='checkbox']",
     "[role='radio']",
-    ".no-drag",
   ].join(",");
 
   if (target.closest(interactiveSelector)) {
     return;
   }
 
-  // Do not drag if user is selecting text
+  // 3. Respect CSS --wails-draggable: no-drag or -webkit-app-region: no-drag on target and ancestors
+  let curr: HTMLElement | null = target;
+  while (curr && curr !== document.documentElement) {
+    const comp = window.getComputedStyle(curr);
+    if ((comp as any).webkitAppRegion === "no-drag" || comp.getPropertyValue("--wails-draggable") === "no-drag") {
+      return;
+    }
+    curr = curr.parentElement;
+  }
+
+  // 4. Do not drag if user is selecting text
   const selection = window.getSelection();
   if (selection && selection.toString().length > 0 && selection.containsNode(target, true)) {
     return;
   }
 
-  const w = window as any;
-  if (typeof w.WailsInvoke === "function") {
-    w.WailsInvoke("drag");
-  } else if (w.runtime && typeof w.runtime.WindowStartDrag === "function") {
-    w.runtime.WindowStartDrag();
-  }
+  triggerNativeDrag();
 });
 
 setStartupProgress(12);
