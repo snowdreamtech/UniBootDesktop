@@ -526,6 +526,7 @@ export const zhCn: TranslationDict = {
   "privilege.status_standard": "未授权",
   "privilege.btn_elevate": "请求管理员权限",
   "privilege.modal_title": "需要管理员权限",
+  "privilege.elevation_prompt": "UniBootDesktop 需要管理员权限以访问底层存储设备并校验启动分区。",
   "privilege.modal_subtitle": "识别引导结构与读写磁盘需要系统授权",
   "privilege.reason_title": "为什么需要管理员权限？",
   "privilege.reason_desc": "操作系统对磁盘底层扇区与 EFI 引导分区有保护限制，授权后即可直接读取并正常制作。",

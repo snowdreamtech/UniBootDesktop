@@ -112,7 +112,8 @@ const handleConfirm = async () => {
   try {
     const wailsAny = window as any;
     if (wailsAny.go && wailsAny.go.main && wailsAny.go.main.App && wailsAny.go.main.App.RequestPrivilegeElevation) {
-      const ok = await wailsAny.go.main.App.RequestPrivilegeElevation();
+      const promptText = t("privilege.elevation_prompt");
+      const ok = await wailsAny.go.main.App.RequestPrivilegeElevation(promptText);
       if (ok) {
         emit("authorized");
         emit("update:visible", false);

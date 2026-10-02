@@ -545,6 +545,8 @@ export const fiFi: TranslationDict = {
   "privilege.status_standard": "Valtuuttamaton",
   "privilege.btn_elevate": "Pyydä järjestelmänvalvojan oikeuksia",
   "privilege.modal_title": "Järjestelmänvalvojan oikeudet vaaditaan",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle":
     "Järjestelmän valtuutus vaaditaan käynnistystietojen lukemiseen ja levyille kirjoittamiseen",
   "privilege.reason_title": "Miksi järjestelmänvalvojan oikeudet tarvitaan?",

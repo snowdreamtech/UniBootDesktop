@@ -19,7 +19,28 @@ var (
 	elevationMutex   sync.RWMutex
 	isCachedElevated bool
 	cachedEvaluated  bool
+
+	defaultPromptMu        sync.RWMutex
+	defaultElevationPrompt = "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions."
 )
+
+// SetDefaultElevationPrompt allows customizing the prompt message displayed during privilege elevation.
+func SetDefaultElevationPrompt(prompt string) {
+	trimmed := strings.TrimSpace(prompt)
+	if trimmed == "" {
+		return
+	}
+	defaultPromptMu.Lock()
+	defer defaultPromptMu.Unlock()
+	defaultElevationPrompt = trimmed
+}
+
+// GetDefaultElevationPrompt returns the current default prompt.
+func GetDefaultElevationPrompt() string {
+	defaultPromptMu.RLock()
+	defer defaultPromptMu.RUnlock()
+	return defaultElevationPrompt
+}
 
 // IsElevated checks whether the current process is running with root or administrator privileges,
 // or possesses an active, authenticated privileged worker connection.
@@ -203,7 +224,7 @@ func RelaxRawDiskPermissionsTemporarilyWithResult(paths ...string) (func(), erro
 
 	worker := GetActiveWorkerClient()
 	if worker == nil || !worker.IsAlive() {
-		w, err := StartOrConnectWorker("UniBootDesktop requires administrator privileges to access raw storage devices.")
+		w, err := StartOrConnectWorker(GetDefaultElevationPrompt())
 		if err == nil {
 			worker = w
 		} else {
@@ -371,7 +392,7 @@ func RunElevated(prompt string, cmdLine string) (string, error) {
 	}
 
 	if prompt == "" {
-		prompt = "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions."
+		prompt = GetDefaultElevationPrompt()
 	}
 
 	switch runtime.GOOS {

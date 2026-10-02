@@ -552,6 +552,8 @@ export const mkMk: TranslationDict = {
   "privilege.status_standard": "Неовластено",
   "privilege.btn_elevate": "Побарај администраторски пристап",
   "privilege.modal_title": "Потребна е администраторска дозвола",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Потребно е системско овластување за читање податоци за подигнување и запишување дискови",
   "privilege.reason_title": "Зошто е потребна администраторска привилегија?",
   "privilege.reason_desc":

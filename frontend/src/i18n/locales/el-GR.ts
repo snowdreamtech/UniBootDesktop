@@ -555,6 +555,8 @@ export const elGr: TranslationDict = {
   "privilege.status_standard": "Μη εξουσιοδοτημένο",
   "privilege.btn_elevate": "Αίτηση πρόσβασης διαχειριστή",
   "privilege.modal_title": "Απαιτούνται δικαιώματα διαχειριστή",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle":
     "Απαιτείται εξουσιοδότηση συστήματος για την ανάγνωση δεδομένων εκκίνησης και την εγγραφή δίσκων",
   "privilege.reason_title": "Γιατί απαιτούνται δικαιώματα διαχειριστή;",

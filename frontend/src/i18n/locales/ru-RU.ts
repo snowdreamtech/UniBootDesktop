@@ -543,6 +543,8 @@ export const ruRu: TranslationDict = {
   "privilege.status_standard": "Не авторизовано",
   "privilege.btn_elevate": "Запросить права администратора",
   "privilege.modal_title": "Требуются права администратора",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Требуется системное разрешение для чтения загрузочных секторов и записи дисков",
   "privilege.reason_title": "Зачем нужны права администратора?",
   "privilege.reason_desc":

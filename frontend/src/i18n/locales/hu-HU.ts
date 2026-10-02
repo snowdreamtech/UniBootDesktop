@@ -547,6 +547,8 @@ export const huHu: TranslationDict = {
   "privilege.status_standard": "Nincs engedélyezve",
   "privilege.btn_elevate": "Rendszergazdai hozzáférés kérése",
   "privilege.modal_title": "Rendszergazdai jogosultság szükséges",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Rendszerengedély szükséges a rendszerindítási adatok olvasásához és a lemezek írásához",
   "privilege.reason_title": "Miért van szükség rendszergazdai jogosultságra?",
   "privilege.reason_desc":

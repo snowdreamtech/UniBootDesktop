@@ -544,6 +544,8 @@ export const skSk: TranslationDict = {
   "privilege.status_standard": "Neautorizované",
   "privilege.btn_elevate": "Požiadať o prístup správcu",
   "privilege.modal_title": "Vyžadujú sa oprávnenia správcu",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Na načítanie spúšťacích údajov a zápis na disky sa vyžaduje autorizácia systému",
   "privilege.reason_title": "Prečo sú potrebné oprávnenia správcu?",
   "privilege.reason_desc":

@@ -539,6 +539,8 @@ export const svSe: TranslationDict = {
   "privilege.status_standard": "Oauktoriserad",
   "privilege.btn_elevate": "Begär administratörsåtkomst",
   "privilege.modal_title": "Administratörsbehörighet krävs",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Systemauktorisering krävs för att läsa startdata och skriva till diskar",
   "privilege.reason_title": "Varför krävs administratörsbehörighet?",
   "privilege.reason_desc":

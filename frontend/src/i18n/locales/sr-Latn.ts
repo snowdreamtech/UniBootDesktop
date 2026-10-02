@@ -544,6 +544,8 @@ export const srLatn: TranslationDict = {
   "privilege.status_standard": "Neovlašćeno",
   "privilege.btn_elevate": "Zatraži administratorski pristup",
   "privilege.modal_title": "Potrebna je dozvola administratora",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Potrebna je autorizacija sistema za čitanje podataka o pokretanju i upis na diskove",
   "privilege.reason_title": "Zašto su potrebne administratorske privilegije?",
   "privilege.reason_desc":

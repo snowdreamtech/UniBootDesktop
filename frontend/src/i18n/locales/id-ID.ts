@@ -547,6 +547,8 @@ export const idId: TranslationDict = {
   "privilege.status_standard": "Belum diotorisasi",
   "privilege.btn_elevate": "Minta Akses Admin",
   "privilege.modal_title": "Izin Administrator Diperlukan",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Otorisasi sistem diperlukan untuk membaca data boot dan menulis disk",
   "privilege.reason_title": "Mengapa Hak Istimewa Administrator Diperlukan?",
   "privilege.reason_desc":

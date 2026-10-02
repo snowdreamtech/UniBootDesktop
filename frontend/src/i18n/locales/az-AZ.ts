@@ -543,6 +543,8 @@ export const azAz: TranslationDict = {
   "privilege.status_standard": "Səlahiyyətləndirilmədi",
   "privilege.btn_elevate": "Admin Girişi Tələb Edin",
   "privilege.modal_title": "Administrator İcazəsi Tələb Olunur",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Yükləmə məlumatlarını oxumaq və disklərə yazmaq üçün sistem icazəsi tələb olunur",
   "privilege.reason_title": "Administrator hüquqları nə üçün tələb olunur?",
   "privilege.reason_desc":

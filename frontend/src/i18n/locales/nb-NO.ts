@@ -542,6 +542,8 @@ export const nbNo: TranslationDict = {
   "privilege.status_standard": "Uautorisert",
   "privilege.btn_elevate": "Be om administratoradgang",
   "privilege.modal_title": "Administratorrettigheter kreves",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Systemgodkjenning kreves for å lese oppstartsdata og skrive til disker",
   "privilege.reason_title": "Hvorfor kreves administratorrettigheter?",
   "privilege.reason_desc":

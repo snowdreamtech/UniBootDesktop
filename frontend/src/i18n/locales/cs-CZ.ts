@@ -543,6 +543,8 @@ export const csCz: TranslationDict = {
   "privilege.status_standard": "Neautorizováno",
   "privilege.btn_elevate": "Vyžádat přístup správce",
   "privilege.modal_title": "Vyžadována oprávnění správce",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "K načtení spouštěcích dat a zápisu na disky je vyžadována autorizace systému",
   "privilege.reason_title": "Proč jsou vyžadována oprávnění správce?",
   "privilege.reason_desc":

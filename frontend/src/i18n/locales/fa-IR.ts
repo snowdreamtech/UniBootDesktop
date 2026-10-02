@@ -540,6 +540,8 @@ export const faIr: TranslationDict = {
   "privilege.status_standard": "غیرمجاز",
   "privilege.btn_elevate": "درخواست دسترسی مدیر",
   "privilege.modal_title": "مجوز مدیر سیستم مورد نیاز است",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "برای خواندن اطلاعات بوت و نوشتن بر روی دیسک‌ها مجوز سیستم لازم است",
   "privilege.reason_title": "چرا به امتیازات مدیر نیاز است؟",
   "privilege.reason_desc":

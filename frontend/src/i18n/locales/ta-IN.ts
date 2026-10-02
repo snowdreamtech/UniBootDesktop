@@ -552,6 +552,8 @@ export const taIn: TranslationDict = {
   "privilege.status_standard": "அங்கீகரிக்கப்படவில்லை",
   "privilege.btn_elevate": "நிர்வாகி அணுகலைக் கோரவும்",
   "privilege.modal_title": "நிர்வாகி அனுமதி தேவை",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "துவக்கத் தரவைப் படிக்கவும் வட்டில் எழுதவும் கணினி அங்கீகாரம் தேவை",
   "privilege.reason_title": "நிர்வாகி சிறப்புரிமை ஏன் தேவை?",
   "privilege.reason_desc":

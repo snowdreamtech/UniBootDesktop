@@ -546,6 +546,8 @@ export const deDe: TranslationDict = {
   "privilege.status_standard": "Nicht autorisiert",
   "privilege.btn_elevate": "Admin-Rechte anfordern",
   "privilege.modal_title": "Administratorrechte erforderlich",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle":
     "Systemautorisierung zum Lesen von Boot-Daten und Schreiben von Datenträgern erforderlich",
   "privilege.reason_title": "Warum sind Administratorrechte erforderlich?",

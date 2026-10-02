@@ -549,6 +549,8 @@ export const hrHr: TranslationDict = {
   "privilege.status_standard": "Neovlašteno",
   "privilege.btn_elevate": "Zatraži administratorska prava",
   "privilege.modal_title": "Potrebna administratorska dozvola",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Potrebna je autorizacija sustava za čitanje podataka o pokretanju i pisanje na diskove",
   "privilege.reason_title": "Zašto su potrebne administratorske ovlasti?",
   "privilege.reason_desc":

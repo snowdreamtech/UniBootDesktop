@@ -550,6 +550,8 @@ export const bgBg: TranslationDict = {
   "privilege.status_standard": "Неоторизиран",
   "privilege.btn_elevate": "Поискай администраторски достъп",
   "privilege.modal_title": "Изисква се разрешение от администратор",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Изисква се системно разрешение за четене на данни за зареждане и запис на дискове",
   "privilege.reason_title": "Защо се изискват администраторски права?",
   "privilege.reason_desc":

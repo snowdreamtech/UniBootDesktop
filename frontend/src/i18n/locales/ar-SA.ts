@@ -529,6 +529,8 @@ export const arSa: TranslationDict = {
   "privilege.status_standard": "غير مصرح به",
   "privilege.btn_elevate": "طلب صلاحيات المسؤول",
   "privilege.modal_title": "مطلوب إذن المسؤول",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "مطلوب تفويض النظام لقراءة بيانات الإقلاع والكتابة على الأقراص",
   "privilege.reason_title": "لماذا تطلب صلاحيات المسؤول؟",
   "privilege.reason_desc":

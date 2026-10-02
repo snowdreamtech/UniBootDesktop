@@ -545,6 +545,8 @@ export const ukUa: TranslationDict = {
   "privilege.status_standard": "Не авторизовано",
   "privilege.btn_elevate": "Запитати права адміністратора",
   "privilege.modal_title": "Потрібні права адміністратора",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Потрібен дозвіл системи для читання завантажувальних даних і запису на диски",
   "privilege.reason_title": "Чому потрібні права адміністратора?",
   "privilege.reason_desc":

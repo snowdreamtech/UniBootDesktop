@@ -550,6 +550,8 @@ export const mlIn: TranslationDict = {
   "privilege.status_standard": "അംഗീകരിച്ചിട്ടില്ല",
   "privilege.btn_elevate": "അഡ്മിൻ ആക്സസ് അഭ്യർത്ഥിക്കുക",
   "privilege.modal_title": "അഡ്മിനിസ്ട്രേറ്റർ അനുമതി ആവശ്യമാണ്",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "ബൂട്ട് ഡാറ്റ വായിക്കാനും ഡിസ്കിൽ എഴുതാനും സിസ്റ്റം അനുമതി ആവശ്യമാണ്",
   "privilege.reason_title": "അഡ്മിനിസ്ട്രേറ്റർ അനുമതി ആവശ്യമായി വരുന്നത് എന്തുകൊണ്ട്?",
   "privilege.reason_desc":

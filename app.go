@@ -101,8 +101,13 @@ func (a *App) startup(ctx context.Context) {
 	if err := env.EnsureAppDirs(); err != nil {
 		logger.Warn("Failed to ensure default app directories exist", "error", err)
 	}
-	if cfg, err := config.Load(); err == nil && cfg != nil && cfg.UniBootPath != "" {
-		firmware.SetCustomUniBootDir(cfg.UniBootPath)
+	if cfg, err := config.Load(); err == nil && cfg != nil {
+		if cfg.UniBootPath != "" {
+			firmware.SetCustomUniBootDir(cfg.UniBootPath)
+		}
+		if strings.HasPrefix(strings.ToLower(cfg.Language), "zh") {
+			privilege.SetDefaultElevationPrompt("UniBootDesktop 需要管理员权限以访问底层存储设备并校验启动分区。")
+		}
 	}
 	disk.StartHotplugMonitor(a.ctx, func() {
 		logger.Info("Removable disk change detected, refreshing drive list")
@@ -1182,6 +1187,12 @@ func (a *App) OpenAboutModal() {
 
 // ReloadAppMenu rebuilds and updates the native application menu with the specified language.
 func (a *App) ReloadAppMenu(lang string) error {
+	if strings.HasPrefix(strings.ToLower(lang), "zh") {
+		privilege.SetDefaultElevationPrompt("UniBootDesktop 需要管理员权限以访问底层存储设备并校验启动分区。")
+	} else {
+		privilege.SetDefaultElevationPrompt("UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.")
+	}
+
 	if a.ctx == nil {
 		return nil
 	}
@@ -1225,13 +1236,29 @@ func (a *App) IsPrivileged() bool {
 }
 
 // RequestPrivilegeElevation prompts the user for administrator privileges across operating systems.
-func (a *App) RequestPrivilegeElevation() (bool, error) {
+// An optional custom prompt string can be provided to support localized authorization dialogs.
+func (a *App) RequestPrivilegeElevation(customPrompt string) (bool, error) {
 	if privilege.IsElevated() {
 		disk.InvalidateDiskCache()
 		return true, nil
 	}
 
-	prompt := "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions."
+	prompt := strings.TrimSpace(customPrompt)
+	if prompt != "" {
+		privilege.SetDefaultElevationPrompt(prompt)
+	} else {
+		cfg, _ := config.Load()
+		lang := ""
+		if cfg != nil {
+			lang = strings.ToLower(cfg.Language)
+		}
+		if strings.HasPrefix(lang, "zh") {
+			prompt = "UniBootDesktop 需要管理员权限以访问底层存储设备并校验启动分区。"
+		} else {
+			prompt = privilege.GetDefaultElevationPrompt()
+		}
+	}
+
 	_, err := privilege.StartOrConnectWorker(prompt)
 	if err != nil {
 		errStr := strings.ToLower(err.Error())

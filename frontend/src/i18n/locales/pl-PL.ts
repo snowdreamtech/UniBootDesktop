@@ -547,6 +547,8 @@ export const plPl: TranslationDict = {
   "privilege.status_standard": "Brak autoryzacji",
   "privilege.btn_elevate": "Wymagaj uprawnień administratora",
   "privilege.modal_title": "Wymagane uprawnienia administratora",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Wymagana autoryzacja systemu do odczytu danych rozruchowych i zapisu dysków",
   "privilege.reason_title": "Dlaczego wymagane są uprawnienia administratora?",
   "privilege.reason_desc":

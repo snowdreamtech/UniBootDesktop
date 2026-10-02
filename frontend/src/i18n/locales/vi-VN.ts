@@ -539,6 +539,8 @@ export const viVn: TranslationDict = {
   "privilege.status_standard": "Chưa cấp quyền",
   "privilege.btn_elevate": "Yêu cầu quyền quản trị",
   "privilege.modal_title": "Cần quyền quản trị viên",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Cần ủy quyền hệ thống để đọc dữ liệu khởi động và ghi đĩa",
   "privilege.reason_title": "Tại sao cần quyền quản trị viên?",
   "privilege.reason_desc":

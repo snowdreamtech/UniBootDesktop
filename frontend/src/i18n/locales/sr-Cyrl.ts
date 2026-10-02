@@ -543,6 +543,8 @@ export const srCyrl: TranslationDict = {
   "privilege.status_standard": "Неовлашћено",
   "privilege.btn_elevate": "Затражи администраторски приступ",
   "privilege.modal_title": "Потребна је дозвола администратора",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Потребна је ауторизација система за читање података о покретању и упис на дискове",
   "privilege.reason_title": "Зашто су потребне администраторске привилегије?",
   "privilege.reason_desc":

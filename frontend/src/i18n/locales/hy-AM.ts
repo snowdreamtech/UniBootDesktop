@@ -552,6 +552,8 @@ export const hyAm: TranslationDict = {
   "privilege.status_standard": "Չլիազորված",
   "privilege.btn_elevate": "Պահանջել ադմինիստրատորի մուտք",
   "privilege.modal_title": "Պահանջվում է ադմինիստրատորի թույլտվություն",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle":
     "Բեռնման տվյալները կարդալու և սկավառակի վրա գրելու համար անհրաժեշտ է համակարգի թույլտվություն",
   "privilege.reason_title": "Ինչո՞ւ է անհրաժեշտ ադմինիստրատորի արտոնությունը:",
