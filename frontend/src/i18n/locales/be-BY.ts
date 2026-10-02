@@ -545,6 +545,8 @@ export const beBy: TranslationDict = {
   "privilege.status_standard": "Не аўтарызавана",
   "privilege.btn_elevate": "Запытаць правы адміністратара",
   "privilege.modal_title": "Патрабуюцца правы адміністратара",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Патрабуецца дазвол сістэмы для чытання загрузачных даных і запісу на дыскі",
   "privilege.reason_title": "Чаму патрэбны правы адміністратара?",
   "privilege.reason_desc":

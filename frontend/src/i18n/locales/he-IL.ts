@@ -530,6 +530,8 @@ export const heIl: TranslationDict = {
   "privilege.status_standard": "לא מורשה",
   "privilege.btn_elevate": "בקש הרשאות מנהל",
   "privilege.modal_title": "נדרשת הרשאת מנהל מערכת",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "נדרש אישור מערכת לקריאת נתוני אתחול וכתיבה לכוננים",
   "privilege.reason_title": "מדוע נדרשות הרשאות מנהל?",
   "privilege.reason_desc": "מערכת ההפעלה מבודדת סקטורים גולמיים ומחיצות EFI. מתן הרשאה מאפשר זיהוי ישיר ויצירה בטוחה.",

@@ -541,6 +541,8 @@ export const hiIn: TranslationDict = {
   "privilege.status_standard": "अनधिकृत",
   "privilege.btn_elevate": "व्यवस्थापक अधिकार का अनुरोध करें",
   "privilege.modal_title": "व्यवस्थापक अनुमति आवश्यक",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "बूट डेटा पढ़ने और डिस्क पर लिखने के लिए सिस्टम प्राधिकरण आवश्यक है",
   "privilege.reason_title": "व्यवस्थापक विशेषाधिकार क्यों आवश्यक है?",
   "privilege.reason_desc":

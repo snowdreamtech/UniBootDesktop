@@ -541,6 +541,8 @@ export const trTr: TranslationDict = {
   "privilege.status_standard": "Yetkilendirilmedi",
   "privilege.btn_elevate": "Yönetici Erişimi İste",
   "privilege.modal_title": "Yönetici İzni Gerekli",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Önyükleme verilerini okumak ve diske yazmak için sistem yetkilendirmesi gereklidir",
   "privilege.reason_title": "Neden Yönetici Ayrıcalığı Gereklidir?",
   "privilege.reason_desc":

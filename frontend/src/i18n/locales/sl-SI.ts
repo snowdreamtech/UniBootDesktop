@@ -549,6 +549,8 @@ export const slSi: TranslationDict = {
   "privilege.status_standard": "Nepooblaščeno",
   "privilege.btn_elevate": "Zahtevaj skrbniški dostop",
   "privilege.modal_title": "Zahtevano skrbniško dovoljenje",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Za branje zagonskih podatkov in zapisovanje na diske je potrebna sistemska avtorizacija",
   "privilege.reason_title": "Zakaj so potrebne skrbniške pravice?",
   "privilege.reason_desc":

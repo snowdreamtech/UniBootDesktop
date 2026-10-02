@@ -240,7 +240,7 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 	}
 
 	if prompt == "" {
-		prompt = "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions."
+		prompt = GetDefaultElevationPrompt()
 	}
 
 	elevDone := make(chan error, 1)

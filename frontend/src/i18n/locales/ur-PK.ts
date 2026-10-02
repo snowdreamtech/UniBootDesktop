@@ -541,6 +541,8 @@ export const urPk: TranslationDict = {
   "privilege.status_standard": "غیر مجاز",
   "privilege.btn_elevate": "ایڈمن تک رسائی کی درخواست کریں",
   "privilege.modal_title": "ایڈمنسٹریٹر کی اجازت درکار ہے",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "بوٹ ڈیٹا پڑھنے اور ڈسک پر لکھنے کے لیے سسٹم کی اجازت درکار ہے",
   "privilege.reason_title": "ایڈمنسٹریٹر کے اختیارات کیوں درکار ہیں؟",
   "privilege.reason_desc":

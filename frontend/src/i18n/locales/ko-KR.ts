@@ -533,6 +533,8 @@ export const koKr: TranslationDict = {
   "privilege.status_standard": "미승인",
   "privilege.btn_elevate": "관리자 권한 요청",
   "privilege.modal_title": "관리자 권한 필요",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "부팅 구조 확인 및 디스크 쓰기 작업을 위해 시스템 권한이 필요합니다",
   "privilege.reason_title": "관리자 권한이 왜 필요한가요?",
   "privilege.reason_desc":

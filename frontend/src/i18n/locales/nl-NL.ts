@@ -542,6 +542,8 @@ export const nlNl: TranslationDict = {
   "privilege.status_standard": "Niet geautoriseerd",
   "privilege.btn_elevate": "Beheerdersrechten aanvragen",
   "privilege.modal_title": "Beheerdersrechten vereist",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Systeemautorisatie vereist om opstartgegevens te lezen en schijven te schrijven",
   "privilege.reason_title": "Waarom zijn beheerdersrechten vereist?",
   "privilege.reason_desc":

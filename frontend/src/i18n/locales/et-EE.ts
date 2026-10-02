@@ -543,6 +543,8 @@ export const etEe: TranslationDict = {
   "privilege.status_standard": "Autoriseerimata",
   "privilege.btn_elevate": "Taotle administraatori õigusi",
   "privilege.modal_title": "Vajalik administraatori luba",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Käivitusandmete lugemiseks ja ketastele kirjutamiseks on vajalik süsteemi luba",
   "privilege.reason_title": "Miks on administraatori õigused vajalikud?",
   "privilege.reason_desc":

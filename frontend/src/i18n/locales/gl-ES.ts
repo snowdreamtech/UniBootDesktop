@@ -546,6 +546,8 @@ export const glEs: TranslationDict = {
   "privilege.status_standard": "Non autorizado",
   "privilege.btn_elevate": "Solicitar acceso de administrador",
   "privilege.modal_title": "Requírese permiso de administrador",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Requírese autorización do sistema para ler datos de arranque e escribir en discos",
   "privilege.reason_title": "Por que se requiren privilexios de administrador?",
   "privilege.reason_desc":

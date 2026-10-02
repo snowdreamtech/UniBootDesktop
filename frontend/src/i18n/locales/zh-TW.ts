@@ -527,6 +527,7 @@ export const zhTw: TranslationDict = {
   "privilege.status_standard": "未授權",
   "privilege.btn_elevate": "請求管理員權限",
   "privilege.modal_title": "需要管理員權限",
+  "privilege.elevation_prompt": "UniBootDesktop 需要管理員權限以存取底層儲存裝置並校驗開機分割區。",
   "privilege.modal_subtitle": "識別開機結構與讀寫磁碟需要系統授權",
   "privilege.reason_title": "為什麼需要管理員權限？",
   "privilege.reason_desc": "作業系統對磁碟底層磁區與 EFI 開機分割區有保護限制，授權後即可直接讀取並正常製作。",

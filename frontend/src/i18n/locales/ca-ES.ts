@@ -549,6 +549,8 @@ export const caEs: TranslationDict = {
   "privilege.status_standard": "No autoritzat",
   "privilege.btn_elevate": "Demanar accés d'administrador",
   "privilege.modal_title": "Permís d'administrador requerit",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Es requereix autorització del sistema per llegir dades d'arrencada i escriure als discs",
   "privilege.reason_title": "Per què calen privilegis d'administrador?",
   "privilege.reason_desc":

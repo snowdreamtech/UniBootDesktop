@@ -544,6 +544,8 @@ export const roRo: TranslationDict = {
   "privilege.status_standard": "Neautorizat",
   "privilege.btn_elevate": "Solicită acces de administrator",
   "privilege.modal_title": "Permisiune de administrator necesară",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Autorizarea sistemului este necesară pentru a citi datele de boot și a scrie pe discuri",
   "privilege.reason_title": "De ce este necesar privilegiul de administrator?",
   "privilege.reason_desc":

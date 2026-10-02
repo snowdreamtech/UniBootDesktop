@@ -95,6 +95,7 @@ declare global {
           EjectDisk(targetDisk: string): Promise<void>;
           BatchEjectDisks?(targetDisks: string[]): Promise<{ success: string[]; failed: Record<string, string> }>;
           ReloadAppMenu(lang: string): Promise<void>;
+          RequestPrivilegeElevation?(customPrompt?: string): Promise<boolean>;
         };
       };
     };

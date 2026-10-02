@@ -541,6 +541,8 @@ export const jaJp: TranslationDict = {
   "privilege.status_standard": "未承認",
   "privilege.btn_elevate": "管理者権限を要求",
   "privilege.modal_title": "管理者権限が必要です",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "ブート構造の識別およびディスクの読み書きにはシステム承認が必要です",
   "privilege.reason_title": "なぜ管理者権限が必要なのですか？",
   "privilege.reason_desc":

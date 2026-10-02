@@ -550,6 +550,8 @@ export const ltLt: TranslationDict = {
   "privilege.status_standard": "Neautorizuota",
   "privilege.btn_elevate": "Prašyti administratoriaus teisių",
   "privilege.modal_title": "Reikalingas administratoriaus leidimas",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Norint nuskaityti paleidimo duomenis ir rašyti į diskus, reikalingas sistemos leidimas",
   "privilege.reason_title": "Kodėl reikalingos administratoriaus teisės?",
   "privilege.reason_desc":

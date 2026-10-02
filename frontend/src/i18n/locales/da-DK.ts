@@ -541,6 +541,8 @@ export const daDk: TranslationDict = {
   "privilege.status_standard": "Uautoriseret",
   "privilege.btn_elevate": "Anmod om administratoradgang",
   "privilege.modal_title": "Administratoradgang påkrævet",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Systemgodkendelse påkrævet for at læse startdata og skrive til diske",
   "privilege.reason_title": "Hvorfor kræves administratorrettigheder?",
   "privilege.reason_desc":

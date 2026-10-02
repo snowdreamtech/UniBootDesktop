@@ -516,6 +516,7 @@ export interface TranslationDict {
   "privilege.status_standard": string;
   "privilege.btn_elevate": string;
   "privilege.modal_title": string;
+  "privilege.elevation_prompt": string;
   "privilege.modal_subtitle": string;
   "privilege.reason_title": string;
   "privilege.reason_desc": string;

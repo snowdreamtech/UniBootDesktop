@@ -546,6 +546,8 @@ export const ocFr: TranslationDict = {
   "privilege.status_standard": "Non autorizat",
   "privilege.btn_elevate": "Demandar l'accès administrator",
   "privilege.modal_title": "Autorizacion d'administrator requerida",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle":
     "Autorizacion del sistèma requerida per legir las donadas d'amorsatge e escriure suls disques",
   "privilege.reason_title": "Per que cal de privilègis d'administrator ?",

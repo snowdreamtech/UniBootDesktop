@@ -547,6 +547,8 @@ export const esEs: TranslationDict = {
   "privilege.status_standard": "No autorizado",
   "privilege.btn_elevate": "Solicitar acceso de admin",
   "privilege.modal_title": "Se requieren permisos de administrador",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Se requiere autorización para leer datos de arranque y escribir en discos",
   "privilege.reason_title": "¿Por qué se requieren privilegios de administrador?",
   "privilege.reason_desc":
