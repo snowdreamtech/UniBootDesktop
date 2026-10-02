@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.4.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.3.0...v0.4.0) (2026-10-02)
+
+
+### 🚀 Features
+
+* **privilege:** localize administrator elevation prompt message across all supported locales ([cf1d410](https://github.com/snowdreamtech/UniBootDesktop/commit/cf1d4105e663d990c5dcbdf94b1b3815f1074871))
+* support auto version detection and download for official Ventoy with full i18n ([d28c232](https://github.com/snowdreamtech/UniBootDesktop/commit/d28c23268c3a17933463f0e3caba4ff633bc9d5d))
+
+
+### 🐛 Bug Fixes
+
+* **gui:** allow seamless blank area window dragging while preserving scrollbar scrolling ([a5f0cc3](https://github.com/snowdreamtech/UniBootDesktop/commit/a5f0cc32e4be221ae76bd3f69b5ded897b909aca))
+* **gui:** prevent scrollbar clicks and dragging from moving window ([b61cd7d](https://github.com/snowdreamtech/UniBootDesktop/commit/b61cd7d94abbf537b16d72c9fb8aeb4cd199af29))
+* resolve theme toggling race condition and support system preference ([a4ba734](https://github.com/snowdreamtech/UniBootDesktop/commit/a4ba7347e0cf7c418ebcdc49c55d0484230148bf))
+* **theme:** eliminate dark flash on restart and synchronize native window theme ([e4e7e97](https://github.com/snowdreamtech/UniBootDesktop/commit/e4e7e976a7c7af4e1c9fdbb82e4cb502a78ee96e))
+
+
+### 🛠 Refactoring
+
+* **settings:** align uniboot firmware sync card position with ventoy tab ([8f5978d](https://github.com/snowdreamtech/UniBootDesktop/commit/8f5978ddcd6ee0f3e7a0d964c6721cd9f2bba3be))
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** sync dependabot config and unirtm toolchain ([906ef2f](https://github.com/snowdreamtech/UniBootDesktop/commit/906ef2fc2a134a9fb17f6fd9324ea6ea1332d32c))
+
 ## [0.3.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.2.0...v0.3.0) (2026-10-01)
 
 
