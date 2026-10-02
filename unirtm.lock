@@ -1336,6 +1336,26 @@ backend = "pipx"
 
 [tools."pipx:clang-format"."platforms.windows-arm64"]
 
+[[tools."pipx:clang-format"]]
+version = "23.1.2"
+backend = "pipx"
+
+[tools."pipx:clang-format"."platforms.linux-amd64"]
+
+[tools."pipx:clang-format"."platforms.linux-amd64-musl"]
+
+[tools."pipx:clang-format"."platforms.linux-arm64"]
+
+[tools."pipx:clang-format"."platforms.linux-arm64-musl"]
+
+[tools."pipx:clang-format"."platforms.macos-amd64"]
+
+[tools."pipx:clang-format"."platforms.macos-arm64"]
+
+[tools."pipx:clang-format"."platforms.windows-amd64"]
+
+[tools."pipx:clang-format"."platforms.windows-arm64"]
+
 [[tools."pipx:pip-audit"]]
 version = "2.10.1"
 backend = "pipx"
