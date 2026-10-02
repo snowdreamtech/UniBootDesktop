@@ -87,7 +87,7 @@ window.addEventListener("mousedown", (e: MouseEvent) => {
   const target = e.target as HTMLElement | null;
   if (!target) return;
 
-  // 2. Do not drag if interacting with buttons, inputs, links, list items, terminals, modals, cards, etc.
+  // 2. Do not drag if interacting with buttons, inputs, links, list items, terminals, modals, etc.
   const interactiveSelector = [
     "button",
     "input",
@@ -104,9 +104,7 @@ window.addEventListener("mousedown", (e: MouseEvent) => {
     ".modal-body",
     ".modal-container",
     ".glass-modal",
-    ".disk-list",
     ".disk-item",
-    ".iso-file-list",
     ".iso-file-item",
     ".mode-tabs",
     ".lang-selector-header",
@@ -114,11 +112,6 @@ window.addEventListener("mousedown", (e: MouseEvent) => {
     ".terminal-body",
     ".terminal-container",
     ".log-line",
-    ".card",
-    ".action-card",
-    ".status-card",
-    ".settings-section",
-    ".tab-content",
     ".no-drag",
     "[contenteditable='true']",
     "[role='button']",
@@ -130,17 +123,7 @@ window.addEventListener("mousedown", (e: MouseEvent) => {
     return;
   }
 
-  // 3. Respect CSS --wails-draggable: no-drag or -webkit-app-region: no-drag on target and ancestors
-  let curr: HTMLElement | null = target;
-  while (curr && curr !== document.documentElement) {
-    const comp = window.getComputedStyle(curr);
-    if ((comp as any).webkitAppRegion === "no-drag" || comp.getPropertyValue("--wails-draggable") === "no-drag") {
-      return;
-    }
-    curr = curr.parentElement;
-  }
-
-  // 4. Do not drag if user is selecting text
+  // 3. Do not drag if user is selecting text
   const selection = window.getSelection();
   if (selection && selection.toString().length > 0 && selection.containsNode(target, true)) {
     return;
