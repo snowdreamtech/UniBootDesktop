@@ -57,23 +57,16 @@ export function isClickOnScrollbar(e: MouseEvent): boolean {
     const overflowX = style.overflowX;
 
     const hasVerticalScroll =
-      (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay") &&
-      el.scrollHeight > el.clientHeight;
+      (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay") && el.scrollHeight > el.clientHeight;
     const hasHorizontalScroll =
-      (overflowX === "auto" || overflowX === "scroll" || overflowX === "overlay") &&
-      el.scrollWidth > el.clientWidth;
+      (overflowX === "auto" || overflowX === "scroll" || overflowX === "overlay") && el.scrollWidth > el.clientWidth;
 
     if (!hasVerticalScroll && !hasHorizontalScroll) {
       continue;
     }
 
     const rect = el.getBoundingClientRect();
-    if (
-      e.clientX < rect.left ||
-      e.clientX > rect.right ||
-      e.clientY < rect.top ||
-      e.clientY > rect.bottom
-    ) {
+    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
       continue;
     }
 
