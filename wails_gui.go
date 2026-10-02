@@ -16,6 +16,7 @@ import (
 
 	"github.com/snowdreamtech/unibootdesktop/cmd"
 	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/sysinfo"
 	"github.com/snowdreamtech/unibootdesktop/pkg/config"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -91,13 +92,29 @@ func RunWails() error {
 	fmt.Println(">>> Starting Wails GUI Runtime...")
 	app := NewApp()
 
-	// Determine Mac native appearance from saved user theme preference so the
-	// native title bar matches the WebView content theme on first launch.
-	macAppearance := mac.NSAppearanceNameDarkAqua
-	backgroundColour := &options.RGBA{R: 11, G: 15, B: 25, A: 255}
-	if cfg, err := config.Load(); err == nil && cfg != nil && cfg.Theme == "light" {
-		macAppearance = mac.NSAppearanceNameAqua
-		backgroundColour = &options.RGBA{R: 248, G: 250, B: 252, A: 255}
+	// Determine native window appearance and background color from saved user theme preference,
+	// or dynamically resolve against OS system appearance when set to "system" or empty.
+	isDark := false
+	if cfg, err := config.Load(); err == nil && cfg != nil {
+		switch cfg.Theme {
+		case "dark":
+			isDark = true
+		case "light":
+			isDark = false
+		default:
+			isDark = sysinfo.IsSystemDarkTheme()
+		}
+	} else {
+		isDark = sysinfo.IsSystemDarkTheme()
+	}
+
+	macAppearance := mac.NSAppearanceNameAqua
+	backgroundColour := &options.RGBA{R: 248, G: 250, B: 252, A: 255}
+	winTheme := windows.Light
+	if isDark {
+		macAppearance = mac.NSAppearanceNameDarkAqua
+		backgroundColour = &options.RGBA{R: 11, G: 15, B: 25, A: 255}
+		winTheme = windows.Dark
 	}
 
 	return wails.Run(&options.App{
@@ -137,7 +154,7 @@ func RunWails() error {
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
 			DisableWindowIcon:    false,
-			Theme:                windows.SystemDefault,
+			Theme:                winTheme,
 			BackdropType:         windows.Auto,
 		},
 		Mac: &mac.Options{
