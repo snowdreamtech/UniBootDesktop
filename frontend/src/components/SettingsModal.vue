@@ -303,7 +303,12 @@
                     t("settings.newVersionDetected", { version: latestReleaseTag })
                   }}</span>
                 </div>
-                <button class="btn-primary-sm" :disabled="isSyncing" @click="syncFirmware">
+                <button
+                  class="btn-primary-sm"
+                  :class="{ 'is-busy': isSyncing }"
+                  :disabled="isSyncing"
+                  @click="syncFirmware"
+                >
                   <span class="btn-icon">{{ isSyncing ? "⏳" : hasUniBootUpdate ? "⚡" : "🔄" }}</span>
                   <span>{{
                     isSyncing
@@ -402,6 +407,7 @@
                 </div>
                 <button
                   class="btn-primary-sm"
+                  :class="{ 'is-busy': isDownloadingVentoy }"
                   :disabled="isDownloadingVentoy || !isVentoyOsSupported"
                   @click="downloadVentoyToolchain"
                   :title="!isVentoyOsSupported ? t('settings.ventoyMacNoDownloadTitle') : ''"
@@ -1731,6 +1737,8 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
 }
 
 .sync-info-labels strong {
@@ -1761,10 +1769,17 @@ onMounted(() => {
 }
 
 .btn-primary-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: max-content;
   background: var(--accent-cyan);
   color: #070a12;
   border: 1px solid var(--accent-cyan);
-  padding: 0.35rem 0.75rem;
+  padding: 0.45rem 1rem;
   border-radius: 6px;
   font-size: 0.8rem;
   font-weight: 700;
@@ -1777,8 +1792,12 @@ onMounted(() => {
 }
 
 .btn-primary-sm:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.btn-primary-sm:disabled.is-busy {
   cursor: wait;
-  opacity: 0.7;
 }
 
 [data-theme="light"] .btn-primary-sm {
