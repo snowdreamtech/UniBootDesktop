@@ -63,6 +63,11 @@ function updateDomAndWindow(resolved: "dark" | "light") {
   }
 }
 
+// Ensure DOM and window theme are synchronized immediately upon script evaluation
+if (typeof document !== "undefined") {
+  updateDomAndWindow(resolveEffectiveTheme(currentTheme.value));
+}
+
 // Global listener for system theme changes (e.g. macOS appearance toggle or sunset/sunrise)
 if (typeof window !== "undefined" && window.matchMedia) {
   const mql = window.matchMedia("(prefers-color-scheme: dark)");

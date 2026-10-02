@@ -113,40 +113,62 @@ export function useAppSettings(options: UseAppSettingsOptions) {
 
     if (window.go && window.go.main && window.go.main.App) {
       try {
-        const isDirect = (payload.proxyProtocol || "direct") === "direct";
-        const host = payload.proxyHost ? payload.proxyHost.trim() : "";
-        const port = !isDirect && host ? Number(payload.proxyPort) || 0 : 0;
+        let currentCfg: any = null;
+        try {
+          currentCfg = await window.go.main.App.GetConfig();
+        } catch {
+          // ignore
+        }
 
-        const configObj =
-          typeof payload === "object" && payload !== null
-            ? {
-                mode: payload.mode || activeMode.value,
-                autoCheckUpdate: payload.autoCheckUpdate !== false,
-                theme: payload.theme || currentTheme.value,
-                language: payload.language || "auto",
-                githubProxy: proxyUrl,
-                fileSystem: payload.fileSystem || selectedFsType.value,
-                proxyProtocol: payload.proxyProtocol || "direct",
-                proxyHost: host,
-                proxyPort: port,
-                proxyUser: payload.proxyUser || "",
-                proxyPassword: payload.proxyPassword || "",
-                ventoyPath: payload.ventoyPath || "",
-                unibootPath: payload.unibootPath || "",
-                ventoySecureBoot: payload.ventoySecureBoot !== false,
-                ventoyPartitionStyle: payload.ventoyPartitionStyle || "MBR",
-                ventoyReserveSpace: Number(payload.ventoyReserveSpace) || 0,
-                ventoyWin11Bypass: payload.ventoyWin11Bypass === true,
-                ventoyMenuTimeout: Number(payload.ventoyMenuTimeout) || 0,
-                autoEjectAfterDeploy: payload.autoEjectAfterDeploy === true,
-              }
-            : {
-                mode: activeMode.value,
-                autoCheckUpdate: true,
-                theme: currentTheme.value,
-                githubProxy: proxyUrl,
-                fileSystem: selectedFsType.value,
-              };
+        const isDirect =
+          payload && payload.proxyProtocol
+            ? payload.proxyProtocol === "direct"
+            : (currentCfg?.proxyProtocol || "direct") === "direct";
+        const host =
+          payload && payload.proxyHost !== undefined ? payload.proxyHost.trim() : currentCfg?.proxyHost || "";
+        const port = !isDirect && host ? Number(payload?.proxyPort ?? currentCfg?.proxyPort) || 0 : 0;
+
+        const configObj = {
+          ...(currentCfg || {}),
+          mode: payload?.mode || currentCfg?.mode || activeMode.value,
+          autoCheckUpdate:
+            typeof payload?.autoCheckUpdate === "boolean"
+              ? payload.autoCheckUpdate
+              : currentCfg?.autoCheckUpdate !== false,
+          theme: payload?.theme || currentCfg?.theme || currentTheme.value,
+          language: payload?.language || currentCfg?.language || "auto",
+          githubProxy:
+            typeof payload?.githubProxy === "string" ? payload.githubProxy : currentCfg?.githubProxy || proxyUrl,
+          fileSystem: payload?.fileSystem || currentCfg?.fileSystem || selectedFsType.value,
+          proxyProtocol: payload?.proxyProtocol || currentCfg?.proxyProtocol || "direct",
+          proxyHost: host,
+          proxyPort: port,
+          proxyUser: payload?.proxyUser !== undefined ? payload.proxyUser : currentCfg?.proxyUser || "",
+          proxyPassword: payload?.proxyPassword !== undefined ? payload.proxyPassword : currentCfg?.proxyPassword || "",
+          ventoyPath: payload?.ventoyPath !== undefined ? payload.ventoyPath : currentCfg?.ventoyPath || "",
+          unibootPath: payload?.unibootPath !== undefined ? payload.unibootPath : currentCfg?.unibootPath || "",
+          ventoySecureBoot:
+            typeof payload?.ventoySecureBoot === "boolean"
+              ? payload.ventoySecureBoot
+              : currentCfg?.ventoySecureBoot !== false,
+          ventoyPartitionStyle: payload?.ventoyPartitionStyle || currentCfg?.ventoyPartitionStyle || "MBR",
+          ventoyReserveSpace:
+            payload?.ventoyReserveSpace !== undefined
+              ? Number(payload.ventoyReserveSpace) || 0
+              : currentCfg?.ventoyReserveSpace || 0,
+          ventoyWin11Bypass:
+            typeof payload?.ventoyWin11Bypass === "boolean"
+              ? payload.ventoyWin11Bypass
+              : currentCfg?.ventoyWin11Bypass === true,
+          ventoyMenuTimeout:
+            payload?.ventoyMenuTimeout !== undefined
+              ? Number(payload.ventoyMenuTimeout) || 0
+              : currentCfg?.ventoyMenuTimeout || 0,
+          autoEjectAfterDeploy:
+            typeof payload?.autoEjectAfterDeploy === "boolean"
+              ? payload.autoEjectAfterDeploy
+              : currentCfg?.autoEjectAfterDeploy === true,
+        };
 
         await window.go.main.App.SaveConfig(configObj as any);
         if (configObj.language && window.go.main.App.ReloadAppMenu) {

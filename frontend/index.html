@@ -31,12 +31,28 @@
         height: 100%;
       }
 
+      :root {
+        --startup-bg: radial-gradient(circle at 50% 38%, rgba(56, 189, 248, 0.12), transparent 30%), #0b0f19;
+        --startup-color: #f8fafc;
+      }
+
+      @media (prefers-color-scheme: light) {
+        :root {
+          --startup-bg: radial-gradient(circle at 50% 38%, rgba(2, 132, 199, 0.1), transparent 30%), #f8fafc;
+          --startup-color: #0f172a;
+        }
+      }
+
       [data-theme="dark"] {
+        --startup-bg: radial-gradient(circle at 50% 38%, rgba(56, 189, 248, 0.12), transparent 30%), #0b0f19;
+        --startup-color: #f8fafc;
         background: #0b0f19;
         color: #f8fafc;
       }
 
       [data-theme="light"] {
+        --startup-bg: radial-gradient(circle at 50% 38%, rgba(2, 132, 199, 0.1), transparent 30%), #f8fafc;
+        --startup-color: #0f172a;
         background: #f8fafc;
         color: #0f172a;
       }
@@ -47,19 +63,14 @@
         z-index: 2147483646;
         display: grid;
         place-items: center;
-        background: radial-gradient(circle at 50% 38%, rgba(56, 189, 248, 0.12), transparent 30%), #0b0f19;
-        color: #f8fafc;
+        background: var(--startup-bg);
+        color: var(--startup-color);
         content: "UniBootDesktop";
         font:
           700 22px/1.2 -apple-system,
           BlinkMacSystemFont,
           "Segoe UI",
           sans-serif;
-      }
-
-      [data-theme="light"]::before {
-        background: radial-gradient(circle at 50% 38%, rgba(2, 132, 199, 0.1), transparent 30%), #f8fafc;
-        color: #0f172a;
       }
 
       html.app-ready::before {
@@ -73,17 +84,12 @@
         display: grid;
         place-items: center;
         overflow: hidden;
-        background: radial-gradient(circle at 50% 38%, rgba(56, 189, 248, 0.12), transparent 30%), #0b0f19;
-        color: #f8fafc;
+        background: var(--startup-bg);
+        color: var(--startup-color);
         opacity: 1;
         transition:
           opacity 220ms ease,
           visibility 220ms ease;
-      }
-
-      [data-theme="light"] #startup-loader {
-        background: radial-gradient(circle at 50% 38%, rgba(2, 132, 199, 0.1), transparent 30%), #f8fafc;
-        color: #0f172a;
       }
 
       html.app-ready #startup-loader {
