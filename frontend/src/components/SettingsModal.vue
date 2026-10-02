@@ -287,6 +287,38 @@
               </div>
             </h4>
 
+            <!-- Firmware sync action card (aligned at top like Ventoy) -->
+            <div class="firmware-sync-card">
+              <div class="sync-status">
+                <div class="sync-info-labels">
+                  <span
+                    >{{ t("settings.localVersion") }} <strong>{{ localVersionTag }}</strong></span
+                  >
+                  <span class="divider">•</span>
+                  <span
+                    >{{ t("settings.cloudRelease") }}
+                    <strong class="highlight-tag">UniBoot {{ latestReleaseTag }}</strong></span
+                  >
+                  <span v-if="hasUniBootUpdate" class="badge warning pulse">{{
+                    t("settings.newVersionDetected", { version: latestReleaseTag })
+                  }}</span>
+                </div>
+                <button class="btn-primary-sm" :disabled="isSyncing" @click="syncFirmware">
+                  <span class="btn-icon">{{ isSyncing ? "⏳" : hasUniBootUpdate ? "⚡" : "🔄" }}</span>
+                  <span>{{
+                    isSyncing
+                      ? t("settings.pullingFirmware")
+                      : hasUniBootUpdate
+                        ? t("settings.upgradeFirmwareNow", { version: latestReleaseTag })
+                        : t("settings.checkSyncFirmware")
+                  }}</span>
+                </button>
+              </div>
+              <div v-if="isSyncing" class="sync-progress">
+                <div class="progress-bar-inner" :style="{ width: syncProgress + '%' }"></div>
+              </div>
+            </div>
+
             <!-- UniBoot Custom Storage Path -->
             <div class="form-group span-full uniboot-path-group">
               <label class="form-label">{{ t("settings.uniboot_dir_label") }}</label>
@@ -328,38 +360,6 @@
                   <span class="badge success">{{ t("settings.embeddedBadge") }}</span>
                   <span class="fw-desc">{{ fw.descKey ? t(fw.descKey as any) : fw.description }}</span>
                 </div>
-              </div>
-            </div>
-
-            <!-- Firmware sync action card -->
-            <div class="firmware-sync-card">
-              <div class="sync-status">
-                <div class="sync-info-labels">
-                  <span
-                    >{{ t("settings.localVersion") }} <strong>{{ localVersionTag }}</strong></span
-                  >
-                  <span class="divider">•</span>
-                  <span
-                    >{{ t("settings.cloudRelease") }}
-                    <strong class="highlight-tag">UniBoot {{ latestReleaseTag }}</strong></span
-                  >
-                  <span v-if="hasUniBootUpdate" class="badge warning pulse">{{
-                    t("settings.newVersionDetected", { version: latestReleaseTag })
-                  }}</span>
-                </div>
-                <button class="btn-primary-sm" :disabled="isSyncing" @click="syncFirmware">
-                  <span class="btn-icon">{{ isSyncing ? "⏳" : hasUniBootUpdate ? "⚡" : "🔄" }}</span>
-                  <span>{{
-                    isSyncing
-                      ? t("settings.pullingFirmware")
-                      : hasUniBootUpdate
-                        ? t("settings.upgradeFirmwareNow", { version: latestReleaseTag })
-                        : t("settings.checkSyncFirmware")
-                  }}</span>
-                </button>
-              </div>
-              <div v-if="isSyncing" class="sync-progress">
-                <div class="progress-bar-inner" :style="{ width: syncProgress + '%' }"></div>
               </div>
             </div>
           </div>
@@ -1709,16 +1709,12 @@ onMounted(() => {
 }
 
 .firmware-sync-card {
-  margin-top: 1.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
   padding: 0.85rem;
   background: var(--input-bg);
   border: 1px solid var(--card-border);
   border-radius: 10px;
-}
-
-.ventoy-sync-card {
-  margin-top: 0.5rem;
-  margin-bottom: 1.25rem;
 }
 
 .sync-status {
