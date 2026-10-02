@@ -63,6 +63,16 @@ export interface TranslationDict {
   "settings.syncSuccessShortAlert": string;
   "settings.syncFailedAlert": string;
   "settings.ventoyToolchain": string;
+  "settings.ventoyNotInstalled": string;
+  "settings.ventoyUpToDate": string;
+  "settings.ventoyMacUnsupportedBadge": string;
+  "settings.ventoyMacNoDownload": string;
+  "settings.ventoyMacNoDownloadTitle": string;
+  "settings.pullingVentoy": string;
+  "settings.upgradeVentoyNow": string;
+  "settings.reinstallVentoy": string;
+  "settings.ventoySyncSuccessAlert": string;
+  "settings.ventoySyncFailedAlert": string;
   "settings.testVentoyCli": string;
   "settings.cliFormattingFlags": string;
   "settings.ventoyPlugins": string;

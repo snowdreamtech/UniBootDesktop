@@ -372,6 +372,57 @@
               <span>{{ t("settings.ventoyToolchain") }}</span>
             </h4>
 
+            <!-- Ventoy Toolchain sync action card -->
+            <div class="firmware-sync-card ventoy-sync-card">
+              <div class="sync-status">
+                <div class="sync-info-labels">
+                  <span
+                    >{{ t("settings.localVersion") }}
+                    <strong>{{
+                      localVentoyVersionTag ||
+                      (ventoyValidation?.valid && ventoyValidation.version
+                        ? (ventoyValidation.version.startsWith("v") ? "" : "v") + ventoyValidation.version
+                        : t("settings.ventoyNotInstalled"))
+                    }}</strong></span
+                  >
+                  <span class="divider">•</span>
+                  <span
+                    >{{ t("settings.cloudRelease") }}
+                    <strong class="highlight-tag">Ventoy {{ latestVentoyTag || "v1.1.17" }}</strong></span
+                  >
+                  <span v-if="!isVentoyOsSupported" class="badge warning">
+                    {{ t("settings.ventoyMacUnsupportedBadge") }}
+                  </span>
+                  <span v-else-if="hasVentoyUpdate" class="badge warning pulse">
+                    {{ t("settings.newVersionDetected", { version: latestVentoyTag || "v1.1.17" }) }}
+                  </span>
+                  <span v-else-if="localVentoyVersionTag || ventoyValidation?.valid" class="badge success">
+                    {{ t("settings.ventoyUpToDate") }}
+                  </span>
+                </div>
+                <button
+                  class="btn-primary-sm"
+                  :disabled="isDownloadingVentoy || !isVentoyOsSupported"
+                  @click="downloadVentoyToolchain"
+                  :title="!isVentoyOsSupported ? t('settings.ventoyMacNoDownloadTitle') : ''"
+                >
+                  <span class="btn-icon">{{ isDownloadingVentoy ? "⏳" : hasVentoyUpdate ? "⚡" : "🔄" }}</span>
+                  <span>{{
+                    isDownloadingVentoy
+                      ? t("settings.pullingVentoy")
+                      : !isVentoyOsSupported
+                        ? t("settings.ventoyMacNoDownload")
+                        : hasVentoyUpdate
+                          ? t("settings.upgradeVentoyNow", { version: latestVentoyTag || "v1.1.17" })
+                          : t("settings.reinstallVentoy")
+                  }}</span>
+                </button>
+              </div>
+              <div v-if="isDownloadingVentoy" class="sync-progress">
+                <div class="progress-bar-inner" :style="{ width: ventoyDownloadProgress + '%' }"></div>
+              </div>
+            </div>
+
             <div class="form-group span-full">
               <label class="form-label">{{ t("settings.ventoy_cli_path") }}</label>
               <div class="input-with-btn">
@@ -619,6 +670,15 @@ const ventoyWin11Bypass = ref(false);
 const ventoyMenuTimeout = ref(0);
 const isValidatingVentoy = ref(false);
 const ventoyValidation = ref<VentoyValidation | null>(null);
+
+// Ventoy release & download state
+const checkingVentoyRelease = ref(false);
+const isDownloadingVentoy = ref(false);
+const ventoyDownloadProgress = ref(0);
+const latestVentoyTag = ref("");
+const localVentoyVersionTag = ref("");
+const hasVentoyUpdate = ref(false);
+const isVentoyOsSupported = ref(true);
 
 // Auto save state
 let isInitializing = true;
@@ -1044,6 +1104,84 @@ async function syncFirmware() {
   }
 }
 
+async function checkVentoyRelease() {
+  const app = getWailsApp();
+  if (app && typeof app.GetVentoyReleaseInfo === "function") {
+    checkingVentoyRelease.value = true;
+    try {
+      const info = await app.GetVentoyReleaseInfo();
+      if (info) {
+        latestVentoyTag.value = info.tagName || "v1.1.17";
+        localVentoyVersionTag.value = info.localVersion || "";
+        hasVentoyUpdate.value = info.hasUpdate === true;
+        isVentoyOsSupported.value = info.isSupportedOS !== false;
+        if (info.installDir && !ventoyPath.value.trim()) {
+          ventoyPath.value = info.installDir;
+        }
+      }
+    } catch (e) {
+      console.error("Failed to check Ventoy release:", e);
+    } finally {
+      checkingVentoyRelease.value = false;
+    }
+  }
+}
+
+async function downloadVentoyToolchain() {
+  if (!isVentoyOsSupported.value) {
+    alert(t("settings.ventoyMacNoDownloadTitle") || "macOS does not support native Ventoy CLI formatting");
+    return;
+  }
+  logUserAction("INFO", "User initiated Ventoy toolchain download/update");
+  isDownloadingVentoy.value = true;
+  ventoyDownloadProgress.value = 15;
+
+  const timer = setInterval(() => {
+    if (ventoyDownloadProgress.value < 85) {
+      ventoyDownloadProgress.value += 15;
+    }
+  }, 300);
+
+  const app = getWailsApp();
+  try {
+    if (app && typeof app.DownloadVentoyRelease === "function") {
+      const info = await app.DownloadVentoyRelease();
+      ventoyDownloadProgress.value = 100;
+      if (info) {
+        latestVentoyTag.value = info.tagName || latestVentoyTag.value || "v1.1.17";
+        localVentoyVersionTag.value = info.localVersion || info.tagName;
+        hasVentoyUpdate.value = false;
+        if (info.installDir) {
+          ventoyPath.value = info.installDir;
+        }
+        await saveConfigImmediate();
+        await checkVentoyCli();
+        setTimeout(() => {
+          isDownloadingVentoy.value = false;
+          ventoyDownloadProgress.value = 0;
+          alert(t("settings.ventoySyncSuccessAlert", { tag: info.tagName || "v1.1.17" }));
+        }, 300);
+      }
+    } else {
+      setTimeout(() => {
+        ventoyDownloadProgress.value = 100;
+        setTimeout(() => {
+          isDownloadingVentoy.value = false;
+          ventoyDownloadProgress.value = 0;
+          alert(t("settings.ventoySyncSuccessAlert", { tag: "v1.1.17" }));
+        }, 300);
+      }, 1000);
+    }
+  } catch (e: any) {
+    console.error("Ventoy download failed:", e);
+    isDownloadingVentoy.value = false;
+    ventoyDownloadProgress.value = 0;
+    alert(t("settings.ventoySyncFailedAlert", { error: e?.message || String(e) }));
+  } finally {
+    clearInterval(timer);
+  }
+}
+
 async function selectVentoyDirectory() {
   if (window.go && window.go.main && window.go.main.App && window.go.main.App.SelectDirectory) {
     try {
@@ -1052,6 +1190,7 @@ async function selectVentoyDirectory() {
         ventoyPath.value = selected;
         triggerAutoSave();
         await checkVentoyCli();
+        await checkVentoyRelease();
       }
     } catch (e) {
       console.error("Failed to select Ventoy directory:", e);
@@ -1100,6 +1239,7 @@ onMounted(() => {
   loadFullConfig();
   fetchFirmwareList();
   checkUniBootRelease();
+  checkVentoyRelease();
 });
 </script>
 
@@ -1575,6 +1715,11 @@ onMounted(() => {
   background: var(--input-bg);
   border: 1px solid var(--card-border);
   border-radius: 10px;
+}
+
+.ventoy-sync-card {
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .sync-status {

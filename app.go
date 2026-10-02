@@ -1047,6 +1047,44 @@ func (a *App) SyncUniBootFirmware() (*firmware.UniBootReleaseInfo, error) {
 	return firmware.SyncUniBootFirmware(a.ctx, proxy)
 }
 
+// GetVentoyReleaseInfo queries the latest official Ventoy GitHub release metadata.
+func (a *App) GetVentoyReleaseInfo() (*installer.VentoyReleaseInfo, error) {
+	cfg, _ := config.Load()
+	proxy := ""
+	ventoyPath := ""
+	if cfg != nil {
+		proxy = cfg.GithubProxy
+		ventoyPath = cfg.VentoyPath
+	}
+	if ventoyPath == "" {
+		ventoyPath = env.GetVentoyDir()
+	}
+	return installer.FetchLatestVentoyRelease(a.ctx, proxy, ventoyPath)
+}
+
+// DownloadVentoyRelease downloads and extracts the official Ventoy toolchain for current platform into the designated Ventoy directory.
+func (a *App) DownloadVentoyRelease() (*installer.VentoyReleaseInfo, error) {
+	cfg, _ := config.Load()
+	proxy := ""
+	ventoyPath := ""
+	if cfg != nil {
+		proxy = cfg.GithubProxy
+		ventoyPath = cfg.VentoyPath
+	}
+	if ventoyPath == "" {
+		ventoyPath = env.GetVentoyDir()
+	}
+	info, err := installer.DownloadAndExtractVentoy(a.ctx, proxy, ventoyPath)
+	if err != nil {
+		return nil, err
+	}
+	if cfg != nil && cfg.VentoyPath == "" {
+		cfg.VentoyPath = ventoyPath
+		_ = cfg.Save()
+	}
+	return info, nil
+}
+
 // GetAppInfo returns dynamic build, environment, and version metadata.
 func (a *App) GetAppInfo() AppInfo {
 	versionStr := env.GitTag
