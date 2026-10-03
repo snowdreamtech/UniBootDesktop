@@ -105,6 +105,7 @@ VERSION text eol=lf
 *.efi binary
 *.lkrn binary
 *.kpxe binary
+*.img binary
 
 # Media (Images, Video, Audio)
 *.avi binary

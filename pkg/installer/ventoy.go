@@ -17,6 +17,9 @@ import (
 //go:embed themes/*
 var embeddedThemes embed.FS
 
+//go:embed assets/ventoy_vhdboot.img
+var embeddedVhdBootImg []byte
+
 // VentoyThemeConfig defines the theme configuration block in ventoy.json matching UniBoot spec.
 type VentoyThemeConfig struct {
 	File    string `json:"file"`
@@ -202,6 +205,54 @@ menuentry "$lbl_return" --class=vtoyret VTOY_RET {
 	grubPath := filepath.Join(ventoyDir, "ventoy_grub.cfg")
 	if err := os.WriteFile(grubPath, []byte(grubCfgContent), 0644); err != nil {
 		return fmt.Errorf("failed to write ventoy_grub.cfg: %w", err)
+	}
+
+	// 4. Ensure ventoy_vhdboot.img is deployed for VHD/VHDX boot support in Hybrid Mode
+	if err := DeployVentoyVhdBoot(ventoyDir); err != nil {
+		return fmt.Errorf("failed to deploy ventoy_vhdboot.img: %w", err)
+	}
+
+	return nil
+}
+
+// DeployVentoyVhdBoot extracts embedded ventoy_vhdboot.img to ventoyDir if not already present or incomplete.
+// It is idempotent and preserves any existing non-empty file (e.g. customized versions).
+func DeployVentoyVhdBoot(ventoyDir string) error {
+	if len(embeddedVhdBootImg) == 0 {
+		return fmt.Errorf("embedded ventoy_vhdboot.img is empty")
+	}
+
+	targetFile := filepath.Join(ventoyDir, "ventoy_vhdboot.img")
+	info, err := os.Stat(targetFile)
+	if err == nil {
+		if info.Size() > 0 {
+			// Already exists and non-empty, avoid redundant writing or overwriting custom user versions
+			return nil
+		}
+		// 0-byte incomplete file, clean it up before rewrite
+		_ = os.Remove(targetFile)
+	}
+
+	if err := os.MkdirAll(ventoyDir, 0755); err != nil {
+		return fmt.Errorf("failed to create ventoy directory for vhdboot: %w", err)
+	}
+
+	// Write atomically via temporary file in the same directory, then rename
+	tmpFile := filepath.Join(ventoyDir, fmt.Sprintf(".ventoy_vhdboot.img.tmp.%d", os.Getpid()))
+	if err := os.WriteFile(tmpFile, embeddedVhdBootImg, 0644); err != nil {
+		// Fallback to direct write if temporary file write fails
+		if directErr := os.WriteFile(targetFile, embeddedVhdBootImg, 0644); directErr != nil {
+			return fmt.Errorf("failed to write ventoy_vhdboot.img directly: %w (temp err: %v)", directErr, err)
+		}
+		return nil
+	}
+
+	if err := os.Rename(tmpFile, targetFile); err != nil {
+		_ = os.Remove(tmpFile)
+		// On non-standard filesystems or Windows locks, fallback to direct write
+		if directErr := os.WriteFile(targetFile, embeddedVhdBootImg, 0644); directErr != nil {
+			return fmt.Errorf("failed to commit ventoy_vhdboot.img: %w", directErr)
+		}
 	}
 
 	return nil
