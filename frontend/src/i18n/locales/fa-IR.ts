@@ -24,7 +24,8 @@ export const faIr: TranslationDict = {
   "common.langAuto": "زبان (خودکار)",
   "common.lang": "زبان",
   "vm.startSuccess": "شبیه‌سازی ماشین مجازی با موفقیت برای دیسک آغاز شد: {disk} ({device})",
-  "vm.backendNotReady": "API Backend آماده نیست: باندهای ناله در حال بارگیری هستند، لطفاً برنامه UniBoot را مجددا راه اندازی کنید.",
+  "vm.backendNotReady":
+    "API Backend آماده نیست: باندهای ناله در حال بارگیری هستند، لطفاً برنامه UniBoot را مجددا راه اندازی کنید.",
   "vm.demoModeStart": "[حالت دمو] شروع اعتبار سنجی شبیه‌ساز QEMU: {disk} ({device})",
   "vm.startFailed": "راه‌اندازی شبیه‌ساز QEMU ناموفق بود: {error}",
   "disk.writingImageProgress": "نوشتن تصویر ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -109,7 +110,8 @@ export const faIr: TranslationDict = {
   "disk.tag_boot_hybrid": "بوت ترکیبی",
   "disk.tag_boot_thirdparty": "بوت متفرقه",
   "confirm.cloud_to_hybrid_warn_title": "توجه: تغییر به حالت ترکیبی نیازمند فرمت کامل است",
-  "confirm.cloud_to_hybrid_warn_desc": "این دیسک در حالت بوت ابری خالص است. حالت ترکیبی Ventoy نیازمند بازسازی MBR و جدول پارتیشن است که تمام داده‌ها و ISOها را پاک می‌کند!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "این دیسک در حالت بوت ابری خالص است. حالت ترکیبی Ventoy نیازمند بازسازی MBR و جدول پارتیشن است که تمام داده‌ها و ISOها را پاک می‌کند!",
   "disk.tag_ssd": "SSD قابل حمل",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "درایو رمزگذاری شده",
@@ -137,9 +139,11 @@ export const faIr: TranslationDict = {
   "log.level_error": "خطا",
   "log.level_debug": "دیباگ",
   "safe.title_cloud": "درایو Ventoy/UniBoot موجود شناسایی شد (حالت ابری فقط پارتیشن ESP را بازنشانی می‌کند)",
-  "safe.desc_cloud": "حالت ابری ساختار دو پارتیشن UNIBOOT را حفظ می‌کند. بازنشانی ESP تمام فایل‌های ISO و داده‌ها را دست‌نخورده باقی می‌گذارد!",
+  "safe.desc_cloud":
+    "حالت ابری ساختار دو پارتیشن UNIBOOT را حفظ می‌کند. بازنشانی ESP تمام فایل‌های ISO و داده‌ها را دست‌نخورده باقی می‌گذارد!",
   "safe.title_hybrid": "درایو Ventoy موجود شناسایی شد (به‌روزرسانی در محل در حالت ترکیبی)",
-  "safe.desc_hybrid": "حالت ترکیبی تمام فایل‌های ISO موجود را بدون فرمت حفظ کرده و تم تاریک UniBoot و منوی ابری را با ایمنی اضافه می‌کند!",
+  "safe.desc_hybrid":
+    "حالت ترکیبی تمام فایل‌های ISO موجود را بدون فرمت حفظ کرده و تم تاریک UniBoot و منوی ابری را با ایمنی اضافه می‌کند!",
   "common.optional": "اختیاری",
   "common.optional_test": "آزمون اختیاری",
   "iso.title": "منابع فایل‌های ایمیج سیستم محلی (ISO / IMG / WIM / VHD)",
@@ -154,7 +158,8 @@ export const faIr: TranslationDict = {
   "iso.drag_unsupported": "هیچ فایل ایمیج پشتیبانی‌شده‌ای شناسایی نشد (.iso, .wim, .img و غیره)",
   "iso.preflight_title": "بررسی پیش از نوشتن",
   "iso.conflict_title": "نام فایل تکراری پیدا شد",
-  "iso.conflict_desc": "فایلی با همین نام از قبل در پوشه iso USB مقصد وجود دارد. روش برخورد را انتخاب کنید. Hashها مقایسه نمی‌شوند.",
+  "iso.conflict_desc":
+    "فایلی با همین نام از قبل در پوشه iso USB مقصد وجود دارد. روش برخورد را انتخاب کنید. Hashها مقایسه نمی‌شوند.",
   "iso.conflict_action": "عملیات",
   "iso.conflict_keep_both": "نگه‌داشتن",
   "iso.conflict_replace": "بازنویسی",
@@ -169,8 +174,10 @@ export const faIr: TranslationDict = {
   "deploy.target_device": "دستگاه هدف:",
   "deploy.batch_target": "{count} درایو(های) USB انتخاب شده",
   "deploy.start_create": "ساخت دیسک بوت",
-  "deploy.tip_batch_update_all": "به‌روزرسانی گروهی بدون از دست رفتن داده: تمامی {count} درایو دیسک انتخاب‌شده در محل به‌روزرسانی می‌شوند",
-  "deploy.tip_batch_mixed": "استقرار ترکیبی گروهی: {bootCount} درایو به‌روزرسانی بدون از دست رفتن داده، {blankCount} درایو فرمت کامل",
+  "deploy.tip_batch_update_all":
+    "به‌روزرسانی گروهی بدون از دست رفتن داده: تمامی {count} درایو دیسک انتخاب‌شده در محل به‌روزرسانی می‌شوند",
+  "deploy.tip_batch_mixed":
+    "استقرار ترکیبی گروهی: {bootCount} درایو به‌روزرسانی بدون از دست رفتن داده، {blankCount} درایو فرمت کامل",
   "deploy.start_update": "ارتقاء در محل (ایمن داده)",
   "deploy.batch_create": "شروع استقرار دسته ای ({count} درایو)",
   "deploy.writing": "نوشتن بسته های سفت افزار بوت...",
@@ -185,21 +192,26 @@ export const faIr: TranslationDict = {
   "deploy.tip_writing": "نوشتن سیستم عامل بوت...",
   "deploy.tip_select_single": "لطفاً ابتدا درایو دیسک مورد نظر را انتخاب کنید",
   "deploy.tip_select_batch": "لطفاً درایوهای دیسک هدف را برای استقرار دسته ای بررسی کنید",
-  "deploy.tip_macos_unsupported": "سیستم‌عامل macOS از قالب‌بندی اولیه در حالت ترکیبی پشتیبانی نمی‌کند (از حالت ابری استفاده کنید یا ابتدا در Win/Linux راه‌اندازی نمایید)",
+  "deploy.tip_macos_unsupported":
+    "سیستم‌عامل macOS از قالب‌بندی اولیه در حالت ترکیبی پشتیبانی نمی‌کند (از حالت ابری استفاده کنید یا ابتدا در Win/Linux راه‌اندازی نمایید)",
   "deploy.tip_need_ventoy": "حالت ترکیبی به ابزارهای محلی Ventoy CLI نیاز دارد. ما حالت ابری را پیشنهاد می‌کنیم!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Fresh Formatting پشتیبانی نمی شود",
-  "deploy.macos_alert_desc": "نسخه رسمی Ventoy هنوز از اجرای برنامه فرمت در macOS پشتیبانی نمی‌کند. برای ساخت [دیسک ترکیبی] جدید به Ventoy CLI نیاز است. پیشنهاد می‌شود از [حالت ابری (دیسک بوت ابری ۱ ثانیه‌ای)] استفاده کنید!",
+  "deploy.macos_alert_desc":
+    "نسخه رسمی Ventoy هنوز از اجرای برنامه فرمت در macOS پشتیبانی نمی‌کند. برای ساخت [دیسک ترکیبی] جدید به Ventoy CLI نیاز است. پیشنهاد می‌شود از [حالت ابری (دیسک بوت ابری ۱ ثانیه‌ای)] استفاده کنید!",
   "deploy.no_ventoy_title": "Ventoy CLI اجرایی شناسایی نشد",
-  "deploy.no_ventoy_desc": "ساخت [دیسک ترکیبی] به Ventoy CLI نصب‌شده محلی نیاز دارد. لطفاً [حالت ابری] پشتیبانی‌شده را انتخاب کنید!",
+  "deploy.no_ventoy_desc":
+    "ساخت [دیسک ترکیبی] به Ventoy CLI نصب‌شده محلی نیاز دارد. لطفاً [حالت ابری] پشتیبانی‌شده را انتخاب کنید!",
   "deploy.result_batch_success": "دیسک نصب ابری ۱ ثانیه‌ای با موفقیت در {count} دیسک مستقر شد!",
   "deploy.result_success": "حالت {mode} با موفقیت در {targets} مستقر شد",
   "deploy.alert_success": "استقرار با موفقیت انجام شد!",
   "deploy.safely_eject_btn": "خروج ایمن درایو دیسک",
   "deploy.success_banner_title": "درایو بوت با موفقیت ساخته شد!",
-  "deploy.success_banner_desc": "فایل‌های راه‌اندازی و سیستم‌عامل نوشته شدند. برای جلوگیری از دست رفتن داده‌ها، قبل از جدا کردن، دیسک را با ایمنی خارج کنید.",
+  "deploy.success_banner_desc":
+    "فایل‌های راه‌اندازی و سیستم‌عامل نوشته شدند. برای جلوگیری از دست رفتن داده‌ها، قبل از جدا کردن، دیسک را با ایمنی خارج کنید.",
   "deploy.toast_auto_ejected": "ساخت کامل شد! تعداد {count} درایو دیسک به‌طور ایمن خارج شد. تمامی اطلاعات ذخیره شد.",
   "deploy.confirm_auto_eject_title": "نوشتن کامل شد — با ایمنی خارج شود؟",
-  "deploy.confirm_auto_eject_desc": "تمام داده‌ها با موفقیت نوشته شدند. آیا می‌خواهید اکنون درایو دیسک را با ایمنی خارج کنید؟",
+  "deploy.confirm_auto_eject_desc":
+    "تمام داده‌ها با موفقیت نوشته شدند. آیا می‌خواهید اکنون درایو دیسک را با ایمنی خارج کنید؟",
   "deploy.confirm_auto_eject_yes": "خروج ایمن",
   "deploy.confirm_auto_eject_no": "فعلاً نه",
   "deploy.alert_fail": "استقرار ناموفق بود:",
@@ -290,7 +302,8 @@ export const faIr: TranslationDict = {
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
   "confirm.title": "High-Risk Format هشدار",
   "confirm.warning_title": "هشدار: Formatting will erase all data!",
-  "confirm.warning_desc": "درایو دیسک انتخاب شده مجدداً پارتیشن بندی و فرمت می شود. تمام فایل های موجود به طور کامل پاک می شوند. مطمئن شوید که از داده های مهم نسخه پشتیبان تهیه کرده اید!",
+  "confirm.warning_desc":
+    "درایو دیسک انتخاب شده مجدداً پارتیشن بندی و فرمت می شود. تمام فایل های موجود به طور کامل پاک می شوند. مطمئن شوید که از داده های مهم نسخه پشتیبان تهیه کرده اید!",
   "confirm.mode_title": "حالت استقرار:",
   "confirm.fs_title": "سیستم فایل هدف:",
   "confirm.disks_title": "درایوهایی که باید قالب‌بندی شوند ({count}):",
@@ -300,11 +313,15 @@ export const faIr: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode تاییدation",
   "confirm.title_danger": "Format هشدار: Disk Initialization",
   "confirm.safe_banner_title": "اعلامیه به‌روزرسانی افزایشی در محل (ایمن اطلاعات)",
-  "confirm.safe_banner_desc": "ساختار بوت Ventoy / UniBoot در درایو هدف شناسایی شد. سیستم یک قالب پرش به‌روزرسانی افزایشی را انجام می‌دهد. تمام فایل ها و ISOهای موجود 100٪ حفظ می شوند!",
-  "confirm.mixed_banner_title": "حالت ترکیبی هوشمند: به‌روزرسانی در محل برای درایوهای بوت، قالب‌بندی برای درایوهای خالی",
-  "confirm.mixed_banner_desc": "{ventoyCount} درایو(های) بوت (به روز رسانی درجا) و {blankCount} درایو(های) خالی (قالب کامل) را انتخاب کرد.",
+  "confirm.safe_banner_desc":
+    "ساختار بوت Ventoy / UniBoot در درایو هدف شناسایی شد. سیستم یک قالب پرش به‌روزرسانی افزایشی را انجام می‌دهد. تمام فایل ها و ISOهای موجود 100٪ حفظ می شوند!",
+  "confirm.mixed_banner_title":
+    "حالت ترکیبی هوشمند: به‌روزرسانی در محل برای درایوهای بوت، قالب‌بندی برای درایوهای خالی",
+  "confirm.mixed_banner_desc":
+    "{ventoyCount} درایو(های) بوت (به روز رسانی درجا) و {blankCount} درایو(های) خالی (قالب کامل) را انتخاب کرد.",
   "confirm.danger_banner_title": "هشدار: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "نوشتن دستگاه مورد نظر را مجدداً پارتیشن بندی و قالب بندی می کند (MBR/GPT). تمام فایل های موجود در درایو(های) انتخاب شده به طور کامل پاک می شوند!",
+  "confirm.danger_banner_desc":
+    "نوشتن دستگاه مورد نظر را مجدداً پارتیشن بندی و قالب بندی می کند (MBR/GPT). تمام فایل های موجود در درایو(های) انتخاب شده به طور کامل پاک می شوند!",
   "confirm.summary_title": "درایوهای هدف برای استقرار بوت:",
   "confirm.smart_safe_tag": "ایمن هوشمند",
   "confirm.ventoy_group_title": "درایوهای ارتقا در محل (همه ISO ها حفظ می شوند):",
@@ -324,8 +341,10 @@ export const faIr: TranslationDict = {
   "confirm.no_format": "ارتقای در‌محل هوشمند",
   "deploy.toast_target_changed": "دیسک هدف انتخاب‌شده تغییر کرده یا دیگر در دسترس نیست. لطفاً دوباره اسکن کنید.",
   "deploy.toast_some_disks_removed": "{count} دیسک در دسترس نیست به طور خودکار حذف شد، ادامه با دیسک‌های باقی‌مانده",
-  "deploy.error_system_disk_blocked": "⛔ مسدود شده: {disks} یک دیسک سیستم است. نمی‌توان دیسک بوت USB را روی درایو سیستم مستقر کرد!",
-  "deploy.error_readonly_disk": "🔒 محافظت در برابر نوشتن: {disks} فقط خواندنی است. لطفاً حفاظت از نوشتن را حذف کنید یا از USB دیگری استفاده کنید",
+  "deploy.error_system_disk_blocked":
+    "⛔ مسدود شده: {disks} یک دیسک سیستم است. نمی‌توان دیسک بوت USB را روی درایو سیستم مستقر کرد!",
+  "deploy.error_readonly_disk":
+    "🔒 محافظت در برابر نوشتن: {disks} فقط خواندنی است. لطفاً حفاظت از نوشتن را حذف کنید یا از USB دیگری استفاده کنید",
   "deploy.start_cloud_create": "ساخت دیسک بوت ابری",
   "deploy.batch_update": "شروع به‌روزرسانی گروهی بدون از دست رفتن داده ({count} درایو دیسک)",
   "deploy.batch_mixed": "شروع استقرار ترکیبی گروهی ({count} درایو دیسک)",
@@ -456,14 +475,17 @@ export const faIr: TranslationDict = {
   "diag.action_reformat_title": "فرمت مجدد (reformat)",
   "diag.action_remount_title": "مونت مجدد (remount)",
   "diag.action_retry_title": "تلاش مجدد (retry)",
-  "diag.action_reformat_desc": "قطع شدن عملیات نوشتن باعث آسیب به جدول پارتیشن یا سیستم فایل شده است. فرمت مجدد توصیه می‌شود.",
-  "diag.action_remount_desc": "مسیر مونت هدف در حین نوشتن قطع شد. لطفاً درایو دیسک را دوباره وارد کنید یا درایو را دوباره مونت نمایید.",
+  "diag.action_reformat_desc":
+    "قطع شدن عملیات نوشتن باعث آسیب به جدول پارتیشن یا سیستم فایل شده است. فرمت مجدد توصیه می‌شود.",
+  "diag.action_remount_desc":
+    "مسیر مونت هدف در حین نوشتن قطع شد. لطفاً درایو دیسک را دوباره وارد کنید یا درایو را دوباره مونت نمایید.",
   "diag.action_retry_desc": "محیط و وضعیت دستگاه سالم هستند. می‌توانید با ایمنی دوباره تلاش کنید.",
   "about.updating": "در حال به‌روزرسانی ({progress}%)",
   "about.updateTo": "به‌روزرسانی آنلاین به {tag}",
   "about.downloading": "در حال دانلود {progress}%",
   "about.preparingDownload": "در حال آماده‌سازی دانلود پکیج...",
-  "about.updateReady": "به‌روزرسانی آماده است! دانلود شده در: {path}. پکیج را اجرا کرده یا برنامه را دوباره راه‌اندازی کنید.",
+  "about.updateReady":
+    "به‌روزرسانی آماده است! دانلود شده در: {path}. پکیج را اجرا کرده یا برنامه را دوباره راه‌اندازی کنید.",
   "about.updateDownloadFailed": "دانلود پکیج به‌روزرسانی ناموفق بود. اتصال شبکه را بررسی کنید.",
   "about.downloadingGuiUpdate": "در حال دانلود به‌روزرسانی واسط کاربری ({progress}%)...",
   "about.updateCompleteRestart": "دانلود به‌روزرسانی کامل شد! برای اعمال، برنامه را دوباره راه‌اندازی کنید.",
@@ -474,7 +496,8 @@ export const faIr: TranslationDict = {
   "dialog.textFilesFilter": "فایل‌های متنی (*.txt)",
   "dialog.allFilesFilter": "همه فایل‌ها (*.*)",
   "dialog.selectIsoTitle": "انتخاب فایل‌های تصویر سیستم (*.iso, *.wim, *.img و غیره)",
-  "dialog.ventoyFilter": "تصاویر منبع Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "تصاویر منبع Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "محاسبه هش",
   "checksum.calculating": "در حال محاسبه هش...",
   "checksum.algo_label": "الگوریتم",
@@ -518,12 +541,15 @@ export const faIr: TranslationDict = {
   "privilege.status_standard": "غیرمجاز",
   "privilege.btn_elevate": "درخواست دسترسی مدیر",
   "privilege.modal_title": "مجوز مدیر سیستم مورد نیاز است",
-  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "برای خواندن اطلاعات بوت و نوشتن بر روی دیسک‌ها مجوز سیستم لازم است",
   "privilege.reason_title": "چرا به امتیازات مدیر نیاز است؟",
-  "privilege.reason_desc": "سیستم‌عامل بخش‌های خام و پارتیشن‌های EFI را ایزوله می‌کند. مجوز دسترسی امکان شناسایی مستقیم و ساخت ایمن را فراهم می‌کند.",
+  "privilege.reason_desc":
+    "سیستم‌عامل بخش‌های خام و پارتیشن‌های EFI را ایزوله می‌کند. مجوز دسترسی امکان شناسایی مستقیم و ساخت ایمن را فراهم می‌کند.",
   "privilege.scope_title": "محدوده دسترسی",
-  "privilege.scope_desc": "صرفاً به فلش‌درایوهای USB خارجی انتخاب‌شده محدود می‌شود. دیسک‌های داخلی هرگز دستکاری نمی‌شوند.",
+  "privilege.scope_desc":
+    "صرفاً به فلش‌درایوهای USB خارجی انتخاب‌شده محدود می‌شود. دیسک‌های داخلی هرگز دستکاری نمی‌شوند.",
   "privilege.safety_title": "امنیت و شفافیت",
   "privilege.safety_desc": "بازرسی کاملاً در حالت فقط خواندنی است و داده‌ها را تغییر نمی‌دهد؛ سورس‌کد کاملاً باز است.",
   "privilege.confirm_btn": "اکنون مجاز شود",

@@ -24,7 +24,8 @@ export const bnBd: TranslationDict = {
   "common.langAuto": "ভাষা (স্বয়ংক্রিয়)",
   "common.lang": "ভাষা",
   "vm.startSuccess": "ডিস্কের জন্য ভিএম সিমুলেশন সফলভাবে শুরু হয়েছে: {disk} ({device})",
-  "vm.backendNotReady": "Backend API প্রস্তুত নয়: Wails bindings লোড হচ্ছে, অনুগ্রহ করে UniBoot অ্যাপ পুনরায় চালু করুন।",
+  "vm.backendNotReady":
+    "Backend API প্রস্তুত নয়: Wails bindings লোড হচ্ছে, অনুগ্রহ করে UniBoot অ্যাপ পুনরায় চালু করুন।",
   "vm.demoModeStart": "[ডেমো মোড] QEMU সিমুলেটর যাচাইকরণ শুরু হচ্ছে: {disk} ({device})",
   "vm.startFailed": "QEMU সিমুলেটর চালু করতে ব্যর্থ: {error}",
   "disk.writingImageProgress": "লেখার ছবি ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -109,7 +110,8 @@ export const bnBd: TranslationDict = {
   "disk.tag_boot_hybrid": "হাইব্রিড বুট",
   "disk.tag_boot_thirdparty": "তৃতীয় পক্ষের বুট",
   "confirm.cloud_to_hybrid_warn_title": "বিজ্ঞপ্তি: হাইব্রিড মোডে স্যুইচ করতে সম্পূর্ণ ফর্ম্যাট প্রয়োজন",
-  "confirm.cloud_to_hybrid_warn_desc": "এই ডিস্কটি খাঁটি ক্লাউড বুট মোডে রয়েছে। Ventoy হাইব্রিড মোডে MBR এবং পার্টিশন টেবিল পুনর্নির্মাণ প্রয়োজন, যা সমস্ত ডেটা এবং ISO মুছে ফেলবে!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "এই ডিস্কটি খাঁটি ক্লাউড বুট মোডে রয়েছে। Ventoy হাইব্রিড মোডে MBR এবং পার্টিশন টেবিল পুনর্নির্মাণ প্রয়োজন, যা সমস্ত ডেটা এবং ISO মুছে ফেলবে!",
   "disk.tag_ssd": "পোর্টেবল এসএসডি",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "এনক্রিপ্ট করা ড্রাইভ",
@@ -136,14 +138,18 @@ export const bnBd: TranslationDict = {
   "log.level_warn": "সতর্কতা",
   "log.level_error": "ত্রুটি",
   "log.level_debug": "ডিবাগ",
-  "safe.title_cloud": "বিদ্যমান Ventoy/UniBoot ড্রাইভ সনাক্ত করা হয়েছে (ক্লাউড মোড শুধুমাত্র ESP পার্টিশন রিফ্রেশ করে)",
-  "safe.desc_cloud": "ক্লাউড মোড UNIBOOT এর ডুয়াল-পার্টিশন লেআউট বজায় রাখে। ESP পার্টিশন রিফ্রেশ করলে সমস্ত ISO এবং ব্যবহারকারী ফাইল নিরাপদ থাকে!",
+  "safe.title_cloud":
+    "বিদ্যমান Ventoy/UniBoot ড্রাইভ সনাক্ত করা হয়েছে (ক্লাউড মোড শুধুমাত্র ESP পার্টিশন রিফ্রেশ করে)",
+  "safe.desc_cloud":
+    "ক্লাউড মোড UNIBOOT এর ডুয়াল-পার্টিশন লেআউট বজায় রাখে। ESP পার্টিশন রিফ্রেশ করলে সমস্ত ISO এবং ব্যবহারকারী ফাইল নিরাপদ থাকে!",
   "safe.title_hybrid": "বিদ্যমান Ventoy ড্রাইভ সনাক্ত করা হয়েছে (হাইব্রিড মোডে ইন-প্লেস আপডেট)",
-  "safe.desc_hybrid": "হাইব্রিড মোড ফর্ম্যাট না করেই সমস্ত বিদ্যমান ISO ফাইল সংরক্ষণ করে, এবং নিরাপদে UniBoot ডার্ক থিম ও ক্লাউড মেনু যোগ করে!",
+  "safe.desc_hybrid":
+    "হাইব্রিড মোড ফর্ম্যাট না করেই সমস্ত বিদ্যমান ISO ফাইল সংরক্ষণ করে, এবং নিরাপদে UniBoot ডার্ক থিম ও ক্লাউড মেনু যোগ করে!",
   "common.optional": "ঐচ্ছিক",
   "common.optional_test": "ঐচ্ছিক পরীক্ষা",
   "iso.title": "স্থানীয় সিস্টেম ইমেজ সোর্স (ISO/IMG/WIM/VHD)",
-  "iso.desc": "Ventoy / UniBoot সরাসরি বুট করার জন্য /UNIBOOT/iso/ ডিরেক্টরিতে স্বয়ংক্রিয়ভাবে অনুলিপি করতে ISO ফাইল যোগ করুন।",
+  "iso.desc":
+    "Ventoy / UniBoot সরাসরি বুট করার জন্য /UNIBOOT/iso/ ডিরেক্টরিতে স্বয়ংক্রিয়ভাবে অনুলিপি করতে ISO ফাইল যোগ করুন।",
   "iso.add_btn": "ইমেজ ফাইল যোগ করুন",
   "iso.empty_title": "ছবি ফাইল যোগ করতে ক্লিক করুন (একক বা ব্যাচ নির্বাচন সমর্থন করে)",
   "iso.empty_sub": ".iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw ফর্ম্যাট সমর্থন করে",
@@ -154,7 +160,8 @@ export const bnBd: TranslationDict = {
   "iso.drag_unsupported": "কোনো সমর্থিত ইমেজ ফাইল পাওয়া যায়নি (.iso, .wim, .img ইত্যাদি)",
   "iso.preflight_title": "লেখার আগে পরীক্ষা",
   "iso.conflict_title": "একই নামের ফাইল পাওয়া গেছে",
-  "iso.conflict_desc": "লক্ষ্য USB-এর iso ফোল্ডারে একই নামের ফাইল আগে থেকেই আছে। করণীয় বেছে নিন। Hash তুলনা করা হবে না।",
+  "iso.conflict_desc":
+    "লক্ষ্য USB-এর iso ফোল্ডারে একই নামের ফাইল আগে থেকেই আছে। করণীয় বেছে নিন। Hash তুলনা করা হবে না।",
   "iso.conflict_action": "করণীয়",
   "iso.conflict_keep_both": "রাখুন",
   "iso.conflict_replace": "ওভাররাইট",
@@ -164,13 +171,15 @@ export const bnBd: TranslationDict = {
   "iso.conflict_confirm": "নিশ্চিত করে চালিয়ে যান",
   "iso.preflight_failed": "লেখার আগের পরীক্ষা ব্যর্থ হয়েছে",
   "deploy.title": "বুটযোগ্য ড্রাইভ তৈরি এবং QEMU পরীক্ষা",
-  "deploy.desc_cloud": "বিশুদ্ধ iPXE ক্লাউড বুট • মাল্টি-আর্ক iPXE নেটওয়ার্ক ফার্মওয়্যার সহ অতি-দ্রুত দ্বৈত-পার্টিশন সেটআপ।",
+  "deploy.desc_cloud":
+    "বিশুদ্ধ iPXE ক্লাউড বুট • মাল্টি-আর্ক iPXE নেটওয়ার্ক ফার্মওয়্যার সহ অতি-দ্রুত দ্বৈত-পার্টিশন সেটআপ।",
   "deploy.desc_hybrid": "Ventoy CLI লোকাল ইঞ্জিন • লোকাল ISO ব্যবস্থাপনা সহ Ventoy হাইব্রিড পার্টিশন সেটআপ।",
   "deploy.target_device": "লক্ষ্য ডিভাইস:",
   "deploy.batch_target": "নির্বাচিত {count} USB ড্রাইভ(গুলি)",
   "deploy.start_create": "বুট ডিস্ক তৈরি করুন",
   "deploy.tip_batch_update_all": "ব্যাচ তথ্য-সুরক্ষিত আপডেট: নির্বাচিত সমস্ত {count}টি USB ড্রাইভ স্বস্থানে আপডেট হবে",
-  "deploy.tip_batch_mixed": "ব্যাচ মিশ্র ডিপ্লয়মেন্ট: {bootCount}টি ড্রাইভ তথ্য বজায় রেখে আপডেট, {blankCount}টি ড্রাইভ নতুন করে ফরম্যাট",
+  "deploy.tip_batch_mixed":
+    "ব্যাচ মিশ্র ডিপ্লয়মেন্ট: {bootCount}টি ড্রাইভ তথ্য বজায় রেখে আপডেট, {blankCount}টি ড্রাইভ নতুন করে ফরম্যাট",
   "deploy.start_update": "ইন-প্লেস আপগ্রেড (ডেটা নিরাপদ)",
   "deploy.batch_create": "ব্যাচ স্থাপন শুরু করুন ({count} ড্রাইভ)",
   "deploy.writing": "বুট ফার্মওয়্যার প্যাকেজ লেখা হচ্ছে...",
@@ -185,19 +194,24 @@ export const bnBd: TranslationDict = {
   "deploy.tip_writing": "বুট ফার্মওয়্যার লেখা হচ্ছে...",
   "deploy.tip_select_single": "অনুগ্রহ করে প্রথমে একটি টার্গেট USB ড্রাইভ নির্বাচন করুন৷",
   "deploy.tip_select_batch": "ব্যাচ স্থাপনার জন্য লক্ষ্য ইউএসবি ড্রাইভ চেক করুন",
-  "deploy.tip_macos_unsupported": "macOS হাইব্রিড মোডে নতুন ফরম্যাটিং সমর্থন করে না (ক্লাউড মোড ব্যবহার করুন বা প্রথমে Win/Linux-এ ইনিশিয়ালাইজ করুন)",
+  "deploy.tip_macos_unsupported":
+    "macOS হাইব্রিড মোডে নতুন ফরম্যাটিং সমর্থন করে না (ক্লাউড মোড ব্যবহার করুন বা প্রথমে Win/Linux-এ ইনিশিয়ালাইজ করুন)",
   "deploy.tip_need_ventoy": "হাইব্রিড মোডের জন্য স্থানীয় Ventoy CLI প্রয়োজন। আমরা ক্লাউড মোডের সুপারিশ করি!",
   "deploy.macos_alert_title": "macOS Ventoy CLI ফ্রেশ ফরম্যাটিং অসমর্থিত৷",
-  "deploy.macos_alert_desc": "অফিসিয়াল Ventoy এখনও macOS-এ ফরম্যাটিং প্রোগ্রাম চালানো সমর্থন করে না। নতুন [হাইব্রিড ড্রাইভ] তৈরির জন্য Ventoy CLI প্রয়োজন। [ক্লাউড মোড (1s ক্লাউড বুট ড্রাইভ)] ব্যবহার করার পরামর্শ দেওয়া হচ্ছে!",
+  "deploy.macos_alert_desc":
+    "অফিসিয়াল Ventoy এখনও macOS-এ ফরম্যাটিং প্রোগ্রাম চালানো সমর্থন করে না। নতুন [হাইব্রিড ড্রাইভ] তৈরির জন্য Ventoy CLI প্রয়োজন। [ক্লাউড মোড (1s ক্লাউড বুট ড্রাইভ)] ব্যবহার করার পরামর্শ দেওয়া হচ্ছে!",
   "deploy.no_ventoy_title": "Ventoy CLI এক্সিকিউটেবল সনাক্ত করা যায়নি",
-  "deploy.no_ventoy_desc": "[হাইব্রিড ড্রাইভ] তৈরির জন্য স্থানীয়ভাবে ইনস্টল করা Ventoy CLI প্রয়োজন। সমর্থিত [ক্লাউড মোড] নির্বাচন করুন!",
+  "deploy.no_ventoy_desc":
+    "[হাইব্রিড ড্রাইভ] তৈরির জন্য স্থানীয়ভাবে ইনস্টল করা Ventoy CLI প্রয়োজন। সমর্থিত [ক্লাউড মোড] নির্বাচন করুন!",
   "deploy.result_batch_success": "{count}টি ডিস্কে ১-সেকেন্ড ক্লাউড ইনস্টল ডিস্ক সফলভাবে স্থাপন করা হয়েছে!",
   "deploy.result_success": "{targets}-এ মোড {mode} সফলভাবে স্থাপন করা হয়েছে",
   "deploy.alert_success": "ডিপ্লয়মেন্ট সফল!",
   "deploy.safely_eject_btn": "নিরাপদে USB ড্রাইভ বের করুন",
   "deploy.success_banner_title": "বুট ড্রাইভ সফলভাবে তৈরি হয়েছে!",
-  "deploy.success_banner_desc": "বুট ফাইল এবং ফার্মওয়্যার লেখা হয়েছে। ডেটা ক্ষতি রোধ করতে সংযোগ বিচ্ছিন্ন করার আগে নিরাপদে বের করুন।",
-  "deploy.toast_auto_ejected": "তৈরি সম্পন্ন হয়েছে! {count}টি USB ড্রাইভ স্বয়ংক্রিয়ভাবে নিরাপদে ইজেক্ট করা হয়েছে। সমস্ত ডেটা সংরক্ষিত হয়েছে।",
+  "deploy.success_banner_desc":
+    "বুট ফাইল এবং ফার্মওয়্যার লেখা হয়েছে। ডেটা ক্ষতি রোধ করতে সংযোগ বিচ্ছিন্ন করার আগে নিরাপদে বের করুন।",
+  "deploy.toast_auto_ejected":
+    "তৈরি সম্পন্ন হয়েছে! {count}টি USB ড্রাইভ স্বয়ংক্রিয়ভাবে নিরাপদে ইজেক্ট করা হয়েছে। সমস্ত ডেটা সংরক্ষিত হয়েছে।",
   "deploy.confirm_auto_eject_title": "লেখা সম্পন্ন — নিরাপদে বের করবেন?",
   "deploy.confirm_auto_eject_desc": "সমস্ত ডেটা সফলভাবে লেখা হয়েছে। আপনি কি এখন নিরাপদে USB ড্রাইভ বের করতে চান?",
   "deploy.confirm_auto_eject_yes": "নিরাপদে বের করুন",
@@ -235,7 +249,8 @@ export const bnBd: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "প্রথমে বাম প্যানেল থেকে একটি টার্গেট USB ড্রাইভ নির্বাচন করতে ক্লিক করুন!",
-  "vm.toast_not_installed": "QEMU এমুলেটর পাওয়া যায়নি! অনুগ্রহ করে কিউইএমইউ ইনস্টল করুন (ব্রু ইন্সটল কিমু বা পোর্ট ইন্সটল কিউমু)",
+  "vm.toast_not_installed":
+    "QEMU এমুলেটর পাওয়া যায়নি! অনুগ্রহ করে কিউইএমইউ ইনস্টল করুন (ব্রু ইন্সটল কিমু বা পোর্ট ইন্সটল কিউমু)",
   "vm.cfg_secure_boot": "SecureBoot অনুকরণ",
   "vm.cfg_accel": "হার্ডওয়্যার ত্বরণ",
   "vm.cfg_ram": "র‌্যাম বরাদ্দ",
@@ -290,7 +305,8 @@ export const bnBd: TranslationDict = {
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
   "confirm.title": "High-Risk Format সতর্কতা",
   "confirm.warning_title": "সতর্কতা: Formatting will erase all data!",
-  "confirm.warning_desc": "নির্বাচিত USB ড্রাইভ পুনরায় বিভাজন এবং বিন্যাস করা হবে। সমস্ত বিদ্যমান ফাইল সম্পূর্ণরূপে মুছে ফেলা হবে. আপনি গুরুত্বপূর্ণ ডেটা ব্যাক আপ করেছেন তা নিশ্চিত করুন!",
+  "confirm.warning_desc":
+    "নির্বাচিত USB ড্রাইভ পুনরায় বিভাজন এবং বিন্যাস করা হবে। সমস্ত বিদ্যমান ফাইল সম্পূর্ণরূপে মুছে ফেলা হবে. আপনি গুরুত্বপূর্ণ ডেটা ব্যাক আপ করেছেন তা নিশ্চিত করুন!",
   "confirm.mode_title": "স্থাপনা মোড:",
   "confirm.fs_title": "টার্গেট ফাইল সিস্টেম:",
   "confirm.disks_title": "ফর্ম্যাট করা ড্রাইভ ({count}):",
@@ -300,11 +316,14 @@ export const bnBd: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode নিশ্চিত করুনation",
   "confirm.title_danger": "Format সতর্কতা: Disk Initialization",
   "confirm.safe_banner_title": "ইন-প্লেস ইনক্রিমেন্টাল আপডেট নোটিশ (ডেটা সেফ)",
-  "confirm.safe_banner_desc": "Ventoy / UniBoot বুট গঠন লক্ষ্য ড্রাইভে সনাক্ত করা হয়েছে. সিস্টেম একটি বর্ধিত আপডেট স্কিপিং বিন্যাস সম্পাদন করবে। সমস্ত বিদ্যমান ফাইল এবং ISO 100% সংরক্ষিত!",
+  "confirm.safe_banner_desc":
+    "Ventoy / UniBoot বুট গঠন লক্ষ্য ড্রাইভে সনাক্ত করা হয়েছে. সিস্টেম একটি বর্ধিত আপডেট স্কিপিং বিন্যাস সম্পাদন করবে। সমস্ত বিদ্যমান ফাইল এবং ISO 100% সংরক্ষিত!",
   "confirm.mixed_banner_title": "স্মার্ট মিক্সড মোড: বুট ড্রাইভের জন্য ইন-প্লেস আপডেট, ব্ল্যাঙ্ক ড্রাইভের ফর্ম্যাট",
-  "confirm.mixed_banner_desc": "নির্বাচিত {ventoyCount} বুট ড্রাইভ (গুলি) (ইন-প্লেস আপডেট) এবং {blankCount} ফাঁকা ড্রাইভ (গুলি) (সম্পূর্ণ ফর্ম্যাট)।",
+  "confirm.mixed_banner_desc":
+    "নির্বাচিত {ventoyCount} বুট ড্রাইভ (গুলি) (ইন-প্লেস আপডেট) এবং {blankCount} ফাঁকা ড্রাইভ (গুলি) (সম্পূর্ণ ফর্ম্যাট)।",
   "confirm.danger_banner_title": "সতর্কতা: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "রাইটিং টার্গেট ডিভাইস (MBR/GPT) রি-পার্টিশন এবং ফরম্যাট করবে। নির্বাচিত ড্রাইভের সমস্ত বিদ্যমান ফাইল সম্পূর্ণরূপে মুছে ফেলা হবে!",
+  "confirm.danger_banner_desc":
+    "রাইটিং টার্গেট ডিভাইস (MBR/GPT) রি-পার্টিশন এবং ফরম্যাট করবে। নির্বাচিত ড্রাইভের সমস্ত বিদ্যমান ফাইল সম্পূর্ণরূপে মুছে ফেলা হবে!",
   "confirm.summary_title": "বুট স্থাপনার লক্ষ্য ড্রাইভ:",
   "confirm.smart_safe_tag": "স্মার্ট সেফ",
   "confirm.ventoy_group_title": "ইন-প্লেস আপগ্রেড ড্রাইভ (সমস্ত ISO সংরক্ষিত):",
@@ -322,10 +341,14 @@ export const bnBd: TranslationDict = {
   "confirm.no": "বাতিল",
   "confirm.will_format": "সম্পূর্ণ ফরম্যাট",
   "confirm.no_format": "স্মার্ট ইন-প্লেস আপডেট",
-  "deploy.toast_target_changed": "নির্বাচিত টার্গেট ডিস্ক পরিবর্তিত হয়েছে বা আর উপলব্ধ নেই। দয়া করে আবার স্ক্যান করুন।",
-  "deploy.toast_some_disks_removed": "{count}টি অনুপলব্ধ ডিস্ক স্বয়ংক্রিয়ভাবে সরানো হয়েছে, অবশিষ্ট ডিস্ক দিয়ে অব্যাহত রাখা হচ্ছে",
-  "deploy.error_system_disk_blocked": "⛔ নিষিদ্ধ: {disks} একটি সিস্টেম ডিস্ক। সিস্টেম ড্রাইভে USB বুট ডিস্ক স্থাপন করা যাবে না!",
-  "deploy.error_readonly_disk": "🔒 লেখা-সুরক্ষিত: {disks} শুধুমাত্র পঠনযোগ্য। দয়া করে লেখা সুরক্ষা সরান বা ভিন্ন USB ব্যবহার করুন",
+  "deploy.toast_target_changed":
+    "নির্বাচিত টার্গেট ডিস্ক পরিবর্তিত হয়েছে বা আর উপলব্ধ নেই। দয়া করে আবার স্ক্যান করুন।",
+  "deploy.toast_some_disks_removed":
+    "{count}টি অনুপলব্ধ ডিস্ক স্বয়ংক্রিয়ভাবে সরানো হয়েছে, অবশিষ্ট ডিস্ক দিয়ে অব্যাহত রাখা হচ্ছে",
+  "deploy.error_system_disk_blocked":
+    "⛔ নিষিদ্ধ: {disks} একটি সিস্টেম ডিস্ক। সিস্টেম ড্রাইভে USB বুট ডিস্ক স্থাপন করা যাবে না!",
+  "deploy.error_readonly_disk":
+    "🔒 লেখা-সুরক্ষিত: {disks} শুধুমাত্র পঠনযোগ্য। দয়া করে লেখা সুরক্ষা সরান বা ভিন্ন USB ব্যবহার করুন",
   "deploy.start_cloud_create": "ক্লাউড বুট ডিস্ক তৈরি করুন",
   "deploy.batch_update": "ব্যাচ তথ্য-সুরক্ষিত আপডেট শুরু করুন ({count}টি USB)",
   "deploy.batch_mixed": "ব্যাচ মিশ্র ডিপ্লয়মেন্ট শুরু করুন ({count}টি USB)",
@@ -456,8 +479,10 @@ export const bnBd: TranslationDict = {
   "diag.action_reformat_title": "পুনরায় ফরম্যাট (reformat)",
   "diag.action_remount_title": "পুনরায় মাউন্ট (remount)",
   "diag.action_retry_title": "পুনরায় চেষ্টা (retry)",
-  "diag.action_reformat_desc": "রাইটিং ব্যাহত হওয়ার ফলে পার্টিশন টেবিল বা ফাইল সিস্টেম ক্ষতিগ্রস্ত হয়েছে। নতুন করে ফরম্যাট করার পরামর্শ দেওয়া হচ্ছে।",
-  "diag.action_remount_desc": "লেখার সময় টার্গেট মাউন্ট পাথ বিচ্ছিন্ন হয়ে গেছে। দয়া করে USB ড্রাইভটি পুনরায় প্রবেশ করান বা ভলিউম মাউন্ট করুন।",
+  "diag.action_reformat_desc":
+    "রাইটিং ব্যাহত হওয়ার ফলে পার্টিশন টেবিল বা ফাইল সিস্টেম ক্ষতিগ্রস্ত হয়েছে। নতুন করে ফরম্যাট করার পরামর্শ দেওয়া হচ্ছে।",
+  "diag.action_remount_desc":
+    "লেখার সময় টার্গেট মাউন্ট পাথ বিচ্ছিন্ন হয়ে গেছে। দয়া করে USB ড্রাইভটি পুনরায় প্রবেশ করান বা ভলিউম মাউন্ট করুন।",
   "diag.action_retry_desc": "পরিবেশ এবং ডিভাইসের অবস্থা অক্ষত আছে। আপনি নিরাপদে পুনরায় চেষ্টা করতে পারেন।",
   "about.updating": "আপডেট হচ্ছে ({progress}%)",
   "about.updateTo": "{tag} এ অনলাইন আপডেট করুন",
@@ -474,7 +499,8 @@ export const bnBd: TranslationDict = {
   "dialog.textFilesFilter": "টেক্সট ফাইল (*.txt)",
   "dialog.allFilesFilter": "সমস্ত ফাইল (*.*)",
   "dialog.selectIsoTitle": "সিস্টেম ইমেজ ফাইল নির্বাচন করুন (*.iso, *.wim, *.img ইত্যাদি)",
-  "dialog.ventoyFilter": "Ventoy সোর্স ইমেজ (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy সোর্স ইমেজ (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "হ্যাশ গণনা করুন",
   "checksum.calculating": "হ্যাশ গণনা করা হচ্ছে...",
   "checksum.algo_label": "অ্যালগরিদম",
@@ -518,12 +544,15 @@ export const bnBd: TranslationDict = {
   "privilege.status_standard": "অননুমোদিত",
   "privilege.btn_elevate": "অ্যাডমিন অ্যাক্সেসের অনুরোধ করুন",
   "privilege.modal_title": "অ্যাডমিনিস্ট্রেটরের অনুমতি প্রয়োজন",
-  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "বুট ডেটা পড়তে এবং ডিস্কে লিখতে সিস্টেম অনুমোদনের প্রয়োজন",
   "privilege.reason_title": "কেন অ্যাডমিনিস্ট্রেটরের বিশেষাধিকার প্রয়োজন?",
-  "privilege.reason_desc": "অপারেটিং সিস্টেম কাঁচা সেক্টর এবং EFI পার্টিশন আলাদা রাখে। অনুমোদন সরাসরি শনাক্তকরণ এবং নিরাপদ ডিস্ক তৈরি নিশ্চিত করে।",
+  "privilege.reason_desc":
+    "অপারেটিং সিস্টেম কাঁচা সেক্টর এবং EFI পার্টিশন আলাদা রাখে। অনুমোদন সরাসরি শনাক্তকরণ এবং নিরাপদ ডিস্ক তৈরি নিশ্চিত করে।",
   "privilege.scope_title": "অ্যাক্সেসের পরিধি",
-  "privilege.scope_desc": "শুধুমাত্র নির্বাচিত বাহ্যিক USB ড্রাইভের মধ্যেই সীমাবদ্ধ। অভ্যন্তরীণ সিস্টেম ডিস্ক কখনই স্পর্শ করা হয় না।",
+  "privilege.scope_desc":
+    "শুধুমাত্র নির্বাচিত বাহ্যিক USB ড্রাইভের মধ্যেই সীমাবদ্ধ। অভ্যন্তরীণ সিস্টেম ডিস্ক কখনই স্পর্শ করা হয় না।",
   "privilege.safety_title": "নিরাপত্তা ও স্বচ্ছতা",
   "privilege.safety_desc": "পরিদর্শন সম্পূর্ণরূপে কেবল-পাঠযোগ্য এবং ডেটা অক্ষত থাকে; সোর্স কোড সম্পূর্ণ উন্মুক্ত।",
   "privilege.confirm_btn": "এখনই অনুমোদন দিন",

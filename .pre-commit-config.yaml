@@ -78,7 +78,8 @@ repos:
             docs/tapes/demo\.gif|
             docs/public/logo-1024\.png|
             assets/branding/app-icon\.png|
-            pkg/firmware/assets/.*
+            pkg/firmware/assets/.*|
+            pkg/installer/assets/.*
           )
         stages: [pre-commit, pre-merge-commit]
         description: "Prevent large files (>1MB) from being committed."

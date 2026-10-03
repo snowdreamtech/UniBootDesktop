@@ -393,5 +393,3 @@ func TestBuildVentoyConfigData_SecondaryMenuConfig(t *testing.T) {
 		t.Errorf("Expected VTOY_SECONDARY_BOOT_MENU to be '1' when enabled, got: %s", string(dataSecondary))
 	}
 }
-
-

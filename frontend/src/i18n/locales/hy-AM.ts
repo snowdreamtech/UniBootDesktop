@@ -24,7 +24,8 @@ export const hyAm: TranslationDict = {
   "common.langAuto": "Լեզու (ավտոմատ)",
   "common.lang": "Լեզու",
   "vm.startSuccess": "ՎՄ սիմուլյացիան հաջողությամբ մեկնարկել է սկավառակի համար՝ {disk} ({device})",
-  "vm.backendNotReady": "Backend API-ն պատրաստ չէ. ողբում է, որ բեռնվում է, խնդրում ենք վերագործարկել UniBoot հավելվածը:",
+  "vm.backendNotReady":
+    "Backend API-ն պատրաստ չէ. ողբում է, որ բեռնվում է, խնդրում ենք վերագործարկել UniBoot հավելվածը:",
   "vm.demoModeStart": "[Դեմո ռեժիմ] Սկսվում է QEMU սիմուլյատորի ստուգումը. {disk} ({device})",
   "vm.startFailed": "Չհաջողվեց գործարկել QEMU սիմուլյատորը՝ {error}",
   "disk.writingImageProgress": "Գրելու պատկեր ({fileIndex}/{totalFiles}). {currentFile} ({progress}%)",
@@ -108,8 +109,10 @@ export const hyAm: TranslationDict = {
   "disk.tag_boot_cloud": "Ամպային բեռնում",
   "disk.tag_boot_hybrid": "Հիբրիդային բեռնում",
   "disk.tag_boot_thirdparty": "Երրորդ կողմի բեռնում",
-  "confirm.cloud_to_hybrid_warn_title": "Ուշադրություն. Հիբրիդային ռեժիմին անցնելու համար պահանջվում է ամբողջական ձևաչափում",
-  "confirm.cloud_to_hybrid_warn_desc": "Այս սկավառակը գտնվում է զուտ Ամպային բեռնման ռեժիմում: Ventoy Հիբրիդային ռեժիմը պահանջում է MBR-ի և բաժանման աղյուսակի վերակառուցում, որը ԿՋՆՋԻ բոլոր տվյալներն ու ISO-ները:",
+  "confirm.cloud_to_hybrid_warn_title":
+    "Ուշադրություն. Հիբրիդային ռեժիմին անցնելու համար պահանջվում է ամբողջական ձևաչափում",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Այս սկավառակը գտնվում է զուտ Ամպային բեռնման ռեժիմում: Ventoy Հիբրիդային ռեժիմը պահանջում է MBR-ի և բաժանման աղյուսակի վերակառուցում, որը ԿՋՆՋԻ բոլոր տվյալներն ու ISO-ները:",
   "disk.tag_ssd": "Դյուրակիր SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Կոդավորված Drive",
@@ -137,13 +140,16 @@ export const hyAm: TranslationDict = {
   "log.level_error": "ՍԽԱԼ",
   "log.level_debug": "Կարգաբերում",
   "safe.title_cloud": "Հայտնաբերվել է առկա Ventoy/UniBoot սկավառակ (Ամպային ռեժիմը թարմացնում է միայն ESP բաժինը)",
-  "safe.desc_cloud": "Ամպային ռեժիմը պահպանում է UNIBOOT-ի երկու բաժիններով կառուցվածքը: ESP-ի թարմացումը պահպանում է բոլոր ISO ֆայլերը:",
+  "safe.desc_cloud":
+    "Ամպային ռեժիմը պահպանում է UNIBOOT-ի երկու բաժիններով կառուցվածքը: ESP-ի թարմացումը պահպանում է բոլոր ISO ֆայլերը:",
   "safe.title_hybrid": "Հայտնաբերվել է առկա Ventoy սկավառակ (Թարմացում տեղում հիբրիդային ռեժիմում)",
-  "safe.desc_hybrid": "Հիբրիդային ռեժիմը պահպանում է բոլոր ISO ֆայլերը առանց ֆորմատավորման՝ ապահով ներդնելով UniBoot մութ թեման և ամպային մենյուն:",
+  "safe.desc_hybrid":
+    "Հիբրիդային ռեժիմը պահպանում է բոլոր ISO ֆայլերը առանց ֆորմատավորման՝ ապահով ներդնելով UniBoot մութ թեման և ամպային մենյուն:",
   "common.optional": "Կամընտիր",
   "common.optional_test": "Կամընտիր փորձ",
   "iso.title": "Տեղական համակարգի պատկերի աղբյուրներ (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Ավելացրեք ISO ֆայլեր ավտոմատ պատճենելու համար /UNIBOOT/iso/ գրացուցակում Ventoy / UniBoot ուղղակի բեռնման համար:",
+  "iso.desc":
+    "Ավելացրեք ISO ֆայլեր ավտոմատ պատճենելու համար /UNIBOOT/iso/ գրացուցակում Ventoy / UniBoot ուղղակի բեռնման համար:",
   "iso.add_btn": "Ավելացնել պատկերի ֆայլեր",
   "iso.empty_title": "Սեղմեք՝ պատկերի ֆայլեր ավելացնելու համար (Աջակցում է մեկ կամ խմբաքանակի ընտրությանը)",
   "iso.empty_sub": "Աջակցում է .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw ձևաչափեր",
@@ -154,7 +160,8 @@ export const hyAm: TranslationDict = {
   "iso.drag_unsupported": "Աջակցվող պատկերի ֆայլեր չեն հայտնաբերվել (.iso, .wim, .img և այլն)",
   "iso.preflight_title": "Գրելուց առաջ ստուգում",
   "iso.conflict_title": "Նույն անունով ֆայլ գտնվեց",
-  "iso.conflict_desc": "Նպատակային USB-ի iso պանակում արդեն կա նույն անունով ֆայլ։ Ընտրեք գործողությունը։ Hash-ը չի համեմատվում։",
+  "iso.conflict_desc":
+    "Նպատակային USB-ի iso պանակում արդեն կա նույն անունով ֆայլ։ Ընտրեք գործողությունը։ Hash-ը չի համեմատվում։",
   "iso.conflict_action": "Գործողություն",
   "iso.conflict_keep_both": "Պահել",
   "iso.conflict_replace": "Վերագրել",
@@ -164,13 +171,17 @@ export const hyAm: TranslationDict = {
   "iso.conflict_confirm": "Հաստատել և շարունակել",
   "iso.preflight_failed": "Գրելուց առաջ ստուգումը ձախողվեց",
   "deploy.title": "Բեռնավորվող կրիչի ստեղծում և QEMU թեստ",
-  "deploy.desc_cloud": "Մաքուր iPXE ամպային բեռնավորում • Գերարագ երկու բաժանմունքների կարգավորում բազմաճարտարապետական iPXE ցանցային ծրագրով:",
-  "deploy.desc_hybrid": "Ventoy CLI տեղական շարժիչ • Ventoy հիբրիդային բաժանմունքի կարգավորում ISO-ի տեղական կառավարմամբ:",
+  "deploy.desc_cloud":
+    "Մաքուր iPXE ամպային բեռնավորում • Գերարագ երկու բաժանմունքների կարգավորում բազմաճարտարապետական iPXE ցանցային ծրագրով:",
+  "deploy.desc_hybrid":
+    "Ventoy CLI տեղական շարժիչ • Ventoy հիբրիդային բաժանմունքի կարգավորում ISO-ի տեղական կառավարմամբ:",
   "deploy.target_device": "Թիրախային սարք.",
   "deploy.batch_target": "Ընտրված է {count} USB կրիչ(ներ)",
   "deploy.start_create": "Ստեղծել բեռնավորման սկավառակ",
-  "deploy.tip_batch_update_all": "Խմբային թարմացում առանց տվյալների կորստի. Բոլոր {count} ընտրված USB կրիչները կթարմացվեն տեղում",
-  "deploy.tip_batch_mixed": "Խմբային խառը տեղադրում. {bootCount} կրիչ թարմացում առանց կորստի, {blankCount} կրիչ նոր ձևաչափում",
+  "deploy.tip_batch_update_all":
+    "Խմբային թարմացում առանց տվյալների կորստի. Բոլոր {count} ընտրված USB կրիչները կթարմացվեն տեղում",
+  "deploy.tip_batch_mixed":
+    "Խմբային խառը տեղադրում. {bootCount} կրիչ թարմացում առանց կորստի, {blankCount} կրիչ նոր ձևաչափում",
   "deploy.start_update": "Տեղում թարմացում (տվյալների անվտանգություն)",
   "deploy.batch_create": "Սկսեք խմբաքանակի տեղակայումը ({count} սկավառակ)",
   "deploy.writing": "Boot ծրագրակազմի փաթեթներ գրելը...",
@@ -185,21 +196,29 @@ export const hyAm: TranslationDict = {
   "deploy.tip_writing": "Բեռնախցիկի որոնվածը գրում է...",
   "deploy.tip_select_single": "Խնդրում ենք նախ ընտրել թիրախային USB կրիչ",
   "deploy.tip_select_batch": "Խնդրում ենք ստուգել թիրախային USB կրիչները խմբաքանակի տեղակայման համար",
-  "deploy.tip_macos_unsupported": "macOS-ը չի աջակցում հիբրիդային ռեժիմով մաքուր ֆորմատավորում (օգտագործեք ամպային ռեժիմ կամ նախ սկզբնավորեք Win/Linux-ում)",
-  "deploy.tip_need_ventoy": "Հիբրիդային ռեժիմը պահանջում է տեղական Ventoy CLI գործիքներ: Մենք խորհուրդ ենք տալիս Ամպային ռեժիմը:",
+  "deploy.tip_macos_unsupported":
+    "macOS-ը չի աջակցում հիբրիդային ռեժիմով մաքուր ֆորմատավորում (օգտագործեք ամպային ռեժիմ կամ նախ սկզբնավորեք Win/Linux-ում)",
+  "deploy.tip_need_ventoy":
+    "Հիբրիդային ռեժիմը պահանջում է տեղական Ventoy CLI գործիքներ: Մենք խորհուրդ ենք տալիս Ամպային ռեժիմը:",
   "deploy.macos_alert_title": "macOS Ventoy CLI թարմ ձևաչափումը չի աջակցվում",
-  "deploy.macos_alert_desc": "Պաշտոնական Ventoy-ը դեռ չի աջակցում ֆորմատավորման ծրագրի գործարկումը macOS-ում: Նոր [Հիբրիդային սկավառակ] ստեղծելու համար պահանջվում է Ventoy CLI: Խորհուրդ է տրվում օգտագործել [Ամպային ռեժիմը (1վ ամպային բեռնավորման սկավառակ)]:",
+  "deploy.macos_alert_desc":
+    "Պաշտոնական Ventoy-ը դեռ չի աջակցում ֆորմատավորման ծրագրի գործարկումը macOS-ում: Նոր [Հիբրիդային սկավառակ] ստեղծելու համար պահանջվում է Ventoy CLI: Խորհուրդ է տրվում օգտագործել [Ամպային ռեժիմը (1վ ամպային բեռնավորման սկավառակ)]:",
   "deploy.no_ventoy_title": "Ventoy CLI գործադիրը չի հայտնաբերվել",
-  "deploy.no_ventoy_desc": "[Հիբրիդային սկավառակ] ստեղծելու համար պահանջվում է տեղադրված Ventoy CLI: Խնդրում ենք ընտրել աջակցվող [Ամպային ռեժիմը]:",
-  "deploy.result_batch_success": "1 վայրկյանում ամպային տեղադրման սկավառակը հաջողությամբ տեղակայվեց {count} սկավառակի վրա:",
+  "deploy.no_ventoy_desc":
+    "[Հիբրիդային սկավառակ] ստեղծելու համար պահանջվում է տեղադրված Ventoy CLI: Խնդրում ենք ընտրել աջակցվող [Ամպային ռեժիմը]:",
+  "deploy.result_batch_success":
+    "1 վայրկյանում ամպային տեղադրման սկավառակը հաջողությամբ տեղակայվեց {count} սկավառակի վրա:",
   "deploy.result_success": "{mode} ռեժիմը հաջողությամբ տեղակայվեց {targets}-ի վրա",
   "deploy.alert_success": "Տեղակայումը հաջողվեց։",
   "deploy.safely_eject_btn": "Ապահով անջատել USB կրիչը",
   "deploy.success_banner_title": "Բեռնավորման սկավառակը հաջողությամբ ստեղծվեց:",
-  "deploy.success_banner_desc": "Բեռնման ֆայլերը և որոնվածը գրված են: Տվյալների կորստից խուսափելու համար անջատելուց առաջ անվտանգ դուրս բերեք սկավառակը:",
-  "deploy.toast_auto_ejected": "Ստեղծումն ավարտվեց: {count} USB կրիչ ավտոմատ ապահով անջատվեց: Բոլոր տվյալները գրանցված են:",
+  "deploy.success_banner_desc":
+    "Բեռնման ֆայլերը և որոնվածը գրված են: Տվյալների կորստից խուսափելու համար անջատելուց առաջ անվտանգ դուրս բերեք սկավառակը:",
+  "deploy.toast_auto_ejected":
+    "Ստեղծումն ավարտվեց: {count} USB կրիչ ավտոմատ ապահով անջատվեց: Բոլոր տվյալները գրանցված են:",
   "deploy.confirm_auto_eject_title": "Գրանցումն ավարտվեց — Ապահո՞վ անջատել:",
-  "deploy.confirm_auto_eject_desc": "Բոլոր տվյալները հաջողությամբ գրանցվել են: Ցանկանո՞ւմ եք հիմա ապահով անջատել USB կրիչը:",
+  "deploy.confirm_auto_eject_desc":
+    "Բոլոր տվյալները հաջողությամբ գրանցվել են: Ցանկանո՞ւմ եք հիմա ապահով անջատել USB կրիչը:",
   "deploy.confirm_auto_eject_yes": "Ապահով անջատել",
   "deploy.confirm_auto_eject_no": "Ոչ հիմա",
   "deploy.alert_fail": "Տեղակայումը ձախողվեց՝",
@@ -218,7 +237,8 @@ export const hyAm: TranslationDict = {
   "vm.boot_mode_bios": "BIOS (Legacy) ռեժիմ",
   "vm.boot_mode_auto": "Ավտոմատ ճանաչում",
   "vm.startSuccess_vm": "{name} սիմուլյացիոն թեստը հաջողությամբ մեկնարկեց",
-  "vm.desc_optional": "Ընտրովի ֆունկցիա. Նախադիտեք USB բեռնավորումը վիրտուալ մեքենայում առանց համակարգիչը վերաբեռնելու:",
+  "vm.desc_optional":
+    "Ընտրովի ֆունկցիա. Նախադիտեք USB բեռնավորումը վիրտուալ մեքենայում առանց համակարգիչը վերաբեռնելու:",
   "vm.installed": "QEMU հայտնաբերված է",
   "vm.not_installed": "QEMU չի հայտնաբերվել",
   "vm.target": "Թիրախային ստուգում:",
@@ -235,7 +255,8 @@ export const hyAm: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Խնդրում ենք սեղմել՝ ձախ վահանակից նախ նպատակային USB կրիչ ընտրելու համար:",
-  "vm.toast_not_installed": "QEMU էմուլյատորը չի գտնվել: Խնդրում ենք տեղադրել QEMU (brew install qemu կամ port install qemu)",
+  "vm.toast_not_installed":
+    "QEMU էմուլյատորը չի գտնվել: Խնդրում ենք տեղադրել QEMU (brew install qemu կամ port install qemu)",
   "vm.cfg_secure_boot": "SecureBoot սիմուլյացիա",
   "vm.cfg_accel": "Սարքաշարային արագացում",
   "vm.cfg_ram": "RAM հատկացում",
@@ -290,7 +311,8 @@ export const hyAm: TranslationDict = {
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
   "confirm.title": "High-Risk Format Զգուշացում",
   "confirm.warning_title": "Զգուշացում: Formatting will erase all data!",
-  "confirm.warning_desc": "Ընտրված USB կրիչը նորից կբաժանվի և կձևաչափվի: Բոլոր առկա ֆայլերը ամբողջությամբ կջնջվեն: Համոզվեք, որ դուք կրկնօրինակել եք կարևոր տվյալները:",
+  "confirm.warning_desc":
+    "Ընտրված USB կրիչը նորից կբաժանվի և կձևաչափվի: Բոլոր առկա ֆայլերը ամբողջությամբ կջնջվեն: Համոզվեք, որ դուք կրկնօրինակել եք կարևոր տվյալները:",
   "confirm.mode_title": "Տեղակայման ռեժիմ.",
   "confirm.fs_title": "Թիրախային ֆայլային համակարգ.",
   "confirm.disks_title": "Ձևաչափման ենթակա սկավառակներ ({count}):",
@@ -300,11 +322,15 @@ export const hyAm: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Հաստատելation",
   "confirm.title_danger": "Format Զգուշացում: Disk Initialization",
   "confirm.safe_banner_title": "Տեղում աճող թարմացման ծանուցում (տվյալների անվտանգություն)",
-  "confirm.safe_banner_desc": "Ventoy / UniBoot բեռնախցիկի կառուցվածքը հայտնաբերվել է թիրախային սկավառակի վրա: Համակարգը կկատարի թարմացման աստիճանական բաց թողնման ձևաչափ: Բոլոր առկա ֆայլերը և ISO-ները 100% պահպանված են:",
-  "confirm.mixed_banner_title": "Խելացի խառը ռեժիմ՝ տեղում թարմացում բեռնախցիկների համար, ձևաչափ՝ դատարկ սկավառակների համար",
-  "confirm.mixed_banner_desc": "Ընտրվել է {ventoyCount} բեռնման դրայվ(ներ) (տեղում թարմացում) և {blankCount} դատարկ դրայվ(ներ) (Լրիվ ձևաչափ):",
+  "confirm.safe_banner_desc":
+    "Ventoy / UniBoot բեռնախցիկի կառուցվածքը հայտնաբերվել է թիրախային սկավառակի վրա: Համակարգը կկատարի թարմացման աստիճանական բաց թողնման ձևաչափ: Բոլոր առկա ֆայլերը և ISO-ները 100% պահպանված են:",
+  "confirm.mixed_banner_title":
+    "Խելացի խառը ռեժիմ՝ տեղում թարմացում բեռնախցիկների համար, ձևաչափ՝ դատարկ սկավառակների համար",
+  "confirm.mixed_banner_desc":
+    "Ընտրվել է {ventoyCount} բեռնման դրայվ(ներ) (տեղում թարմացում) և {blankCount} դատարկ դրայվ(ներ) (Լրիվ ձևաչափ):",
   "confirm.danger_banner_title": "Զգուշացում: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Գրելը կվերաբաժանի և կձևավորի թիրախային սարքը (MBR/GPT): Ընտրված դրայվ(ներ)ում առկա բոլոր ֆայլերն ամբողջությամբ կջնջվեն:",
+  "confirm.danger_banner_desc":
+    "Գրելը կվերաբաժանի և կձևավորի թիրախային սարքը (MBR/GPT): Ընտրված դրայվ(ներ)ում առկա բոլոր ֆայլերն ամբողջությամբ կջնջվեն:",
   "confirm.summary_title": "Թիրախային կրիչներ բեռնման տեղակայման համար.",
   "confirm.smart_safe_tag": "Խելացի պաշտպանություն",
   "confirm.ventoy_group_title": "Տեղում արդիականացման կրիչներ (բոլոր ISO-ները պահպանված են).",
@@ -322,10 +348,14 @@ export const hyAm: TranslationDict = {
   "confirm.no": "Չեղարկել",
   "confirm.will_format": "Ամբողջական ֆորմատավորում",
   "confirm.no_format": "Խելացի տեղական թարմացում",
-  "deploy.toast_target_changed": "Ընտրված թիրախային սկավառակը փոխվել է կամ այլևս հասանելի չէ: Խնդրում ենք կրկին սկանավորել:",
-  "deploy.toast_some_disks_removed": "{count} անհասանելի սկավառակ ինքնաշխատ հեռացվել է, շարունակում մնացած սկավառակներով",
-  "deploy.error_system_disk_blocked": "⛔ Արգելափակված է: {disks}-ը համակարգային սկավառակ է: Չի կարող տեղադրել USB բեռնավորման սկավառակը համակարգային սկավառակին:",
-  "deploy.error_readonly_disk": "🔒 Գրելու պաշտպանություն: {disks}-ը միայն կարդալու համար է: Հեռացրեք գրելու պաշտպանությունը կամ օգտագործեք այլ USB",
+  "deploy.toast_target_changed":
+    "Ընտրված թիրախային սկավառակը փոխվել է կամ այլևս հասանելի չէ: Խնդրում ենք կրկին սկանավորել:",
+  "deploy.toast_some_disks_removed":
+    "{count} անհասանելի սկավառակ ինքնաշխատ հեռացվել է, շարունակում մնացած սկավառակներով",
+  "deploy.error_system_disk_blocked":
+    "⛔ Արգելափակված է: {disks}-ը համակարգային սկավառակ է: Չի կարող տեղադրել USB բեռնավորման սկավառակը համակարգային սկավառակին:",
+  "deploy.error_readonly_disk":
+    "🔒 Գրելու պաշտպանություն: {disks}-ը միայն կարդալու համար է: Հեռացրեք գրելու պաշտպանությունը կամ օգտագործեք այլ USB",
   "deploy.start_cloud_create": "Ստեղծել ամպային բեռնավորման սկավառակ",
   "deploy.batch_update": "Սկսել խմբային թարմացումը առանց տվյալների կորստի ({count} USB կրիչ)",
   "deploy.batch_mixed": "Սկսել խմբային խառը տեղադրումը ({count} USB կրիչ)",
@@ -350,7 +380,8 @@ export const hyAm: TranslationDict = {
   "inspector.fake_title": "Fake USB 3.0 Զգուշացում Alert!",
   "inspector.fake_desc": "Սարքը ցույց է տալիս USB 3.0, սակայն իրական PHY արագությունը ընդամենը {speed} է:",
   "inspector.genuine_title": "Ֆիզիկական ապարատային հաստատումն անցավ (Բնական USB 3.0+ սարք)",
-  "inspector.genuine_desc": "Ֆիզիկական PHY մակարդակը հաստատել է իսկական SuperSpeed/SuperSpeed+ կապ {speed} արագությամբ:",
+  "inspector.genuine_desc":
+    "Ֆիզիկական PHY մակարդակը հաստատել է իսկական SuperSpeed/SuperSpeed+ կապ {speed} արագությամբ:",
   "inspector.usb2_title": "Ստանդարտ USB 2.0 ինտերֆեյս",
   "inspector.usb2_desc": "Սարքի սարքավորումը USB 2.0 է, տեսական ֆիզիկական առավելագույն արագությունը 480 Մբ/վ:",
   "inspector.section_basic": "Սարքի հիմնական տեղեկություններ",
@@ -456,9 +487,12 @@ export const hyAm: TranslationDict = {
   "diag.action_reformat_title": "Վերաֆորմատավորել (reformat)",
   "diag.action_remount_title": "Վերամիացնել (remount)",
   "diag.action_retry_title": "Կրկին փորձել (retry)",
-  "diag.action_reformat_desc": "Գրանցման ընդհատումը վնասել է բաժինների աղյուսակը կամ ֆայլային համակարգը: Խորհուրդ է տրվում նորից ֆորմատավորել:",
-  "diag.action_remount_desc": "Թիրախային միացման ուղին անջատվել է գրանցման ընթացքում: Խնդրում ենք կրկին տեղադրել USB-ն կամ վերամիացնել սկավառակը:",
-  "diag.action_retry_desc": "Միջավայրը և սարքի կարգավիճակը անվնաս են: Դուք կարող եք ապահով կերպով կրկին փորձել տեղադրումը:",
+  "diag.action_reformat_desc":
+    "Գրանցման ընդհատումը վնասել է բաժինների աղյուսակը կամ ֆայլային համակարգը: Խորհուրդ է տրվում նորից ֆորմատավորել:",
+  "diag.action_remount_desc":
+    "Թիրախային միացման ուղին անջատվել է գրանցման ընթացքում: Խնդրում ենք կրկին տեղադրել USB-ն կամ վերամիացնել սկավառակը:",
+  "diag.action_retry_desc":
+    "Միջավայրը և սարքի կարգավիճակը անվնաս են: Դուք կարող եք ապահով կերպով կրկին փորձել տեղադրումը:",
   "about.updating": "Թարմացում ({progress}%)",
   "about.updateTo": "Օնլայն թարմացում մինչև {tag}",
   "about.downloading": "Բեռնվում է {progress}%",
@@ -474,7 +508,8 @@ export const hyAm: TranslationDict = {
   "dialog.textFilesFilter": "Տեքստային ֆայլեր (*.txt)",
   "dialog.allFilesFilter": "Բոլոր ֆայլերը (*.*)",
   "dialog.selectIsoTitle": "Ընտրեք համակարգի պատկերի ֆայլեր (*.iso, *.wim, *.img և այլն)",
-  "dialog.ventoyFilter": "Ventoy աղբյուրի պատկերներ (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy աղբյուրի պատկերներ (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Հաշվարկել Hash",
   "checksum.calculating": "Hash-ի հաշվարկում...",
   "checksum.algo_label": "Ալգորիթմ",
@@ -518,14 +553,19 @@ export const hyAm: TranslationDict = {
   "privilege.status_standard": "Չլիազորված",
   "privilege.btn_elevate": "Պահանջել ադմինիստրատորի մուտք",
   "privilege.modal_title": "Պահանջվում է ադմինիստրատորի թույլտվություն",
-  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
-  "privilege.modal_subtitle": "Բեռնման տվյալները կարդալու և սկավառակի վրա գրելու համար անհրաժեշտ է համակարգի թույլտվություն",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.modal_subtitle":
+    "Բեռնման տվյալները կարդալու և սկավառակի վրա գրելու համար անհրաժեշտ է համակարգի թույլտվություն",
   "privilege.reason_title": "Ինչո՞ւ է անհրաժեշտ ադմինիստրատորի արտոնությունը:",
-  "privilege.reason_desc": "Օպերացիոն համակարգը մեկուսացնում է հում սեկտորները և EFI բաժինները: Թույլտվությունը բացում է ուղիղ հայտնաբերումը և անվտանգ ստեղծումը:",
+  "privilege.reason_desc":
+    "Օպերացիոն համակարգը մեկուսացնում է հում սեկտորները և EFI բաժինները: Թույլտվությունը բացում է ուղիղ հայտնաբերումը և անվտանգ ստեղծումը:",
   "privilege.scope_title": "Մուտքի շրջանակ",
-  "privilege.scope_desc": "Խստորեն սահմանափակված է միայն ընտրված արտաքին USB կրիչներով: Ներքին սկավառակներին երբեք ձեռք չի տրվում:",
+  "privilege.scope_desc":
+    "Խստորեն սահմանափակված է միայն ընտրված արտաքին USB կրիչներով: Ներքին սկավառակներին երբեք ձեռք չի տրվում:",
   "privilege.safety_title": "Անվտանգություն և թափանցիկություն",
-  "privilege.safety_desc": "Ստուգումը կատարվում է բացառապես ընթերցման ռեժիմում և չի փչացնում տվյալները. կոդը լիովին բաց է:",
+  "privilege.safety_desc":
+    "Ստուգումը կատարվում է բացառապես ընթերցման ռեժիմում և չի փչացնում տվյալները. կոդը լիովին բաց է:",
   "privilege.confirm_btn": "Լիազորել հիմա",
   "privilege.cancel_btn": "Չեղարկել",
   "privilege.success_msg": "Ադմինիստրատորի արտոնությունները տրամադրված են",

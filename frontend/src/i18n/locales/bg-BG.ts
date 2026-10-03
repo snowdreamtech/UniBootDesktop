@@ -78,7 +78,8 @@ export const bgBg: TranslationDict = {
   "settings.cliFormattingFlags": "Флагове за форматиране на CLI на Ventoy",
   "settings.ventoyPlugins": "Ventoy плъгини за автоматизация (ventoy.json)",
   "app.title": "UniBoot Desktop",
-  "app.subtitle": "Инструмент за създаване на зареждащи дискове с двоен двигател UEFI/Legacy BIOS за всички архитектури",
+  "app.subtitle":
+    "Инструмент за създаване на зареждащи дискове с двоен двигател UEFI/Legacy BIOS за всички архитектури",
   "mode.cloud": "Облачен режим",
   "mode.hybrid": "Хибриден режим",
   "disk.select_title": "Изберете Целево USB Устройство",
@@ -109,7 +110,8 @@ export const bgBg: TranslationDict = {
   "disk.tag_boot_hybrid": "Хибридно зареждане",
   "disk.tag_boot_thirdparty": "Зареждане от трета страна",
   "confirm.cloud_to_hybrid_warn_title": "Внимание: Превключването към хибриден режим изисква пълно форматиране",
-  "confirm.cloud_to_hybrid_warn_desc": "Този диск е в режим на чисто облачно зареждане. Хибридният режим на Ventoy изисква повторно изграждане на MBR и таблицата с дялове, което ще ИЗТРИЕ всички данни и ISO!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Този диск е в режим на чисто облачно зареждане. Хибридният режим на Ventoy изисква повторно изграждане на MBR и таблицата с дялове, което ще ИЗТРИЕ всички данни и ISO!",
   "disk.tag_ssd": "Преносим SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Криптиран диск",
@@ -118,7 +120,8 @@ export const bgBg: TranslationDict = {
   "disk.tag_key": "Ключ за сигурност",
   "disk.tag_cdrom": "Виртуално CD-ROM",
   "disk.tooltip_uniboot_hybrid": "Ventoy / UniBoot зареждащ диск (Хибриден режим, безразрушително обновяване)",
-  "disk.tooltip_uniboot_cloud": "UniBoot Облачен зареждащ диск (Облачен режим, поддръжка на актуализация без изтриване)",
+  "disk.tooltip_uniboot_cloud":
+    "UniBoot Облачен зареждащ диск (Облачен режим, поддръжка на актуализация без изтриване)",
   "disk.tooltip_third_party_boot": "Открита е външна структура за зареждане",
   "log.title": "Център за дневници",
   "log.live": "Дневник на събитията на живо",
@@ -137,13 +140,16 @@ export const bgBg: TranslationDict = {
   "log.level_error": "ГРЕШКА",
   "log.level_debug": "Дебъг",
   "safe.title_cloud": "Открит е съществуващ Ventoy/UniBoot диск (Облачният режим обновява само ESP раздела)",
-  "safe.desc_cloud": "Облачният режим запазва структурата от два раздела на UNIBOOT. Обновяването на ESP запазва всички ISO файлове и данни!",
+  "safe.desc_cloud":
+    "Облачният режим запазва структурата от два раздела на UNIBOOT. Обновяването на ESP запазва всички ISO файлове и данни!",
   "safe.title_hybrid": "Открит е съществуващ Ventoy диск (Актуализация на място в хибриден режим)",
-  "safe.desc_hybrid": "Хибридният режим запазва всички съществуващи ISO файлове без форматиране, внедрявайки безопасно тъмната тема на UniBoot и менюто!",
+  "safe.desc_hybrid":
+    "Хибридният режим запазва всички съществуващи ISO файлове без форматиране, внедрявайки безопасно тъмната тема на UniBoot и менюто!",
   "common.optional": "По избор",
   "common.optional_test": "Незадължителен тест",
   "iso.title": "Локални източници на системни изображения (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Добавете ISO файлове за автоматично копиране в директорията /UNIBOOT/iso/ за директно зареждане на Ventoy / UniBoot.",
+  "iso.desc":
+    "Добавете ISO файлове за автоматично копиране в директорията /UNIBOOT/iso/ за директно зареждане на Ventoy / UniBoot.",
   "iso.add_btn": "Добавете файлове с изображения",
   "iso.empty_title": "Щракнете, за да добавите файлове с изображения (поддържа единичен или пакетен избор)",
   "iso.empty_sub": "Поддържа формати .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -154,7 +160,8 @@ export const bgBg: TranslationDict = {
   "iso.drag_unsupported": "Не са открити поддържани файлове с образи (.iso, .wim, .img и др.)",
   "iso.preflight_title": "Проверка преди запис",
   "iso.conflict_title": "Открито е дублирано име",
-  "iso.conflict_desc": "В папката iso на целевия USB вече има файл със същото име. Изберете действие. Hash не се сравнява.",
+  "iso.conflict_desc":
+    "В папката iso на целевия USB вече има файл със същото име. Изберете действие. Hash не се сравнява.",
   "iso.conflict_action": "Действие",
   "iso.conflict_keep_both": "Запази",
   "iso.conflict_replace": "Замени",
@@ -165,12 +172,15 @@ export const bgBg: TranslationDict = {
   "iso.preflight_failed": "Проверката преди запис не бе успешна",
   "deploy.title": "Създаване на стартиращ диск и QEMU тест",
   "deploy.desc_cloud": "Чисто iPXE облачно зареждане • Ултрабърза настройка с два дяла и мрежов фърмуер iPXE.",
-  "deploy.desc_hybrid": "Локален двигател Ventoy CLI • Настройка на хибриден дял на Ventoy с локално управление на ISO.",
+  "deploy.desc_hybrid":
+    "Локален двигател Ventoy CLI • Настройка на хибриден дял на Ventoy с локално управление на ISO.",
   "deploy.target_device": "Целево устройство:",
   "deploy.batch_target": "Избрано {count} USB устройство(а)",
   "deploy.start_create": "Създаване на зареждащ диск",
-  "deploy.tip_batch_update_all": "Групово обновяване без загуба на данни: всички {count} избрани USB ще бъдат обновени на място",
-  "deploy.tip_batch_mixed": "Групово смесено внедряване: {bootCount} USB обновяване без загуба на данни, {blankCount} USB пълно форматиране",
+  "deploy.tip_batch_update_all":
+    "Групово обновяване без загуба на данни: всички {count} избрани USB ще бъдат обновени на място",
+  "deploy.tip_batch_mixed":
+    "Групово смесено внедряване: {bootCount} USB обновяване без загуба на данни, {blankCount} USB пълно форматиране",
   "deploy.start_update": "Надграждане на място (безопасно за данни)",
   "deploy.batch_create": "Старт на пакетно внедряване ({count} дискове)",
   "deploy.writing": "Писане на стартиращи фърмуерни пакети...",
@@ -185,21 +195,27 @@ export const bgBg: TranslationDict = {
   "deploy.tip_writing": "Пише се фърмуер за зареждане...",
   "deploy.tip_select_single": "Моля, първо изберете целево USB устройство",
   "deploy.tip_select_batch": "Моля, проверете целевите USB устройства за пакетно внедряване",
-  "deploy.tip_macos_unsupported": "macOS не поддържа първоначално форматиране в хибриден режим (използвайте облачен режим или първо инициализирайте под Win/Linux)",
+  "deploy.tip_macos_unsupported":
+    "macOS не поддържа първоначално форматиране в хибриден режим (използвайте облачен режим или първо инициализирайте под Win/Linux)",
   "deploy.tip_need_ventoy": "Хибридният режим изисква локални инструменти Ventoy CLI. Препоръчваме Облачен режим!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Ново форматиране не се поддържа",
-  "deploy.macos_alert_desc": "Официалният Ventoy все още не поддържа стартиране на програмата за форматиране на macOS. За създаване на нов [Хибриден диск] е необходим Ventoy CLI. Препоръчва се използването на [Облачен режим (1s облачен стартиращ диск)]!",
+  "deploy.macos_alert_desc":
+    "Официалният Ventoy все още не поддържа стартиране на програмата за форматиране на macOS. За създаване на нов [Хибриден диск] е необходим Ventoy CLI. Препоръчва се използването на [Облачен режим (1s облачен стартиращ диск)]!",
   "deploy.no_ventoy_title": "Ventoy CLI изпълним файл не е открит",
-  "deploy.no_ventoy_desc": "Създаването на [Хибриден диск] изисква локално инсталиран Ventoy CLI. Моля, изберете поддържания [Облачен режим]!",
+  "deploy.no_ventoy_desc":
+    "Създаването на [Хибриден диск] изисква локално инсталиран Ventoy CLI. Моля, изберете поддържания [Облачен режим]!",
   "deploy.result_batch_success": "1-секундният облачен инсталационен диск е внедрен успешно на {count} диск(а)!",
   "deploy.result_success": "Режим {mode} е внедрен успешно на {targets}",
   "deploy.alert_success": "Разгръщането е успешно!",
   "deploy.safely_eject_btn": "Безопасно изваждане на USB устройството",
   "deploy.success_banner_title": "Зареждащият диск е създаден успешно!",
-  "deploy.success_banner_desc": "Файловете за зареждане и фърмуерът са записани. Извадете безопасно преди изключване, за да предотвратите загуба на данни.",
-  "deploy.toast_auto_ejected": "Създаването завърши! Автоматично са извадени безопасно {count} USB устройства. Всички данни са записани.",
+  "deploy.success_banner_desc":
+    "Файловете за зареждане и фърмуерът са записани. Извадете безопасно преди изключване, за да предотвратите загуба на данни.",
+  "deploy.toast_auto_ejected":
+    "Създаването завърши! Автоматично са извадени безопасно {count} USB устройства. Всички данни са записани.",
   "deploy.confirm_auto_eject_title": "Записът е завършен — Безопасно изваждане?",
-  "deploy.confirm_auto_eject_desc": "Всички данни бяха успешно записани. Желаете ли да извадите безопасно USB устройството сега?",
+  "deploy.confirm_auto_eject_desc":
+    "Всички данни бяха успешно записани. Желаете ли да извадите безопасно USB устройството сега?",
   "deploy.confirm_auto_eject_yes": "Безопасно изваждане",
   "deploy.confirm_auto_eject_no": "Не сега",
   "deploy.alert_fail": "Разгръщането е неуспешно:",
@@ -218,7 +234,8 @@ export const bgBg: TranslationDict = {
   "vm.boot_mode_bios": "Режим BIOS (Legacy)",
   "vm.boot_mode_auto": "Автоматично откриване",
   "vm.startSuccess_vm": "Тестът за симулация {name} стартира успешно",
-  "vm.desc_optional": "Задължителна опция: Преглед на стартирането от USB във виртуална машина без рестартиране на компютъра.",
+  "vm.desc_optional":
+    "Задължителна опция: Преглед на стартирането от USB във виртуална машина без рестартиране на компютъра.",
   "vm.installed": "Открит е QEMU",
   "vm.not_installed": "QEMU не е открит",
   "vm.target": "Цел на теста:",
@@ -229,13 +246,15 @@ export const bgBg: TranslationDict = {
   "vm.tip_launching": "Стартиране на QEMU емулатор...",
   "vm.tip_running": "Virtual machine is currently running. Target disk will be automatically remounted when closed.",
   "vm.tip_deploying": "Разполагане на стартиращи файлове, моля, изчакайте, докато приключи",
-  "vm.tip_not_installed": "QEMU емулаторът не е намерен. Моля, първо инсталирайте QEMU (преварване/инсталиране на порт qemu)",
+  "vm.tip_not_installed":
+    "QEMU емулаторът не е намерен. Моля, първо инсталирайте QEMU (преварване/инсталиране на порт qemu)",
   "vm.tip_select_target": "Моля, първо изберете целево USB устройство от левия панел",
   "vm.tip_ready": "Щракнете, за да стартирате QEMU VM, за да проверите USB буутлоудъра на текущия работен плот",
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Моля, щракнете, за да изберете първо целево USB устройство от левия панел!",
-  "vm.toast_not_installed": "QEMU емулаторът не е намерен! Моля, инсталирайте QEMU (brew install qemu или port install qemu)",
+  "vm.toast_not_installed":
+    "QEMU емулаторът не е намерен! Моля, инсталирайте QEMU (brew install qemu или port install qemu)",
   "vm.cfg_secure_boot": "Симулация на SecureBoot",
   "vm.cfg_accel": "Хардуерно ускорение",
   "vm.cfg_ram": "Разпределение на RAM",
@@ -290,7 +309,8 @@ export const bgBg: TranslationDict = {
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
   "confirm.title": "High-Risk Format Предупреждение",
   "confirm.warning_title": "Предупреждение: Formatting will erase all data!",
-  "confirm.warning_desc": "Избраното USB устройство ще бъде повторно разделено и форматирано. Всички съществуващи файлове ще бъдат изтрити напълно. Уверете се, че сте архивирали важни данни!",
+  "confirm.warning_desc":
+    "Избраното USB устройство ще бъде повторно разделено и форматирано. Всички съществуващи файлове ще бъдат изтрити напълно. Уверете се, че сте архивирали важни данни!",
   "confirm.mode_title": "Режим на внедряване:",
   "confirm.fs_title": "Целева файлова система:",
   "confirm.disks_title": "Дискове за форматиране ({count}):",
@@ -300,11 +320,15 @@ export const bgBg: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Потвърдиation",
   "confirm.title_danger": "Format Предупреждение: Disk Initialization",
   "confirm.safe_banner_title": "Известие за постепенна актуализация на място (безопасно за данните)",
-  "confirm.safe_banner_desc": "Ventoy / UniBoot структура за зареждане, открита на целевото устройство. Системата ще извърши инкрементален формат за пропускане на актуализацията. Всички съществуващи файлове и ISO са 100% запазени!",
-  "confirm.mixed_banner_title": "Интелигентен смесен режим: Актуализация на място за зареждащи устройства, форматиране за празни устройства",
-  "confirm.mixed_banner_desc": "Избрани {ventoyCount} устройство(а) за зареждане (актуализация на място) и {blankCount} празно устройство(а) (Пълен формат).",
+  "confirm.safe_banner_desc":
+    "Ventoy / UniBoot структура за зареждане, открита на целевото устройство. Системата ще извърши инкрементален формат за пропускане на актуализацията. Всички съществуващи файлове и ISO са 100% запазени!",
+  "confirm.mixed_banner_title":
+    "Интелигентен смесен режим: Актуализация на място за зареждащи устройства, форматиране за празни устройства",
+  "confirm.mixed_banner_desc":
+    "Избрани {ventoyCount} устройство(а) за зареждане (актуализация на място) и {blankCount} празно устройство(а) (Пълен формат).",
   "confirm.danger_banner_title": "Предупреждение: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Записването ще преразпредели и форматира целевото устройство (MBR/GPT). Всички съществуващи файлове на избрано устройство(а) ще бъдат напълно изтрити!",
+  "confirm.danger_banner_desc":
+    "Записването ще преразпредели и форматира целевото устройство (MBR/GPT). Всички съществуващи файлове на избрано устройство(а) ще бъдат напълно изтрити!",
   "confirm.summary_title": "Целеви дискове за внедряване на зареждане:",
   "confirm.smart_safe_tag": "Интелигентна защита",
   "confirm.ventoy_group_title": "Дискове за надграждане на място (запазени всички ISO):",
@@ -323,9 +347,12 @@ export const bgBg: TranslationDict = {
   "confirm.will_format": "Пълно форматиране",
   "confirm.no_format": "Интелигентно обновяване на място",
   "deploy.toast_target_changed": "Избраният целеви диск се промени или вече не е достъпен. Моля, сканирайте отново.",
-  "deploy.toast_some_disks_removed": "{count} недостъпни диска премахнати автоматично, продължаване с останалите дискове",
-  "deploy.error_system_disk_blocked": "⛔ Блокирано: {disks} е системен диск. Не може да се разположи USB стартов диск на системен диск!",
-  "deploy.error_readonly_disk": "🔒 Защита срещу запис: {disks} е само за четене. Моля, премахнете защитата срещу запис или използвайте друг USB",
+  "deploy.toast_some_disks_removed":
+    "{count} недостъпни диска премахнати автоматично, продължаване с останалите дискове",
+  "deploy.error_system_disk_blocked":
+    "⛔ Блокирано: {disks} е системен диск. Не може да се разположи USB стартов диск на системен диск!",
+  "deploy.error_readonly_disk":
+    "🔒 Защита срещу запис: {disks} е само за четене. Моля, премахнете защитата срещу запис или използвайте друг USB",
   "deploy.start_cloud_create": "Създаване на облачен зареждащ диск",
   "deploy.batch_update": "Стартиране на групово обновяване без загуба на данни ({count} USB)",
   "deploy.batch_mixed": "Стартиране на групово смесено внедряване ({count} USB)",
@@ -348,7 +375,8 @@ export const bgBg: TranslationDict = {
   "inspector.smart": "SMART здравен статус:",
   "inspector.sector": "Размер на сектора:",
   "inspector.fake_title": "Fake USB 3.0 Предупреждение Alert!",
-  "inspector.fake_desc": "Устройството рекламира USB 3.0/3.1, но действителната скорост на физическия слой се договаря само на {speed} (USB 2.0 High-Speed ​​PHY). Това устройство вероятно има фалшив фърмуер или фалшив син порт.",
+  "inspector.fake_desc":
+    "Устройството рекламира USB 3.0/3.1, но действителната скорост на физическия слой се договаря само на {speed} (USB 2.0 High-Speed ​​PHY). Това устройство вероятно има фалшив фърмуер или фалшив син порт.",
   "inspector.genuine_title": "Успешна проверка на физическия хардуер (истинско USB 3.0+ устройство)",
   "inspector.genuine_desc": "Физическият слой PHY установи истинска SuperSpeed/SuperSpeed+ връзка със скорост {speed}.",
   "inspector.usb2_title": "Стандартен USB 2.0 интерфейс",
@@ -456,14 +484,18 @@ export const bgBg: TranslationDict = {
   "diag.action_reformat_title": "Преформатиране (reformat)",
   "diag.action_remount_title": "Повторно монтиране (remount)",
   "diag.action_retry_title": "Повторен опит (retry)",
-  "diag.action_reformat_desc": "Прекъсването на записа повреди таблицата с дялове или файловата система. Препоръчва се ново форматиране.",
-  "diag.action_remount_desc": "Целевият път на монтиране се прекъсна по време на записа. Поставете отново USB устройството или монтирайте тома отново.",
-  "diag.action_retry_desc": "Средата и състоянието на устройството са изправни. Можете безопасно да опитате инсталацията отново.",
+  "diag.action_reformat_desc":
+    "Прекъсването на записа повреди таблицата с дялове или файловата система. Препоръчва се ново форматиране.",
+  "diag.action_remount_desc":
+    "Целевият път на монтиране се прекъсна по време на записа. Поставете отново USB устройството или монтирайте тома отново.",
+  "diag.action_retry_desc":
+    "Средата и състоянието на устройството са изправни. Можете безопасно да опитате инсталацията отново.",
   "about.updating": "Актуализиране ({progress}%)",
   "about.updateTo": "Онлайн актуализация до {tag}",
   "about.downloading": "Изтегляне {progress}%",
   "about.preparingDownload": "Подготовка за изтегляне на пакета...",
-  "about.updateReady": "Актуализацията е готова! Изтеглена в: {path}. Стартирайте пакета или рестартирайте приложението.",
+  "about.updateReady":
+    "Актуализацията е готова! Изтеглена в: {path}. Стартирайте пакета или рестартирайте приложението.",
   "about.updateDownloadFailed": "Изтеглянето на пакета с актуализация се провали. Проверете мрежовата връзка.",
   "about.downloadingGuiUpdate": "Изтегляне на актуализация на GUI ({progress}%)...",
   "about.updateCompleteRestart": "Изтеглянето на актуализацията приключи! Рестартирайте приложението, за да приложите.",
@@ -474,7 +506,8 @@ export const bgBg: TranslationDict = {
   "dialog.textFilesFilter": "Текстови файлове (*.txt)",
   "dialog.allFilesFilter": "Всички файлове (*.*)",
   "dialog.selectIsoTitle": "Изберете файлове с системни изображения (*.iso, *.wim, *.img и др.)",
-  "dialog.ventoyFilter": "Изходни изображения Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Изходни изображения Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Изчисли Хеш",
   "checksum.calculating": "Изчисляване на Хеш...",
   "checksum.algo_label": "Алгоритъм",
@@ -518,14 +551,18 @@ export const bgBg: TranslationDict = {
   "privilege.status_standard": "Неоторизиран",
   "privilege.btn_elevate": "Поискай администраторски достъп",
   "privilege.modal_title": "Изисква се разрешение от администратор",
-  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Изисква се системно разрешение за четене на данни за зареждане и запис на дискове",
   "privilege.reason_title": "Защо се изискват администраторски права?",
-  "privilege.reason_desc": "Операционната система изолира суровите сектори и EFI дяловете. Оторизацията позволява директно разпознаване и безопасно създаване.",
+  "privilege.reason_desc":
+    "Операционната система изолира суровите сектори и EFI дяловете. Оторизацията позволява директно разпознаване и безопасно създаване.",
   "privilege.scope_title": "Обхват на достъп",
-  "privilege.scope_desc": "Строго ограничено до избрани външни USB устройства. Вътрешните системни дискове никога не се засягат.",
+  "privilege.scope_desc":
+    "Строго ограничено до избрани външни USB устройства. Вътрешните системни дискове никога не се засягат.",
   "privilege.safety_title": "Безопасност и прозрачност",
-  "privilege.safety_desc": "Проверката е изцяло в режим само за четене и без разрушаване на данни; изходният код е напълно отворен.",
+  "privilege.safety_desc":
+    "Проверката е изцяло в режим само за четене и без разрушаване на данни; изходният код е напълно отворен.",
   "privilege.confirm_btn": "Оторизирай сега",
   "privilege.cancel_btn": "Отказ",
   "privilege.success_msg": "Администраторските права са предоставени",
