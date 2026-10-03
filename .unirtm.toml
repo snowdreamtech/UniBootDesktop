@@ -92,11 +92,16 @@ run = '''
     MODULE_PATH=$(go list -m)
     PKG="${MODULE_PATH}/internal/env"
     PROJECT_NAME="${MODULE_PATH##*/}"
+  BUILD_TAGS=""
+  if [ "$(go env GOOS)" = "linux" ] && command -v pkg-config >/dev/null 2>&1 && pkg-config --exists webkit2gtk-4.1 && ! pkg-config --exists webkit2gtk-4.0; then
+    BUILD_TAGS="-tags webkit2_41"
+  fi
   GOCACHE="$PWD/.cache/go" GOTMPDIR="$PWD/.cache/go-tmp" unirtm exec -- wails build \
     -clean \
     -trimpath \
     -m \
     -nosyncgomod \
+    $BUILD_TAGS \
     -ldflags "-s -w \
       -X '${PKG}.GitTag=${TAG}' \
       -X '${PKG}.CommitHash=${COMMIT}' \

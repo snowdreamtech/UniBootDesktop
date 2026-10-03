@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
 import { createServer } from "node:net";
-import { spawn } from "node:child_process";
+import { spawn, execSync } from "node:child_process";
 
 /**
  * Check if a TCP port is currently free on the specified host.
@@ -60,7 +60,34 @@ async function main() {
     console.log(`\x1b[32m[SmartPort] Frontend port ${frontend.port} is available\x1b[0m`);
   }
 
-  const args = ["dev", "-devserver", `localhost:${backend.port}`, ...process.argv.slice(2)];
+  const userArgs = process.argv.slice(2);
+  const autoTags = [];
+  if (process.platform === "linux") {
+    const hasTags = userArgs.some((arg) => arg === "-tags" || arg.startsWith("-tags="));
+    if (!hasTags) {
+      try {
+        let has40 = false;
+        try {
+          execSync("pkg-config --exists webkit2gtk-4.0", { stdio: "ignore" });
+          has40 = true;
+        } catch {
+          // webkit2gtk-4.0 not available
+        }
+        if (!has40) {
+          try {
+            execSync("pkg-config --exists webkit2gtk-4.1", { stdio: "ignore" });
+            autoTags.push("-tags", "webkit2_41");
+          } catch {
+            // neither available
+          }
+        }
+      } catch {
+        // pkg-config not available
+      }
+    }
+  }
+
+  const args = ["dev", "-devserver", `localhost:${backend.port}`, ...autoTags, ...userArgs];
 
   console.log(
     `\x1b[36m[SmartPort] Launching Wails Dev (Backend: localhost:${backend.port}, Frontend: localhost:${frontend.port})...\x1b[0m\n`
