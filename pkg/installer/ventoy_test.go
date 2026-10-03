@@ -110,7 +110,52 @@ func TestDeployVentoyVhdBoot_RecoverCorruptedZeroByte(t *testing.T) {
 	}
 }
 
-func TestWriteVentoyConfig_IncludesVhdBoot(t *testing.T) {
+func TestDeployVentoyWimBoot_Fresh(t *testing.T) {
+	tempDir := t.TempDir()
+	ventoyDir := filepath.Join(tempDir, "ventoy")
+
+	if err := DeployVentoyWimBoot(ventoyDir); err != nil {
+		t.Fatalf("DeployVentoyWimBoot failed on fresh directory: %v", err)
+	}
+
+	targetFile := filepath.Join(ventoyDir, "ventoy_wimboot.img")
+	info, err := os.Stat(targetFile)
+	if err != nil {
+		t.Fatalf("Expected ventoy_wimboot.img to exist: %v", err)
+	}
+	if info.Size() == 0 {
+		t.Fatalf("Expected ventoy_wimboot.img to be non-empty")
+	}
+}
+
+func TestDeployVentoyWimBoot_Idempotent(t *testing.T) {
+	tempDir := t.TempDir()
+	ventoyDir := filepath.Join(tempDir, "ventoy")
+
+	if err := DeployVentoyWimBoot(ventoyDir); err != nil {
+		t.Fatalf("Initial DeployVentoyWimBoot failed: %v", err)
+	}
+
+	targetFile := filepath.Join(ventoyDir, "ventoy_wimboot.img")
+	info1, err := os.Stat(targetFile)
+	if err != nil {
+		t.Fatalf("Stat failed: %v", err)
+	}
+
+	if err := DeployVentoyWimBoot(ventoyDir); err != nil {
+		t.Fatalf("Second DeployVentoyWimBoot failed: %v", err)
+	}
+
+	info2, err := os.Stat(targetFile)
+	if err != nil {
+		t.Fatalf("Stat failed: %v", err)
+	}
+	if info1.ModTime() != info2.ModTime() {
+		t.Errorf("Expected ventoy_wimboot.img not to be overwritten if already present and non-empty")
+	}
+}
+
+func TestWriteVentoyConfig_IncludesVhdAndWimBoot(t *testing.T) {
 	mountDir := t.TempDir()
 
 	if err := WriteVentoyConfig(mountDir); err != nil {
@@ -118,11 +163,20 @@ func TestWriteVentoyConfig_IncludesVhdBoot(t *testing.T) {
 	}
 
 	vhdBootPath := filepath.Join(mountDir, "ventoy", "ventoy_vhdboot.img")
-	info, err := os.Stat(vhdBootPath)
+	infoVhd, err := os.Stat(vhdBootPath)
 	if err != nil {
 		t.Fatalf("Expected ventoy_vhdboot.img to exist in mountDir: %v", err)
 	}
-	if info.Size() == 0 {
+	if infoVhd.Size() == 0 {
 		t.Fatalf("Expected ventoy_vhdboot.img to have non-zero size")
+	}
+
+	wimBootPath := filepath.Join(mountDir, "ventoy", "ventoy_wimboot.img")
+	infoWim, err := os.Stat(wimBootPath)
+	if err != nil {
+		t.Fatalf("Expected ventoy_wimboot.img to exist in mountDir: %v", err)
+	}
+	if infoWim.Size() == 0 {
+		t.Fatalf("Expected ventoy_wimboot.img to have non-zero size")
 	}
 }
