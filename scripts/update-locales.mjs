@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process";
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -5,6 +6,7 @@ import { fileURLToPath } from "node:url";
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const localesDir = resolve(projectRoot, "frontend/src/i18n/locales");
 const isCheckMode = process.argv.includes("--check");
+const isFormatOnly = process.argv.includes("--format");
 
 /**
  * Converts a locale code like "zh-CN" or "sr-Latn" to camelCase identifier "zhCn" or "srLatn".
@@ -22,17 +24,43 @@ function toCamelCase(code) {
 
 /**
  * Extracts key-value pairs from a locale TypeScript file.
+ * Supports single/double quotes, Prettier line-wrapped keys, and trailing comments.
  * @param {string} content
  * @returns {Map<string, string>}
  */
 function parseLocaleEntries(content) {
   const map = new Map();
-  const regex = /^\s*"([^"\\]*(?:\\.[^"\\]*)*)"\s*:\s*"((?:[^"\\]|\\.)*)"\s*,?\s*$/gm;
+  const regex =
+    /^\s*(?:"([^"\\]*(?:\\.[^"\\]*)*)"|'([^'\\]*(?:\\.[^'\\]*)*)')\s*:\s*(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)')\s*,?\s*(?:\/\/.*)?$/gm;
   let match;
   while ((match = regex.exec(content)) !== null) {
-    map.set(match[1], match[2]);
+    const key = match[1] ?? match[2];
+    const value = match[3] ?? match[4];
+    map.set(key, value);
   }
   return map;
+}
+
+/**
+ * Formats given file paths using Prettier to maintain 100% style consistency with unirtm verify.
+ * @param {string[]} filePaths
+ */
+function formatFilesWithPrettier(filePaths) {
+  if (!filePaths || filePaths.length === 0) return;
+  const args = filePaths.map((f) => `"${f}"`).join(" ");
+  try {
+    execSync(`prettier --write ${args}`, { stdio: "inherit" });
+  } catch {
+    try {
+      execSync(`unirtm exec -- prettier --write ${args}`, { stdio: "inherit" });
+    } catch {
+      try {
+        execSync(`npx prettier --write ${args}`, { stdio: "inherit" });
+      } catch (err) {
+        console.warn("⚠️  Warning: could not run prettier on updated locale files:", err.message);
+      }
+    }
+  }
 }
 
 /**
@@ -59,6 +87,12 @@ function generateLocaleContent(varName, entries) {
 }
 
 async function main() {
+  if (isFormatOnly) {
+    console.log(`Formatting all locale files in ${localesDir} with Prettier...`);
+    formatFilesWithPrettier([resolve(localesDir, "*.ts")]);
+    process.exit(0);
+  }
+
   const enUsPath = resolve(localesDir, "en-US.ts");
   const enUsContent = await readFile(enUsPath, "utf-8");
   const enUsEntries = parseLocaleEntries(enUsContent);
@@ -66,7 +100,7 @@ async function main() {
 
   const allFiles = (await readdir(localesDir)).filter((file) => file.endsWith(".ts"));
   let hasMissing = false;
-  let updatedCount = 0;
+  const updatedFiles = [];
 
   console.log(
     `Checking ${allFiles.length} locale files against en-US canonical schema (${canonicalKeys.length} keys)...`
@@ -104,7 +138,7 @@ async function main() {
         const varName = toCamelCase(localeCode);
         const newContent = generateLocaleContent(varName, mergedEntries);
         await writeFile(filePath, newContent, "utf-8");
-        updatedCount++;
+        updatedFiles.push(filePath);
         console.log(`✅ [${localeCode}] synchronized and updated.`);
       }
     }
@@ -119,8 +153,10 @@ async function main() {
       process.exit(0);
     }
   } else {
-    if (updatedCount > 0) {
-      console.log(`\n✨ Successfully updated ${updatedCount} locale files.`);
+    if (updatedFiles.length > 0) {
+      console.log(`\n🎨 Formatting ${updatedFiles.length} updated files with Prettier...`);
+      formatFilesWithPrettier(updatedFiles);
+      console.log(`\n✨ Successfully updated and formatted ${updatedFiles.length} locale files.`);
     } else {
       console.log(`\n🎉 All ${allFiles.length} locale files already up to date!`);
     }
