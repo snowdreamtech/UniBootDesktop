@@ -1156,6 +1156,26 @@ backend = "npm"
 
 [tools."npm:eslint"."platforms.windows-arm64"]
 
+[[tools."npm:eslint"]]
+version = "10.12.0"
+backend = "npm"
+
+[tools."npm:eslint"."platforms.linux-amd64"]
+
+[tools."npm:eslint"."platforms.linux-amd64-musl"]
+
+[tools."npm:eslint"."platforms.linux-arm64"]
+
+[tools."npm:eslint"."platforms.linux-arm64-musl"]
+
+[tools."npm:eslint"."platforms.macos-amd64"]
+
+[tools."npm:eslint"."platforms.macos-arm64"]
+
+[tools."npm:eslint"."platforms.windows-amd64"]
+
+[tools."npm:eslint"."platforms.windows-arm64"]
+
 [[tools."npm:markdownlint-cli2"]]
 version = "0.23.2"
 backend = "npm"
