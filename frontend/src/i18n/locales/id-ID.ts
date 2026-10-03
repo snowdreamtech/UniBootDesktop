@@ -288,8 +288,6 @@ export const idId: TranslationDict = {
   "settings.ventoy_win11_bypass": "Lewati Pemeriksaan TPM/CPU/RAM Windows 11:",
   "settings.ventoy_timeout": "Batas Waktu Menu Ventoy (Detik):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Peringatan",
   "confirm.warning_title": "Peringatan: Formatting will erase all data!",
   "confirm.warning_desc": "Drive USB yang dipilih akan dipartisi ulang dan diformat. Semua file yang ada akan terhapus seluruhnya. Pastikan Anda telah membuat cadangan data penting!",

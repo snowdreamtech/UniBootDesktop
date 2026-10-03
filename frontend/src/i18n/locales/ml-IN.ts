@@ -288,8 +288,6 @@ export const mlIn: TranslationDict = {
   "settings.ventoy_win11_bypass": "Windows 11 TPM/CPU/RAM ചെക്ക് ബൈപാസ് ചെയ്യുക:",
   "settings.ventoy_timeout": "വെൻ്റോയ് മെനു ടൈംഔട്ട് (സെക്കൻഡ്):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format മുന്നറിയിപ്പ്",
   "confirm.warning_title": "മുന്നറിയിപ്പ്: Formatting will erase all data!",
   "confirm.warning_desc": "തിരഞ്ഞെടുത്ത USB ഡ്രൈവ് വീണ്ടും പാർട്ടീഷൻ ചെയ്യുകയും ഫോർമാറ്റ് ചെയ്യുകയും ചെയ്യും. നിലവിലുള്ള എല്ലാ ഫയലുകളും പൂർണ്ണമായും മായ്‌ക്കും. നിങ്ങൾ പ്രധാനപ്പെട്ട ഡാറ്റ ബാക്കപ്പ് ചെയ്തിട്ടുണ്ടെന്ന് ഉറപ്പാക്കുക!",

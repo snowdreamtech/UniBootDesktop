@@ -288,8 +288,6 @@ export const ocFr: TranslationDict = {
   "settings.ventoy_win11_bypass": "Contornar Windows 11 TPM/CPU/RAM Verificacion:",
   "settings.ventoy_timeout": "Temps d'espèra del menú Ventoy (Segondas):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Avertiment",
   "confirm.warning_title": "Avertiment: Formatting will erase all data!",
   "confirm.warning_desc": "La unitat USB seleccionada serà reparticionada e formatada. Totes los fichièrs existents seràn completament escafats. Asseguratz-vos d'aver fach una còpia de seguretat de donadas importantas!",

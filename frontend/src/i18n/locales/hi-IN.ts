@@ -288,8 +288,6 @@ export const hiIn: TranslationDict = {
   "settings.ventoy_win11_bypass": "विंडोज़ 11 टीपीएम/सीपीयू/रैम को बायपास करें चेक:",
   "settings.ventoy_timeout": "वेंटॉय मेनू टाइमआउट (सेकंड):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format चेतावनी",
   "confirm.warning_title": "चेतावनी: Formatting will erase all data!",
   "confirm.warning_desc": "चयनित USB ड्राइव को पुनः विभाजित और स्वरूपित किया जाएगा। सभी मौजूदा फ़ाइलें पूरी तरह मिटा दी जाएंगी. सुनिश्चित करें कि आपने महत्वपूर्ण डेटा का बैकअप ले लिया है!",

@@ -288,8 +288,6 @@ export const trTr: TranslationDict = {
   "settings.ventoy_win11_bypass": "Windows 11 TPM/CPU/RAM Kontrolünü Atla:",
   "settings.ventoy_timeout": "Ventoy Menü Zaman Aşımı (Saniye):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "Yüksek Riskli Biçimlendirme Uyarısı",
   "confirm.warning_title": "Uyarı: Biçimlendirme tüm verileri silecektir!",
   "confirm.warning_desc": "Seçilen USB sürücü yeniden bölümlenecek ve biçimlendirilecektir. Mevcut tüm dosyalar tamamen silinecektir. Önemli verilerinizi yedeklediğinizden emin olun!",

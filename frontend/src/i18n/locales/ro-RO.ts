@@ -288,8 +288,6 @@ export const roRo: TranslationDict = {
   "settings.ventoy_win11_bypass": "Ocoliți verificarea TPM/CPU/RAM din Windows 11:",
   "settings.ventoy_timeout": "Timeout meniul Ventoy (secunde):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Avertisment",
   "confirm.warning_title": "Avertisment: Formatting will erase all data!",
   "confirm.warning_desc": "Unitatea USB selectată va fi re-partiționată și formatată. Toate fișierele existente vor fi șterse complet. Asigurați-vă că ați făcut o copie de rezervă a datelor importante!",

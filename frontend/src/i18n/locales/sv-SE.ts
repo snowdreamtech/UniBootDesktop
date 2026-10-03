@@ -288,8 +288,6 @@ export const svSe: TranslationDict = {
   "settings.ventoy_win11_bypass": "Förbigå Windows 11 TPM/CPU/RAM-kontroll:",
   "settings.ventoy_timeout": "Ventoy Menu Timeout (sekunder):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Varning",
   "confirm.warning_title": "Varning: Formatting will erase all data!",
   "confirm.warning_desc": "Den valda USB-enheten kommer att ompartitioneras och formateras. Alla befintliga filer kommer att raderas helt. Se till att du har säkerhetskopierat viktig data!",

@@ -288,8 +288,6 @@ export const taIn: TranslationDict = {
   "settings.ventoy_win11_bypass": "பைபாஸ் Windows 11 TPM/CPU/RAM சரிபார்ப்பு:",
   "settings.ventoy_timeout": "வென்டோய் மெனு நேரம் முடிந்தது (வினாடிகள்):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format எச்சரிக்கை",
   "confirm.warning_title": "எச்சரிக்கை: Formatting will erase all data!",
   "confirm.warning_desc": "தேர்ந்தெடுக்கப்பட்ட USB டிரைவ் மீண்டும் பகிர்வு செய்யப்பட்டு வடிவமைக்கப்படும். ஏற்கனவே உள்ள அனைத்து கோப்புகளும் முற்றிலும் அழிக்கப்படும். முக்கியமான தரவை காப்புப் பிரதி எடுத்துள்ளீர்கள் என்பதை உறுதிப்படுத்திக் கொள்ளுங்கள்!",

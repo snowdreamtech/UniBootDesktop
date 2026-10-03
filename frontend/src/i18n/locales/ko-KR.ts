@@ -288,8 +288,6 @@ export const koKr: TranslationDict = {
   "settings.ventoy_win11_bypass": "Windows 11 TPM/CPU/RAM 요구사항 우회:",
   "settings.ventoy_timeout": "Ventoy 메뉴 제한 시간 (초):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "고위험 포맷 경고",
   "confirm.warning_title": "경고: 포맷 시 모든 데이터가 삭제됩니다!",
   "confirm.warning_desc": "선택한 디스크가 재분할 및 포맷됩니다. 모든 기존 파일이 완전히 삭제됩니다. 중요한 데이터를 백업했는지 확인하세요!",

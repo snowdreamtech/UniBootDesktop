@@ -79,10 +79,16 @@ async function main() {
     const currentEntries = parseLocaleEntries(content);
 
     const missingKeys = canonicalKeys.filter((key) => !currentEntries.has(key));
+    const obsoleteKeys = Array.from(currentEntries.keys()).filter((key) => !canonicalKeys.includes(key));
 
-    if (missingKeys.length > 0) {
+    if (missingKeys.length > 0 || obsoleteKeys.length > 0) {
       hasMissing = true;
-      console.warn(`⚠️  [${localeCode}] missing ${missingKeys.length} keys: ${missingKeys.join(", ")}`);
+      if (missingKeys.length > 0) {
+        console.warn(`⚠️  [${localeCode}] missing ${missingKeys.length} keys: ${missingKeys.join(", ")}`);
+      }
+      if (obsoleteKeys.length > 0) {
+        console.warn(`🗑️  [${localeCode}] removing ${obsoleteKeys.length} obsolete keys: ${obsoleteKeys.join(", ")}`);
+      }
 
       if (!isCheckMode) {
         // Backfill missing keys in canonical order using en-US fallback

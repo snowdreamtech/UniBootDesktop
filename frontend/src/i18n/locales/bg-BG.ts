@@ -288,8 +288,6 @@ export const bgBg: TranslationDict = {
   "settings.ventoy_win11_bypass": "Заобикаляне на Windows 11 TPM/CPU/RAM Проверка:",
   "settings.ventoy_timeout": "Изчакване на менюто на Ventoy (секунди):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Предупреждение",
   "confirm.warning_title": "Предупреждение: Formatting will erase all data!",
   "confirm.warning_desc": "Избраното USB устройство ще бъде повторно разделено и форматирано. Всички съществуващи файлове ще бъдат изтрити напълно. Уверете се, че сте архивирали важни данни!",

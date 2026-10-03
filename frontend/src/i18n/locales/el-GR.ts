@@ -288,8 +288,6 @@ export const elGr: TranslationDict = {
   "settings.ventoy_win11_bypass": "Παράκαμψη ελέγχου TPM/CPU/RAM των Windows 11:",
   "settings.ventoy_timeout": "Χρόνος λήξης του μενού Ventoy (δευτερόλεπτα):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Προειδοποίηση",
   "confirm.warning_title": "Προειδοποίηση: Formatting will erase all data!",
   "confirm.warning_desc": "Η επιλεγμένη μονάδα USB θα διαμεριστεί εκ νέου και θα μορφοποιηθεί. Όλα τα υπάρχοντα αρχεία θα διαγραφούν εντελώς. Βεβαιωθείτε ότι έχετε δημιουργήσει αντίγραφα ασφαλείας σημαντικών δεδομένων!",

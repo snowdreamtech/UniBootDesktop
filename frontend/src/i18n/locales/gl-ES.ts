@@ -288,8 +288,6 @@ export const glEs: TranslationDict = {
   "settings.ventoy_win11_bypass": "Omitir a comprobación de TPM/CPU/RAM de Windows 11:",
   "settings.ventoy_timeout": "Tempo de espera do menú Ventoy (segundos):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Aviso",
   "confirm.warning_title": "Aviso: Formatting will erase all data!",
   "confirm.warning_desc": "A unidade USB seleccionada volverase a particionar e formatear. Todos os ficheiros existentes borraranse por completo. Asegúrate de facer unha copia de seguranza dos datos importantes.",

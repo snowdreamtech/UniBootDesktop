@@ -288,8 +288,6 @@ export const heIl: TranslationDict = {
   "settings.ventoy_win11_bypass": "עוקף את Windows 11 בדיקת TPM/CPU/RAM:",
   "settings.ventoy_timeout": "פסק זמן לתפריט Ventoy (שניות):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format אזהרה",
   "confirm.warning_title": "אזהרה: Formatting will erase all data!",
   "confirm.warning_desc": "כונן ה-USB שנבחר יחולק מחדש ויפורמט. כל הקבצים הקיימים יימחקו לחלוטין. ודא שגיבית נתונים חשובים!",

@@ -288,8 +288,6 @@ export const beBy: TranslationDict = {
   "settings.ventoy_win11_bypass": "Абыход Windows 11 TPM/CPU/RAM Check:",
   "settings.ventoy_timeout": "Тайм-аўт меню Ventoy (секунды):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Папярэджанне",
   "confirm.warning_title": "Папярэджанне: Formatting will erase all data!",
   "confirm.warning_desc": "Выбраны USB-назапашвальнік будзе паўторна разбіты на раздзелы і адфарматаваны. Усе існуючыя файлы будуць цалкам выдалены. Пераканайцеся, што вы стварылі рэзервовую копію важных даных!",

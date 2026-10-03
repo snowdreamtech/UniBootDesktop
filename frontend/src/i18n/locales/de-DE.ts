@@ -288,8 +288,6 @@ export const deDe: TranslationDict = {
   "settings.ventoy_win11_bypass": "Windows 11 TPM/CPU/RAM-Prüfung umgehen:",
   "settings.ventoy_timeout": "Ventoy-Menü-Time-out (Sekunden):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "Hochrisiko-Formatierungswarnung",
   "confirm.warning_title": "Warnung: Formatierung löscht alle Daten!",
   "confirm.warning_desc": "Das ausgewählte Datenträger wird neu partitioniert und formatiert. Alle vorhandenen Dateien werden vollständig gelöscht. Stellen Sie sicher, dass Sie wichtige Daten gesichert haben!",

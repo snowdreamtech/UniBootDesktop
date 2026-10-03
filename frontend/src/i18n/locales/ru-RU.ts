@@ -288,8 +288,6 @@ export const ruRu: TranslationDict = {
   "settings.ventoy_win11_bypass": "Обход проверки требований Windows 11 (TPM/CPU/RAM):",
   "settings.ventoy_timeout": "Таймаут меню Ventoy (Секунды):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "Предупреждение об опасном форматировании",
   "confirm.warning_title": "Внимание: форматирование удалит все данные!",
   "confirm.warning_desc": "Выбранный диск будет заново размечен и отформатирован. Все существующие файлы будут полностью удалены. Убедитесь, что вы создали резервную копию важных данных!",

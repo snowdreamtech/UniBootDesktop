@@ -288,8 +288,6 @@ export const hrHr: TranslationDict = {
   "settings.ventoy_win11_bypass": "Zaobići Windows 11 TPM/CPU/RAM provjeru:",
   "settings.ventoy_timeout": "Istek izbornika Ventoy (sekunde):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Upozorenje",
   "confirm.warning_title": "Upozorenje: Formatting will erase all data!",
   "confirm.warning_desc": "Odabrani USB pogon bit će ponovno particioniran i formatiran. Sve postojeće datoteke bit će potpuno izbrisane. Provjerite jeste li sigurnosno kopirali važne podatke!",
