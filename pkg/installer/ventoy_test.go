@@ -4,6 +4,8 @@
 package installer
 
 import (
+	"bytes"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -290,3 +292,81 @@ func TestWriteVentoyConfig_NonDestructiveExistingConfig(t *testing.T) {
 		t.Errorf("Expected VTOY_VHD_NO_WARNING to be injected")
 	}
 }
+
+func TestBuildVentoyConfigData_StripBOM(t *testing.T) {
+	// Simulate Windows Notepad UTF-8 with BOM (\xef\xbb\xbf)
+	bomJSON := append([]byte("\xef\xbb\xbf"), []byte(`{
+    "control": [
+        { "VTOY_DEFAULT_SEARCH_ROOT": "/MY_ISO" }
+    ]
+}`)...)
+
+	mergedBytes, err := BuildVentoyConfigData(bomJSON, nil, t.TempDir())
+	if err != nil {
+		t.Fatalf("BuildVentoyConfigData failed on BOM input: %v", err)
+	}
+
+	// Result must NOT start with UTF-8 BOM
+	if bytes.HasPrefix(mergedBytes, []byte("\xef\xbb\xbf")) {
+		t.Errorf("Output ventoy.json must not have UTF-8 BOM")
+	}
+
+	mergedStr := string(mergedBytes)
+	if !strings.Contains(mergedStr, "/MY_ISO") {
+		t.Errorf("Expected custom control from BOM file to be preserved")
+	}
+	if !strings.Contains(mergedStr, "VTOY_VHD_NO_WARNING") {
+		t.Errorf("Expected UniBoot control to be woven in")
+	}
+}
+
+func TestBuildVentoyConfigData_MalformedJSONError(t *testing.T) {
+	brokenJSON := []byte(`{ "invalid_json": [ unclosed `)
+
+	_, err := BuildVentoyConfigData(brokenJSON, nil, t.TempDir())
+	if err == nil {
+		t.Fatalf("Expected BuildVentoyConfigData to fail on malformed JSON")
+	}
+}
+
+func TestWriteVentoyConfig_CorruptedConfigBackup(t *testing.T) {
+	mountDir := t.TempDir()
+	ventoyDir := filepath.Join(mountDir, "ventoy")
+	if err := os.MkdirAll(ventoyDir, 0755); err != nil {
+		t.Fatalf("MkdirAll failed: %v", err)
+	}
+
+	brokenJSON := []byte(`{ "broken": [ missing close bracket `)
+	jsonPath := filepath.Join(ventoyDir, "ventoy.json")
+	if err := os.WriteFile(jsonPath, brokenJSON, 0644); err != nil {
+		t.Fatalf("WriteFile failed: %v", err)
+	}
+
+	// WriteVentoyConfig should catch the corruption, back up to ventoy.json.corrupt.bak, and write a fresh ventoy.json
+	if err := WriteVentoyConfig(mountDir); err != nil {
+		t.Fatalf("WriteVentoyConfig should gracefully recover from corrupted config: %v", err)
+	}
+
+	backupPath := filepath.Join(ventoyDir, "ventoy.json.corrupt.bak")
+	backupBytes, err := os.ReadFile(backupPath)
+	if err != nil {
+		t.Fatalf("Expected ventoy.json.corrupt.bak to exist: %v", err)
+	}
+	if string(backupBytes) != string(brokenJSON) {
+		t.Errorf("Backup content does not match original corrupted JSON")
+	}
+
+	// New ventoy.json must be valid JSON
+	newBytes, err := os.ReadFile(jsonPath)
+	if err != nil {
+		t.Fatalf("ReadFile on new ventoy.json failed: %v", err)
+	}
+	var parsed map[string]interface{}
+	if err := json.Unmarshal(newBytes, &parsed); err != nil {
+		t.Fatalf("New ventoy.json is not valid JSON: %v", err)
+	}
+	if !strings.Contains(string(newBytes), "themes/uniboot/theme.txt") {
+		t.Errorf("Expected new ventoy.json to contain UniBoot theme")
+	}
+}
+
