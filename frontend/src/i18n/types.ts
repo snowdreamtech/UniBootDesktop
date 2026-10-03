@@ -290,6 +290,9 @@ export interface TranslationDict {
   "settings.ventoy_reserve": string;
   "settings.ventoy_win11_bypass": string;
   "settings.ventoy_timeout": string;
+  "settings.ventoy_secondary_menu"?: string;
+  "settings.ventoy_secondary_menu_direct"?: string;
+  "settings.ventoy_secondary_menu_enabled"?: string;
   "confirm.title": string;
   "confirm.warning_title": string;
   "confirm.warning_desc": string;

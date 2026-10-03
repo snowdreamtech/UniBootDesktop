@@ -24,8 +24,7 @@ export const mkMk: TranslationDict = {
   "common.langAuto": "Јазик (автоматски)",
   "common.lang": "Јазик",
   "vm.startSuccess": "Симулацијата на виртуелна машина започна успешно за дискот: {disk} ({device})",
-  "vm.backendNotReady":
-    "АПИ-то на заднината не е подготвено: Се вчитуваат обврзниците со плачење, рестартирајте ја апликацијата UniBoot.",
+  "vm.backendNotReady": "АПИ-то на заднината не е подготвено: Се вчитуваат обврзниците со плачење, рестартирајте ја апликацијата UniBoot.",
   "vm.demoModeStart": "[Демо режим] Започнува проверка на QEMU симулатор: {disk} ({device})",
   "vm.startFailed": "Неуспешно стартување на QEMU симулаторот: {error}",
   "disk.writingImageProgress": "Пишување слика ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -110,8 +109,7 @@ export const mkMk: TranslationDict = {
   "disk.tag_boot_hybrid": "Хибридно подигнување",
   "disk.tag_boot_thirdparty": "Подигнување од трета страна",
   "confirm.cloud_to_hybrid_warn_title": "Известување: Префрлањето во хибриден режим бара целосно форматирање",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "Овој диск е во чист режим на облачно подигнување. Ventoy хибридниот режим бара обнова на MBR и табелата на партиции, што ќе ги ИЗБРИШЕ сите податоци и ISO слики!",
+  "confirm.cloud_to_hybrid_warn_desc": "Овој диск е во чист режим на облачно подигнување. Ventoy хибридниот режим бара обнова на MBR и табелата на партиции, што ќе ги ИЗБРИШЕ сите податоци и ISO слики!",
   "disk.tag_ssd": "Пренослив SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Шифриран диск",
@@ -139,16 +137,13 @@ export const mkMk: TranslationDict = {
   "log.level_error": "ГРЕШКА",
   "log.level_debug": "Дебагирање",
   "safe.title_cloud": "Откриен е постоечки Ventoy/UniBoot диск (Облачниот режим го освежува само ESP преградата)",
-  "safe.desc_cloud":
-    "Облачниот режим ја чува структурата од два прегради на UNIBOOT. Освежувањето на ESP ги остава сите ISO фајлови недопрени!",
+  "safe.desc_cloud": "Облачниот режим ја чува структурата од два прегради на UNIBOOT. Освежувањето на ESP ги остава сите ISO фајлови недопрени!",
   "safe.title_hybrid": "Откриен е постоечки Ventoy диск (Ажурирање на лице место во хибриден режим)",
-  "safe.desc_hybrid":
-    "Хибридниот режим ги чува сите ISO фајлови без форматирање, безбедно додавајќи ја темната тема на UniBoot и облачното мени!",
+  "safe.desc_hybrid": "Хибридниот режим ги чува сите ISO фајлови без форматирање, безбедно додавајќи ја темната тема на UniBoot и облачното мени!",
   "common.optional": "Опционално",
   "common.optional_test": "Опционален тест",
   "iso.title": "Извори на слика на локалниот систем (ISO / IMG / WIM / VHD)",
-  "iso.desc":
-    "Додајте ISO-датотеки за автоматско копирање во директориумот /UNIBOOT/iso/ за директно подигање Ventoy / UniBoot.",
+  "iso.desc": "Додајте ISO-датотеки за автоматско копирање во директориумот /UNIBOOT/iso/ за директно подигање Ventoy / UniBoot.",
   "iso.add_btn": "Додајте датотеки со слики",
   "iso.empty_title": "Кликнете за да додадете датотеки со слики (поддржува единечно или сериско избирање)",
   "iso.empty_sub": "Поддржува формати .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -159,8 +154,7 @@ export const mkMk: TranslationDict = {
   "iso.drag_unsupported": "Не се откриени поддржани датотеки со слики (.iso, .wim, .img итн.)",
   "iso.preflight_title": "Проверка пред запишување",
   "iso.conflict_title": "Пронајдена е датотека со исто име",
-  "iso.conflict_desc":
-    "Во iso-папката на целниот USB веќе постои датотека со исто име. Изберете дејство. Hash не се споредува.",
+  "iso.conflict_desc": "Во iso-папката на целниот USB веќе постои датотека со исто име. Изберете дејство. Hash не се споредува.",
   "iso.conflict_action": "Дејство",
   "iso.conflict_keep_both": "Задржи",
   "iso.conflict_replace": "Презапиши",
@@ -170,17 +164,13 @@ export const mkMk: TranslationDict = {
   "iso.conflict_confirm": "Потврди и продолжи",
   "iso.preflight_failed": "Проверката пред запишување не успеа",
   "deploy.title": "Креирање на бутабилен диск и QEMU тест",
-  "deploy.desc_cloud":
-    "Чисто iPXE облачно покренување • Ултра-брзо поставување на две партиции со мрежен iPXE фирмвер.",
-  "deploy.desc_hybrid":
-    "Локален мотор Ventoy CLI • Поставување на хибридна партиција Ventoy со локално управување со ISO.",
+  "deploy.desc_cloud": "Чисто iPXE облачно покренување • Ултра-брзо поставување на две партиции со мрежен iPXE фирмвер.",
+  "deploy.desc_hybrid": "Локален мотор Ventoy CLI • Поставување на хибридна партиција Ventoy со локално управување со ISO.",
   "deploy.target_device": "Целен уред:",
   "deploy.batch_target": "Избрани {count} USB-диск(и)",
   "deploy.start_create": "Започни создавање диск за подигнување",
-  "deploy.tip_batch_update_all":
-    "Групно ажурирање без губење податоци: Сите {count} избрани USB уреди ќе се ажурираат на лице место",
-  "deploy.tip_batch_mixed":
-    "Групна мешана имплементација: {bootCount} уреди ажурирање без губење, {blankCount} уреди ново форматирање",
+  "deploy.tip_batch_update_all": "Групно ажурирање без губење податоци: Сите {count} избрани USB уреди ќе се ажурираат на лице место",
+  "deploy.tip_batch_mixed": "Групна мешана имплементација: {bootCount} уреди ажурирање без губење, {blankCount} уреди ново форматирање",
   "deploy.start_update": "Надградба на место (безбедно за податоци)",
   "deploy.batch_create": "Започнете со сериско распоредување ({count} дискови)",
   "deploy.writing": "Пишување пакети со фирмвер за подигање...",
@@ -195,27 +185,21 @@ export const mkMk: TranslationDict = {
   "deploy.tip_writing": "Пишување фирмвер за подигање...",
   "deploy.tip_select_single": "Прво изберете целен USB-уред",
   "deploy.tip_select_batch": "Проверете ги целните USB-дискови за сериско распоредување",
-  "deploy.tip_macos_unsupported":
-    "macOS не поддржува ново форматирање во хибриден режим (користете режим во облак или прво иницијализирајте на Win/Linux)",
+  "deploy.tip_macos_unsupported": "macOS не поддржува ново форматирање во хибриден режим (користете режим во облак или прво иницијализирајте на Win/Linux)",
   "deploy.tip_need_ventoy": "Хибридниот режим бара локални Ventoy CLI алатки. Препорачуваме Режим во облак!",
   "deploy.macos_alert_title": "Неподдржано е свежо форматирање на macOS Ventoy CLI",
-  "deploy.macos_alert_desc":
-    "Официјалниот Ventoy сè уште не поддржува активирање на програмата за форматирање на macOS. За изработка на нов [Хибриден диск] е потребен Ventoy CLI. Се препорачува употреба на [Режим во облак (1s стартен диск во облак)]!",
+  "deploy.macos_alert_desc": "Официјалниот Ventoy сè уште не поддржува активирање на програмата за форматирање на macOS. За изработка на нов [Хибриден диск] е потребен Ventoy CLI. Се препорачува употреба на [Режим во облак (1s стартен диск во облак)]!",
   "deploy.no_ventoy_title": "Вентој CLI извршна не е откриена",
-  "deploy.no_ventoy_desc":
-    "Изработката на [Хибриден диск] бара локално инсталиран Ventoy CLI. Ве молиме изберете го поддржаниот [Режим во облак]!",
+  "deploy.no_ventoy_desc": "Изработката на [Хибриден диск] бара локално инсталиран Ventoy CLI. Ве молиме изберете го поддржаниот [Режим во облак]!",
   "deploy.result_batch_success": "1-секундниот облачен инсталациски диск е успешно инсталиран на {count} диск(ови)!",
   "deploy.result_success": "Режимот {mode} е успешно инсталиран на {targets}",
   "deploy.alert_success": "Распоредувањето е успешно!",
   "deploy.safely_eject_btn": "Безбедно исфрли USB уред",
   "deploy.success_banner_title": "Уредите за покренување се успешно креирани!",
-  "deploy.success_banner_desc":
-    "Датотеките за подигнување и фирмверот се запишани. Безбедно исфрлете го уредот пред исклучување за да спречите губење податоци.",
-  "deploy.toast_auto_ejected":
-    "Креирањето е завршено! {count} USB уреди се автоматски безбедно извадени. Сите податоци се зачувани.",
+  "deploy.success_banner_desc": "Датотеките за подигнување и фирмверот се запишани. Безбедно исфрлете го уредот пред исклучување за да спречите губење податоци.",
+  "deploy.toast_auto_ejected": "Креирањето е завршено! {count} USB уреди се автоматски безбедно извадени. Сите податоци се зачувани.",
   "deploy.confirm_auto_eject_title": "Запишувањето е завршено — Безбедно исфрлање?",
-  "deploy.confirm_auto_eject_desc":
-    "Сите податоци се успешно запишани. Дали сакате да го исфрлите USB уредот безбедно сега?",
+  "deploy.confirm_auto_eject_desc": "Сите податоци се успешно запишани. Дали сакате да го исфрлите USB уредот безбедно сега?",
   "deploy.confirm_auto_eject_yes": "Безбедно исфрли",
   "deploy.confirm_auto_eject_no": "Не сега",
   "deploy.alert_fail": "Распоредувањето не успеа:",
@@ -234,8 +218,7 @@ export const mkMk: TranslationDict = {
   "vm.boot_mode_bios": "BIOS (наследен) режим",
   "vm.boot_mode_auto": "Автоматско препознавање",
   "vm.startSuccess_vm": "Тестот за симулација на {name} започна успешно",
-  "vm.desc_optional":
-    "Изборна функција: Преглед на покренувањето од USB во виртуелна машина без рестартирање на компјутерот.",
+  "vm.desc_optional": "Изборна функција: Преглед на покренувањето од USB во виртуелна машина без рестартирање на компјутерот.",
   "vm.installed": "QEMU е откриен",
   "vm.not_installed": "QEMU не е откриен",
   "vm.target": "Цел за тестирање:",
@@ -246,15 +229,13 @@ export const mkMk: TranslationDict = {
   "vm.tip_launching": "Се стартува QEMU емулатор...",
   "vm.tip_running": "Virtual machine is currently running. Target disk will be automatically remounted when closed.",
   "vm.tip_deploying": "Распоредувањето на датотеките за подигање, почекајте додека не завршите",
-  "vm.tip_not_installed":
-    "Емулаторот QEMU не е пронајден. Ве молиме прво инсталирајте QEMU (приготвувајте/порта инсталирајте qemu)",
+  "vm.tip_not_installed": "Емулаторот QEMU не е пронајден. Ве молиме прво инсталирајте QEMU (приготвувајте/порта инсталирајте qemu)",
   "vm.tip_select_target": "Прво изберете целен USB-диск од левиот панел",
   "vm.tip_ready": "Кликнете за да стартувате QEMU VM за да го потврдите USB-подигачот на тековната работна површина",
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Ве молиме кликнете за да изберете целен USB-диск од левиот панел прво!",
-  "vm.toast_not_installed":
-    "Емулаторот QEMU не е пронајден! Ве молиме инсталирајте QEMU (инсталирајте qemu или приклучете инсталирајте qemu)",
+  "vm.toast_not_installed": "Емулаторот QEMU не е пронајден! Ве молиме инсталирајте QEMU (инсталирајте qemu или приклучете инсталирајте qemu)",
   "vm.cfg_secure_boot": "Симулација на SecureBoot",
   "vm.cfg_accel": "Хардверско забрзување",
   "vm.cfg_ram": "Распределба на RAM",
@@ -306,10 +287,12 @@ export const mkMk: TranslationDict = {
   "settings.ventoy_reserve": "Резервирај простор (MB):",
   "settings.ventoy_win11_bypass": "Заобиколете проверка на Windows 11 TPM/CPU/RAM:",
   "settings.ventoy_timeout": "Истекување на менито Ventoy (секунди):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Предупредување",
   "confirm.warning_title": "Предупредување: Formatting will erase all data!",
-  "confirm.warning_desc":
-    "Избраниот USB-уред ќе биде повторно партициониран и форматиран. Сите постоечки датотеки ќе бидат целосно избришани. Осигурајте се дека сте направиле резервна копија на важни податоци!",
+  "confirm.warning_desc": "Избраниот USB-уред ќе биде повторно партициониран и форматиран. Сите постоечки датотеки ќе бидат целосно избришани. Осигурајте се дека сте направиле резервна копија на важни податоци!",
   "confirm.mode_title": "Режим на распоредување:",
   "confirm.fs_title": "Целен датотечен систем:",
   "confirm.disks_title": "Дискови што ќе се форматираат ({count}):",
@@ -319,15 +302,11 @@ export const mkMk: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Потврдиation",
   "confirm.title_danger": "Format Предупредување: Disk Initialization",
   "confirm.safe_banner_title": "Известување за дополнително ажурирање на место (безбедно за податоци)",
-  "confirm.safe_banner_desc":
-    "Откриена структура за подигање Ventoy / UniBoot на целниот погон. Системот ќе изврши формат за прескокнување на постепено ажурирање. Сите постоечки датотеки и ISO се 100% зачувани!",
-  "confirm.mixed_banner_title":
-    "Паметен мешан режим: ажурирање на место за дискови за подигање, формат за празни дискови",
-  "confirm.mixed_banner_desc":
-    "Избрани {ventoyCount} диск(и) за подигање (наместо ажурирање) и {blankCount} празно диск(и) (целосен формат).",
+  "confirm.safe_banner_desc": "Откриена структура за подигање Ventoy / UniBoot на целниот погон. Системот ќе изврши формат за прескокнување на постепено ажурирање. Сите постоечки датотеки и ISO се 100% зачувани!",
+  "confirm.mixed_banner_title": "Паметен мешан режим: ажурирање на место за дискови за подигање, формат за празни дискови",
+  "confirm.mixed_banner_desc": "Избрани {ventoyCount} диск(и) за подигање (наместо ажурирање) и {blankCount} празно диск(и) (целосен формат).",
   "confirm.danger_banner_title": "Предупредување: Formatting is irreversible!",
-  "confirm.danger_banner_desc":
-    "Пишувањето повторно ќе го подели и форматира целниот уред (MBR/GPT). Сите постоечки датотеки на избраните диск(и) ќе бидат целосно избришани!",
+  "confirm.danger_banner_desc": "Пишувањето повторно ќе го подели и форматира целниот уред (MBR/GPT). Сите постоечки датотеки на избраните диск(и) ќе бидат целосно избришани!",
   "confirm.summary_title": "Целни дискови за распоредување подигање:",
   "confirm.smart_safe_tag": "Паметна заштита",
   "confirm.ventoy_group_title": "Дискови за надградба на место (сите ISO се зачувани):",
@@ -345,14 +324,10 @@ export const mkMk: TranslationDict = {
   "confirm.no": "Откажи",
   "confirm.will_format": "Целосно форматирање",
   "confirm.no_format": "Паметно ажурирање на лице место",
-  "deploy.toast_target_changed":
-    "Избраниот целен диск се промени или повеќе не е достапен. Ве молиме скенирајте повторно.",
-  "deploy.toast_some_disks_removed":
-    "{count} недостапни дискови автоматски отстранети, продолжување со преостанатите дискови",
-  "deploy.error_system_disk_blocked":
-    "⛔ Блокирано: {disks} е системски диск. Не може да се постави USB загрувачки диск на системскиот диск!",
-  "deploy.error_readonly_disk":
-    "🔒 Заштитено од запишување: {disks} е само за читање. Отстранете ја заштитата од запишување или користете друг USB",
+  "deploy.toast_target_changed": "Избраниот целен диск се промени или повеќе не е достапен. Ве молиме скенирајте повторно.",
+  "deploy.toast_some_disks_removed": "{count} недостапни дискови автоматски отстранети, продолжување со преостанатите дискови",
+  "deploy.error_system_disk_blocked": "⛔ Блокирано: {disks} е системски диск. Не може да се постави USB загрувачки диск на системскиот диск!",
+  "deploy.error_readonly_disk": "🔒 Заштитено од запишување: {disks} е само за читање. Отстранете ја заштитата од запишување или користете друг USB",
   "deploy.start_cloud_create": "Започни создавање диск за облачно подигнување",
   "deploy.batch_update": "Започни групно ажурирање без губење податоци ({count} USB уреди)",
   "deploy.batch_mixed": "Започни групна мешана имплементација ({count} USB уреди)",
@@ -375,11 +350,9 @@ export const mkMk: TranslationDict = {
   "inspector.smart": "SMART здравствена состојба:",
   "inspector.sector": "Големина на секторот:",
   "inspector.fake_title": "Fake USB 3.0 Предупредување Alert!",
-  "inspector.fake_desc":
-    "Уредот рекламира USB 3.0/3.1, но вистинската брзина на физичкиот слој се преговара само со {speed} (USB 2.0 High-Speed PHY). Овој диск веројатно има лажен фирмвер или лажна сина порта.",
+  "inspector.fake_desc": "Уредот рекламира USB 3.0/3.1, но вистинската брзина на физичкиот слој се преговара само со {speed} (USB 2.0 High-Speed PHY). Овој диск веројатно има лажен фирмвер или лажна сина порта.",
   "inspector.genuine_title": "Потврдена е физичката хардверска потврда (оригинален USB 3.0+ уред)",
-  "inspector.genuine_desc":
-    "Физичкиот слој PHY воспостави автентична SuperSpeed/SuperSpeed+ врска со брзина од {speed}.",
+  "inspector.genuine_desc": "Физичкиот слој PHY воспостави автентична SuperSpeed/SuperSpeed+ врска со брзина од {speed}.",
   "inspector.usb2_title": "Стандарден USB 2.0 интерфејс",
   "inspector.usb2_desc": "Хардверот на уредот е USB 2.0, теоретска физичка максимална брзина 480 Mb/s.",
   "inspector.section_basic": "Основни информации за уредот",
@@ -485,18 +458,14 @@ export const mkMk: TranslationDict = {
   "diag.action_reformat_title": "Повторно форматирај (reformat)",
   "diag.action_remount_title": "Повторно монтирај (remount)",
   "diag.action_retry_title": "Обиди се пак (retry)",
-  "diag.action_reformat_desc":
-    "Прекинот на запишувањето ја оштети табелата со партиции или датотечниот систем. Се препорачува ново форматирање.",
-  "diag.action_remount_desc":
-    "Целната патека на монтирање се исклучи за време на запишувањето. Повторно вметнете го USB уредот или повторно монтирајте го волуменот.",
-  "diag.action_retry_desc":
-    "Окружувањето и состојбата на уредот се исправни. Можете безбедно повторно да се обидете со инсталацијата.",
+  "diag.action_reformat_desc": "Прекинот на запишувањето ја оштети табелата со партиции или датотечниот систем. Се препорачува ново форматирање.",
+  "diag.action_remount_desc": "Целната патека на монтирање се исклучи за време на запишувањето. Повторно вметнете го USB уредот или повторно монтирајте го волуменот.",
+  "diag.action_retry_desc": "Окружувањето и состојбата на уредот се исправни. Можете безбедно повторно да се обидете со инсталацијата.",
   "about.updating": "Ажурирање ({progress}%)",
   "about.updateTo": "Мрежно ажурирање на {tag}",
   "about.downloading": "Преземање {progress}%",
   "about.preparingDownload": "Подготовка за преземање на пакетот...",
-  "about.updateReady":
-    "Ажурирањето е подготвено! Преземено во: {path}. Стартувајте го пакетот или рестартирајте ја апликацијата.",
+  "about.updateReady": "Ажурирањето е подготвено! Преземено во: {path}. Стартувајте го пакетот или рестартирајте ја апликацијата.",
   "about.updateDownloadFailed": "Преземањето на пакетот за ажурирање не успеа. Проверете ја мрежната врска.",
   "about.downloadingGuiUpdate": "Преземање на GUI ажурирање ({progress}%)...",
   "about.updateCompleteRestart": "Преземањето на ажурирањето е завршено! Рестартирајте ја апликацијата за примена.",
@@ -507,8 +476,7 @@ export const mkMk: TranslationDict = {
   "dialog.textFilesFilter": "Текстуални датотеки (*.txt)",
   "dialog.allFilesFilter": "Сите датотеки (*.*)",
   "dialog.selectIsoTitle": "Изберете датотеки со системски слики (*.iso, *.wim, *.img итн.)",
-  "dialog.ventoyFilter":
-    "Изворни слики на Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Изворни слики на Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Пресметај Хеш",
   "checksum.calculating": "Пресметување на Хеш...",
   "checksum.algo_label": "Алгоритам",
@@ -552,18 +520,14 @@ export const mkMk: TranslationDict = {
   "privilege.status_standard": "Неовластено",
   "privilege.btn_elevate": "Побарај администраторски пристап",
   "privilege.modal_title": "Потребна е администраторска дозвола",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Потребно е системско овластување за читање податоци за подигнување и запишување дискови",
   "privilege.reason_title": "Зошто е потребна администраторска привилегија?",
-  "privilege.reason_desc":
-    "Оперативниот систем ги изолира сировите сектори и EFI партициите. Овластувањето овозможува директно препознавање и безбедно креирање дискови.",
+  "privilege.reason_desc": "Оперативниот систем ги изолира сировите сектори и EFI партициите. Овластувањето овозможува директно препознавање и безбедно креирање дискови.",
   "privilege.scope_title": "Опсег на пристап",
-  "privilege.scope_desc":
-    "Пристапот е строго ограничен на избраните надворешни USB уреди. Внатрешните системски дискови никогаш не се допираат.",
+  "privilege.scope_desc": "Пристапот е строго ограничен на избраните надворешни USB уреди. Внатрешните системски дискови никогаш не се допираат.",
   "privilege.safety_title": "Безбедност и транспарентност",
-  "privilege.safety_desc":
-    "Проверката е исклучиво за читање и не ги оштетува податоците; изворниот код е целосно отворен.",
+  "privilege.safety_desc": "Проверката е исклучиво за читање и не ги оштетува податоците; изворниот код е целосно отворен.",
   "privilege.confirm_btn": "Овласти сега",
   "privilege.cancel_btn": "Откажи",
   "privilege.success_msg": "Доделена е администраторска дозвола",

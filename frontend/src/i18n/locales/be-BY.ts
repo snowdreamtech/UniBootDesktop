@@ -109,8 +109,7 @@ export const beBy: TranslationDict = {
   "disk.tag_boot_hybrid": "Гібрыдная загрузка",
   "disk.tag_boot_thirdparty": "Сторонняя загрузка",
   "confirm.cloud_to_hybrid_warn_title": "Увага: Пераход у гібрыдны рэжым патрабуе поўнага фарматавання",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "Гэты дыск знаходзіцца ў рэжыме чыстай воблачнай загрузкі. Гібрыдны рэжым Ventoy патрабуе перабудовы MBR і табліцы раздзелаў, што сатрэ ўсе даныя і ISO!",
+  "confirm.cloud_to_hybrid_warn_desc": "Гэты дыск знаходзіцца ў рэжыме чыстай воблачнай загрузкі. Гібрыдны рэжым Ventoy патрабуе перабудовы MBR і табліцы раздзелаў, што сатрэ ўсе даныя і ISO!",
   "disk.tag_ssd": "Партатыўны SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Зашыфраваны дыск",
@@ -138,16 +137,13 @@ export const beBy: TranslationDict = {
   "log.level_error": "ПАМЫЛКА",
   "log.level_debug": "Адладка",
   "safe.title_cloud": "Знойдзены існуючы дыск Ventoy/UniBoot (Воблачны рэжым абнаўляе толькі раздзел ESP)",
-  "safe.desc_cloud":
-    "Воблачны рэжым захоўвае структуры двух раздзелаў UNIBOOT. Абнаўленне ESP пакідае ўсе файлы ISO і даныя некранутымі!",
+  "safe.desc_cloud": "Воблачны рэжым захоўвае структуры двух раздзелаў UNIBOOT. Абнаўленне ESP пакідае ўсе файлы ISO і даныя некранутымі!",
   "safe.title_hybrid": "Знойдзены існуючы дыск Ventoy (Абнаўленне на месцы ў гібрыдным рэжыме)",
-  "safe.desc_hybrid":
-    "Гібрыдны рэжым захоўвае ўсе існуючыя файлы ISO без фарматавання, бяспечна дадаючы цёмную тэму UniBoot і воблачнае меню!",
+  "safe.desc_hybrid": "Гібрыдны рэжым захоўвае ўсе існуючыя файлы ISO без фарматавання, бяспечна дадаючы цёмную тэму UniBoot і воблачнае меню!",
   "common.optional": "Неабавязкова",
   "common.optional_test": "Неабавязковы тэст",
   "iso.title": "Лакальныя крыніцы выявы сістэмы (ISO / IMG / WIM / VHD)",
-  "iso.desc":
-    "Дадайце файлы ISO для аўтаматычнага капіравання ў каталог /UNIBOOT/iso/ для прамой загрузкі Ventoy / UniBoot.",
+  "iso.desc": "Дадайце файлы ISO для аўтаматычнага капіравання ў каталог /UNIBOOT/iso/ для прамой загрузкі Ventoy / UniBoot.",
   "iso.add_btn": "Дадаць файлы малюнкаў",
   "iso.empty_title": "Пстрыкніце, каб дадаць файлы малюнкаў (падтрымлівае адзіночны або пакетны выбар)",
   "iso.empty_sub": "Падтрымлівае фарматы .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -168,17 +164,13 @@ export const beBy: TranslationDict = {
   "iso.conflict_confirm": "Пацвердзіць і працягнуць",
   "iso.preflight_failed": "Праверка перад запісам не ўдалася",
   "deploy.title": "Стварэнне загрузачнага дыска і тэст QEMU",
-  "deploy.desc_cloud":
-    "Чыстая воблачная загрузка iPXE • Надхуткае наладжванне двух раздзелаў з сеткавай прашыўкай iPXE.",
-  "deploy.desc_hybrid":
-    "Лакальны рухавік Ventoy CLI • Наладжванне гібрыднага раздзела Ventoy з лакальным кіраваннем ISO.",
+  "deploy.desc_cloud": "Чыстая воблачная загрузка iPXE • Надхуткае наладжванне двух раздзелаў з сеткавай прашыўкай iPXE.",
+  "deploy.desc_hybrid": "Лакальны рухавік Ventoy CLI • Наладжванне гібрыднага раздзела Ventoy з лакальным кіраваннем ISO.",
   "deploy.target_device": "Мэтавая прылада:",
   "deploy.batch_target": "Выбраны USB-назапашвальнік: {count}",
   "deploy.start_create": "Пачаць стварэнне загрузачнага дыска",
-  "deploy.tip_batch_update_all":
-    "Пакетнае абнаўленне без страты даных: усе {count} абраных USB будуць абноўлены на месцы",
-  "deploy.tip_batch_mixed":
-    "Пакетнае змяшанае разгортванне: {bootCount} USB абнаўленне без страты даных, {blankCount} USB поўнае фарматаванне",
+  "deploy.tip_batch_update_all": "Пакетнае абнаўленне без страты даных: усе {count} абраных USB будуць абноўлены на месцы",
+  "deploy.tip_batch_mixed": "Пакетнае змяшанае разгортванне: {bootCount} USB абнаўленне без страты даных, {blankCount} USB поўнае фарматаванне",
   "deploy.start_update": "Абнаўленне на месцы (бяспечнасць даных)",
   "deploy.batch_create": "Пачаць пакетнае разгортванне ({count} дыскаў)",
   "deploy.writing": "Запіс загрузных пакетаў прашыўкі...",
@@ -193,24 +185,19 @@ export const beBy: TranslationDict = {
   "deploy.tip_writing": "Запіс загрузнай прашыўкі...",
   "deploy.tip_select_single": "Спачатку выберыце мэтавы USB-дыск",
   "deploy.tip_select_batch": "Калі ласка, праверце мэтавыя USB-назапашвальнікі для пакетнага разгортвання",
-  "deploy.tip_macos_unsupported":
-    "macOS не падтрымлівае першапачатковае фарматаванне ў гібрыдным рэжыме (выкарыстоўвайце воблачны рэжым альбо спачатку ініцыялізуйце на Win/Linux)",
+  "deploy.tip_macos_unsupported": "macOS не падтрымлівае першапачатковае фарматаванне ў гібрыдным рэжыме (выкарыстоўвайце воблачны рэжым альбо спачатку ініцыялізуйце на Win/Linux)",
   "deploy.tip_need_ventoy": "Гібрыдны рэжым патрабуе лакальных інструментаў Ventoy CLI. Мы рэкамендуем Воблачны рэжым!",
   "deploy.macos_alert_title": "Новае фарматаванне macOS Ventoy CLI не падтрымліваецца",
-  "deploy.macos_alert_desc":
-    "Афіцыйны Ventoy пакуль не падтрымлівае запуск праграмы фарматавання на macOS. Для стварэння новага [Гібрыднага дыска] патрабуецца Ventoy CLI. Рэкамендуецца выкарыстоўваць [Воблачны рэжым (1s воблачны загрузачны дыск)]!",
+  "deploy.macos_alert_desc": "Афіцыйны Ventoy пакуль не падтрымлівае запуск праграмы фарматавання на macOS. Для стварэння новага [Гібрыднага дыска] патрабуецца Ventoy CLI. Рэкамендуецца выкарыстоўваць [Воблачны рэжым (1s воблачны загрузачны дыск)]!",
   "deploy.no_ventoy_title": "Выкананы файл Ventoy CLI не выяўлены",
-  "deploy.no_ventoy_desc":
-    "Сварэнне [Гібрыднага дыска] патрабуе лакальна ўсталяванага Ventoy CLI. Выберыце падтрымоўваемы [Воблачны рэжым]!",
+  "deploy.no_ventoy_desc": "Сварэнне [Гібрыднага дыска] патрабуе лакальна ўсталяванага Ventoy CLI. Выберыце падтрымоўваемы [Воблачны рэжым]!",
   "deploy.result_batch_success": "Воблачны ўстановачны дыск за 1 сек паспяхова разгорнуты на {count} дыск(ах)!",
   "deploy.result_success": "Рэжым {mode} паспяхова разгорнуты на {targets}",
   "deploy.alert_success": "Разгортванне паспяховае!",
   "deploy.safely_eject_btn": "Бяспечна выняць USB-дыск",
   "deploy.success_banner_title": "Загрузачны дыск паспяхова створаны!",
-  "deploy.success_banner_desc":
-    "Файлы загрузкі і прашыўкі запісаны. Бяспечна выміце перад адключэннем, каб пазбегнуць страты даных.",
-  "deploy.toast_auto_ejected":
-    "Стварэнне завершана! Аўтаматычна бяспечна вынята {count} USB-назапашвальнікаў. Усе даныя запісаны.",
+  "deploy.success_banner_desc": "Файлы загрузкі і прашыўкі запісаны. Бяспечна выміце перад адключэннем, каб пазбегнуць страты даных.",
+  "deploy.toast_auto_ejected": "Стварэнне завершана! Аўтаматычна бяспечна вынята {count} USB-назапашвальнікаў. Усе даныя запісаны.",
   "deploy.confirm_auto_eject_title": "Запіс завершаны — Бяспечна выняць?",
   "deploy.confirm_auto_eject_desc": "Усе даныя паспяхова запісаны. Вы жадаеце бяспечна выняць USB-дыск зараз?",
   "deploy.confirm_auto_eject_yes": "Бяспечна выняць",
@@ -242,15 +229,13 @@ export const beBy: TranslationDict = {
   "vm.tip_launching": "Запуск эмулятара QEMU...",
   "vm.tip_running": "Virtual machine is currently running. Target disk will be automatically remounted when closed.",
   "vm.tip_deploying": "Разгортванне загрузачных файлаў, калі ласка, дачакайцеся завяршэння",
-  "vm.tip_not_installed":
-    "Эмулятар QEMU не знойдзены. Калі ласка, спачатку ўсталюйце QEMU (вараць/усталёўваць порт qemu)",
+  "vm.tip_not_installed": "Эмулятар QEMU не знойдзены. Калі ласка, спачатку ўсталюйце QEMU (вараць/усталёўваць порт qemu)",
   "vm.tip_select_target": "Спачатку выберыце мэтавы USB-дыск на панэлі злева",
   "vm.tip_ready": "Націсніце, каб запусціць QEMU VM, каб праверыць USB-загрузчык на бягучым працоўным стале",
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Націсніце, каб спачатку выбраць мэтавы USB-назапашвальнік з левай панэлі!",
-  "vm.toast_not_installed":
-    "Эмулятар QEMU не знойдзены! Усталюйце, калі ласка, QEMU (усталяваць qemu ў рэжыме brew або ўсталяваць qemu праз порт)",
+  "vm.toast_not_installed": "Эмулятар QEMU не знойдзены! Усталюйце, калі ласка, QEMU (усталяваць qemu ў рэжыме brew або ўсталяваць qemu праз порт)",
   "vm.cfg_secure_boot": "Сімуляцыя SecureBoot",
   "vm.cfg_accel": "Апаратнае паскарэнне",
   "vm.cfg_ram": "Выдзяленне АЗП",
@@ -302,10 +287,12 @@ export const beBy: TranslationDict = {
   "settings.ventoy_reserve": "Рэзервовае месца (МБ):",
   "settings.ventoy_win11_bypass": "Абыход Windows 11 TPM/CPU/RAM Check:",
   "settings.ventoy_timeout": "Тайм-аўт меню Ventoy (секунды):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Папярэджанне",
   "confirm.warning_title": "Папярэджанне: Formatting will erase all data!",
-  "confirm.warning_desc":
-    "Выбраны USB-назапашвальнік будзе паўторна разбіты на раздзелы і адфарматаваны. Усе існуючыя файлы будуць цалкам выдалены. Пераканайцеся, што вы стварылі рэзервовую копію важных даных!",
+  "confirm.warning_desc": "Выбраны USB-назапашвальнік будзе паўторна разбіты на раздзелы і адфарматаваны. Усе існуючыя файлы будуць цалкам выдалены. Пераканайцеся, што вы стварылі рэзервовую копію важных даных!",
   "confirm.mode_title": "Рэжым разгортвання:",
   "confirm.fs_title": "Мэтавая файлавая сістэма:",
   "confirm.disks_title": "Дыскі для фарматавання ({count}):",
@@ -315,15 +302,11 @@ export const beBy: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Пацвердзіцьation",
   "confirm.title_danger": "Format Папярэджанне: Disk Initialization",
   "confirm.safe_banner_title": "Паведамленне аб паступовым абнаўленні на месцы (бяспечна для даных)",
-  "confirm.safe_banner_desc":
-    "Структура загрузкі Ventoy / UniBoot выяўлена на мэтавым дыску. Сістэма выканае фармат паступовага абнаўлення без пропуску. Усе існуючыя файлы і ISO захаваны на 100%!",
-  "confirm.mixed_banner_title":
-    "Разумны змешаны рэжым: абнаўленне на месцы для загрузачных дыскаў, фармат для пустых дыскаў",
-  "confirm.mixed_banner_desc":
-    "Выбраны загрузачны дыск(ы) {ventoyCount} (абнаўленне на месцы) і пусты дыск(ы) {blankCount} (поўны фармат).",
+  "confirm.safe_banner_desc": "Структура загрузкі Ventoy / UniBoot выяўлена на мэтавым дыску. Сістэма выканае фармат паступовага абнаўлення без пропуску. Усе існуючыя файлы і ISO захаваны на 100%!",
+  "confirm.mixed_banner_title": "Разумны змешаны рэжым: абнаўленне на месцы для загрузачных дыскаў, фармат для пустых дыскаў",
+  "confirm.mixed_banner_desc": "Выбраны загрузачны дыск(ы) {ventoyCount} (абнаўленне на месцы) і пусты дыск(ы) {blankCount} (поўны фармат).",
   "confirm.danger_banner_title": "Папярэджанне: Formatting is irreversible!",
-  "confirm.danger_banner_desc":
-    "Запіс прывядзе да паўторнага падзелу і фарматавання мэтавай прылады (MBR/GPT). Усе існуючыя файлы на выбраным дыску(ах) будуць цалкам выдалены!",
+  "confirm.danger_banner_desc": "Запіс прывядзе да паўторнага падзелу і фарматавання мэтавай прылады (MBR/GPT). Усе існуючыя файлы на выбраным дыску(ах) будуць цалкам выдалены!",
   "confirm.summary_title": "Мэтавыя дыскі для разгортвання загрузкі:",
   "confirm.smart_safe_tag": "Разумная абарона",
   "confirm.ventoy_group_title": "Дыскі для абнаўлення на месцы (усе ISO захоўваюцца):",
@@ -343,10 +326,8 @@ export const beBy: TranslationDict = {
   "confirm.no_format": "Разумнае абнаўленне на месцы",
   "deploy.toast_target_changed": "Выбраны мэтавы дыск змяніўся або больш недаступны. Сканаваць зноў.",
   "deploy.toast_some_disks_removed": "{count} недаступны дыск аўтаматычна выдалены, працягваць з астатнімі дыскамі",
-  "deploy.error_system_disk_blocked":
-    "⛔ Забаронена: {disks} - гэта сістэмны дыск. Немагчыма разгарнуць USB-загрузчык на сістэмны дыск!",
-  "deploy.error_readonly_disk":
-    "🔒 Абарона ад запісу: {disks} толькі для чытання. Зніміце абарону ад запісу або выкарыстоўвайце іншы USB",
+  "deploy.error_system_disk_blocked": "⛔ Забаронена: {disks} - гэта сістэмны дыск. Немагчыма разгарнуць USB-загрузчык на сістэмны дыск!",
+  "deploy.error_readonly_disk": "🔒 Абарона ад запісу: {disks} толькі для чытання. Зніміце абарону ад запісу або выкарыстоўвайце іншы USB",
   "deploy.start_cloud_create": "Пачаць стварэнне воблачнага загрузачнага дыска",
   "deploy.batch_update": "Пачаць пакетнае абнаўленне без страты даных ({count} USB)",
   "deploy.batch_mixed": "Пачаць пакетнае змяшанае разгортванне ({count} USB)",
@@ -369,14 +350,11 @@ export const beBy: TranslationDict = {
   "inspector.smart": "Стан здароўя SMART:",
   "inspector.sector": "Памер сектара:",
   "inspector.fake_title": "Fake USB 3.0 Папярэджанне Alert!",
-  "inspector.fake_desc":
-    "Прылада рэкламуе USB 3.0/3.1, але фактычная хуткасць фізічнага ўзроўню агаворваецца толькі на {speed} (USB 2.0 High-Speed ​​PHY). Верагодна, на гэтым дыску ёсць падробленае прашыўка або фальшывы сіні порт.",
+  "inspector.fake_desc": "Прылада рэкламуе USB 3.0/3.1, але фактычная хуткасць фізічнага ўзроўню агаворваецца толькі на {speed} (USB 2.0 High-Speed ​​PHY). Верагодна, на гэтым дыску ёсць падробленае прашыўка або фальшывы сіні порт.",
   "inspector.genuine_title": "Праверка фізічнага абсталявання пройдзена (арыгінальная прылада USB 3.0+)",
-  "inspector.genuine_desc":
-    "Фізічны ўзровень PHY устанавіў сапраўднае злучэнне SuperSpeed/SuperSpeed+ з хуткасцю {speed}.",
+  "inspector.genuine_desc": "Фізічны ўзровень PHY устанавіў сапраўднае злучэнне SuperSpeed/SuperSpeed+ з хуткасцю {speed}.",
   "inspector.usb2_title": "Стандартны інтэрфейс USB 2.0",
-  "inspector.usb2_desc":
-    "Апаратнае забеспячэнне прылады - USB 2.0, тэарэтычная фізічная максімальная хуткасць 480 Мбіт/с.",
+  "inspector.usb2_desc": "Апаратнае забеспячэнне прылады - USB 2.0, тэарэтычная фізічная максімальная хуткасць 480 Мбіт/с.",
   "inspector.section_basic": "Асноўная інфармацыя аб прыладзе",
   "inspector.section_hw": "Hardware Падрабязнасці",
   "inspector.lbl_name": "Назва прылады",
@@ -480,10 +458,8 @@ export const beBy: TranslationDict = {
   "diag.action_reformat_title": "Перафарматаваць (reformat)",
   "diag.action_remount_title": "Перамантаваць (remount)",
   "diag.action_retry_title": "Паўтарыць спробу (retry)",
-  "diag.action_reformat_desc":
-    "Перапыненне запісу пашкодзіла табліцу раздзелаў або файлавую сістэму. Рэкамендуецца новае фарматаванне.",
-  "diag.action_remount_desc":
-    "Мэтавы шлях мантавання адлучыўся падчас запісу. Устаўце USB-дыск зноў або перамантуйце том.",
+  "diag.action_reformat_desc": "Перапыненне запісу пашкодзіла табліцу раздзелаў або файлавую сістэму. Рэкамендуецца новае фарматаванне.",
+  "diag.action_remount_desc": "Мэтавы шлях мантавання адлучыўся падчас запісу. Устаўце USB-дыск зноў або перамантуйце том.",
   "diag.action_retry_desc": "Асяроддзе і стан прылады ў парадку. Вы можаце бяспечна паўтарыць спробу ўстаноўкі.",
   "about.updating": "Абнаўленне ({progress}%)",
   "about.updateTo": "Анлайн-абнаўленне да {tag}",
@@ -500,8 +476,7 @@ export const beBy: TranslationDict = {
   "dialog.textFilesFilter": "Тэкставыя файлы (*.txt)",
   "dialog.allFilesFilter": "Усе файлы (*.*)",
   "dialog.selectIsoTitle": "Выберыце файлы вобразаў сістэмы (*.iso, *.wim, *.img і г.д.)",
-  "dialog.ventoyFilter":
-    "Крынічныя вобразы Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Крынічныя вобразы Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Разлічыць хэш",
   "checksum.calculating": "Разлік хэшу...",
   "checksum.algo_label": "Алгарытм",
@@ -545,15 +520,12 @@ export const beBy: TranslationDict = {
   "privilege.status_standard": "Не аўтарызавана",
   "privilege.btn_elevate": "Запытаць правы адміністратара",
   "privilege.modal_title": "Патрабуюцца правы адміністратара",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Патрабуецца дазвол сістэмы для чытання загрузачных даных і запісу на дыскі",
   "privilege.reason_title": "Чаму патрэбны правы адміністратара?",
-  "privilege.reason_desc":
-    "Аперацыйная сістэма ізалюе неапрацаваныя сектары і раздзелы EFI. Аўтарызацыя забяспечвае прамое вызначэнне і бяспечнае стварэнне.",
+  "privilege.reason_desc": "Аперацыйная сістэма ізалюе неапрацаваныя сектары і раздзелы EFI. Аўтарызацыя забяспечвае прамое вызначэнне і бяспечнае стварэнне.",
   "privilege.scope_title": "Вобласць доступу",
-  "privilege.scope_desc":
-    "Строга абмежавана выбранымі знешнімі USB-назапашвальнікамі. Унутраныя сістэмныя дыскі ніколі не кранаюцца.",
+  "privilege.scope_desc": "Строга абмежавана выбранымі знешнімі USB-назапашвальнікамі. Унутраныя сістэмныя дыскі ніколі не кранаюцца.",
   "privilege.safety_title": "Бяспека і празрыстасць",
   "privilege.safety_desc": "Праверка выконваецца выключна для чытання без змены даных; зыходны код цалкам адкрыты.",
   "privilege.confirm_btn": "Аўтарызаваць зараз",

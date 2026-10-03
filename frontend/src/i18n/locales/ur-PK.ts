@@ -24,8 +24,7 @@ export const urPk: TranslationDict = {
   "common.langAuto": "زبان (خودکار)",
   "common.lang": "زبان",
   "vm.startSuccess": "ڈسک کے لیے وی ایم سمیلیشن کامیابی کے ساتھ شروع ہو گئی: {disk} ({device})",
-  "vm.backendNotReady":
-    "Backend API تیار نہیں: Wails bindings لوڈ ہو رہا ہے، براہ کرم UniBoot ایپ کو دوبارہ شروع کریں۔",
+  "vm.backendNotReady": "Backend API تیار نہیں: Wails bindings لوڈ ہو رہا ہے، براہ کرم UniBoot ایپ کو دوبارہ شروع کریں۔",
   "vm.demoModeStart": "[ڈیمو موڈ] QEMU سمیلیٹر کی توثیق شروع کرنا: {disk} ({device})",
   "vm.startFailed": "QEMU سمیلیٹر شروع کرنے میں ناکامی: {error}",
   "disk.writingImageProgress": "تحریری تصویر ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -110,8 +109,7 @@ export const urPk: TranslationDict = {
   "disk.tag_boot_hybrid": "ہائبرڈ بوٹ",
   "disk.tag_boot_thirdparty": "تھرڈ پارٹی بوٹ",
   "confirm.cloud_to_hybrid_warn_title": "توجہ فرمائیں: ہائبرڈ موڈ پر سوئچ کرنے کے لیے مکمل فارمیٹ درکار ہے",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "یہ ڈسک خالص کلاؤڈ بوٹ موڈ میں ہے۔ Ventoy ہائبرڈ موڈ کے لیے MBR اور پارٹیشن ٹیبل کی تعمیر نو ضروری ہے، جس سے تمام ڈیٹا اور ISO فائلیں مٹ جائیں گی!",
+  "confirm.cloud_to_hybrid_warn_desc": "یہ ڈسک خالص کلاؤڈ بوٹ موڈ میں ہے۔ Ventoy ہائبرڈ موڈ کے لیے MBR اور پارٹیشن ٹیبل کی تعمیر نو ضروری ہے، جس سے تمام ڈیٹا اور ISO فائلیں مٹ جائیں گی!",
   "disk.tag_ssd": "پورٹ ایبل ایس ایس ڈی",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "خفیہ کردہ ڈرائیو",
@@ -139,11 +137,9 @@ export const urPk: TranslationDict = {
   "log.level_error": "خرابی",
   "log.level_debug": "ڈیبگ",
   "safe.title_cloud": "موجودہ Ventoy/UniBoot ڈرائیو ملی (کلاؤڈ موڈ صرف ESP پارٹیشن کو تازہ کرتا ہے)",
-  "safe.desc_cloud":
-    "کلاؤڈ موڈ معیاری UNIBOOT دوہرے پارٹیشن لے آؤٹ کو برقرار رکھتا ہے۔ ESP کو تازہ کرنے سے تمام ISO اور ڈیٹا فائلیں محفوظ رہتی ہیں!",
+  "safe.desc_cloud": "کلاؤڈ موڈ معیاری UNIBOOT دوہرے پارٹیشن لے آؤٹ کو برقرار رکھتا ہے۔ ESP کو تازہ کرنے سے تمام ISO اور ڈیٹا فائلیں محفوظ رہتی ہیں!",
   "safe.title_hybrid": "موجودہ Ventoy ڈرائیو ملی (ہائبرڈ موڈ ان پلیس اپ ڈیٹ)",
-  "safe.desc_hybrid":
-    "ہائبرڈ موڈ فارمیٹ کیے بغیر تمام موجودہ ISO فائلوں کو محفوظ رکھتا ہے، اور UniBoot ڈارک تھیم اور کلاؤڈ مینو کو محفوظ طریقے سے شامل کرتا ہے!",
+  "safe.desc_hybrid": "ہائبرڈ موڈ فارمیٹ کیے بغیر تمام موجودہ ISO فائلوں کو محفوظ رکھتا ہے، اور UniBoot ڈارک تھیم اور کلاؤڈ مینو کو محفوظ طریقے سے شامل کرتا ہے!",
   "common.optional": "اختیاری",
   "common.optional_test": "اختیاری ٹیسٹ",
   "iso.title": "مقامی سسٹم امیج ذرائع (ISO / IMG / WIM / VHD)",
@@ -158,8 +154,7 @@ export const urPk: TranslationDict = {
   "iso.drag_unsupported": "کوئی معاون امیج فائل نہیں ملی (.iso, .wim, .img وغیرہ)",
   "iso.preflight_title": "لکھنے سے پہلے جانچ",
   "iso.conflict_title": "ایک ہی نام کی فائل موجود ہے",
-  "iso.conflict_desc":
-    "ہدف USB کے iso فولڈر میں اسی نام کی فائل پہلے سے موجود ہے۔ کارروائی منتخب کریں۔ Hash کا موازنہ نہیں کیا جائے گا۔",
+  "iso.conflict_desc": "ہدف USB کے iso فولڈر میں اسی نام کی فائل پہلے سے موجود ہے۔ کارروائی منتخب کریں۔ Hash کا موازنہ نہیں کیا جائے گا۔",
   "iso.conflict_action": "کارروائی",
   "iso.conflict_keep_both": "محفوظ رکھیں",
   "iso.conflict_replace": "اووررائٹ",
@@ -169,14 +164,12 @@ export const urPk: TranslationDict = {
   "iso.conflict_confirm": "تصدیق کریں اور جاری رکھیں",
   "iso.preflight_failed": "لکھنے سے پہلے کی جانچ ناکام رہی",
   "deploy.title": "بوٹ ایبل ڈرائیو بنانا اور QEMU ٹیسٹ",
-  "deploy.desc_cloud":
-    "خالص iPXE کلاؤڈ بوٹ • ملٹی آرک iPXE نیٹ ورک فرم ویئر کے ساتھ انتہائی تیز رفتار دوہری پارٹیشن سیٹ اپ۔",
+  "deploy.desc_cloud": "خالص iPXE کلاؤڈ بوٹ • ملٹی آرک iPXE نیٹ ورک فرم ویئر کے ساتھ انتہائی تیز رفتار دوہری پارٹیشن سیٹ اپ۔",
   "deploy.desc_hybrid": "Ventoy CLI مقامی انجن • مقامی ISO مینجمنٹ کے ساتھ Ventoy ہائبرڈ پارٹیشن سیٹ اپ۔",
   "deploy.target_device": "ٹارگٹ ڈیوائس:",
   "deploy.batch_target": "منتخب کردہ {count} ڈسک ڈرائیو (ز)",
   "deploy.start_create": "بوٹ ڈسک بنائیں",
-  "deploy.tip_batch_update_all":
-    "ڈیٹا کے نقصان کے بغیر بیچ اپ ڈیٹ: تمام منتخب شدہ {count} ڈسک ڈرائیوز کو اسی جگہ اپ ڈیٹ کیا جائے گا",
+  "deploy.tip_batch_update_all": "ڈیٹا کے نقصان کے بغیر بیچ اپ ڈیٹ: تمام منتخب شدہ {count} ڈسک ڈرائیوز کو اسی جگہ اپ ڈیٹ کیا جائے گا",
   "deploy.tip_batch_mixed": "بیچ مخلوط ڈیپلائمنٹ: {bootCount} ڈرائیوز محفوظ اپ ڈیٹ، {blankCount} ڈرائیوز نیا فارمیٹ",
   "deploy.start_update": "ان پلیس اپ گریڈ (ڈیٹا سیف)",
   "deploy.batch_create": "بیچ کی تعیناتی شروع کریں ({count} ڈرائیوز)",
@@ -192,27 +185,21 @@ export const urPk: TranslationDict = {
   "deploy.tip_writing": "بوٹ فرم ویئر لکھ رہا ہے...",
   "deploy.tip_select_single": "براہ کرم پہلے ایک ہدف ڈسک ڈرائیو منتخب کریں۔",
   "deploy.tip_select_batch": "براہ کرم بیچ کی تعیناتی کے لیے ٹارگٹ ڈسک ڈرائیوز چیک کریں۔",
-  "deploy.tip_macos_unsupported":
-    "macOS ہائبرڈ موڈ میں نئی فارمیٹنگ کی حمایت نہیں کرتا ہے (کلاؤڈ موڈ استعمال کریں یا پہلے Win/Linux پر شروع کریں)",
+  "deploy.tip_macos_unsupported": "macOS ہائبرڈ موڈ میں نئی فارمیٹنگ کی حمایت نہیں کرتا ہے (کلاؤڈ موڈ استعمال کریں یا پہلے Win/Linux پر شروع کریں)",
   "deploy.tip_need_ventoy": "ہائبرڈ موڈ کے لیے مقامی Ventoy CLI ٹولز درکار ہیں۔ ہم کلاؤڈ موڈ کی سفارش کرتے ہیں!",
   "deploy.macos_alert_title": "macOS Ventoy CLI تازہ فارمیٹنگ غیر تعاون یافتہ",
-  "deploy.macos_alert_desc":
-    "آفیشل Ventoy ابھی macOS پر فارمیٹنگ پروگرام چلانے کی حمایت نہیں کرتا۔ نئی [ہائبرڈ ڈرائیو] بنانے کے لیے Ventoy CLI ضروری ہے۔ [کلاؤڈ موڈ (1 سیکنڈ کلاؤڈ بوٹ ڈرائیو)] استعمال کرنے کی سفارش کی جاتی ہے!",
+  "deploy.macos_alert_desc": "آفیشل Ventoy ابھی macOS پر فارمیٹنگ پروگرام چلانے کی حمایت نہیں کرتا۔ نئی [ہائبرڈ ڈرائیو] بنانے کے لیے Ventoy CLI ضروری ہے۔ [کلاؤڈ موڈ (1 سیکنڈ کلاؤڈ بوٹ ڈرائیو)] استعمال کرنے کی سفارش کی جاتی ہے!",
   "deploy.no_ventoy_title": "Ventoy CLI ایگزیکیوٹیبل کا پتہ نہیں چلا",
-  "deploy.no_ventoy_desc":
-    "[ہائبرڈ ڈرائیو] بنانے کے لیے مقامی طور پر انسٹال شدہ Ventoy CLI درکار ہے۔ براہ کرم معاونت شدہ [کلاؤڈ موڈ] منتخب کریں!",
+  "deploy.no_ventoy_desc": "[ہائبرڈ ڈرائیو] بنانے کے لیے مقامی طور پر انسٹال شدہ Ventoy CLI درکار ہے۔ براہ کرم معاونت شدہ [کلاؤڈ موڈ] منتخب کریں!",
   "deploy.result_batch_success": "{count} ڈسک پر 1 سیکنڈ کلاؤڈ انسٹال ڈسک کامیابی سے تعینات ہو گئی!",
   "deploy.result_success": "{targets} پر وضع {mode} کامیابی سے تعینات کر دی گئی",
   "deploy.alert_success": "تعیناتی کامیاب!",
   "deploy.safely_eject_btn": "ڈسک ڈرائیو کو محفوظ طریقے سے نکالیں",
   "deploy.success_banner_title": "بوٹ ڈرائیو کامیابی کے ساتھ بنائی گئی!",
-  "deploy.success_banner_desc":
-    "بوٹ فائلیں اور فرم ویئر لکھ دیے گئے ہیں۔ ڈیٹا کے نقصان سے بچنے کے لیے ان پلگ کرنے سے پہلے محفوظ طریقے سے نکالیں۔",
-  "deploy.toast_auto_ejected":
-    "تخلیق مکمل ہو گئی! {count} ڈسک ڈرائیوز خود بخود محفوظ طریقے سے نکال دی گئیں۔ تمام ڈیٹا محفوظ کر لیا گیا۔",
+  "deploy.success_banner_desc": "بوٹ فائلیں اور فرم ویئر لکھ دیے گئے ہیں۔ ڈیٹا کے نقصان سے بچنے کے لیے ان پلگ کرنے سے پہلے محفوظ طریقے سے نکالیں۔",
+  "deploy.toast_auto_ejected": "تخلیق مکمل ہو گئی! {count} ڈسک ڈرائیوز خود بخود محفوظ طریقے سے نکال دی گئیں۔ تمام ڈیٹا محفوظ کر لیا گیا۔",
   "deploy.confirm_auto_eject_title": "رائٹنگ مکمل ہو گئی — محفوظ طریقے سے نکالیں؟",
-  "deploy.confirm_auto_eject_desc":
-    "تمام ڈیٹا کامیابی کے ساتھ لکھا جا چکا ہے۔ کیا آپ اب ڈسک ڈرائیو کو محفوظ طریقے سے نکالنا چاہتے ہیں؟",
+  "deploy.confirm_auto_eject_desc": "تمام ڈیٹا کامیابی کے ساتھ لکھا جا چکا ہے۔ کیا آپ اب ڈسک ڈرائیو کو محفوظ طریقے سے نکالنا چاہتے ہیں؟",
   "deploy.confirm_auto_eject_yes": "محفوظ طریقے سے نکالیں",
   "deploy.confirm_auto_eject_no": "ابھی نہیں",
   "deploy.alert_fail": "تعیناتی ناکام:",
@@ -248,8 +235,7 @@ export const urPk: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "براہ کرم پہلے بائیں پینل سے ٹارگٹ ڈسک ڈرائیو منتخب کرنے کے لیے کلک کریں!",
-  "vm.toast_not_installed":
-    "QEMU ایمولیٹر نہیں ملا! براہ کرم QEMU انسٹال کریں (brew install qemu یا port install qemu)",
+  "vm.toast_not_installed": "QEMU ایمولیٹر نہیں ملا! براہ کرم QEMU انسٹال کریں (brew install qemu یا port install qemu)",
   "vm.cfg_secure_boot": "SecureBoot کی نقالی",
   "vm.cfg_accel": "ہارڈ ویئر ایکسلریشن",
   "vm.cfg_ram": "ریم کی تخصیص",
@@ -301,10 +287,12 @@ export const urPk: TranslationDict = {
   "settings.ventoy_reserve": "ریزرو اسپیس (MB):",
   "settings.ventoy_win11_bypass": "ونڈوز 11 TPM/CPU/RAM چیک کو بائی پاس کریں:",
   "settings.ventoy_timeout": "Ventoy مینو ٹائم آؤٹ (سیکنڈ):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format انتباہ",
   "confirm.warning_title": "انتباہ: Formatting will erase all data!",
-  "confirm.warning_desc":
-    "منتخب کردہ ڈسک ڈرائیو کو دوبارہ تقسیم اور فارمیٹ کیا جائے گا۔ تمام موجودہ فائلیں مکمل طور پر مٹ جائیں گی۔ یقینی بنائیں کہ آپ نے اہم ڈیٹا کا بیک اپ لیا ہے!",
+  "confirm.warning_desc": "منتخب کردہ ڈسک ڈرائیو کو دوبارہ تقسیم اور فارمیٹ کیا جائے گا۔ تمام موجودہ فائلیں مکمل طور پر مٹ جائیں گی۔ یقینی بنائیں کہ آپ نے اہم ڈیٹا کا بیک اپ لیا ہے!",
   "confirm.mode_title": "تعیناتی موڈ:",
   "confirm.fs_title": "ٹارگٹ فائل سسٹم:",
   "confirm.disks_title": "فارمیٹ ہونے والی ڈرائیوز ({count}):",
@@ -314,14 +302,11 @@ export const urPk: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode تصدیق کریںation",
   "confirm.title_danger": "Format انتباہ: Disk Initialization",
   "confirm.safe_banner_title": "ان پلیس انکریمنٹل اپڈیٹ نوٹس (ڈیٹا سیف)",
-  "confirm.safe_banner_desc":
-    "ٹارگٹ ڈرائیو پر وینٹوائے / یونی بوٹ بوٹ ڈھانچہ کا پتہ چلا۔ سسٹم ایک اضافی اپڈیٹ اسکیپنگ فارمیٹ انجام دے گا۔ تمام موجودہ فائلیں اور ISO 100% محفوظ ہیں!",
+  "confirm.safe_banner_desc": "ٹارگٹ ڈرائیو پر وینٹوائے / یونی بوٹ بوٹ ڈھانچہ کا پتہ چلا۔ سسٹم ایک اضافی اپڈیٹ اسکیپنگ فارمیٹ انجام دے گا۔ تمام موجودہ فائلیں اور ISO 100% محفوظ ہیں!",
   "confirm.mixed_banner_title": "اسمارٹ مکسڈ موڈ: بوٹ ڈرائیوز کے لیے ان پلیس اپ ڈیٹ، بلینک ڈرائیوز کے لیے فارمیٹ",
-  "confirm.mixed_banner_desc":
-    "منتخب کردہ {ventoyCount} بوٹ ڈرائیو (ان جگہ اپ ڈیٹ) اور {blankCount} خالی ڈرائیو (مکمل فارمیٹ)۔",
+  "confirm.mixed_banner_desc": "منتخب کردہ {ventoyCount} بوٹ ڈرائیو (ان جگہ اپ ڈیٹ) اور {blankCount} خالی ڈرائیو (مکمل فارمیٹ)۔",
   "confirm.danger_banner_title": "انتباہ: Formatting is irreversible!",
-  "confirm.danger_banner_desc":
-    "لکھنا ٹارگٹ ڈیوائس (MBR/GPT) کو دوبارہ تقسیم کرے گا اور فارمیٹ کرے گا۔ منتخب کردہ ڈرائیو پر موجود تمام فائلز کو مکمل طور پر مٹا دیا جائے گا!",
+  "confirm.danger_banner_desc": "لکھنا ٹارگٹ ڈیوائس (MBR/GPT) کو دوبارہ تقسیم کرے گا اور فارمیٹ کرے گا۔ منتخب کردہ ڈرائیو پر موجود تمام فائلز کو مکمل طور پر مٹا دیا جائے گا!",
   "confirm.summary_title": "بوٹ کی تعیناتی کے لیے ٹارگٹ ڈرائیوز:",
   "confirm.smart_safe_tag": "اسمارٹ سیف",
   "confirm.ventoy_group_title": "ان پلیس اپ گریڈ ڈرائیوز (تمام ISO محفوظ ہیں):",
@@ -341,10 +326,8 @@ export const urPk: TranslationDict = {
   "confirm.no_format": "سمارٹ ان-پلیس اپ ڈیٹ",
   "deploy.toast_target_changed": "منتخب کردہ ہدف ڈسک تبدیل ہو گئی ہے یا اب دستیاب نہیں ہے۔ براہ کرم دوبارہ اسکین کریں۔",
   "deploy.toast_some_disks_removed": "{count} غیر دستیاب ڈسک خودکار طور پر ہٹا دی گئی، باقی ڈسک کے ساتھ جاری رکھنا",
-  "deploy.error_system_disk_blocked":
-    "⛔ مسدود: {disks} ایک سسٹم ڈسک ہے۔ سسٹم ڈرائیو پر USB بوٹ ڈسک تعینات نہیں کی جا سکتی!",
-  "deploy.error_readonly_disk":
-    "🔒 تحریر سے محفوظ: {disks} صرف پڑھنے کے لیے ہے۔ براہ کرم تحریر کی حفاظت کو ہٹائیں یا مختلف USB استعمال کریں",
+  "deploy.error_system_disk_blocked": "⛔ مسدود: {disks} ایک سسٹم ڈسک ہے۔ سسٹم ڈرائیو پر USB بوٹ ڈسک تعینات نہیں کی جا سکتی!",
+  "deploy.error_readonly_disk": "🔒 تحریر سے محفوظ: {disks} صرف پڑھنے کے لیے ہے۔ براہ کرم تحریر کی حفاظت کو ہٹائیں یا مختلف USB استعمال کریں",
   "deploy.start_cloud_create": "کلاؤڈ بوٹ ڈسک بنائیں",
   "deploy.batch_update": "ڈیٹا کے نقصان کے بغیر بیچ اپ ڈیٹ شروع کریں ({count} ڈسک ڈرائیوز)",
   "deploy.batch_mixed": "بیچ مخلوط ڈیپلائمنٹ شروع کریں ({count} ڈسک ڈرائیوز)",
@@ -367,8 +350,7 @@ export const urPk: TranslationDict = {
   "inspector.smart": "SMART صحت کی حالت:",
   "inspector.sector": "سیکٹر کا سائز:",
   "inspector.fake_title": "Fake USB 3.0 انتباہ Alert!",
-  "inspector.fake_desc":
-    "ڈیوائس USB 3.0/3.1 کی تشہیر کرتی ہے، لیکن اصل فزیکل لیئر اسپیڈ صرف {speed} (USB 2.0 High-Speed PHY) پر بات چیت کی جاتی ہے۔ اس ڈرائیو میں ممکنہ طور پر جعلی فرم ویئر یا جعلی بلیو پورٹ ہے۔",
+  "inspector.fake_desc": "ڈیوائس USB 3.0/3.1 کی تشہیر کرتی ہے، لیکن اصل فزیکل لیئر اسپیڈ صرف {speed} (USB 2.0 High-Speed PHY) پر بات چیت کی جاتی ہے۔ اس ڈرائیو میں ممکنہ طور پر جعلی فرم ویئر یا جعلی بلیو پورٹ ہے۔",
   "inspector.genuine_title": "جسمانی ہارڈ ویئر کی توثیق پاس ہو گئی (حقیقی USB 3.0+ ڈیوائس)",
   "inspector.genuine_desc": "فزیکل PHY پرت نے {speed} کی حقیقی SuperSpeed/SuperSpeed+ رفتار حاصل کی۔",
   "inspector.usb2_title": "معیاری USB 2.0 انٹرفیس",
@@ -476,10 +458,8 @@ export const urPk: TranslationDict = {
   "diag.action_reformat_title": "دوبارہ فارمیٹ کریں (reformat)",
   "diag.action_remount_title": "دوبارہ ماؤنٹ کریں (remount)",
   "diag.action_retry_title": "دوبارہ کوشش کریں (retry)",
-  "diag.action_reformat_desc":
-    "رائٹنگ میں رکاوٹ نے پارٹیشن ٹیبل یا فائل سسٹم کو نقصان پہنچایا ہے۔ نیا فارمیٹ کرنے کی سفارش کی جاتی ہے۔",
-  "diag.action_remount_desc":
-    "رائٹنگ کے دوران ہدف ماؤنٹ پاتھ منقطع ہو گیا۔ براہ کرم ڈسک ڈرائیو دوبارہ لگائیں یا والیم دوبارہ ماؤنٹ کریں۔",
+  "diag.action_reformat_desc": "رائٹنگ میں رکاوٹ نے پارٹیشن ٹیبل یا فائل سسٹم کو نقصان پہنچایا ہے۔ نیا فارمیٹ کرنے کی سفارش کی جاتی ہے۔",
+  "diag.action_remount_desc": "رائٹنگ کے دوران ہدف ماؤنٹ پاتھ منقطع ہو گیا۔ براہ کرم ڈسک ڈرائیو دوبارہ لگائیں یا والیم دوبارہ ماؤنٹ کریں۔",
   "diag.action_retry_desc": "ماحول اور ڈیوائس کی حالت بالکل ٹھیک ہے۔ آپ محفوظ طریقے سے دوبارہ کوشش کر سکتے ہیں۔",
   "about.updating": "اپ ڈیٹ ہو رہا ہے ({progress}%)",
   "about.updateTo": "{tag} پر آن لائن اپ ڈیٹ کریں",
@@ -496,8 +476,7 @@ export const urPk: TranslationDict = {
   "dialog.textFilesFilter": "متن فائلیں (*.txt)",
   "dialog.allFilesFilter": "تمام فائلیں (*.*)",
   "dialog.selectIsoTitle": "سسٹم امیج فائلیں منتخب کریں (*.iso, *.wim, *.img وغیرہ)",
-  "dialog.ventoyFilter":
-    "Ventoy ماخذ امیجز (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Ventoy ماخذ امیجز (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "ہیش کا حساب لگائیں",
   "checksum.calculating": "ہیش کا حساب لگایا جا رہا ہے...",
   "checksum.algo_label": "الگورتھم",
@@ -541,12 +520,10 @@ export const urPk: TranslationDict = {
   "privilege.status_standard": "غیر مجاز",
   "privilege.btn_elevate": "ایڈمن تک رسائی کی درخواست کریں",
   "privilege.modal_title": "ایڈمنسٹریٹر کی اجازت درکار ہے",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "بوٹ ڈیٹا پڑھنے اور ڈسک پر لکھنے کے لیے سسٹم کی اجازت درکار ہے",
   "privilege.reason_title": "ایڈمنسٹریٹر کے اختیارات کیوں درکار ہیں؟",
-  "privilege.reason_desc":
-    "آپریٹنگ سسٹم خام سیکٹرز اور EFI پارٹیشنز کو محفوظ رکھتا ہے۔ اجازت براہ راست شناخت اور محفوظ تخلیق کو ممکن بناتی ہے۔",
+  "privilege.reason_desc": "آپریٹنگ سسٹم خام سیکٹرز اور EFI پارٹیشنز کو محفوظ رکھتا ہے۔ اجازت براہ راست شناخت اور محفوظ تخلیق کو ممکن بناتی ہے۔",
   "privilege.scope_title": "رسائی کا دائرہ",
   "privilege.scope_desc": "صرف منتخب بیرونی USB ڈرائیوز تک محدود ہے۔ اندرونی سسٹم ڈسکس کو کبھی ہاتھ نہیں لگایا جاتا۔",
   "privilege.safety_title": "حفاظت اور شفافیت",

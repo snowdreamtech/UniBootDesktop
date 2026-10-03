@@ -164,6 +164,10 @@ export function useAppSettings(options: UseAppSettingsOptions) {
             payload?.ventoyMenuTimeout !== undefined
               ? Number(payload.ventoyMenuTimeout) || 0
               : currentCfg?.ventoyMenuTimeout || 0,
+          ventoySecondaryMenu:
+            typeof payload?.ventoySecondaryMenu === "boolean"
+              ? payload.ventoySecondaryMenu
+              : currentCfg?.ventoySecondaryMenu === true,
           autoEjectAfterDeploy:
             typeof payload?.autoEjectAfterDeploy === "boolean"
               ? payload.autoEjectAfterDeploy

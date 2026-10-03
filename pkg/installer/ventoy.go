@@ -228,6 +228,12 @@ func BuildVentoyConfigData(existingData []byte, appCfg *config.AppConfig, mountD
 		)
 	}
 
+	if appCfg.VentoySecondaryMenu {
+		controls = append(controls, map[string]interface{}{"VTOY_SECONDARY_BOOT_MENU": "1"})
+	} else {
+		controls = append(controls, map[string]interface{}{"VTOY_SECONDARY_BOOT_MENU": "0"})
+	}
+
 	themeCfg := &VentoyThemeConfig{
 		File:    "/ventoy/themes/uniboot/theme.txt",
 		Gfxmode: "1280x800",

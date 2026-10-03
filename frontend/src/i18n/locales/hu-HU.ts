@@ -24,8 +24,7 @@ export const huHu: TranslationDict = {
   "common.langAuto": "Nyelv (automatikus)",
   "common.lang": "Nyelv",
   "vm.startSuccess": "A virtuális gép szimuláció sikeresen elindult a lemezen: {disk} ({device})",
-  "vm.backendNotReady":
-    "A háttér API nem készen áll: Wails kötések betöltése, kérjük, indítsa újra az UniBoot alkalmazást.",
+  "vm.backendNotReady": "A háttér API nem készen áll: Wails kötések betöltése, kérjük, indítsa újra az UniBoot alkalmazást.",
   "vm.demoModeStart": "[Demo mód] A QEMU szimulátor ellenőrzésének indítása: {disk} ({device})",
   "vm.startFailed": "Nem sikerült elindítani a QEMU szimulátort: {error}",
   "disk.writingImageProgress": "Kép írása ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -110,8 +109,7 @@ export const huHu: TranslationDict = {
   "disk.tag_boot_hybrid": "Hibrid indítás",
   "disk.tag_boot_thirdparty": "Harmadik féltől származó indítás",
   "confirm.cloud_to_hybrid_warn_title": "Figyelem: A hibrid módra váltás teljes formázást igényel",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "Ez a lemez tiszta felhő alapú módban van. A Ventoy hibrid mód megköveteli az MBR és a partíciós tábla újraépítését, ami TÖRÖL minden adatot és ISO-t!",
+  "confirm.cloud_to_hybrid_warn_desc": "Ez a lemez tiszta felhő alapú módban van. A Ventoy hibrid mód megköveteli az MBR és a partíciós tábla újraépítését, ami TÖRÖL minden adatot és ISO-t!",
   "disk.tag_ssd": "Hordozható SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Titkosított meghajtó",
@@ -139,16 +137,13 @@ export const huHu: TranslationDict = {
   "log.level_error": "HIBA",
   "log.level_debug": "Hibakeresés",
   "safe.title_cloud": "Meglévő Ventoy/UniBoot meghajtó észlelve (A Felhő mód csak az ESP partíciót frissíti)",
-  "safe.desc_cloud":
-    "A Felhő mód megőrzi a UNIBOOT dupla partíciós elrendezését. Az ESP frissítése érintetlenül hagyja az ISO-kat és fájlokat!",
+  "safe.desc_cloud": "A Felhő mód megőrzi a UNIBOOT dupla partíciós elrendezését. Az ESP frissítése érintetlenül hagyja az ISO-kat és fájlokat!",
   "safe.title_hybrid": "Meglévő Ventoy meghajtó észlelve (Hibrid módú helybeni frissítés)",
-  "safe.desc_hybrid":
-    "A Hibrid mód formázás nélkül megőrzi az összes létező ISO fájlt, biztonságosan beillesztve a UniBoot sötét témát és a felhő menüt!",
+  "safe.desc_hybrid": "A Hibrid mód formázás nélkül megőrzi az összes létező ISO fájlt, biztonságosan beillesztve a UniBoot sötét témát és a felhő menüt!",
   "common.optional": "Opcionális",
   "common.optional_test": "Opcionális teszt",
   "iso.title": "Helyi rendszerkép források (ISO / IMG / WIM / VHD)",
-  "iso.desc":
-    "Adjon hozzá ISO fájlokat az automatikus másoláshoz a /UNIBOOT/iso/ könyvtárba a közvetlen Ventoy / UniBoot indításhoz.",
+  "iso.desc": "Adjon hozzá ISO fájlokat az automatikus másoláshoz a /UNIBOOT/iso/ könyvtárba a közvetlen Ventoy / UniBoot indításhoz.",
   "iso.add_btn": "Képfájlok hozzáadása",
   "iso.empty_title": "Kattintson képfájlok hozzáadásához",
   "iso.empty_sub": "Támogatott formátumok: .iso, .wim, .img, .whd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -159,8 +154,7 @@ export const huHu: TranslationDict = {
   "iso.drag_unsupported": "Nem található támogatott képfájl (.iso, .wim, .img stb.)",
   "iso.preflight_title": "Írás előtti ellenőrzés",
   "iso.conflict_title": "A fájlnév már létezik",
-  "iso.conflict_desc":
-    "A cél USB iso mappájában már létezik ilyen nevű fájl. Válasszon műveletet. A hasheket nem hasonlítjuk össze.",
+  "iso.conflict_desc": "A cél USB iso mappájában már létezik ilyen nevű fájl. Válasszon műveletet. A hasheket nem hasonlítjuk össze.",
   "iso.conflict_action": "Művelet",
   "iso.conflict_keep_both": "Megtartás",
   "iso.conflict_replace": "Felülírás",
@@ -170,16 +164,13 @@ export const huHu: TranslationDict = {
   "iso.conflict_confirm": "Megerősítés és folytatás",
   "iso.preflight_failed": "Az írás előtti ellenőrzés sikertelen",
   "deploy.title": "Indítólemez létrehozása és QEMU teszt",
-  "deploy.desc_cloud":
-    "Tiszta iPXE felhő indítás • Rendkívül gyors kétpartíciós beállítás többarchitektúrás iPXE hálózati belső vezérlőprogrammal.",
+  "deploy.desc_cloud": "Tiszta iPXE felhő indítás • Rendkívül gyors kétpartíciós beállítás többarchitektúrás iPXE hálózati belső vezérlőprogrammal.",
   "deploy.desc_hybrid": "Ventoy CLI helyi motor • Ventoy hibrid partíció beállítás helyi ISO kezeléssel.",
   "deploy.target_device": "Céleszköz:",
   "deploy.batch_target": "Kiválasztva {count} USB-meghajtó",
   "deploy.start_create": "Indítólemez létrehozása",
-  "deploy.tip_batch_update_all":
-    "Kötegelt frissítés adatvesztés nélkül: Mind a(z) {count} kiválasztott USB-meghajtó helyben frissül",
-  "deploy.tip_batch_mixed":
-    "Kötegelt vegyes telepítés: {bootCount} meghajtó frissítés adatvesztés nélkül, {blankCount} meghajtó új formázás",
+  "deploy.tip_batch_update_all": "Kötegelt frissítés adatvesztés nélkül: Mind a(z) {count} kiválasztott USB-meghajtó helyben frissül",
+  "deploy.tip_batch_mixed": "Kötegelt vegyes telepítés: {bootCount} meghajtó frissítés adatvesztés nélkül, {blankCount} meghajtó új formázás",
   "deploy.start_update": "Helybeni frissítés (Adatbiztos)",
   "deploy.batch_create": "Több lemezes létrehozás indítása ({count} meghajtó)",
   "deploy.writing": "Indító belső vezérlőprogram csomagok írása...",
@@ -194,27 +185,21 @@ export const huHu: TranslationDict = {
   "deploy.tip_writing": "Boot firmware írása...",
   "deploy.tip_select_single": "Kérjük, először válassza ki a cél USB-meghajtót",
   "deploy.tip_select_batch": "Kérjük, ellenőrizze a cél USB-meghajtókat a kötegelt telepítéshez",
-  "deploy.tip_macos_unsupported":
-    "A macOS nem támogatja a hibrid módú tiszta formázást (használja a felhő módot vagy inicializálja előbb Win/Linux rendszeren)",
+  "deploy.tip_macos_unsupported": "A macOS nem támogatja a hibrid módú tiszta formázást (használja a felhő módot vagy inicializálja előbb Win/Linux rendszeren)",
   "deploy.tip_need_ventoy": "A Hibrid módhoz helyi Ventoy CLI eszközkészlet szükséges. A Felhő módot javasoljuk!",
   "deploy.macos_alert_title": "A macOS Ventoy CLI friss formázása nem támogatott",
-  "deploy.macos_alert_desc":
-    "A hivatalos Ventoy még nem támogatja a formázó program futtatását macOS rendszeren. Új [Hibrid lemez] készítéséhez Ventoy CLI szükséges. Javasoljuk a [Felhő mód (1s felhő indítólemez)] használatát!",
+  "deploy.macos_alert_desc": "A hivatalos Ventoy még nem támogatja a formázó program futtatását macOS rendszeren. Új [Hibrid lemez] készítéséhez Ventoy CLI szükséges. Javasoljuk a [Felhő mód (1s felhő indítólemez)] használatát!",
   "deploy.no_ventoy_title": "A Ventoy CLI végrehajtható fájl nem észlelhető",
-  "deploy.no_ventoy_desc":
-    "A [Hibrid lemez] készítéséhez helyileg telepített Ventoy CLI szükséges. Kérjük, válassza a támogatott [Felhő módot]!",
+  "deploy.no_ventoy_desc": "A [Hibrid lemez] készítéséhez helyileg telepített Ventoy CLI szükséges. Kérjük, válassza a támogatott [Felhő módot]!",
   "deploy.result_batch_success": "Az 1 másodperces felhőalapú telepítőlemez sikeresen telepítve {count} lemezre!",
   "deploy.result_success": "A(z) {mode} mód sikeresen telepítve: {targets}",
   "deploy.alert_success": "Telepítés sikeres!",
   "deploy.safely_eject_btn": "USB-meghajtó biztonságos eltávolítása",
   "deploy.success_banner_title": "A rendszerindító meghajtó sikeresen elkészült!",
-  "deploy.success_banner_desc":
-    "Az indítófájlok és a firmware kiírása sikeres. Az adatvesztés elkerülése érdekében leválasztás előtt biztonságosan távolítsa el.",
-  "deploy.toast_auto_ejected":
-    "Elkészült! {count} USB-meghajtó automatikusan biztonságosan kiadva. Minden adat kiírva.",
+  "deploy.success_banner_desc": "Az indítófájlok és a firmware kiírása sikeres. Az adatvesztés elkerülése érdekében leválasztás előtt biztonságosan távolítsa el.",
+  "deploy.toast_auto_ejected": "Elkészült! {count} USB-meghajtó automatikusan biztonságosan kiadva. Minden adat kiírva.",
   "deploy.confirm_auto_eject_title": "Írás befejezve — Biztonságosan eltávolítja?",
-  "deploy.confirm_auto_eject_desc":
-    "Minden adat sikeresen kiírásra került. Szeretné most biztonságosan eltávolítani az USB-meghajtót?",
+  "deploy.confirm_auto_eject_desc": "Minden adat sikeresen kiírásra került. Szeretné most biztonságosan eltávolítani az USB-meghajtót?",
   "deploy.confirm_auto_eject_yes": "Biztonságos eltávolítás",
   "deploy.confirm_auto_eject_no": "Most nem",
   "deploy.alert_fail": "Telepítés sikertelen:",
@@ -250,8 +235,7 @@ export const huHu: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Kérjük, kattintson először a cél USB-meghajtó kiválasztásához a bal oldali panelen!",
-  "vm.toast_not_installed":
-    "A QEMU emulátor nem található! Kérjük, telepítse a QEMU-t (brew install qemu vagy port install qemu)",
+  "vm.toast_not_installed": "A QEMU emulátor nem található! Kérjük, telepítse a QEMU-t (brew install qemu vagy port install qemu)",
   "vm.cfg_secure_boot": "SecureBoot szimuláció",
   "vm.cfg_accel": "Hardveres gyorsítás",
   "vm.cfg_ram": "RAM alokáció",
@@ -303,10 +287,12 @@ export const huHu: TranslationDict = {
   "settings.ventoy_reserve": "Helyfoglalás (MB):",
   "settings.ventoy_win11_bypass": "A Windows 11 TPM/CPU/RAM ellenőrzésének megkerülése:",
   "settings.ventoy_timeout": "Ventoy menü időtúllépése (másodperc):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Figyelmeztetés",
   "confirm.warning_title": "Figyelmeztetés: Formatting will erase all data!",
-  "confirm.warning_desc":
-    "A kiválasztott USB-meghajtó újraparticionálásra és formázásra kerül. Az összes meglévő fájl teljesen törlődik. Győződjön meg arról, hogy a fontos adatokról biztonsági másolatot készített!",
+  "confirm.warning_desc": "A kiválasztott USB-meghajtó újraparticionálásra és formázásra kerül. Az összes meglévő fájl teljesen törlődik. Győződjön meg arról, hogy a fontos adatokról biztonsági másolatot készített!",
   "confirm.mode_title": "Telepítési mód:",
   "confirm.fs_title": "Cél fájlrendszer:",
   "confirm.disks_title": "Formázni kívánt meghajtók ({count}):",
@@ -316,15 +302,11 @@ export const huHu: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Megerősítésation",
   "confirm.title_danger": "Format Figyelmeztetés: Disk Initialization",
   "confirm.safe_banner_title": "Helyi fokozatos frissítési értesítés (adatbiztonság)",
-  "confirm.safe_banner_desc":
-    "Ventoy / UniBoot rendszerindító szerkezet észlelve a célmeghajtón. A rendszer növekményes frissítési kihagyási formátumot hajt végre. Minden létező fájl és ISO 100%-ban megmarad!",
-  "confirm.mixed_banner_title":
-    "Intelligens vegyes mód: Helyi frissítés a rendszerindító meghajtókhoz, formátum az üres meghajtókhoz",
-  "confirm.mixed_banner_desc":
-    "Kiválasztott {ventoyCount} rendszerindító meghajtó(k) (helyi frissítés) és {blankCount} üres meghajtó(k) (teljes formátum).",
+  "confirm.safe_banner_desc": "Ventoy / UniBoot rendszerindító szerkezet észlelve a célmeghajtón. A rendszer növekményes frissítési kihagyási formátumot hajt végre. Minden létező fájl és ISO 100%-ban megmarad!",
+  "confirm.mixed_banner_title": "Intelligens vegyes mód: Helyi frissítés a rendszerindító meghajtókhoz, formátum az üres meghajtókhoz",
+  "confirm.mixed_banner_desc": "Kiválasztott {ventoyCount} rendszerindító meghajtó(k) (helyi frissítés) és {blankCount} üres meghajtó(k) (teljes formátum).",
   "confirm.danger_banner_title": "Figyelmeztetés: Formatting is irreversible!",
-  "confirm.danger_banner_desc":
-    "Az írás újraparticionálja és formázza a céleszközt (MBR/GPT). A kiválasztott meghajtó(k)on lévő összes fájl teljesen törlődik!",
+  "confirm.danger_banner_desc": "Az írás újraparticionálja és formázza a céleszközt (MBR/GPT). A kiválasztott meghajtó(k)on lévő összes fájl teljesen törlődik!",
   "confirm.summary_title": "Célmeghajtók a rendszerindításhoz:",
   "confirm.smart_safe_tag": "Okos védelem",
   "confirm.ventoy_group_title": "Helyben frissíthető meghajtók (minden ISO megőrizve):",
@@ -342,14 +324,10 @@ export const huHu: TranslationDict = {
   "confirm.no": "Mégse",
   "confirm.will_format": "Teljes formázás",
   "confirm.no_format": "Intelligens helybeni frissítés",
-  "deploy.toast_target_changed":
-    "A kiválasztott céllemez megváltozott vagy már nem érhető el. Kérjük, szkenneljen újra.",
-  "deploy.toast_some_disks_removed":
-    "{count} nem elérhető lemez automatikusan eltávolítva, folytatás a fennmaradó lemezekkel",
-  "deploy.error_system_disk_blocked":
-    "⛔ Letiltva: A(z) {disks} rendszerlemez. USB rendszerindító lemez nem telepíthető rendszermeghajtóra!",
-  "deploy.error_readonly_disk":
-    "🔒 Írásvédett: A(z) {disks} csak olvasható. Távolítsa el az írásvédelmet, vagy használjon másik USB-eszközt",
+  "deploy.toast_target_changed": "A kiválasztott céllemez megváltozott vagy már nem érhető el. Kérjük, szkenneljen újra.",
+  "deploy.toast_some_disks_removed": "{count} nem elérhető lemez automatikusan eltávolítva, folytatás a fennmaradó lemezekkel",
+  "deploy.error_system_disk_blocked": "⛔ Letiltva: A(z) {disks} rendszerlemez. USB rendszerindító lemez nem telepíthető rendszermeghajtóra!",
+  "deploy.error_readonly_disk": "🔒 Írásvédett: A(z) {disks} csak olvasható. Távolítsa el az írásvédelmet, vagy használjon másik USB-eszközt",
   "deploy.start_cloud_create": "Felhőalapú indítólemez létrehozása",
   "deploy.batch_update": "Kötegelt frissítés indítása adatvesztés nélkül ({count} USB-meghajtó)",
   "deploy.batch_mixed": "Kötegelt vegyes telepítés indítása ({count} USB-meghajtó)",
@@ -372,11 +350,9 @@ export const huHu: TranslationDict = {
   "inspector.smart": "SMART egészségi állapot:",
   "inspector.sector": "Szektor mérete:",
   "inspector.fake_title": "Fake USB 3.0 Figyelmeztetés Alert!",
-  "inspector.fake_desc":
-    "Az eszköz USB 3.0/3.1-et hirdet, de a tényleges fizikai rétegsebesség csak {speed} (USB 2.0 High-Speed PHY) mellett áll rendelkezésre. Ez a meghajtó valószínűleg hamisított firmware-t vagy hamis kék portot tartalmaz.",
+  "inspector.fake_desc": "Az eszköz USB 3.0/3.1-et hirdet, de a tényleges fizikai rétegsebesség csak {speed} (USB 2.0 High-Speed PHY) mellett áll rendelkezésre. Ez a meghajtó valószínűleg hamisított firmware-t vagy hamis kék portot tartalmaz.",
   "inspector.genuine_title": "A fizikai hardver ellenőrzése sikeres (Eredeti USB 3.0+ eszköz)",
-  "inspector.genuine_desc":
-    "A fizikai PHY réteg valódi SuperSpeed/SuperSpeed+ kapcsolatot épített fel {speed} sebességgel.",
+  "inspector.genuine_desc": "A fizikai PHY réteg valódi SuperSpeed/SuperSpeed+ kapcsolatot épített fel {speed} sebességgel.",
   "inspector.usb2_title": "Standard USB 2.0 interfész",
   "inspector.usb2_desc": "A készülék hardvere USB 2.0, elméleti fizikai max sebessége 480 Mb/s.",
   "inspector.section_basic": "Alapvető eszközinformációk",
@@ -482,10 +458,8 @@ export const huHu: TranslationDict = {
   "diag.action_reformat_title": "Újraformázás (reformat)",
   "diag.action_remount_title": "Újracsatolás (remount)",
   "diag.action_retry_title": "Újrapróbálkozás (retry)",
-  "diag.action_reformat_desc":
-    "Az írás megszakadása megsértette a partíciós táblát vagy a fájlrendszert. Újraformázás javasolt.",
-  "diag.action_remount_desc":
-    "A cél csatolási útvonala megszakadt az írás során. Illessze be újra az USB-meghajtót vagy csatolja újra a kötetet.",
+  "diag.action_reformat_desc": "Az írás megszakadása megsértette a partíciós táblát vagy a fájlrendszert. Újraformázás javasolt.",
+  "diag.action_remount_desc": "A cél csatolási útvonala megszakadt az írás során. Illessze be újra az USB-meghajtót vagy csatolja újra a kötetet.",
   "diag.action_retry_desc": "A környezet és az eszköz állapota ép. Biztonságosan megismételheti a telepítést.",
   "about.updating": "Frissítés ({progress}%)",
   "about.updateTo": "Online frissítés erre: {tag}",
@@ -502,8 +476,7 @@ export const huHu: TranslationDict = {
   "dialog.textFilesFilter": "Szöveges fájlok (*.txt)",
   "dialog.allFilesFilter": "Minden fájl (*.*)",
   "dialog.selectIsoTitle": "Rendszerképfájlok kiválasztása (*.iso, *.wim, *.img stb.)",
-  "dialog.ventoyFilter":
-    "Ventoy forrásképfájlok (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Ventoy forrásképfájlok (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Hash kiszámítása",
   "checksum.calculating": "Hash kiszámítása folyamatban...",
   "checksum.algo_label": "Algoritmus",
@@ -547,15 +520,12 @@ export const huHu: TranslationDict = {
   "privilege.status_standard": "Nincs engedélyezve",
   "privilege.btn_elevate": "Rendszergazdai hozzáférés kérése",
   "privilege.modal_title": "Rendszergazdai jogosultság szükséges",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Rendszerengedély szükséges a rendszerindítási adatok olvasásához és a lemezek írásához",
   "privilege.reason_title": "Miért van szükség rendszergazdai jogosultságra?",
-  "privilege.reason_desc":
-    "Az operációs rendszer elszigeteli a nyers szektorokat és az EFI-partíciókat. Az engedélyezés lehetővé teszi a közvetlen észlelést és a biztonságos lemezkészítést.",
+  "privilege.reason_desc": "Az operációs rendszer elszigeteli a nyers szektorokat és az EFI-partíciókat. Az engedélyezés lehetővé teszi a közvetlen észlelést és a biztonságos lemezkészítést.",
   "privilege.scope_title": "Hozzáférési kör",
-  "privilege.scope_desc":
-    "Szigorúan a kiválasztott külső USB-meghajtókra korlátozódik. A belső rendszerlemezeket soha nem érinti.",
+  "privilege.scope_desc": "Szigorúan a kiválasztott külső USB-meghajtókra korlátozódik. A belső rendszerlemezeket soha nem érinti.",
   "privilege.safety_title": "Biztonság és átláthatóság",
   "privilege.safety_desc": "Az ellenőrzés szigorúan csak olvasható és nem destruktív; a forráskód teljesen nyílt.",
   "privilege.confirm_btn": "Engedélyezés most",
