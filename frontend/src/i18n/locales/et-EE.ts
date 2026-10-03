@@ -288,8 +288,6 @@ export const etEe: TranslationDict = {
   "settings.ventoy_win11_bypass": "Vältige Windows 11 TPM/CPU/RAM kontrolli:",
   "settings.ventoy_timeout": "Ventoy menüü ajalõpp (sekundites):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Hoiatus",
   "confirm.warning_title": "Hoiatus: Formatting will erase all data!",
   "confirm.warning_desc": "Valitud USB-draiv sektsioonitakse uuesti ja vormindatakse. Kõik olemasolevad failid kustutatakse täielikult. Veenduge, et olete varundanud olulised andmed!",

@@ -298,9 +298,7 @@ export const enUs: TranslationDict = {
   "settings.ventoy_reserve": "Reserve Space (MB):",
   "settings.ventoy_win11_bypass": "Bypass Windows 11 TPM/CPU/RAM Check:",
   "settings.ventoy_timeout": "Ventoy Menu Timeout (Seconds):",
-  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Menu:",
   "confirm.title": "High-Risk Format Warning",
   "confirm.warning_title": "Warning: Formatting will erase all data!",
   "confirm.warning_desc":

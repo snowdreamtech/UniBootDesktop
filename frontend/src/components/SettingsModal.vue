@@ -550,11 +550,11 @@
                   <div class="radio-group horizontal">
                     <label class="radio-label">
                       <input type="radio" :value="false" v-model="ventoySecondaryMenu" @change="triggerAutoSave" />
-                      <span>{{ t("settings.ventoy_secondary_menu_direct") }}</span>
+                      <span>{{ t("common.off") }}</span>
                     </label>
                     <label class="radio-label">
                       <input type="radio" :value="true" v-model="ventoySecondaryMenu" @change="triggerAutoSave" />
-                      <span>{{ t("settings.ventoy_secondary_menu_enabled") }}</span>
+                      <span>{{ t("common.on") }}</span>
                     </label>
                   </div>
                 </div>

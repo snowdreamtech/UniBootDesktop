@@ -288,8 +288,6 @@ export const azAz: TranslationDict = {
   "settings.ventoy_win11_bypass": "Windows 11 TPM/CPU/RAM yoxlamasından keçin:",
   "settings.ventoy_timeout": "Ventoy Menyu Taymout (Saniyələr):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Xəbərdarlıq",
   "confirm.warning_title": "Xəbərdarlıq: Formatting will erase all data!",
   "confirm.warning_desc": "Seçilmiş USB sürücüsü yenidən bölmələrə bölünəcək və formatlaşdırılacaq. Bütün mövcud fayllar tamamilə silinəcək. Vacib məlumatların ehtiyat nüsxəsini çıxardığınızdan əmin olun!",

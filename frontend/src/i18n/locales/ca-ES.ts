@@ -288,8 +288,6 @@ export const caEs: TranslationDict = {
   "settings.ventoy_win11_bypass": "Evita la comprovació de TPM/CPU/RAM de Windows 11:",
   "settings.ventoy_timeout": "Temps d'espera del menú Ventoy (segons):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Avís",
   "confirm.warning_title": "Avís: Formatting will erase all data!",
   "confirm.warning_desc": "La unitat USB seleccionada es tornarà a particionar i formatar. Tots els fitxers existents s'esborraran completament. Assegureu-vos d'haver fet una còpia de seguretat de les dades importants!",

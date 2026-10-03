@@ -288,8 +288,6 @@ export const esLa: TranslationDict = {
   "settings.ventoy_win11_bypass": "Omita la verificación de TPM/CPU/RAM de Windows 11:",
   "settings.ventoy_timeout": "Tiempo de espera del menú Ventoy (segundos):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Advertencia",
   "confirm.warning_title": "Advertencia: Formatting will erase all data!",
   "confirm.warning_desc": "La disco seleccionada se volverá a particionar y formatear. Todos los archivos existentes se borrarán por completo. ¡Asegúrese de haber realizado una copia de seguridad de los datos importantes!",

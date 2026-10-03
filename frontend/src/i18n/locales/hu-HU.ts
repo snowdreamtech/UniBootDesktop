@@ -288,8 +288,6 @@ export const huHu: TranslationDict = {
   "settings.ventoy_win11_bypass": "A Windows 11 TPM/CPU/RAM ellenőrzésének megkerülése:",
   "settings.ventoy_timeout": "Ventoy menü időtúllépése (másodperc):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Figyelmeztetés",
   "confirm.warning_title": "Figyelmeztetés: Formatting will erase all data!",
   "confirm.warning_desc": "A kiválasztott USB-meghajtó újraparticionálásra és formázásra kerül. Az összes meglévő fájl teljesen törlődik. Győződjön meg arról, hogy a fontos adatokról biztonsági másolatot készített!",

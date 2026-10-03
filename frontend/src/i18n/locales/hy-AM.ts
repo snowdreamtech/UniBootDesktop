@@ -288,8 +288,6 @@ export const hyAm: TranslationDict = {
   "settings.ventoy_win11_bypass": "Շրջանցել Windows 11 TPM/CPU/RAM ստուգումը.",
   "settings.ventoy_timeout": "Ventoy Menu Timeout (վայրկյաններ):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Զգուշացում",
   "confirm.warning_title": "Զգուշացում: Formatting will erase all data!",
   "confirm.warning_desc": "Ընտրված USB կրիչը նորից կբաժանվի և կձևաչափվի: Բոլոր առկա ֆայլերը ամբողջությամբ կջնջվեն: Համոզվեք, որ դուք կրկնօրինակել եք կարևոր տվյալները:",

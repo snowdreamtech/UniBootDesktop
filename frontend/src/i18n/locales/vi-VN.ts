@@ -288,8 +288,6 @@ export const viVn: TranslationDict = {
   "settings.ventoy_win11_bypass": "Bỏ qua kiểm tra phần cứng Windows 11 (TPM/CPU/RAM):",
   "settings.ventoy_timeout": "Thời gian chờ menu Ventoy (Giây):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "Cảnh báo định dạng rủi ro cao",
   "confirm.warning_title": "Cảnh báo: Định dạng sẽ xóa toàn bộ dữ liệu!",
   "confirm.warning_desc": "Ổ USB được chọn sẽ được phân vùng lại và định dạng. Tất cả các tệp hiện có sẽ bị xóa hoàn toàn. Hãy đảm bảo bạn đã sao lưu dữ liệu quan trọng!",

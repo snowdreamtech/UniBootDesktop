@@ -288,8 +288,6 @@ export const arSa: TranslationDict = {
   "settings.ventoy_win11_bypass": "تجاوز فحص متطلبات Windows 11 (TPM/CPU/RAM):",
   "settings.ventoy_timeout": "مهلة قائمة Ventoy (بالثواني):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "تحذير من التنسيق عالي المخاطر",
   "confirm.warning_title": "تحذير: التنسيق سيمحو جميع البيانات!",
   "confirm.warning_desc": "سيتم إعادة تقسيم محرك أقرص USB المحدد وتنسيقه. سيتم محو جميع الملفات الحالية بالكامل. يرجى التأكد من نسخ بياناتك الهامة احتياطياً!",

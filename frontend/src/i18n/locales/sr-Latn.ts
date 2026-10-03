@@ -288,8 +288,6 @@ export const srLatn: TranslationDict = {
   "settings.ventoy_win11_bypass": "Заобиђите Виндовс 11 ТПМ/ЦПУ/РАМ проверу:",
   "settings.ventoy_timeout": "Временско ограничење Вентои менија (секунде):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Upozorenje",
   "confirm.warning_title": "Upozorenje: Formatting will erase all data!",
   "confirm.warning_desc": "Изабрани УСБ диск ће бити поново партиционисан и форматиран. Све постојеће датотеке ће бити потпуно избрисане. Уверите се да сте направили резервну копију важних података!",

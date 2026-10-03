@@ -288,8 +288,6 @@ export const noNo: TranslationDict = {
   "settings.ventoy_win11_bypass": "Omgå Windows 11 TPM/CPU/RAM-sjekk:",
   "settings.ventoy_timeout": "Ventoy-menytidsavbrudd (sekunder):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Advarsel",
   "confirm.warning_title": "Advarsel: Formatting will erase all data!",
   "confirm.warning_desc": "Den valgte USB-stasjonen vil bli re-partisjonert og formatert. Alle eksisterende filer vil bli slettet fullstendig. Sørg for at du har sikkerhetskopiert viktige data!",

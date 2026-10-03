@@ -288,8 +288,6 @@ export const faIr: TranslationDict = {
   "settings.ventoy_win11_bypass": "دور زدن بررسی TPM/CPU/RAM ویندوز 11:",
   "settings.ventoy_timeout": "مهلت زمانی منوی Ventoy (ثانیه):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format هشدار",
   "confirm.warning_title": "هشدار: Formatting will erase all data!",
   "confirm.warning_desc": "درایو دیسک انتخاب شده مجدداً پارتیشن بندی و فرمت می شود. تمام فایل های موجود به طور کامل پاک می شوند. مطمئن شوید که از داده های مهم نسخه پشتیبان تهیه کرده اید!",

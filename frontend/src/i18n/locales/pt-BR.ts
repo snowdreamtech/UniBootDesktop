@@ -288,8 +288,6 @@ export const ptBr: TranslationDict = {
   "settings.ventoy_win11_bypass": "Ignorar Verificação do Windows 11 (TPM/CPU/RAM):",
   "settings.ventoy_timeout": "Tempo limite do Menu Ventoy (Segundos):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "Aviso de Formatação de Alto Risco",
   "confirm.warning_title": "Aviso: A formatação apagará todos os dados!",
   "confirm.warning_desc": "A disco selecionada será repartitionada e formatada. Todos os arquivos existentes serão completamente apagados. Certifique-se de ter feito backup dos dados importantes!",

@@ -288,8 +288,6 @@ export const thTh: TranslationDict = {
   "settings.ventoy_win11_bypass": "บายพาสการตรวจสอบ TPM/CPU/RAM ของ Windows 11:",
   "settings.ventoy_timeout": "การหมดเวลาเมนู Ventoy (วินาที):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format คำเตือน",
   "confirm.warning_title": "คำเตือน: Formatting will erase all data!",
   "confirm.warning_desc": "ไดรฟ์ USB ที่เลือกจะถูกแบ่งพาร์ติชันและฟอร์แมตใหม่ ไฟล์ที่มีอยู่ทั้งหมดจะถูกลบออกอย่างสมบูรณ์ ตรวจสอบให้แน่ใจว่าคุณได้สำรองข้อมูลสำคัญแล้ว!",

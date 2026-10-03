@@ -288,8 +288,6 @@ export const jaJp: TranslationDict = {
   "settings.ventoy_win11_bypass": "Windows 11 システム要件の回避 (TPM/CPU/RAM):",
   "settings.ventoy_timeout": "Ventoy メニュータイムアウト (秒):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "高リスクフォーマット警告",
   "confirm.warning_title": "警告：フォーマットによりすべてのデータが消去されます！",
   "confirm.warning_desc": "選択した ディスクは再パーティションおよびフォーマットされます。すべての既存ファイルは完全に削除されます。重要なデータは必ずバックアップしてください！",

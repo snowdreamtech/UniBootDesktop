@@ -288,8 +288,6 @@ export const itIt: TranslationDict = {
   "settings.ventoy_win11_bypass": "Bypass Controllo Requisiti Windows 11 (TPM/CPU/RAM):",
   "settings.ventoy_timeout": "Timeout Menu Ventoy (Secondi):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "Avviso di Formattazione ad Alto Rischio",
   "confirm.warning_title": "Avviso: La formattazione cancellerà tutti i dati!",
   "confirm.warning_desc": "L'disco selezionata verrà ripartizionata e formattata. Tutti i file esistenti verranno completamente cancellati. Assicurati di aver eseguito il backup dei dati importanti!",

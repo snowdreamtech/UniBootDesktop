@@ -288,8 +288,6 @@ export const frFr: TranslationDict = {
   "settings.ventoy_win11_bypass": "Contourner la vérification Windows 11 TPM/CPU/RAM :",
   "settings.ventoy_timeout": "Délai d'expiration du menu Ventoy (Secondes) :",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "Avertissement de formatage à haut risque",
   "confirm.warning_title": "Avertissement : Le formatage effacera toutes les données !",
   "confirm.warning_desc": "La disque sélectionnée sera repartitionnée et formatée. Tous les fichiers existants seront complètement effacés. Assurez-vous d'avoir sauvegardé les données importantes !",

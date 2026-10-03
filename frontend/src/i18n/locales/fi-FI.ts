@@ -288,8 +288,6 @@ export const fiFi: TranslationDict = {
   "settings.ventoy_win11_bypass": "Ohita Windows 11:n TPM/CPU/RAM-tarkistus:",
   "settings.ventoy_timeout": "Ventoy-valikon aikakatkaisu (sekuntia):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Varoitus",
   "confirm.warning_title": "Varoitus: Formatting will erase all data!",
   "confirm.warning_desc": "Valittu USB-asema osioidaan uudelleen ja alustetaan. Kaikki olemassa olevat tiedostot poistetaan kokonaan. Varmista, että olet varmuuskopioinut tärkeät tiedot!",

@@ -288,8 +288,6 @@ export const bnBd: TranslationDict = {
   "settings.ventoy_win11_bypass": "বাইপাস Windows 11 TPM/CPU/RAM চেক:",
   "settings.ventoy_timeout": "Ventoy মেনু টাইমআউট (সেকেন্ড):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format সতর্কতা",
   "confirm.warning_title": "সতর্কতা: Formatting will erase all data!",
   "confirm.warning_desc": "নির্বাচিত USB ড্রাইভ পুনরায় বিভাজন এবং বিন্যাস করা হবে। সমস্ত বিদ্যমান ফাইল সম্পূর্ণরূপে মুছে ফেলা হবে. আপনি গুরুত্বপূর্ণ ডেটা ব্যাক আপ করেছেন তা নিশ্চিত করুন!",

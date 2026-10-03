@@ -288,8 +288,6 @@ export const csCz: TranslationDict = {
   "settings.ventoy_win11_bypass": "Vynechání kontroly TPM/CPU/RAM systému Windows 11:",
   "settings.ventoy_timeout": "Časový limit nabídky Ventoy (v sekundách):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Varování",
   "confirm.warning_title": "Varování: Formatting will erase all data!",
   "confirm.warning_desc": "Vybraná jednotka USB bude znovu rozdělena a naformátována. Všechny existující soubory budou zcela vymazány. Ujistěte se, že jste zálohovali důležitá data!",

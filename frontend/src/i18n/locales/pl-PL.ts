@@ -288,8 +288,6 @@ export const plPl: TranslationDict = {
   "settings.ventoy_win11_bypass": "Pomiń sprawdzanie wymagań Windows 11 (TPM/CPU/RAM):",
   "settings.ventoy_timeout": "Limit czasu menu Ventoy (Sekundy):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "Ostrzeżenie o Formatowaniu Wysokiego Ryzyka",
   "confirm.warning_title": "Ostrzeżenie: Formatowanie usunie wszystkie dane!",
   "confirm.warning_desc": "Wybrany napęd USB zostanie ponownie podzielony na partycje i sformatowany. Wszystkie istniejące pliki zostaną całkowicie usunięte. Upewnij się, że utworzono kopię zapasową ważnych danych!",

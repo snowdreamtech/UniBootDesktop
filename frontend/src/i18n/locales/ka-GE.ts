@@ -288,8 +288,6 @@ export const kaGe: TranslationDict = {
   "settings.ventoy_win11_bypass": "Windows 11 TPM/CPU/RAM შემოწმების გვერდის ავლით:",
   "settings.ventoy_timeout": "Ventoy მენიუს ვადა (წამები):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format გაფრთხილება",
   "confirm.warning_title": "გაფრთხილება: Formatting will erase all data!",
   "confirm.warning_desc": "არჩეული USB დისკი ხელახლა დაიყოფა და დაფორმატდება. ყველა არსებული ფაილი მთლიანად წაიშლება. დარწმუნდით, რომ გაქვთ მნიშვნელოვანი მონაცემების სარეზერვო ასლი!",

@@ -288,8 +288,6 @@ export const ltLt: TranslationDict = {
   "settings.ventoy_win11_bypass": "Apeiti „Windows 11“ TPM / CPU / RAM patikrinimą:",
   "settings.ventoy_timeout": "Ventoy meniu skirtasis laikas (sekundėmis):",
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
-  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
-  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Įspėjimas",
   "confirm.warning_title": "Įspėjimas: Formatting will erase all data!",
   "confirm.warning_desc": "Pasirinktas USB diskas bus iš naujo padalintas ir suformatuotas. Visi esami failai bus visiškai ištrinti. Įsitikinkite, kad padarėte svarbių duomenų atsargines kopijas!",
