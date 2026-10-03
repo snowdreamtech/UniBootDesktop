@@ -212,6 +212,7 @@ func deployHybridModeWithStage(ctx context.Context, targetDisk string, fsType st
 		filepath.Join(mountPoint, "ventoy", "ventoy_grub.cfg"),
 		filepath.Join(mountPoint, "ventoy", "themes", "uniboot"),
 		filepath.Join(mountPoint, "ventoy", "ventoy_vhdboot.img"),
+		filepath.Join(mountPoint, "ventoy", "ventoy_wimboot.img"),
 	})
 
 	// Step 5: Copy Selected ISO / IMG Files

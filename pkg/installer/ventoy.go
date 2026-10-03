@@ -20,6 +20,9 @@ var embeddedThemes embed.FS
 //go:embed assets/ventoy_vhdboot.img
 var embeddedVhdBootImg []byte
 
+//go:embed assets/ventoy_wimboot.img
+var embeddedWimBootImg []byte
+
 // VentoyThemeConfig defines the theme configuration block in ventoy.json matching UniBoot spec.
 type VentoyThemeConfig struct {
 	File    string `json:"file"`
@@ -207,9 +210,12 @@ menuentry "$lbl_return" --class=vtoyret VTOY_RET {
 		return fmt.Errorf("failed to write ventoy_grub.cfg: %w", err)
 	}
 
-	// 4. Ensure ventoy_vhdboot.img is deployed for VHD/VHDX boot support in Hybrid Mode
+	// 4. Ensure ventoy_vhdboot.img and ventoy_wimboot.img are deployed for VHD/WIM boot support in Hybrid Mode
 	if err := DeployVentoyVhdBoot(ventoyDir); err != nil {
 		return fmt.Errorf("failed to deploy ventoy_vhdboot.img: %w", err)
+	}
+	if err := DeployVentoyWimBoot(ventoyDir); err != nil {
+		return fmt.Errorf("failed to deploy ventoy_wimboot.img: %w", err)
 	}
 
 	return nil
@@ -218,11 +224,21 @@ menuentry "$lbl_return" --class=vtoyret VTOY_RET {
 // DeployVentoyVhdBoot extracts embedded ventoy_vhdboot.img to ventoyDir if not already present or incomplete.
 // It is idempotent and preserves any existing non-empty file (e.g. customized versions).
 func DeployVentoyVhdBoot(ventoyDir string) error {
-	if len(embeddedVhdBootImg) == 0 {
-		return fmt.Errorf("embedded ventoy_vhdboot.img is empty")
+	return deployEmbeddedImage(ventoyDir, "ventoy_vhdboot.img", embeddedVhdBootImg)
+}
+
+// DeployVentoyWimBoot extracts embedded ventoy_wimboot.img to ventoyDir if not already present or incomplete.
+// It is idempotent and preserves any existing non-empty file (e.g. customized versions).
+func DeployVentoyWimBoot(ventoyDir string) error {
+	return deployEmbeddedImage(ventoyDir, "ventoy_wimboot.img", embeddedWimBootImg)
+}
+
+func deployEmbeddedImage(ventoyDir, filename string, embeddedData []byte) error {
+	if len(embeddedData) == 0 {
+		return fmt.Errorf("embedded %s is empty", filename)
 	}
 
-	targetFile := filepath.Join(ventoyDir, "ventoy_vhdboot.img")
+	targetFile := filepath.Join(ventoyDir, filename)
 	info, err := os.Stat(targetFile)
 	if err == nil {
 		if info.Size() > 0 {
@@ -234,15 +250,15 @@ func DeployVentoyVhdBoot(ventoyDir string) error {
 	}
 
 	if err := os.MkdirAll(ventoyDir, 0755); err != nil {
-		return fmt.Errorf("failed to create ventoy directory for vhdboot: %w", err)
+		return fmt.Errorf("failed to create ventoy directory for %s: %w", filename, err)
 	}
 
 	// Write atomically via temporary file in the same directory, then rename
-	tmpFile := filepath.Join(ventoyDir, fmt.Sprintf(".ventoy_vhdboot.img.tmp.%d", os.Getpid()))
-	if err := os.WriteFile(tmpFile, embeddedVhdBootImg, 0644); err != nil {
+	tmpFile := filepath.Join(ventoyDir, fmt.Sprintf(".%s.tmp.%d", filename, os.Getpid()))
+	if err := os.WriteFile(tmpFile, embeddedData, 0644); err != nil {
 		// Fallback to direct write if temporary file write fails
-		if directErr := os.WriteFile(targetFile, embeddedVhdBootImg, 0644); directErr != nil {
-			return fmt.Errorf("failed to write ventoy_vhdboot.img directly: %w (temp err: %v)", directErr, err)
+		if directErr := os.WriteFile(targetFile, embeddedData, 0644); directErr != nil {
+			return fmt.Errorf("failed to write %s directly: %w (temp err: %v)", filename, directErr, err)
 		}
 		return nil
 	}
@@ -250,8 +266,8 @@ func DeployVentoyVhdBoot(ventoyDir string) error {
 	if err := os.Rename(tmpFile, targetFile); err != nil {
 		_ = os.Remove(tmpFile)
 		// On non-standard filesystems or Windows locks, fallback to direct write
-		if directErr := os.WriteFile(targetFile, embeddedVhdBootImg, 0644); directErr != nil {
-			return fmt.Errorf("failed to commit ventoy_vhdboot.img: %w", directErr)
+		if directErr := os.WriteFile(targetFile, embeddedData, 0644); directErr != nil {
+			return fmt.Errorf("failed to commit %s: %w", filename, directErr)
 		}
 	}
 
