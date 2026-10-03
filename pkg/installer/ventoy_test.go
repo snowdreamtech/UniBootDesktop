@@ -6,6 +6,7 @@ package installer
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -178,5 +179,14 @@ func TestWriteVentoyConfig_IncludesVhdAndWimBoot(t *testing.T) {
 	}
 	if infoWim.Size() == 0 {
 		t.Fatalf("Expected ventoy_wimboot.img to have non-zero size")
+	}
+
+	jsonPath := filepath.Join(mountDir, "ventoy", "ventoy.json")
+	jsonData, err := os.ReadFile(jsonPath)
+	if err != nil {
+		t.Fatalf("Expected ventoy.json to exist: %v", err)
+	}
+	if !strings.Contains(string(jsonData), "VTOY_VHD_NO_WARNING") {
+		t.Errorf("Expected ventoy.json to contain VTOY_VHD_NO_WARNING setting")
 	}
 }

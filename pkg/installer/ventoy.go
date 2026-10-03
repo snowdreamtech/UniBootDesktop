@@ -69,6 +69,7 @@ func WriteVentoyConfigWithAppConfig(mountDir string, appCfg *config.AppConfig) e
 		{"VTOY_FILE_FLT_EFI": "1"},
 		{"VTOY_FILT_DOT_UNDERSCORE_FILE": "1"},
 		{"VTOY_SORT_CASE_SENSITIVE": "0"},
+		{"VTOY_VHD_NO_WARNING": "1"},
 	}
 
 	defaultIso := filepath.Join(mountDir, "iso", "UniBoot.iso")
