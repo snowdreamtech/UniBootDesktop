@@ -24,8 +24,7 @@ export const taIn: TranslationDict = {
   "common.langAuto": "மொழி (ஆட்டோ)",
   "common.lang": "மொழி",
   "vm.startSuccess": "வட்டுக்கான விஎம் உருவகப்படுத்துதல் வெற்றிகரமாகத் தொடங்கியது: {disk} ({device})",
-  "vm.backendNotReady":
-    "பேக்கண்ட் ஏபிஐ தயாராக இல்லை: பைண்டிங்ஸ் ஏற்றப்படுகிறது, யுனிபூட் பயன்பாட்டை மறுதொடக்கம் செய்யுங்கள்.",
+  "vm.backendNotReady": "பேக்கண்ட் ஏபிஐ தயாராக இல்லை: பைண்டிங்ஸ் ஏற்றப்படுகிறது, யுனிபூட் பயன்பாட்டை மறுதொடக்கம் செய்யுங்கள்.",
   "vm.demoModeStart": "[டெமோ பயன்முறை] QEMU சிமுலேட்டர் சரிபார்ப்பைத் தொடங்குகிறது: {disk} ({device})",
   "vm.startFailed": "QEMU சிமுலேட்டரைத் தொடங்க முடியவில்லை: {error}",
   "disk.writingImageProgress": "எழுதும் படம் ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -60,8 +59,7 @@ export const taIn: TranslationDict = {
   "settings.directModeNotice": "நேரடி பயன்முறை (ப்ராக்ஸி முடக்கப்பட்டது)",
   "settings.proxyHostRequired": "முதலில் ப்ராக்ஸி சர்வர் ஹோஸ்ட் முகவரியை உள்ளிடவும்",
   "settings.proxyTestSuccess": "{protocol} ப்ராக்ஸி இணைக்கப்பட்டுள்ளது ({host}:{port})",
-  "settings.syncSuccessAlert":
-    "Cloud UniBoot {tag} ஃபார்ம்வேர் & ஸ்கிரிப்டுகள் பதிவிறக்கம் செய்யப்பட்டு வெற்றிகரமாக தேக்ககப்படுத்தப்பட்டன!",
+  "settings.syncSuccessAlert": "Cloud UniBoot {tag} ஃபார்ம்வேர் & ஸ்கிரிப்டுகள் பதிவிறக்கம் செய்யப்பட்டு வெற்றிகரமாக தேக்ககப்படுத்தப்பட்டன!",
   "settings.syncSuccessShortAlert": "கிளவுட் யூனிபூட் கோர் ஃபார்ம்வேர் வெற்றிகரமாக ஒத்திசைக்கப்பட்டது!",
   "settings.syncFailedAlert": "நிலைபொருள் ஒத்திசைவு தோல்வி: {error}",
   "settings.ventoyToolchain": "Ventoy டூல்செயின்",
@@ -102,8 +100,7 @@ export const taIn: TranslationDict = {
   "disk.details": "விவரங்கள்",
   "disk.eject": "வெளியேற்று",
   "disk.batch_eject": "வெளியேற்று",
-  "disk.toast_batch_eject_success":
-    "தேர்ந்தெடுக்கப்பட்ட {count} USB டிரைவ்கள் வெற்றிகரமாக மற்றும் பாதுகாப்பாக வெளியேற்றப்பட்டன!",
+  "disk.toast_batch_eject_success": "தேர்ந்தெடுக்கப்பட்ட {count} USB டிரைவ்கள் வெற்றிகரமாக மற்றும் பாதுகாப்பாக வெளியேற்றப்பட்டன!",
   "disk.toast_batch_eject_partial": "பகுதி வெளியேற்றம்: {successCount} வெற்றி, {failCount} தோல்வி.",
   "disk.toast_ejected_success": "USB டிரைவ் {name} ({device}) பாதுகாப்பாக அகற்றப்பட்டது!",
   "disk.toast_ejected_failed": "USB டிரைவ் {device} அகற்றுவது தோல்வியடைந்தது: {error}",
@@ -112,8 +109,7 @@ export const taIn: TranslationDict = {
   "disk.tag_boot_hybrid": "கலப்பின தொடக்கம்",
   "disk.tag_boot_thirdparty": "மூன்றாம் தரப்பு தொடக்கம்",
   "confirm.cloud_to_hybrid_warn_title": "அறிவிப்பு: கலப்பின பயன்முறைக்கு மாற முழு வடிவமைப்பு தேவை",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "இந்த வட்டு தூய மேகக்கணி தொடக்க பயன்முறையில் உள்ளது. Ventoy கலப்பின பயன்முறைக்கு MBR மற்றும் பகிர்வு அட்டவணையை மீண்டும் உருவாக்க வேண்டும், இது அனைத்து தரவுகளையும் ISO-களையும் அழிக்கும்!",
+  "confirm.cloud_to_hybrid_warn_desc": "இந்த வட்டு தூய மேகக்கணி தொடக்க பயன்முறையில் உள்ளது. Ventoy கலப்பின பயன்முறைக்கு MBR மற்றும் பகிர்வு அட்டவணையை மீண்டும் உருவாக்க வேண்டும், இது அனைத்து தரவுகளையும் ISO-களையும் அழிக்கும்!",
   "disk.tag_ssd": "போர்ட்டபிள் SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "மறைகுறியாக்கப்பட்ட இயக்ககம்",
@@ -140,18 +136,14 @@ export const taIn: TranslationDict = {
   "log.level_warn": "எச்சரிக்கை",
   "log.level_error": "பிழை",
   "log.level_debug": "பிழைதிருத்து",
-  "safe.title_cloud":
-    "നിലവിലുള്ള Ventoy/UniBoot டிரைவ் கண்டறியப்பட்டது (கிளவுட் பயன்முறை ESP பிரிவை மட்டுமே புதுப்பிக்கும்)",
-  "safe.desc_cloud":
-    "கிளவுட் பயன்முறை UNIBOOT இரட்டை பிரிவு அமைப்பை 유지 유지. ESP ஐ புதுப்பிப்பது அனைத்து ISO மற்றும் கோப்புகளையும் பாதுகாப்பாக வைக்கும்!",
+  "safe.title_cloud": "നിലവിലുള്ള Ventoy/UniBoot டிரைவ் கண்டறியப்பட்டது (கிளவுட் பயன்முறை ESP பிரிவை மட்டுமே புதுப்பிக்கும்)",
+  "safe.desc_cloud": "கிளவுட் பயன்முறை UNIBOOT இரட்டை பிரிவு அமைப்பை 유지 유지. ESP ஐ புதுப்பிப்பது அனைத்து ISO மற்றும் கோப்புகளையும் பாதுகாப்பாக வைக்கும்!",
   "safe.title_hybrid": "നിലവിലുള്ള Ventoy டிரைவ் கண்டறியப்பட்டது (ஹைப்ரிட் பயன்முறையில் இன்-பிளேஸ் புதுப்பிப்பு)",
-  "safe.desc_hybrid":
-    "ஹைப்ரிட் பயன்முறை அனைத்து ISO கோப்புகளையும் பாதுகாக்கிறது மற்றும் UniBoot மற்றும் கிளவுட் பயன்முறையை ஆதரிக்கிறது!",
+  "safe.desc_hybrid": "ஹைப்ரிட் பயன்முறை அனைத்து ISO கோப்புகளையும் பாதுகாக்கிறது மற்றும் UniBoot மற்றும் கிளவுட் பயன்முறையை ஆதரிக்கிறது!",
   "common.optional": "விருப்பத்தேர்வு",
   "common.optional_test": "விருப்பத்தேர்வு சோதனை",
   "iso.title": "லோக்கல் சிஸ்டம் பட ஆதாரங்கள் (ISO / IMG / WIM / VHD)",
-  "iso.desc":
-    "Ventoy / UniBoot நேரடி துவக்கத்திற்கான /UNIBOOT/iso/ கோப்பகத்திற்கு தானாக நகலெடுக்க ISO கோப்புகளைச் சேர்க்கவும்.",
+  "iso.desc": "Ventoy / UniBoot நேரடி துவக்கத்திற்கான /UNIBOOT/iso/ கோப்பகத்திற்கு தானாக நகலெடுக்க ISO கோப்புகளைச் சேர்க்கவும்.",
   "iso.add_btn": "படக் கோப்புகளைச் சேர்க்கவும்",
   "iso.empty_title": "படக் கோப்புகளைச் சேர்க்க கிளிக் செய்யவும் (ஒற்றை அல்லது தொகுதித் தேர்வை ஆதரிக்கிறது)",
   "iso.empty_sub": ".iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw வடிவங்களை ஆதரிக்கிறது",
@@ -162,8 +154,7 @@ export const taIn: TranslationDict = {
   "iso.drag_unsupported": "ஆதரிக்கப்படும் படக் கோப்புகள் எதுவும் கண்டறியப்படவில்லை (.iso, .wim, .img போன்றவை)",
   "iso.preflight_title": "எழுதுவதற்கு முன் சரிபார்ப்பு",
   "iso.conflict_title": "நகல் கோப்புப் பெயர் கண்டறியப்பட்டது",
-  "iso.conflict_desc":
-    "இலக்கு USB-யின் iso கோப்பகத்தில் இதே பெயருடைய கோப்பு ஏற்கனவே உள்ளது. செயல்பாட்டைத் தேர்ந்தெடுக்கவும். Hash ஒப்பிடப்படாது.",
+  "iso.conflict_desc": "இலக்கு USB-யின் iso கோப்பகத்தில் இதே பெயருடைய கோப்பு ஏற்கனவே உள்ளது. செயல்பாட்டைத் தேர்ந்தெடுக்கவும். Hash ஒப்பிடப்படாது.",
   "iso.conflict_action": "செயல்",
   "iso.conflict_keep_both": "வைத்திரு",
   "iso.conflict_replace": "மேலெழுது",
@@ -173,16 +164,13 @@ export const taIn: TranslationDict = {
   "iso.conflict_confirm": "உறுதிசெய்து தொடர்க",
   "iso.preflight_failed": "எழுதுவதற்கு முன் சரிபார்ப்பு தோல்வியடைந்தது",
   "deploy.title": "பூட் செய்யக்கூடிய டிரைவ் உருவாக்கம் மற்றும் QEMU சோதனை",
-  "deploy.desc_cloud":
-    "தூய்மையான iPXE மேகக்கணி பூட் • பல கட்டிடக்கலை iPXE நெட்வொர்க் ஃபார்ம்வேருடன் கூடிய அதிவேக இரட்டைப் பிரிவு அமைவு.",
+  "deploy.desc_cloud": "தூய்மையான iPXE மேகக்கணி பூட் • பல கட்டிடக்கலை iPXE நெட்வொர்க் ஃபார்ம்வேருடன் கூடிய அதிவேக இரட்டைப் பிரிவு அமைவு.",
   "deploy.desc_hybrid": "Ventoy CLI உள்ளூர் எஞ்சின் • உள்ளூர் ISO மேலாண்மையுடன் கூடிய Ventoy கலப்பின பிரிவு அமைவு.",
   "deploy.target_device": "இலக்கு சாதனம்:",
   "deploy.batch_target": "தேர்ந்தெடுக்கப்பட்ட {count} USB டிரைவ்(கள்)",
   "deploy.start_create": "பூட் டிஸ்க் உருவாக்கவும்",
-  "deploy.tip_batch_update_all":
-    "தரவு இழப்பின்றி தொகுதி புதுப்பித்தல்: தேர்ந்தெடுக்கப்பட்ட அனைத்து {count} USB இயக்கிகளும் உடனடியாகப் புதுப்பிக்கப்படும்",
-  "deploy.tip_batch_mixed":
-    "கலப்பு தொகுதி வரிசைப்படுத்தல்: {bootCount} இயக்கிகள் பாதுகாப்பான புதுப்பித்தல், {blankCount} இயக்கிகள் புதிய வடிவமைப்பு",
+  "deploy.tip_batch_update_all": "தரவு இழப்பின்றி தொகுதி புதுப்பித்தல்: தேர்ந்தெடுக்கப்பட்ட அனைத்து {count} USB இயக்கிகளும் உடனடியாகப் புதுப்பிக்கப்படும்",
+  "deploy.tip_batch_mixed": "கலப்பு தொகுதி வரிசைப்படுத்தல்: {bootCount} இயக்கிகள் பாதுகாப்பான புதுப்பித்தல், {blankCount} இயக்கிகள் புதிய வடிவமைப்பு",
   "deploy.start_update": "இன்-ப்ளேஸ் அப்கிரேட் (டேட்டா சேஃப்)",
   "deploy.batch_create": "தொகுதி வரிசைப்படுத்தலைத் தொடங்கு ({count} இயக்கிகள்)",
   "deploy.writing": "துவக்க நிலைபொருள் தொகுப்புகளை எழுதுதல்...",
@@ -197,28 +185,21 @@ export const taIn: TranslationDict = {
   "deploy.tip_writing": "துவக்க நிலைபொருளை எழுதுகிறது...",
   "deploy.tip_select_single": "முதலில் இலக்கு USB டிரைவைத் தேர்ந்தெடுக்கவும்",
   "deploy.tip_select_batch": "தொகுதி வரிசைப்படுத்தலுக்கு இலக்கு USB டிரைவ்களை சரிபார்க்கவும்",
-  "deploy.tip_macos_unsupported":
-    "macOS கலப்பு பயன்முறையில் புதிய வடிவமைப்பை ஆதரிக்காது (கிளவுட் பயன்முறையைப் பயன்படுத்தவும் அல்லது முதலில் Win/Linux இல் தொடங்கவும்)",
-  "deploy.tip_need_ventoy":
-    "கலப்பின பயன்முறைக்கு உள்ளூர் Ventoy CLI கருவிகள் தேவை. மேகக்கணி பயன்முறையை நாங்கள் பரிந்துரைக்கிறோம்!",
+  "deploy.tip_macos_unsupported": "macOS கலப்பு பயன்முறையில் புதிய வடிவமைப்பை ஆதரிக்காது (கிளவுட் பயன்முறையைப் பயன்படுத்தவும் அல்லது முதலில் Win/Linux இல் தொடங்கவும்)",
+  "deploy.tip_need_ventoy": "கலப்பின பயன்முறைக்கு உள்ளூர் Ventoy CLI கருவிகள் தேவை. மேகக்கணி பயன்முறையை நாங்கள் பரிந்துரைக்கிறோம்!",
   "deploy.macos_alert_title": "macOS Ventoy CLI புதிய வடிவமைப்பு ஆதரிக்கப்படவில்லை",
-  "deploy.macos_alert_desc":
-    "அதிகாரப்பூர்வ Ventoy இன்னும் macOS இல் வடிவமைப்பு நிரலை இயக்குவதை ஆதரிக்கவில்லை. புதிய [கலப்பின டிரைவ்] உருவாக்க Ventoy CLI தேவை. [மேகக்கணி பயன்முறை (1 வினாடி மேகக்கணி பூட் டிரைவ்)] பயன்படுத்த பரிந்துரைக்கப்படுகிறது!",
+  "deploy.macos_alert_desc": "அதிகாரப்பூர்வ Ventoy இன்னும் macOS இல் வடிவமைப்பு நிரலை இயக்குவதை ஆதரிக்கவில்லை. புதிய [கலப்பின டிரைவ்] உருவாக்க Ventoy CLI தேவை. [மேகக்கணி பயன்முறை (1 வினாடி மேகக்கணி பூட் டிரைவ்)] பயன்படுத்த பரிந்துரைக்கப்படுகிறது!",
   "deploy.no_ventoy_title": "வென்டோய் சிஎல்ஐ இயங்கக்கூடியது கண்டறியப்படவில்லை",
-  "deploy.no_ventoy_desc":
-    "[கலப்பின டிரைவ்] உருவாக்க உள்ளூரில் நிறுவப்பட்ட Ventoy CLI தேவை. ஆதரிக்கப்படும் [மேகக்கணி பயன்முறை] தேர்ந்தெடுக்கவும்!",
+  "deploy.no_ventoy_desc": "[கலப்பின டிரைவ்] உருவாக்க உள்ளூரில் நிறுவப்பட்ட Ventoy CLI தேவை. ஆதரிக்கப்படும் [மேகக்கணி பயன்முறை] தேர்ந்தெடுக்கவும்!",
   "deploy.result_batch_success": "{count} வட்டுகளில் 1-வினாடி மேகக்கணி நிறுவல் வட்டு வெற்றிகரமாக பயன்படுத்தப்பட்டது!",
   "deploy.result_success": "{targets} இலக்குகளுக்கு பயன்முறை {mode} வெற்றிகரமாக பயன்படுத்தப்பட்டது",
   "deploy.alert_success": "வரிசைப்படுத்தல் வெற்றி!",
   "deploy.safely_eject_btn": "USB டிரைவை பாதுகாப்பாக வெளியேற்று",
   "deploy.success_banner_title": "பூட் டிரைவ் வெற்றிகரமாக உருவாக்கப்பட்டது!",
-  "deploy.success_banner_desc":
-    "துவக்க கோப்புகள் மற்றும் நிலைபொருள் எழுதப்பட்டது. தரவு இழப்பைத் தவிர்க்க அகற்றுவதற்கு முன் பாதுகாப்பாக வெளியேற்றவும்.",
-  "deploy.toast_auto_ejected":
-    "உருவாக்கம் முடிந்தது! {count} USB டிரைவ்கள் தானாகவே பாதுகாப்பாக வெளியேற்றப்பட்டன. அனைத்து தரவுகளும் சேமிக்கப்பட்டன.",
+  "deploy.success_banner_desc": "துவக்க கோப்புகள் மற்றும் நிலைபொருள் எழுதப்பட்டது. தரவு இழப்பைத் தவிர்க்க அகற்றுவதற்கு முன் பாதுகாப்பாக வெளியேற்றவும்.",
+  "deploy.toast_auto_ejected": "உருவாக்கம் முடிந்தது! {count} USB டிரைவ்கள் தானாகவே பாதுகாப்பாக வெளியேற்றப்பட்டன. அனைத்து தரவுகளும் சேமிக்கப்பட்டன.",
   "deploy.confirm_auto_eject_title": "எழுதுதல் முடிந்தது — பாதுகாப்பாக வெளியேற்றவா?",
-  "deploy.confirm_auto_eject_desc":
-    "அனைத்து தரவுகளும் வெற்றிகரமாக எழுதப்பட்டுள்ளன. இப்போது USB டிரைவை பாதுகாப்பாக வெளியேற்ற விரும்புகிறீர்களா?",
+  "deploy.confirm_auto_eject_desc": "அனைத்து தரவுகளும் வெற்றிகரமாக எழுதப்பட்டுள்ளன. இப்போது USB டிரைவை பாதுகாப்பாக வெளியேற்ற விரும்புகிறீர்களா?",
   "deploy.confirm_auto_eject_yes": "பாதுகாப்பாக வெளியேற்று",
   "deploy.confirm_auto_eject_no": "இப்போது வேண்டாம்",
   "deploy.alert_fail": "வரிசைப்படுத்தல் தோல்வி:",
@@ -254,8 +235,7 @@ export const taIn: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "முதலில் இடது பேனலில் இருந்து இலக்கு USB டிரைவைத் தேர்ந்தெடுக்க கிளிக் செய்யவும்!",
-  "vm.toast_not_installed":
-    "QEMU எமுலேட்டர் கிடைக்கவில்லை! QEMU ஐ நிறுவவும் (புரூ நிறுவ qemu அல்லது port install qemu)",
+  "vm.toast_not_installed": "QEMU எமுலேட்டர் கிடைக்கவில்லை! QEMU ஐ நிறுவவும் (புரூ நிறுவ qemu அல்லது port install qemu)",
   "vm.cfg_secure_boot": "SecureBoot போலி",
   "vm.cfg_accel": "வன்பொருள் முடுக்கம்",
   "vm.cfg_ram": "ரேம் ஒதுக்கீடு",
@@ -307,10 +287,12 @@ export const taIn: TranslationDict = {
   "settings.ventoy_reserve": "ரிசர்வ் ஸ்பேஸ் (MB):",
   "settings.ventoy_win11_bypass": "பைபாஸ் Windows 11 TPM/CPU/RAM சரிபார்ப்பு:",
   "settings.ventoy_timeout": "வென்டோய் மெனு நேரம் முடிந்தது (வினாடிகள்):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format எச்சரிக்கை",
   "confirm.warning_title": "எச்சரிக்கை: Formatting will erase all data!",
-  "confirm.warning_desc":
-    "தேர்ந்தெடுக்கப்பட்ட USB டிரைவ் மீண்டும் பகிர்வு செய்யப்பட்டு வடிவமைக்கப்படும். ஏற்கனவே உள்ள அனைத்து கோப்புகளும் முற்றிலும் அழிக்கப்படும். முக்கியமான தரவை காப்புப் பிரதி எடுத்துள்ளீர்கள் என்பதை உறுதிப்படுத்திக் கொள்ளுங்கள்!",
+  "confirm.warning_desc": "தேர்ந்தெடுக்கப்பட்ட USB டிரைவ் மீண்டும் பகிர்வு செய்யப்பட்டு வடிவமைக்கப்படும். ஏற்கனவே உள்ள அனைத்து கோப்புகளும் முற்றிலும் அழிக்கப்படும். முக்கியமான தரவை காப்புப் பிரதி எடுத்துள்ளீர்கள் என்பதை உறுதிப்படுத்திக் கொள்ளுங்கள்!",
   "confirm.mode_title": "வரிசைப்படுத்தல் முறை:",
   "confirm.fs_title": "இலக்கு கோப்பு முறைமை:",
   "confirm.disks_title": "வடிவமைக்கப்பட வேண்டிய இயக்கிகள் ({count}):",
@@ -320,15 +302,11 @@ export const taIn: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode உறுதிப்படுத்துation",
   "confirm.title_danger": "Format எச்சரிக்கை: Disk Initialization",
   "confirm.safe_banner_title": "இன்-ப்ளேஸ் இன்க்ரிமென்டல் அப்டேட் அறிவிப்பு (டேட்டா சேஃப்)",
-  "confirm.safe_banner_desc":
-    "இலக்கு இயக்ககத்தில் வென்டோய் / யூனிபூட் துவக்க அமைப்பு கண்டறியப்பட்டது. சிஸ்டம் அதிகரிக்கும் புதுப்பிப்பு ஸ்கிப்பிங் வடிவமைப்பைச் செய்யும். ஏற்கனவே உள்ள அனைத்து கோப்புகளும் ஐஎஸ்ஓக்களும் 100% பாதுகாக்கப்படுகின்றன!",
-  "confirm.mixed_banner_title":
-    "ஸ்மார்ட் கலப்பு பயன்முறை: பூட் டிரைவ்களுக்கான இன்-பிளேஸ் அப்டேட், வெற்று டிரைவ்களுக்கான வடிவம்",
-  "confirm.mixed_banner_desc":
-    "தேர்ந்தெடுக்கப்பட்ட {ventoyCount} பூட் டிரைவ்(கள்) (இன்-பிளேஸ் அப்டேட்) மற்றும் {blankCount} வெற்று இயக்கி(கள்) (முழு வடிவம்).",
+  "confirm.safe_banner_desc": "இலக்கு இயக்ககத்தில் வென்டோய் / யூனிபூட் துவக்க அமைப்பு கண்டறியப்பட்டது. சிஸ்டம் அதிகரிக்கும் புதுப்பிப்பு ஸ்கிப்பிங் வடிவமைப்பைச் செய்யும். ஏற்கனவே உள்ள அனைத்து கோப்புகளும் ஐஎஸ்ஓக்களும் 100% பாதுகாக்கப்படுகின்றன!",
+  "confirm.mixed_banner_title": "ஸ்மார்ட் கலப்பு பயன்முறை: பூட் டிரைவ்களுக்கான இன்-பிளேஸ் அப்டேட், வெற்று டிரைவ்களுக்கான வடிவம்",
+  "confirm.mixed_banner_desc": "தேர்ந்தெடுக்கப்பட்ட {ventoyCount} பூட் டிரைவ்(கள்) (இன்-பிளேஸ் அப்டேட்) மற்றும் {blankCount} வெற்று இயக்கி(கள்) (முழு வடிவம்).",
   "confirm.danger_banner_title": "எச்சரிக்கை: Formatting is irreversible!",
-  "confirm.danger_banner_desc":
-    "எழுதுவது இலக்கு சாதனத்தை (MBR/GPT) மறு பகிர்வு செய்து வடிவமைக்கும். தேர்ந்தெடுக்கப்பட்ட இயக்கி(களில்) உள்ள எல்லா கோப்புகளும் முற்றிலும் அழிக்கப்படும்!",
+  "confirm.danger_banner_desc": "எழுதுவது இலக்கு சாதனத்தை (MBR/GPT) மறு பகிர்வு செய்து வடிவமைக்கும். தேர்ந்தெடுக்கப்பட்ட இயக்கி(களில்) உள்ள எல்லா கோப்புகளும் முற்றிலும் அழிக்கப்படும்!",
   "confirm.summary_title": "துவக்க வரிசைப்படுத்தலுக்கான இலக்கு இயக்கிகள்:",
   "confirm.smart_safe_tag": "ஸ்மார்ட் பாதுகாப்பு",
   "confirm.ventoy_group_title": "இன்-பிளேஸ் அப்கிரேட் டிரைவ்கள் (அனைத்து ஐஎஸ்ஓக்களும் பாதுகாக்கப்பட்டுள்ளன):",
@@ -346,14 +324,10 @@ export const taIn: TranslationDict = {
   "confirm.no": "ரத்துசெய்",
   "confirm.will_format": "முழு வடிவமைப்பு",
   "confirm.no_format": "ஸ்மார்ட் உள்ளூர் புதுப்பிப்பு",
-  "deploy.toast_target_changed":
-    "தேர்ந்தெடுக்கப்பட்ட இலக்கு டிஸ்க் மாறியுள்ளது அல்லது இனி கிடைக்காது. மீண்டும் ஸ்கேன் செய்யவும்.",
-  "deploy.toast_some_disks_removed":
-    "{count} கிடைக்காத வட்டு(கள்) தானாகவே நீக்கப்பட்டது, மீதமுள்ள வட்டுகளுடன் தொடர்கிறது",
-  "deploy.error_system_disk_blocked":
-    "⛔ தடுக்கப்பட்டது: {disks} ஒரு கணினி வட்டு. கணினி இயக்ககத்தில் USB துவக்க வட்டை பயன்படுத்த முடியாது!",
-  "deploy.error_readonly_disk":
-    "🔒 எழுதுதல்-பாதுகாக்கப்பட்டது: {disks} படிக்க மட்டுமே. எழுதுதல் பாதுகாப்பை அகற்றவும் அல்லது வேறு USB ஐப் பயன்படுத்தவும்",
+  "deploy.toast_target_changed": "தேர்ந்தெடுக்கப்பட்ட இலக்கு டிஸ்க் மாறியுள்ளது அல்லது இனி கிடைக்காது. மீண்டும் ஸ்கேன் செய்யவும்.",
+  "deploy.toast_some_disks_removed": "{count} கிடைக்காத வட்டு(கள்) தானாகவே நீக்கப்பட்டது, மீதமுள்ள வட்டுகளுடன் தொடர்கிறது",
+  "deploy.error_system_disk_blocked": "⛔ தடுக்கப்பட்டது: {disks} ஒரு கணினி வட்டு. கணினி இயக்ககத்தில் USB துவக்க வட்டை பயன்படுத்த முடியாது!",
+  "deploy.error_readonly_disk": "🔒 எழுதுதல்-பாதுகாக்கப்பட்டது: {disks} படிக்க மட்டுமே. எழுதுதல் பாதுகாப்பை அகற்றவும் அல்லது வேறு USB ஐப் பயன்படுத்தவும்",
   "deploy.start_cloud_create": "கிளவுட் பூட் டிஸ்க் உருவாக்கவும்",
   "deploy.batch_update": "தரவு இழப்பின்றி தொகுதி புதுப்பித்தலைத் தொடங்கு ({count} USB இயக்கிகள்)",
   "deploy.batch_mixed": "கலப்பு தொகுதி வரிசைப்படுத்தலைத் தொடங்கு ({count} USB இயக்கிகள்)",
@@ -376,11 +350,9 @@ export const taIn: TranslationDict = {
   "inspector.smart": "SMART ஆரோக்கிய நிலை:",
   "inspector.sector": "துறை அளவு:",
   "inspector.fake_title": "Fake USB 3.0 எச்சரிக்கை Alert!",
-  "inspector.fake_desc":
-    "சாதனம் USB 3.0/3.1 ஐ விளம்பரப்படுத்துகிறது, ஆனால் உண்மையான இயற்பியல் அடுக்கு வேகம் {speed} இல் மட்டுமே (USB 2.0 High-Speed PHY) பேரம் பேசப்படுகிறது. இந்த டிரைவில் ஏமாற்றப்பட்ட ஃபார்ம்வேர் அல்லது போலி ப்ளூ போர்ட் இருக்கலாம்.",
+  "inspector.fake_desc": "சாதனம் USB 3.0/3.1 ஐ விளம்பரப்படுத்துகிறது, ஆனால் உண்மையான இயற்பியல் அடுக்கு வேகம் {speed} இல் மட்டுமே (USB 2.0 High-Speed PHY) பேரம் பேசப்படுகிறது. இந்த டிரைவில் ஏமாற்றப்பட்ட ஃபார்ம்வேர் அல்லது போலி ப்ளூ போர்ட் இருக்கலாம்.",
   "inspector.genuine_title": "இயற்பியல் வன்பொருள் சரிபார்ப்பு முடிந்தது (உண்மையான USB 3.0+ சாதனம்)",
-  "inspector.genuine_desc":
-    "இயற்பியல் PHY அடுக்கு {speed} வேகத்தில் உண்மையான SuperSpeed/SuperSpeed+ இணைப்பை ஏற்படுத்தியது.",
+  "inspector.genuine_desc": "இயற்பியல் PHY அடுக்கு {speed} வேகத்தில் உண்மையான SuperSpeed/SuperSpeed+ இணைப்பை ஏற்படுத்தியது.",
   "inspector.usb2_title": "தரமான USB 2.0 இடைமுகம்",
   "inspector.usb2_desc": "சாதன வன்பொருள் USB 2.0, தத்துவார்த்த இயற்பியல் அதிகபட்ச வேகம் 480 Mb/s.",
   "inspector.section_basic": "அடிப்படை சாதனத் தகவல்",
@@ -486,12 +458,9 @@ export const taIn: TranslationDict = {
   "diag.action_reformat_title": "மீண்டும் வடிவமைக்கவும் (reformat)",
   "diag.action_remount_title": "மீண்டும் மவுண்ட் செய்யவும் (remount)",
   "diag.action_retry_title": "மீண்டும் முயற்சிக்கவும் (retry)",
-  "diag.action_reformat_desc":
-    "எழுதுதல் தடைபட்டதால் பகிர்வு அட்டவணை அல்லது கோப்பு முறைமை சேதமடைந்துள்ளது. புதிய வடிவமைப்பு பரிந்துரைக்கப்படுகிறது.",
-  "diag.action_remount_desc":
-    "எழுதும் போது இலக்கு மவுண்ட் பாதை துண்டிக்கப்பட்டது. USB டிரைவை மீண்டும் செருகவும் அல்லது தொகுதியை மவுண்ட் செய்யவும்.",
-  "diag.action_retry_desc":
-    "சூழ்நிலை மற்றும் சாதனத்தின் நிலை சரியாக உள்ளது. நீங்கள் பாதுகாப்பாக மீண்டும் நிறுவலை முயற்சிக்கலாம்.",
+  "diag.action_reformat_desc": "எழுதுதல் தடைபட்டதால் பகிர்வு அட்டவணை அல்லது கோப்பு முறைமை சேதமடைந்துள்ளது. புதிய வடிவமைப்பு பரிந்துரைக்கப்படுகிறது.",
+  "diag.action_remount_desc": "எழுதும் போது இலக்கு மவுண்ட் பாதை துண்டிக்கப்பட்டது. USB டிரைவை மீண்டும் செருகவும் அல்லது தொகுதியை மவுண்ட் செய்யவும்.",
+  "diag.action_retry_desc": "சூழ்நிலை மற்றும் சாதனத்தின் நிலை சரியாக உள்ளது. நீங்கள் பாதுகாப்பாக மீண்டும் நிறுவலை முயற்சிக்கலாம்.",
   "about.updating": "புதுப்பிக்கப்படுகிறது ({progress}%)",
   "about.updateTo": "{tag} க்கு ஆன்லைன் புதுப்பிப்பு",
   "about.downloading": "பதிவிறக்கப்படுகிறது {progress}%",
@@ -507,8 +476,7 @@ export const taIn: TranslationDict = {
   "dialog.textFilesFilter": "உரை கோப்புகள் (*.txt)",
   "dialog.allFilesFilter": "அனைத்து கோப்புகளும் (*.*)",
   "dialog.selectIsoTitle": "இயக்க முறைமை படக் கோப்புகளைத் தேர்ந்தெடுக்கவும் (*.iso, *.wim, *.img போன்றவை)",
-  "dialog.ventoyFilter":
-    "Ventoy மூல படங்கள் (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Ventoy மூல படங்கள் (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "ஹாஷ் கணக்கிடு",
   "checksum.calculating": "ஹாஷ் கணக்கிடப்படுகிறது...",
   "checksum.algo_label": "நெறிமுறை",
@@ -552,15 +520,12 @@ export const taIn: TranslationDict = {
   "privilege.status_standard": "அங்கீகரிக்கப்படவில்லை",
   "privilege.btn_elevate": "நிர்வாகி அணுகலைக் கோரவும்",
   "privilege.modal_title": "நிர்வாகி அனுமதி தேவை",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "துவக்கத் தரவைப் படிக்கவும் வட்டில் எழுதவும் கணினி அங்கீகாரம் தேவை",
   "privilege.reason_title": "நிர்வாகி சிறப்புரிமை ஏன் தேவை?",
-  "privilege.reason_desc":
-    "இயக்க முறைமை மூலத் துறைகளையும் EFI பகிர்வுகளையும் தனிமைப்படுத்துகிறது. அனுமதி நேரடிக் கண்டறிதல் மற்றும் பாதுகாப்பான வட்டு உருவாக்கத்தை உறுதி செய்கிறது.",
+  "privilege.reason_desc": "இயக்க முறைமை மூலத் துறைகளையும் EFI பகிர்வுகளையும் தனிமைப்படுத்துகிறது. அனுமதி நேரடிக் கண்டறிதல் மற்றும் பாதுகாப்பான வட்டு உருவாக்கத்தை உறுதி செய்கிறது.",
   "privilege.scope_title": "அணுகலின் நோக்கம்",
-  "privilege.scope_desc":
-    "தேர்ந்தெடுக்கப்பட்ட வெளிப்புற USB இயக்கிகளுக்கு மட்டுமே கண்டிப்பாக கட்டுப்படுத்தப்பட்டுள்ளது. உள் இயக்கிகள் ஒருபோதும் தொடப்படாது.",
+  "privilege.scope_desc": "தேர்ந்தெடுக்கப்பட்ட வெளிப்புற USB இயக்கிகளுக்கு மட்டுமே கண்டிப்பாக கட்டுப்படுத்தப்பட்டுள்ளது. உள் இயக்கிகள் ஒருபோதும் தொடப்படாது.",
   "privilege.safety_title": "பாதுகாப்பு மற்றும் வெளிப்படைத்தன்மை",
   "privilege.safety_desc": "ஆய்வு முற்றிலும் படிக்க மட்டுமே மற்றும் தரவை மாற்றாது; மூலக் குறியீடு முற்றிலும் திறந்தது.",
   "privilege.confirm_btn": "இப்போது அங்கீகரிக்கவும்",

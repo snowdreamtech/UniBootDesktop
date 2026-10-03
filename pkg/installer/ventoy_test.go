@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/snowdreamtech/unibootdesktop/pkg/config"
 )
 
 func TestDeployVentoyVhdBoot_Fresh(t *testing.T) {
@@ -369,4 +371,27 @@ func TestWriteVentoyConfig_CorruptedConfigBackup(t *testing.T) {
 		t.Errorf("Expected new ventoy.json to contain UniBoot theme")
 	}
 }
+
+func TestBuildVentoyConfigData_SecondaryMenuConfig(t *testing.T) {
+	// 1. Default / False: VTOY_SECONDARY_BOOT_MENU should be "0" (direct boot)
+	cfgDefault := &config.AppConfig{VentoySecondaryMenu: false}
+	dataDirect, err := BuildVentoyConfigData(nil, cfgDefault, t.TempDir())
+	if err != nil {
+		t.Fatalf("BuildVentoyConfigData failed: %v", err)
+	}
+	if !strings.Contains(string(dataDirect), `"VTOY_SECONDARY_BOOT_MENU": "0"`) {
+		t.Errorf("Expected VTOY_SECONDARY_BOOT_MENU to be '0' for direct boot, got: %s", string(dataDirect))
+	}
+
+	// 2. Enabled / True: VTOY_SECONDARY_BOOT_MENU should be "1" (secondary menu enabled)
+	cfgSecondary := &config.AppConfig{VentoySecondaryMenu: true}
+	dataSecondary, err := BuildVentoyConfigData(nil, cfgSecondary, t.TempDir())
+	if err != nil {
+		t.Fatalf("BuildVentoyConfigData failed: %v", err)
+	}
+	if !strings.Contains(string(dataSecondary), `"VTOY_SECONDARY_BOOT_MENU": "1"`) {
+		t.Errorf("Expected VTOY_SECONDARY_BOOT_MENU to be '1' when enabled, got: %s", string(dataSecondary))
+	}
+}
+
 

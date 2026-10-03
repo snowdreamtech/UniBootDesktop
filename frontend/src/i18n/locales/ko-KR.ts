@@ -109,8 +109,7 @@ export const koKr: TranslationDict = {
   "disk.tag_boot_hybrid": "하이브리드 부팅",
   "disk.tag_boot_thirdparty": "타사 부팅",
   "confirm.cloud_to_hybrid_warn_title": "주의: 하이브리드 모드로 전환 시 전체 포맷이 필요합니다",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "현재 디스크는 순수 클라우드 부팅 모드입니다. Ventoy 하이브리드 모드는 MBR 및 파티션 테이블 재구축이 필요하며, 모든 데이터와 ISO가 삭제됩니다!",
+  "confirm.cloud_to_hybrid_warn_desc": "현재 디스크는 순수 클라우드 부팅 모드입니다. Ventoy 하이브리드 모드는 MBR 및 파티션 테이블 재구축이 필요하며, 모든 데이터와 ISO가 삭제됩니다!",
   "disk.tag_ssd": "외장 SSD",
   "disk.tag_typec": "Type-C 드라이브",
   "disk.tag_secure": "암호화 드라이브",
@@ -138,16 +137,13 @@ export const koKr: TranslationDict = {
   "log.level_error": "오류",
   "log.level_debug": "디버그",
   "safe.title_cloud": "기존 Ventoy/UniBoot 드라이브 감지됨 (클라우드 모드는 ESP 파티션만 새로고침)",
-  "safe.desc_cloud":
-    "클라우드 모드는 표준 UNIBOOT 이중 파티션 구조를 유지합니다. ESP 파티션을 새로고침해도 데이터 파티션의 모든 ISO와 파일이 보존됩니다!",
+  "safe.desc_cloud": "클라우드 모드는 표준 UNIBOOT 이중 파티션 구조를 유지합니다. ESP 파티션을 새로고침해도 데이터 파티션의 모든 ISO와 파일이 보존됩니다!",
   "safe.title_hybrid": "기존 Ventoy 드라이브 감지됨 (하이브리드 모드 인플레이스 업데이트)",
-  "safe.desc_hybrid":
-    "하이브리드 모드는 포맷 없이 모든 기존 ISO 파일을 보존하고, UniBoot 다크 테마와 클라우드 부트 메뉴를 안전하게 주입합니다!",
+  "safe.desc_hybrid": "하이브리드 모드는 포맷 없이 모든 기존 ISO 파일을 보존하고, UniBoot 다크 테마와 클라우드 부트 메뉴를 안전하게 주입합니다!",
   "common.optional": "선택 사항",
   "common.optional_test": "선택 테스트",
   "iso.title": "로컬 시스템 이미지 소스 (ISO / IMG / WIM / VHD)",
-  "iso.desc":
-    "ISO 파일을 추가하면 /UNIBOOT/iso/ 디렉터리로 자동 복사되어 Ventoy / UniBoot에서 직접 부팅할 수 있습니다.",
+  "iso.desc": "ISO 파일을 추가하면 /UNIBOOT/iso/ 디렉터리로 자동 복사되어 Ventoy / UniBoot에서 직접 부팅할 수 있습니다.",
   "iso.add_btn": "이미지 파일 추가",
   "iso.empty_title": "클릭하여 이미지 파일 추가 (단일 및 다중 선택 지원)",
   "iso.empty_sub": ".iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw 등 모든 형식 지원",
@@ -158,8 +154,7 @@ export const koKr: TranslationDict = {
   "iso.drag_unsupported": "지원되는 이미지 파일을 찾을 수 없습니다 (.iso, .wim, .img 등)",
   "iso.preflight_title": "쓰기 전 확인",
   "iso.conflict_title": "같은 이름의 파일이 있습니다",
-  "iso.conflict_desc":
-    "대상 USB의 iso 폴더에 같은 이름의 파일이 있습니다. Hash는 비교하지 않으며 처리 방법을 선택해야 합니다.",
+  "iso.conflict_desc": "대상 USB의 iso 폴더에 같은 이름의 파일이 있습니다. Hash는 비교하지 않으며 처리 방법을 선택해야 합니다.",
   "iso.conflict_action": "처리 방법",
   "iso.conflict_keep_both": "보관",
   "iso.conflict_replace": "덮어쓰기",
@@ -190,12 +185,10 @@ export const koKr: TranslationDict = {
   "deploy.tip_writing": "부팅 펌웨어 작성 중...",
   "deploy.tip_select_single": "제작할 대상 디스크를 먼저 선택하세요",
   "deploy.tip_select_batch": "일괄 제작할 대상 디스크를 먼저 체크하세요",
-  "deploy.tip_macos_unsupported":
-    "macOS는 하이브리드 모드 신규 포맷을 지원하지 않습니다 (클라우드 모드 사용 또는 Win/Linux에서 초기화하세요)",
+  "deploy.tip_macos_unsupported": "macOS는 하이브리드 모드 신규 포맷을 지원하지 않습니다 (클라우드 모드 사용 또는 Win/Linux에서 초기화하세요)",
   "deploy.tip_need_ventoy": "하이브리드 모드 신규 포맷에는 로컬 Ventoy CLI가 필요합니다",
   "deploy.macos_alert_title": "macOS Ventoy CLI 신규 포맷 미지원",
-  "deploy.macos_alert_desc":
-    "Ventoy는 macOS에서 직접 포맷을 지원하지 않습니다. 기본 지원을 위해 클라우드 모드를 사용하거나, Windows/Linux에서 Ventoy를 초기화한 후 macOS에서 제자리 업그레이드를 수행하세요.",
+  "deploy.macos_alert_desc": "Ventoy는 macOS에서 직접 포맷을 지원하지 않습니다. 기본 지원을 위해 클라우드 모드를 사용하거나, Windows/Linux에서 Ventoy를 초기화한 후 macOS에서 제자리 업그레이드를 수행하세요.",
   "deploy.no_ventoy_title": "Ventoy CLI 실행 파일을 찾을 수 없습니다",
   "deploy.no_ventoy_desc": "하이브리드 모드는 로컬 Ventoy CLI 도구 체인이 필요합니다. 클라우드 모드를 권장합니다!",
   "deploy.result_batch_success": "1초 클라우드 설치 디스크를 {count}개 디스크에 일괄 배포했습니다!",
@@ -203,8 +196,7 @@ export const koKr: TranslationDict = {
   "deploy.alert_success": "배포 성공!",
   "deploy.safely_eject_btn": "디스크 안전하게 꺼내기",
   "deploy.success_banner_title": "부팅 드라이브 제작 완료!",
-  "deploy.success_banner_desc":
-    "부팅 및 펌웨어 파일이 작성되었습니다. 데이터 손상을 방지하기 위해 분리하기 전에 안전하게 제거하십시오.",
+  "deploy.success_banner_desc": "부팅 및 펌웨어 파일이 작성되었습니다. 데이터 손상을 방지하기 위해 분리하기 전에 안전하게 제거하십시오.",
   "deploy.toast_auto_ejected": "제작 완료! {count}개의 디스크가 자동으로 꺼졌습니다.",
   "deploy.confirm_auto_eject_title": "쓰기 완료 — 안전하게 꺼낼까요?",
   "deploy.confirm_auto_eject_desc": "모든 데이터가 성공적으로 기록되었습니다. 지금 디스크를 안전하게 꺼낼까요?",
@@ -295,10 +287,12 @@ export const koKr: TranslationDict = {
   "settings.ventoy_reserve": "예약 공간 용량 (MB):",
   "settings.ventoy_win11_bypass": "Windows 11 TPM/CPU/RAM 요구사항 우회:",
   "settings.ventoy_timeout": "Ventoy 메뉴 제한 시간 (초):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "고위험 포맷 경고",
   "confirm.warning_title": "경고: 포맷 시 모든 데이터가 삭제됩니다!",
-  "confirm.warning_desc":
-    "선택한 디스크가 재분할 및 포맷됩니다. 모든 기존 파일이 완전히 삭제됩니다. 중요한 데이터를 백업했는지 확인하세요!",
+  "confirm.warning_desc": "선택한 디스크가 재분할 및 포맷됩니다. 모든 기존 파일이 완전히 삭제됩니다. 중요한 데이터를 백업했는지 확인하세요!",
   "confirm.mode_title": "배포 모드:",
   "confirm.fs_title": "대상 파일 시스템:",
   "confirm.disks_title": "포맷할 디스크 ({count}):",
@@ -308,13 +302,11 @@ export const koKr: TranslationDict = {
   "confirm.title_mixed": "스마트 하이브리드 배포 확인",
   "confirm.title_danger": "포맷 경고: 디스크 초기화",
   "confirm.safe_banner_title": "인플레이스 증분 업데이트 알림 (데이터 안전)",
-  "confirm.safe_banner_desc":
-    "대상 디스크에서 Ventoy / UniBoot 부팅 구조가 감지되었습니다. 포맷을 건너뛰고 증분 업데이트를 수행합니다. 기존의 모든 파일과 ISO 이미지가 100% 보존됩니다!",
+  "confirm.safe_banner_desc": "대상 디스크에서 Ventoy / UniBoot 부팅 구조가 감지되었습니다. 포맷을 건너뛰고 증분 업데이트를 수행합니다. 기존의 모든 파일과 ISO 이미지가 100% 보존됩니다!",
   "confirm.mixed_banner_title": "스마트 하이브리드 모드: 부팅 드라이브는 증분 업데이트, 빈 드라이브는 전체 포맷",
   "confirm.mixed_banner_desc": "부팅 드라이브 {ventoyCount}개 및 빈 드라이브 {blankCount}개가 선택되었습니다.",
   "confirm.danger_banner_title": "경고: 포맷 작업은 되돌릴 수 없습니다!",
-  "confirm.danger_banner_desc":
-    "쓰기 작업 시 대상 장치가 재파티션 및 포맷(MBR/GPT)됩니다. 기존 데이터는 완전히 삭제됩니다!",
+  "confirm.danger_banner_desc": "쓰기 작업 시 대상 장치가 재파티션 및 포맷(MBR/GPT)됩니다. 기존 데이터는 완전히 삭제됩니다!",
   "confirm.summary_title": "부팅 배포 대상 디스크:",
   "confirm.smart_safe_tag": "스마트 세이프",
   "confirm.ventoy_group_title": "인플레이스 업데이트 드라이브 (모든 ISO 보존):",
@@ -333,12 +325,9 @@ export const koKr: TranslationDict = {
   "confirm.will_format": "전체 포맷",
   "confirm.no_format": "스마트 제자리 업데이트",
   "deploy.toast_target_changed": "선택한 대상 디스크가 변경되었거나 더 이상 사용할 수 없습니다. 다시 스캔하세요.",
-  "deploy.toast_some_disks_removed":
-    "{count}개의 사용 불가 디스크가 자동으로 제거되었습니다. 남은 디스크로 계속 진행합니다",
-  "deploy.error_system_disk_blocked":
-    "⛔ 차단됨: {disks}은(는) 시스템 디스크입니다. 시스템 드라이브에 USB 부팅 디스크를 배포할 수 없습니다!",
-  "deploy.error_readonly_disk":
-    "🔒 쓰기 금지: {disks}은(는) 읽기 전용입니다. 쓰기 금지를 제거하거나 다른 USB를 사용하십시오",
+  "deploy.toast_some_disks_removed": "{count}개의 사용 불가 디스크가 자동으로 제거되었습니다. 남은 디스크로 계속 진행합니다",
+  "deploy.error_system_disk_blocked": "⛔ 차단됨: {disks}은(는) 시스템 디스크입니다. 시스템 드라이브에 USB 부팅 디스크를 배포할 수 없습니다!",
+  "deploy.error_readonly_disk": "🔒 쓰기 금지: {disks}은(는) 읽기 전용입니다. 쓰기 금지를 제거하거나 다른 USB를 사용하십시오",
   "deploy.start_cloud_create": "클라우드 부팅 디스크 제작 시작",
   "deploy.batch_update": "일괄 무손실 업데이트 시작 ({count}개 드라이브)",
   "deploy.batch_mixed": "일괄 혼합 배포 시작 ({count}개 드라이브)",
@@ -363,8 +352,7 @@ export const koKr: TranslationDict = {
   "inspector.fake_title": "가짜 USB 3.0 경고 알림!",
   "inspector.fake_desc": "장치가 USB 3.0으로 표시되지만 실제 속도는 {speed} (USB 2.0 PHY)로 제한됩니다.",
   "inspector.genuine_title": "물리적 하드웨어 검증 통과 (정품 USB 3.0+ 장치)",
-  "inspector.genuine_desc":
-    "물리 PHY 계층이 정품 SuperSpeed/SuperSpeed+ 링크로 협상되었으며 측정 속도는 {speed}입니다.",
+  "inspector.genuine_desc": "물리 PHY 계층이 정품 SuperSpeed/SuperSpeed+ 링크로 협상되었으며 측정 속도는 {speed}입니다.",
   "inspector.usb2_title": "표준 USB 2.0 인터페이스",
   "inspector.usb2_desc": "장치 하드웨어는 USB 2.0 사양이며 이론상 최대 속도는 480 Mb/s입니다.",
   "inspector.section_basic": "장치 기본 정보",
@@ -488,8 +476,7 @@ export const koKr: TranslationDict = {
   "dialog.textFilesFilter": "텍스트 파일 (*.txt)",
   "dialog.allFilesFilter": "모든 파일 (*.*)",
   "dialog.selectIsoTitle": "시스템 이미지 파일 선택 (*.iso, *.wim, *.img 등)",
-  "dialog.ventoyFilter":
-    "Ventoy 소스 이미지 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Ventoy 소스 이미지 (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "해시 계산",
   "checksum.calculating": "해시 계산 중...",
   "checksum.algo_label": "알고리즘",
@@ -533,18 +520,14 @@ export const koKr: TranslationDict = {
   "privilege.status_standard": "미승인",
   "privilege.btn_elevate": "관리자 권한 요청",
   "privilege.modal_title": "관리자 권한 필요",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "부팅 구조 확인 및 디스크 쓰기 작업을 위해 시스템 권한이 필요합니다",
   "privilege.reason_title": "관리자 권한이 왜 필요한가요?",
-  "privilege.reason_desc":
-    "운영체제는 로우 디스크 섹터 및 EFI 파티션을 보호합니다. 권한을 부여하면 부팅 데이터를 안전하게 읽고 정상적으로 제작할 수 있습니다.",
+  "privilege.reason_desc": "운영체제는 로우 디스크 섹터 및 EFI 파티션을 보호합니다. 권한을 부여하면 부팅 데이터를 안전하게 읽고 정상적으로 제작할 수 있습니다.",
   "privilege.scope_title": "권한 범위",
-  "privilege.scope_desc":
-    "선택한 외장 USB 드라이브의 검증 및 쓰기에만 제한되며, 내장 시스템 디스크는 절대 건드리지 않습니다.",
+  "privilege.scope_desc": "선택한 외장 USB 드라이브의 검증 및 쓰기에만 제한되며, 내장 시스템 디스크는 절대 건드리지 않습니다.",
   "privilege.safety_title": "안전 약속",
-  "privilege.safety_desc":
-    "검사 단계는 완전 읽기 전용으로 기존 데이터를 훼손하지 않으며, 소스코드는 완전 공개되어 있습니다.",
+  "privilege.safety_desc": "검사 단계는 완전 읽기 전용으로 기존 데이터를 훼손하지 않으며, 소스코드는 완전 공개되어 있습니다.",
   "privilege.confirm_btn": "지금 승인",
   "privilege.cancel_btn": "나중에",
   "privilege.success_msg": "관리자 권한을 획득했습니다",

@@ -78,8 +78,7 @@ export const plPl: TranslationDict = {
   "settings.cliFormattingFlags": "Parametry formatowania Ventoy CLI",
   "settings.ventoyPlugins": "Wtyczki automatyzacji Ventoy (ventoy.json)",
   "app.title": "UniBoot Desktop",
-  "app.subtitle":
-    "Narzędzie do tworzenia dysków rozruchowych z podwójnym silnikiem UEFI/Legacy BIOS dla wszystkich architektur",
+  "app.subtitle": "Narzędzie do tworzenia dysków rozruchowych z podwójnym silnikiem UEFI/Legacy BIOS dla wszystkich architektur",
   "mode.cloud": "Tryb chmury",
   "mode.hybrid": "Tryb hybrydowy",
   "disk.select_title": "Wybierz Docelowy Dysk USB",
@@ -110,8 +109,7 @@ export const plPl: TranslationDict = {
   "disk.tag_boot_hybrid": "Rozruch hybrydowy",
   "disk.tag_boot_thirdparty": "Rozruch innej firmy",
   "confirm.cloud_to_hybrid_warn_title": "Uwaga: Przełączenie w tryb hybrydowy wymaga pełnego formatowania",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "Ten dysk działa w trybie czystego rozruchu w chmurze. Tryb hybrydowy Ventoy wymaga odbudowania MBR i tablicy partycji, co USUNIE wszystkie dane i pliki ISO!",
+  "confirm.cloud_to_hybrid_warn_desc": "Ten dysk działa w trybie czystego rozruchu w chmurze. Tryb hybrydowy Ventoy wymaga odbudowania MBR i tablicy partycji, co USUNIE wszystkie dane i pliki ISO!",
   "disk.tag_ssd": "Przenośny SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Szyfrowany Napęd",
@@ -139,16 +137,13 @@ export const plPl: TranslationDict = {
   "log.level_error": "BŁĄD",
   "log.level_debug": "Debugowanie",
   "safe.title_cloud": "Wykryto istniejący dysk Ventoy/UniBoot (Tryb chmury odświeża tylko partycję ESP)",
-  "safe.desc_cloud":
-    "Tryb chmury zachowuje układ dwóch partycji UNIBOOT. Odświeżenie ESP pozostawia nienaruszone wszystkie pliki ISO i dane!",
+  "safe.desc_cloud": "Tryb chmury zachowuje układ dwóch partycji UNIBOOT. Odświeżenie ESP pozostawia nienaruszone wszystkie pliki ISO i dane!",
   "safe.title_hybrid": "Wykryto istniejący dysk Ventoy (Aktualizacja w miejscu w trybie hybrydowym)",
-  "safe.desc_hybrid":
-    "Tryb hybrydowy zachowuje wszystkie istniejące pliki ISO bez formatowania, bezpiecznie wstrzykując ciemny motyw UniBoot i menu chmury!",
+  "safe.desc_hybrid": "Tryb hybrydowy zachowuje wszystkie istniejące pliki ISO bez formatowania, bezpiecznie wstrzykując ciemny motyw UniBoot i menu chmury!",
   "common.optional": "Opcjonalnie",
   "common.optional_test": "Test opcjonalny",
   "iso.title": "Lokalne źródła obrazów systemu (ISO / IMG / WIM / VHD)",
-  "iso.desc":
-    "Dodaj pliki ISO do automatycznego kopiowania do /UNIBOOT/iso/ dla bezpośredniego rozruchu Ventoy / UniBoot.",
+  "iso.desc": "Dodaj pliki ISO do automatycznego kopiowania do /UNIBOOT/iso/ dla bezpośredniego rozruchu Ventoy / UniBoot.",
   "iso.add_btn": "Dodaj pliki obrazu",
   "iso.empty_title": "Kliknij, aby dodać pliki obrazów (Wybór pojedynczy lub masowy)",
   "iso.empty_sub": "Obsługuje formaty .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -159,8 +154,7 @@ export const plPl: TranslationDict = {
   "iso.drag_unsupported": "Nie wykryto obsługiwanych plików obrazów (.iso, .wim, .img itp.)",
   "iso.preflight_title": "Sprawdzenie przed zapisem",
   "iso.conflict_title": "Plik o tej nazwie już istnieje",
-  "iso.conflict_desc":
-    "W folderze iso docelowego USB znajduje się już plik o tej nazwie. Wybierz działanie. Sumy kontrolne nie są porównywane.",
+  "iso.conflict_desc": "W folderze iso docelowego USB znajduje się już plik o tej nazwie. Wybierz działanie. Sumy kontrolne nie są porównywane.",
   "iso.conflict_action": "Działanie",
   "iso.conflict_keep_both": "Zachowaj",
   "iso.conflict_replace": "Nadpisz",
@@ -170,17 +164,13 @@ export const plPl: TranslationDict = {
   "iso.conflict_confirm": "Potwierdź i kontynuuj",
   "iso.preflight_failed": "Sprawdzenie przed zapisem nie powiodło się",
   "deploy.title": "Tworzenie dysku rozruchowego i test QEMU",
-  "deploy.desc_cloud":
-    "Czysty rozruch iPXE z chmury • Ultraszybka konfiguracja dwupartycyjna z oprogramowaniem układowym iPXE.",
-  "deploy.desc_hybrid":
-    "Lokalny silnik Ventoy CLI • Konfiguracja partycji hybrydowej Ventoy z lokalnym zarządzaniem ISO.",
+  "deploy.desc_cloud": "Czysty rozruch iPXE z chmury • Ultraszybka konfiguracja dwupartycyjna z oprogramowaniem układowym iPXE.",
+  "deploy.desc_hybrid": "Lokalny silnik Ventoy CLI • Konfiguracja partycji hybrydowej Ventoy z lokalnym zarządzaniem ISO.",
   "deploy.target_device": "Urządzenie docelowe:",
   "deploy.batch_target": "Wybrano {count} dysk(ów) USB",
   "deploy.start_create": "Utwórz dysk rozruchowy",
-  "deploy.tip_batch_update_all":
-    "Zbiorcza aktualizacja bez utraty danych: Wszystkie {count} wybrane dyski USB zostaną zaktualizowane na miejscu",
-  "deploy.tip_batch_mixed":
-    "Wdrożenie mieszane: {bootCount} dysków zostanie zaktualizowanych, {blankCount} sformatowanych",
+  "deploy.tip_batch_update_all": "Zbiorcza aktualizacja bez utraty danych: Wszystkie {count} wybrane dyski USB zostaną zaktualizowane na miejscu",
+  "deploy.tip_batch_mixed": "Wdrożenie mieszane: {bootCount} dysków zostanie zaktualizowanych, {blankCount} sformatowanych",
   "deploy.start_update": "Aktualizacja w miejscu (Dane bezpieczne)",
   "deploy.batch_create": "Rozpocznij tworzenie zbiorcze ({count} dysków)",
   "deploy.writing": "Zapisywanie pakietów oprogramowania rozruchowego...",
@@ -195,26 +185,21 @@ export const plPl: TranslationDict = {
   "deploy.tip_writing": "Zapisywanie oprogramowania rozruchowego...",
   "deploy.tip_select_single": "Najpierw wybierz docelowy dysk USB",
   "deploy.tip_select_batch": "Zaznacz docelowe dyski USB do tworzenia masowego",
-  "deploy.tip_macos_unsupported":
-    "macOS nie obsługuje czystego formatowania w trybie hybrydowym (użyj trybu chmurowego lub zainicjuj najpierw w systemie Win/Linux)",
+  "deploy.tip_macos_unsupported": "macOS nie obsługuje czystego formatowania w trybie hybrydowym (użyj trybu chmurowego lub zainicjuj najpierw w systemie Win/Linux)",
   "deploy.tip_need_ventoy": "Tryb hybrydowy wymaga lokalnych narzędzi Ventoy CLI. Zalecamy Tryb Chmurowy!",
   "deploy.macos_alert_title": "Nowe formatowanie przez CLI Ventoy nie jest obsługiwane w macOS",
-  "deploy.macos_alert_desc":
-    "Oficjalny Ventoy nie obsługuje jeszcze uruchamiania programu formatującego w macOS. Do utworzenia nowego [Dysku Hybrydowego] wymagany jest Ventoy CLI. Zalecamy użycie [Trybu Chmurowego (1-sekundowy dysk startowy z chmury)]!",
+  "deploy.macos_alert_desc": "Oficjalny Ventoy nie obsługuje jeszcze uruchamiania programu formatującego w macOS. Do utworzenia nowego [Dysku Hybrydowego] wymagany jest Ventoy CLI. Zalecamy użycie [Trybu Chmurowego (1-sekundowy dysk startowy z chmury)]!",
   "deploy.no_ventoy_title": "Nie wykryto pliku wykonywalnego CLI Ventoy",
-  "deploy.no_ventoy_desc":
-    "Tworzenie [Dysku Hybrydowego] wymaga lokalnie zainstalowanego Ventoy CLI. Zalecamy wybór obsługiwanego [Trybu Chmurowego]!",
+  "deploy.no_ventoy_desc": "Tworzenie [Dysku Hybrydowego] wymaga lokalnie zainstalowanego Ventoy CLI. Zalecamy wybór obsługiwanego [Trybu Chmurowego]!",
   "deploy.result_batch_success": "Pomyślnie wdrożono dysk instalacyjny w chmurze (1 s) na {count} dysk(ach)!",
   "deploy.result_success": "Pomyślnie wdrożono tryb {mode} do {targets}",
   "deploy.alert_success": "Wdrożenie zakończone sukcesem!",
   "deploy.safely_eject_btn": "Bezpiecznie wysuń dysk USB",
   "deploy.success_banner_title": "Dysk rozruchowy został pomyślnie utworzony!",
-  "deploy.success_banner_desc":
-    "Pliki rozruchowe i oprogramowanie układowe zapisane. Bezpiecznie wysuń przed odłączeniem, aby uniknąć utraty danych.",
+  "deploy.success_banner_desc": "Pliki rozruchowe i oprogramowanie układowe zapisane. Bezpiecznie wysuń przed odłączeniem, aby uniknąć utraty danych.",
   "deploy.toast_auto_ejected": "Zakończono! Automatycznie bezpiecznie wysunięto {count} dysków USB.",
   "deploy.confirm_auto_eject_title": "Zapis zakończony — Bezpiecznie wysunąć?",
-  "deploy.confirm_auto_eject_desc":
-    "Wszystkie dane zostały pomyślnie zapisane. Czy chcesz teraz bezpiecznie wysunąć dysk USB?",
+  "deploy.confirm_auto_eject_desc": "Wszystkie dane zostały pomyślnie zapisane. Czy chcesz teraz bezpiecznie wysunąć dysk USB?",
   "deploy.confirm_auto_eject_yes": "Bezpiecznie wysuń",
   "deploy.confirm_auto_eject_no": "Nie teraz",
   "deploy.alert_fail": "Wdrożenie nie powiodło się:",
@@ -233,8 +218,7 @@ export const plPl: TranslationDict = {
   "vm.boot_mode_bios": "Tryb BIOS (Legacy)",
   "vm.boot_mode_auto": "Automatyczne wykrywanie",
   "vm.startSuccess_vm": "Test symulacji {name} uruchomiony pomyślnie",
-  "vm.desc_optional":
-    "Funkcja opcjonalna: Podgląd rozruchu USB w maszynie wirtualnej bez ponownego uruchamiania komputera.",
+  "vm.desc_optional": "Funkcja opcjonalna: Podgląd rozruchu USB w maszynie wirtualnej bez ponownego uruchamiania komputera.",
   "vm.installed": "Wykryto QEMU",
   "vm.not_installed": "Nie wykryto QEMU",
   "vm.target": "Cel testu:",
@@ -303,10 +287,12 @@ export const plPl: TranslationDict = {
   "settings.ventoy_reserve": "Rezerwa miejsca (MB):",
   "settings.ventoy_win11_bypass": "Pomiń sprawdzanie wymagań Windows 11 (TPM/CPU/RAM):",
   "settings.ventoy_timeout": "Limit czasu menu Ventoy (Sekundy):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "Ostrzeżenie o Formatowaniu Wysokiego Ryzyka",
   "confirm.warning_title": "Ostrzeżenie: Formatowanie usunie wszystkie dane!",
-  "confirm.warning_desc":
-    "Wybrany napęd USB zostanie ponownie podzielony na partycje i sformatowany. Wszystkie istniejące pliki zostaną całkowicie usunięte. Upewnij się, że utworzono kopię zapasową ważnych danych!",
+  "confirm.warning_desc": "Wybrany napęd USB zostanie ponownie podzielony na partycje i sformatowany. Wszystkie istniejące pliki zostaną całkowicie usunięte. Upewnij się, że utworzono kopię zapasową ważnych danych!",
   "confirm.mode_title": "Tryb Wdrożenia:",
   "confirm.fs_title": "Docelowy System Plików:",
   "confirm.disks_title": "Dyski USB do sformatowania ({count}):",
@@ -316,14 +302,11 @@ export const plPl: TranslationDict = {
   "confirm.title_mixed": "Potwierdzenie inteligentnego wdrażania hybrydowego",
   "confirm.title_danger": "Ostrzeżenie o formatowaniu: Inicjalizacja dysku",
   "confirm.safe_banner_title": "Powiadomienie o aktualizacji przyrostowej (Bezpieczeństwo danych)",
-  "confirm.safe_banner_desc":
-    "Wykryto strukturę rozruchową Ventoy / UniBoot na dysku USB. System wykona aktualizację przyrostową, pomijając formatowanie. Wszystkie istniejące pliki i obrazy ISO zostają w 100% zachowane!",
-  "confirm.mixed_banner_title":
-    "Inteligentny tryb hybrydowy: Aktualizacja w miejscu dla dysków rozruchowych, formatowanie dla pustych",
+  "confirm.safe_banner_desc": "Wykryto strukturę rozruchową Ventoy / UniBoot na dysku USB. System wykona aktualizację przyrostową, pomijając formatowanie. Wszystkie istniejące pliki i obrazy ISO zostają w 100% zachowane!",
+  "confirm.mixed_banner_title": "Inteligentny tryb hybrydowy: Aktualizacja w miejscu dla dysków rozruchowych, formatowanie dla pustych",
   "confirm.mixed_banner_desc": "Wybrano {ventoyCount} dysków rozruchowych i {blankCount} pustych dysków.",
   "confirm.danger_banner_title": "Ostrzeżenie: Formatowanie jest nieodwracalne!",
-  "confirm.danger_banner_desc":
-    "Operacja ponownie podzieli na partycje i sformatuje urządzenie docelowe (MBR/GPT). Wszystkie dane zostaną całkowicie usunięte!",
+  "confirm.danger_banner_desc": "Operacja ponownie podzieli na partycje i sformatuje urządzenie docelowe (MBR/GPT). Wszystkie dane zostaną całkowicie usunięte!",
   "confirm.summary_title": "Docelowe dyski USB do wdrożenia rozruchu:",
   "confirm.smart_safe_tag": "Inteligentna ochrona",
   "confirm.ventoy_group_title": "Dyski aktualizowane w miejscu (Wszystkie ISO zachowane):",
@@ -341,14 +324,10 @@ export const plPl: TranslationDict = {
   "confirm.no": "Anuluj",
   "confirm.will_format": "Pełne formatowanie",
   "confirm.no_format": "Inteligentna aktualizacja w miejscu",
-  "deploy.toast_target_changed":
-    "Wybrany dysk docelowy uległ zmianie lub nie jest już dostępny. Wykonaj ponowne skanowanie.",
-  "deploy.toast_some_disks_removed":
-    "{count} niedostępny(ch) dysk(ów) usunięto automatycznie, kontynuacja z pozostałymi dyskami",
-  "deploy.error_system_disk_blocked":
-    "⛔ Zablokowano: {disks} to dysk systemowy. Nie można wdrożyć dysku rozruchowego USB na dysku systemowym!",
-  "deploy.error_readonly_disk":
-    "🔒 Zabezpieczony przed zapisem: {disks} jest tylko do odczytu. Usuń zabezpieczenie przed zapisem lub użyj innego USB",
+  "deploy.toast_target_changed": "Wybrany dysk docelowy uległ zmianie lub nie jest już dostępny. Wykonaj ponowne skanowanie.",
+  "deploy.toast_some_disks_removed": "{count} niedostępny(ch) dysk(ów) usunięto automatycznie, kontynuacja z pozostałymi dyskami",
+  "deploy.error_system_disk_blocked": "⛔ Zablokowano: {disks} to dysk systemowy. Nie można wdrożyć dysku rozruchowego USB na dysku systemowym!",
+  "deploy.error_readonly_disk": "🔒 Zabezpieczony przed zapisem: {disks} jest tylko do odczytu. Usuń zabezpieczenie przed zapisem lub użyj innego USB",
   "deploy.start_cloud_create": "Utwórz chmurowy dysk rozruchowy",
   "deploy.batch_update": "Rozpocznij aktualizację bez utraty danych ({count} dysków)",
   "deploy.batch_mixed": "Rozpocznij wdrożenie mieszane ({count} dysków)",
@@ -366,17 +345,14 @@ export const plPl: TranslationDict = {
   "inspector.vendor": "Producent / Marka:",
   "inspector.bus_speed": "Protokół magistrali i prędkość:",
   "inspector.fake_report": "Analiza sfałszowanego/zdegradowanego USB 3.0:",
-  "inspector.fake_text":
-    "Zdegradowany sfałszowany порт USB 3.0 (Niebieski/czarny port, ale wewnętrzny protokół negocjowany na USB 2.0 480Mb/s)",
+  "inspector.fake_text": "Zdegradowany sfałszowany порт USB 3.0 (Niebieski/czarny port, ale wewnętrzny protokół negocjowany na USB 2.0 480Mb/s)",
   "inspector.genuine_text": "Oryginalny kontroler szybkiego USB 3.0/3.1",
   "inspector.smart": "Stan zdrowia SMART:",
   "inspector.sector": "Rozmiar sektora:",
   "inspector.fake_title": "Ostrzeżenie o sfałszowanym USB 3.0!",
-  "inspector.fake_desc":
-    "Urządzenie zgłasza obsługę USB 3.0, ale rzeczywista prędkość PHY wynosi tylko {speed} (USB 2.0 PHY).",
+  "inspector.fake_desc": "Urządzenie zgłasza obsługę USB 3.0, ale rzeczywista prędkość PHY wynosi tylko {speed} (USB 2.0 PHY).",
   "inspector.genuine_title": "Weryfikacja sprzętowa pomyślna (Oryginalne urządzenie USB 3.0+)",
-  "inspector.genuine_desc":
-    "Warstwa fizyczna PHY wynegocjowała autentyczne połączenie SuperSpeed/SuperSpeed+ o prędkości {speed}.",
+  "inspector.genuine_desc": "Warstwa fizyczna PHY wynegocjowała autentyczne połączenie SuperSpeed/SuperSpeed+ o prędkości {speed}.",
   "inspector.usb2_title": "Standardowy interfejs USB 2.0",
   "inspector.usb2_desc": "Sprzęt w standardzie USB 2.0, teoretyczna maksymalna prędkość 480 Mb/s.",
   "inspector.section_basic": "Podstawowe informacje o urządzeniu",
@@ -482,10 +458,8 @@ export const plPl: TranslationDict = {
   "diag.action_reformat_title": "Sformatuj ponownie (reformat)",
   "diag.action_remount_title": "Zamontuj ponownie (remount)",
   "diag.action_retry_title": "Ponów próbę (retry)",
-  "diag.action_reformat_desc":
-    "Przerwanie zapisu uszkodziło tablicę partycji lub system plików. Zalecane jest ponowne sformatowanie.",
-  "diag.action_remount_desc":
-    "Ścieżka montowania została odłączona podczas zapisu. Podłącz ponownie dysk USB lub zamontuj wolumin.",
+  "diag.action_reformat_desc": "Przerwanie zapisu uszkodziło tablicę partycji lub system plików. Zalecane jest ponowne sformatowanie.",
+  "diag.action_remount_desc": "Ścieżka montowania została odłączona podczas zapisu. Podłącz ponownie dysk USB lub zamontuj wolumin.",
   "diag.action_retry_desc": "Środowisko i stan urządzenia są prawidłowe. Możesz bezpiecznie ponowić próbę instalacji.",
   "about.updating": "Aktualizowanie ({progress}%)",
   "about.updateTo": "Aktualizacja online do {tag}",
@@ -502,8 +476,7 @@ export const plPl: TranslationDict = {
   "dialog.textFilesFilter": "Pliki tekstowe (*.txt)",
   "dialog.allFilesFilter": "Wszystkie pliki (*.*)",
   "dialog.selectIsoTitle": "Wybierz pliki obrazu systemu (*.iso, *.wim, *.img itp.)",
-  "dialog.ventoyFilter":
-    "Obrazy źródłowe Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Obrazy źródłowe Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Oblicz Hash",
   "checksum.calculating": "Obliczanie Hasha...",
   "checksum.algo_label": "Algorytm",
@@ -547,18 +520,14 @@ export const plPl: TranslationDict = {
   "privilege.status_standard": "Brak autoryzacji",
   "privilege.btn_elevate": "Wymagaj uprawnień administratora",
   "privilege.modal_title": "Wymagane uprawnienia administratora",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Wymagana autoryzacja systemu do odczytu danych rozruchowych i zapisu dysków",
   "privilege.reason_title": "Dlaczego wymagane są uprawnienia administratora?",
-  "privilege.reason_desc":
-    "System operacyjny izoluje surowe sektory i partycje EFI. Autoryzacja umożliwia bezpośrednie wykrywanie i bezpieczne tworzenie dysków.",
+  "privilege.reason_desc": "System operacyjny izoluje surowe sektory i partycje EFI. Autoryzacja umożliwia bezpośrednie wykrywanie i bezpieczne tworzenie dysków.",
   "privilege.scope_title": "Zakres dostępu",
-  "privilege.scope_desc":
-    "Ściśle ograniczone do wybranych zewnętrznych dysków USB. Dyski wewnętrzne nigdy nie są modyfikowane.",
+  "privilege.scope_desc": "Ściśle ograniczone do wybranych zewnętrznych dysków USB. Dyski wewnętrzne nigdy nie są modyfikowane.",
   "privilege.safety_title": "Bezpieczeństwo i przejrzystość",
-  "privilege.safety_desc":
-    "Inspekcja jest wyłącznie w trybie tylko do odczytu i bezinwazyjna; kod źródłowy jest w pełni otwarty.",
+  "privilege.safety_desc": "Inspekcja jest wyłącznie w trybie tylko do odczytu i bezinwazyjna; kod źródłowy jest w pełni otwarty.",
   "privilege.confirm_btn": "Autoryzuj teraz",
   "privilege.cancel_btn": "Anuluj",
   "privilege.success_msg": "Przyznano uprawnienia administratora",

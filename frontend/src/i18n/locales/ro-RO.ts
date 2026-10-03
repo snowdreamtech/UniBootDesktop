@@ -24,8 +24,7 @@ export const roRo: TranslationDict = {
   "common.langAuto": "Limba (Automat)",
   "common.lang": "Limba",
   "vm.startSuccess": "Simularea VM a fost pornită cu succes pentru discul: {disk} ({device})",
-  "vm.backendNotReady":
-    "API-ul de backend nu este gata: se încarcă legăturile de laudă, vă rugăm să reporniți aplicația UniBoot.",
+  "vm.backendNotReady": "API-ul de backend nu este gata: se încarcă legăturile de laudă, vă rugăm să reporniți aplicația UniBoot.",
   "vm.demoModeStart": "[Mod Demo] Se pornește verificarea simulatorului QEMU: {disk} ({device})",
   "vm.startFailed": "Nu s-a putut porni simulatorul QEMU: {error}",
   "disk.writingImageProgress": "Se scrie imaginea ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -110,8 +109,7 @@ export const roRo: TranslationDict = {
   "disk.tag_boot_hybrid": "Bootare Hibridă",
   "disk.tag_boot_thirdparty": "Bootare terță parte",
   "confirm.cloud_to_hybrid_warn_title": "Notificare: Trecerea la modul hibrid necesită formatare completă",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "Acest disc este în mod pur Cloud. Modul Ventoy hibrid necesită reconstruirea MBR și a tabelei de partiții, ceea ce va ȘTERGE toate datele și fișierele ISO!",
+  "confirm.cloud_to_hybrid_warn_desc": "Acest disc este în mod pur Cloud. Modul Ventoy hibrid necesită reconstruirea MBR și a tabelei de partiții, ceea ce va ȘTERGE toate datele și fișierele ISO!",
   "disk.tag_ssd": "SSD portabil",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Drive criptat",
@@ -139,11 +137,9 @@ export const roRo: TranslationDict = {
   "log.level_error": "EROARE",
   "log.level_debug": "Depanare",
   "safe.title_cloud": "Unitate Ventoy/UniBoot existentă detectată (Modul Cloud reîmprospătează doar partiția ESP)",
-  "safe.desc_cloud":
-    "Modul Cloud păstrează structura cu două partiții UNIBOOT. Reîmprospătarea ESP lasă toate ISO-urile și fișierele intacte!",
+  "safe.desc_cloud": "Modul Cloud păstrează structura cu două partiții UNIBOOT. Reîmprospătarea ESP lasă toate ISO-urile și fișierele intacte!",
   "safe.title_hybrid": "Unitate Ventoy existentă detectată (Actualizare pe loc în modul Hibrid)",
-  "safe.desc_hybrid":
-    "Modul Hibrid păstrează toate fișierele ISO existente fără formatare, injectând tema întunecată UniBoot și meniul Cloud în siguranță!",
+  "safe.desc_hybrid": "Modul Hibrid păstrează toate fișierele ISO existente fără formatare, injectând tema întunecată UniBoot și meniul Cloud în siguranță!",
   "common.optional": "Opțional",
   "common.optional_test": "Test opțional",
   "iso.title": "Surse de imagini de sistem locale (ISO / IMG / WIM / VHD)",
@@ -158,8 +154,7 @@ export const roRo: TranslationDict = {
   "iso.drag_unsupported": "Nu au fost detectate fișiere imagine acceptate (.iso, .wim, .img etc.)",
   "iso.preflight_title": "Verificare înainte de scriere",
   "iso.conflict_title": "Numele fișierului există deja",
-  "iso.conflict_desc":
-    "În folderul iso al USB-ului țintă există deja un fișier cu același nume. Alegeți acțiunea. Hash-urile nu sunt comparate.",
+  "iso.conflict_desc": "În folderul iso al USB-ului țintă există deja un fișier cu același nume. Alegeți acțiunea. Hash-urile nu sunt comparate.",
   "iso.conflict_action": "Acțiune",
   "iso.conflict_keep_both": "Păstrează",
   "iso.conflict_replace": "Suprascrie",
@@ -169,16 +164,13 @@ export const roRo: TranslationDict = {
   "iso.conflict_confirm": "Confirmă și continuă",
   "iso.preflight_failed": "Verificarea înainte de scriere a eșuat",
   "deploy.title": "Creare disc bootabil și test QEMU",
-  "deploy.desc_cloud":
-    "Bootare Cloud iPXE pură • Configurare ultra-rapidă cu două partiții și firmware de rețea iPXE multi-arhitectură.",
+  "deploy.desc_cloud": "Bootare Cloud iPXE pură • Configurare ultra-rapidă cu două partiții și firmware de rețea iPXE multi-arhitectură.",
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configurare partiție hibridă Ventoy cu gestionare ISO locală.",
   "deploy.target_device": "Dispozitiv țintă:",
   "deploy.batch_target": "{count} unitate(ăți) USB selectată(e)",
   "deploy.start_create": "Creați disc de bootare",
-  "deploy.tip_batch_update_all":
-    "Actualizare fără pierdere de date: Toate cele {count} unități selectate vor fi actualizate pe loc",
-  "deploy.tip_batch_mixed":
-    "Desfășurare mixtă: {bootCount} unități actualizate pe loc, {blankCount} unități formatate de la zero",
+  "deploy.tip_batch_update_all": "Actualizare fără pierdere de date: Toate cele {count} unități selectate vor fi actualizate pe loc",
+  "deploy.tip_batch_mixed": "Desfășurare mixtă: {bootCount} unități actualizate pe loc, {blankCount} unități formatate de la zero",
   "deploy.start_update": "Upgrade la loc (sigur pentru date)",
   "deploy.batch_create": "Porniți crearea în lot ({count} unități)",
   "deploy.writing": "Se scrie pachete de firmware de pornire...",
@@ -193,27 +185,21 @@ export const roRo: TranslationDict = {
   "deploy.tip_writing": "Se scrie firmware-ul de pornire...",
   "deploy.tip_select_single": "Vă rugăm să selectați mai întâi o unitate USB țintă",
   "deploy.tip_select_batch": "Vă rugăm să verificați unitățile USB țintă pentru implementarea în lot",
-  "deploy.tip_macos_unsupported":
-    "macOS nu acceptă formatarea inițială în modul hibrid (utilizați modul Cloud sau inițializați mai întâi pe Win/Linux)",
+  "deploy.tip_macos_unsupported": "macOS nu acceptă formatarea inițială în modul hibrid (utilizați modul Cloud sau inițializați mai întâi pe Win/Linux)",
   "deploy.tip_need_ventoy": "Modul Hibrid necesită instrumente locale Ventoy CLI. Recomandăm modul Cloud!",
   "deploy.macos_alert_title": "Formatarea macOS Ventoy CLI Fresh neacceptată",
-  "deploy.macos_alert_desc":
-    "Ventoy oficial nu suportă încă rularea utilitarului de formatare pe macOS. Pentru a crea un [Disc Hibrid] nou este necesar Ventoy CLI. Se recomandă utilizarea [Modului Cloud (disc bootabil cloud 1s)]!",
+  "deploy.macos_alert_desc": "Ventoy oficial nu suportă încă rularea utilitarului de formatare pe macOS. Pentru a crea un [Disc Hibrid] nou este necesar Ventoy CLI. Se recomandă utilizarea [Modului Cloud (disc bootabil cloud 1s)]!",
   "deploy.no_ventoy_title": "Ventoy CLI Executable nedetectat",
-  "deploy.no_ventoy_desc":
-    "Crearea unui [Disc Hibrid] necesită Ventoy CLI instalat local. Vă rugăm să alegeți [Modul Cloud] suportat!",
-  "deploy.result_batch_success":
-    "Discul de instalare în cloud de 1 s a fost implementat cu succes pe {count} disc(uri)!",
+  "deploy.no_ventoy_desc": "Crearea unui [Disc Hibrid] necesită Ventoy CLI instalat local. Vă rugăm să alegeți [Modul Cloud] suportat!",
+  "deploy.result_batch_success": "Discul de instalare în cloud de 1 s a fost implementat cu succes pe {count} disc(uri)!",
   "deploy.result_success": "Modul {mode} a fost implementat cu succes pe {targets}",
   "deploy.alert_success": "Implementare reușită!",
   "deploy.safely_eject_btn": "Ejectare în siguranță unitate USB",
   "deploy.success_banner_title": "Unitate de boot creată cu succes!",
-  "deploy.success_banner_desc":
-    "Fișierele de pornire și firmware-ul au fost scrise. Evacuați în siguranță înainte de deconectare pentru a preveni pierderea datelor.",
+  "deploy.success_banner_desc": "Fișierele de pornire și firmware-ul au fost scrise. Evacuați în siguranță înainte de deconectare pentru a preveni pierderea datelor.",
   "deploy.toast_auto_ejected": "Finalizat! S-au evacuat automat în siguranță {count} unități USB.",
   "deploy.confirm_auto_eject_title": "Scriere finalizată — Ejectați în siguranță?",
-  "deploy.confirm_auto_eject_desc":
-    "Toate datele au fost scrise cu succes. Doriți să ejectați unitatea USB în siguranță acum?",
+  "deploy.confirm_auto_eject_desc": "Toate datele au fost scrise cu succes. Doriți să ejectați unitatea USB în siguranță acum?",
   "deploy.confirm_auto_eject_yes": "Ejectare în siguranță",
   "deploy.confirm_auto_eject_no": "Nu acum",
   "deploy.alert_fail": "Implementare eșuată:",
@@ -243,15 +229,13 @@ export const roRo: TranslationDict = {
   "vm.tip_launching": "Se lansează emulator QEMU...",
   "vm.tip_running": "Virtual machine is currently running. Target disk will be automatically remounted when closed.",
   "vm.tip_deploying": "Implementarea fișierelor de boot, așteptați până când ați terminat",
-  "vm.tip_not_installed":
-    "Emulator QEMU nu a fost găsit. Vă rugăm să instalați mai întâi QEMU (brew/port install qemu)",
+  "vm.tip_not_installed": "Emulator QEMU nu a fost găsit. Vă rugăm să instalați mai întâi QEMU (brew/port install qemu)",
   "vm.tip_select_target": "Vă rugăm să selectați mai întâi o unitate USB țintă din panoul din stânga",
   "vm.tip_ready": "Faceți clic pentru a lansa QEMU VM pentru a verifica bootloader-ul USB pe desktopul curent",
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Faceți clic mai întâi pentru a selecta o unitate USB țintă din panoul din stânga!",
-  "vm.toast_not_installed":
-    "Emulatorul QEMU nu a fost găsit! Vă rugăm să instalați QEMU (brew install qemu sau port install qemu)",
+  "vm.toast_not_installed": "Emulatorul QEMU nu a fost găsit! Vă rugăm să instalați QEMU (brew install qemu sau port install qemu)",
   "vm.cfg_secure_boot": "Simulare SecureBoot",
   "vm.cfg_accel": "Accelerare hardware",
   "vm.cfg_ram": "Alocare RAM",
@@ -303,10 +287,12 @@ export const roRo: TranslationDict = {
   "settings.ventoy_reserve": "Rezervare spațiu (MB):",
   "settings.ventoy_win11_bypass": "Ocoliți verificarea TPM/CPU/RAM din Windows 11:",
   "settings.ventoy_timeout": "Timeout meniul Ventoy (secunde):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Avertisment",
   "confirm.warning_title": "Avertisment: Formatting will erase all data!",
-  "confirm.warning_desc":
-    "Unitatea USB selectată va fi re-partiționată și formatată. Toate fișierele existente vor fi șterse complet. Asigurați-vă că ați făcut o copie de rezervă a datelor importante!",
+  "confirm.warning_desc": "Unitatea USB selectată va fi re-partiționată și formatată. Toate fișierele existente vor fi șterse complet. Asigurați-vă că ați făcut o copie de rezervă a datelor importante!",
   "confirm.mode_title": "Mod de implementare:",
   "confirm.fs_title": "Sistemul de fișiere țintă:",
   "confirm.disks_title": "Unități USB de formatat ({count}):",
@@ -316,14 +302,11 @@ export const roRo: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Confirmăation",
   "confirm.title_danger": "Format Avertisment: Disk Initialization",
   "confirm.safe_banner_title": "Notificare de actualizare incrementală în loc (sigur pentru date)",
-  "confirm.safe_banner_desc":
-    "Structura de pornire Ventoy / UniBoot a fost detectată pe unitatea țintă. Sistemul va efectua un format de omitere a actualizării incrementale. Toate fișierele și ISO-urile existente sunt păstrate 100%!",
-  "confirm.mixed_banner_title":
-    "Modul mixt inteligent: Actualizare la locul lui pentru unitățile de pornire, format pentru unitățile goale",
+  "confirm.safe_banner_desc": "Structura de pornire Ventoy / UniBoot a fost detectată pe unitatea țintă. Sistemul va efectua un format de omitere a actualizării incrementale. Toate fișierele și ISO-urile existente sunt păstrate 100%!",
+  "confirm.mixed_banner_title": "Modul mixt inteligent: Actualizare la locul lui pentru unitățile de pornire, format pentru unitățile goale",
   "confirm.mixed_banner_desc": "S-au selectat {ventoyCount} unități de boot și {blankCount} unități goale.",
   "confirm.danger_banner_title": "Avertisment: Formatting is irreversible!",
-  "confirm.danger_banner_desc":
-    "Scrierea va repartiționa și va formata dispozitivul țintă (MBR/GPT). Toate fișierele existente de pe unitățile selectate vor fi șterse complet!",
+  "confirm.danger_banner_desc": "Scrierea va repartiționa și va formata dispozitivul țintă (MBR/GPT). Toate fișierele existente de pe unitățile selectate vor fi șterse complet!",
   "confirm.summary_title": "Unități țintă pentru implementarea de pornire:",
   "confirm.smart_safe_tag": "Protecție Inteligentă",
   "confirm.ventoy_group_title": "Unități de actualizare la loc (toate ISO-urile păstrate):",
@@ -342,12 +325,9 @@ export const roRo: TranslationDict = {
   "confirm.will_format": "Formatare completă",
   "confirm.no_format": "Actualizare inteligentă pe loc",
   "deploy.toast_target_changed": "Discul țintă selectat s-a schimbat sau nu mai este disponibil. Scanați din nou.",
-  "deploy.toast_some_disks_removed":
-    "{count} disc(uri) indisponibil(e) eliminat(e) automat, continuând cu discurile rămase",
-  "deploy.error_system_disk_blocked":
-    "⛔ Blocat: {disks} este un disc de sistem. Nu se poate implementa un disc de pornire USB pe unitatea de sistem!",
-  "deploy.error_readonly_disk":
-    "🔒 Protejat la scriere: {disks} este doar citire. Eliminați protecția la scriere sau utilizați un USB diferit",
+  "deploy.toast_some_disks_removed": "{count} disc(uri) indisponibil(e) eliminat(e) automat, continuând cu discurile rămase",
+  "deploy.error_system_disk_blocked": "⛔ Blocat: {disks} este un disc de sistem. Nu se poate implementa un disc de pornire USB pe unitatea de sistem!",
+  "deploy.error_readonly_disk": "🔒 Protejat la scriere: {disks} este doar citire. Eliminați protecția la scriere sau utilizați un USB diferit",
   "deploy.start_cloud_create": "Creați disc de bootare în Cloud",
   "deploy.batch_update": "Porniți actualizarea fără pierdere de date ({count} unități)",
   "deploy.batch_mixed": "Porniți desfășurarea mixtă ({count} unități)",
@@ -365,8 +345,7 @@ export const roRo: TranslationDict = {
   "inspector.vendor": "Furnizor/Marcă:",
   "inspector.bus_speed": "Protocolul autobuzului și viteza:",
   "inspector.fake_report": "Analiză falsă USB 3.0:",
-  "inspector.fake_text":
-    "Fake USB 3.0 a fost retrogradat (portul albastru/negru, dar protocolul intern este USB 2.0 480Mb/s)",
+  "inspector.fake_text": "Fake USB 3.0 a fost retrogradat (portul albastru/negru, dar protocolul intern este USB 2.0 480Mb/s)",
   "inspector.genuine_text": "Controler autentic USB 3.0/3.1 de mare viteză",
   "inspector.smart": "Stare sănătate SMART:",
   "inspector.sector": "Dimensiunea sectorului:",
@@ -479,10 +458,8 @@ export const roRo: TranslationDict = {
   "diag.action_reformat_title": "Reformatează (reformat)",
   "diag.action_remount_title": "Remontează (remount)",
   "diag.action_retry_title": "Reîncearcă (retry)",
-  "diag.action_reformat_desc":
-    "Întreruperea scrierii a deteriorat tabela de partiții sau sistemul de fișiere. Se recomandă o nouă formatare.",
-  "diag.action_remount_desc":
-    "Calea de montare țintă s-a deconectat în timpul scrierii. Reintroduceți unitatea USB sau remontați volumul.",
+  "diag.action_reformat_desc": "Întreruperea scrierii a deteriorat tabela de partiții sau sistemul de fișiere. Se recomandă o nouă formatare.",
+  "diag.action_remount_desc": "Calea de montare țintă s-a deconectat în timpul scrierii. Reintroduceți unitatea USB sau remontați volumul.",
   "diag.action_retry_desc": "Mediul și starea dispozitivului sunt intacte. Puteți reîncerca instalarea în siguranță.",
   "about.updating": "Se actualizează ({progress}%)",
   "about.updateTo": "Actualizare online la {tag}",
@@ -499,8 +476,7 @@ export const roRo: TranslationDict = {
   "dialog.textFilesFilter": "Fișiere text (*.txt)",
   "dialog.allFilesFilter": "Toate fișierele (*.*)",
   "dialog.selectIsoTitle": "Selectați fișierele de imagine de sistem (*.iso, *.wim, *.img etc.)",
-  "dialog.ventoyFilter":
-    "Imagini sursă Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Imagini sursă Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Calculează Hash",
   "checksum.calculating": "Se calculează Hash-ul...",
   "checksum.algo_label": "Algoritm",
@@ -544,15 +520,12 @@ export const roRo: TranslationDict = {
   "privilege.status_standard": "Neautorizat",
   "privilege.btn_elevate": "Solicită acces de administrator",
   "privilege.modal_title": "Permisiune de administrator necesară",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Autorizarea sistemului este necesară pentru a citi datele de boot și a scrie pe discuri",
   "privilege.reason_title": "De ce este necesar privilegiul de administrator?",
-  "privilege.reason_desc":
-    "Sistemul de operare izolează sectoarele brute și partițiile EFI. Autorizarea deblochează detectarea directă și crearea în siguranță.",
+  "privilege.reason_desc": "Sistemul de operare izolează sectoarele brute și partițiile EFI. Autorizarea deblochează detectarea directă și crearea în siguranță.",
   "privilege.scope_title": "Domeniul de acces",
-  "privilege.scope_desc":
-    "Strict limitat la unitățile USB externe selectate. Discurile interne de sistem nu sunt niciodată atinse.",
+  "privilege.scope_desc": "Strict limitat la unitățile USB externe selectate. Discurile interne de sistem nu sunt niciodată atinse.",
   "privilege.safety_title": "Siguranță și transparență",
   "privilege.safety_desc": "Inspecția este strict doar-citire și nedistructivă; codul sursă este complet deschis.",
   "privilege.confirm_btn": "Autorizează acum",

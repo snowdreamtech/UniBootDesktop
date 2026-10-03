@@ -59,8 +59,7 @@ export const skSk: TranslationDict = {
   "settings.directModeNotice": "Priamy režim (proxy zakázaný)",
   "settings.proxyHostRequired": "Najprv zadajte adresu hostiteľa proxy servera",
   "settings.proxyTestSuccess": "Proxy {protocol} pripojená ({host}:{port})",
-  "settings.syncSuccessAlert":
-    "Firmvér a skripty Cloud UniBoot {tag} boli úspešne stiahnuté a uložené do vyrovnávacej pamäte!",
+  "settings.syncSuccessAlert": "Firmvér a skripty Cloud UniBoot {tag} boli úspešne stiahnuté a uložené do vyrovnávacej pamäte!",
   "settings.syncSuccessShortAlert": "Firmvér jadra Cloud UniBoot bol úspešne synchronizovaný!",
   "settings.syncFailedAlert": "Synchronizácia firmvéru zlyhala: {error}",
   "settings.ventoyToolchain": "Sada nástrojov Ventoy",
@@ -110,8 +109,7 @@ export const skSk: TranslationDict = {
   "disk.tag_boot_hybrid": "Hybridné spúšťanie",
   "disk.tag_boot_thirdparty": "Spúšťanie tretej strany",
   "confirm.cloud_to_hybrid_warn_title": "Upozornenie: Prepnutie do hybridného režimu vyžaduje úplné naformátovanie",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "Tento disk je v čistom režime cloudového spúšťania. Hybridný režim Ventoy vyžaduje obnovu MBR a tabuľky oddielov, čo VYMAŽE všetky údaje a ISO obrazy!",
+  "confirm.cloud_to_hybrid_warn_desc": "Tento disk je v čistom režime cloudového spúšťania. Hybridný režim Ventoy vyžaduje obnovu MBR a tabuľky oddielov, čo VYMAŽE všetky údaje a ISO obrazy!",
   "disk.tag_ssd": "Prenosný SSD disk",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Šifrovaný disk",
@@ -139,16 +137,13 @@ export const skSk: TranslationDict = {
   "log.level_error": "CHYBA",
   "log.level_debug": "Ladenie",
   "safe.title_cloud": "Zistená existujúca jednotka Ventoy/UniBoot (Cloudový režim obnovuje iba oddiel ESP)",
-  "safe.desc_cloud":
-    "Cloudový režim zachováva dvojdielne usporiadanie UNIBOOT. Obnovenie oddielu ESP ponechá všetky ISO a súbory nedotknuté!",
+  "safe.desc_cloud": "Cloudový režim zachováva dvojdielne usporiadanie UNIBOOT. Obnovenie oddielu ESP ponechá všetky ISO a súbory nedotknuté!",
   "safe.title_hybrid": "Zistená existujúca jednotka Ventoy (Aktualizácia na mieste v hybridnom režime)",
-  "safe.desc_hybrid":
-    "Hybridný režim zachováva všetky existujúce ISO súbory bez formátovania a bezpečne vkladá tmavú tému UniBoot a cloudové menu!",
+  "safe.desc_hybrid": "Hybridný režim zachováva všetky existujúce ISO súbory bez formátovania a bezpečne vkladá tmavú tému UniBoot a cloudové menu!",
   "common.optional": "Voliteľné",
   "common.optional_test": "Voliteľný test",
   "iso.title": "Lokálne zdroje obrazov systému (ISO / IMG / WIM / VHD)",
-  "iso.desc":
-    "Pridajte súbory ISO pre automatické kopírovanie do priečinka /UNIBOOT/iso/ pre priame bootovanie Ventoy / UniBoot.",
+  "iso.desc": "Pridajte súbory ISO pre automatické kopírovanie do priečinka /UNIBOOT/iso/ pre priame bootovanie Ventoy / UniBoot.",
   "iso.add_btn": "Pridať obrazové súbory",
   "iso.empty_title": "Kliknutím pridáte obrazové súbory (podporuje výber jednej alebo dávky)",
   "iso.empty_sub": "Podporuje formáty .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -159,8 +154,7 @@ export const skSk: TranslationDict = {
   "iso.drag_unsupported": "Neboli nájdené žiadne podporované súbory obrazov (.iso, .wim, .img atď.)",
   "iso.preflight_title": "Kontrola pred zápisom",
   "iso.conflict_title": "Názov súboru už existuje",
-  "iso.conflict_desc":
-    "V priečinku iso cieľového USB už existuje súbor s rovnakým názvom. Vyberte akciu. Hash sa neporovnáva.",
+  "iso.conflict_desc": "V priečinku iso cieľového USB už existuje súbor s rovnakým názvom. Vyberte akciu. Hash sa neporovnáva.",
   "iso.conflict_action": "Akcia",
   "iso.conflict_keep_both": "Ponechať",
   "iso.conflict_replace": "Prepísať",
@@ -170,16 +164,13 @@ export const skSk: TranslationDict = {
   "iso.conflict_confirm": "Potvrdiť a pokračovať",
   "iso.preflight_failed": "Kontrola pred zápisom zlyhala",
   "deploy.title": "Vytvorenie bootovacieho disku a test QEMU",
-  "deploy.desc_cloud":
-    "Čistý iPXE cloudový boot • Ultrarýchle nastavenie dvoch oddielov s sieťovým firmvérom iPXE pre viacero architektúr.",
+  "deploy.desc_cloud": "Čistý iPXE cloudový boot • Ultrarýchle nastavenie dvoch oddielov s sieťovým firmvérom iPXE pre viacero architektúr.",
   "deploy.desc_hybrid": "Lokálny engine Ventoy CLI • Nastavenie hybridného oddielu Ventoy s lokálnou správou ISO.",
   "deploy.target_device": "Cieľové zariadenie:",
   "deploy.batch_target": "Vybrané jednotky USB (počet: {count})",
   "deploy.start_create": "Vytvoriť bootovací disk",
-  "deploy.tip_batch_update_all":
-    "Hromadná aktualizácia bez straty dát: Všetkých {count} vybraných USB diskov bude aktualizovaných na mieste",
-  "deploy.tip_batch_mixed":
-    "Hromadné zmiešané nasadenie: {bootCount} diskov aktualizácia bez straty dát, {blankCount} diskov nové formátovanie",
+  "deploy.tip_batch_update_all": "Hromadná aktualizácia bez straty dát: Všetkých {count} vybraných USB diskov bude aktualizovaných na mieste",
+  "deploy.tip_batch_mixed": "Hromadné zmiešané nasadenie: {bootCount} diskov aktualizácia bez straty dát, {blankCount} diskov nové formátovanie",
   "deploy.start_update": "In-place Upgrade (Data Safe)",
   "deploy.batch_create": "Spustiť dávkové nasadenie ({count} diskov)",
   "deploy.writing": "Zapisujú sa balíčky bootovacieho firmvéru...",
@@ -194,24 +185,19 @@ export const skSk: TranslationDict = {
   "deploy.tip_writing": "Prebieha zápis bootovacieho firmvéru...",
   "deploy.tip_select_single": "Najprv vyberte cieľovú jednotku USB",
   "deploy.tip_select_batch": "Skontrolujte cieľové jednotky USB pre dávkové nasadenie",
-  "deploy.tip_macos_unsupported":
-    "macOS nepodporuje čisté formátovanie v hybridnom režime (použite cloudový režim alebo najprv inicializujte vo Win/Linux)",
+  "deploy.tip_macos_unsupported": "macOS nepodporuje čisté formátovanie v hybridnom režime (použite cloudový režim alebo najprv inicializujte vo Win/Linux)",
   "deploy.tip_need_ventoy": "Hybridný režim vyžaduje lokálne nástroje Ventoy CLI. Odporúčame Cloudový režim!",
   "deploy.macos_alert_title": "Nepodporované čerstvé formátovanie macOS Ventoy CLI",
-  "deploy.macos_alert_desc":
-    "Oficiálny Ventoy zatiaľ nepodporuje spustenie formátovacieho programu v systéme macOS. Pre vytvorenie nového [Hybridného disku] je potrebný Ventoy CLI. Odporúčame použiť [Cloudový režim (1s cloudový bootovací disk)]!",
+  "deploy.macos_alert_desc": "Oficiálny Ventoy zatiaľ nepodporuje spustenie formátovacieho programu v systéme macOS. Pre vytvorenie nového [Hybridného disku] je potrebný Ventoy CLI. Odporúčame použiť [Cloudový režim (1s cloudový bootovací disk)]!",
   "deploy.no_ventoy_title": "Spustiteľný súbor Ventoy CLI nebol zistený",
-  "deploy.no_ventoy_desc":
-    "Tvorba [Hybridného disku] vyžaduje lokálne nainštalovaný Ventoy CLI. Odporúčame zvoliť podporovaný [Cloudový režim]!",
+  "deploy.no_ventoy_desc": "Tvorba [Hybridného disku] vyžaduje lokálne nainštalovaný Ventoy CLI. Odporúčame zvoliť podporovaný [Cloudový režim]!",
   "deploy.result_batch_success": "1-sekundový cloudový inštalačný disk bol úspešne nasadený na {count} disk(ov)!",
   "deploy.result_success": "Režim {mode} bol úspešne nasadený na {targets}",
   "deploy.alert_success": "Nasadenie úspešné!",
   "deploy.safely_eject_btn": "Bezpečne odpojiť USB disk",
   "deploy.success_banner_title": "Bootovací disk bol úspešne vytvorený!",
-  "deploy.success_banner_desc":
-    "Spúšťacie súbory a firmvér boli zapísané. Pred odpojením bezpečne vysuňte, aby ste predišli strate údajov.",
-  "deploy.toast_auto_ejected":
-    "Vytváranie dokončené! {count} USB disk(ov) bolo automaticky bezpečne vysunutých. Všetky dáta boli zapísané.",
+  "deploy.success_banner_desc": "Spúšťacie súbory a firmvér boli zapísané. Pred odpojením bezpečne vysuňte, aby ste predišli strate údajov.",
+  "deploy.toast_auto_ejected": "Vytváranie dokončené! {count} USB disk(ov) bolo automaticky bezpečne vysunutých. Všetky dáta boli zapísané.",
   "deploy.confirm_auto_eject_title": "Zápis dokončený — Bezpečne odpojiť?",
   "deploy.confirm_auto_eject_desc": "Všetky údaje boli úspešne zapísané. Chcete teraz bezpečne odpojiť USB disk?",
   "deploy.confirm_auto_eject_yes": "Bezpečne odpojiť",
@@ -249,8 +235,7 @@ export const skSk: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Najprv kliknutím vyberte cieľovú jednotku USB z ľavého panela!",
-  "vm.toast_not_installed":
-    "Emulátor QEMU sa nenašiel! Nainštalujte si prosím QEMU (brew install qemu alebo port install qemu)",
+  "vm.toast_not_installed": "Emulátor QEMU sa nenašiel! Nainštalujte si prosím QEMU (brew install qemu alebo port install qemu)",
   "vm.cfg_secure_boot": "Simulácia SecureBoot",
   "vm.cfg_accel": "Hardvérová akcelerácia",
   "vm.cfg_ram": "Alokácia RAM",
@@ -302,10 +287,12 @@ export const skSk: TranslationDict = {
   "settings.ventoy_reserve": "Rezervný priestor (MB):",
   "settings.ventoy_win11_bypass": "Vynechanie kontroly TPM/CPU/RAM systému Windows 11:",
   "settings.ventoy_timeout": "Časový limit ponuky Ventoy (v sekundách):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Upozornenie",
   "confirm.warning_title": "Upozornenie: Formatting will erase all data!",
-  "confirm.warning_desc":
-    "Vybraná jednotka USB sa znova rozdelí a naformátuje. Všetky existujúce súbory budú úplne vymazané. Uistite sa, že máte zálohované dôležité dáta!",
+  "confirm.warning_desc": "Vybraná jednotka USB sa znova rozdelí a naformátuje. Všetky existujúce súbory budú úplne vymazané. Uistite sa, že máte zálohované dôležité dáta!",
   "confirm.mode_title": "Režim nasadenia:",
   "confirm.fs_title": "Cieľový súborový systém:",
   "confirm.disks_title": "Jednotky, ktoré sa majú naformátovať ({count}):",
@@ -315,15 +302,11 @@ export const skSk: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Potvrdiťation",
   "confirm.title_danger": "Format Upozornenie: Disk Initialization",
   "confirm.safe_banner_title": "Oznámenie o prírastkovej aktualizácii na mieste (údaje bezpečné)",
-  "confirm.safe_banner_desc":
-    "Na cieľovom disku bola zistená zavádzacia štruktúra Ventoy / UniBoot. Systém vykoná inkrementálnu aktualizáciu preskakovaním formátu. Všetky existujúce súbory a ISO sú 100% zachované!",
-  "confirm.mixed_banner_title":
-    "Inteligentný zmiešaný režim: Aktualizácia na mieste pre zavádzacie jednotky, formátovanie pre prázdne jednotky",
-  "confirm.mixed_banner_desc":
-    "Vybraté {ventoyCount} spúšťacie jednotky (aktualizácia na mieste) a {blankCount} prázdne jednotky (úplný formát).",
+  "confirm.safe_banner_desc": "Na cieľovom disku bola zistená zavádzacia štruktúra Ventoy / UniBoot. Systém vykoná inkrementálnu aktualizáciu preskakovaním formátu. Všetky existujúce súbory a ISO sú 100% zachované!",
+  "confirm.mixed_banner_title": "Inteligentný zmiešaný režim: Aktualizácia na mieste pre zavádzacie jednotky, formátovanie pre prázdne jednotky",
+  "confirm.mixed_banner_desc": "Vybraté {ventoyCount} spúšťacie jednotky (aktualizácia na mieste) a {blankCount} prázdne jednotky (úplný formát).",
   "confirm.danger_banner_title": "Upozornenie: Formatting is irreversible!",
-  "confirm.danger_banner_desc":
-    "Zápisom sa znova rozdelí a naformátuje cieľové zariadenie (MBR/GPT). Všetky existujúce súbory na vybraných jednotkách budú úplne vymazané!",
+  "confirm.danger_banner_desc": "Zápisom sa znova rozdelí a naformátuje cieľové zariadenie (MBR/GPT). Všetky existujúce súbory na vybraných jednotkách budú úplne vymazané!",
   "confirm.summary_title": "Cieľové jednotky pre zavádzanie:",
   "confirm.smart_safe_tag": "Inteligentná ochrana",
   "confirm.ventoy_group_title": "In-place Upgrade disky (všetky ISO zachované):",
@@ -342,12 +325,9 @@ export const skSk: TranslationDict = {
   "confirm.will_format": "Úplné formátovanie",
   "confirm.no_format": "Inteligentná aktualizácia na mieste",
   "deploy.toast_target_changed": "Vybraný cieľový disk sa zmenil alebo už nie je dostupný. Vykonajte nový sken.",
-  "deploy.toast_some_disks_removed":
-    "{count} nedostupných diskov automaticky odstránených, pokračovanie so zostávajúcimi diskami",
-  "deploy.error_system_disk_blocked":
-    "⛔ Blokované: {disks} je systémový disk. Na systémový disk nie je možné nasadiť USB bootovací disk!",
-  "deploy.error_readonly_disk":
-    "🔒 Chránené proti zápisu: {disks} je len na čítanie. Odstráňte ochranu proti zápisu alebo použite iné USB",
+  "deploy.toast_some_disks_removed": "{count} nedostupných diskov automaticky odstránených, pokračovanie so zostávajúcimi diskami",
+  "deploy.error_system_disk_blocked": "⛔ Blokované: {disks} je systémový disk. Na systémový disk nie je možné nasadiť USB bootovací disk!",
+  "deploy.error_readonly_disk": "🔒 Chránené proti zápisu: {disks} je len na čítanie. Odstráňte ochranu proti zápisu alebo použite iné USB",
   "deploy.start_cloud_create": "Vytvoriť cloudový bootovací disk",
   "deploy.batch_update": "Spustiť hromadnú aktualizáciu bez straty dát ({count} USB diskov)",
   "deploy.batch_mixed": "Spustiť hromadné zmiešané nasadenie ({count} USB diskov)",
@@ -372,8 +352,7 @@ export const skSk: TranslationDict = {
   "inspector.fake_title": "Fake USB 3.0 Upozornenie Alert!",
   "inspector.fake_desc": "Zariadenie uvádza USB 3.0, ale skutočná rýchlosť PHY je iba {speed}.",
   "inspector.genuine_title": "Fyzické overenie hardvéru prebehlo úspešne (originálne zariadenie USB 3.0+)",
-  "inspector.genuine_desc":
-    "Fyzická vrstva PHY vyjednala skutočné spojenie SuperSpeed/SuperSpeed+ s rýchlosťou {speed}.",
+  "inspector.genuine_desc": "Fyzická vrstva PHY vyjednala skutočné spojenie SuperSpeed/SuperSpeed+ s rýchlosťou {speed}.",
   "inspector.usb2_title": "Štandardné rozhranie USB 2.0",
   "inspector.usb2_desc": "Hardvér zariadenia je USB 2.0, teoretická fyzická maximálna rýchlosť 480 Mb/s.",
   "inspector.section_basic": "Základné informácie o zariadení",
@@ -479,10 +458,8 @@ export const skSk: TranslationDict = {
   "diag.action_reformat_title": "Preformátovať (reformat)",
   "diag.action_remount_title": "Opätovne pripojiť (remount)",
   "diag.action_retry_title": "Opakovať (retry)",
-  "diag.action_reformat_desc":
-    "Prerušenie zápisu poškodilo tabuľku oddielov alebo súborový systém. Odporúča sa nové preformátovanie.",
-  "diag.action_remount_desc":
-    "Cieľová cesta pripojenia bola počas zápisu odpojená. Znovu vložte USB disk alebo pripojte zväzok.",
+  "diag.action_reformat_desc": "Prerušenie zápisu poškodilo tabuľku oddielov alebo súborový systém. Odporúča sa nové preformátovanie.",
+  "diag.action_remount_desc": "Cieľová cesta pripojenia bola počas zápisu odpojená. Znovu vložte USB disk alebo pripojte zväzok.",
   "diag.action_retry_desc": "Prostredie a stav zariadenia sú v poriadku. Môžete bezpečne opakovať inštaláciu.",
   "about.updating": "Aktualizácia ({progress}%)",
   "about.updateTo": "Online aktualizácia na {tag}",
@@ -499,8 +476,7 @@ export const skSk: TranslationDict = {
   "dialog.textFilesFilter": "Textové súbory (*.txt)",
   "dialog.allFilesFilter": "Všetky súbory (*.*)",
   "dialog.selectIsoTitle": "Vybrať súbory obrazu systému (*.iso, *.wim, *.img atď.)",
-  "dialog.ventoyFilter":
-    "Zdrojové obrazy Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Zdrojové obrazy Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Vypočítať Hash",
   "checksum.calculating": "Počíta sa Hash...",
   "checksum.algo_label": "Algoritmus",
@@ -544,15 +520,12 @@ export const skSk: TranslationDict = {
   "privilege.status_standard": "Neautorizované",
   "privilege.btn_elevate": "Požiadať o prístup správcu",
   "privilege.modal_title": "Vyžadujú sa oprávnenia správcu",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Na načítanie spúšťacích údajov a zápis na disky sa vyžaduje autorizácia systému",
   "privilege.reason_title": "Prečo sú potrebné oprávnenia správcu?",
-  "privilege.reason_desc":
-    "Operačný systém izoluje surové sektory a oddiely EFI. Autorizácia umožňuje priamu detekciu a bezpečné vytvorenie disku.",
+  "privilege.reason_desc": "Operačný systém izoluje surové sektory a oddiely EFI. Autorizácia umožňuje priamu detekciu a bezpečné vytvorenie disku.",
   "privilege.scope_title": "Rozsah prístupu",
-  "privilege.scope_desc":
-    "Prísne obmedzené na vybrané externé USB jednotky. Interné systémové disky nie sú nikdy dotknuté.",
+  "privilege.scope_desc": "Prísne obmedzené na vybrané externé USB jednotky. Interné systémové disky nie sú nikdy dotknuté.",
   "privilege.safety_title": "Bezpečnosť a transparentnosť",
   "privilege.safety_desc": "Kontrola je striktne iba na čítanie a nedeštruktívna; zdrojový kód je plne otvorený.",
   "privilege.confirm_btn": "Autorizovať teraz",

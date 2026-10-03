@@ -59,6 +59,7 @@ func isEmptyConfig(cfg *AppConfig) bool {
 		cfg.VentoyReserveSpace == 0 &&
 		!cfg.VentoyWin11Bypass &&
 		cfg.VentoyMenuTimeout == 0 &&
+		!cfg.VentoySecondaryMenu &&
 		!cfg.AutoEjectAfterDeploy
 }
 
@@ -181,6 +182,7 @@ type AppConfig struct {
 	VentoyReserveSpace   int    `json:"ventoyReserveSpace" toml:"ventoyReserveSpace"`     // Reserved space at end of disk (MB)
 	VentoyWin11Bypass    bool   `json:"ventoyWin11Bypass" toml:"ventoyWin11Bypass"`       // Auto inject Win11 TPM/CPU bypass patch
 	VentoyMenuTimeout    int    `json:"ventoyMenuTimeout" toml:"ventoyMenuTimeout"`       // Auto boot timeout (seconds)
+	VentoySecondaryMenu  bool   `json:"ventoySecondaryMenu" toml:"ventoySecondaryMenu"`   // Enable Ventoy secondary boot mode menu (default: false, direct boot)
 	AutoEjectAfterDeploy bool   `json:"autoEjectAfterDeploy" toml:"autoEjectAfterDeploy"` // Automatically safely eject target disks after successful deployment
 }
 
@@ -208,6 +210,7 @@ func GetDefaultConfig() *AppConfig {
 		VentoyReserveSpace:   0,     // Official Ventoy default: 0 MB
 		VentoyWin11Bypass:    false, // Official Ventoy default: Disabled (False)
 		VentoyMenuTimeout:    0,     // Official Ventoy default: 0 (No timeout / wait indefinitely)
+		VentoySecondaryMenu:  false, // Default: false (Direct boot without secondary menu for beginner friendly UX)
 		AutoEjectAfterDeploy: false, // Default: do NOT auto eject — user should verify the disk first
 	}
 }

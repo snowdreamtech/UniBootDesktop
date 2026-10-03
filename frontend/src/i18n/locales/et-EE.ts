@@ -59,8 +59,7 @@ export const etEe: TranslationDict = {
   "settings.directModeNotice": "Otserežiim (puhverserver keelatud)",
   "settings.proxyHostRequired": "Sisestage esmalt puhverserveri hosti aadress",
   "settings.proxyTestSuccess": "{protocol} Puhverserver on ühendatud ({host}:{port})",
-  "settings.syncSuccessAlert":
-    "Cloud UniBoot {tag} püsivara ja skriptid on edukalt alla laaditud ja vahemällu salvestatud!",
+  "settings.syncSuccessAlert": "Cloud UniBoot {tag} püsivara ja skriptid on edukalt alla laaditud ja vahemällu salvestatud!",
   "settings.syncSuccessShortAlert": "Cloud UniBooti põhipüsivara sünkrooniti edukalt!",
   "settings.syncFailedAlert": "Püsivara sünkroonimine ebaõnnestus: {error}",
   "settings.ventoyToolchain": "Ventoy tööriistakomplekt",
@@ -110,8 +109,7 @@ export const etEe: TranslationDict = {
   "disk.tag_boot_hybrid": "Hübriidkäivitus",
   "disk.tag_boot_thirdparty": "Kolmanda osapoole käivitus",
   "confirm.cloud_to_hybrid_warn_title": "Teade: Hübriidrežiimile lülitumine nõuab täielikku vormindamist",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "See ketas on puhtas pilvekäivituse režiimis. Ventoy hübriidrežiim nõuab MBR-i ja partitsioonitabeli uuesti loomist, mis KUSTUTAB kõik andmed ja ISO-failid!",
+  "confirm.cloud_to_hybrid_warn_desc": "See ketas on puhtas pilvekäivituse režiimis. Ventoy hübriidrežiim nõuab MBR-i ja partitsioonitabeli uuesti loomist, mis KUSTUTAB kõik andmed ja ISO-failid!",
   "disk.tag_ssd": "Kaasaskantav SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Krüpteeritud ketas",
@@ -139,16 +137,13 @@ export const etEe: TranslationDict = {
   "log.level_error": "VIGA",
   "log.level_debug": "Buggide otsing",
   "safe.title_cloud": "Tuvastati olemasolev Ventoy/UniBoot draiv (Pilverežiim värskendab ainult ESP sektsiooni)",
-  "safe.desc_cloud":
-    "Pilverežiim säilitab UNIBOOT kahe sektsiooniga paigutuse. ESP sektsiooni värskendamine jätab kõik ISO-d ja failid puutumata!",
+  "safe.desc_cloud": "Pilverežiim säilitab UNIBOOT kahe sektsiooniga paigutuse. ESP sektsiooni värskendamine jätab kõik ISO-d ja failid puutumata!",
   "safe.title_hybrid": "Tuvastati olemasolev Ventoy draiv (Kohapealne uuendus hübriidrežiimis)",
-  "safe.desc_hybrid":
-    "Hübriidrežiim säilitab kõik olemasolevad ISO-failid ilma vormindamata, lisades turvaliselt UniBoot tumeda teema ja pilvemenüü!",
+  "safe.desc_hybrid": "Hübriidrežiim säilitab kõik olemasolevad ISO-failid ilma vormindamata, lisades turvaliselt UniBoot tumeda teema ja pilvemenüü!",
   "common.optional": "Valikuline",
   "common.optional_test": "Valikuline test",
   "iso.title": "Kohaliku süsteemi pildiallikad (ISO / IMG / WIM / VHD)",
-  "iso.desc":
-    "Lisage ISO-failid automaatseks kopeerimiseks /UNIBOOT/iso/ kataloogi Ventoy / UniBoot otsekäivitamiseks.",
+  "iso.desc": "Lisage ISO-failid automaatseks kopeerimiseks /UNIBOOT/iso/ kataloogi Ventoy / UniBoot otsekäivitamiseks.",
   "iso.add_btn": "Lisage pildifaile",
   "iso.empty_title": "Klõpsake pildifailide lisamiseks (toetab üksik- või partiivalikut)",
   "iso.empty_sub": "Toetab .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw vorminguid",
@@ -169,16 +164,13 @@ export const etEe: TranslationDict = {
   "iso.conflict_confirm": "Kinnita ja jätka",
   "iso.preflight_failed": "Kirjutamiseelne kontroll nurjus",
   "deploy.title": "Alglaaditava ketta loomine ja QEMU test",
-  "deploy.desc_cloud":
-    "Puhas iPXE pilvealglaadimine • Ülikiire kahe sektsiooni seadistamine mitme arhitektuuriga iPXE võrgupüsivaraga.",
+  "deploy.desc_cloud": "Puhas iPXE pilvealglaadimine • Ülikiire kahe sektsiooni seadistamine mitme arhitektuuriga iPXE võrgupüsivaraga.",
   "deploy.desc_hybrid": "Ventoy CLI kohalik mootor • Ventoy hübriidsektsiooni seadistamine kohaliku ISO haldusega.",
   "deploy.target_device": "Sihtseade:",
   "deploy.batch_target": "Valitud on {count} USB-draivi",
   "deploy.start_create": "Loo alglaadimisketas",
-  "deploy.tip_batch_update_all":
-    "Hulgivärskendus ilma andmekaota: Kõik {count} valitud USB-seadet värskendatakse kohapeal",
-  "deploy.tip_batch_mixed":
-    "Segatüüpi hulgipaigaldus: {bootCount} seade(t) värskendus ilma andmekaota, {blankCount} seade(t) uus vormindamine",
+  "deploy.tip_batch_update_all": "Hulgivärskendus ilma andmekaota: Kõik {count} valitud USB-seadet värskendatakse kohapeal",
+  "deploy.tip_batch_mixed": "Segatüüpi hulgipaigaldus: {bootCount} seade(t) värskendus ilma andmekaota, {blankCount} seade(t) uus vormindamine",
   "deploy.start_update": "Kohane versiooniuuendus (andmete turvaline)",
   "deploy.batch_create": "Alusta pakettjuurutust ({count} draivi)",
   "deploy.writing": "Alglaadimispüsivarapakettide kirjutamine...",
@@ -193,27 +185,21 @@ export const etEe: TranslationDict = {
   "deploy.tip_writing": "Alglaadimise püsivara kirjutamine...",
   "deploy.tip_select_single": "Valige esmalt siht-USB-draiv",
   "deploy.tip_select_batch": "Kontrollige siht-USB-draive komplekti juurutamiseks",
-  "deploy.tip_macos_unsupported":
-    "macOS ei toeta hübriidrežiimis esmast vormindamist (kasutage pilverežiimi või lähtestage esmalt Win/Linuxis)",
+  "deploy.tip_macos_unsupported": "macOS ei toeta hübriidrežiimis esmast vormindamist (kasutage pilverežiimi või lähtestage esmalt Win/Linuxis)",
   "deploy.tip_need_ventoy": "Hübriidrežiim vajab kohalikku Ventoy CLI tööriista. Soovitame Pilverežiimi!",
   "deploy.macos_alert_title": "macOS Ventoy CLI värsket vormindamist ei toetata",
-  "deploy.macos_alert_desc":
-    "Ametlik Ventoy ei toeta veel vormindamisprogrammi käivitamist macOS-is. Uue [Hübriidketta] loomiseks on vaja Ventoy CLI-d. Soovitatav on kasutada [Pilverežiimi (1s pilve käivitusketas)]!",
+  "deploy.macos_alert_desc": "Ametlik Ventoy ei toeta veel vormindamisprogrammi käivitamist macOS-is. Uue [Hübriidketta] loomiseks on vaja Ventoy CLI-d. Soovitatav on kasutada [Pilverežiimi (1s pilve käivitusketas)]!",
   "deploy.no_ventoy_title": "Ventoy CLI käivitatavat ei tuvastatud",
-  "deploy.no_ventoy_desc":
-    "[Hübriidketta] loomiseks on vaja kohalikult installitud Ventoy CLI-d. Palun valige toetatud [Pilverežiim]!",
+  "deploy.no_ventoy_desc": "[Hübriidketta] loomiseks on vaja kohalikult installitud Ventoy CLI-d. Palun valige toetatud [Pilverežiim]!",
   "deploy.result_batch_success": "1-sekundiline pilvepaigaldusketas edukalt juurutatud {count} kettale!",
   "deploy.result_success": "Režiim {mode} edukalt juurutatud sihtkohta {targets}",
   "deploy.alert_success": "Juurutamine õnnestus!",
   "deploy.safely_eject_btn": "Eemalda USB-seade turvaliselt",
   "deploy.success_banner_title": "Käivitusketas on edukalt loodud!",
-  "deploy.success_banner_desc":
-    "Käivitusfailid ja püsivara on kirjutatud. Andmekao vältimiseks eemaldage ketas enne lahtiühendamist turvaliselt.",
-  "deploy.toast_auto_ejected":
-    "Loomine lõpetatud! {count} USB-seadet on automaatselt ohutult väljutatud. Kõik andmed on salvestatud.",
+  "deploy.success_banner_desc": "Käivitusfailid ja püsivara on kirjutatud. Andmekao vältimiseks eemaldage ketas enne lahtiühendamist turvaliselt.",
+  "deploy.toast_auto_ejected": "Loomine lõpetatud! {count} USB-seadet on automaatselt ohutult väljutatud. Kõik andmed on salvestatud.",
   "deploy.confirm_auto_eject_title": "Kirjutamine lõpetatud — Eemaldada turvaliselt?",
-  "deploy.confirm_auto_eject_desc":
-    "Kõik andmed on edukalt kirjutatud. Kas soovite USB-seadme kohe turvaliselt eemaldada?",
+  "deploy.confirm_auto_eject_desc": "Kõik andmed on edukalt kirjutatud. Kas soovite USB-seadme kohe turvaliselt eemaldada?",
   "deploy.confirm_auto_eject_yes": "Eemalda turvaliselt",
   "deploy.confirm_auto_eject_no": "Mitte praegu",
   "deploy.alert_fail": "Juurutamine ebaõnnestus:",
@@ -301,10 +287,12 @@ export const etEe: TranslationDict = {
   "settings.ventoy_reserve": "Ruumi reserveerimine (MB):",
   "settings.ventoy_win11_bypass": "Vältige Windows 11 TPM/CPU/RAM kontrolli:",
   "settings.ventoy_timeout": "Ventoy menüü ajalõpp (sekundites):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Hoiatus",
   "confirm.warning_title": "Hoiatus: Formatting will erase all data!",
-  "confirm.warning_desc":
-    "Valitud USB-draiv sektsioonitakse uuesti ja vormindatakse. Kõik olemasolevad failid kustutatakse täielikult. Veenduge, et olete varundanud olulised andmed!",
+  "confirm.warning_desc": "Valitud USB-draiv sektsioonitakse uuesti ja vormindatakse. Kõik olemasolevad failid kustutatakse täielikult. Veenduge, et olete varundanud olulised andmed!",
   "confirm.mode_title": "Juurutusrežiim:",
   "confirm.fs_title": "Sihtfailisüsteem:",
   "confirm.disks_title": "Vormitavad draivid ({count}):",
@@ -314,15 +302,11 @@ export const etEe: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Kinnitaation",
   "confirm.title_danger": "Format Hoiatus: Disk Initialization",
   "confirm.safe_banner_title": "Kohapealse järkjärgulise värskenduse teatis (andmete turvaline)",
-  "confirm.safe_banner_desc":
-    "Sihtdraivil tuvastati Ventoy / UniBooti alglaadimisstruktuur. Süsteem teostab järkjärgulise värskenduse vahelejätmise vormingu. Kõik olemasolevad failid ja ISO-d on 100% säilinud!",
-  "confirm.mixed_banner_title":
-    "Nutikas segarežiim: alglaadimisdraivide kohapealne värskendus, tühjade draivide vorming",
-  "confirm.mixed_banner_desc":
-    "Valitud {ventoyCount} alglaadimisdraiv (kohapealne värskendus) ja {blankCount} tühja draivi (täisvorming).",
+  "confirm.safe_banner_desc": "Sihtdraivil tuvastati Ventoy / UniBooti alglaadimisstruktuur. Süsteem teostab järkjärgulise värskenduse vahelejätmise vormingu. Kõik olemasolevad failid ja ISO-d on 100% säilinud!",
+  "confirm.mixed_banner_title": "Nutikas segarežiim: alglaadimisdraivide kohapealne värskendus, tühjade draivide vorming",
+  "confirm.mixed_banner_desc": "Valitud {ventoyCount} alglaadimisdraiv (kohapealne värskendus) ja {blankCount} tühja draivi (täisvorming).",
   "confirm.danger_banner_title": "Hoiatus: Formatting is irreversible!",
-  "confirm.danger_banner_desc":
-    "Kirjutamine sektsioonib ja vormindab sihtseadme uuesti (MBR/GPT). Kõik olemasolevad failid valitud draividel kustutatakse täielikult!",
+  "confirm.danger_banner_desc": "Kirjutamine sektsioonib ja vormindab sihtseadme uuesti (MBR/GPT). Kõik olemasolevad failid valitud draividel kustutatakse täielikult!",
   "confirm.summary_title": "Alglaadimise juurutamise sihtkettad:",
   "confirm.smart_safe_tag": "Nutikas kaitse",
   "confirm.ventoy_group_title": "Kohapealsed täiendusdraivid (kõik ISO-d säilinud):",
@@ -341,12 +325,9 @@ export const etEe: TranslationDict = {
   "confirm.will_format": "Täielik vormindamine",
   "confirm.no_format": "Nutikas kohapealne värskendus",
   "deploy.toast_target_changed": "Valitud sihtketas on muutunud või pole enam saadaval. Palun skannige uuesti.",
-  "deploy.toast_some_disks_removed":
-    "{count} kättesaamatut ketast eemaldatud automaatselt, jätkatakse ülejäänud kettadega",
-  "deploy.error_system_disk_blocked":
-    "⛔ Blokeeritud: {disks} on süsteemiketas. USB-alglaadimiskettast ei saa süsteemikettale paigaldada!",
-  "deploy.error_readonly_disk":
-    "🔒 Kirjutuskaitstud: {disks} on ainult lugemiseks. Eemaldage kirjutuskaitse või kasutage teist USB-d",
+  "deploy.toast_some_disks_removed": "{count} kättesaamatut ketast eemaldatud automaatselt, jätkatakse ülejäänud kettadega",
+  "deploy.error_system_disk_blocked": "⛔ Blokeeritud: {disks} on süsteemiketas. USB-alglaadimiskettast ei saa süsteemikettale paigaldada!",
+  "deploy.error_readonly_disk": "🔒 Kirjutuskaitstud: {disks} on ainult lugemiseks. Eemaldage kirjutuskaitse või kasutage teist USB-d",
   "deploy.start_cloud_create": "Loo pilve alglaadimisketas",
   "deploy.batch_update": "Käivita hulgivärskendus ilma andmekaota ({count} USB-seadet)",
   "deploy.batch_mixed": "Käivita segatüüpi hulgipaigaldus ({count} USB-seadet)",
@@ -369,8 +350,7 @@ export const etEe: TranslationDict = {
   "inspector.smart": "SMART tervislik seisund:",
   "inspector.sector": "Sektori suurus:",
   "inspector.fake_title": "Fake USB 3.0 Hoiatus Alert!",
-  "inspector.fake_desc":
-    "Seade reklaamib USB 3.0/3.1, kuid tegelik füüsilise kihi kiirus lepitakse kokku ainult {speed} (USB 2.0 High-Speed PHY). Sellel draivil on tõenäoliselt võltsitud püsivara või võltssinine port.",
+  "inspector.fake_desc": "Seade reklaamib USB 3.0/3.1, kuid tegelik füüsilise kihi kiirus lepitakse kokku ainult {speed} (USB 2.0 High-Speed PHY). Sellel draivil on tõenäoliselt võltsitud püsivara või võltssinine port.",
   "inspector.genuine_title": "Füüsilise riistvara kinnitus läbitud (ehtne USB 3.0+ seade)",
   "inspector.genuine_desc": "Füüsiline PHY-kiht saavutas ehtsa SuperSpeed/SuperSpeed+ ühenduse kiirusega {speed}.",
   "inspector.usb2_title": "Standardne USB 2.0 liides",
@@ -478,10 +458,8 @@ export const etEe: TranslationDict = {
   "diag.action_reformat_title": "Vorminda uuesti (reformat)",
   "diag.action_remount_title": "Haagi uuesti (remount)",
   "diag.action_retry_title": "Proovi uuesti (retry)",
-  "diag.action_reformat_desc":
-    "Kirjutamise katkestus kahjustas partitsioonitabelit või failisüsteemi. Soovitatav on uus vormindamine.",
-  "diag.action_remount_desc":
-    "Sihi haakimistee katketi kirjutamise ajal. Sisestage USB-seade uuesti või haakige köide uuesti.",
+  "diag.action_reformat_desc": "Kirjutamise katkestus kahjustas partitsioonitabelit või failisüsteemi. Soovitatav on uus vormindamine.",
+  "diag.action_remount_desc": "Sihi haakimistee katketi kirjutamise ajal. Sisestage USB-seade uuesti või haakige köide uuesti.",
   "diag.action_retry_desc": "Keskkond ja seadme olek on korras. Võite turvaliselt paigaldust uuesti proovida.",
   "about.updating": "Uuendamine ({progress}%)",
   "about.updateTo": "Võrguvärskendus versioonile {tag}",
@@ -498,8 +476,7 @@ export const etEe: TranslationDict = {
   "dialog.textFilesFilter": "Tekstifailid (*.txt)",
   "dialog.allFilesFilter": "Kõik failid (*.*)",
   "dialog.selectIsoTitle": "Vali süsteemitõmmise failid (*.iso, *.wim, *.img jne)",
-  "dialog.ventoyFilter":
-    "Ventoy alltõmmised (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Ventoy alltõmmised (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Arvuta Hash",
   "checksum.calculating": "Hashi arvutamine...",
   "checksum.algo_label": "Algoritm",
@@ -543,15 +520,12 @@ export const etEe: TranslationDict = {
   "privilege.status_standard": "Autoriseerimata",
   "privilege.btn_elevate": "Taotle administraatori õigusi",
   "privilege.modal_title": "Vajalik administraatori luba",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Käivitusandmete lugemiseks ja ketastele kirjutamiseks on vajalik süsteemi luba",
   "privilege.reason_title": "Miks on administraatori õigused vajalikud?",
-  "privilege.reason_desc":
-    "Operatsioonisüsteem isoleerib toorsektorid ja EFI-partitsioonid. Luba võimaldab otsest tuvastamist ja turvalist loomist.",
+  "privilege.reason_desc": "Operatsioonisüsteem isoleerib toorsektorid ja EFI-partitsioonid. Luba võimaldab otsest tuvastamist ja turvalist loomist.",
   "privilege.scope_title": "Juurdepääsu ulatus",
-  "privilege.scope_desc":
-    "Rangelt piiratud valitud väliste USB-seadmetega. Sisemisi süsteemikettaid ei puudutata kunagi.",
+  "privilege.scope_desc": "Rangelt piiratud valitud väliste USB-seadmetega. Sisemisi süsteemikettaid ei puudutata kunagi.",
   "privilege.safety_title": "Ohutus ja läbipaistvus",
   "privilege.safety_desc": "Ülevaatus on rangelt kirjutuskaitstud ja mittepurustav; lähtekood on täielikult avatud.",
   "privilege.confirm_btn": "Autoriseeri kohe",

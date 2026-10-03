@@ -109,8 +109,7 @@ export const idId: TranslationDict = {
   "disk.tag_boot_hybrid": "Boot Hibrida",
   "disk.tag_boot_thirdparty": "Boot Pihak Ketiga",
   "confirm.cloud_to_hybrid_warn_title": "Pemberitahuan: Beralih ke Mode Hibrida memerlukan format penuh",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "Disk ini dalam mode Boot Cloud murni. Mode Hibrida Ventoy memerlukan pembuatan ulang MBR dan tabel partisi, yang akan MENGHAPUS semua data dan ISO!",
+  "confirm.cloud_to_hybrid_warn_desc": "Disk ini dalam mode Boot Cloud murni. Mode Hibrida Ventoy memerlukan pembuatan ulang MBR dan tabel partisi, yang akan MENGHAPUS semua data dan ISO!",
   "disk.tag_ssd": "SSD portabel",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Drive Terenkripsi",
@@ -138,16 +137,13 @@ export const idId: TranslationDict = {
   "log.level_error": "KESALAHAN",
   "log.level_debug": "Debug",
   "safe.title_cloud": "Drive Ventoy/UniBoot Terdeteksi (Mode Cloud hanya memperbarui partisi ESP)",
-  "safe.desc_cloud":
-    "Mode Cloud mempertahankan tata letak dua partisi UNIBOOT. Memperbarui ESP menjaga semua ISO dan file pengguna tetap aman!",
+  "safe.desc_cloud": "Mode Cloud mempertahankan tata letak dua partisi UNIBOOT. Memperbarui ESP menjaga semua ISO dan file pengguna tetap aman!",
   "safe.title_hybrid": "Drive Ventoy Terdeteksi (Pembaruan di tempat Mode Hybrid)",
-  "safe.desc_hybrid":
-    "Mode Hybrid mempertahankan semua file ISO tanpa format ulang, menyuntikkan tema gelap UniBoot dan menu cloud dengan aman!",
+  "safe.desc_hybrid": "Mode Hybrid mempertahankan semua file ISO tanpa format ulang, menyuntikkan tema gelap UniBoot dan menu cloud dengan aman!",
   "common.optional": "Opsional",
   "common.optional_test": "Uji Opsional",
   "iso.title": "Sumber Citra Sistem Lokal (ISO / IMG / WIM / VHD)",
-  "iso.desc":
-    "Tambahkan berkas ISO untuk disalin otomatis ke direktori /UNIBOOT/iso/ untuk booting langsung Ventoy / UniBoot.",
+  "iso.desc": "Tambahkan berkas ISO untuk disalin otomatis ke direktori /UNIBOOT/iso/ untuk booting langsung Ventoy / UniBoot.",
   "iso.add_btn": "Tambahkan File Gambar",
   "iso.empty_title": "Klik untuk Menambahkan File Gambar (Mendukung Pilihan Tunggal atau Batch)",
   "iso.empty_sub": "Mendukung format .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -158,8 +154,7 @@ export const idId: TranslationDict = {
   "iso.drag_unsupported": "Format file gambar yang didukung tidak terdeteksi (.iso, .wim, .img, dll.)",
   "iso.preflight_title": "Pemeriksaan sebelum penulisan",
   "iso.conflict_title": "Nama file sudah ada",
-  "iso.conflict_desc":
-    "File dengan nama yang sama sudah ada di folder iso USB tujuan. Pilih tindakan yang diinginkan. Hash tidak dibandingkan.",
+  "iso.conflict_desc": "File dengan nama yang sama sudah ada di folder iso USB tujuan. Pilih tindakan yang diinginkan. Hash tidak dibandingkan.",
   "iso.conflict_action": "Tindakan",
   "iso.conflict_keep_both": "Simpan",
   "iso.conflict_replace": "Timpa",
@@ -169,16 +164,13 @@ export const idId: TranslationDict = {
   "iso.conflict_confirm": "Konfirmasi dan lanjutkan",
   "iso.preflight_failed": "Pemeriksaan sebelum penulisan gagal",
   "deploy.title": "Pembuatan Drive Bootable & Uji QEMU",
-  "deploy.desc_cloud":
-    "Boot Awan iPXE Murni • Pengaturan dua partisi ultra-cepat dengan firmware jaringan iPXE multi-arsitektur.",
+  "deploy.desc_cloud": "Boot Awan iPXE Murni • Pengaturan dua partisi ultra-cepat dengan firmware jaringan iPXE multi-arsitektur.",
   "deploy.desc_hybrid": "Mesin Lokal Ventoy CLI • Pengaturan partisi hibrida Ventoy dengan manajemen ISO lokal.",
   "deploy.target_device": "Perangkat Sasaran:",
   "deploy.batch_target": "{count} drive USB yang dipilih",
   "deploy.start_create": "Buat Diska Booting",
-  "deploy.tip_batch_update_all":
-    "Pembaruan massal tanpa kehilangan data: Semua {count} drive USB yang dipilih akan diperbarui di tempat",
-  "deploy.tip_batch_mixed":
-    "Penyebaran massal campuran: {bootCount} drive pembaruan tanpa kehilangan data, {blankCount} drive format ulang",
+  "deploy.tip_batch_update_all": "Pembaruan massal tanpa kehilangan data: Semua {count} drive USB yang dipilih akan diperbarui di tempat",
+  "deploy.tip_batch_mixed": "Penyebaran massal campuran: {bootCount} drive pembaruan tanpa kehilangan data, {blankCount} drive format ulang",
   "deploy.start_update": "Peningkatan di Tempat (Data Aman)",
   "deploy.batch_create": "Mulai Penerapan Batch ({count} Drive)",
   "deploy.writing": "Menulis Paket Boot Firmware...",
@@ -193,27 +185,21 @@ export const idId: TranslationDict = {
   "deploy.tip_writing": "Menulis firmware boot...",
   "deploy.tip_select_single": "Silakan pilih drive USB target terlebih dahulu",
   "deploy.tip_select_batch": "Silakan periksa drive USB target untuk penerapan batch",
-  "deploy.tip_macos_unsupported":
-    "macOS tidak mendukung pemformatan baru dalam Mode Hibrid (gunakan Mode Cloud atau inisialisasi di Win/Linux terlebih dahulu)",
+  "deploy.tip_macos_unsupported": "macOS tidak mendukung pemformatan baru dalam Mode Hibrid (gunakan Mode Cloud atau inisialisasi di Win/Linux terlebih dahulu)",
   "deploy.tip_need_ventoy": "Mode Hibrida memerlukan alat Ventoy CLI lokal. Kami merekomendasikan Mode Cloud!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Pemformatan Baru Tidak Didukung",
-  "deploy.macos_alert_desc":
-    "Ventoy resmi belum mendukung penjalankan program pemformatan di macOS. Untuk membuat [Drive Hibrida] baru, diperlukan Ventoy CLI. Disarankan untuk menggunakan [Mode Cloud (drive boot cloud 1 detik)]!",
+  "deploy.macos_alert_desc": "Ventoy resmi belum mendukung penjalankan program pemformatan di macOS. Untuk membuat [Drive Hibrida] baru, diperlukan Ventoy CLI. Disarankan untuk menggunakan [Mode Cloud (drive boot cloud 1 detik)]!",
   "deploy.no_ventoy_title": "Ventoy CLI Dapat Dieksekusi Tidak Terdeteksi",
-  "deploy.no_ventoy_desc":
-    "Pembuatan [Drive Hibrida] memerlukan Ventoy CLI yang terpasang secara lokal. Silakan pilih [Mode Cloud] yang didukung!",
+  "deploy.no_ventoy_desc": "Pembuatan [Drive Hibrida] memerlukan Ventoy CLI yang terpasang secara lokal. Silakan pilih [Mode Cloud] yang didukung!",
   "deploy.result_batch_success": "Berhasil menerapkan Disk Instalasi Cloud 1-Detik ke {count} disk!",
   "deploy.result_success": "Berhasil menerapkan Mode {mode} ke {targets}",
   "deploy.alert_success": "Penyebaran berhasil!",
   "deploy.safely_eject_btn": "Lepas Drive USB Secara Aman",
   "deploy.success_banner_title": "Drive Boot Berhasil Dibuat!",
-  "deploy.success_banner_desc":
-    "File boot & firmware berhasil ditulis. Keluarkan dengan aman sebelum mencabut untuk mencegah hilangnya data.",
-  "deploy.toast_auto_ejected":
-    "Pembuatan selesai! {count} drive USB telah dikeluarkan secara aman. Semua data tersimpan.",
+  "deploy.success_banner_desc": "File boot & firmware berhasil ditulis. Keluarkan dengan aman sebelum mencabut untuk mencegah hilangnya data.",
+  "deploy.toast_auto_ejected": "Pembuatan selesai! {count} drive USB telah dikeluarkan secara aman. Semua data tersimpan.",
   "deploy.confirm_auto_eject_title": "Penulisan Selesai — Lepas Secara Aman?",
-  "deploy.confirm_auto_eject_desc":
-    "Semua data telah berhasil ditulis. Apakah Anda ingin melepas drive USB secara aman sekarang?",
+  "deploy.confirm_auto_eject_desc": "Semua data telah berhasil ditulis. Apakah Anda ingin melepas drive USB secara aman sekarang?",
   "deploy.confirm_auto_eject_yes": "Lepas Secara Aman",
   "deploy.confirm_auto_eject_no": "Nanti Saja",
   "deploy.alert_fail": "Penyebaran gagal:",
@@ -243,15 +229,13 @@ export const idId: TranslationDict = {
   "vm.tip_launching": "Meluncurkan emulator QEMU...",
   "vm.tip_running": "Virtual machine is currently running. Target disk will be automatically remounted when closed.",
   "vm.tip_deploying": "Menyebarkan file boot, harap tunggu hingga selesai",
-  "vm.tip_not_installed":
-    "Emulator QEMU tidak ditemukan. Silahkan install QEMU terlebih dahulu (brew/port install qemu)",
+  "vm.tip_not_installed": "Emulator QEMU tidak ditemukan. Silahkan install QEMU terlebih dahulu (brew/port install qemu)",
   "vm.tip_select_target": "Silakan pilih drive USB target dari panel kiri terlebih dahulu",
   "vm.tip_ready": "Klik untuk meluncurkan QEMU VM untuk memverifikasi bootloader USB di desktop saat ini",
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Silakan klik untuk memilih drive USB target dari panel kiri terlebih dahulu!",
-  "vm.toast_not_installed":
-    "Emulator QEMU tidak ditemukan! Silakan instal QEMU (brew install qemu atau port install qemu)",
+  "vm.toast_not_installed": "Emulator QEMU tidak ditemukan! Silakan instal QEMU (brew install qemu atau port install qemu)",
   "vm.cfg_secure_boot": "Simulasi SecureBoot",
   "vm.cfg_accel": "Akselerasi Perangkat Keras",
   "vm.cfg_ram": "Alokasi RAM",
@@ -303,10 +287,12 @@ export const idId: TranslationDict = {
   "settings.ventoy_reserve": "Ruang Cadangan (MB):",
   "settings.ventoy_win11_bypass": "Lewati Pemeriksaan TPM/CPU/RAM Windows 11:",
   "settings.ventoy_timeout": "Batas Waktu Menu Ventoy (Detik):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Peringatan",
   "confirm.warning_title": "Peringatan: Formatting will erase all data!",
-  "confirm.warning_desc":
-    "Drive USB yang dipilih akan dipartisi ulang dan diformat. Semua file yang ada akan terhapus seluruhnya. Pastikan Anda telah membuat cadangan data penting!",
+  "confirm.warning_desc": "Drive USB yang dipilih akan dipartisi ulang dan diformat. Semua file yang ada akan terhapus seluruhnya. Pastikan Anda telah membuat cadangan data penting!",
   "confirm.mode_title": "Modus Penerapan:",
   "confirm.fs_title": "Sistem File Sasaran:",
   "confirm.disks_title": "Drive yang Akan Diformat ({count}):",
@@ -316,14 +302,11 @@ export const idId: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Konfirmasiation",
   "confirm.title_danger": "Format Peringatan: Disk Initialization",
   "confirm.safe_banner_title": "Pemberitahuan Pembaruan Tambahan di Tempat (Data Aman)",
-  "confirm.safe_banner_desc":
-    "Struktur boot Ventoy / UniBoot terdeteksi pada drive target. Sistem akan melakukan format melewatkan pembaruan tambahan. Semua file & ISO yang ada 100% dipertahankan!",
+  "confirm.safe_banner_desc": "Struktur boot Ventoy / UniBoot terdeteksi pada drive target. Sistem akan melakukan format melewatkan pembaruan tambahan. Semua file & ISO yang ada 100% dipertahankan!",
   "confirm.mixed_banner_title": "Mode Campuran Cerdas: Pembaruan Di Tempat untuk Drive Boot, Format untuk Drive Kosong",
-  "confirm.mixed_banner_desc":
-    "{ventoyCount} drive boot yang dipilih (Pembaruan di tempat) dan {blankCount} drive kosong (Format penuh).",
+  "confirm.mixed_banner_desc": "{ventoyCount} drive boot yang dipilih (Pembaruan di tempat) dan {blankCount} drive kosong (Format penuh).",
   "confirm.danger_banner_title": "Peringatan: Formatting is irreversible!",
-  "confirm.danger_banner_desc":
-    "Penulisan akan mempartisi ulang dan memformat perangkat target (MBR/GPT). Semua file yang ada di drive yang dipilih akan terhapus seluruhnya!",
+  "confirm.danger_banner_desc": "Penulisan akan mempartisi ulang dan memformat perangkat target (MBR/GPT). Semua file yang ada di drive yang dipilih akan terhapus seluruhnya!",
   "confirm.summary_title": "Drive Target untuk Penerapan Boot:",
   "confirm.smart_safe_tag": "Aman Pintar",
   "confirm.ventoy_group_title": "Drive Peningkatan di Tempat (Semua ISO Dipertahankan):",
@@ -342,12 +325,9 @@ export const idId: TranslationDict = {
   "confirm.will_format": "Format Penuh",
   "confirm.no_format": "Pembaruan Pintar di Tempat",
   "deploy.toast_target_changed": "Disk target yang dipilih berubah atau tidak lagi tersedia. Silakan pindai ulang.",
-  "deploy.toast_some_disks_removed":
-    "{count} disk tidak tersedia dihapus secara otomatis, melanjutkan dengan disk yang tersisa",
-  "deploy.error_system_disk_blocked":
-    "⛔ Diblokir: {disks} adalah disk sistem. Tidak dapat menerapkan disk boot USB ke drive sistem!",
-  "deploy.error_readonly_disk":
-    "🔒 Dilindungi tulis: {disks} hanya baca. Hapus proteksi tulis atau gunakan USB yang berbeda",
+  "deploy.toast_some_disks_removed": "{count} disk tidak tersedia dihapus secara otomatis, melanjutkan dengan disk yang tersisa",
+  "deploy.error_system_disk_blocked": "⛔ Diblokir: {disks} adalah disk sistem. Tidak dapat menerapkan disk boot USB ke drive sistem!",
+  "deploy.error_readonly_disk": "🔒 Dilindungi tulis: {disks} hanya baca. Hapus proteksi tulis atau gunakan USB yang berbeda",
   "deploy.start_cloud_create": "Buat Diska Booting Cloud",
   "deploy.batch_update": "Mulai Pembaruan Massal Tanpa Kehilangan Data ({count} drive USB)",
   "deploy.batch_mixed": "Mulai Penyebaran Massal Campuran ({count} drive USB)",
@@ -365,17 +345,14 @@ export const idId: TranslationDict = {
   "inspector.vendor": "Penjual / Merek:",
   "inspector.bus_speed": "Protokol & Kecepatan Bus:",
   "inspector.fake_report": "Analisis USB 3.0 Palsu:",
-  "inspector.fake_text":
-    "USB 3.0 Palsu yang diturunkan versinya (Port Biru/Hitam, tetapi protokol internalnya adalah USB 2.0 480Mb/s)",
+  "inspector.fake_text": "USB 3.0 Palsu yang diturunkan versinya (Port Biru/Hitam, tetapi protokol internalnya adalah USB 2.0 480Mb/s)",
   "inspector.genuine_text": "Pengontrol USB 3.0/3.1 Berkecepatan Tinggi Asli",
   "inspector.smart": "Status Kesehatan SMART:",
   "inspector.sector": "Ukuran Sektor:",
   "inspector.fake_title": "Fake USB 3.0 Peringatan Alert!",
-  "inspector.fake_desc":
-    "Perangkat mengiklankan USB 3.0/3.1, namun kecepatan lapisan fisik sebenarnya dinegosiasikan hanya pada {speed} (USB 2.0 High-Speed PHY). Drive ini kemungkinan memiliki firmware palsu atau port biru palsu.",
+  "inspector.fake_desc": "Perangkat mengiklankan USB 3.0/3.1, namun kecepatan lapisan fisik sebenarnya dinegosiasikan hanya pada {speed} (USB 2.0 High-Speed PHY). Drive ini kemungkinan memiliki firmware palsu atau port biru palsu.",
   "inspector.genuine_title": "Verifikasi Perangkat Keras Fisik Lulus (Perangkat USB 3.0+ Asli)",
-  "inspector.genuine_desc":
-    "Lapisan fisik PHY berhasil menegosiasikan tautan SuperSpeed/SuperSpeed+ asli dengan kecepatan {speed}.",
+  "inspector.genuine_desc": "Lapisan fisik PHY berhasil menegosiasikan tautan SuperSpeed/SuperSpeed+ asli dengan kecepatan {speed}.",
   "inspector.usb2_title": "Antarmuka Standar USB 2.0",
   "inspector.usb2_desc": "Perangkat keras perangkat adalah USB 2.0, kecepatan maksimal fisik teoritis 480 Mb/s.",
   "inspector.section_basic": "Info Perangkat Dasar",
@@ -481,12 +458,9 @@ export const idId: TranslationDict = {
   "diag.action_reformat_title": "Format Ulang (reformat)",
   "diag.action_remount_title": "Kaitkan Ulang (remount)",
   "diag.action_retry_title": "Coba Lagi (retry)",
-  "diag.action_reformat_desc":
-    "Gangguan penulisan merusak tabel partisi atau sistem berkas. Disarankan untuk memformat ulang.",
-  "diag.action_remount_desc":
-    "Jalur kait target terputus selama penulisan. Silakan masukkan kembali drive USB atau kaitkan ulang volume.",
-  "diag.action_retry_desc":
-    "Lingkungan dan status perangkat dalam keadaan baik. Anda dapat mencoba lagi pemasangan secara aman.",
+  "diag.action_reformat_desc": "Gangguan penulisan merusak tabel partisi atau sistem berkas. Disarankan untuk memformat ulang.",
+  "diag.action_remount_desc": "Jalur kait target terputus selama penulisan. Silakan masukkan kembali drive USB atau kaitkan ulang volume.",
+  "diag.action_retry_desc": "Lingkungan dan status perangkat dalam keadaan baik. Anda dapat mencoba lagi pemasangan secara aman.",
   "about.updating": "Memperbarui ({progress}%)",
   "about.updateTo": "Pembaruan Online ke {tag}",
   "about.downloading": "Mengunduh {progress}%",
@@ -502,8 +476,7 @@ export const idId: TranslationDict = {
   "dialog.textFilesFilter": "Berkas Teks (*.txt)",
   "dialog.allFilesFilter": "Semua Berkas (*.*)",
   "dialog.selectIsoTitle": "Pilih Berkas Gambar Sistem (*.iso, *.wim, *.img, dll)",
-  "dialog.ventoyFilter":
-    "Gambar Sumber Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Gambar Sumber Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Hitung Hash",
   "checksum.calculating": "Menghitung Hash...",
   "checksum.algo_label": "Algoritma",
@@ -547,15 +520,12 @@ export const idId: TranslationDict = {
   "privilege.status_standard": "Belum diotorisasi",
   "privilege.btn_elevate": "Minta Akses Admin",
   "privilege.modal_title": "Izin Administrator Diperlukan",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Otorisasi sistem diperlukan untuk membaca data boot dan menulis disk",
   "privilege.reason_title": "Mengapa Hak Istimewa Administrator Diperlukan?",
-  "privilege.reason_desc":
-    "Sistem operasi mengisolasi sektor mentah dan partisi EFI. Otorisasi membuka deteksi langsung dan pembuatan disk yang aman.",
+  "privilege.reason_desc": "Sistem operasi mengisolasi sektor mentah dan partisi EFI. Otorisasi membuka deteksi langsung dan pembuatan disk yang aman.",
   "privilege.scope_title": "Cakupan Akses",
-  "privilege.scope_desc":
-    "Dibatasi hanya untuk drive USB eksternal yang dipilih. Disk sistem internal tidak pernah disentuh.",
+  "privilege.scope_desc": "Dibatasi hanya untuk drive USB eksternal yang dipilih. Disk sistem internal tidak pernah disentuh.",
   "privilege.safety_title": "Keamanan & Transparansi",
   "privilege.safety_desc": "Pemeriksaan sepenuhnya hanya-baca dan tidak merusak data; kode sumber sepenuhnya terbuka.",
   "privilege.confirm_btn": "Otorisasi Sekarang",

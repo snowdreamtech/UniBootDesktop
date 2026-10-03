@@ -24,8 +24,7 @@ export const elGr: TranslationDict = {
   "common.langAuto": "Γλώσσα (Αυτόματα)",
   "common.lang": "Γλώσσα",
   "vm.startSuccess": "Η προσομοίωση εικονικής μηχανής ξεκίνησε επιτυχώς για τον δίσκο: {disk} ({device})",
-  "vm.backendNotReady":
-    "Το Backend API δεν είναι έτοιμο: Γίνεται φόρτωση των συνδέσεων, επανεκκινήστε την εφαρμογή UniBoot.",
+  "vm.backendNotReady": "Το Backend API δεν είναι έτοιμο: Γίνεται φόρτωση των συνδέσεων, επανεκκινήστε την εφαρμογή UniBoot.",
   "vm.demoModeStart": "[Demo Mode] Έναρξη επαλήθευσης προσομοιωτή QEMU: {disk} ({device})",
   "vm.startFailed": "Αποτυχία εκκίνησης του προσομοιωτή QEMU: {error}",
   "disk.writingImageProgress": "Γράψιμο εικόνας ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -60,8 +59,7 @@ export const elGr: TranslationDict = {
   "settings.directModeNotice": "Άμεση λειτουργία (Απενεργοποιημένος διακομιστής μεσολάβησης)",
   "settings.proxyHostRequired": "Εισαγάγετε πρώτα τη διεύθυνση κεντρικού υπολογιστή διακομιστή μεσολάβησης",
   "settings.proxyTestSuccess": "{protocol} Συνδέθηκε διακομιστής μεσολάβησης ({host}:{port})",
-  "settings.syncSuccessAlert":
-    "Το υλικολογισμικό και τα σενάρια του Cloud UniBoot {tag} λήφθηκαν και αποθηκεύτηκαν με επιτυχία!",
+  "settings.syncSuccessAlert": "Το υλικολογισμικό και τα σενάρια του Cloud UniBoot {tag} λήφθηκαν και αποθηκεύτηκαν με επιτυχία!",
   "settings.syncSuccessShortAlert": "Το υλικολογισμικό του πυρήνα του Cloud UniBoot συγχρονίστηκε με επιτυχία!",
   "settings.syncFailedAlert": "Αποτυχία συγχρονισμού υλικολογισμικού: {error}",
   "settings.ventoyToolchain": "Εργαλειοθήκη Ventoy",
@@ -111,8 +109,7 @@ export const elGr: TranslationDict = {
   "disk.tag_boot_hybrid": "Υβριδική εκκίνηση",
   "disk.tag_boot_thirdparty": "Εκκίνηση τρίτων",
   "confirm.cloud_to_hybrid_warn_title": "Ειδοποίηση: Η μετάβαση σε υβριδική λειτουργία απαιτεί πλήρη διαμόρφωση",
-  "confirm.cloud_to_hybrid_warn_desc":
-    "Αυτός ο δίσκος είναι σε καθαρή λειτουργία Cloud. Η υβριδική λειτουργία Ventoy απαιτεί αναδόμηση του MBR και του πίνακα διαμερισμάτων, γεγονός που θα ΔΙΑΓΡΑΨΕΙ όλα τα δεδομένα και τα ISO!",
+  "confirm.cloud_to_hybrid_warn_desc": "Αυτός ο δίσκος είναι σε καθαρή λειτουργία Cloud. Η υβριδική λειτουργία Ventoy απαιτεί αναδόμηση του MBR και του πίνακα διαμερισμάτων, γεγονός που θα ΔΙΑΓΡΑΨΕΙ όλα τα δεδομένα και τα ISO!",
   "disk.tag_ssd": "Φορητό SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Κρυπτογραφημένη μονάδα δίσκου",
@@ -121,8 +118,7 @@ export const elGr: TranslationDict = {
   "disk.tag_key": "Κλειδί ασφαλείας",
   "disk.tag_cdrom": "Εικονικό CD-ROM",
   "disk.tooltip_uniboot_hybrid": "Μονάδα εκκίνησης Ventoy / UniBoot (Υβριδική λειτουργία, αναβάθμιση χωρίς απώλεια)",
-  "disk.tooltip_uniboot_cloud":
-    "Μονάδα εκκίνησης Cloud UniBoot (Λειτουργία Cloud, υποστήριξη ενημέρωσης χωρίς απώλεια δεδομένων)",
+  "disk.tooltip_uniboot_cloud": "Μονάδα εκκίνησης Cloud UniBoot (Λειτουργία Cloud, υποστήριξη ενημέρωσης χωρίς απώλεια δεδομένων)",
   "disk.tooltip_third_party_boot": "Εντοπίστηκε δομή εκκίνησης τρίτου κατασκευαστή",
   "log.title": "Κέντρο Καταγραφών",
   "log.live": "Ζωντανό αρχείο καταγραφής συμβάντων",
@@ -140,18 +136,14 @@ export const elGr: TranslationDict = {
   "log.level_warn": "ΠΡΟΕΙΔ",
   "log.level_error": "ΣΦΑΛΜΑ",
   "log.level_debug": "Αποσφαλμάτωση",
-  "safe.title_cloud":
-    "Εντοπίστηκε υπάρχουσα μονάδα Ventoy/UniBoot (Η λειτουργία Cloud ενημερώνει μόνο το διαμέρισμα ESP)",
-  "safe.desc_cloud":
-    "Η λειτουργία Cloud διατηρεί τη δομή διπλού διαμερίσματος UNIBOOT. Η ενημέρωση του ESP διατηρεί ανέπαφα όλα τα αρχεία ISO!",
+  "safe.title_cloud": "Εντοπίστηκε υπάρχουσα μονάδα Ventoy/UniBoot (Η λειτουργία Cloud ενημερώνει μόνο το διαμέρισμα ESP)",
+  "safe.desc_cloud": "Η λειτουργία Cloud διατηρεί τη δομή διπλού διαμερίσματος UNIBOOT. Η ενημέρωση του ESP διατηρεί ανέπαφα όλα τα αρχεία ISO!",
   "safe.title_hybrid": "Εντοπίστηκε υπάρχουσα μονάδα Ventoy (Ενημέρωση επί τόπου σε υβριδική λειτουργία)",
-  "safe.desc_hybrid":
-    "Η υβριδική λειτουργία διατηρεί όλα τα υπάρχοντα αρχεία ISO χωρίς διαμόρφωση, εισάγοντας με ασφάλεια το σκούρο θέμα UniBoot!",
+  "safe.desc_hybrid": "Η υβριδική λειτουργία διατηρεί όλα τα υπάρχοντα αρχεία ISO χωρίς διαμόρφωση, εισάγοντας με ασφάλεια το σκούρο θέμα UniBoot!",
   "common.optional": "Προαιρετικό",
   "common.optional_test": "Προαιρετική δοκιμή",
   "iso.title": "Τοπικές πηγές εικόνων συστήματος (ISO / IMG / WIM / VHD)",
-  "iso.desc":
-    "Προσθέστε αρχεία ISO για αυτόματη αντιγραφή στον κατάλογο /UNIBOOT/iso/ για άμεση εκκίνηση Ventoy / UniBoot.",
+  "iso.desc": "Προσθέστε αρχεία ISO για αυτόματη αντιγραφή στον κατάλογο /UNIBOOT/iso/ για άμεση εκκίνηση Ventoy / UniBoot.",
   "iso.add_btn": "Προσθήκη αρχείων εικόνας",
   "iso.empty_title": "Κάντε κλικ για να προσθέσετε αρχεία εικόνας (Υποστηρίζει μεμονωμένη ή ομαδική επιλογή)",
   "iso.empty_sub": "Υποστηρίζει μορφές .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -162,8 +154,7 @@ export const elGr: TranslationDict = {
   "iso.drag_unsupported": "Δεν εντοπίστηκαν υποστηριζόμενα αρχεία εικόνας (.iso, .wim, .img κ.λπ.)",
   "iso.preflight_title": "Έλεγχος πριν από την εγγραφή",
   "iso.conflict_title": "Βρέθηκε διπλό όνομα αρχείου",
-  "iso.conflict_desc":
-    "Υπάρχει ήδη αρχείο με το ίδιο όνομα στον φάκελο iso του USB προορισμού. Επιλέξτε ενέργεια. Δεν γίνεται σύγκριση Hash.",
+  "iso.conflict_desc": "Υπάρχει ήδη αρχείο με το ίδιο όνομα στον φάκελο iso του USB προορισμού. Επιλέξτε ενέργεια. Δεν γίνεται σύγκριση Hash.",
   "iso.conflict_action": "Ενέργεια",
   "iso.conflict_keep_both": "Διατήρηση και των δύο",
   "iso.conflict_replace": "Αντικατάσταση υπάρχοντος αρχείου",
@@ -173,16 +164,13 @@ export const elGr: TranslationDict = {
   "iso.conflict_confirm": "Επιβεβαίωση και συνέχεια",
   "iso.preflight_failed": "Ο έλεγχος πριν από την εγγραφή απέτυχε",
   "deploy.title": "Δημιουργία εκκινήσιμου δίσκου & δοκιμή QEMU",
-  "deploy.desc_cloud":
-    "Καθαρή εκκίνηση Cloud iPXE • Εξαιρετικά γρήγορη ρύθμιση δύο διαμερισμάτων με λογισμικό δικτύου iPXE.",
+  "deploy.desc_cloud": "Καθαρή εκκίνηση Cloud iPXE • Εξαιρετικά γρήγορη ρύθμιση δύο διαμερισμάτων με λογισμικό δικτύου iPXE.",
   "deploy.desc_hybrid": "Τοπική μηχανή Ventoy CLI • Ρύθμιση υβριδικού διαμερίσματος Ventoy με τοπική διαχείριση ISO.",
   "deploy.target_device": "Συσκευή στόχου:",
   "deploy.batch_target": "Επιλεγμένες {count} μονάδες USB",
   "deploy.start_create": "Δημιουργία δίσκου εκκίνησης",
-  "deploy.tip_batch_update_all":
-    "Μαζική ενημέρωση χωρίς απώλεια: Όλες οι {count} επιλεγμένες μονάδες USB θα ενημερωθούν επί τόπου",
-  "deploy.tip_batch_mixed":
-    "Μαζική μικτή ανάπτυξη: {bootCount} μονάδα(ες) ενημέρωση χωρίς απώλεια, {blankCount} μονάδα(ες) νέα διαμόρφωση",
+  "deploy.tip_batch_update_all": "Μαζική ενημέρωση χωρίς απώλεια: Όλες οι {count} επιλεγμένες μονάδες USB θα ενημερωθούν επί τόπου",
+  "deploy.tip_batch_mixed": "Μαζική μικτή ανάπτυξη: {bootCount} μονάδα(ες) ενημέρωση χωρίς απώλεια, {blankCount} μονάδα(ες) νέα διαμόρφωση",
   "deploy.start_update": "Επιτόπια αναβάθμιση (ασφαλές δεδομένων)",
   "deploy.batch_create": "Έναρξη μαζικής ανάπτυξης ({count} δίσκοι)",
   "deploy.writing": "Σύνταξη πακέτων υλικολογισμικού εκκίνησης...",
@@ -197,29 +185,21 @@ export const elGr: TranslationDict = {
   "deploy.tip_writing": "Εγγραφή υλικολογισμικού εκκίνησης...",
   "deploy.tip_select_single": "Επιλέξτε πρώτα μια στοχευόμενη μονάδα USB",
   "deploy.tip_select_batch": "Ελέγξτε τις στοχευόμενες μονάδες USB για μαζική ανάπτυξη",
-  "deploy.tip_macos_unsupported":
-    "Το macOS δεν υποστηρίζει νέα διαμόρφωση σε υβριδική λειτουργία (χρησιμοποιήστε τη λειτουργία Cloud ή αρχικοποιήστε πρώτα σε Win/Linux)",
-  "deploy.tip_need_ventoy":
-    "Η Υβριδική λειτουργία απαιτεί το τοπικό εργαλείο Ventoy CLI. Συνιστούμε τη λειτουργία Cloud!",
+  "deploy.tip_macos_unsupported": "Το macOS δεν υποστηρίζει νέα διαμόρφωση σε υβριδική λειτουργία (χρησιμοποιήστε τη λειτουργία Cloud ή αρχικοποιήστε πρώτα σε Win/Linux)",
+  "deploy.tip_need_ventoy": "Η Υβριδική λειτουργία απαιτεί το τοπικό εργαλείο Ventoy CLI. Συνιστούμε τη λειτουργία Cloud!",
   "deploy.macos_alert_title": "MacOS Ventoy CLI Fresh Formatting Δεν υποστηρίζεται",
-  "deploy.macos_alert_desc":
-    "Το επίσημο Ventoy δεν υποστηρίζει ακόμη την εκτέλεση του προγράμματος διαμόρφωσης στο macOS. Για τη δημιουργία νέου [Υβριδικού Δίσκου] απαιτείται το Ventoy CLI. Συνιστάται η χρήση της [Λειτουργίας Cloud (δίσκος εκκίνησης Cloud 1s)]!",
+  "deploy.macos_alert_desc": "Το επίσημο Ventoy δεν υποστηρίζει ακόμη την εκτέλεση του προγράμματος διαμόρφωσης στο macOS. Για τη δημιουργία νέου [Υβριδικού Δίσκου] απαιτείται το Ventoy CLI. Συνιστάται η χρήση της [Λειτουργίας Cloud (δίσκος εκκίνησης Cloud 1s)]!",
   "deploy.no_ventoy_title": "Ventoy CLI εκτελέσιμο δεν ανιχνεύθηκε",
-  "deploy.no_ventoy_desc":
-    "Η δημιουργία [Υβριδικού Δίσκου] απαιτεί τοπικά εγκατεστημένο Ventoy CLI. Παρακαλούμε επιλέξτε την υποστηριζόμενη [Λειτουργία Cloud]!",
-  "deploy.result_batch_success":
-    "Ο δίσκος εγκατάστασης cloud 1 δευτερολέπτου αναπτύχθηκε με επιτυχία σε {count} δίσκο(ους)!",
+  "deploy.no_ventoy_desc": "Η δημιουργία [Υβριδικού Δίσκου] απαιτεί τοπικά εγκατεστημένο Ventoy CLI. Παρακαλούμε επιλέξτε την υποστηριζόμενη [Λειτουργία Cloud]!",
+  "deploy.result_batch_success": "Ο δίσκος εγκατάστασης cloud 1 δευτερολέπτου αναπτύχθηκε με επιτυχία σε {count} δίσκο(ους)!",
   "deploy.result_success": "Η λειτουργία {mode} αναπτύχθηκε με επιτυχία στο {targets}",
   "deploy.alert_success": "Η ανάπτυξη ολοκληρώθηκε με επιτυχία!",
   "deploy.safely_eject_btn": "Ασφαλής εξαγωγή μονάδας USB",
   "deploy.success_banner_title": "Ο δίσκος εκκίνησης δημιουργήθηκε με επιτυχία!",
-  "deploy.success_banner_desc":
-    "Τα αρχεία εκκίνησης και το υλικολογισμικό εγγράφηκαν. Εξαγάγετε με ασφάλεια πριν από την αποσύνδεση για να αποφύγετε απώλεια δεδομένων.",
-  "deploy.toast_auto_ejected":
-    "Η δημιουργία ολοκληρώθηκε! {count} μονάδα(ες) USB αφαιρέθηκε(αν) αυτόματα με ασφάλεια. Όλα τα δεδομένα αποθηκεύτηκαν.",
+  "deploy.success_banner_desc": "Τα αρχεία εκκίνησης και το υλικολογισμικό εγγράφηκαν. Εξαγάγετε με ασφάλεια πριν από την αποσύνδεση για να αποφύγετε απώλεια δεδομένων.",
+  "deploy.toast_auto_ejected": "Η δημιουργία ολοκληρώθηκε! {count} μονάδα(ες) USB αφαιρέθηκε(αν) αυτόματα με ασφάλεια. Όλα τα δεδομένα αποθηκεύτηκαν.",
   "deploy.confirm_auto_eject_title": "Η εγγραφή ολοκληρώθηκε — Ασφαλής εξαγωγή;",
-  "deploy.confirm_auto_eject_desc":
-    "Όλα τα δεδομένα εγγράφηκαν με επιτυχία. Θέλετε να κάνετε ασφαλή εξαγωγή της μονάδας USB τώρα;",
+  "deploy.confirm_auto_eject_desc": "Όλα τα δεδομένα εγγράφηκαν με επιτυχία. Θέλετε να κάνετε ασφαλή εξαγωγή της μονάδας USB τώρα;",
   "deploy.confirm_auto_eject_yes": "Ασφαλής εξαγωγή",
   "deploy.confirm_auto_eject_no": "Όχι τώρα",
   "deploy.alert_fail": "Η ανάπτυξη απέτυχε:",
@@ -238,8 +218,7 @@ export const elGr: TranslationDict = {
   "vm.boot_mode_bios": "Function BIOS (Legacy)",
   "vm.boot_mode_auto": "Αυτόματος Εντοπισμός",
   "vm.startSuccess_vm": "Η δοκιμή προσομοίωσης {name} ξεκίνησε με επιτυχία",
-  "vm.desc_optional":
-    "Προαιρετική λειτουργία: Προεπισκόπηση εκκίνησης USB σε εικονική μηχανή χωρίς επανεκκίνηση του υπολογιστή.",
+  "vm.desc_optional": "Προαιρετική λειτουργία: Προεπισκόπηση εκκίνησης USB σε εικονική μηχανή χωρίς επανεκκίνηση του υπολογιστή.",
   "vm.installed": "Εντοπίστηκε QEMU",
   "vm.not_installed": "Δεν εντοπίστηκε QEMU",
   "vm.target": "Στόχος Δοκιμής:",
@@ -252,13 +231,11 @@ export const elGr: TranslationDict = {
   "vm.tip_deploying": "Ανάπτυξη αρχείων εκκίνησης, περιμένετε μέχρι να ολοκληρωθεί",
   "vm.tip_not_installed": "Δεν βρέθηκε εξομοιωτής QEMU. Εγκαταστήστε πρώτα το QEMU (brew/port install qemu)",
   "vm.tip_select_target": "Επιλέξτε πρώτα μια στοχευόμενη μονάδα USB από τον αριστερό πίνακα",
-  "vm.tip_ready":
-    "Κάντε κλικ για εκκίνηση του QEMU VM για επαλήθευση του USB bootloader στην τρέχουσα επιφάνεια εργασίας",
+  "vm.tip_ready": "Κάντε κλικ για εκκίνηση του QEMU VM για επαλήθευση του USB bootloader στην τρέχουσα επιφάνεια εργασίας",
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Κάντε κλικ για να επιλέξετε πρώτα μια μονάδα USB-στόχου από τον αριστερό πίνακα!",
-  "vm.toast_not_installed":
-    "Ο εξομοιωτής QEMU δεν βρέθηκε! Εγκαταστήστε το QEMU (brew install qemu ή port install qemu)",
+  "vm.toast_not_installed": "Ο εξομοιωτής QEMU δεν βρέθηκε! Εγκαταστήστε το QEMU (brew install qemu ή port install qemu)",
   "vm.cfg_secure_boot": "Προσομοίωση SecureBoot",
   "vm.cfg_accel": "Επιτάχυνση υλικού",
   "vm.cfg_ram": "Εκχώρηση RAM",
@@ -310,10 +287,12 @@ export const elGr: TranslationDict = {
   "settings.ventoy_reserve": "Κράτηση χώρου (MB):",
   "settings.ventoy_win11_bypass": "Παράκαμψη ελέγχου TPM/CPU/RAM των Windows 11:",
   "settings.ventoy_timeout": "Χρόνος λήξης του μενού Ventoy (δευτερόλεπτα):",
+  "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
+  "settings.ventoy_secondary_menu_direct": "Off (Direct Boot, Recommended)",
+  "settings.ventoy_secondary_menu_enabled": "On (Show Mode Selection)",
   "confirm.title": "High-Risk Format Προειδοποίηση",
   "confirm.warning_title": "Προειδοποίηση: Formatting will erase all data!",
-  "confirm.warning_desc":
-    "Η επιλεγμένη μονάδα USB θα διαμεριστεί εκ νέου και θα μορφοποιηθεί. Όλα τα υπάρχοντα αρχεία θα διαγραφούν εντελώς. Βεβαιωθείτε ότι έχετε δημιουργήσει αντίγραφα ασφαλείας σημαντικών δεδομένων!",
+  "confirm.warning_desc": "Η επιλεγμένη μονάδα USB θα διαμεριστεί εκ νέου και θα μορφοποιηθεί. Όλα τα υπάρχοντα αρχεία θα διαγραφούν εντελώς. Βεβαιωθείτε ότι έχετε δημιουργήσει αντίγραφα ασφαλείας σημαντικών δεδομένων!",
   "confirm.mode_title": "Λειτουργία ανάπτυξης:",
   "confirm.fs_title": "Σύστημα αρχείων στόχου:",
   "confirm.disks_title": "Δίσκοι προς μορφοποίηση ({count}):",
@@ -323,15 +302,11 @@ export const elGr: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Επιβεβαίωσηation",
   "confirm.title_danger": "Format Προειδοποίηση: Disk Initialization",
   "confirm.safe_banner_title": "Ειδοποίηση επαυξημένης ενημέρωσης (ασφαλές δεδομένων)",
-  "confirm.safe_banner_desc":
-    "Εντοπίστηκε δομή εκκίνησης Ventoy / UniBoot στη μονάδα-στόχο. Το σύστημα θα εκτελέσει μια σταδιακή μορφή παράβλεψης ενημέρωσης. Όλα τα υπάρχοντα αρχεία & ISO διατηρούνται 100%!",
-  "confirm.mixed_banner_title":
-    "Έξυπνη μικτή λειτουργία: Επιτόπια ενημέρωση για μονάδες εκκίνησης, Μορφοποίηση για κενές μονάδες",
-  "confirm.mixed_banner_desc":
-    "Επιλέχθηκαν {ventoyCount} μονάδα(ες) εκκίνησης (Επιτόπια ενημέρωση) και {blankCount} κενή μονάδα(ες) (Πλήρης μορφή).",
+  "confirm.safe_banner_desc": "Εντοπίστηκε δομή εκκίνησης Ventoy / UniBoot στη μονάδα-στόχο. Το σύστημα θα εκτελέσει μια σταδιακή μορφή παράβλεψης ενημέρωσης. Όλα τα υπάρχοντα αρχεία & ISO διατηρούνται 100%!",
+  "confirm.mixed_banner_title": "Έξυπνη μικτή λειτουργία: Επιτόπια ενημέρωση για μονάδες εκκίνησης, Μορφοποίηση για κενές μονάδες",
+  "confirm.mixed_banner_desc": "Επιλέχθηκαν {ventoyCount} μονάδα(ες) εκκίνησης (Επιτόπια ενημέρωση) και {blankCount} κενή μονάδα(ες) (Πλήρης μορφή).",
   "confirm.danger_banner_title": "Προειδοποίηση: Formatting is irreversible!",
-  "confirm.danger_banner_desc":
-    "Η εγγραφή θα επαναδιαμερίσει και θα μορφοποιήσει τη συσκευή προορισμού (MBR/GPT). Όλα τα υπάρχοντα αρχεία σε επιλεγμένες μονάδες δίσκου θα διαγραφούν πλήρως!",
+  "confirm.danger_banner_desc": "Η εγγραφή θα επαναδιαμερίσει και θα μορφοποιήσει τη συσκευή προορισμού (MBR/GPT). Όλα τα υπάρχοντα αρχεία σε επιλεγμένες μονάδες δίσκου θα διαγραφούν πλήρως!",
   "confirm.summary_title": "Στόχευση μονάδων δίσκου για ανάπτυξη εκκίνησης:",
   "confirm.smart_safe_tag": "Έξυπνη Ασφάλεια",
   "confirm.ventoy_group_title": "Δίσκοι αναβάθμισης επί τόπου (Διατηρούνται όλα τα ISO):",
@@ -349,14 +324,10 @@ export const elGr: TranslationDict = {
   "confirm.no": "Ακύρωση",
   "confirm.will_format": "Πλήρης διαμόρφωση",
   "confirm.no_format": "Έξυπνη αναβάθμιση επί τόπου",
-  "deploy.toast_target_changed":
-    "Ο επιλεγμένος δίσκος προορισμού άλλαξε ή δεν είναι πλέον διαθέσιμος. Παρακαλώ σαρώστε ξανά.",
-  "deploy.toast_some_disks_removed":
-    "{count} μη διαθέσιμοι δίσκοι αφαιρέθηκαν αυτόματα, συνεχίζοντας με τους υπόλοιπους δίσκους",
-  "deploy.error_system_disk_blocked":
-    "⛔ Αποκλεισμένο: Το {disks} είναι δίσκος συστήματος. Δεν είναι δυνατή η ανάπτυξη δίσκου εκκίνησης USB σε μονάδα συστήματος!",
-  "deploy.error_readonly_disk":
-    "🔒 Προστατευμένο από εγγραφή: Το {disks} είναι μόνο για ανάγνωση. Αφαιρέστε την προστασία εγγραφής ή χρησιμοποιήστε διαφορετικό USB",
+  "deploy.toast_target_changed": "Ο επιλεγμένος δίσκος προορισμού άλλαξε ή δεν είναι πλέον διαθέσιμος. Παρακαλώ σαρώστε ξανά.",
+  "deploy.toast_some_disks_removed": "{count} μη διαθέσιμοι δίσκοι αφαιρέθηκαν αυτόματα, συνεχίζοντας με τους υπόλοιπους δίσκους",
+  "deploy.error_system_disk_blocked": "⛔ Αποκλεισμένο: Το {disks} είναι δίσκος συστήματος. Δεν είναι δυνατή η ανάπτυξη δίσκου εκκίνησης USB σε μονάδα συστήματος!",
+  "deploy.error_readonly_disk": "🔒 Προστατευμένο από εγγραφή: Το {disks} είναι μόνο για ανάγνωση. Αφαιρέστε την προστασία εγγραφής ή χρησιμοποιήστε διαφορετικό USB",
   "deploy.start_cloud_create": "Δημιουργία δίσκου εκκίνησης Cloud",
   "deploy.batch_update": "Έναρξη μαζικής ενημέρωσης χωρίς απώλεια δεδομένων ({count} USB)",
   "deploy.batch_mixed": "Έναρξη μαζικής μικτής ανάπτυξης ({count} USB)",
@@ -374,14 +345,12 @@ export const elGr: TranslationDict = {
   "inspector.vendor": "Πωλητής / Μάρκα:",
   "inspector.bus_speed": "Πρωτόκολλο λεωφορείου και ταχύτητα:",
   "inspector.fake_report": "Ανάλυση ψευδούς USB 3.0:",
-  "inspector.fake_text":
-    "Υποβαθμισμένο Fake USB 3.0 (Μπλε/Μαύρη θύρα, αλλά το εσωτερικό πρωτόκολλο είναι USB 2.0 480Mb/s)",
+  "inspector.fake_text": "Υποβαθμισμένο Fake USB 3.0 (Μπλε/Μαύρη θύρα, αλλά το εσωτερικό πρωτόκολλο είναι USB 2.0 480Mb/s)",
   "inspector.genuine_text": "Γνήσιος ελεγκτής υψηλής ταχύτητας USB 3.0/3.1",
   "inspector.smart": "Κατάσταση υγείας SMART:",
   "inspector.sector": "Μέγεθος Τομέα:",
   "inspector.fake_title": "Fake USB 3.0 Προειδοποίηση Alert!",
-  "inspector.fake_desc":
-    "Η συσκευή διαφημίζει USB 3.0/3.1, αλλά η πραγματική ταχύτητα φυσικού επιπέδου διαπραγματεύεται μόνο με {speed} (USB 2.0 High-Speed PHY). Αυτή η μονάδα δίσκου πιθανότατα έχει πλαστογραφημένο υλικολογισμικό ή ψεύτικη μπλε θύρα.",
+  "inspector.fake_desc": "Η συσκευή διαφημίζει USB 3.0/3.1, αλλά η πραγματική ταχύτητα φυσικού επιπέδου διαπραγματεύεται μόνο με {speed} (USB 2.0 High-Speed PHY). Αυτή η μονάδα δίσκου πιθανότατα έχει πλαστογραφημένο υλικολογισμικό ή ψεύτικη μπλε θύρα.",
   "inspector.genuine_title": "Επικυρώθηκε η επαλήθευση φυσικού υλικού (Γνήσια συσκευή USB 3.0+)",
   "inspector.genuine_desc": "Το φυσικό στρώμα PHY διαπραγματεύτηκε γνήσια σύνδεση SuperSpeed/SuperSpeed+ στα {speed}.",
   "inspector.usb2_title": "Τυπική διεπαφή USB 2.0",
@@ -489,12 +458,9 @@ export const elGr: TranslationDict = {
   "diag.action_reformat_title": "Επαναδιαμόρφωση (reformat)",
   "diag.action_remount_title": "Επαναπροσάρτηση (remount)",
   "diag.action_retry_title": "Επανεκτέλεση (retry)",
-  "diag.action_reformat_desc":
-    "Η διακοπή της εγγραφής κατέστρεψε τον πίνακα κατατμήσεων ή το σύστημα αρχείων. Συνιστάται νέα διαμόρφωση.",
-  "diag.action_remount_desc":
-    "Η διαδρομή προσάρτησης προορισμού αποσυνδέθηκε κατά την εγγραφή. Επανατοποθετήστε τη μονάδα USB ή επαναπροσαρτήστε τον τόμο.",
-  "diag.action_retry_desc":
-    "Το περιβάλλον και η κατάσταση της συσκευής είναι σώα. Μπορείτε να επανεκτελέσετε την εγκατάσταση με ασφάλεια.",
+  "diag.action_reformat_desc": "Η διακοπή της εγγραφής κατέστρεψε τον πίνακα κατατμήσεων ή το σύστημα αρχείων. Συνιστάται νέα διαμόρφωση.",
+  "diag.action_remount_desc": "Η διαδρομή προσάρτησης προορισμού αποσυνδέθηκε κατά την εγγραφή. Επανατοποθετήστε τη μονάδα USB ή επαναπροσαρτήστε τον τόμο.",
+  "diag.action_retry_desc": "Το περιβάλλον και η κατάσταση της συσκευής είναι σώα. Μπορείτε να επανεκτελέσετε την εγκατάσταση με ασφάλεια.",
   "about.updating": "Ενημέρωση ({progress}%)",
   "about.updateTo": "Online ενημέρωση σε {tag}",
   "about.downloading": "Λήψη {progress}%",
@@ -510,8 +476,7 @@ export const elGr: TranslationDict = {
   "dialog.textFilesFilter": "Αρχεία κειμένου (*.txt)",
   "dialog.allFilesFilter": "Όλα τα αρχεία (*.*)",
   "dialog.selectIsoTitle": "Επιλέξτε αρχεία εικόνας συστήματος (*.iso, *.wim, *.img κ.λπ.)",
-  "dialog.ventoyFilter":
-    "Εικόνες προέλευσης Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter": "Εικόνες προέλευσης Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Υπολογισμός Hash",
   "checksum.calculating": "Υπολογισμός Hash...",
   "checksum.algo_label": "Αλγόριθμος",
@@ -555,19 +520,14 @@ export const elGr: TranslationDict = {
   "privilege.status_standard": "Μη εξουσιοδοτημένο",
   "privilege.btn_elevate": "Αίτηση πρόσβασης διαχειριστή",
   "privilege.modal_title": "Απαιτούνται δικαιώματα διαχειριστή",
-  "privilege.elevation_prompt":
-    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
-  "privilege.modal_subtitle":
-    "Απαιτείται εξουσιοδότηση συστήματος για την ανάγνωση δεδομένων εκκίνησης και την εγγραφή δίσκων",
+  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.modal_subtitle": "Απαιτείται εξουσιοδότηση συστήματος για την ανάγνωση δεδομένων εκκίνησης και την εγγραφή δίσκων",
   "privilege.reason_title": "Γιατί απαιτούνται δικαιώματα διαχειριστή;",
-  "privilege.reason_desc":
-    "Το λειτουργικό σύστημα απομονώνει τους ανεπεξέργαστους τομείς και τα διαμερίσματα EFI. Η εξουσιοδότηση επιτρέπει την άμεση ανίχνευση και την ασφαλή δημιουργία.",
+  "privilege.reason_desc": "Το λειτουργικό σύστημα απομονώνει τους ανεπεξέργαστους τομείς και τα διαμερίσματα EFI. Η εξουσιοδότηση επιτρέπει την άμεση ανίχνευση και την ασφαλή δημιουργία.",
   "privilege.scope_title": "Εύρος πρόσβασης",
-  "privilege.scope_desc":
-    "Περιορίζεται αυστηρά στις επιλεγμένες εξωτερικές μονάδες USB. Οι εσωτερικοί δίσκοι συστήματος δεν αγγίζονται ποτέ.",
+  "privilege.scope_desc": "Περιορίζεται αυστηρά στις επιλεγμένες εξωτερικές μονάδες USB. Οι εσωτερικοί δίσκοι συστήματος δεν αγγίζονται ποτέ.",
   "privilege.safety_title": "Ασφάλεια και διαφάνεια",
-  "privilege.safety_desc":
-    "Ο έλεγχος είναι αυστηρά μόνο για ανάγνωση και μη καταστροφικός. Ο πηγαίος κώδικας είναι πλήρως ανοιχτός.",
+  "privilege.safety_desc": "Ο έλεγχος είναι αυστηρά μόνο για ανάγνωση και μη καταστροφικός. Ο πηγαίος κώδικας είναι πλήρως ανοιχτός.",
   "privilege.confirm_btn": "Εξουσιοδότηση τώρα",
   "privilege.cancel_btn": "Ακύρωση",
   "privilege.success_msg": "Χορηγήθηκαν δικαιώματα διαχειριστή",

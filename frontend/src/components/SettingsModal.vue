@@ -544,6 +544,20 @@
                     @input="triggerAutoSave"
                   />
                 </div>
+
+                <div class="form-group">
+                  <label class="form-label">{{ t("settings.ventoy_secondary_menu") }}</label>
+                  <div class="radio-group horizontal">
+                    <label class="radio-label">
+                      <input type="radio" :value="false" v-model="ventoySecondaryMenu" @change="triggerAutoSave" />
+                      <span>{{ t("settings.ventoy_secondary_menu_direct") }}</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" :value="true" v-model="ventoySecondaryMenu" @change="triggerAutoSave" />
+                      <span>{{ t("settings.ventoy_secondary_menu_enabled") }}</span>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -612,6 +626,7 @@ const emit = defineEmits<{
       ventoyReserveSpace: number;
       ventoyWin11Bypass: boolean;
       ventoyMenuTimeout: number;
+      ventoySecondaryMenu: boolean;
     }
   ): void;
 }>();
@@ -673,6 +688,7 @@ const ventoyPartitionStyle = ref("MBR");
 const ventoyReserveSpace = ref(0);
 const ventoyWin11Bypass = ref(false);
 const ventoyMenuTimeout = ref(0);
+const ventoySecondaryMenu = ref(false);
 const isValidatingVentoy = ref(false);
 const ventoyValidation = ref<VentoyValidation | null>(null);
 
@@ -797,6 +813,7 @@ function buildConfigPayload() {
     ventoyReserveSpace: Number(ventoyReserveSpace.value) || 0,
     ventoyWin11Bypass: ventoyWin11Bypass.value === true,
     ventoyMenuTimeout: Number(ventoyMenuTimeout.value) || 0,
+    ventoySecondaryMenu: ventoySecondaryMenu.value === true,
     unibootPath: unibootPath.value.trim(),
   };
 }
@@ -870,6 +887,7 @@ watch(
     ventoyReserveSpace,
     ventoyWin11Bypass,
     ventoyMenuTimeout,
+    ventoySecondaryMenu,
   ],
   () => {
     triggerAutoSave();
@@ -954,6 +972,7 @@ async function loadFullConfig() {
       ventoyReserveSpace.value = cfg.ventoyReserveSpace || 0;
       ventoyWin11Bypass.value = cfg.ventoyWin11Bypass === true;
       ventoyMenuTimeout.value = cfg.menuTimeout || cfg.ventoyMenuTimeout || 0;
+      ventoySecondaryMenu.value = cfg.ventoySecondaryMenu === true;
       unibootPath.value = cfg.unibootPath || "";
 
       if (ventoyPath.value.trim()) {
