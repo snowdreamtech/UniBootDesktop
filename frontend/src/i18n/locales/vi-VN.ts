@@ -109,7 +109,8 @@ export const viVn: TranslationDict = {
   "disk.tag_boot_hybrid": "Khởi động kết hợp",
   "disk.tag_boot_thirdparty": "Khởi động bên thứ 3",
   "confirm.cloud_to_hybrid_warn_title": "Lưu ý: Chuyển sang Chế độ kết hợp yêu cầu định dạng toàn bộ",
-  "confirm.cloud_to_hybrid_warn_desc": "Ổ đĩa này đang ở chế độ Khởi động Cloud thuần túy. Chế độ kết hợp Ventoy yêu cầu xây dựng lại MBR và bảng phân vùng, điều này sẽ XÓA tất cả dữ liệu và ISO!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Ổ đĩa này đang ở chế độ Khởi động Cloud thuần túy. Chế độ kết hợp Ventoy yêu cầu xây dựng lại MBR và bảng phân vùng, điều này sẽ XÓA tất cả dữ liệu và ISO!",
   "disk.tag_ssd": "SSD di động",
   "disk.tag_typec": "Ổ Type-C",
   "disk.tag_secure": "Ổ đĩa mã hóa",
@@ -137,13 +138,16 @@ export const viVn: TranslationDict = {
   "log.level_error": "LỖI",
   "log.level_debug": "Gỡ lỗi",
   "safe.title_cloud": "Đã phát hiện ổ đĩa Ventoy/UniBoot (Chế độ đám mây chỉ làm mới phân vùng ESP)",
-  "safe.desc_cloud": "Chế độ đám mây giữ nguyên cấu trúc hai phân vùng UNIBOOT. Làm mới ESP giữ nguyên toàn bộ tệp ISO và dữ liệu!",
+  "safe.desc_cloud":
+    "Chế độ đám mây giữ nguyên cấu trúc hai phân vùng UNIBOOT. Làm mới ESP giữ nguyên toàn bộ tệp ISO và dữ liệu!",
   "safe.title_hybrid": "Đã phát hiện ổ đĩa Ventoy (Cập nhật tại chỗ ở chế độ hỗn hợp)",
-  "safe.desc_hybrid": "Chế độ hỗn hợp giữ nguyên toàn bộ tệp ISO mà không cần định dạng lại, nhúng giao diện tối UniBoot và menu đám mây an toàn!",
+  "safe.desc_hybrid":
+    "Chế độ hỗn hợp giữ nguyên toàn bộ tệp ISO mà không cần định dạng lại, nhúng giao diện tối UniBoot và menu đám mây an toàn!",
   "common.optional": "Tùy chọn",
   "common.optional_test": "Kiểm tra tùy chọn",
   "iso.title": "Nguồn tệp ảnh hệ thống cục bộ (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Thêm các tệp ISO để tự động sao chép vào thư mục /UNIBOOT/iso/ để khởi động trực tiếp bằng Ventoy / UniBoot.",
+  "iso.desc":
+    "Thêm các tệp ISO để tự động sao chép vào thư mục /UNIBOOT/iso/ để khởi động trực tiếp bằng Ventoy / UniBoot.",
   "iso.add_btn": "Thêm tệp ảnh",
   "iso.empty_title": "Nhấp để thêm tệp ảnh (Hỗ trợ chọn đơn hoặc hàng loạt)",
   "iso.empty_sub": "Hỗ trợ các định dạng .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -164,13 +168,16 @@ export const viVn: TranslationDict = {
   "iso.conflict_confirm": "Xác nhận và tiếp tục",
   "iso.preflight_failed": "Kiểm tra trước khi ghi không thành công",
   "deploy.title": "Tạo ổ đĩa khởi động & Thử nghiệm QEMU",
-  "deploy.desc_cloud": "Khởi động đám mây iPXE thuần túy • Thiết lập hai phân vùng siêu tốc với phần mềm mạng iPXE đa kiến trúc.",
+  "deploy.desc_cloud":
+    "Khởi động đám mây iPXE thuần túy • Thiết lập hai phân vùng siêu tốc với phần mềm mạng iPXE đa kiến trúc.",
   "deploy.desc_hybrid": "Động cơ cục bộ Ventoy CLI • Thiết lập phân vùng hỗn hợp Ventoy với quản lý ISO cục bộ.",
   "deploy.target_device": "Thiết bị mục tiêu:",
   "deploy.batch_target": "Đã chọn {count} ổ USB",
   "deploy.start_create": "Tạo đĩa khởi động",
-  "deploy.tip_batch_update_all": "Cập nhật hàng loạt không mất dữ liệu: Tất cả {count} ổ USB được chọn sẽ được cập nhật tại chỗ",
-  "deploy.tip_batch_mixed": "Triển khai hỗn hợp hàng loạt: {bootCount} ổ cập nhật không mất dữ liệu, {blankCount} ổ định dạng lại",
+  "deploy.tip_batch_update_all":
+    "Cập nhật hàng loạt không mất dữ liệu: Tất cả {count} ổ USB được chọn sẽ được cập nhật tại chỗ",
+  "deploy.tip_batch_mixed":
+    "Triển khai hỗn hợp hàng loạt: {bootCount} ổ cập nhật không mất dữ liệu, {blankCount} ổ định dạng lại",
   "deploy.start_update": "Nâng cấp tại chỗ (An toàn dữ liệu)",
   "deploy.batch_create": "Bắt đầu tạo hàng loạt ({count} ổ đĩa)",
   "deploy.writing": "Đang ghi các gói firmware khởi động...",
@@ -185,21 +192,26 @@ export const viVn: TranslationDict = {
   "deploy.tip_writing": "Đang ghi firmware khởi động...",
   "deploy.tip_select_single": "Vui lòng chọn ổ USB mục tiêu trước",
   "deploy.tip_select_batch": "Vui lòng tích chọn các ổ USB mục tiêu để tạo hàng loạt",
-  "deploy.tip_macos_unsupported": "macOS không hỗ trợ định dạng mới trong Chế độ Hỗn hợp (dùng Chế độ Đám mây hoặc khởi tạo trên Win/Linux trước)",
+  "deploy.tip_macos_unsupported":
+    "macOS không hỗ trợ định dạng mới trong Chế độ Hỗn hợp (dùng Chế độ Đám mây hoặc khởi tạo trên Win/Linux trước)",
   "deploy.tip_need_ventoy": "Định dạng mới trong Chế độ Hỗn hợp yêu cầu Ventoy CLI cục bộ",
   "deploy.macos_alert_title": "macOS chưa hỗ trợ định dạng mới bằng Ventoy CLI",
-  "deploy.macos_alert_desc": "Ventoy không hỗ trợ định dạng trực tiếp trên macOS. Dùng Chế độ Đám mây để hỗ trợ gốc, hoặc khởi tạo Ventoy trên Windows/Linux trước rồi nâng cấp tại chỗ trên macOS.",
+  "deploy.macos_alert_desc":
+    "Ventoy không hỗ trợ định dạng trực tiếp trên macOS. Dùng Chế độ Đám mây để hỗ trợ gốc, hoặc khởi tạo Ventoy trên Windows/Linux trước rồi nâng cấp tại chỗ trên macOS.",
   "deploy.no_ventoy_title": "Không tìm thấy tệp thực thi Ventoy CLI",
-  "deploy.no_ventoy_desc": "Chế độ Hỗn hợp yêu cầu chuỗi công cụ Ventoy CLI cục bộ. Chúng tôi khuyến nghị Chế độ Đám mây!",
+  "deploy.no_ventoy_desc":
+    "Chế độ Hỗn hợp yêu cầu chuỗi công cụ Ventoy CLI cục bộ. Chúng tôi khuyến nghị Chế độ Đám mây!",
   "deploy.result_batch_success": "Đã triển khai thành công Ổ cài đặt đám mây 1 giây tới {count} đĩa!",
   "deploy.result_success": "Đã triển khai thành công Chế độ {mode} tới {targets}",
   "deploy.alert_success": "Triển khai thành công!",
   "deploy.safely_eject_btn": "Tháo USB an toàn",
   "deploy.success_banner_title": "Đã tạo ổ đĩa khởi động thành công!",
-  "deploy.success_banner_desc": "Các tệp khởi động và firmware đã được ghi thành công. Vui lòng ngắt kết nối an toàn trước khi rút để tránh mất dữ liệu.",
+  "deploy.success_banner_desc":
+    "Các tệp khởi động và firmware đã được ghi thành công. Vui lòng ngắt kết nối an toàn trước khi rút để tránh mất dữ liệu.",
   "deploy.toast_auto_ejected": "Đã hoàn thành! Đã tự động rút an toàn {count} ổ USB. Tất cả dữ liệu đã được lưu.",
   "deploy.confirm_auto_eject_title": "Ghi xong — Tháo an toàn?",
-  "deploy.confirm_auto_eject_desc": "Tất cả dữ liệu đã ghi thành công. Bạn có muốn tháo ổ USB an toàn ngay bây giờ không?",
+  "deploy.confirm_auto_eject_desc":
+    "Tất cả dữ liệu đã ghi thành công. Bạn có muốn tháo ổ USB an toàn ngay bây giờ không?",
   "deploy.confirm_auto_eject_yes": "Tháo an toàn",
   "deploy.confirm_auto_eject_no": "Chưa",
   "deploy.alert_fail": "Triển khai thất bại:",
@@ -290,7 +302,8 @@ export const viVn: TranslationDict = {
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
   "confirm.title": "Cảnh báo định dạng rủi ro cao",
   "confirm.warning_title": "Cảnh báo: Định dạng sẽ xóa toàn bộ dữ liệu!",
-  "confirm.warning_desc": "Ổ USB được chọn sẽ được phân vùng lại và định dạng. Tất cả các tệp hiện có sẽ bị xóa hoàn toàn. Hãy đảm bảo bạn đã sao lưu dữ liệu quan trọng!",
+  "confirm.warning_desc":
+    "Ổ USB được chọn sẽ được phân vùng lại và định dạng. Tất cả các tệp hiện có sẽ bị xóa hoàn toàn. Hãy đảm bảo bạn đã sao lưu dữ liệu quan trọng!",
   "confirm.mode_title": "Chế độ triển khai:",
   "confirm.fs_title": "Hệ thống tệp mục tiêu:",
   "confirm.disks_title": "Ổ đĩa cần định dạng ({count}):",
@@ -300,11 +313,14 @@ export const viVn: TranslationDict = {
   "confirm.title_mixed": "Xác nhận triển khai lai thông minh",
   "confirm.title_danger": "Cảnh báo định dạng: Khởi tạo ổ đĩa",
   "confirm.safe_banner_title": "Thông báo cập nhật tăng cường (An toàn dữ liệu)",
-  "confirm.safe_banner_desc": "Đã phát hiện cấu trúc khởi động Ventoy / UniBoot trên ổ USB. Hệ thống sẽ thực hiện cập nhật tăng cường bỏ qua định dạng. Tất cả tệp và ảnh ISO hiện có được giữ nguyên 100%!",
+  "confirm.safe_banner_desc":
+    "Đã phát hiện cấu trúc khởi động Ventoy / UniBoot trên ổ USB. Hệ thống sẽ thực hiện cập nhật tăng cường bỏ qua định dạng. Tất cả tệp và ảnh ISO hiện có được giữ nguyên 100%!",
   "confirm.mixed_banner_title": "Chế độ lai thông minh: Cập nhật tại chỗ cho ổ khởi động, định dạng cho ổ trống",
-  "confirm.mixed_banner_desc": "Đã chọn {ventoyCount} ổ khởi động (cập nhật tăng cường) và {blankCount} ổ trống (định dạng toàn bộ).",
+  "confirm.mixed_banner_desc":
+    "Đã chọn {ventoyCount} ổ khởi động (cập nhật tăng cường) và {blankCount} ổ trống (định dạng toàn bộ).",
   "confirm.danger_banner_title": "Cảnh báo: Định dạng là không thể đảo ngược!",
-  "confirm.danger_banner_desc": "Thao tác ghi sẽ phân vùng lại và định dạng thiết bị mục tiêu (MBR/GPT). Tất cả dữ liệu hiện có sẽ bị xóa hoàn toàn!",
+  "confirm.danger_banner_desc":
+    "Thao tác ghi sẽ phân vùng lại và định dạng thiết bị mục tiêu (MBR/GPT). Tất cả dữ liệu hiện có sẽ bị xóa hoàn toàn!",
   "confirm.summary_title": "Ổ USB mục tiêu triển khai khởi động:",
   "confirm.smart_safe_tag": "An toàn thông minh",
   "confirm.ventoy_group_title": "Ổ đĩa nâng cấp tại chỗ (Giữ nguyên mọi tệp ISO):",
@@ -324,8 +340,10 @@ export const viVn: TranslationDict = {
   "confirm.no_format": "Cập nhật tại chỗ thông minh",
   "deploy.toast_target_changed": "Ổ đĩa mục tiêu đã thay đổi hoặc không còn khả dụng. Vui lòng quét lại.",
   "deploy.toast_some_disks_removed": "{count} đĩa không khả dụng đã được xóa tự động, tiếp tục với các đĩa còn lại",
-  "deploy.error_system_disk_blocked": "⛔ Đã chặn: {disks} là đĩa hệ thống. Không thể triển khai đĩa khởi động USB vào ổ đĩa hệ thống!",
-  "deploy.error_readonly_disk": "🔒 Được bảo vệ chống ghi: {disks} ở chế độ chỉ đọc. Vui lòng gỡ bảo vệ chống ghi hoặc sử dụng USB khác",
+  "deploy.error_system_disk_blocked":
+    "⛔ Đã chặn: {disks} là đĩa hệ thống. Không thể triển khai đĩa khởi động USB vào ổ đĩa hệ thống!",
+  "deploy.error_readonly_disk":
+    "🔒 Được bảo vệ chống ghi: {disks} ở chế độ chỉ đọc. Vui lòng gỡ bảo vệ chống ghi hoặc sử dụng USB khác",
   "deploy.start_cloud_create": "Tạo đĩa khởi động đám mây",
   "deploy.batch_update": "Bắt đầu cập nhật hàng loạt không mất dữ liệu ({count} ổ USB)",
   "deploy.batch_mixed": "Bắt đầu triển khai hỗn hợp hàng loạt ({count} ổ USB)",
@@ -348,9 +366,11 @@ export const viVn: TranslationDict = {
   "inspector.smart": "Sức khỏe SMART:",
   "inspector.sector": "Kích thước sector:",
   "inspector.fake_title": "Cảnh báo USB 3.0 giả mạo!",
-  "inspector.fake_desc": "Thiết bị ghi là USB 3.0/3.1 nhưng tốc độ thực tế thương lượng ở tầng vật lý chỉ là {speed} (USB 2.0 PHY).",
+  "inspector.fake_desc":
+    "Thiết bị ghi là USB 3.0/3.1 nhưng tốc độ thực tế thương lượng ở tầng vật lý chỉ là {speed} (USB 2.0 PHY).",
   "inspector.genuine_title": "Xác minh phần cứng thành công (Thiết bị USB 3.0+ chính hãng)",
-  "inspector.genuine_desc": "Tầng vật lý PHY thương lượng thành công liên kết SuperSpeed/SuperSpeed+ thực tế đạt {speed}.",
+  "inspector.genuine_desc":
+    "Tầng vật lý PHY thương lượng thành công liên kết SuperSpeed/SuperSpeed+ thực tế đạt {speed}.",
   "inspector.usb2_title": "Giao diện USB 2.0 chuẩn",
   "inspector.usb2_desc": "Phần cứng USB 2.0 tiêu chuẩn, tốc độ lý thuyết tối đa 480 Mb/s.",
   "inspector.section_basic": "Thông tin cơ bản về thiết bị",
@@ -457,7 +477,8 @@ export const viVn: TranslationDict = {
   "diag.action_remount_title": "Gắn lại (remount)",
   "diag.action_retry_title": "Thử lại (retry)",
   "diag.action_reformat_desc": "Gián đoạn triển khai đã làm hỏng bảng phân vùng hoặc hệ thống tệp. Nên định dạng lại.",
-  "diag.action_remount_desc": "Đường dẫn gắn kết mục tiêu bị ngắt kết nối trong khi ghi. Hãy cắm lại ổ USB hoặc gắn lại ổ đĩa.",
+  "diag.action_remount_desc":
+    "Đường dẫn gắn kết mục tiêu bị ngắt kết nối trong khi ghi. Hãy cắm lại ổ USB hoặc gắn lại ổ đĩa.",
   "diag.action_retry_desc": "Môi trường và trạng thái thiết bị còn nguyên vẹn. Bạn có thể thử triển khai lại an toàn.",
   "about.updating": "Đang cập nhật ({progress}%)",
   "about.updateTo": "Cập nhật trực tuyến lên {tag}",
@@ -474,7 +495,8 @@ export const viVn: TranslationDict = {
   "dialog.textFilesFilter": "Tệp văn bản (*.txt)",
   "dialog.allFilesFilter": "Tất cả tệp (*.*)",
   "dialog.selectIsoTitle": "Chọn tệp hình ảnh hệ thống (*.iso, *.wim, *.img, v.v.)",
-  "dialog.ventoyFilter": "Hình ảnh nguồn Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Hình ảnh nguồn Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Tính toán Hash",
   "checksum.calculating": "Đang tính toán Hash...",
   "checksum.algo_label": "Thuật toán",
@@ -518,10 +540,12 @@ export const viVn: TranslationDict = {
   "privilege.status_standard": "Chưa cấp quyền",
   "privilege.btn_elevate": "Yêu cầu quyền quản trị",
   "privilege.modal_title": "Cần quyền quản trị viên",
-  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Cần ủy quyền hệ thống để đọc dữ liệu khởi động và ghi đĩa",
   "privilege.reason_title": "Tại sao cần quyền quản trị viên?",
-  "privilege.reason_desc": "Hệ điều hành cách ly các sector thô và phân vùng EFI. Cấp quyền giúp phát hiện trực tiếp và tạo đĩa an toàn.",
+  "privilege.reason_desc":
+    "Hệ điều hành cách ly các sector thô và phân vùng EFI. Cấp quyền giúp phát hiện trực tiếp và tạo đĩa an toàn.",
   "privilege.scope_title": "Phạm vi truy cập",
   "privilege.scope_desc": "Chỉ giới hạn ở các ổ USB ngoài đã chọn. Không bao giờ can thiệp vào ổ đĩa hệ thống nội bộ.",
   "privilege.safety_title": "An toàn & Minh bạch",

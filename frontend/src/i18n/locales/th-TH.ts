@@ -109,7 +109,8 @@ export const thTh: TranslationDict = {
   "disk.tag_boot_hybrid": "บูตไฮบริด",
   "disk.tag_boot_thirdparty": "บูตจากบุคคลที่สาม",
   "confirm.cloud_to_hybrid_warn_title": "ข้อสังเกต: การเปลี่ยนเป็นโหมดไฮบริดจำเป็นต้องฟอร์แมตทั้งหมด",
-  "confirm.cloud_to_hybrid_warn_desc": "ดิสก์นี้อยู่ในโหมดบูตคลาวด์ล้วน โหมดไฮบริด Ventoy จำเป็นต้องสร้าง MBR และตารางพาร์ติชันใหม่ ซึ่งจะลบข้อมูลและไฟล์ ISO ทั้งหมด!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "ดิสก์นี้อยู่ในโหมดบูตคลาวด์ล้วน โหมดไฮบริด Ventoy จำเป็นต้องสร้าง MBR และตารางพาร์ติชันใหม่ ซึ่งจะลบข้อมูลและไฟล์ ISO ทั้งหมด!",
   "disk.tag_ssd": "SSD แบบพกพา",
   "disk.tag_typec": "ไดรฟ์ Type-C",
   "disk.tag_secure": "ไดรฟ์ที่เข้ารหัส",
@@ -137,9 +138,11 @@ export const thTh: TranslationDict = {
   "log.level_error": "ข้อผิดพลาด",
   "log.level_debug": "ดีบั๊ก",
   "safe.title_cloud": "ตรวจพบไดรฟ์ Ventoy/UniBoot ที่มีอยู่ (โหมดคลาวด์จะรีเฟรชพาร์ติชัน ESP เท่านั้น)",
-  "safe.desc_cloud": "โหมดคลาวด์ยังคงโครงสร้างสองพาร์ติชัน UNIBOOT การรีเฟรช ESP จะรักษาไฟล์ ISO และข้อมูลทั้งหมดไว้อย่างปลอดภัย!",
+  "safe.desc_cloud":
+    "โหมดคลาวด์ยังคงโครงสร้างสองพาร์ติชัน UNIBOOT การรีเฟรช ESP จะรักษาไฟล์ ISO และข้อมูลทั้งหมดไว้อย่างปลอดภัย!",
   "safe.title_hybrid": "ตรวจพบไดรฟ์ Ventoy ที่มีอยู่ (อัปเดตแบบอินเพลสในโหมดไฮบริด)",
-  "safe.desc_hybrid": "โหมดไฮบริดจะรักษาไฟล์ ISO ที่มีอยู่ทั้งหมดโดยไม่ต้องฟอร์แมต เพิ่มธีมมืด UniBoot และเมนูคลาวด์บู้ตอย่างปลอดภัย!",
+  "safe.desc_hybrid":
+    "โหมดไฮบริดจะรักษาไฟล์ ISO ที่มีอยู่ทั้งหมดโดยไม่ต้องฟอร์แมต เพิ่มธีมมืด UniBoot และเมนูคลาวด์บู้ตอย่างปลอดภัย!",
   "common.optional": "ไม่บังคับ",
   "common.optional_test": "ทดสอบตัวเลือก",
   "iso.title": "แหล่งที่มาอิมเมจระบบท้องถิ่น (ISO / IMG / WIM / VHD)",
@@ -154,7 +157,8 @@ export const thTh: TranslationDict = {
   "iso.drag_unsupported": "ไม่พบไฟล์อิมเมจที่รองรับ (.iso, .wim, .img ฯลฯ)",
   "iso.preflight_title": "ตรวจสอบก่อนเขียน",
   "iso.conflict_title": "พบชื่อไฟล์ซ้ำ",
-  "iso.conflict_desc": "มีไฟล์ชื่อเดียวกันอยู่ในโฟลเดอร์ iso ของ USB ปลายทางแล้ว โปรดเลือกวิธีจัดการ ระบบจะไม่เปรียบเทียบแฮช",
+  "iso.conflict_desc":
+    "มีไฟล์ชื่อเดียวกันอยู่ในโฟลเดอร์ iso ของ USB ปลายทางแล้ว โปรดเลือกวิธีจัดการ ระบบจะไม่เปรียบเทียบแฮช",
   "iso.conflict_action": "การดำเนินการ",
   "iso.conflict_keep_both": "เก็บไว้",
   "iso.conflict_replace": "เขียนทับ",
@@ -164,13 +168,16 @@ export const thTh: TranslationDict = {
   "iso.conflict_confirm": "ยืนยันและดำเนินการต่อ",
   "iso.preflight_failed": "ตรวจสอบก่อนเขียนไม่สำเร็จ",
   "deploy.title": "การสร้างไดรฟ์ที่บูตได้และการทดสอบ QEMU",
-  "deploy.desc_cloud": "การบูตคลาวด์ iPXE บริสุทธิ์ • การตั้งค่าสองพาร์ติชันที่เร็วเป็นพิเศษพร้อมเฟิร์มแวร์เครือข่าย iPXE Multi-arch.",
+  "deploy.desc_cloud":
+    "การบูตคลาวด์ iPXE บริสุทธิ์ • การตั้งค่าสองพาร์ติชันที่เร็วเป็นพิเศษพร้อมเฟิร์มแวร์เครือข่าย iPXE Multi-arch.",
   "deploy.desc_hybrid": "เอ็นจินท้องถิ่น Ventoy CLI • การตั้งค่าพาร์ติชันไฮบริด Ventoy พร้อมการจัดการ ISO ท้องถิ่น.",
   "deploy.target_device": "อุปกรณ์เป้าหมาย:",
   "deploy.batch_target": "เลือกไดรฟ์ USB {count} รายการ",
   "deploy.start_create": "สร้างดิสก์บูต",
-  "deploy.tip_batch_update_all": "การอัปเดตเป็นชุดโดยไม่สูญเสียข้อมูล: ไดรฟ์ USB ทั้งหมด {count} ไดรฟ์ที่เลือกจะได้รับการอัปเดตในสถานที่",
-  "deploy.tip_batch_mixed": "การปรับใช้แบบผสมเป็นชุด: {bootCount} ไดรฟ์อัปเดตโดยไม่สูญเสียข้อมูล, {blankCount} ไดรฟ์ฟอร์แมตใหม่",
+  "deploy.tip_batch_update_all":
+    "การอัปเดตเป็นชุดโดยไม่สูญเสียข้อมูล: ไดรฟ์ USB ทั้งหมด {count} ไดรฟ์ที่เลือกจะได้รับการอัปเดตในสถานที่",
+  "deploy.tip_batch_mixed":
+    "การปรับใช้แบบผสมเป็นชุด: {bootCount} ไดรฟ์อัปเดตโดยไม่สูญเสียข้อมูล, {blankCount} ไดรฟ์ฟอร์แมตใหม่",
   "deploy.start_update": "อัปเกรดแบบแทนที่ (ปลอดภัยข้อมูล)",
   "deploy.batch_create": "เริ่มการปรับใช้เป็นกลุ่ม (ไดรฟ์ {count})",
   "deploy.writing": "กำลังเขียนแพ็คเกจเฟิร์มแวร์บูต...",
@@ -185,10 +192,12 @@ export const thTh: TranslationDict = {
   "deploy.tip_writing": "กำลังเขียนเฟิร์มแวร์บูต...",
   "deploy.tip_select_single": "โปรดเลือกไดรฟ์ USB เป้าหมายก่อน",
   "deploy.tip_select_batch": "โปรดตรวจสอบไดรฟ์ USB เป้าหมายสำหรับการปรับใช้เป็นชุด",
-  "deploy.tip_macos_unsupported": "macOS ไม่รองรับการฟอร์แมตใหม่ในโหมดไฮบริด (ใช้โหมดคลาวด์หรือเริ่มต้นบน Win/Linux ก่อน)",
+  "deploy.tip_macos_unsupported":
+    "macOS ไม่รองรับการฟอร์แมตใหม่ในโหมดไฮบริด (ใช้โหมดคลาวด์หรือเริ่มต้นบน Win/Linux ก่อน)",
   "deploy.tip_need_ventoy": "การฟอร์แมตใหม่ในโหมดไฮบริดต้องใช้ Ventoy CLI ในเครื่อง",
   "deploy.macos_alert_title": "macOS Ventoy CLI ไม่รองรับการจัดรูปแบบใหม่",
-  "deploy.macos_alert_desc": "Ventoy ไม่รองรับการฟอร์แมตโดยตรงบน macOS ใช้โหมดคลาวด์สำหรับการรองรับแบบดั้งเดิม หรือเริ่มต้น Ventoy บน Windows/Linux ก่อน แล้วอัปเกรดในที่บน macOS",
+  "deploy.macos_alert_desc":
+    "Ventoy ไม่รองรับการฟอร์แมตโดยตรงบน macOS ใช้โหมดคลาวด์สำหรับการรองรับแบบดั้งเดิม หรือเริ่มต้น Ventoy บน Windows/Linux ก่อน แล้วอัปเกรดในที่บน macOS",
   "deploy.no_ventoy_title": "ตรวจไม่พบการดำเนินการ Ventoy CLI",
   "deploy.no_ventoy_desc": "โหมดไฮบริดต้องใช้ Ventoy CLI toolchain ในเครื่อง เราแนะนำโหมดคลาวด์!",
   "deploy.result_batch_success": "ติดตั้งดิสก์ติดตั้งคลาวด์ 1 วินาทีไปยัง {count} ไดรฟ์เรียบร้อยแล้ว!",
@@ -196,8 +205,10 @@ export const thTh: TranslationDict = {
   "deploy.alert_success": "การปรับใช้สำเร็จ!",
   "deploy.safely_eject_btn": "นำ USB ออกอย่างปลอดภัย",
   "deploy.success_banner_title": "สร้างไดรฟ์บูตสำเร็จแล้ว!",
-  "deploy.success_banner_desc": "เขียนไฟล์บูตและเฟิร์มแวร์เรียบร้อยแล้ว กรุณากดเอาไดรฟ์ออกอย่างปลอดภัยก่อนถอดปลั๊กเพื่อป้องกันข้อมูลสูญหาย",
-  "deploy.toast_auto_ejected": "สร้างเสร็จสมบูรณ์! ถอดไดรฟ์ USB {count} ตัวออกຢ່າງปลอดภัยโดยอัตโนมัติแล้ว บันทึกข้อมูลเรียบร้อย",
+  "deploy.success_banner_desc":
+    "เขียนไฟล์บูตและเฟิร์มแวร์เรียบร้อยแล้ว กรุณากดเอาไดรฟ์ออกอย่างปลอดภัยก่อนถอดปลั๊กเพื่อป้องกันข้อมูลสูญหาย",
+  "deploy.toast_auto_ejected":
+    "สร้างเสร็จสมบูรณ์! ถอดไดรฟ์ USB {count} ตัวออกຢ່າງปลอดภัยโดยอัตโนมัติแล้ว บันทึกข้อมูลเรียบร้อย",
   "deploy.confirm_auto_eject_title": "เขียนเสร็จสิ้น — นำออกอย่างปลอดภัยหรือไม่?",
   "deploy.confirm_auto_eject_desc": "ข้อมูลทั้งหมดถูกเขียนสำเร็จแล้ว ต้องการนำ USB ออกอย่างปลอดภัยตอนนี้หรือไม่?",
   "deploy.confirm_auto_eject_yes": "นำออกอย่างปลอดภัย",
@@ -290,7 +301,8 @@ export const thTh: TranslationDict = {
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
   "confirm.title": "High-Risk Format คำเตือน",
   "confirm.warning_title": "คำเตือน: Formatting will erase all data!",
-  "confirm.warning_desc": "ไดรฟ์ USB ที่เลือกจะถูกแบ่งพาร์ติชันและฟอร์แมตใหม่ ไฟล์ที่มีอยู่ทั้งหมดจะถูกลบออกอย่างสมบูรณ์ ตรวจสอบให้แน่ใจว่าคุณได้สำรองข้อมูลสำคัญแล้ว!",
+  "confirm.warning_desc":
+    "ไดรฟ์ USB ที่เลือกจะถูกแบ่งพาร์ติชันและฟอร์แมตใหม่ ไฟล์ที่มีอยู่ทั้งหมดจะถูกลบออกอย่างสมบูรณ์ ตรวจสอบให้แน่ใจว่าคุณได้สำรองข้อมูลสำคัญแล้ว!",
   "confirm.mode_title": "โหมดการปรับใช้:",
   "confirm.fs_title": "ระบบไฟล์เป้าหมาย:",
   "confirm.disks_title": "ไดรฟ์ที่จะฟอร์แมต ({count}):",
@@ -300,11 +312,14 @@ export const thTh: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode ยืนยันation",
   "confirm.title_danger": "Format คำเตือน: Disk Initialization",
   "confirm.safe_banner_title": "ประกาศการอัปเดตที่เพิ่มขึ้นแบบแทนที่ (ความปลอดภัยของข้อมูล)",
-  "confirm.safe_banner_desc": "ตรวจพบโครงสร้างการบูต Ventoy / UniBoot บนไดรฟ์เป้าหมาย ระบบจะดำเนินการรูปแบบการข้ามการอัปเดตแบบเพิ่มหน่วย ไฟล์และ ISO ที่มีอยู่ทั้งหมดจะถูกเก็บรักษาไว้ 100%!",
+  "confirm.safe_banner_desc":
+    "ตรวจพบโครงสร้างการบูต Ventoy / UniBoot บนไดรฟ์เป้าหมาย ระบบจะดำเนินการรูปแบบการข้ามการอัปเดตแบบเพิ่มหน่วย ไฟล์และ ISO ที่มีอยู่ทั้งหมดจะถูกเก็บรักษาไว้ 100%!",
   "confirm.mixed_banner_title": "โหมดผสมอัจฉริยะ: การอัปเดตแบบแทนที่สำหรับไดรฟ์บูต, รูปแบบสำหรับไดรฟ์เปล่า",
-  "confirm.mixed_banner_desc": "เลือกไดรฟ์สำหรับบูต {ventoyCount} รายการ (การอัปเดตแบบแทนที่) และไดรฟ์ว่าง {blankCount} รายการ (รูปแบบเต็ม)",
+  "confirm.mixed_banner_desc":
+    "เลือกไดรฟ์สำหรับบูต {ventoyCount} รายการ (การอัปเดตแบบแทนที่) และไดรฟ์ว่าง {blankCount} รายการ (รูปแบบเต็ม)",
   "confirm.danger_banner_title": "คำเตือน: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "การเขียนจะแบ่งพาร์ติชันใหม่และฟอร์แมตอุปกรณ์เป้าหมาย (MBR/GPT) ไฟล์ที่มีอยู่ทั้งหมดในไดรฟ์ที่เลือกจะถูกลบทิ้งอย่างสมบูรณ์!",
+  "confirm.danger_banner_desc":
+    "การเขียนจะแบ่งพาร์ติชันใหม่และฟอร์แมตอุปกรณ์เป้าหมาย (MBR/GPT) ไฟล์ที่มีอยู่ทั้งหมดในไดรฟ์ที่เลือกจะถูกลบทิ้งอย่างสมบูรณ์!",
   "confirm.summary_title": "ไดรฟ์เป้าหมายสำหรับการปรับใช้การบูต:",
   "confirm.smart_safe_tag": "ความปลอดภัยอัจฉริยะ",
   "confirm.ventoy_group_title": "ไดรฟ์อัปเกรดแบบแทนที่ (รักษา ISO ทั้งหมดไว้):",
@@ -323,9 +338,11 @@ export const thTh: TranslationDict = {
   "confirm.will_format": "ฟอร์แมตทั้งหมด",
   "confirm.no_format": "การอัปเดตอัจฉริยะในที่",
   "deploy.toast_target_changed": "ดิสก์เป้าหมายที่เลือกเปลี่ยนไปหรือไม่พร้อมใช้งานแล้ว โปรดสแกนอีกครั้ง",
-  "deploy.toast_some_disks_removed": "{count} ดิสก์ที่ไม่พร้อมใช้งานถูกลบโดยอัตโนมัติ กำลังดำเนินการต่อกับดิสก์ที่เหลือ",
+  "deploy.toast_some_disks_removed":
+    "{count} ดิสก์ที่ไม่พร้อมใช้งานถูกลบโดยอัตโนมัติ กำลังดำเนินการต่อกับดิสก์ที่เหลือ",
   "deploy.error_system_disk_blocked": "⛔ ถูกบล็อก: {disks} เป็นดิสก์ระบบ ไม่สามารถติดตั้งดิสก์บูต USB บนไดรฟ์ระบบได้!",
-  "deploy.error_readonly_disk": "🔒 ป้องกันการเขียน: {disks} เป็นแบบอ่านอย่างเดียว โปรดลบการป้องกันการเขียนหรือใช้ USB อื่น",
+  "deploy.error_readonly_disk":
+    "🔒 ป้องกันการเขียน: {disks} เป็นแบบอ่านอย่างเดียว โปรดลบการป้องกันการเขียนหรือใช้ USB อื่น",
   "deploy.start_cloud_create": "สร้างดิสก์บูตคลาวด์",
   "deploy.batch_update": "เริ่มการอัปเดตเป็นชุดโดยไม่สูญเสียข้อมูล ({count} ไดรฟ์ USB)",
   "deploy.batch_mixed": "เริ่มการปรับใช้แบบผสมเป็นชุด ({count} ไดรฟ์ USB)",
@@ -348,7 +365,8 @@ export const thTh: TranslationDict = {
   "inspector.smart": "สุขภาพ SMART:",
   "inspector.sector": "ขนาดภาค:",
   "inspector.fake_title": "Fake USB 3.0 คำเตือน Alert!",
-  "inspector.fake_desc": "อุปกรณ์โฆษณา USB 3.0/3.1 แต่ความเร็วฟิสิคัลเลเยอร์จริงจะต่อรองที่ {speed} เท่านั้น (USB 2.0 High-Speed PHY) ไดรฟ์นี้น่าจะมีเฟิร์มแวร์ปลอมหรือมีพอร์ตสีน้ำเงินปลอม",
+  "inspector.fake_desc":
+    "อุปกรณ์โฆษณา USB 3.0/3.1 แต่ความเร็วฟิสิคัลเลเยอร์จริงจะต่อรองที่ {speed} เท่านั้น (USB 2.0 High-Speed PHY) ไดรฟ์นี้น่าจะมีเฟิร์มแวร์ปลอมหรือมีพอร์ตสีน้ำเงินปลอม",
   "inspector.genuine_title": "ผ่านการตรวจสอบฮาร์ดแวร์ทางกายภาพแล้ว (อุปกรณ์ USB 3.0+ ของแท้)",
   "inspector.genuine_desc": "ชั้นกายภาพ PHY เชื่อมต่อด้วยความเร็ว SuperSpeed/SuperSpeed+ แท้จริงที่ {speed}",
   "inspector.usb2_title": "อินเทอร์เฟซ USB 2.0 มาตรฐาน",
@@ -474,7 +492,8 @@ export const thTh: TranslationDict = {
   "dialog.textFilesFilter": "ไฟล์ข้อความ (*.txt)",
   "dialog.allFilesFilter": "ไฟล์ทั้งหมด (*.*)",
   "dialog.selectIsoTitle": "เลือกไฟล์อิมเมจระบบ (*.iso, *.wim, *.img ฯลฯ)",
-  "dialog.ventoyFilter": "อิมเมจต้นฉบับ Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "อิมเมจต้นฉบับ Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "คำนวณ Hash",
   "checksum.calculating": "กำลังคำนวณ Hash...",
   "checksum.algo_label": "อัลกอริทึม",
@@ -518,10 +537,12 @@ export const thTh: TranslationDict = {
   "privilege.status_standard": "ยังไม่ได้รับอนุญาต",
   "privilege.btn_elevate": "ขอสิทธิ์ผู้ดูแลระบบ",
   "privilege.modal_title": "ต้องใช้สิทธิ์ผู้ดูแลระบบ",
-  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "จำเป็นต้องได้รับการอนุญาตจากระบบเพื่ออ่านข้อมูลบูตและเขียนลงดิสก์",
   "privilege.reason_title": "ทำไมต้องใช้สิทธิ์ผู้ดูแลระบบ?",
-  "privilege.reason_desc": "ระบบปฏิบัติการแยกเซกเตอร์ดิบและพาร์ติชัน EFI การอนุญาตช่วยให้ตรวจจับได้โดยตรงและสร้างดิสก์ได้อย่างปลอดภัย",
+  "privilege.reason_desc":
+    "ระบบปฏิบัติการแยกเซกเตอร์ดิบและพาร์ติชัน EFI การอนุญาตช่วยให้ตรวจจับได้โดยตรงและสร้างดิสก์ได้อย่างปลอดภัย",
   "privilege.scope_title": "ขอบเขตการเข้าถึง",
   "privilege.scope_desc": "จำกัดเฉพาะแฟลชไดรฟ์ USB ภายนอกที่เลือกเท่านั้น จะไม่แตะต้องดิสก์ระบบภายในอย่างเด็ดขาด",
   "privilege.safety_title": "ความปลอดภัยและความโปร่งใส",

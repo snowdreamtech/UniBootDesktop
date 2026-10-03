@@ -1,3 +1,11 @@
 {
-  "Exclude": ["internal/addlicense/testdata", "^\\.specify/", "^frontend/wailsjs/", "^pkg/firmware/assets/", ".*\\.go$"]
+  "Exclude": [
+    "internal/addlicense/testdata",
+    "^\\.specify/",
+    "^frontend/wailsjs/",
+    "^pkg/firmware/assets/",
+    "^pkg/installer/assets/",
+    ".*\\.img$",
+    ".*\\.go$"
+  ]
 }

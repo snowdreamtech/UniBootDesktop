@@ -109,7 +109,8 @@ export const kaGe: TranslationDict = {
   "disk.tag_boot_hybrid": "ჰიბრიდული ჩატვირთვა",
   "disk.tag_boot_thirdparty": "მესამე მხარის ჩატვირთვა",
   "confirm.cloud_to_hybrid_warn_title": "ყურადღება: ჰიბრიდულ რეჟიმზე გადასვლა მოითხოვს სრულ ფორმატირებას",
-  "confirm.cloud_to_hybrid_warn_desc": "ეს დისკი იმყოფება სუფთა ღრუბლოვან რეჟიმში. Ventoy ჰიბრიდული რეჟიმი მოითხოვს MBR-ისა და დანაყოფების ხელახლა შექმნას, რაც წაშლის ყველა მონაცემსა და ISO-ს!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "ეს დისკი იმყოფება სუფთა ღრუბლოვან რეჟიმში. Ventoy ჰიბრიდული რეჟიმი მოითხოვს MBR-ისა და დანაყოფების ხელახლა შექმნას, რაც წაშლის ყველა მონაცემსა და ISO-ს!",
   "disk.tag_ssd": "პორტატული SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "დაშიფრული დისკი",
@@ -137,13 +138,16 @@ export const kaGe: TranslationDict = {
   "log.level_error": "შეცდომა",
   "log.level_debug": "დებაგირება",
   "safe.title_cloud": "აღმოჩენილია Ventoy/UniBoot დისკი (ღრუბლოვანი რეჟიმი ანახლებს მხოლოდ ESP განყოფილებას)",
-  "safe.desc_cloud": "ღრუბლოვანი რეჟიმი ინარჩუნებს UNIBOOT-ის ორგანყოფილებიან სტრუქტურას. ESP-ის განახლება ინარჩუნებს ყველა ISO ფაილს!",
+  "safe.desc_cloud":
+    "ღრუბლოვანი რეჟიმი ინარჩუნებს UNIBOOT-ის ორგანყოფილებიან სტრუქტურას. ESP-ის განახლება ინარჩუნებს ყველა ISO ფაილს!",
   "safe.title_hybrid": "აღმოჩენილია Ventoy დისკი (ადგილზე განახლება ჰიბრიდულ რეჟიმში)",
-  "safe.desc_hybrid": "ჰიბრიდული რეჟიმი ინარჩუნებს ყველა ISO ფაილს ფორმატირების გარეშე, უსაფრთხოდ ამატებს UniBoot მუქ თემას და ღრუბლოვან მენიუს!",
+  "safe.desc_hybrid":
+    "ჰიბრიდული რეჟიმი ინარჩუნებს ყველა ISO ფაილს ფორმატირების გარეშე, უსაფრთხოდ ამატებს UniBoot მუქ თემას და ღრუბლოვან მენიუს!",
   "common.optional": "არასავალდებულო",
   "common.optional_test": "სურვილისამებრ ტესტი",
   "iso.title": "ადგილობრივი სისტემის გამოსახულების წყაროები (ISO / IMG / WIM / VHD)",
-  "iso.desc": "დაამატეთ ISO ფაილები ავტომატური კოპირებისთვის /UNIBOOT/iso/ დირექტორიაში Ventoy / UniBoot პირდაპირი ჩატვირთვისთვის.",
+  "iso.desc":
+    "დაამატეთ ISO ფაილები ავტომატური კოპირებისთვის /UNIBOOT/iso/ დირექტორიაში Ventoy / UniBoot პირდაპირი ჩატვირთვისთვის.",
   "iso.add_btn": "დაამატეთ სურათის ფაილები",
   "iso.empty_title": "დააწკაპუნეთ სურათის ფაილების დასამატებლად (მხარდაჭერილია ერთჯერადი ან ჯგუფური არჩევით)",
   "iso.empty_sub": "მხარს უჭერს .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw ფორმატებს",
@@ -154,7 +158,8 @@ export const kaGe: TranslationDict = {
   "iso.drag_unsupported": "მხარდაჭერილი გამოსახულების ფაილები ვერ მოიძებნა (.iso, .wim, .img და ა.შ.)",
   "iso.preflight_title": "ჩაწერამდე შემოწმება",
   "iso.conflict_title": "ნაპოვნია დუბლირებული ფაილის სახელი",
-  "iso.conflict_desc": "სამიზნე USB-ის iso საქაღალდეში იგივე სახელის ფაილი უკვე არსებობს. აირჩიეთ მოქმედება. Hash არ შედარდება.",
+  "iso.conflict_desc":
+    "სამიზნე USB-ის iso საქაღალდეში იგივე სახელის ფაილი უკვე არსებობს. აირჩიეთ მოქმედება. Hash არ შედარდება.",
   "iso.conflict_action": "მოქმედება",
   "iso.conflict_keep_both": "შენახვა",
   "iso.conflict_replace": "გადაწერა",
@@ -164,13 +169,16 @@ export const kaGe: TranslationDict = {
   "iso.conflict_confirm": "დადასტურება და გაგრძელება",
   "iso.preflight_failed": "ჩაწერამდე შემოწმება ვერ შესრულდა",
   "deploy.title": "ჩატვირთვადი დისკის შექმნა და QEMU ტესტი",
-  "deploy.desc_cloud": "სუფთა iPXE ღრუბლოვანი ჩატვირთვა • ულტრასწრაფი ორსექციიანი კონფიგურაცია მრავალარქიტექტურული iPXE ქსელური პროგრამით.",
+  "deploy.desc_cloud":
+    "სუფთა iPXE ღრუბლოვანი ჩატვირთვა • ულტრასწრაფი ორსექციიანი კონფიგურაცია მრავალარქიტექტურული iPXE ქსელური პროგრამით.",
   "deploy.desc_hybrid": "Ventoy CLI ლოკალური ძრავა • Ventoy ჰიბრიდული სექციის კონფიგურაცია ლოკალური ISO მართვით.",
   "deploy.target_device": "სამიზნე მოწყობილობა:",
   "deploy.batch_target": "არჩეულია {count} USB დრაივი",
   "deploy.start_create": "ჩამტვირთავი დისკის შექმნა",
-  "deploy.tip_batch_update_all": "ჯგუფური განახლება მონაცემთა დაკარგვის გარეშე: ყველა {count} არჩეული USB დისკი განახლდება ადგილზე",
-  "deploy.tip_batch_mixed": "ჯგუფური შერეული განთავსება: {bootCount} დისკი განახლება დაკარგვის გარეშე, {blankCount} დისკი სრული ფორმატირება",
+  "deploy.tip_batch_update_all":
+    "ჯგუფური განახლება მონაცემთა დაკარგვის გარეშე: ყველა {count} არჩეული USB დისკი განახლდება ადგილზე",
+  "deploy.tip_batch_mixed":
+    "ჯგუფური შერეული განთავსება: {bootCount} დისკი განახლება დაკარგვის გარეშე, {blankCount} დისკი სრული ფორმატირება",
   "deploy.start_update": "ადგილზე განახლება (მონაცემთა უსაფრთხო)",
   "deploy.batch_create": "ჯგუფური დანერგვის დაწყება ({count} დისკი)",
   "deploy.writing": "ჩატვირთვის პროგრამული უზრუნველყოფის პაკეტების ჩაწერა...",
@@ -185,19 +193,25 @@ export const kaGe: TranslationDict = {
   "deploy.tip_writing": "ჩატვირთვის პროგრამული უზრუნველყოფის წერა...",
   "deploy.tip_select_single": "გთხოვთ, ჯერ აირჩიოთ სამიზნე USB დისკი",
   "deploy.tip_select_batch": "გთხოვთ, შეამოწმოთ სამიზნე USB დისკები ჯგუფური განლაგებისთვის",
-  "deploy.tip_macos_unsupported": "macOS არ მხარს უჭერს ახალ ფორმატირებას ჰიბრიდულ რეჟიმში (გამოიყენეთ ღრუბლოვანი რეჟიმი ან ჯერ დააინიციალიზეთ Win/Linux-ზე)",
-  "deploy.tip_need_ventoy": "ჰიბრიდული რეჟიმი მოითხოვს ლოკალურ Ventoy CLI ინსტრუმენტებს. ჩვენ გირჩევთ ღრუბლოვან რეჟიმს!",
+  "deploy.tip_macos_unsupported":
+    "macOS არ მხარს უჭერს ახალ ფორმატირებას ჰიბრიდულ რეჟიმში (გამოიყენეთ ღრუბლოვანი რეჟიმი ან ჯერ დააინიციალიზეთ Win/Linux-ზე)",
+  "deploy.tip_need_ventoy":
+    "ჰიბრიდული რეჟიმი მოითხოვს ლოკალურ Ventoy CLI ინსტრუმენტებს. ჩვენ გირჩევთ ღრუბლოვან რეჟიმს!",
   "deploy.macos_alert_title": "macOS Ventoy CLI ახალი ფორმატირება მხარდაუჭერელია",
-  "deploy.macos_alert_desc": "ოფიციალური Ventoy ჯერ კიდევ არ მხარს უჭერს ფორმატირების პროგრამის გაშვებას macOS-ზე. ახალი [ჰიბრიდული დისკის] შესაქმნელად საჭიროა Ventoy CLI. რეკომენდებულია [ღრუბლოვანი რეჟიმის (1წმ ღრუბლოვანი ჩატვირთვის დისკი)] გამოყენება!",
+  "deploy.macos_alert_desc":
+    "ოფიციალური Ventoy ჯერ კიდევ არ მხარს უჭერს ფორმატირების პროგრამის გაშვებას macOS-ზე. ახალი [ჰიბრიდული დისკის] შესაქმნელად საჭიროა Ventoy CLI. რეკომენდებულია [ღრუბლოვანი რეჟიმის (1წმ ღრუბლოვანი ჩატვირთვის დისკი)] გამოყენება!",
   "deploy.no_ventoy_title": "Ventoy CLI შესრულებადი არ არის აღმოჩენილი",
-  "deploy.no_ventoy_desc": "[ჰიბრიდული დისკის] შექმნა მოითხოვს ლოკალურად დაყენებულ Ventoy CLI-ს. გთხოვთ აირჩიოთ მხარდაჭერილი [ღრუბლოვანი რეჟიმი]!",
+  "deploy.no_ventoy_desc":
+    "[ჰიბრიდული დისკის] შექმნა მოითხოვს ლოკალურად დაყენებულ Ventoy CLI-ს. გთხოვთ აირჩიოთ მხარდაჭერილი [ღრუბლოვანი რეჟიმი]!",
   "deploy.result_batch_success": "1-წამიანი ღრუბლოვანი ინსტალაციის დისკი წარმატებით განთავსდა {count} დისკზე!",
   "deploy.result_success": "{mode} რეჟიმი წარმატებით განთავსდა {targets}-ზე",
   "deploy.alert_success": "განლაგება წარმატებით დასრულდა!",
   "deploy.safely_eject_btn": "USB დისკის უსაფრთხოდ ამოღება",
   "deploy.success_banner_title": "ჩამტვირთავი დისკი წარმატებით შეიქმნა!",
-  "deploy.success_banner_desc": "ჩამტვირთავი ფაილები და პროგრამული უზრუნველყოფა ჩაწერილია. მონაცემთა დაკარგვის თავიდან ასაცილებლად გათიშვამდე უსაფრთხოდ ამოიღეთ:",
-  "deploy.toast_auto_ejected": "შექმნა დასრულდა! {count} USB დისკი ავტომატურად უსაფრთხოდ ამოიღო. ყველა მონაცემი ჩაწერილია.",
+  "deploy.success_banner_desc":
+    "ჩამტვირთავი ფაილები და პროგრამული უზრუნველყოფა ჩაწერილია. მონაცემთა დაკარგვის თავიდან ასაცილებლად გათიშვამდე უსაფრთხოდ ამოიღეთ:",
+  "deploy.toast_auto_ejected":
+    "შექმნა დასრულდა! {count} USB დისკი ავტომატურად უსაფრთხოდ ამოიღო. ყველა მონაცემი ჩაწერილია.",
   "deploy.confirm_auto_eject_title": "ჩაწერა დასრულდა — უსაფრთხოდ ამოვიღოთ?",
   "deploy.confirm_auto_eject_desc": "ყველა მონაცემი წარმატებით ჩაიწერა. გსურთ ახლა USB დისკის უსაფრთხოდ ამოღება?",
   "deploy.confirm_auto_eject_yes": "უსაფრთხოდ ამოღება",
@@ -218,7 +232,8 @@ export const kaGe: TranslationDict = {
   "vm.boot_mode_bios": "BIOS (Legacy) რეჟიმი",
   "vm.boot_mode_auto": "ავტომატური ამოცნობა",
   "vm.startSuccess_vm": "{name} სიმულაციის ტესტი წარმატებით დაიწყო",
-  "vm.desc_optional": "არასავალდებულო ფუნქცია: USB ჩატვირთვის წინასწარი გადახედვა ვირტუალურ მანქანაში კომპიუტერის გადატვირთვის გარეშე.",
+  "vm.desc_optional":
+    "არასავალდებულო ფუნქცია: USB ჩატვირთვის წინასწარი გადახედვა ვირტუალურ მანქანაში კომპიუტერის გადატვირთვის გარეშე.",
   "vm.installed": "QEMU ნაპოვნია",
   "vm.not_installed": "QEMU ვერ მოიძებნა",
   "vm.target": "ტესტის სამიზნე:",
@@ -235,7 +250,8 @@ export const kaGe: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "გთხოვთ, დააწკაპუნოთ, რათა აირჩიოთ სამიზნე USB დისკი მარცხენა პანელიდან!",
-  "vm.toast_not_installed": "QEMU ემულატორი ვერ მოიძებნა! გთხოვთ დააინსტალიროთ QEMU (დააყენეთ qemu ან პორტის დააინსტალირეთ qemu)",
+  "vm.toast_not_installed":
+    "QEMU ემულატორი ვერ მოიძებნა! გთხოვთ დააინსტალიროთ QEMU (დააყენეთ qemu ან პორტის დააინსტალირეთ qemu)",
   "vm.cfg_secure_boot": "SecureBoot სიმულაცია",
   "vm.cfg_accel": "აპარატურული აჩქარება",
   "vm.cfg_ram": "RAM გამოყოფა",
@@ -290,7 +306,8 @@ export const kaGe: TranslationDict = {
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
   "confirm.title": "High-Risk Format გაფრთხილება",
   "confirm.warning_title": "გაფრთხილება: Formatting will erase all data!",
-  "confirm.warning_desc": "არჩეული USB დისკი ხელახლა დაიყოფა და დაფორმატდება. ყველა არსებული ფაილი მთლიანად წაიშლება. დარწმუნდით, რომ გაქვთ მნიშვნელოვანი მონაცემების სარეზერვო ასლი!",
+  "confirm.warning_desc":
+    "არჩეული USB დისკი ხელახლა დაიყოფა და დაფორმატდება. ყველა არსებული ფაილი მთლიანად წაიშლება. დარწმუნდით, რომ გაქვთ მნიშვნელოვანი მონაცემების სარეზერვო ასლი!",
   "confirm.mode_title": "განლაგების რეჟიმი:",
   "confirm.fs_title": "სამიზნე ფაილური სისტემა:",
   "confirm.disks_title": "გასაფორმებელი დისკები ({count}):",
@@ -300,11 +317,15 @@ export const kaGe: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode დადასტურებაation",
   "confirm.title_danger": "Format გაფრთხილება: Disk Initialization",
   "confirm.safe_banner_title": "ადგილზე დამატებითი განახლების შეტყობინება (მონაცემთა უსაფრთხო)",
-  "confirm.safe_banner_desc": "Ventoy / UniBoot ჩატვირთვის სტრუქტურა აღმოჩენილია სამიზნე დისკზე. სისტემა შეასრულებს დამატებითი განახლების გამოტოვების ფორმატს. ყველა არსებული ფაილი და ISO 100% შენახულია!",
-  "confirm.mixed_banner_title": "ჭკვიანი შერეული რეჟიმი: ადგილზე განახლება ჩატვირთვის დისკებისთვის, ფორმატი ცარიელი დისკებისთვის",
-  "confirm.mixed_banner_desc": "არჩეულია {ventoyCount} ჩატვირთვის დრაივ(ები) (ადგილობრივი განახლება) და {blankCount} ცარიელი დრაივ(ები) (სრული ფორმატი).",
+  "confirm.safe_banner_desc":
+    "Ventoy / UniBoot ჩატვირთვის სტრუქტურა აღმოჩენილია სამიზნე დისკზე. სისტემა შეასრულებს დამატებითი განახლების გამოტოვების ფორმატს. ყველა არსებული ფაილი და ISO 100% შენახულია!",
+  "confirm.mixed_banner_title":
+    "ჭკვიანი შერეული რეჟიმი: ადგილზე განახლება ჩატვირთვის დისკებისთვის, ფორმატი ცარიელი დისკებისთვის",
+  "confirm.mixed_banner_desc":
+    "არჩეულია {ventoyCount} ჩატვირთვის დრაივ(ები) (ადგილობრივი განახლება) და {blankCount} ცარიელი დრაივ(ები) (სრული ფორმატი).",
   "confirm.danger_banner_title": "გაფრთხილება: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "ჩაწერა ხელახლა დაყოფს და დააფორმებს სამიზნე მოწყობილობას (MBR/GPT). ყველა არსებული ფაილი არჩეულ დისკ(ებ)ზე მთლიანად წაიშლება!",
+  "confirm.danger_banner_desc":
+    "ჩაწერა ხელახლა დაყოფს და დააფორმებს სამიზნე მოწყობილობას (MBR/GPT). ყველა არსებული ფაილი არჩეულ დისკ(ებ)ზე მთლიანად წაიშლება!",
   "confirm.summary_title": "სამიზნე დისკები ჩატვირთვის განლაგებისთვის:",
   "confirm.smart_safe_tag": "ჭკვიანი დაცვა",
   "confirm.ventoy_group_title": "ადგილზე განახლების დისკები (ყველა ISO დაცულია):",
@@ -322,10 +343,13 @@ export const kaGe: TranslationDict = {
   "confirm.no": "გაუქმება",
   "confirm.will_format": "სრული ფორმატირება",
   "confirm.no_format": "ჭკვიანი ადგილობრივი განახლება",
-  "deploy.toast_target_changed": "არჩეული სამიზნე დისკი შეიცვალა ან აღარ არის ხელმისაწვდომი. გთხოვთ ხელახლა დაასკანიროთ.",
+  "deploy.toast_target_changed":
+    "არჩეული სამიზნე დისკი შეიცვალა ან აღარ არის ხელმისაწვდომი. გთხოვთ ხელახლა დაასკანიროთ.",
   "deploy.toast_some_disks_removed": "{count} მიუწვდომელი დისკი ავტომატურად წაიშალა, გაგრძელება დარჩენილი დისკებით",
-  "deploy.error_system_disk_blocked": "⛔ დაბლოკილია: {disks} სისტემის დისკია. USB ჩატვირთვის დისკის განლაგება სისტემურ დისკზე შეუძლებელია!",
-  "deploy.error_readonly_disk": "🔒 ჩაწერისგან დაცული: {disks} მხოლოდ წაკითხვადია. გთხოვთ, მოხსნათ ჩაწერის დაცვა ან გამოიყენოთ სხვა USB",
+  "deploy.error_system_disk_blocked":
+    "⛔ დაბლოკილია: {disks} სისტემის დისკია. USB ჩატვირთვის დისკის განლაგება სისტემურ დისკზე შეუძლებელია!",
+  "deploy.error_readonly_disk":
+    "🔒 ჩაწერისგან დაცული: {disks} მხოლოდ წაკითხვადია. გთხოვთ, მოხსნათ ჩაწერის დაცვა ან გამოიყენოთ სხვა USB",
   "deploy.start_cloud_create": "ღრუბლოვანი ჩამტვირთავი დისკის შექმნა",
   "deploy.batch_update": "მონაცემთა დაკარგვის გარეშე ჯგუფური განახლების დაწყება ({count} USB დისკი)",
   "deploy.batch_mixed": "ჯგუფური შერეული განთავსების დაწყება ({count} USB დისკი)",
@@ -456,9 +480,12 @@ export const kaGe: TranslationDict = {
   "diag.action_reformat_title": "ხელახლა დაფორმატება (reformat)",
   "diag.action_remount_title": "ხელახლა მიერთება (remount)",
   "diag.action_retry_title": "ხელახლა ცდა (retry)",
-  "diag.action_reformat_desc": "ჩაწერის შეწყვეტამ დააზიანა დანაყოფების ცხრილი ან ფაილური სისტემა. რეკომენდებულია ხელახალი ფორმატირება.",
-  "diag.action_remount_desc": "სამიზნე მიერთების გზა გაეთიშა ჩაწერისას. გთხოვთ ხელახლა ჩასვათ USB დისკი ან ხელახლა მიაერთოთ ტომი.",
-  "diag.action_retry_desc": "გარემო და მოწყობილობის მდგომარეობა წესრიგშია. შეგიძლიათ უსაფრთხოდ სცადოთ ინსტალაცია ხელახლა.",
+  "diag.action_reformat_desc":
+    "ჩაწერის შეწყვეტამ დააზიანა დანაყოფების ცხრილი ან ფაილური სისტემა. რეკომენდებულია ხელახალი ფორმატირება.",
+  "diag.action_remount_desc":
+    "სამიზნე მიერთების გზა გაეთიშა ჩაწერისას. გთხოვთ ხელახლა ჩასვათ USB დისკი ან ხელახლა მიაერთოთ ტომი.",
+  "diag.action_retry_desc":
+    "გარემო და მოწყობილობის მდგომარეობა წესრიგშია. შეგიძლიათ უსაფრთხოდ სცადოთ ინსტალაცია ხელახლა.",
   "about.updating": "განახლება ({progress}%)",
   "about.updateTo": "ონლაინ განახლება {tag}-მდე",
   "about.downloading": "მიმდინარეობს ჩამოტვირთვა {progress}%",
@@ -474,7 +501,8 @@ export const kaGe: TranslationDict = {
   "dialog.textFilesFilter": "ტექსტური ფაილები (*.txt)",
   "dialog.allFilesFilter": "ყველა ფაილი (*.*)",
   "dialog.selectIsoTitle": "აირჩიეთ სისტემის გამოსახულების ფაილები (*.iso, *.wim, *.img და ა.შ.)",
-  "dialog.ventoyFilter": "Ventoy წყაროს გამოსახულებები (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy წყაროს გამოსახულებები (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Hash-ის გამოთვლა",
   "checksum.calculating": "Hash-ის გამოთვლა...",
   "checksum.algo_label": "ალგორითმი",
@@ -518,14 +546,17 @@ export const kaGe: TranslationDict = {
   "privilege.status_standard": "არაავტორიზებული",
   "privilege.btn_elevate": "ადმინისტრატორის წვდომის მოთხოვნა",
   "privilege.modal_title": "საჭიროა ადმინისტრატორის ნებართვა",
-  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "ჩატვირთვის მონაცემების წასაკითხად და დისკზე ჩასაწერად საჭიროა სისტემური ავტორიზაცია",
   "privilege.reason_title": "რატომ არის საჭირო ადმინისტრატორის უფლებები?",
-  "privilege.reason_desc": "ოპერაციული სისტემა იზოლირებს პირველად სექტორებს და EFI დანაყოფებს. ავტორიზაცია უზრუნველყოფს პირდაპირ ამოცნობას და უსაფრთხო შექმნას.",
+  "privilege.reason_desc":
+    "ოპერაციული სისტემა იზოლირებს პირველად სექტორებს და EFI დანაყოფებს. ავტორიზაცია უზრუნველყოფს პირდაპირ ამოცნობას და უსაფრთხო შექმნას.",
   "privilege.scope_title": "წვდომის ფარგლები",
   "privilege.scope_desc": "მკაცრად შემოიფარგლება არჩეული გარე USB დისკებით. შიდა სისტემურ დისკებს არასოდეს ეხება.",
   "privilege.safety_title": "უსაფრთხოება და გამჭვირვალობა",
-  "privilege.safety_desc": "შემოწმება მკაცრად მხოლოდ წაკითხვის რეჟიმშია და არ აზიანებს მონაცემებს; საწყისი კოდი სრულიად ღიაა.",
+  "privilege.safety_desc":
+    "შემოწმება მკაცრად მხოლოდ წაკითხვის რეჟიმშია და არ აზიანებს მონაცემებს; საწყისი კოდი სრულიად ღიაა.",
   "privilege.confirm_btn": "ავტორიზაცია ახლა",
   "privilege.cancel_btn": "გაუქმება",
   "privilege.success_msg": "ადმინისტრატორის უფლებები მინიჭებულია",

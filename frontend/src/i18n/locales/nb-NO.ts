@@ -109,7 +109,8 @@ export const nbNo: TranslationDict = {
   "disk.tag_boot_hybrid": "Hybrid-oppstart",
   "disk.tag_boot_thirdparty": "Tredjeparts-oppstart",
   "confirm.cloud_to_hybrid_warn_title": "Merk: Bytte til hybridmodus krever fullstendig formatering",
-  "confirm.cloud_to_hybrid_warn_desc": "Denne disken er i ren nettsky-oppstartsmodus. Ventoy-hybridmodus krever gjenoppbygging av MBR og partisjonstabell, noe som vil SLETTE alle data og ISO-er!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Denne disken er i ren nettsky-oppstartsmodus. Ventoy-hybridmodus krever gjenoppbygging av MBR og partisjonstabell, noe som vil SLETTE alle data og ISO-er!",
   "disk.tag_ssd": "Bærbar SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Kryptert stasjon",
@@ -137,9 +138,11 @@ export const nbNo: TranslationDict = {
   "log.level_error": "FEIL",
   "log.level_debug": "Feilsøking",
   "safe.title_cloud": "Eksisterende Ventoy/UniBoot-stasjon oppdaget (Skymodus oppdaterer bare ESP-partisjonen)",
-  "safe.desc_cloud": "Skymodus bevarer UNIBOOT-dobbeltpartisjonslayout. Oppdatering av ESP lar alle ISO-filer og brukerfiler være intakte!",
+  "safe.desc_cloud":
+    "Skymodus bevarer UNIBOOT-dobbeltpartisjonslayout. Oppdatering av ESP lar alle ISO-filer og brukerfiler være intakte!",
   "safe.title_hybrid": "Eksisterende Ventoy-stasjon oppdaget (In-place oppdatering i hybridmodus)",
-  "safe.desc_hybrid": "Hybridmodus bevarer alle eksisterende ISO-filer uten formatering og setter inn UniBoot mørkt tema og skymeny trygt!",
+  "safe.desc_hybrid":
+    "Hybridmodus bevarer alle eksisterende ISO-filer uten formatering og setter inn UniBoot mørkt tema og skymeny trygt!",
   "common.optional": "Valgfritt",
   "common.optional_test": "Valgfri test",
   "iso.title": "Lokale systembildekilder (ISO / IMG / WIM / VHD)",
@@ -154,7 +157,8 @@ export const nbNo: TranslationDict = {
   "iso.drag_unsupported": "Ingen støttede bildefiler oppdaget (.iso, .wim, .img osv.)",
   "iso.preflight_title": "Kontroll før skriving",
   "iso.conflict_title": "Filnavnet finnes allerede",
-  "iso.conflict_desc": "Det finnes allerede en fil med samme navn i iso-mappen på mål-USB-enheten. Velg handling. Hashverdier sammenlignes ikke.",
+  "iso.conflict_desc":
+    "Det finnes allerede en fil med samme navn i iso-mappen på mål-USB-enheten. Velg handling. Hashverdier sammenlignes ikke.",
   "iso.conflict_action": "Handling",
   "iso.conflict_keep_both": "Behold",
   "iso.conflict_replace": "Overskriv",
@@ -164,13 +168,15 @@ export const nbNo: TranslationDict = {
   "iso.conflict_confirm": "Bekreft og fortsett",
   "iso.preflight_failed": "Kontrollen før skriving mislyktes",
   "deploy.title": "Opprettelse av oppstartbar stasjon og QEMU-test",
-  "deploy.desc_cloud": "Ren iPXE skyoppstart • Ultrarask oppsett med to partisjoner og multi-arch iPXE-nettverksfastvare.",
+  "deploy.desc_cloud":
+    "Ren iPXE skyoppstart • Ultrarask oppsett med to partisjoner og multi-arch iPXE-nettverksfastvare.",
   "deploy.desc_hybrid": "Ventoy CLI lokal motor • Ventoy hybrid partisjonsoppsett med lokal ISO-behandling.",
   "deploy.target_device": "Målenhet:",
   "deploy.batch_target": "Valgt {count} USB-stasjon(er)",
   "deploy.start_create": "Opprett oppstartsdisk",
   "deploy.tip_batch_update_all": "Batch-oppdatering uten datatap: Alle {count} valgte USB-stasjoner oppdateres direkte",
-  "deploy.tip_batch_mixed": "Blandet batch-distribusjon: {bootCount} stasjon(er) oppdatering uten datatap, {blankCount} stasjon(er) ny formatering",
+  "deploy.tip_batch_mixed":
+    "Blandet batch-distribusjon: {bootCount} stasjon(er) oppdatering uten datatap, {blankCount} stasjon(er) ny formatering",
   "deploy.start_update": "Sømløs oppgradering (Datagarantert)",
   "deploy.batch_create": "Start batch-opprettelse ({count} stasjoner)",
   "deploy.writing": "Skriver oppstartsfastvarepakker...",
@@ -185,19 +191,24 @@ export const nbNo: TranslationDict = {
   "deploy.tip_writing": "Skriver oppstartsfirmware...",
   "deploy.tip_select_single": "Vennligst velg en mål-USB-stasjon først",
   "deploy.tip_select_batch": "Vennligst sjekk mål-USB-stasjoner for batch-distribusjon",
-  "deploy.tip_macos_unsupported": "macOS støtter ikke ny formatering i hybridmodus (bruk skymodus eller initialiser på Win/Linux først)",
+  "deploy.tip_macos_unsupported":
+    "macOS støtter ikke ny formatering i hybridmodus (bruk skymodus eller initialiser på Win/Linux først)",
   "deploy.tip_need_ventoy": "Hybridmodus krever lokalt Ventoy CLI-verktøysett. Vi anbefaler Skymodus!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Fresh-formatering støttes ikke",
-  "deploy.macos_alert_desc": "Offisiell Ventoy støtter ennå ikke kjøring av formateringsprogrammet på macOS. For å opprette en ny [Hybrid-disk] kreves Ventoy CLI. Det anbefales å bruke [Skymodus (1-sekunds skyboot-disk)]!",
+  "deploy.macos_alert_desc":
+    "Offisiell Ventoy støtter ennå ikke kjøring av formateringsprogrammet på macOS. For å opprette en ny [Hybrid-disk] kreves Ventoy CLI. Det anbefales å bruke [Skymodus (1-sekunds skyboot-disk)]!",
   "deploy.no_ventoy_title": "Ventoy CLI-kjørbar ikke oppdaget",
-  "deploy.no_ventoy_desc": "Opprettelse av [Hybrid-disk] krever lokalt installert Ventoy CLI. Velg den støttede [Skymodusen]!",
+  "deploy.no_ventoy_desc":
+    "Opprettelse av [Hybrid-disk] krever lokalt installert Ventoy CLI. Velg den støttede [Skymodusen]!",
   "deploy.result_batch_success": "1-sekunds nettsky-installasjonsdisk distribuert til {count} stasjon(er)!",
   "deploy.result_success": "Modus {mode} distribuert til {targets}",
   "deploy.alert_success": "Utplassering fullført!",
   "deploy.safely_eject_btn": "Trygg utmating av USB-stasjon",
   "deploy.success_banner_title": "Oppstartsstasjon opprettet!",
-  "deploy.success_banner_desc": "Oppstartsfiler og fastvare er skrevet. Løs ut trygt før frakobling for å unngå tap av data.",
-  "deploy.toast_auto_ejected": "Opprettelse fullført! {count} USB-stasjon(er) automatisk trygt utløst. Alle data er skrevet.",
+  "deploy.success_banner_desc":
+    "Oppstartsfiler og fastvare er skrevet. Løs ut trygt før frakobling for å unngå tap av data.",
+  "deploy.toast_auto_ejected":
+    "Opprettelse fullført! {count} USB-stasjon(er) automatisk trygt utløst. Alle data er skrevet.",
   "deploy.confirm_auto_eject_title": "Skriving fullført — Mate ut trygt?",
   "deploy.confirm_auto_eject_desc": "Alle data ble skrevet gjennom. Vil du mate ut USB-stasjonen trygt nå?",
   "deploy.confirm_auto_eject_yes": "Mate ut trygt",
@@ -235,7 +246,8 @@ export const nbNo: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Klikk for å velge en USB-målstasjon fra venstre panel først!",
-  "vm.toast_not_installed": "QEMU-emulator ikke funnet! Vennligst installer QEMU (brygg installer qemu eller portinstaller qemu)",
+  "vm.toast_not_installed":
+    "QEMU-emulator ikke funnet! Vennligst installer QEMU (brygg installer qemu eller portinstaller qemu)",
   "vm.cfg_secure_boot": "SecureBoot-simulering",
   "vm.cfg_accel": "Maskinvareakselerasjon",
   "vm.cfg_ram": "RAM-tildeling",
@@ -290,7 +302,8 @@ export const nbNo: TranslationDict = {
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
   "confirm.title": "High-Risk Format Advarsel",
   "confirm.warning_title": "Advarsel: Formatting will erase all data!",
-  "confirm.warning_desc": "Den valgte USB-stasjonen vil bli re-partisjonert og formatert. Alle eksisterende filer vil bli slettet fullstendig. Sørg for at du har sikkerhetskopiert viktige data!",
+  "confirm.warning_desc":
+    "Den valgte USB-stasjonen vil bli re-partisjonert og formatert. Alle eksisterende filer vil bli slettet fullstendig. Sørg for at du har sikkerhetskopiert viktige data!",
   "confirm.mode_title": "Implementeringsmodus:",
   "confirm.fs_title": "Målfilsystem:",
   "confirm.disks_title": "Stasjoner som skal formateres ({count}):",
@@ -300,11 +313,15 @@ export const nbNo: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Bekreftation",
   "confirm.title_danger": "Format Advarsel: Disk Initialization",
   "confirm.safe_banner_title": "Varsel om inkrementell oppdatering på stedet (datasikker)",
-  "confirm.safe_banner_desc": "Ventoy / UniBoot oppstartsstruktur oppdaget på målstasjonen. Systemet vil utføre et inkrementelt oppdateringshoppingsformat. Alle eksisterende filer og ISO-er er 100% bevart!",
-  "confirm.mixed_banner_title": "Smart blandet modus: oppdatering på stedet for oppstartsstasjoner, format for tomme stasjoner",
-  "confirm.mixed_banner_desc": "Valgte {ventoyCount} oppstartsstasjon(er) (på plass oppdatering) og {blankCount} tomme stasjon(er) (fullformat).",
+  "confirm.safe_banner_desc":
+    "Ventoy / UniBoot oppstartsstruktur oppdaget på målstasjonen. Systemet vil utføre et inkrementelt oppdateringshoppingsformat. Alle eksisterende filer og ISO-er er 100% bevart!",
+  "confirm.mixed_banner_title":
+    "Smart blandet modus: oppdatering på stedet for oppstartsstasjoner, format for tomme stasjoner",
+  "confirm.mixed_banner_desc":
+    "Valgte {ventoyCount} oppstartsstasjon(er) (på plass oppdatering) og {blankCount} tomme stasjon(er) (fullformat).",
   "confirm.danger_banner_title": "Advarsel: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Skriving vil partisjonere og formatere målenheten (MBR/GPT). Alle eksisterende filer på valgte stasjon(er) vil bli fullstendig slettet!",
+  "confirm.danger_banner_desc":
+    "Skriving vil partisjonere og formatere målenheten (MBR/GPT). Alle eksisterende filer på valgte stasjon(er) vil bli fullstendig slettet!",
   "confirm.summary_title": "Målstasjoner for oppstartsdistribusjon:",
   "confirm.smart_safe_tag": "Smart-beskyttelse",
   "confirm.ventoy_group_title": "Oppgraderingsstasjoner på stedet (alle ISO-er bevart):",
@@ -322,10 +339,14 @@ export const nbNo: TranslationDict = {
   "confirm.no": "Avbryt",
   "confirm.will_format": "Full formatering",
   "confirm.no_format": "Intelligent oppgradering på stedet",
-  "deploy.toast_target_changed": "Den valgte måldisken har endret seg eller er ikke lenger tilgjengelig. Skann på nytt.",
-  "deploy.toast_some_disks_removed": "{count} utilgjengelige disker fjernet automatisk, fortsetter med gjenværende disker",
-  "deploy.error_system_disk_blocked": "⛔ Blokkert: {disks} er en systemdisk. Kan ikke distribuere USB-oppstartsdisk til systemstasjonen!",
-  "deploy.error_readonly_disk": "🔒 Skrivebeskyttet: {disks} er skrivebeskyttet. Fjern skrivebeskyttelsen eller bruk en annen USB",
+  "deploy.toast_target_changed":
+    "Den valgte måldisken har endret seg eller er ikke lenger tilgjengelig. Skann på nytt.",
+  "deploy.toast_some_disks_removed":
+    "{count} utilgjengelige disker fjernet automatisk, fortsetter med gjenværende disker",
+  "deploy.error_system_disk_blocked":
+    "⛔ Blokkert: {disks} er en systemdisk. Kan ikke distribuere USB-oppstartsdisk til systemstasjonen!",
+  "deploy.error_readonly_disk":
+    "🔒 Skrivebeskyttet: {disks} er skrivebeskyttet. Fjern skrivebeskyttelsen eller bruk en annen USB",
   "deploy.start_cloud_create": "Opprett skyoppstartsdisk",
   "deploy.batch_update": "Start batch-oppdatering uten datatap ({count} USB-stasjoner)",
   "deploy.batch_mixed": "Start blandet batch-distribusjon ({count} USB-stasjoner)",
@@ -348,7 +369,8 @@ export const nbNo: TranslationDict = {
   "inspector.smart": "SMART helsetilstand:",
   "inspector.sector": "Sektorstørrelse:",
   "inspector.fake_title": "Fake USB 3.0 Advarsel Alert!",
-  "inspector.fake_desc": "Enheten annonserer USB 3.0/3.1, men faktisk fysisk laghastighet forhandles til kun {speed} (USB 2.0 High-Speed PHY). Denne stasjonen har sannsynligvis forfalsket fastvare eller en falsk blå port.",
+  "inspector.fake_desc":
+    "Enheten annonserer USB 3.0/3.1, men faktisk fysisk laghastighet forhandles til kun {speed} (USB 2.0 High-Speed PHY). Denne stasjonen har sannsynligvis forfalsket fastvare eller en falsk blå port.",
   "inspector.genuine_title": "Fysisk maskinvareverifisering bestått (ekte USB 3.0+-enhet)",
   "inspector.genuine_desc": "Fysisk PHY-lag forhandlet frem ekte SuperSpeed/SuperSpeed+-kobling med {speed}.",
   "inspector.usb2_title": "Standard USB 2.0-grensesnitt",
@@ -456,8 +478,10 @@ export const nbNo: TranslationDict = {
   "diag.action_reformat_title": "Omformater (reformat)",
   "diag.action_remount_title": "Remonter (remount)",
   "diag.action_retry_title": "Prøv på nytt (retry)",
-  "diag.action_reformat_desc": "Avbrudd i skrivingen skadet partisjonstabellen eller filsystemet. Ny omformatering anbefales.",
-  "diag.action_remount_desc": "Målets monteringsbane ble koblet fra under skriving. Sett inn USB-stasjonen på nytt eller remonter volumet.",
+  "diag.action_reformat_desc":
+    "Avbrudd i skrivingen skadet partisjonstabellen eller filsystemet. Ny omformatering anbefales.",
+  "diag.action_remount_desc":
+    "Målets monteringsbane ble koblet fra under skriving. Sett inn USB-stasjonen på nytt eller remonter volumet.",
   "diag.action_retry_desc": "Miljøet og enhetsstatusen er intakt. Du kan trygt prøve installasjonen på nytt.",
   "about.updating": "Oppdaterer ({progress}%)",
   "about.updateTo": "Online oppdatering til {tag}",
@@ -474,7 +498,8 @@ export const nbNo: TranslationDict = {
   "dialog.textFilesFilter": "Tekstfiler (*.txt)",
   "dialog.allFilesFilter": "Alle filer (*.*)",
   "dialog.selectIsoTitle": "Velg systemavtrykksfiler (*.iso, *.wim, *.img osv.)",
-  "dialog.ventoyFilter": "Ventoy-kildeavtrykk (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy-kildeavtrykk (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Beregn Hash",
   "checksum.calculating": "Beregner Hash...",
   "checksum.algo_label": "Algoritme",
@@ -518,14 +543,17 @@ export const nbNo: TranslationDict = {
   "privilege.status_standard": "Uautorisert",
   "privilege.btn_elevate": "Be om administratoradgang",
   "privilege.modal_title": "Administratorrettigheter kreves",
-  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Systemgodkjenning kreves for å lese oppstartsdata og skrive til disker",
   "privilege.reason_title": "Hvorfor kreves administratorrettigheter?",
-  "privilege.reason_desc": "Operativsystemet isolerer råsektorer og EFI-partisjoner. Godkjenning muliggjør direkte gjenkjenning og sikker diskoppretting.",
+  "privilege.reason_desc":
+    "Operativsystemet isolerer råsektorer og EFI-partisjoner. Godkjenning muliggjør direkte gjenkjenning og sikker diskoppretting.",
   "privilege.scope_title": "Adgangsomfang",
   "privilege.scope_desc": "Strengt begrenset til valgte eksterne USB-stasjoner. Interne systemdisker berøres aldri.",
   "privilege.safety_title": "Sikkerhet og åpenhet",
-  "privilege.safety_desc": "Inspeksjonen er strengt skrivebeskyttet og ikke-destruktiv; kildekoden er fullstendig åpen.",
+  "privilege.safety_desc":
+    "Inspeksjonen er strengt skrivebeskyttet og ikke-destruktiv; kildekoden er fullstendig åpen.",
   "privilege.confirm_btn": "Autoriser nå",
   "privilege.cancel_btn": "Avbryt",
   "privilege.success_msg": "Administratorrettigheter innvilget",

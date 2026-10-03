@@ -59,7 +59,8 @@ export const slSi: TranslationDict = {
   "settings.directModeNotice": "Neposredni način (proxy onemogočen)",
   "settings.proxyHostRequired": "Najprej vnesite naslov gostitelja proxy strežnika",
   "settings.proxyTestSuccess": "{protocol} proxy povezan ({host}:{port})",
-  "settings.syncSuccessAlert": "Vdelana programska oprema in skripti Cloud UniBoot {tag} so bili uspešno preneseni in predpomnjeni!",
+  "settings.syncSuccessAlert":
+    "Vdelana programska oprema in skripti Cloud UniBoot {tag} so bili uspešno preneseni in predpomnjeni!",
   "settings.syncSuccessShortAlert": "Vdelana programska oprema jedra Cloud UniBoot je uspešno sinhronizirana!",
   "settings.syncFailedAlert": "Sinhronizacija vdelane programske opreme ni uspela: {error}",
   "settings.ventoyToolchain": "Zbirka orodij Ventoy",
@@ -109,7 +110,8 @@ export const slSi: TranslationDict = {
   "disk.tag_boot_hybrid": "Hibridni zagon",
   "disk.tag_boot_thirdparty": "Zagon tretje osebe",
   "confirm.cloud_to_hybrid_warn_title": "Obvestilo: Preklop v hibridni način zahteva popolno formatiranje",
-  "confirm.cloud_to_hybrid_warn_desc": "Ta disk je v čistem načinu zagona iz oblaka. Hibridni način Ventoy zahteva obnovo MBR in particijske tabele, kar bo IZBRISALO vse podatke in ISO!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Ta disk je v čistem načinu zagona iz oblaka. Hibridni način Ventoy zahteva obnovo MBR in particijske tabele, kar bo IZBRISALO vse podatke in ISO!",
   "disk.tag_ssd": "Prenosni SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Šifrirani pogon",
@@ -117,7 +119,8 @@ export const slSi: TranslationDict = {
   "disk.tag_hdd": "Prenosni HDD",
   "disk.tag_key": "Varnostni ključ",
   "disk.tag_cdrom": "Navidezni CD-ROM",
-  "disk.tooltip_uniboot_hybrid": "Zagonski pogon Ventoy / UniBoot (Hibridni način, podpora za nedestruktivno nadgradnjo)",
+  "disk.tooltip_uniboot_hybrid":
+    "Zagonski pogon Ventoy / UniBoot (Hibridni način, podpora za nedestruktivno nadgradnjo)",
   "disk.tooltip_uniboot_cloud": "Zagonski pogon UniBoot Cloud (Način oblaka, podpora za nedestruktivno posodobitev)",
   "disk.tooltip_third_party_boot": "Zaznana zunanja zagonska struktura",
   "log.title": "Središče za dnevnike",
@@ -137,13 +140,16 @@ export const slSi: TranslationDict = {
   "log.level_error": "NAPAKA",
   "log.level_debug": "Odpravljanje napak",
   "safe.title_cloud": "Zaznan obstoječi pogon Ventoy/UniBoot (Način oblaka osveži le razdelek ESP)",
-  "safe.desc_cloud": "Način oblaka ohranja dvodelno postavitev UNIBOOT. Osvežitev ESP pusti vse ISO datoteke in podatke nedotaknjene!",
+  "safe.desc_cloud":
+    "Način oblaka ohranja dvodelno postavitev UNIBOOT. Osvežitev ESP pusti vse ISO datoteke in podatke nedotaknjene!",
   "safe.title_hybrid": "Zaznan obstoječi pogon Ventoy (Posodobitev na mestu v hibridnem načinu)",
-  "safe.desc_hybrid": "Hibridni način ohranja vse obstoječe ISO datoteke brez formatiranja ter varno vstavi temno temo UniBoot in oblačni meni!",
+  "safe.desc_hybrid":
+    "Hibridni način ohranja vse obstoječe ISO datoteke brez formatiranja ter varno vstavi temno temo UniBoot in oblačni meni!",
   "common.optional": "Izbirno",
   "common.optional_test": "Izbirni test",
   "iso.title": "Lokalni sistemski slikovni viri (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Dodajte datoteke ISO za samodejno kopiranje v imenik /UNIBOOT/iso/ za neposredni zagon Ventoy / UniBoot.",
+  "iso.desc":
+    "Dodajte datoteke ISO za samodejno kopiranje v imenik /UNIBOOT/iso/ za neposredni zagon Ventoy / UniBoot.",
   "iso.add_btn": "Dodajte slikovne datoteke",
   "iso.empty_title": "Kliknite za dodajanje slikovnih datotek (podpira posamezno ali paketno izbiro)",
   "iso.empty_sub": "Podpira formate .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -154,7 +160,8 @@ export const slSi: TranslationDict = {
   "iso.drag_unsupported": "Podprte slikovne datoteke niso bile zaznane (.iso, .wim, .img itd.)",
   "iso.preflight_title": "Preverjanje pred zapisovanjem",
   "iso.conflict_title": "Ime datoteke že obstaja",
-  "iso.conflict_desc": "V mapi iso ciljnega USB-ja že obstaja datoteka z enakim imenom. Izberite dejanje. Zgoščene vrednosti se ne primerjajo.",
+  "iso.conflict_desc":
+    "V mapi iso ciljnega USB-ja že obstaja datoteka z enakim imenom. Izberite dejanje. Zgoščene vrednosti se ne primerjajo.",
   "iso.conflict_action": "Dejanje",
   "iso.conflict_keep_both": "Ohrani",
   "iso.conflict_replace": "Prepiši",
@@ -164,13 +171,16 @@ export const slSi: TranslationDict = {
   "iso.conflict_confirm": "Potrdi in nadaljuj",
   "iso.preflight_failed": "Preverjanje pred zapisovanjem ni uspelo",
   "deploy.title": "Ustvarjanje zagonskega pogona in preizkus QEMU",
-  "deploy.desc_cloud": "Čisti zagonski oblak iPXE • Ultrahitra namestitev dveh particij z omrežno vgrajeno programsko opremo iPXE.",
+  "deploy.desc_cloud":
+    "Čisti zagonski oblak iPXE • Ultrahitra namestitev dveh particij z omrežno vgrajeno programsko opremo iPXE.",
   "deploy.desc_hybrid": "Lokalni pogon Ventoy CLI • Namestitev hibridne particije Ventoy z lokalnim upravljanjem ISO.",
   "deploy.target_device": "Ciljna naprava:",
   "deploy.batch_target": "Izbranih {count} pogonov USB",
   "deploy.start_create": "Ustvari zagonski disk",
-  "deploy.tip_batch_update_all": "Skupinska posodobitev brez izgube podatkov: Vsi {count} izbrani USB pogoni bodo posodobljeni na mestu",
-  "deploy.tip_batch_mixed": "Mešana skupinska namestitev: {bootCount} pogon(ov) posodobitev brez izgube, {blankCount} pogon(ov) novo formatiranje",
+  "deploy.tip_batch_update_all":
+    "Skupinska posodobitev brez izgube podatkov: Vsi {count} izbrani USB pogoni bodo posodobljeni na mestu",
+  "deploy.tip_batch_mixed":
+    "Mešana skupinska namestitev: {bootCount} pogon(ov) posodobitev brez izgube, {blankCount} pogon(ov) novo formatiranje",
   "deploy.start_update": "Nadgradnja na mestu (varno za podatke)",
   "deploy.batch_create": "Začni paketno uvajanje ({count} pogonov)",
   "deploy.writing": "Pisanje zagonskih paketov vdelane programske opreme ...",
@@ -185,19 +195,24 @@ export const slSi: TranslationDict = {
   "deploy.tip_writing": "Pisanje zagonske vdelane programske opreme ...",
   "deploy.tip_select_single": "Najprej izberite ciljni pogon USB",
   "deploy.tip_select_batch": "Preverite ciljne pogone USB za paketno uvajanje",
-  "deploy.tip_macos_unsupported": "macOS ne podpira novega formatiranja v hibridnem načinu (uporabite način v oblaku ali najprej inicializirajte v sistemu Win/Linux)",
+  "deploy.tip_macos_unsupported":
+    "macOS ne podpira novega formatiranja v hibridnem načinu (uporabite način v oblaku ali najprej inicializirajte v sistemu Win/Linux)",
   "deploy.tip_need_ventoy": "Hibridni način zahteva lokalna orodja Ventoy CLI. Priporočamo Način v oblaku!",
   "deploy.macos_alert_title": "macOS Ventoy CLI Sveže oblikovanje ni podprto",
-  "deploy.macos_alert_desc": "Uradni Ventoy še ne podpira zagona programa za formatiranje v macOS. Za ustvarjanje novega [Hibridnega diska] je potreben Ventoy CLI. Priporočamo uporabo [Načina v oblaku (1s zagonski disk v oblaku)]!",
+  "deploy.macos_alert_desc":
+    "Uradni Ventoy še ne podpira zagona programa za formatiranje v macOS. Za ustvarjanje novega [Hibridnega diska] je potreben Ventoy CLI. Priporočamo uporabo [Načina v oblaku (1s zagonski disk v oblaku)]!",
   "deploy.no_ventoy_title": "Izvršljiva datoteka Ventoy CLI ni bila zaznana",
-  "deploy.no_ventoy_desc": "Ustvarjanje [Hibridnega diska] zahteva lokalno nameščen Ventoy CLI. Prosimo, izberite podprti [Način v oblaku]!",
+  "deploy.no_ventoy_desc":
+    "Ustvarjanje [Hibridnega diska] zahteva lokalno nameščen Ventoy CLI. Prosimo, izberite podprti [Način v oblaku]!",
   "deploy.result_batch_success": "1-sekundni namestitveni disk iz oblaka je bil uspešno nameščen na {count} disk(ov)!",
   "deploy.result_success": "Način {mode} je bil uspešno razporejen na {targets}",
   "deploy.alert_success": "Namestitev uspešna!",
   "deploy.safely_eject_btn": "Varno odstrani USB pogon",
   "deploy.success_banner_title": "Zagonski pogon je bil uspešno ustvarjen!",
-  "deploy.success_banner_desc": "Zagonske datoteke in vdelana programska oprema so zapisane. Varno odstranite pred odklopom, da preprečite izgubo podatkov.",
-  "deploy.toast_auto_ejected": "Ustvarjanje končano! {count} pogon(ov) USB samodejno varno odstranjen(ih). Vsi podatki so zapisani.",
+  "deploy.success_banner_desc":
+    "Zagonske datoteke in vdelana programska oprema so zapisane. Varno odstranite pred odklopom, da preprečite izgubo podatkov.",
+  "deploy.toast_auto_ejected":
+    "Ustvarjanje končano! {count} pogon(ov) USB samodejno varno odstranjen(ih). Vsi podatki so zapisani.",
   "deploy.confirm_auto_eject_title": "Pisanje končano — Varno odstraniti?",
   "deploy.confirm_auto_eject_desc": "Vsi podatki so bili uspešno zapisani. Želite zdaj varno odstraniti USB pogon?",
   "deploy.confirm_auto_eject_yes": "Varno odstrani",
@@ -235,7 +250,8 @@ export const slSi: TranslationDict = {
   "vm.session_ended_success": "Simulation test ended. Target disk remounted successfully.",
   "vm.session_ended_error": "Simulation test ended: {error}",
   "vm.toast_select_first": "Kliknite, da najprej izberete ciljni pogon USB na levi plošči!",
-  "vm.toast_not_installed": "Emulator QEMU ni bil najden! Prosimo, namestite QEMU (brew install qemu ali port install qemu)",
+  "vm.toast_not_installed":
+    "Emulator QEMU ni bil najden! Prosimo, namestite QEMU (brew install qemu ali port install qemu)",
   "vm.cfg_secure_boot": "Simulacija SecureBoot",
   "vm.cfg_accel": "Strojno pospeševanje",
   "vm.cfg_ram": "Dodelitev RAM-a",
@@ -290,7 +306,8 @@ export const slSi: TranslationDict = {
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
   "confirm.title": "High-Risk Format Opozorilo",
   "confirm.warning_title": "Opozorilo: Formatting will erase all data!",
-  "confirm.warning_desc": "Izbrani pogon USB bo ponovno particioniran in formatiran. Vse obstoječe datoteke bodo popolnoma izbrisane. Prepričajte se, da ste varnostno kopirali pomembne podatke!",
+  "confirm.warning_desc":
+    "Izbrani pogon USB bo ponovno particioniran in formatiran. Vse obstoječe datoteke bodo popolnoma izbrisane. Prepričajte se, da ste varnostno kopirali pomembne podatke!",
   "confirm.mode_title": "Način uvajanja:",
   "confirm.fs_title": "Ciljni datotečni sistem:",
   "confirm.disks_title": "Pogoni za formatiranje ({count}):",
@@ -300,11 +317,15 @@ export const slSi: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Potrdiation",
   "confirm.title_danger": "Format Opozorilo: Disk Initialization",
   "confirm.safe_banner_title": "Obvestilo o postopni posodobitvi na mestu (varno za podatke)",
-  "confirm.safe_banner_desc": "Na ciljnem pogonu je bila zaznana zagonska struktura Ventoy / UniBoot. Sistem bo izvedel inkrementalni format preskakovanja posodobitev. Vse obstoječe datoteke in ISO-ji so 100% ohranjeni!",
-  "confirm.mixed_banner_title": "Pametni mešani način: posodobitev na mestu za zagonske pogone, format za prazne pogone",
-  "confirm.mixed_banner_desc": "Izbranih {ventoyCount} zagonskih pogonov (posodobitev na mestu) in {blankCount} praznih pogonov (polna oblika).",
+  "confirm.safe_banner_desc":
+    "Na ciljnem pogonu je bila zaznana zagonska struktura Ventoy / UniBoot. Sistem bo izvedel inkrementalni format preskakovanja posodobitev. Vse obstoječe datoteke in ISO-ji so 100% ohranjeni!",
+  "confirm.mixed_banner_title":
+    "Pametni mešani način: posodobitev na mestu za zagonske pogone, format za prazne pogone",
+  "confirm.mixed_banner_desc":
+    "Izbranih {ventoyCount} zagonskih pogonov (posodobitev na mestu) in {blankCount} praznih pogonov (polna oblika).",
   "confirm.danger_banner_title": "Opozorilo: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Zapisovanje bo ponovno razdelilo in formatiralo ciljno napravo (MBR/GPT). Vse obstoječe datoteke na izbranih pogonih bodo popolnoma izbrisane!",
+  "confirm.danger_banner_desc":
+    "Zapisovanje bo ponovno razdelilo in formatiralo ciljno napravo (MBR/GPT). Vse obstoječe datoteke na izbranih pogonih bodo popolnoma izbrisane!",
   "confirm.summary_title": "Ciljni pogoni za uvajanje zagona:",
   "confirm.smart_safe_tag": "Pametna zaščita",
   "confirm.ventoy_group_title": "Pogoni za nadgradnjo na mestu (ohranjeni vsi ISO-ji):",
@@ -322,10 +343,14 @@ export const slSi: TranslationDict = {
   "confirm.no": "Prekliči",
   "confirm.will_format": "Popolno formatiranje",
   "confirm.no_format": "Pametna nadgradnja na mestu",
-  "deploy.toast_target_changed": "Izbrani ciljni disk se je spremenil ali ni več na voljo. Prosimo, ponovno poskenirajte.",
-  "deploy.toast_some_disks_removed": "{count} nedostopnih diskov samodejno odstranjenih, nadaljevanje z preostalimi diski",
-  "deploy.error_system_disk_blocked": "⛔ Blokirano: {disks} je sistemski disk. USB zagonskega diska ni mogoče namestiti na sistemski pogon!",
-  "deploy.error_readonly_disk": "🔒 Zaščiteno pred pisanjem: {disks} je samo za branje. Odstranite zaščito pred pisanjem ali uporabite drug USB",
+  "deploy.toast_target_changed":
+    "Izbrani ciljni disk se je spremenil ali ni več na voljo. Prosimo, ponovno poskenirajte.",
+  "deploy.toast_some_disks_removed":
+    "{count} nedostopnih diskov samodejno odstranjenih, nadaljevanje z preostalimi diski",
+  "deploy.error_system_disk_blocked":
+    "⛔ Blokirano: {disks} je sistemski disk. USB zagonskega diska ni mogoče namestiti na sistemski pogon!",
+  "deploy.error_readonly_disk":
+    "🔒 Zaščiteno pred pisanjem: {disks} je samo za branje. Odstranite zaščito pred pisanjem ali uporabite drug USB",
   "deploy.start_cloud_create": "Ustvari oblačni zagonski disk",
   "deploy.batch_update": "Zaženi skupinsko posodobitev brez izgube podatkov ({count} USB pogonov)",
   "deploy.batch_mixed": "Zaženi mešano skupinsko namestitev ({count} USB pogonov)",
@@ -343,14 +368,17 @@ export const slSi: TranslationDict = {
   "inspector.vendor": "Prodajalec/blagovna znamka:",
   "inspector.bus_speed": "Protokol in hitrost vodila:",
   "inspector.fake_report": "Lažna analiza USB 3.0:",
-  "inspector.fake_text": "Znižana različica Fake USB 3.0 (modra/črna vrata, vendar je notranji protokol USB 2.0 480 Mb/s)",
+  "inspector.fake_text":
+    "Znižana različica Fake USB 3.0 (modra/črna vrata, vendar je notranji protokol USB 2.0 480 Mb/s)",
   "inspector.genuine_text": "Pristen krmilnik visoke hitrosti USB 3.0/3.1",
   "inspector.smart": "Stanje zdravja SMART:",
   "inspector.sector": "Velikost sektorja:",
   "inspector.fake_title": "Fake USB 3.0 Opozorilo Alert!",
-  "inspector.fake_desc": "Naprava oglašuje USB 3.0/3.1, vendar je dejanska hitrost fizične plasti dogovorjena pri samo {speed} (USB 2.0 High-Speed PHY). Ta pogon ima verjetno lažno strojno programsko opremo ali lažna modra vrata.",
+  "inspector.fake_desc":
+    "Naprava oglašuje USB 3.0/3.1, vendar je dejanska hitrost fizične plasti dogovorjena pri samo {speed} (USB 2.0 High-Speed PHY). Ta pogon ima verjetno lažno strojno programsko opremo ali lažna modra vrata.",
   "inspector.genuine_title": "Preverjanje fizične strojne opreme uspešno (pristna naprava USB 3.0+)",
-  "inspector.genuine_desc": "Fizična plast PHY je vzpostavila pristno povezavo SuperSpeed/SuperSpeed+ s hitrostjo {speed}.",
+  "inspector.genuine_desc":
+    "Fizična plast PHY je vzpostavila pristno povezavo SuperSpeed/SuperSpeed+ s hitrostjo {speed}.",
   "inspector.usb2_title": "Standardni vmesnik USB 2.0",
   "inspector.usb2_desc": "Strojna oprema naprave je USB 2.0, teoretična fizična največja hitrost 480 Mb/s.",
   "inspector.section_basic": "Osnovne informacije o napravi",
@@ -456,14 +484,17 @@ export const slSi: TranslationDict = {
   "diag.action_reformat_title": "Ponovno formatiraj (reformat)",
   "diag.action_remount_title": "Ponovno priklopi (remount)",
   "diag.action_retry_title": "Ponovno poskusi (retry)",
-  "diag.action_reformat_desc": "Prekinitev pisanja je poškodovala razdelitveno tabelo ali datotečni sistem. Priporočamo novo formatiranje.",
-  "diag.action_remount_desc": "Ciljna pot priklopa se je med pisanjem prekinila. Ponovno vstavite USB pogon ali ponovno priklopite pogon.",
+  "diag.action_reformat_desc":
+    "Prekinitev pisanja je poškodovala razdelitveno tabelo ali datotečni sistem. Priporočamo novo formatiranje.",
+  "diag.action_remount_desc":
+    "Ciljna pot priklopa se je med pisanjem prekinila. Ponovno vstavite USB pogon ali ponovno priklopite pogon.",
   "diag.action_retry_desc": "Okolje in stanje naprave sta v redu. Lahko varno ponovno poskusite namestitev.",
   "about.updating": "Posodabljanje ({progress}%)",
   "about.updateTo": "Spletna posodobitev na {tag}",
   "about.downloading": "Prenašanje {progress}%",
   "about.preparingDownload": "Priprava prenosa paketa...",
-  "about.updateReady": "Posodobitev je pripravljena! Preneseno v: {path}. Zazenite paket ali ponovno zazenite aplikacijo.",
+  "about.updateReady":
+    "Posodobitev je pripravljena! Preneseno v: {path}. Zazenite paket ali ponovno zazenite aplikacijo.",
   "about.updateDownloadFailed": "Prenos paketa posodobitve ni uspel. Preverite omrežno povezavo.",
   "about.downloadingGuiUpdate": "Prenašanje posodobitve GUI ({progress}%)...",
   "about.updateCompleteRestart": "Prenos posodobitve končan! Ponovno zazenite aplikacijo za uveljavitev.",
@@ -474,7 +505,8 @@ export const slSi: TranslationDict = {
   "dialog.textFilesFilter": "Besedilne datoteke (*.txt)",
   "dialog.allFilesFilter": "Vse datoteke (*.*)",
   "dialog.selectIsoTitle": "Izberite datoteke slik sistema (*.iso, *.wim, *.img itd.)",
-  "dialog.ventoyFilter": "Izvorne slike Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Izvorne slike Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Izračunaj Hash",
   "checksum.calculating": "Izračunavanje Hasha...",
   "checksum.algo_label": "Algoritem",
@@ -518,12 +550,15 @@ export const slSi: TranslationDict = {
   "privilege.status_standard": "Nepooblaščeno",
   "privilege.btn_elevate": "Zahtevaj skrbniški dostop",
   "privilege.modal_title": "Zahtevano skrbniško dovoljenje",
-  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Za branje zagonskih podatkov in zapisovanje na diske je potrebna sistemska avtorizacija",
   "privilege.reason_title": "Zakaj so potrebne skrbniške pravice?",
-  "privilege.reason_desc": "Operacijski sistem izolira surove sektorje in razdelke EFI. Dovoljenje omogoča neposredno zaznavanje in varno ustvarjanje diska.",
+  "privilege.reason_desc":
+    "Operacijski sistem izolira surove sektorje in razdelke EFI. Dovoljenje omogoča neposredno zaznavanje in varno ustvarjanje diska.",
   "privilege.scope_title": "Obseg dostopa",
-  "privilege.scope_desc": "Strogo omejeno na izbrane zunanje pogone USB. Notranji sistemski diski se nikoli ne spreminjajo.",
+  "privilege.scope_desc":
+    "Strogo omejeno na izbrane zunanje pogone USB. Notranji sistemski diski se nikoli ne spreminjajo.",
   "privilege.safety_title": "Varnost in preglednost",
   "privilege.safety_desc": "Pregled je strogo samo za branje in nedestruktiven; izvorna koda je popolnoma odprta.",
   "privilege.confirm_btn": "Pooblasti zdaj",

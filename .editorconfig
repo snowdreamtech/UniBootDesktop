@@ -60,6 +60,6 @@ max_line_length = off
 
 # ── Binary & Static Assets ──────────────────────────────────────────────────
 # Prevent metadata corruption or noise in binary files
-[*.{png,jpg,jpeg,gif,webp,ico,pdf,zip,gz,tar,7z,exe,dll,so,o,pyc,jar,war,ear}]
+[*.{png,jpg,jpeg,gif,webp,ico,pdf,zip,gz,tar,7z,exe,dll,so,o,pyc,jar,war,ear,img,iso,bin,dat,efi,lkrn,kpxe}]
 insert_final_newline = false
 trim_trailing_whitespace = false

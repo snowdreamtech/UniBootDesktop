@@ -59,7 +59,8 @@ export const fiFi: TranslationDict = {
   "settings.directModeNotice": "Suora tila (välityspalvelin pois käytöstä)",
   "settings.proxyHostRequired": "Anna ensin välityspalvelimen isäntäosoite",
   "settings.proxyTestSuccess": "{protocol}-välityspalvelin yhdistetty ({host}:{port})",
-  "settings.syncSuccessAlert": "Cloud UniBoot {tag} laiteohjelmisto ja komentosarjat ladattu ja välimuistiin tallennettu onnistuneesti!",
+  "settings.syncSuccessAlert":
+    "Cloud UniBoot {tag} laiteohjelmisto ja komentosarjat ladattu ja välimuistiin tallennettu onnistuneesti!",
   "settings.syncSuccessShortAlert": "Cloud UniBoot -ytimen laiteohjelmisto synkronoitu onnistuneesti!",
   "settings.syncFailedAlert": "Laiteohjelmiston synkronointi epäonnistui: {error}",
   "settings.ventoyToolchain": "Ventoy-työkaluketju",
@@ -109,7 +110,8 @@ export const fiFi: TranslationDict = {
   "disk.tag_boot_hybrid": "Hybridikäynnistys",
   "disk.tag_boot_thirdparty": "Kolmannen osapuolen käynnistys",
   "confirm.cloud_to_hybrid_warn_title": "Huomio: Hybriditilaan vaihtaminen vaatii täyden alustuksen",
-  "confirm.cloud_to_hybrid_warn_desc": "Tämä levy on puhtaassa pilvikäynnistystilassa. Ventoy-hybriditila vaatii MBR:n ja osiotaulukon uudelleenrakentamisen, mikä POISTAA kaikki tiedot ja ISO-tiedostot!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Tämä levy on puhtaassa pilvikäynnistystilassa. Ventoy-hybriditila vaatii MBR:n ja osiotaulukon uudelleenrakentamisen, mikä POISTAA kaikki tiedot ja ISO-tiedostot!",
   "disk.tag_ssd": "Kannettava SSD",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Salattu asema",
@@ -137,13 +139,16 @@ export const fiFi: TranslationDict = {
   "log.level_error": "VIRHE",
   "log.level_debug": "Vianetsintä",
   "safe.title_cloud": "Havaittu olemassa oleva Ventoy/UniBoot-asema (Pilvitila päivittää vain ESP-osion)",
-  "safe.desc_cloud": "Pilvitila säilyttää UNIBOOT-kaksoisosiokokoonpanon. ESP-osion päivitys jättää kaikki ISO-tiedostot ja käyttäjän tiedostot koskemattomiksi!",
+  "safe.desc_cloud":
+    "Pilvitila säilyttää UNIBOOT-kaksoisosiokokoonpanon. ESP-osion päivitys jättää kaikki ISO-tiedostot ja käyttäjän tiedostot koskemattomiksi!",
   "safe.title_hybrid": "Havaittu olemassa oleva Ventoy-asema (Päivitys paikan päällä hybriditilassa)",
-  "safe.desc_hybrid": "Hybriditila säilyttää kaikki olemassa olevat ISO-tiedostot ilman alustusta ja lisää UniBoot-tumman teeman ja pilvivalikon turvallisesti!",
+  "safe.desc_hybrid":
+    "Hybriditila säilyttää kaikki olemassa olevat ISO-tiedostot ilman alustusta ja lisää UniBoot-tumman teeman ja pilvivalikon turvallisesti!",
   "common.optional": "Valinnainen",
   "common.optional_test": "Valinnainen testi",
   "iso.title": "Paikalliset järjestelmäkuvalähteet (ISO / IMG / WIM / VHD)",
-  "iso.desc": "Lisää ISO-tiedostoja automaattista kopoiontia varten /UNIBOOT/iso/-hakemistoon suoraa Ventoy / UniBoot -käynnistystä varten.",
+  "iso.desc":
+    "Lisää ISO-tiedostoja automaattista kopoiontia varten /UNIBOOT/iso/-hakemistoon suoraa Ventoy / UniBoot -käynnistystä varten.",
   "iso.add_btn": "Lisää kuvatiedostoja",
   "iso.empty_title": "Napsauta lisätäksesi kuvatiedostoja (tukee yhden tai erän valintaa)",
   "iso.empty_sub": "Tukee muotoja .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -154,7 +159,8 @@ export const fiFi: TranslationDict = {
   "iso.drag_unsupported": "Tuettuja levykuvatiedostoja ei havaittu (.iso, .wim, .img jne.)",
   "iso.preflight_title": "Tarkistus ennen kirjoittamista",
   "iso.conflict_title": "Tiedostonimi on jo käytössä",
-  "iso.conflict_desc": "Kohde-USB:n iso-kansiossa on jo samanniminen tiedosto. Valitse toiminto. Hajautusarvoja ei verrata.",
+  "iso.conflict_desc":
+    "Kohde-USB:n iso-kansiossa on jo samanniminen tiedosto. Valitse toiminto. Hajautusarvoja ei verrata.",
   "iso.conflict_action": "Toiminto",
   "iso.conflict_keep_both": "Säilytä",
   "iso.conflict_replace": "Korvaa",
@@ -164,13 +170,16 @@ export const fiFi: TranslationDict = {
   "iso.conflict_confirm": "Vahvista ja jatka",
   "iso.preflight_failed": "Kirjoitusta edeltävä tarkistus epäonnistui",
   "deploy.title": "Käynnistettävän aseman luonti ja QEMU-testi",
-  "deploy.desc_cloud": "Puhdas iPXE-pilvikäynnistys • Erittäin nopea kahden osion asennus monen arkkitehtuurin iPXE-verkkolaitteistolla.",
+  "deploy.desc_cloud":
+    "Puhdas iPXE-pilvikäynnistys • Erittäin nopea kahden osion asennus monen arkkitehtuurin iPXE-verkkolaitteistolla.",
   "deploy.desc_hybrid": "Ventoy CLI paikallinen moottori • Ventoy-hybridiosion asennus paikallisella ISO-hallinnalla.",
   "deploy.target_device": "Kohdelaite:",
   "deploy.batch_target": "Valittu {count} USB-asema(a)",
   "deploy.start_create": "Luot käynnistyslevy",
-  "deploy.tip_batch_update_all": "Eräpäivitys ilman tietojen menetystä: Kaikki {count} valittua USB-asemaa päivitetään paikallaan",
-  "deploy.tip_batch_mixed": "Sekamuotoinen eräasennus: {bootCount} asema(a) päivitys ilman tietojen menetystä, {blankCount} asema(a) uusi alustus",
+  "deploy.tip_batch_update_all":
+    "Eräpäivitys ilman tietojen menetystä: Kaikki {count} valittua USB-asemaa päivitetään paikallaan",
+  "deploy.tip_batch_mixed":
+    "Sekamuotoinen eräasennus: {bootCount} asema(a) päivitys ilman tietojen menetystä, {blankCount} asema(a) uusi alustus",
   "deploy.start_update": "Paikkapäivitys (tietoturvallinen)",
   "deploy.batch_create": "Aloita eräkäyttöönotto ({count} asemaa)",
   "deploy.writing": "Kirjoitetaan käynnistysohjelmistopaketteja...",
@@ -185,21 +194,27 @@ export const fiFi: TranslationDict = {
   "deploy.tip_writing": "Kirjoitetaan käynnistyksen laiteohjelmistoa...",
   "deploy.tip_select_single": "Valitse ensin kohde-USB-asema",
   "deploy.tip_select_batch": "Tarkista kohde-USB-asemien eräkäyttöönotto",
-  "deploy.tip_macos_unsupported": "macOS ei tue uutta alustusta hybriditilassa (käytä pilvitilaa tai alusta ensin Win/Linuxissa)",
+  "deploy.tip_macos_unsupported":
+    "macOS ei tue uutta alustusta hybriditilassa (käytä pilvitilaa tai alusta ensin Win/Linuxissa)",
   "deploy.tip_need_ventoy": "Hybriditila vaatii paikallisen Ventoy CLI -työkaluston. Suosittelemme Pilvitilaa!",
   "deploy.macos_alert_title": "macOS Ventoy CLI tuoretta muotoilua ei tueta",
-  "deploy.macos_alert_desc": "Virallinen Ventoy ei vielä tue alustusohjelman suorittamista macOS-järjestelmässä. Uuden [Hybridilevyn] luomiseen tarvitaan Ventoy CLI. Suosittelemme [Pilvitilaa (1s pilvikäynnistyslevy)]!",
+  "deploy.macos_alert_desc":
+    "Virallinen Ventoy ei vielä tue alustusohjelman suorittamista macOS-järjestelmässä. Uuden [Hybridilevyn] luomiseen tarvitaan Ventoy CLI. Suosittelemme [Pilvitilaa (1s pilvikäynnistyslevy)]!",
   "deploy.no_ventoy_title": "Ventoy CLI:n suoritusta ei havaittu",
-  "deploy.no_ventoy_desc": "[Hybridilevyn] luominen vaatii paikallisesti asennetun Ventoy CLI:n. Valitse tuettu [Pilvitila]!",
+  "deploy.no_ventoy_desc":
+    "[Hybridilevyn] luominen vaatii paikallisesti asennetun Ventoy CLI:n. Valitse tuettu [Pilvitila]!",
   "deploy.result_batch_success": "1 sekunnin pilviasennuslevy otettiin onnistuneesti käyttöön {count} asemalle!",
   "deploy.result_success": "Tila {mode} otettiin onnistuneesti käyttöön kohteessa {targets}",
   "deploy.alert_success": "Käyttöönotto onnistui!",
   "deploy.safely_eject_btn": "Poista USB-asema turvallisesti",
   "deploy.success_banner_title": "Käynnistysasema luotu onnistuneesti!",
-  "deploy.success_banner_desc": "Käynnistystiedostot ja laiteohjelmisto kirjoitettu. Poista laite turvallisesti ennen irrottamista tietojen menetyksen välttämiseksi.",
-  "deploy.toast_auto_ejected": "Luonti valmis! {count} USB-asemaa poistettu turvallisesti automaattisesti. Kaikki tiedot kirjoitettu.",
+  "deploy.success_banner_desc":
+    "Käynnistystiedostot ja laiteohjelmisto kirjoitettu. Poista laite turvallisesti ennen irrottamista tietojen menetyksen välttämiseksi.",
+  "deploy.toast_auto_ejected":
+    "Luonti valmis! {count} USB-asemaa poistettu turvallisesti automaattisesti. Kaikki tiedot kirjoitettu.",
   "deploy.confirm_auto_eject_title": "Kirjoitus valmis — Poistetaanko turvallisesti?",
-  "deploy.confirm_auto_eject_desc": "Kaikki tiedot on kirjoitettu onnistuneesti. Haluatko poistaa USB-aseman turvallisesti nyt?",
+  "deploy.confirm_auto_eject_desc":
+    "Kaikki tiedot on kirjoitettu onnistuneesti. Haluatko poistaa USB-aseman turvallisesti nyt?",
   "deploy.confirm_auto_eject_yes": "Poista turvallisesti",
   "deploy.confirm_auto_eject_no": "Ei nyt",
   "deploy.alert_fail": "Käyttöönotto epäonnistui:",
@@ -218,7 +233,8 @@ export const fiFi: TranslationDict = {
   "vm.boot_mode_bios": "BIOS (Legacy) -tila",
   "vm.boot_mode_auto": "Automaattinen tunnistus",
   "vm.startSuccess_vm": "Simulaatiotesti {name} aloitettu onnistuneesti",
-  "vm.desc_optional": "Valinnainen ominaisuus: Esikatsele USB-käynnistystä virtuaalikoneessa ilman tietokoneen uudelleenkäynnistystä.",
+  "vm.desc_optional":
+    "Valinnainen ominaisuus: Esikatsele USB-käynnistystä virtuaalikoneessa ilman tietokoneen uudelleenkäynnistystä.",
   "vm.installed": "QEMU havaittu",
   "vm.not_installed": "QEMU ei havaittu",
   "vm.target": "Testikohde:",
@@ -290,7 +306,8 @@ export const fiFi: TranslationDict = {
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
   "confirm.title": "High-Risk Format Varoitus",
   "confirm.warning_title": "Varoitus: Formatting will erase all data!",
-  "confirm.warning_desc": "Valittu USB-asema osioidaan uudelleen ja alustetaan. Kaikki olemassa olevat tiedostot poistetaan kokonaan. Varmista, että olet varmuuskopioinut tärkeät tiedot!",
+  "confirm.warning_desc":
+    "Valittu USB-asema osioidaan uudelleen ja alustetaan. Kaikki olemassa olevat tiedostot poistetaan kokonaan. Varmista, että olet varmuuskopioinut tärkeät tiedot!",
   "confirm.mode_title": "Käyttöönottotila:",
   "confirm.fs_title": "Kohdetiedostojärjestelmä:",
   "confirm.disks_title": "Alustavat asemat ({count}):",
@@ -300,11 +317,14 @@ export const fiFi: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Vahvistaation",
   "confirm.title_danger": "Format Varoitus: Disk Initialization",
   "confirm.safe_banner_title": "Paikalla oleva asteittainen päivitysilmoitus (tietoturvallinen)",
-  "confirm.safe_banner_desc": "Ventoy / UniBoot -käynnistysrakenne havaittu kohdeasemassa. Järjestelmä suorittaa asteittaisen päivityksen ohitusmuodon. Kaikki olemassa olevat tiedostot ja ISO:t säilyvät 100 %!",
+  "confirm.safe_banner_desc":
+    "Ventoy / UniBoot -käynnistysrakenne havaittu kohdeasemassa. Järjestelmä suorittaa asteittaisen päivityksen ohitusmuodon. Kaikki olemassa olevat tiedostot ja ISO:t säilyvät 100 %!",
   "confirm.mixed_banner_title": "Älykäs sekatila: Paikalla oleva päivitys käynnistysasemille, muoto tyhjille asemille",
-  "confirm.mixed_banner_desc": "Valittu {ventoyCount} käynnistysasema(a) (paikallinen päivitys) ja {blankCount} tyhjä(ä) asema(tä) (täysi muoto).",
+  "confirm.mixed_banner_desc":
+    "Valittu {ventoyCount} käynnistysasema(a) (paikallinen päivitys) ja {blankCount} tyhjä(ä) asema(tä) (täysi muoto).",
   "confirm.danger_banner_title": "Varoitus: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "Kirjoittaminen osioi ja alustaa kohdelaitteen uudelleen (MBR/GPT). Kaikki valitulla asemalla olevat tiedostot poistetaan kokonaan!",
+  "confirm.danger_banner_desc":
+    "Kirjoittaminen osioi ja alustaa kohdelaitteen uudelleen (MBR/GPT). Kaikki valitulla asemalla olevat tiedostot poistetaan kokonaan!",
   "confirm.summary_title": "Käynnistyksen käyttöönoton kohdeasemat:",
   "confirm.smart_safe_tag": "Älykäs suojaus",
   "confirm.ventoy_group_title": "Paikalla olevat päivitysasemat (kaikki ISO:t säilytetty):",
@@ -323,9 +343,12 @@ export const fiFi: TranslationDict = {
   "confirm.will_format": "Täysi alustus",
   "confirm.no_format": "Älykäs päivitys paikallaan",
   "deploy.toast_target_changed": "Valittu kohdelevy on muuttunut tai se ei ole enää käytettävissä. Skannaa uudelleen.",
-  "deploy.toast_some_disks_removed": "{count} ei-saatavilla olevaa levyä poistettu automaattisesti, jatketaan jäljellä olevilla levyillä",
-  "deploy.error_system_disk_blocked": "⛔ Estetty: {disks} on järjestelmälevy. USB-käynnistyslevyä ei voi ottaa käyttöön järjestelmäasemalle!",
-  "deploy.error_readonly_disk": "🔒 Kirjoitussuojattu: {disks} on vain luku -tilassa. Poista kirjoitussuojaus tai käytä eri USB-laitetta",
+  "deploy.toast_some_disks_removed":
+    "{count} ei-saatavilla olevaa levyä poistettu automaattisesti, jatketaan jäljellä olevilla levyillä",
+  "deploy.error_system_disk_blocked":
+    "⛔ Estetty: {disks} on järjestelmälevy. USB-käynnistyslevyä ei voi ottaa käyttöön järjestelmäasemalle!",
+  "deploy.error_readonly_disk":
+    "🔒 Kirjoitussuojattu: {disks} on vain luku -tilassa. Poista kirjoitussuojaus tai käytä eri USB-laitetta",
   "deploy.start_cloud_create": "Luot pilvikäynnistyslevy",
   "deploy.batch_update": "Aloita eräpäivitys ilman tietojen menetystä ({count} USB-asemaa)",
   "deploy.batch_mixed": "Aloita sekamuotoinen eräasennus ({count} USB-asemaa)",
@@ -343,7 +366,8 @@ export const fiFi: TranslationDict = {
   "inspector.vendor": "Myyjä / merkki:",
   "inspector.bus_speed": "Bussiprotokolla ja nopeus:",
   "inspector.fake_report": "Fake USB 3.0 -analyysi:",
-  "inspector.fake_text": "Vanhentunut Fake USB 3.0 (sininen/musta portti, mutta sisäinen protokolla on USB 2.0 480 Mb/s)",
+  "inspector.fake_text":
+    "Vanhentunut Fake USB 3.0 (sininen/musta portti, mutta sisäinen protokolla on USB 2.0 480 Mb/s)",
   "inspector.genuine_text": "Aito High-Speed USB 3.0/3.1 -ohjain",
   "inspector.smart": "SMART-terveystila:",
   "inspector.sector": "Sektorin koko:",
@@ -456,14 +480,17 @@ export const fiFi: TranslationDict = {
   "diag.action_reformat_title": "Uudelleenalusta (reformat)",
   "diag.action_remount_title": "Uudelleenliitä (remount)",
   "diag.action_retry_title": "Yritä uudelleen (retry)",
-  "diag.action_reformat_desc": "Kirjoituksen keskeytyminen vioitti osiotaulukkoa tai tiedostojärjestelmää. Suosittelemme uutta alustusta.",
-  "diag.action_remount_desc": "Kohdelaitteen liitospolku katkesi kirjoituksen aikana. Aseta USB-asema uudelleen tai liitä taltio uudelleen.",
+  "diag.action_reformat_desc":
+    "Kirjoituksen keskeytyminen vioitti osiotaulukkoa tai tiedostojärjestelmää. Suosittelemme uutta alustusta.",
+  "diag.action_remount_desc":
+    "Kohdelaitteen liitospolku katkesi kirjoituksen aikana. Aseta USB-asema uudelleen tai liitä taltio uudelleen.",
   "diag.action_retry_desc": "Ympäristö ja laitteen tila ovat kunnossa. Voit turvallisesti yrittää asennusta uudelleen.",
   "about.updating": "Päivitetään ({progress}%)",
   "about.updateTo": "Online-päivitys versioon {tag}",
   "about.downloading": "Ladataan {progress}%",
   "about.preparingDownload": "Valmistellaan paketin latausta...",
-  "about.updateReady": "Päivitys valmis! Ladattu kohteeseen: {path}. Käynnistä paketti tai käynnistä sovellus uudelleen.",
+  "about.updateReady":
+    "Päivitys valmis! Ladattu kohteeseen: {path}. Käynnistä paketti tai käynnistä sovellus uudelleen.",
   "about.updateDownloadFailed": "Päivityspaketin lataus epäonnistui. Tarkista verkkoyhteys.",
   "about.downloadingGuiUpdate": "Ladataan GUI-päivitystä ({progress}%)...",
   "about.updateCompleteRestart": "Päivityksen lataus valmis! Käynnistä sovellus uudelleen ottaaksesi käyttöön.",
@@ -474,7 +501,8 @@ export const fiFi: TranslationDict = {
   "dialog.textFilesFilter": "Tekstitiedostot (*.txt)",
   "dialog.allFilesFilter": "Kaikki tiedostot (*.*)",
   "dialog.selectIsoTitle": "Valitse järjestelmälevykuvatiedostot (*.iso, *.wim, *.img jne.)",
-  "dialog.ventoyFilter": "Ventoy-Lähdelevykuvat (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Ventoy-Lähdelevykuvat (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Laske Hash",
   "checksum.calculating": "Lasketaan Hash-tarkistussummaa...",
   "checksum.algo_label": "Algoritmi",
@@ -518,12 +546,16 @@ export const fiFi: TranslationDict = {
   "privilege.status_standard": "Valtuuttamaton",
   "privilege.btn_elevate": "Pyydä järjestelmänvalvojan oikeuksia",
   "privilege.modal_title": "Järjestelmänvalvojan oikeudet vaaditaan",
-  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
-  "privilege.modal_subtitle": "Järjestelmän valtuutus vaaditaan käynnistystietojen lukemiseen ja levyille kirjoittamiseen",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.modal_subtitle":
+    "Järjestelmän valtuutus vaaditaan käynnistystietojen lukemiseen ja levyille kirjoittamiseen",
   "privilege.reason_title": "Miksi järjestelmänvalvojan oikeudet tarvitaan?",
-  "privilege.reason_desc": "Käyttöjärjestelmä eristää raakasektorit ja EFI-osiot. Valtuutus mahdollistaa suoran tunnistuksen ja turvallisen luonnin.",
+  "privilege.reason_desc":
+    "Käyttöjärjestelmä eristää raakasektorit ja EFI-osiot. Valtuutus mahdollistaa suoran tunnistuksen ja turvallisen luonnin.",
   "privilege.scope_title": "Käyttöoikeuksien laajuus",
-  "privilege.scope_desc": "Rajoitettu tiukasti valittuihin ulkoisiin USB-asemiin. Sisäisiin järjestelmälevyihin ei koskaan kosketa.",
+  "privilege.scope_desc":
+    "Rajoitettu tiukasti valittuihin ulkoisiin USB-asemiin. Sisäisiin järjestelmälevyihin ei koskaan kosketa.",
   "privilege.safety_title": "Turvallisuus ja läpinäkyvyys",
   "privilege.safety_desc": "Tarkastus on täysin vain luku -tilassa eikä tuhoa tietoja; lähdekoodi on täysin avointa.",
   "privilege.confirm_btn": "Valtuuta nyt",

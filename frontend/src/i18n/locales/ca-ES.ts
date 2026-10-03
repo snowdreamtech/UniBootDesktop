@@ -24,7 +24,8 @@ export const caEs: TranslationDict = {
   "common.langAuto": "Idioma (automàtic)",
   "common.lang": "Llengua",
   "vm.startSuccess": "Simulació de màquina virtual iniciada amb èxit per al disc: {disk} ({device})",
-  "vm.backendNotReady": "L'API de backend no està preparada: lamenta la càrrega dels enllaços, reinicieu l'aplicació UniBoot.",
+  "vm.backendNotReady":
+    "L'API de backend no està preparada: lamenta la càrrega dels enllaços, reinicieu l'aplicació UniBoot.",
   "vm.demoModeStart": "[Mode Demostració] Iniciant verificació del simulador QEMU: {disk} ({device})",
   "vm.startFailed": "No s'ha pogut iniciar el simulador QEMU: {error}",
   "disk.writingImageProgress": "Imatge d'escriptura ({fileIndex}/{totalFiles}): {currentFile} ({progress}%)",
@@ -59,7 +60,8 @@ export const caEs: TranslationDict = {
   "settings.directModeNotice": "Mode directe (proxy desactivat)",
   "settings.proxyHostRequired": "Introduïu primer l'adreça de l'amfitrió del servidor intermediari",
   "settings.proxyTestSuccess": "Proxy {protocol} connectat ({host}:{port})",
-  "settings.syncSuccessAlert": "El microprogramari i els scripts de Cloud UniBoot {tag} s'han descarregat i s'han guardat a la memòria cau correctament!",
+  "settings.syncSuccessAlert":
+    "El microprogramari i els scripts de Cloud UniBoot {tag} s'han descarregat i s'han guardat a la memòria cau correctament!",
   "settings.syncSuccessShortAlert": "El microprogramari bàsic Cloud UniBoot s'ha sincronitzat correctament!",
   "settings.syncFailedAlert": "Ha fallat la sincronització del firmware: {error}",
   "settings.ventoyToolchain": "Cadena d'eines Ventoy",
@@ -109,7 +111,8 @@ export const caEs: TranslationDict = {
   "disk.tag_boot_hybrid": "Arrencada Híbrida",
   "disk.tag_boot_thirdparty": "Arrencada de tercers",
   "confirm.cloud_to_hybrid_warn_title": "Avís: Canviar al mode híbrid requereix formatar completament",
-  "confirm.cloud_to_hybrid_warn_desc": "Aquest disc està en mode Cloud pur. El mode híbrid Ventoy requereix reconstruir l'MBR i la taula de particions, esborrant totes les dades i ISOs!",
+  "confirm.cloud_to_hybrid_warn_desc":
+    "Aquest disc està en mode Cloud pur. El mode híbrid Ventoy requereix reconstruir l'MBR i la taula de particions, esborrant totes les dades i ISOs!",
   "disk.tag_ssd": "SSD portàtil",
   "disk.tag_typec": "Type-C",
   "disk.tag_secure": "Unitat xifrada",
@@ -137,13 +140,16 @@ export const caEs: TranslationDict = {
   "log.level_error": "ERROR",
   "log.level_debug": "Depuració",
   "safe.title_cloud": "Detectada unitat Ventoy/UniBoot existent (El mode Núvol només actualitza la partició ESP)",
-  "safe.desc_cloud": "El mode Núvol conserva el disseny de doble partició UNIBOOT. Actualitzar l'ESP manté intactes els fitxers i ISOs!",
+  "safe.desc_cloud":
+    "El mode Núvol conserva el disseny de doble partició UNIBOOT. Actualitzar l'ESP manté intactes els fitxers i ISOs!",
   "safe.title_hybrid": "Detectada unitat Ventoy existent (Actualització in situ en mode Híbrid)",
-  "safe.desc_hybrid": "El mode Híbrid conserva tots els fitxers ISO existents sense formatar, injectant el tema fosc de UniBoot i el menú Núvol!",
+  "safe.desc_hybrid":
+    "El mode Híbrid conserva tots els fitxers ISO existents sense formatar, injectant el tema fosc de UniBoot i el menú Núvol!",
   "common.optional": "Opcional",
   "common.optional_test": "Prova opcional",
   "iso.title": "Fonts d'imatge del sistema local (ISO/IMG/WIM/VHD)",
-  "iso.desc": "Afegiu fitxers ISO per copiar automàticament al directori /UNIBOOT/iso/ per a l'arrencada directe de Ventoy / UniBoot.",
+  "iso.desc":
+    "Afegiu fitxers ISO per copiar automàticament al directori /UNIBOOT/iso/ per a l'arrencada directe de Ventoy / UniBoot.",
   "iso.add_btn": "Afegeix fitxers d'imatge",
   "iso.empty_title": "Feu clic per afegir fitxers d'imatge (admet la selecció única o per lots)",
   "iso.empty_sub": "Admet formats .iso, .wim, .img, .vhd, .vhdx, .vti, .efi, .bin, .xz, .gz, .raw",
@@ -154,7 +160,8 @@ export const caEs: TranslationDict = {
   "iso.drag_unsupported": "No s'han detectat fitxers d'imatge admesos (.iso, .wim, .img, etc.)",
   "iso.preflight_title": "Comprovació abans d’escriure",
   "iso.conflict_title": "El nom del fitxer ja existeix",
-  "iso.conflict_desc": "Ja existeix un fitxer amb el mateix nom a la carpeta iso de l’USB de destinació. Trieu una acció. No es comparen els hash.",
+  "iso.conflict_desc":
+    "Ja existeix un fitxer amb el mateix nom a la carpeta iso de l’USB de destinació. Trieu una acció. No es comparen els hash.",
   "iso.conflict_action": "Acció",
   "iso.conflict_keep_both": "Conserva",
   "iso.conflict_replace": "Sobreescriu",
@@ -164,13 +171,16 @@ export const caEs: TranslationDict = {
   "iso.conflict_confirm": "Confirma i continua",
   "iso.preflight_failed": "La comprovació abans d’escriure ha fallat",
   "deploy.title": "Creació de disc d'arrencada i prova QEMU",
-  "deploy.desc_cloud": "Arrencada al núvol iPXE pur • Configuració ultra-ràpida de dues particions amb programari de xarxa iPXE.",
+  "deploy.desc_cloud":
+    "Arrencada al núvol iPXE pur • Configuració ultra-ràpida de dues particions amb programari de xarxa iPXE.",
   "deploy.desc_hybrid": "Motor local Ventoy CLI • Configuració de partició híbrida Ventoy amb gestió ISO local.",
   "deploy.target_device": "Dispositiu objectiu:",
   "deploy.batch_target": "S'han seleccionat {count} unitats USB",
   "deploy.start_create": "Crear disc d'arrencada",
-  "deploy.tip_batch_update_all": "Actualització en lot sense pèrdua: Totes les {count} unitats seleccionades s'actualitzaran al lloc",
-  "deploy.tip_batch_mixed": "Desplegament mixt en lot: {bootCount} unitat(s) actualització sense pèrdua, {blankCount} unitat(s) formatat complet",
+  "deploy.tip_batch_update_all":
+    "Actualització en lot sense pèrdua: Totes les {count} unitats seleccionades s'actualitzaran al lloc",
+  "deploy.tip_batch_mixed":
+    "Desplegament mixt en lot: {bootCount} unitat(s) actualització sense pèrdua, {blankCount} unitat(s) formatat complet",
   "deploy.start_update": "Actualització in situ (Seguretat de dades)",
   "deploy.batch_create": "Inicia el desplegament per lots ({count} unitats)",
   "deploy.writing": "Escrivint paquets de firmware d'arrencada...",
@@ -180,26 +190,33 @@ export const caEs: TranslationDict = {
   "deploy.toast_added_iso": "S'han afegit amb èxit {count} imatges ISO",
   "deploy.toast_added_demo_iso": "S'han afegit 2 fitxers d'origen d'imatge de demostració (demo del navegador)",
   "deploy.toast_select_target": "Seleccioneu primer una unitat USB de destinació al tauler esquerre",
-  "deploy.toast_select_batch": "Si us plau, comproveu primer les unitats USB de destinació per obtenir un format per lots",
+  "deploy.toast_select_batch":
+    "Si us plau, comproveu primer les unitats USB de destinació per obtenir un format per lots",
   "deploy.toast_no_disks": "No s'ha detectat cap unitat USB! Si us plau, inseriu una unitat USB i torneu-ho a provar.",
   "deploy.tip_writing": "S'està escrivint el firmware d'arrencada...",
   "deploy.tip_select_single": "Seleccioneu primer una unitat USB de destinació",
   "deploy.tip_select_batch": "Comproveu les unitats USB de destinació per a la implementació per lots",
-  "deploy.tip_macos_unsupported": "macOS no admet el format inicial en Mode Híbrid (utilitzeu el Mode Núvol o inicialitzeu primer a Win/Linux)",
+  "deploy.tip_macos_unsupported":
+    "macOS no admet el format inicial en Mode Híbrid (utilitzeu el Mode Núvol o inicialitzeu primer a Win/Linux)",
   "deploy.tip_need_ventoy": "El Mode Híbrid requereix eines locals de Ventoy CLI. Recomanem el Mode Núvol!",
   "deploy.macos_alert_title": "El format fresc de la CLI de macOS Ventoy no és compatible",
-  "deploy.macos_alert_desc": "El Ventoy oficial encara no admet executar el programa de formatació a macOS. Per crear un nou [Disc Híbrid] es requereix Ventoy CLI. Es recomana utilitzar el [Mode Núvol (disc d'arrencada en el núvol d'1s)]!",
+  "deploy.macos_alert_desc":
+    "El Ventoy oficial encara no admet executar el programa de formatació a macOS. Per crear un nou [Disc Híbrid] es requereix Ventoy CLI. Es recomana utilitzar el [Mode Núvol (disc d'arrencada en el núvol d'1s)]!",
   "deploy.no_ventoy_title": "Ventoy CLI executable no detectat",
-  "deploy.no_ventoy_desc": "La creació d'un [Disc Híbrid] requereix Ventoy CLI instal·lat localment. Trieu el [Mode Núvol] compatible!",
+  "deploy.no_ventoy_desc":
+    "La creació d'un [Disc Híbrid] requereix Ventoy CLI instal·lat localment. Trieu el [Mode Núvol] compatible!",
   "deploy.result_batch_success": "Disc d'instal·lació al núvol en 1 s desplegat amb èxit a {count} disc(s)!",
   "deploy.result_success": "Mode {mode} desplegat amb èxit a {targets}",
   "deploy.alert_success": "Desplegament correcte!",
   "deploy.safely_eject_btn": "Expulsar la unitat USB amb seguretat",
   "deploy.success_banner_title": "Unitat d'arrencada creada amb èxit!",
-  "deploy.success_banner_desc": "S'han escrit els fitxers d'arrencada i el microprogramari. Expulseu de manera segura abans de desconnectar per evitar pèrdues de dades.",
-  "deploy.toast_auto_ejected": "Creació completada! S'ha(n) expulsat de manera segura {count} unitat(s) USB. Totes les dades s'han desat.",
+  "deploy.success_banner_desc":
+    "S'han escrit els fitxers d'arrencada i el microprogramari. Expulseu de manera segura abans de desconnectar per evitar pèrdues de dades.",
+  "deploy.toast_auto_ejected":
+    "Creació completada! S'ha(n) expulsat de manera segura {count} unitat(s) USB. Totes les dades s'han desat.",
   "deploy.confirm_auto_eject_title": "Escriptura completada — Expulsar amb seguretat?",
-  "deploy.confirm_auto_eject_desc": "Totes les dades s'han escrit correctament. Voleu expulsar la unitat USB amb seguretat ara?",
+  "deploy.confirm_auto_eject_desc":
+    "Totes les dades s'han escrit correctament. Voleu expulsar la unitat USB amb seguretat ara?",
   "deploy.confirm_auto_eject_yes": "Expulsar amb seguretat",
   "deploy.confirm_auto_eject_no": "Ara no",
   "deploy.alert_fail": "Desplegament fallit:",
@@ -218,7 +235,8 @@ export const caEs: TranslationDict = {
   "vm.boot_mode_bios": "Mode BIOS (Legacy)",
   "vm.boot_mode_auto": "Detecció automàtica",
   "vm.startSuccess_vm": "La prova de simulació {name} s'ha iniciat amb èxit",
-  "vm.desc_optional": "Funció opcional: Previsualitzeu l'arrencada USB en una màquina virtual sense reiniciar l'ordinador.",
+  "vm.desc_optional":
+    "Funció opcional: Previsualitzeu l'arrencada USB en una màquina virtual sense reiniciar l'ordinador.",
   "vm.installed": "QEMU detectat",
   "vm.not_installed": "QEMU no detectat",
   "vm.target": "Objectiu de la prova:",
@@ -290,7 +308,8 @@ export const caEs: TranslationDict = {
   "settings.ventoy_secondary_menu": "Ventoy Secondary Boot Menu:",
   "confirm.title": "High-Risk Format Avís",
   "confirm.warning_title": "Avís: Formatting will erase all data!",
-  "confirm.warning_desc": "La unitat USB seleccionada es tornarà a particionar i formatar. Tots els fitxers existents s'esborraran completament. Assegureu-vos d'haver fet una còpia de seguretat de les dades importants!",
+  "confirm.warning_desc":
+    "La unitat USB seleccionada es tornarà a particionar i formatar. Tots els fitxers existents s'esborraran completament. Assegureu-vos d'haver fet una còpia de seguretat de les dades importants!",
   "confirm.mode_title": "Mode de desplegament:",
   "confirm.fs_title": "Sistema de fitxers de destinació:",
   "confirm.disks_title": "Unitats que s'han de formatar ({count}):",
@@ -300,11 +319,15 @@ export const caEs: TranslationDict = {
   "confirm.title_mixed": "Smart Mixed Mode Confirmaration",
   "confirm.title_danger": "Format Avís: Disk Initialization",
   "confirm.safe_banner_title": "Avís d'actualització incremental al lloc (segur de dades)",
-  "confirm.safe_banner_desc": "Estructura d'arrencada Ventoy/UniBoot detectada a la unitat de destinació. El sistema realitzarà un format de salt d'actualització incremental. Tots els fitxers i ISO existents es conserven al 100%.",
-  "confirm.mixed_banner_title": "Mode mixt intel·ligent: actualització local per a unitats d'arrencada, format per a unitats en blanc",
-  "confirm.mixed_banner_desc": "S'han seleccionat {ventoyCount} unitats d'arrencada (actualització local) i {blankCount} unitats en blanc (format complet).",
+  "confirm.safe_banner_desc":
+    "Estructura d'arrencada Ventoy/UniBoot detectada a la unitat de destinació. El sistema realitzarà un format de salt d'actualització incremental. Tots els fitxers i ISO existents es conserven al 100%.",
+  "confirm.mixed_banner_title":
+    "Mode mixt intel·ligent: actualització local per a unitats d'arrencada, format per a unitats en blanc",
+  "confirm.mixed_banner_desc":
+    "S'han seleccionat {ventoyCount} unitats d'arrencada (actualització local) i {blankCount} unitats en blanc (format complet).",
   "confirm.danger_banner_title": "Avís: Formatting is irreversible!",
-  "confirm.danger_banner_desc": "L'escriptura tornarà a particionar i formatar el dispositiu de destinació (MBR/GPT). Tots els fitxers existents a les unitats seleccionades s'esborraran completament!",
+  "confirm.danger_banner_desc":
+    "L'escriptura tornarà a particionar i formatar el dispositiu de destinació (MBR/GPT). Tots els fitxers existents a les unitats seleccionades s'esborraran completament!",
   "confirm.summary_title": "Unitats de destinació per al desplegament d'arrencada:",
   "confirm.smart_safe_tag": "Protecció Intel·ligent",
   "confirm.ventoy_group_title": "Unitats d'actualització al lloc (totes les ISO es conserven):",
@@ -322,10 +345,14 @@ export const caEs: TranslationDict = {
   "confirm.no": "Cancel·lar",
   "confirm.will_format": "Formatació completa",
   "confirm.no_format": "Actualització in-situ intel·ligent",
-  "deploy.toast_target_changed": "El disc de destinació seleccionat ha canviat o ja no està disponible. Torneu a escannejar.",
-  "deploy.toast_some_disks_removed": "{count} disc(s) no disponible(s) eliminat(s) automàticament, continuant amb els discs restants",
-  "deploy.error_system_disk_blocked": "⛔ Bloquejat: {disks} és un disc del sistema. No es pot desplegar un disc d'arrencada USB en una unitat del sistema!",
-  "deploy.error_readonly_disk": "🔒 Protegit contra escriptura: {disks} és només de lectura. Elimineu la protecció contra escriptura o utilitzeu un USB diferent",
+  "deploy.toast_target_changed":
+    "El disc de destinació seleccionat ha canviat o ja no està disponible. Torneu a escannejar.",
+  "deploy.toast_some_disks_removed":
+    "{count} disc(s) no disponible(s) eliminat(s) automàticament, continuant amb els discs restants",
+  "deploy.error_system_disk_blocked":
+    "⛔ Bloquejat: {disks} és un disc del sistema. No es pot desplegar un disc d'arrencada USB en una unitat del sistema!",
+  "deploy.error_readonly_disk":
+    "🔒 Protegit contra escriptura: {disks} és només de lectura. Elimineu la protecció contra escriptura o utilitzeu un USB diferent",
   "deploy.start_cloud_create": "Crear disc d'arrencada al Núvol",
   "deploy.batch_update": "Inicia l'actualització en lot sense pèrdua de dades ({count} unitats USB)",
   "deploy.batch_mixed": "Inicia el desplegament mixt en lot ({count} unitats USB)",
@@ -348,7 +375,8 @@ export const caEs: TranslationDict = {
   "inspector.smart": "Estat de salut SMART:",
   "inspector.sector": "Mida del sector:",
   "inspector.fake_title": "Fake USB 3.0 Avís Alert!",
-  "inspector.fake_desc": "El dispositiu anuncia USB 3.0/3.1, però la velocitat real de la capa física es negocia només a {speed} (USB 2.0 High-Speed ​​PHY). És probable que aquesta unitat tingui un firmware fals o un port blau fals.",
+  "inspector.fake_desc":
+    "El dispositiu anuncia USB 3.0/3.1, però la velocitat real de la capa física es negocia només a {speed} (USB 2.0 High-Speed ​​PHY). És probable que aquesta unitat tingui un firmware fals o un port blau fals.",
   "inspector.genuine_title": "Verificació de maquinari físic superada (dispositiu USB 3.0+ original)",
   "inspector.genuine_desc": "La capa física PHY ha negociat un enllaç autèntic SuperSpeed/SuperSpeed+ a {speed}.",
   "inspector.usb2_title": "Interfície USB 2.0 estàndard",
@@ -456,9 +484,12 @@ export const caEs: TranslationDict = {
   "diag.action_reformat_title": "Reformatar (reformat)",
   "diag.action_remount_title": "Remuntar (remount)",
   "diag.action_retry_title": "Reintentar (retry)",
-  "diag.action_reformat_desc": "La interrupció de l'escriptura ha malmès la taula de particions o el sistema de fitxers. Es recomana tornar a formatar.",
-  "diag.action_remount_desc": "El camí de muntatge de destinació s'ha desconnectat durant l'escriptura. Torneu a inserir la unitat USB o remunteu el volum.",
-  "diag.action_retry_desc": "L'entorn i l'estat del dispositiu estan intactes. Podeu reintentar la instal·lació amb seguretat.",
+  "diag.action_reformat_desc":
+    "La interrupció de l'escriptura ha malmès la taula de particions o el sistema de fitxers. Es recomana tornar a formatar.",
+  "diag.action_remount_desc":
+    "El camí de muntatge de destinació s'ha desconnectat durant l'escriptura. Torneu a inserir la unitat USB o remunteu el volum.",
+  "diag.action_retry_desc":
+    "L'entorn i l'estat del dispositiu estan intactes. Podeu reintentar la instal·lació amb seguretat.",
   "about.updating": "Actualitzant ({progress}%)",
   "about.updateTo": "Actualització en línia a {tag}",
   "about.downloading": "Descarregant {progress}%",
@@ -474,7 +505,8 @@ export const caEs: TranslationDict = {
   "dialog.textFilesFilter": "Fitxers de text (*.txt)",
   "dialog.allFilesFilter": "Tots els fitxers (*.*)",
   "dialog.selectIsoTitle": "Seleccionar fitxers d'imatge de sistema (*.iso, *.wim, *.img, etc.)",
-  "dialog.ventoyFilter": "Imatges font de Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
+  "dialog.ventoyFilter":
+    "Imatges font de Ventoy (*.iso; *.wim; *.img; *.vhd; *.vhdx; *.vti; *.efi; *.bin; *.xz; *.gz; *.raw)",
   "checksum.calc_btn": "Calcular Hash",
   "checksum.calculating": "Calculant Hash...",
   "checksum.algo_label": "Algorisme",
@@ -518,14 +550,18 @@ export const caEs: TranslationDict = {
   "privilege.status_standard": "No autoritzat",
   "privilege.btn_elevate": "Demanar accés d'administrador",
   "privilege.modal_title": "Permís d'administrador requerit",
-  "privilege.elevation_prompt": "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
+  "privilege.elevation_prompt":
+    "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions.",
   "privilege.modal_subtitle": "Es requereix autorització del sistema per llegir dades d'arrencada i escriure als discs",
   "privilege.reason_title": "Per què calen privilegis d'administrador?",
-  "privilege.reason_desc": "El sistema operatiu aïlla els sectors en brut i les particions EFI. L'autorització permet la detecció directa i la creació segura.",
+  "privilege.reason_desc":
+    "El sistema operatiu aïlla els sectors en brut i les particions EFI. L'autorització permet la detecció directa i la creació segura.",
   "privilege.scope_title": "Abast de l'accés",
-  "privilege.scope_desc": "Estrictament limitat a les unitats USB externes seleccionades. Els discs del sistema intern mai no es toquen.",
+  "privilege.scope_desc":
+    "Estrictament limitat a les unitats USB externes seleccionades. Els discs del sistema intern mai no es toquen.",
   "privilege.safety_title": "Seguretat i transparència",
-  "privilege.safety_desc": "La inspecció és estrictament de només lectura i no destructiva; el codi és totalment obert.",
+  "privilege.safety_desc":
+    "La inspecció és estrictament de només lectura i no destructiva; el codi és totalment obert.",
   "privilege.confirm_btn": "Autoritza ara",
   "privilege.cancel_btn": "Cancel·la",
   "privilege.success_msg": "Privilegis d'administrador concedits",
