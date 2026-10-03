@@ -190,3 +190,103 @@ func TestWriteVentoyConfig_IncludesVhdAndWimBoot(t *testing.T) {
 		t.Errorf("Expected ventoy.json to contain VTOY_VHD_NO_WARNING setting")
 	}
 }
+
+func TestBuildVentoyConfigData_PreserveCustomSections(t *testing.T) {
+	existingJSON := []byte(`{
+    "persistence": [
+        {
+            "image": "/ISO/ubuntu-24.04.iso",
+            "backend": "/persistence/ubuntu.dat"
+        }
+    ],
+    "auto_install": [
+        {
+            "image": "/ISO/win11.iso",
+            "template": "/ventoy/script/unattend.xml"
+        }
+    ],
+    "control": [
+        { "VTOY_DEFAULT_SEARCH_ROOT": "/my_iso_dir" }
+    ],
+    "image_alias": [
+        {
+            "image": "/ISO/custom.iso",
+            "alias": "My Custom Image"
+        }
+    ]
+}`)
+
+	mergedBytes, err := BuildVentoyConfigData(existingJSON, nil, t.TempDir())
+	if err != nil {
+		t.Fatalf("BuildVentoyConfigData failed: %v", err)
+	}
+
+	mergedStr := string(mergedBytes)
+
+	// Verify user-defined sections are preserved intact
+	if !strings.Contains(mergedStr, "/persistence/ubuntu.dat") {
+		t.Errorf("Expected persistence section to be preserved in merged config")
+	}
+	if !strings.Contains(mergedStr, "/ventoy/script/unattend.xml") {
+		t.Errorf("Expected auto_install section to be preserved in merged config")
+	}
+	if !strings.Contains(mergedStr, "/my_iso_dir") {
+		t.Errorf("Expected custom VTOY_DEFAULT_SEARCH_ROOT control to be preserved")
+	}
+	if !strings.Contains(mergedStr, "My Custom Image") {
+		t.Errorf("Expected custom image_alias to be preserved")
+	}
+
+	// Verify UniBoot settings are woven in
+	if !strings.Contains(mergedStr, "VTOY_VHD_NO_WARNING") {
+		t.Errorf("Expected VTOY_VHD_NO_WARNING to be woven in")
+	}
+	if !strings.Contains(mergedStr, "themes/uniboot/theme.txt") {
+		t.Errorf("Expected UniBoot theme to be woven in")
+	}
+	if !strings.Contains(mergedStr, "UniBoot Network & Local Installation System") {
+		t.Errorf("Expected UniBoot alias to be woven in")
+	}
+}
+
+func TestWriteVentoyConfig_NonDestructiveExistingConfig(t *testing.T) {
+	mountDir := t.TempDir()
+	ventoyDir := filepath.Join(mountDir, "ventoy")
+	if err := os.MkdirAll(ventoyDir, 0755); err != nil {
+		t.Fatalf("MkdirAll failed: %v", err)
+	}
+
+	existingJSON := []byte(`{
+    "persistence": [
+        {
+            "image": "/ISO/kali.iso",
+            "backend": "/persistence/kali.dat"
+        }
+    ]
+}`)
+	jsonPath := filepath.Join(ventoyDir, "ventoy.json")
+	if err := os.WriteFile(jsonPath, existingJSON, 0644); err != nil {
+		t.Fatalf("WriteFile failed: %v", err)
+	}
+
+	// Upgrade/Rewrite
+	if err := WriteVentoyConfig(mountDir); err != nil {
+		t.Fatalf("WriteVentoyConfig failed on existing directory: %v", err)
+	}
+
+	readBytes, err := os.ReadFile(jsonPath)
+	if err != nil {
+		t.Fatalf("ReadFile failed: %v", err)
+	}
+
+	readStr := string(readBytes)
+	if !strings.Contains(readStr, "/persistence/kali.dat") {
+		t.Errorf("Expected existing persistence configuration to be preserved")
+	}
+	if !strings.Contains(readStr, "themes/uniboot/theme.txt") {
+		t.Errorf("Expected UniBoot theme to be injected")
+	}
+	if !strings.Contains(readStr, "VTOY_VHD_NO_WARNING") {
+		t.Errorf("Expected VTOY_VHD_NO_WARNING to be injected")
+	}
+}

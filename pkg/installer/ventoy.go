@@ -4,6 +4,7 @@
 package installer
 
 import (
+	"bytes"
 	"embed"
 	"encoding/json"
 	"fmt"
@@ -64,53 +65,17 @@ func WriteVentoyConfigWithAppConfig(mountDir string, appCfg *config.AppConfig) e
 		return fmt.Errorf("failed to create ventoy directory: %w", err)
 	}
 
-	controls := []map[string]interface{}{
-		{"VTOY_MENU_LANGUAGE": "zh_CN"},
-		{"VTOY_FILE_FLT_EFI": "1"},
-		{"VTOY_FILT_DOT_UNDERSCORE_FILE": "1"},
-		{"VTOY_SORT_CASE_SENSITIVE": "0"},
-		{"VTOY_VHD_NO_WARNING": "1"},
-	}
-
-	defaultIso := filepath.Join(mountDir, "iso", "UniBoot.iso")
-	if _, err := os.Stat(defaultIso); err == nil {
-		controls = append(controls, map[string]interface{}{"VTOY_DEFAULT_IMAGE": "/iso/UniBoot.iso"})
-	}
-
-	if appCfg.VentoyWin11Bypass {
-		controls = append(controls,
-			map[string]interface{}{"VTOY_WIN11_BYPASS_CHECK": "1"},
-			map[string]interface{}{"VTOY_WIN11_BYPASS_NRO": "1"},
-		)
-	}
-
-	themeCfg := &VentoyThemeConfig{
-		File:    "/ventoy/themes/uniboot/theme.txt",
-		Gfxmode: "1280x800",
-		Display: "full",
-	}
-	if appCfg.VentoyMenuTimeout > 0 {
-		themeCfg.Timeout = appCfg.VentoyMenuTimeout
-	}
-
-	// 1. Build ventoy.json matching official UniBoot specification & user config
-	cfg := VentoyGlobalConfig{
-		Theme: themeCfg,
-		ImageAlias: []VentoyAliasConfig{
-			{
-				Image: "/iso/UniBoot.iso",
-				Alias: "⚡ UniBoot Network & Local Installation System",
-			},
-		},
-		Control: controls,
-	}
-
-	data, err := json.MarshalIndent(cfg, "", "    ")
-	if err != nil {
-		return fmt.Errorf("failed to marshal ventoy.json: %w", err)
-	}
-
 	jsonPath := filepath.Join(ventoyDir, "ventoy.json")
+	var existingData []byte
+	if raw, err := os.ReadFile(jsonPath); err == nil && len(raw) > 0 {
+		existingData = raw
+	}
+
+	data, err := BuildVentoyConfigData(existingData, appCfg, mountDir)
+	if err != nil {
+		return fmt.Errorf("failed to build ventoy.json: %w", err)
+	}
+
 	if err := os.WriteFile(jsonPath, data, 0644); err != nil {
 		return fmt.Errorf("failed to write ventoy.json: %w", err)
 	}
@@ -220,6 +185,165 @@ menuentry "$lbl_return" --class=vtoyret VTOY_RET {
 	}
 
 	return nil
+}
+
+// BuildVentoyConfigData generates or non-destructively merges ventoy.json content.
+// If existingData contains valid JSON, user-configured sections (e.g. persistence, auto_install,
+// custom image_alias, custom controls) are strictly preserved while UniBoot settings are woven in.
+func BuildVentoyConfigData(existingData []byte, appCfg *config.AppConfig, mountDir string) ([]byte, error) {
+	if appCfg == nil {
+		appCfg, _ = config.Load()
+		if appCfg == nil {
+			appCfg = config.GetDefaultConfig()
+		}
+	}
+
+	controls := []map[string]interface{}{
+		{"VTOY_MENU_LANGUAGE": "zh_CN"},
+		{"VTOY_FILE_FLT_EFI": "1"},
+		{"VTOY_FILT_DOT_UNDERSCORE_FILE": "1"},
+		{"VTOY_SORT_CASE_SENSITIVE": "0"},
+		{"VTOY_VHD_NO_WARNING": "1"},
+	}
+
+	defaultIso := filepath.Join(mountDir, "iso", "UniBoot.iso")
+	if _, err := os.Stat(defaultIso); err == nil {
+		controls = append(controls, map[string]interface{}{"VTOY_DEFAULT_IMAGE": "/iso/UniBoot.iso"})
+	}
+
+	if appCfg.VentoyWin11Bypass {
+		controls = append(controls,
+			map[string]interface{}{"VTOY_WIN11_BYPASS_CHECK": "1"},
+			map[string]interface{}{"VTOY_WIN11_BYPASS_NRO": "1"},
+		)
+	}
+
+	themeCfg := &VentoyThemeConfig{
+		File:    "/ventoy/themes/uniboot/theme.txt",
+		Gfxmode: "1280x800",
+		Display: "full",
+	}
+	if appCfg.VentoyMenuTimeout > 0 {
+		themeCfg.Timeout = appCfg.VentoyMenuTimeout
+	}
+
+	unibootAliases := []VentoyAliasConfig{
+		{
+			Image: "/iso/UniBoot.iso",
+			Alias: "⚡ UniBoot Network & Local Installation System",
+		},
+	}
+
+	// Try parsing existing JSON into a generic map to preserve user-defined sections (persistence, etc.)
+	var rawMap map[string]interface{}
+	if len(existingData) > 0 {
+		_ = json.Unmarshal(existingData, &rawMap)
+	}
+	if rawMap == nil {
+		rawMap = make(map[string]interface{})
+	}
+
+	// 1. Weave Theme
+	rawMap["theme"] = themeCfg
+
+	// 2. Weave Controls non-destructively
+	rawMap["control"] = mergeVentoyControls(rawMap["control"], controls)
+
+	// 3. Weave ImageAlias non-destructively
+	rawMap["image_alias"] = mergeVentoyImageAliases(rawMap["image_alias"], unibootAliases)
+
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	enc.SetEscapeHTML(false)
+	enc.SetIndent("", "    ")
+	if err := enc.Encode(rawMap); err != nil {
+		return nil, fmt.Errorf("failed to encode ventoy.json: %w", err)
+	}
+
+	return bytes.TrimRight(buf.Bytes(), "\n"), nil
+}
+
+func mergeVentoyControls(existing interface{}, unibootControls []map[string]interface{}) []map[string]interface{} {
+	result := make([]map[string]interface{}, 0)
+	handledKeys := make(map[string]bool)
+
+	unibootMap := make(map[string]interface{})
+	for _, c := range unibootControls {
+		for k, v := range c {
+			unibootMap[k] = v
+		}
+	}
+
+	// 1. Process existing controls preserving user's order and custom keys
+	if existingSlice, ok := existing.([]interface{}); ok {
+		for _, item := range existingSlice {
+			if m, ok := item.(map[string]interface{}); ok {
+				newEntry := make(map[string]interface{})
+				for k, v := range m {
+					if unibootVal, exists := unibootMap[k]; exists {
+						newEntry[k] = unibootVal
+						handledKeys[k] = true
+					} else {
+						// Custom user control, preserve it
+						newEntry[k] = v
+					}
+				}
+				if len(newEntry) > 0 {
+					result = append(result, newEntry)
+				}
+			}
+		}
+	}
+
+	// 2. Append any UniBoot controls not yet handled
+	for _, c := range unibootControls {
+		for k, v := range c {
+			if !handledKeys[k] {
+				result = append(result, map[string]interface{}{k: v})
+				handledKeys[k] = true
+			}
+		}
+	}
+
+	return result
+}
+
+func mergeVentoyImageAliases(existing interface{}, unibootAliases []VentoyAliasConfig) []VentoyAliasConfig {
+	result := make([]VentoyAliasConfig, 0)
+	unibootMap := make(map[string]string)
+	for _, a := range unibootAliases {
+		unibootMap[a.Image] = a.Alias
+	}
+
+	handledImages := make(map[string]bool)
+
+	// Preserve existing aliases
+	if existingSlice, ok := existing.([]interface{}); ok {
+		for _, item := range existingSlice {
+			if m, ok := item.(map[string]interface{}); ok {
+				img, _ := m["image"].(string)
+				alias, _ := m["alias"].(string)
+				if img != "" {
+					if ubAlias, exists := unibootMap[img]; exists {
+						result = append(result, VentoyAliasConfig{Image: img, Alias: ubAlias})
+						handledImages[img] = true
+					} else {
+						result = append(result, VentoyAliasConfig{Image: img, Alias: alias})
+					}
+				}
+			}
+		}
+	}
+
+	// Append any unhandled UniBoot aliases
+	for _, a := range unibootAliases {
+		if !handledImages[a.Image] {
+			result = append(result, a)
+			handledImages[a.Image] = true
+		}
+	}
+
+	return result
 }
 
 // DeployVentoyVhdBoot extracts embedded ventoy_vhdboot.img to ventoyDir if not already present or incomplete.
