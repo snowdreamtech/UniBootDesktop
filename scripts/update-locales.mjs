@@ -154,6 +154,9 @@ async function main() {
     }
   } else {
     if (updatedFiles.length > 0) {
+      if (!updatedFiles.includes(enUsPath)) {
+        updatedFiles.push(enUsPath);
+      }
       console.log(`\n🎨 Formatting ${updatedFiles.length} updated files with Prettier...`);
       formatFilesWithPrettier(updatedFiles);
       console.log(`\n✨ Successfully updated and formatted ${updatedFiles.length} locale files.`);
