@@ -183,8 +183,8 @@ func TestDownloader_ContextTimeout(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Millisecond)
 	defer cancel()
 
-	// Wait for context to timeout
-	time.Sleep(50 * time.Millisecond)
+	// Wait for context to timeout reliably
+	<-ctx.Done()
 
 	mock := &MockDownloader{
 		DownloadFunc: func(ctx context.Context, url, destination string, opts download.DownloadOptions) error {
