@@ -297,7 +297,7 @@ if [ "$(go env GOOS)" = "linux" ] && pkg-config --exists webkit2gtk-4.1 && ! pkg
     BUILD_TAGS+=("-tags" "webkit2_41")
 fi
 unirtm exec -- wails build -s -clean ${BUILD_TAGS[@]+"${BUILD_TAGS[@]}"}
-rm -rf build/bin
+node -e "const fs = require('fs'); fs.rmSync('build/bin', { recursive: true, force: true });"
 '''
 output = "interleaved"
 
