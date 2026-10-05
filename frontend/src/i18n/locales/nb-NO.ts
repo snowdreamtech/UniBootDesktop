@@ -386,6 +386,8 @@ export const nbNo: TranslationDict = {
   "inspector.lbl_fs": "Filsystem",
   "inspector.lbl_scheme": "Partisjonsskjema",
   "inspector.lbl_mount": "Monteringsbane",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Disktillatelse",
   "inspector.val_rw": "Lese-skrive",
   "inspector.val_ro": "Skrivebeskyttet (skrivebeskyttet)",

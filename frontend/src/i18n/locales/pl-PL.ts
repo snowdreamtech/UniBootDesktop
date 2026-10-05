@@ -391,6 +391,8 @@ export const plPl: TranslationDict = {
   "inspector.lbl_fs": "System plików",
   "inspector.lbl_scheme": "Typ tablicy partycji",
   "inspector.lbl_mount": "Ścieżka montowania",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Uprawnienia do dysku",
   "inspector.val_rw": "Odczyt i Zapis (Read-Write)",
   "inspector.val_ro": "Tylko do odczytu (Read-Only)",

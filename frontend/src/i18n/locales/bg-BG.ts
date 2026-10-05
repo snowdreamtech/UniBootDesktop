@@ -392,6 +392,8 @@ export const bgBg: TranslationDict = {
   "inspector.lbl_fs": "Файлова система",
   "inspector.lbl_scheme": "Схема за разделяне",
   "inspector.lbl_mount": "Път на монтиране",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Разрешение за диск",
   "inspector.val_rw": "Четене-Писане",
   "inspector.val_ro": "Само за четене (защитено от запис)",

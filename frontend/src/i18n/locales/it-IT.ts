@@ -388,6 +388,8 @@ export const itIt: TranslationDict = {
   "inspector.lbl_fs": "Sistema di file",
   "inspector.lbl_scheme": "Tabella Partizioni",
   "inspector.lbl_mount": "Percorso di mount",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Permessi Disco",
   "inspector.val_rw": "Lettura e Scrittura (Read-Write)",
   "inspector.val_ro": "Sola Lettura (Read-Only)",

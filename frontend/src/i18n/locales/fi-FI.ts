@@ -388,6 +388,8 @@ export const fiFi: TranslationDict = {
   "inspector.lbl_fs": "Tiedostojärjestelmä",
   "inspector.lbl_scheme": "Osiokaavio",
   "inspector.lbl_mount": "Liitospolku",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Levyn käyttöoikeus",
   "inspector.val_rw": "Lue-kirjoita",
   "inspector.val_ro": "Vain luku (kirjoitussuojattu)",

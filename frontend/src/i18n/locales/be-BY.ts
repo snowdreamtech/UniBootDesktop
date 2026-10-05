@@ -389,6 +389,8 @@ export const beBy: TranslationDict = {
   "inspector.lbl_fs": "Файлавая сістэма",
   "inspector.lbl_scheme": "Схема перагародкі",
   "inspector.lbl_mount": "Шлях мантавання",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Дазвол дыска",
   "inspector.val_rw": "Чытанне і запіс",
   "inspector.val_ro": "Толькі для чытання (абаронены ад запісу)",

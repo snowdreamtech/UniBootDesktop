@@ -387,6 +387,8 @@ export const csCz: TranslationDict = {
   "inspector.lbl_fs": "Systém souborů",
   "inspector.lbl_scheme": "Schéma rozdělení",
   "inspector.lbl_mount": "Cesta připojení",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Oprávnění k disku",
   "inspector.val_rw": "Čtení-Zápis",
   "inspector.val_ro": "Pouze pro čtení (chráněno proti zápisu)",

@@ -392,6 +392,8 @@ export const slSi: TranslationDict = {
   "inspector.lbl_fs": "Datotečni sistem",
   "inspector.lbl_scheme": "Razdelitvena shema",
   "inspector.lbl_mount": "Pot priklopa",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Dovoljenje za disk",
   "inspector.val_rw": "Beri-piši",
   "inspector.val_ro": "Samo za branje (zaščiteno pred pisanjem)",

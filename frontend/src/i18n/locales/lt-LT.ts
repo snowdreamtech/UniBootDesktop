@@ -393,6 +393,8 @@ export const ltLt: TranslationDict = {
   "inspector.lbl_fs": "Failų sistema",
   "inspector.lbl_scheme": "Padalijimo schema",
   "inspector.lbl_mount": "Prijungimo kelias",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Disko leidimas",
   "inspector.val_rw": "Skaityti-Rašyti",
   "inspector.val_ro": "Tik skaitymas (apsaugota nuo rašymo)",

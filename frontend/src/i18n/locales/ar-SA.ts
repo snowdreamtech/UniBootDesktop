@@ -376,6 +376,8 @@ export const arSa: TranslationDict = {
   "inspector.lbl_fs": "نظام الملفات",
   "inspector.lbl_scheme": "نوع جدول التقسيم",
   "inspector.lbl_mount": "مسار التحميل",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "أذونات القرص",
   "inspector.val_rw": "القراءة والكتابة (Read-Write)",
   "inspector.val_ro": "للقراءة فقط (Read-Only)",

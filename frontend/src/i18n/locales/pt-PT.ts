@@ -390,6 +390,8 @@ export const ptPt: TranslationDict = {
   "inspector.lbl_fs": "Sistema de arquivos",
   "inspector.lbl_scheme": "Esquema de partição",
   "inspector.lbl_mount": "Ponto de montagem",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Permissão de disco",
   "inspector.val_rw": "Ler-Escrever",
   "inspector.val_ro": "Somente leitura (protegido contra gravação)",

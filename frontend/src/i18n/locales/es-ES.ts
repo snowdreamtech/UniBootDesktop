@@ -390,6 +390,8 @@ export const esEs: TranslationDict = {
   "inspector.lbl_fs": "Sistema de archivos",
   "inspector.lbl_scheme": "Tabla de particiones",
   "inspector.lbl_mount": "Punto de montaje",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Permisos de disco",
   "inspector.val_rw": "Lectura y Escritura (Read-Write)",
   "inspector.val_ro": "Solo lectura (Read-Only)",

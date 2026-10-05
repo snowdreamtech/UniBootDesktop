@@ -388,6 +388,8 @@ export const skSk: TranslationDict = {
   "inspector.lbl_fs": "Systém súborov",
   "inspector.lbl_scheme": "Schéma rozdelenia",
   "inspector.lbl_mount": "Cesta pripojenia",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Povolenie disku",
   "inspector.val_rw": "Čítanie-Zápis",
   "inspector.val_ro": "Iba na čítanie (chránené proti zápisu)",

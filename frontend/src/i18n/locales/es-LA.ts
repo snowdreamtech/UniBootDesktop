@@ -395,6 +395,8 @@ export const esLa: TranslationDict = {
   "inspector.lbl_fs": "Sistema de archivos",
   "inspector.lbl_scheme": "Esquema de partición",
   "inspector.lbl_mount": "Punto de montaje",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Permiso de disco",
   "inspector.val_rw": "Lectura-Escritura",
   "inspector.val_ro": "Solo lectura (protegido contra escritura)",

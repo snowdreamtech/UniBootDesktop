@@ -379,6 +379,8 @@ export const koKr: TranslationDict = {
   "inspector.lbl_fs": "파일 시스템",
   "inspector.lbl_scheme": "파티션 형식",
   "inspector.lbl_mount": "마운트 경로",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "디스크 권한",
   "inspector.val_rw": "읽기/쓰기 가능 (Read-Write)",
   "inspector.val_ro": "읽기 전용 (Read-Only)",

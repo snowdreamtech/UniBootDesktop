@@ -387,6 +387,8 @@ export const ruRu: TranslationDict = {
   "inspector.lbl_fs": "Файловая система",
   "inspector.lbl_scheme": "Схема разделов",
   "inspector.lbl_mount": "Путь монтирования",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Права доступа",
   "inspector.val_rw": "Чтение и запись (Read-Write)",
   "inspector.val_ro": "Только чтение (Read-Only)",

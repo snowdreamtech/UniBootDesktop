@@ -390,6 +390,8 @@ export const idId: TranslationDict = {
   "inspector.lbl_fs": "Sistem File",
   "inspector.lbl_scheme": "Skema Partisi",
   "inspector.lbl_mount": "Jalur Kait",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Izin Disk",
   "inspector.val_rw": "Baca-Tulis",
   "inspector.val_ro": "Hanya-Baca (Dilindungi Tulisan)",

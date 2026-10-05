@@ -388,6 +388,8 @@ export const kaGe: TranslationDict = {
   "inspector.lbl_fs": "ფაილური სისტემა",
   "inspector.lbl_scheme": "გაყოფის სქემა",
   "inspector.lbl_mount": "მიერთების გზა",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "დისკის ნებართვა",
   "inspector.val_rw": "კითხვა-წერა",
   "inspector.val_ro": "მხოლოდ წაკითხვადი (ჩაწერა დაცულია)",

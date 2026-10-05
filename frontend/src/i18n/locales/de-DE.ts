@@ -390,6 +390,8 @@ export const deDe: TranslationDict = {
   "inspector.lbl_fs": "Dateisystem",
   "inspector.lbl_scheme": "Partitionsschema",
   "inspector.lbl_mount": "Einhängepunkt",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Zugriffsrechte",
   "inspector.val_rw": "Lesen & Schreiben (Read-Write)",
   "inspector.val_ro": "Schreibgeschützt (Read-Only)",

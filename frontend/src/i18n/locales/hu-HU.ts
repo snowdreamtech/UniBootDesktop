@@ -391,6 +391,8 @@ export const huHu: TranslationDict = {
   "inspector.lbl_fs": "Fájlrendszer",
   "inspector.lbl_scheme": "Partíciós séma",
   "inspector.lbl_mount": "Csatolási útvonal",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Lemezengedély",
   "inspector.val_rw": "Olvasni-Írni",
   "inspector.val_ro": "Csak olvasható (írásvédett)",

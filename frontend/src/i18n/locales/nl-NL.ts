@@ -386,6 +386,8 @@ export const nlNl: TranslationDict = {
   "inspector.lbl_fs": "Bestandssysteem",
   "inspector.lbl_scheme": "Partitieschema",
   "inspector.lbl_mount": "Koppelpad",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Schijftoestemming",
   "inspector.val_rw": "Lezen-schrijven",
   "inspector.val_ro": "Alleen-lezen (schrijfbeveiligd)",

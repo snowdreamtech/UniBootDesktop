@@ -398,6 +398,8 @@ export const elGr: TranslationDict = {
   "inspector.lbl_fs": "Σύστημα αρχείων",
   "inspector.lbl_scheme": "Σχέδιο κατάτμησης",
   "inspector.lbl_mount": "Διαδρομή προσάρτησης",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Άδεια δίσκου",
   "inspector.val_rw": "Διαβάστε-Γράψτε",
   "inspector.val_ro": "Μόνο για ανάγνωση (Προστασία εγγραφής)",

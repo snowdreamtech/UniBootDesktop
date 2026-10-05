@@ -389,6 +389,8 @@ export const ocFr: TranslationDict = {
   "inspector.lbl_fs": "Sistèma de fichièrs",
   "inspector.lbl_scheme": "Esquèma de particion",
   "inspector.lbl_mount": "Camin de montatge",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Permission del disc",
   "inspector.val_rw": "Legir-Escriure",
   "inspector.val_ro": "Sola lectura (Protegit per l'escritura)",

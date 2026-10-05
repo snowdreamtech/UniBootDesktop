@@ -385,6 +385,8 @@ export const daDk: TranslationDict = {
   "inspector.lbl_fs": "Filsystem",
   "inspector.lbl_scheme": "Opdelingsskema",
   "inspector.lbl_mount": "Monteringssti",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Disktilladelse",
   "inspector.val_rw": "Læs-skriv",
   "inspector.val_ro": "Skrivebeskyttet (skrivebeskyttet)",

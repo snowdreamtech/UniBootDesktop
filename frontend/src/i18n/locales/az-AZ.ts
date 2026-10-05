@@ -385,6 +385,8 @@ export const azAz: TranslationDict = {
   "inspector.lbl_fs": "Fayl sistemi",
   "inspector.lbl_scheme": "Bölmə sxemi",
   "inspector.lbl_mount": "Qoşulma yolu",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Disk icazəsi",
   "inspector.val_rw": "Oxu-Yaz",
   "inspector.val_ro": "Yalnız oxumaq üçün (Yazmaqdan qorunur)",
