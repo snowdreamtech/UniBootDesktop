@@ -19,3 +19,8 @@ func IsSystemDarkTheme() bool {
 	}
 	return strings.TrimSpace(string(out)) == "Dark"
 }
+
+// SupportsMicaBackdrop always returns false on macOS.
+func SupportsMicaBackdrop() bool {
+	return false
+}

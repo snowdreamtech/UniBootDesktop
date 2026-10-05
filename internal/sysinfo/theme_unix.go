@@ -19,3 +19,8 @@ func IsSystemDarkTheme() bool {
 	}
 	return false
 }
+
+// SupportsMicaBackdrop always returns false on Linux/Unix.
+func SupportsMicaBackdrop() bool {
+	return false
+}
