@@ -20,6 +20,7 @@ import (
 
 	"github.com/snowdreamtech/unibootdesktop/internal/env"
 	"github.com/snowdreamtech/unibootdesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/internal/sysinfo"
 	"github.com/snowdreamtech/unibootdesktop/pkg/config"
 	"github.com/snowdreamtech/unibootdesktop/pkg/disk"
 	"github.com/snowdreamtech/unibootdesktop/pkg/firmware"
@@ -1018,6 +1019,23 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		return err
 	}
 	firmware.SetCustomUniBootDir(cfg.UniBootPath)
+	if a.ctx != nil && a.ctx.Value("frontend") != nil {
+		switch cfg.Theme {
+		case "dark":
+			wailsRuntime.WindowSetDarkTheme(a.ctx)
+			wailsRuntime.WindowSetBackgroundColour(a.ctx, 11, 15, 25, 255)
+		case "light":
+			wailsRuntime.WindowSetLightTheme(a.ctx)
+			wailsRuntime.WindowSetBackgroundColour(a.ctx, 248, 250, 252, 255)
+		default:
+			wailsRuntime.WindowSetSystemDefaultTheme(a.ctx)
+			if sysinfo.IsSystemDarkTheme() {
+				wailsRuntime.WindowSetBackgroundColour(a.ctx, 11, 15, 25, 255)
+			} else {
+				wailsRuntime.WindowSetBackgroundColour(a.ctx, 248, 250, 252, 255)
+			}
+		}
+	}
 	logger.Info("Application preferences saved successfully")
 	return nil
 }

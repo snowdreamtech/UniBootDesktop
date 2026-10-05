@@ -1,5 +1,6 @@
 import { onMounted, onUnmounted, type Ref } from "vue";
 import { GetRecentLogs } from "../../wailsjs/go/main/App";
+import { syncWindowTheme } from "./useTheme";
 
 export interface UseAppRuntimeEventsOptions {
   t: (key: any, named?: Record<string, any>) => string;
@@ -41,6 +42,7 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
   } = options;
 
   onMounted(() => {
+    syncWindowTheme();
     loadConfig();
     refreshDisks();
     checkQemu();

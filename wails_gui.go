@@ -95,26 +95,29 @@ func RunWails() error {
 	// Determine native window appearance and background color from saved user theme preference,
 	// or dynamically resolve against OS system appearance when set to "system" or empty.
 	isDark := false
+	winTheme := windows.SystemDefault
 	if cfg, err := config.Load(); err == nil && cfg != nil {
 		switch cfg.Theme {
 		case "dark":
 			isDark = true
+			winTheme = windows.Dark
 		case "light":
 			isDark = false
+			winTheme = windows.Light
 		default:
 			isDark = sysinfo.IsSystemDarkTheme()
+			winTheme = windows.SystemDefault
 		}
 	} else {
 		isDark = sysinfo.IsSystemDarkTheme()
+		winTheme = windows.SystemDefault
 	}
 
 	macAppearance := mac.NSAppearanceNameAqua
 	backgroundColour := &options.RGBA{R: 248, G: 250, B: 252, A: 255}
-	winTheme := windows.Light
 	if isDark {
 		macAppearance = mac.NSAppearanceNameDarkAqua
 		backgroundColour = &options.RGBA{R: 11, G: 15, B: 25, A: 255}
-		winTheme = windows.Dark
 	}
 
 	return wails.Run(&options.App{

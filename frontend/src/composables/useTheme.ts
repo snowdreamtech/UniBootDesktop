@@ -42,18 +42,25 @@ function updateDomAndWindow(resolved: "dark" | "light") {
 
   if (typeof window !== "undefined" && (window as any).runtime) {
     try {
-      if (resolved === "dark") {
+      if (
+        currentTheme.value === "system" &&
+        typeof (window as any).runtime.WindowSetSystemDefaultTheme === "function"
+      ) {
+        (window as any).runtime.WindowSetSystemDefaultTheme();
+      } else if (resolved === "dark") {
         if (typeof (window as any).runtime.WindowSetDarkTheme === "function") {
           (window as any).runtime.WindowSetDarkTheme();
-        }
-        if (typeof (window as any).runtime.WindowSetBackgroundColour === "function") {
-          (window as any).runtime.WindowSetBackgroundColour(11, 15, 25, 255);
         }
       } else {
         if (typeof (window as any).runtime.WindowSetLightTheme === "function") {
           (window as any).runtime.WindowSetLightTheme();
         }
-        if (typeof (window as any).runtime.WindowSetBackgroundColour === "function") {
+      }
+
+      if (typeof (window as any).runtime.WindowSetBackgroundColour === "function") {
+        if (resolved === "dark") {
+          (window as any).runtime.WindowSetBackgroundColour(11, 15, 25, 255);
+        } else {
           (window as any).runtime.WindowSetBackgroundColour(248, 250, 252, 255);
         }
       }
@@ -61,6 +68,10 @@ function updateDomAndWindow(resolved: "dark" | "light") {
       // Ignore errors in non-wails environment
     }
   }
+}
+
+export function syncWindowTheme() {
+  updateDomAndWindow(resolveEffectiveTheme(currentTheme.value));
 }
 
 // Ensure DOM and window theme are synchronized immediately upon script evaluation
