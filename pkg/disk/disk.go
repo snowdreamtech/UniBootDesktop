@@ -2491,6 +2491,10 @@ func getWindowsDisks() ([]DiskInfo, error) {
 }
 
 func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
+	devNode := strings.TrimSpace(drive.DeviceID)
+	if devNode == "" {
+		devNode = fmt.Sprintf(`\\.\PhysicalDrive%d`, i)
+	}
 	driveLetter := fmt.Sprintf("%c:", 'E'+i)
 	displayName := drive.Model
 	if displayName == "" {
@@ -2515,7 +2519,7 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 	protoCode := MapProtocolCode(usbVer, usbSpeed)
 
 	// Detect if this is a system disk
-	isSystemDisk, _ := isSystemDiskWindows(driveLetter)
+	isSystemDisk, _ := isSystemDiskWindows(devNode)
 
 	manifestWin := GetDiskUniBootManifest(driveLetter)
 	isRealVentoyWin := IsRealVentoyDisk(driveLetter)
@@ -2536,7 +2540,7 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 	bootStatusWin, bootStatusCodeWin := DetectBootStatus("GPT / MBR", isRealVentoyWin, isCloudModeWin, thirdPartyBootWin, manifestWin, false)
 
 	return &DiskInfo{
-		Device:             driveLetter,
+		Device:             devNode,
 		Name:               displayName,
 		Size:               drive.Size,
 		Formatted:          formattedSize,
@@ -2755,22 +2759,75 @@ func isSystemDiskDarwin(device string) (bool, error) {
 	return false, nil
 }
 
+var (
+	windowsSystemDiskIndexOnce sync.Once
+	windowsSystemDiskIndex     = -1
+)
+
+func getWindowsSystemDiskIndex() int {
+	windowsSystemDiskIndexOnce.Do(func() {
+		// 1. Fast path: native Win32 DeviceIoControl
+		if idx, err := getSystemDriveDiskNumberWindows(); err == nil && idx >= 0 {
+			windowsSystemDiskIndex = idx
+			return
+		}
+
+		systemDrive := os.Getenv("SystemDrive")
+		if systemDrive == "" {
+			systemDrive = "C:"
+		}
+		driveLetter := strings.TrimSuffix(systemDrive, "\\")
+		driveLetter = strings.TrimSuffix(driveLetter, ":")
+		if driveLetter == "" {
+			driveLetter = "C"
+		}
+
+		// 2. Try PowerShell to query the partition of the system drive
+		cmd := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command",
+			fmt.Sprintf("(Get-Partition -DriveLetter '%s').DiskNumber", driveLetter))
+		if out, err := cmd.Output(); err == nil {
+			trimmed := strings.TrimSpace(string(out))
+			if idx, errConv := strconv.Atoi(trimmed); errConv == nil && idx >= 0 {
+				windowsSystemDiskIndex = idx
+				return
+			}
+		}
+
+		// 2. Fallback to WMI association query
+		cmdWmi := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command",
+			fmt.Sprintf("(Get-CimAssociatedInstance -InputObject (Get-CimInstance Win32_LogicalDisk -Filter \"DeviceID='%s:'\") -ResultClassName Win32_DiskPartition).DiskIndex", driveLetter))
+		if out, err := cmdWmi.Output(); err == nil {
+			trimmed := strings.TrimSpace(string(out))
+			if idx, errConv := strconv.Atoi(trimmed); errConv == nil && idx >= 0 {
+				windowsSystemDiskIndex = idx
+				return
+			}
+		}
+
+		// 3. Fallback default to 0 for safety
+		windowsSystemDiskIndex = 0
+	})
+	return windowsSystemDiskIndex
+}
+
 // isSystemDiskWindows checks if a disk is a system disk on Windows
 func isSystemDiskWindows(device string) (bool, error) {
-	// Extract drive letter or disk number
-	var target string
-	if len(device) == 2 && device[1] == ':' {
-		// Drive letter format (C:)
-		target = device
-	} else {
-		// PhysicalDrive format
-		target = strings.TrimPrefix(device, `\\.\PhysicalDrive`)
-		target = strings.TrimPrefix(target, `PhysicalDrive`)
-		target = strings.TrimPrefix(target, `disk`)
+	trimmed := strings.TrimSpace(device)
+	if trimmed == "" {
+		return false, fmt.Errorf("empty device path")
 	}
 
-	// Check if drive contains Windows directory
-	if len(target) == 2 && target[1] == ':' {
+	// 1. Drive letter format (e.g. C:, C:\, D:)
+	if (len(trimmed) == 2 && trimmed[1] == ':') || (len(trimmed) == 3 && trimmed[1] == ':' && (trimmed[2] == '\\' || trimmed[2] == '/')) {
+		target := strings.ToUpper(trimmed[:2])
+		sysDrive := strings.ToUpper(os.Getenv("SystemDrive"))
+		if sysDrive == "" {
+			sysDrive = "C:"
+		}
+		if target == sysDrive {
+			return true, nil
+		}
+
 		windowsDir := filepath.Join(target+"\\", "Windows")
 		if info, err := os.Stat(windowsDir); err == nil && info.IsDir() {
 			return true, nil
@@ -2784,6 +2841,19 @@ func isSystemDiskWindows(device string) (bool, error) {
 			if strings.Contains(strings.ToUpper(string(output)), "TRUE") {
 				return true, nil
 			}
+		}
+		return false, nil
+	}
+
+	// 2. Physical drive format (e.g. \\.\PhysicalDrive0, PhysicalDrive0, disk0, 0)
+	diskNum, err := parseWindowsDiskNumber(trimmed)
+	if err == nil {
+		sysDiskNum := getWindowsSystemDiskIndex()
+		if sysDiskNum >= 0 && diskNum == sysDiskNum {
+			return true, nil
+		}
+		if diskNum == 0 {
+			return true, nil
 		}
 	}
 
