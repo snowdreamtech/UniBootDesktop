@@ -14,3 +14,11 @@ func TestSupportsMicaBackdrop(t *testing.T) {
 	// SupportsMicaBackdrop should execute safely without crashing on any supported platform
 	_ = SupportsMicaBackdrop()
 }
+
+func TestSyncTitleBarTheme(t *testing.T) {
+	// SyncTitleBarTheme should execute safely without crashing on any supported platform
+	SyncTitleBarTheme("dark")
+	SyncTitleBarTheme("light")
+	SyncTitleBarTheme("system")
+}
+

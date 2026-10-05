@@ -113,6 +113,11 @@ func RunWails() error {
 		winTheme = windows.SystemDefault
 	}
 
+	winBackdrop := windows.Auto
+	if sysinfo.SupportsMicaBackdrop() {
+		winBackdrop = windows.Mica
+	}
+
 	macAppearance := mac.NSAppearanceNameAqua
 	backgroundColour := &options.RGBA{R: 248, G: 250, B: 252, A: 255}
 	if isDark {
@@ -141,6 +146,11 @@ func RunWails() error {
 			time.AfterFunc(50*time.Millisecond, func() {
 				wailsRuntime.Show(ctx)
 				wailsRuntime.WindowShow(ctx)
+				if cfg, err := config.Load(); err == nil && cfg != nil {
+					sysinfo.SyncTitleBarTheme(cfg.Theme)
+				} else {
+					sysinfo.SyncTitleBarTheme("system")
+				}
 			})
 		},
 		OnShutdown:    app.shutdown,
@@ -158,7 +168,21 @@ func RunWails() error {
 			WindowIsTranslucent:  sysinfo.SupportsMicaBackdrop(),
 			DisableWindowIcon:    false,
 			Theme:                winTheme,
-			BackdropType:         windows.Mica,
+			CustomTheme: &windows.ThemeSettings{
+				DarkModeTitleBar:           windows.RGB(11, 15, 25),
+				DarkModeTitleBarInactive:   windows.RGB(15, 23, 42),
+				DarkModeTitleText:          windows.RGB(241, 245, 249),
+				DarkModeTitleTextInactive:  windows.RGB(148, 163, 184),
+				DarkModeBorder:             windows.RGB(30, 41, 59),
+				DarkModeBorderInactive:     windows.RGB(30, 41, 59),
+				LightModeTitleBar:          windows.RGB(248, 250, 252),
+				LightModeTitleBarInactive:  windows.RGB(241, 245, 249),
+				LightModeTitleText:         windows.RGB(15, 23, 42),
+				LightModeTitleTextInactive: windows.RGB(100, 116, 139),
+				LightModeBorder:            windows.RGB(226, 232, 240),
+				LightModeBorderInactive:    windows.RGB(226, 232, 240),
+			},
+			BackdropType:         winBackdrop,
 		},
 		Mac: &mac.Options{
 			TitleBar:             mac.TitleBarHiddenInset(),

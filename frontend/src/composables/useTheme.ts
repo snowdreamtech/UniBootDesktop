@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
 import { ref, computed } from "vue";
+import { SetTheme } from "../../wailsjs/go/main/App";
 
 export type AppTheme = "dark" | "light" | "system";
 
@@ -40,29 +41,42 @@ function updateDomAndWindow(resolved: "dark" | "light") {
     document.documentElement.setAttribute("data-theme", resolved);
   }
 
-  if (typeof window !== "undefined" && (window as any).runtime) {
-    try {
-      if (
-        currentTheme.value === "system" &&
-        typeof (window as any).runtime.WindowSetSystemDefaultTheme === "function"
-      ) {
-        (window as any).runtime.WindowSetSystemDefaultTheme();
-      } else if (resolved === "dark") {
-        if (typeof (window as any).runtime.WindowSetDarkTheme === "function") {
-          (window as any).runtime.WindowSetDarkTheme();
-        }
-      } else {
-        if (typeof (window as any).runtime.WindowSetLightTheme === "function") {
-          (window as any).runtime.WindowSetLightTheme();
-        }
-      }
-
-      if (typeof (window as any).runtime.WindowSetBackgroundColour === "function") {
-        if (resolved === "dark") {
-          (window as any).runtime.WindowSetBackgroundColour(11, 15, 25, 255);
+  if (typeof window !== "undefined") {
+    if ((window as any).runtime) {
+      try {
+        if (
+          currentTheme.value === "system" &&
+          typeof (window as any).runtime.WindowSetSystemDefaultTheme === "function"
+        ) {
+          (window as any).runtime.WindowSetSystemDefaultTheme();
+        } else if (resolved === "dark") {
+          if (typeof (window as any).runtime.WindowSetDarkTheme === "function") {
+            (window as any).runtime.WindowSetDarkTheme();
+          }
         } else {
-          (window as any).runtime.WindowSetBackgroundColour(248, 250, 252, 255);
+          if (typeof (window as any).runtime.WindowSetLightTheme === "function") {
+            (window as any).runtime.WindowSetLightTheme();
+          }
         }
+
+        if (typeof (window as any).runtime.WindowSetBackgroundColour === "function") {
+          if (resolved === "dark") {
+            (window as any).runtime.WindowSetBackgroundColour(11, 15, 25, 255);
+          } else {
+            (window as any).runtime.WindowSetBackgroundColour(248, 250, 252, 255);
+          }
+        }
+      } catch (e) {
+        // Ignore errors in non-wails environment
+      }
+    }
+
+    // Trigger backend SetTheme to force native Windows/DWM frame recalculation and title bar update
+    try {
+      if (typeof SetTheme === "function") {
+        SetTheme(currentTheme.value).catch(() => {});
+      } else if (typeof (window as any).go?.main?.App?.SetTheme === "function") {
+        (window as any).go.main.App.SetTheme(currentTheme.value);
       }
     } catch (e) {
       // Ignore errors in non-wails environment

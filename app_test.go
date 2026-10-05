@@ -52,6 +52,11 @@ func TestApp_LifecycleAndAPIs(t *testing.T) {
 
 	err = app.SaveConfig(cfg)
 	assert.NoError(t, err)
+
+	// Theme synchronization
+	app.SetTheme("dark")
+	app.SetTheme("light")
+	app.SetTheme("system")
 }
 
 func TestResolveWindowsUserDataPath(t *testing.T) {
