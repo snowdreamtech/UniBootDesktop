@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"errors"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -371,8 +372,25 @@ func TestProgressIndicator_ColorOutput(t *testing.T) {
 	assert.Contains(t, output, "\033[")
 }
 
+type safeBuffer struct {
+	mu  sync.Mutex
+	buf bytes.Buffer
+}
+
+func (s *safeBuffer) Write(p []byte) (n int, err error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.buf.Write(p)
+}
+
+func (s *safeBuffer) String() string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.buf.String()
+}
+
 func TestProgressIndicator_ShowPercentage(t *testing.T) {
-	buf := &bytes.Buffer{}
+	buf := &safeBuffer{}
 	progress := NewProgressIndicator(ProgressOptions{
 		Writer:         buf,
 		Message:        "Processing",
@@ -382,7 +400,9 @@ func TestProgressIndicator_ShowPercentage(t *testing.T) {
 
 	progress.Start()
 	progress.Update(75, 100)
-	time.Sleep(200 * time.Millisecond)
+	assert.Eventually(t, func() bool {
+		return strings.Contains(buf.String(), "75.0%")
+	}, 2*time.Second, 20*time.Millisecond)
 	progress.Finish()
 
 	output := buf.String()

@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -37,7 +38,11 @@ func TestExtractTarFile(t *testing.T) {
 		Linkname: "mydir",
 	}
 	err = extractTarFile(nil, hdrSymlink, tempDir)
-	require.NoError(t, err)
+	if err != nil && runtime.GOOS == "windows" {
+		t.Logf("Skipping symlink test on Windows without privilege: %v", err)
+	} else {
+		require.NoError(t, err)
+	}
 
 	// Test Hardlink (Link)
 	hdrLink := &tar.Header{
@@ -91,6 +96,10 @@ func TestExtractZipFileModes(t *testing.T) {
 
 	for _, f := range zr.File {
 		err = extractZipFile(f, tempDir)
+		if err != nil && runtime.GOOS == "windows" && f.Mode()&os.ModeSymlink != 0 {
+			t.Logf("Skipping zip symlink test on Windows without privilege: %v", err)
+			continue
+		}
 		require.NoError(t, err)
 	}
 
