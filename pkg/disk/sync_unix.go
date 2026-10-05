@@ -81,6 +81,8 @@ type winPhysicalDiskInfo struct {
 	Product        string
 	Revision       string
 	SerialNumber   string
+	UsbVersion     string
+	UsbSpeed       string
 }
 
 // queryPhysicalDiskWindows is a stub on Unix.

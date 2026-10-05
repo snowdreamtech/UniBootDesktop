@@ -271,6 +271,34 @@ func TestInvalidateWindowsUSBCache(t *testing.T) {
 	assert.Empty(t, winUSBCacheMap)
 }
 
+func TestInspectWindowsDisk_UsbVersionPrecedence(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("Windows only")
+	}
+
+	drive := winDiskDrive{
+		DeviceID:       `\\.\PhysicalDrive9`,
+		Index:          9,
+		Model:          "SanDisk Ultra 3.0 Flash Drive",
+		Caption:        "SanDisk Ultra 3.0 Flash Drive",
+		Size:           16000000000,
+		BytesPerSector: 512,
+		UsbVersion:     "USB 2.0",
+		UsbSpeed:       "480 Mb/s",
+	}
+	info := inspectWindowsDisk(9, drive)
+	assert.NotNil(t, info)
+	assert.Equal(t, "USB 2.0", info.UsbVersion)
+	assert.Equal(t, "480 Mb/s", info.UsbSpeed)
+}
+
+func TestInspectWindowsDisk_UnibootVolumeLabel(t *testing.T) {
+	assert.False(t, IsIgnoredVolume("UNIBOOT"))
+	assert.False(t, IsIgnoredVolume("uniboot"))
+	assert.True(t, IsIgnoredVolume("UNIBOOTEFI"))
+	assert.True(t, IsIgnoredVolume("VTOYEFI"))
+}
+
 func TestValidateUserEjectTarget(t *testing.T) {
 	assert.Error(t, ValidateUserEjectTarget(""))
 	assert.Error(t, ValidateUserEjectTarget("/"))

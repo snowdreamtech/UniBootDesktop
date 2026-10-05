@@ -2478,6 +2478,8 @@ type winDiskDrive struct {
 	PNPDeviceID    string           `json:"PNPDeviceID"`
 	SerialNumber   string           `json:"SerialNumber"`
 	PartitionList  winPartitionList `json:"PartitionList"`
+	UsbVersion     string           `json:"UsbVersion,omitempty"`
+	UsbSpeed       string           `json:"UsbSpeed,omitempty"`
 }
 
 func getWindowsDisks() ([]DiskInfo, error) {
@@ -2632,6 +2634,12 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 	usbInfo := getUsbDeviceInfoWindows(drive.PNPDeviceID, drive.SerialNumber)
 	usbVer := "USB 2.0"
 	usbSpeed := "480 Mb/s"
+	if drive.UsbVersion != "" {
+		usbVer = drive.UsbVersion
+		if drive.UsbSpeed != "" {
+			usbSpeed = drive.UsbSpeed
+		}
+	}
 	vendor := "Generic"
 	serialNum := drive.SerialNumber
 	vendorID := ""
@@ -2641,11 +2649,16 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 	transportProtocol := "BOT (Bulk-Only Transport)"
 
 	if usbInfo != nil {
-		if usbInfo.UsbVersion != "" {
+		if drive.UsbVersion != "" {
+			usbVer = drive.UsbVersion
+			if drive.UsbSpeed != "" {
+				usbSpeed = drive.UsbSpeed
+			}
+		} else if usbInfo.UsbVersion != "" {
 			usbVer = usbInfo.UsbVersion
-		}
-		if usbInfo.UsbSpeed != "" {
-			usbSpeed = usbInfo.UsbSpeed
+			if usbInfo.UsbSpeed != "" {
+				usbSpeed = usbInfo.UsbSpeed
+			}
 		}
 		if usbInfo.Vendor != "" {
 			vendor = usbInfo.Vendor
@@ -2664,8 +2677,8 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 		if usbInfo.TransportProtocol != "" {
 			transportProtocol = usbInfo.TransportProtocol
 		}
-	} else {
-		// Fallback inspection from drive Model/Caption if USB info unavailable
+	} else if drive.UsbVersion == "" {
+		// Fallback inspection from drive Model/Caption only if hardware probe was completely absent
 		upperModel := strings.ToUpper(drive.Model + " " + displayName)
 		if strings.Contains(upperModel, "3.2") {
 			usbVer = "USB 3.2"
