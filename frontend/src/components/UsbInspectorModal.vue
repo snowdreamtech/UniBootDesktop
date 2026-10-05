@@ -98,7 +98,7 @@
 
           <div class="spec-item">
             <span class="spec-label">{{ t("inspector.lbl_mount") }}</span>
-            <span class="spec-val code highlight">{{ disk.mountPoint || t("inspector.val_unmounted") || "N/A" }}</span>
+            <span class="spec-val code highlight">{{ (disk.mountPoint ? disk.mountPoint.replace(/[\\/]+$/, '') : '') || t("inspector.val_unmounted") || "N/A" }}</span>
           </div>
 
           <div class="spec-item">

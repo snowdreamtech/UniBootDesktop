@@ -672,11 +672,8 @@ function formatSelectedDiskTarget(disk: DiskInfo): string {
   const dev = disk.device;
   const mp = disk.mountPoint;
   if (mp && /^[A-Za-z]:[\\/]?$/.test(mp.trim())) {
-    const cleanMp = mp.trim().endsWith("\\") ? mp.trim() : mp.trim() + "\\";
-    return `${name} (${cleanMp} • ${dev})`;
-  }
-  if (mp && mp.trim() !== dev.trim()) {
-    return `${name} (${mp.trim()} • ${dev})`;
+    const driveLetter = mp.trim().replace(/[\\/]+$/, "");
+    return `${name} (${driveLetter})`;
   }
   return `${name} (${dev})`;
 }
@@ -685,11 +682,8 @@ function formatVmTargetDisplay(name: string, dev: string): string {
   if (props.selectedDisk && props.selectedDisk.device === dev && props.selectedDisk.mountPoint) {
     const mp = props.selectedDisk.mountPoint;
     if (/^[A-Za-z]:[\\/]?$/.test(mp.trim())) {
-      const cleanMp = mp.trim().endsWith("\\") ? mp.trim() : mp.trim() + "\\";
-      return `${name} (${cleanMp} • ${dev})`;
-    }
-    if (mp.trim() !== dev.trim()) {
-      return `${name} (${mp.trim()} • ${dev})`;
+      const driveLetter = mp.trim().replace(/[\\/]+$/, "");
+      return `${name} (${driveLetter})`;
     }
   }
   return `${name} (${dev})`;

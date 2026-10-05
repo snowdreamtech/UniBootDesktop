@@ -442,7 +442,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             isGenericBoot: false,
             thirdPartyBootType: "",
             thirdPartyBootCode: "",
-            mountPoint: isWin ? "E:\\" : "/Volumes/SANDISK",
+            mountPoint: isWin ? "E:" : "/Volumes/SANDISK",
           },
           {
             device: isWin ? "\\\\.\\PhysicalDrive2" : "/dev/disk3",
@@ -477,7 +477,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             isGenericBoot: false,
             thirdPartyBootType: "",
             thirdPartyBootCode: "",
-            mountPoint: isWin ? "F:\\" : "/Volumes/KINGSTON",
+            mountPoint: isWin ? "F:" : "/Volumes/KINGSTON",
           },
           {
             device: isWin ? "\\\\.\\PhysicalDrive3" : "/dev/disk4",
@@ -512,7 +512,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             isGenericBoot: false,
             thirdPartyBootType: "",
             thirdPartyBootCode: "",
-            mountPoint: isWin ? "G:\\" : "/Volumes/SAMSUNG",
+            mountPoint: isWin ? "G:" : "/Volumes/SAMSUNG",
           },
         ];
         if (previousSelectedDevice) {
