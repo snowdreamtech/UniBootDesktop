@@ -591,16 +591,21 @@ func IsVentoyDisk(targetDisk string) bool {
 	} else if runtime.GOOS == "windows" {
 		diskNum, err := parseWindowsDiskNumber(targetDisk)
 		if err != nil {
-			return false
+			if dn, dnErr := getDriveLetterDiskNumberWindows(targetDisk); dnErr == nil {
+				diskNum = dn
+				err = nil
+			}
 		}
-		out, err := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command",
-			fmt.Sprintf("Get-Partition -DiskNumber %d | Get-Volume | Select-Object -ExpandProperty DriveLetter", diskNum)).Output()
 		if err == nil {
-			lines := strings.Split(strings.TrimSpace(string(out)), "\n")
-			for _, l := range lines {
-				l = strings.TrimSpace(l)
-				if l != "" && HasVentoyEngineFiles(l+":\\") {
-					return true
+			vols, vErr := getVolumesForDiskWindows(diskNum)
+			if vErr == nil {
+				for _, v := range vols {
+					if strings.EqualFold(v.VolumeName, "VTOYEFI") || strings.EqualFold(v.VolumeName, "VENTOY") {
+						return true
+					}
+					if v.DriveLetter != "" && HasVentoyEngineFiles(v.DriveLetter+`\`) {
+						return true
+					}
 				}
 			}
 		}
@@ -697,15 +702,27 @@ func IsCloudModeDisk(targetDisk string) bool {
 			}
 		}
 	} else if runtime.GOOS == "windows" {
-		// Windows: cannot easily check partitions separately
-		// For now, rely on file detection only
-		// Note: This may have limitations for hybrid mode detection
-		if HasVentoyEngineFiles(targetDisk) {
-			return false
+		mountPoints := GetDiskMountPoints(targetDisk)
+		if len(mountPoints) == 0 {
+			mountPoints = []string{targetDisk}
 		}
-		if HasUniBootCloudFiles(targetDisk) {
+		hasVentoyFiles := false
+		hasCloudFiles := false
+		for _, mp := range mountPoints {
+			mp = strings.TrimSpace(mp)
+			if mp != "" {
+				if HasVentoyEngineFiles(mp) {
+					hasVentoyFiles = true
+				}
+				if HasUniBootCloudFiles(mp) {
+					hasCloudFiles = true
+				}
+			}
+		}
+		if hasCloudFiles && !hasVentoyFiles {
 			return true
 		}
+		return false
 	}
 	return false
 }
