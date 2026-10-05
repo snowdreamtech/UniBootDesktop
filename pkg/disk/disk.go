@@ -3245,17 +3245,44 @@ func EjectDisk(device string) error {
 		return nil
 
 	case "windows":
-		driveLetter := strings.TrimSuffix(device, "\\")
-		if !strings.HasSuffix(driveLetter, ":") {
-			driveLetter = driveLetter + ":"
+		var driveLetters []string
+		trimmed := strings.TrimSpace(device)
+		if len(trimmed) >= 2 && trimmed[1] == ':' && (len(trimmed) == 2 || (len(trimmed) == 3 && (trimmed[2] == '\\' || trimmed[2] == '/'))) {
+			driveLetters = append(driveLetters, strings.ToUpper(trimmed[:2]))
+		} else {
+			diskNum, err := parseWindowsDiskNumber(trimmed)
+			if err == nil {
+				vols, vErr := getVolumesForDiskWindows(diskNum)
+				if vErr == nil {
+					for _, v := range vols {
+						if v.DriveLetter != "" {
+							driveLetters = append(driveLetters, strings.ToUpper(v.DriveLetter))
+						}
+					}
+				}
+			}
 		}
-		psCmd := fmt.Sprintf("(New-Object -ComObject Shell.Application).NameSpace(17).ParseName('%s').InvokeVerb('Eject')", driveLetter)
-		cmd := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd)
-		output, err := cmd.CombinedOutput()
-		if err != nil {
-			return fmt.Errorf("failed to eject drive %s: %s (%w)", device, strings.TrimSpace(string(output)), err)
+
+		if len(driveLetters) > 0 {
+			var lastErr error
+			for _, letter := range driveLetters {
+				psCmd := fmt.Sprintf("(New-Object -ComObject Shell.Application).NameSpace(17).ParseName('%s').InvokeVerb('Eject')", letter)
+				cmd := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd)
+				if output, err := cmd.CombinedOutput(); err != nil {
+					lastErr = fmt.Errorf("failed to eject drive %s: %s (%w)", letter, strings.TrimSpace(string(output)), err)
+				}
+			}
+			return lastErr
 		}
-		return nil
+
+		// Fallback for disks without mounted drive letters: dismount partitions gracefully
+		diskNum, err := parseWindowsDiskNumber(trimmed)
+		if err == nil {
+			psCmd := fmt.Sprintf("Get-Partition -DiskNumber %d -ErrorAction SilentlyContinue | Dismount-Volume -ErrorAction SilentlyContinue", diskNum)
+			_ = execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command", psCmd).Run()
+			return nil
+		}
+		return fmt.Errorf("unsupported windows disk target for ejection: %q", device)
 
 	default:
 		cmd := execCommand("udisksctl", "power-off", "-b", device)

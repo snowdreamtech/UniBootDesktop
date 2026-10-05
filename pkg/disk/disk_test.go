@@ -243,6 +243,13 @@ func TestValidateUserEjectTarget(t *testing.T) {
 	assert.Error(t, ValidateUserEjectTarget("/dev/sda"))
 }
 
+func TestEjectDisk_Validation(t *testing.T) {
+	assert.Error(t, EjectDisk(""))
+	assert.Error(t, EjectDisk("C:"))
+	assert.Error(t, EjectDisk(`\\.\PhysicalDrive0`))
+	assert.Error(t, EjectDisk("/dev/sda"))
+}
+
 func TestValidateTargetDiskSnapshot(t *testing.T) {
 	var validDev, diffDev string
 	switch runtime.GOOS {
