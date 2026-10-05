@@ -387,6 +387,8 @@ export const etEe: TranslationDict = {
   "inspector.lbl_fs": "Failisüsteem",
   "inspector.lbl_scheme": "Jaotusskeem",
   "inspector.lbl_mount": "Haakimistee",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Ketta luba",
   "inspector.val_rw": "Loe-kirjuta",
   "inspector.val_ro": "Kirjutuskaitstud (kirjutuskaitsega)",

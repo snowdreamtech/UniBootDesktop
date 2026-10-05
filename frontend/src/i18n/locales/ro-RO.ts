@@ -388,6 +388,8 @@ export const roRo: TranslationDict = {
   "inspector.lbl_fs": "Sistem de fișiere",
   "inspector.lbl_scheme": "Schema de partiții",
   "inspector.lbl_mount": "Cale de montare",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Permisiune de disc",
   "inspector.val_rw": "Citiți-Scrieți",
   "inspector.val_ro": "Numai citire (protejat la scriere)",

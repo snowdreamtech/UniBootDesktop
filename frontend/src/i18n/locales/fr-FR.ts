@@ -388,6 +388,8 @@ export const frFr: TranslationDict = {
   "inspector.lbl_fs": "Système de fichiers",
   "inspector.lbl_scheme": "Type de table de partition",
   "inspector.lbl_mount": "Point de montage",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Droits d'accès",
   "inspector.val_rw": "Lecture-Écriture (Read-Write)",
   "inspector.val_ro": "Lecture seule (Read-Only)",

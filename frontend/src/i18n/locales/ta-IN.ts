@@ -395,6 +395,8 @@ export const taIn: TranslationDict = {
   "inspector.lbl_fs": "கோப்பு முறைமை",
   "inspector.lbl_scheme": "பகிர்வு திட்டம்",
   "inspector.lbl_mount": "மவுண்ட் பாதை",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "வட்டு அனுமதி",
   "inspector.val_rw": "படிக்க-எழுது",
   "inspector.val_ro": "படிக்க மட்டும் (எழுதுதல் பாதுகாக்கப்பட்டது)",

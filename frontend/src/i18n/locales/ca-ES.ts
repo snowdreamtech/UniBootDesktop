@@ -392,6 +392,8 @@ export const caEs: TranslationDict = {
   "inspector.lbl_fs": "Sistema de fitxers",
   "inspector.lbl_scheme": "Esquema de particions",
   "inspector.lbl_mount": "Camí de muntatge",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Permís de disc",
   "inspector.val_rw": "Lectura-Escriptura",
   "inspector.val_ro": "Només lectura (protegit contra escriptura)",

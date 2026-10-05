@@ -392,6 +392,8 @@ export const mlIn: TranslationDict = {
   "inspector.lbl_fs": "ഫയൽ സിസ്റ്റം",
   "inspector.lbl_scheme": "വിഭജന പദ്ധതി",
   "inspector.lbl_mount": "മൗണ്ട് പാത്ത്",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "ഡിസ്ക് അനുമതി",
   "inspector.val_rw": "വായിക്കുക-എഴുതുക",
   "inspector.val_ro": "വായന-മാത്രം (എഴുത്ത് പരിരക്ഷിതം)",

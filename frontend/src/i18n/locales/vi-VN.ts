@@ -384,6 +384,8 @@ export const viVn: TranslationDict = {
   "inspector.lbl_fs": "Hệ thống tệp",
   "inspector.lbl_scheme": "Kiểu bảng phân vùng",
   "inspector.lbl_mount": "Đường dẫn gắn kết",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Quyền đĩa",
   "inspector.val_rw": "Đọc & Ghi (Read-Write)",
   "inspector.val_ro": "Chỉ đọc (Read-Only)",

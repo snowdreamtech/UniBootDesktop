@@ -383,6 +383,8 @@ export const faIr: TranslationDict = {
   "inspector.lbl_fs": "سیستم فایل",
   "inspector.lbl_scheme": "طرح پارتیشن",
   "inspector.lbl_mount": "مسیر مونت",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "مجوز دیسک",
   "inspector.val_rw": "خواندن و نوشتن",
   "inspector.val_ro": "فقط خواندنی (محافظت از نوشتن)",

@@ -387,6 +387,8 @@ export const bnBd: TranslationDict = {
   "inspector.lbl_fs": "ফাইল সিস্টেম",
   "inspector.lbl_scheme": "পার্টিশন স্কিম",
   "inspector.lbl_mount": "মাউন্ট পাথ",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "ডিস্ক অনুমতি",
   "inspector.val_rw": "পড়ুন-লিখুন",
   "inspector.val_ro": "শুধুমাত্র-পঠন (লিখুন সুরক্ষিত)",

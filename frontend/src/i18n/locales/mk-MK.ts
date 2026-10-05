@@ -394,6 +394,8 @@ export const mkMk: TranslationDict = {
   "inspector.lbl_fs": "Датотечниот систем",
   "inspector.lbl_scheme": "Шема за партиција",
   "inspector.lbl_mount": "Патека на монтирање",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Дозвола за диск",
   "inspector.val_rw": "Читање-пишување",
   "inspector.val_ro": "Само за читање (заштитено за пишување)",

@@ -388,6 +388,8 @@ export const srLatn: TranslationDict = {
   "inspector.lbl_fs": "Систем датотека",
   "inspector.lbl_scheme": "Партициона шема",
   "inspector.lbl_mount": "Putanja montiranja",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Дозвола за диск",
   "inspector.val_rw": "Читај-пиши",
   "inspector.val_ro": "Само за читање (заштићено од писања)",

@@ -389,6 +389,8 @@ export const glEs: TranslationDict = {
   "inspector.lbl_fs": "Sistema de ficheiros",
   "inspector.lbl_scheme": "Esquema de partición",
   "inspector.lbl_mount": "Ruta de montaxe",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Permiso de disco",
   "inspector.val_rw": "Ler-Escribir",
   "inspector.val_ro": "Só lectura (protexido contra escritura)",

@@ -384,6 +384,8 @@ export const hiIn: TranslationDict = {
   "inspector.lbl_fs": "फ़ाइल सिस्टम",
   "inspector.lbl_scheme": "विभाजन योजना",
   "inspector.lbl_mount": "माउंट पथ",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "डिस्क अनुमति",
   "inspector.val_rw": "पढ़ें-लिखें",
   "inspector.val_ro": "केवल पढ़ने के लिए (संरक्षित लिखें)",

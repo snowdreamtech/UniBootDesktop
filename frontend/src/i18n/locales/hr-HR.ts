@@ -393,6 +393,8 @@ export const hrHr: TranslationDict = {
   "inspector.lbl_fs": "Datotečni sustav",
   "inspector.lbl_scheme": "Shema podjele",
   "inspector.lbl_mount": "Putanja montiranja",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Dozvola za disk",
   "inspector.val_rw": "Čitaj-piši",
   "inspector.val_ro": "Samo za čitanje (zaštićeno od pisanja)",

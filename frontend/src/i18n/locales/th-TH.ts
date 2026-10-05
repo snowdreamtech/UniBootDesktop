@@ -382,6 +382,8 @@ export const thTh: TranslationDict = {
   "inspector.lbl_fs": "ระบบไฟล์",
   "inspector.lbl_scheme": "โครงการพาร์ทิชัน",
   "inspector.lbl_mount": "เส้นทางเมาท์",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "การอนุญาตดิสก์",
   "inspector.val_rw": "อ่าน-เขียน",
   "inspector.val_ro": "อ่านอย่างเดียว (ป้องกันการเขียน)",

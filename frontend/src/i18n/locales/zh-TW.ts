@@ -373,6 +373,8 @@ export const zhTw: TranslationDict = {
   "inspector.lbl_fs": "檔案系統",
   "inspector.lbl_scheme": "分區表類型",
   "inspector.lbl_mount": "掛載路徑",
+  "inspector.lbl_device": "實體裝置路徑",
+  "inspector.val_unmounted": "未掛載 (無磁碟區標籤代號)",
   "inspector.lbl_perm": "磁碟讀寫權限",
   "inspector.val_rw": "可讀可寫 (Read-Write)",
   "inspector.val_ro": "只讀保護 (Read-Only)",

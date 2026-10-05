@@ -389,6 +389,8 @@ export const ukUa: TranslationDict = {
   "inspector.lbl_fs": "Файлова система",
   "inspector.lbl_scheme": "Схема розділу",
   "inspector.lbl_mount": "Шлях монтування",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Дозвіл на диск",
   "inspector.val_rw": "Читання-Писання",
   "inspector.val_ro": "Лише читання (захищено від запису)",

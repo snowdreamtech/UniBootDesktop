@@ -385,6 +385,8 @@ export const urPk: TranslationDict = {
   "inspector.lbl_fs": "فائل سسٹم",
   "inspector.lbl_scheme": "تقسیم کی اسکیم",
   "inspector.lbl_mount": "ماؤنٹ پاتھ",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "ڈسک کی اجازت",
   "inspector.val_rw": "پڑھنا لکھنا",
   "inspector.val_ro": "صرف پڑھنے کے لیے (لکھنے سے محفوظ)",

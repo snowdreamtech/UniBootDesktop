@@ -385,6 +385,8 @@ export const trTr: TranslationDict = {
   "inspector.lbl_fs": "Dosya Sistemi",
   "inspector.lbl_scheme": "Bölüm Tablosu Türü",
   "inspector.lbl_mount": "Bağlama noktası",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Disk İzinleri",
   "inspector.val_rw": "Okuma ve Yazma (Read-Write)",
   "inspector.val_ro": "Salt Okunur (Read-Only)",

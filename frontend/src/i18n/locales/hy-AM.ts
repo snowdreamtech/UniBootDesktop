@@ -395,6 +395,8 @@ export const hyAm: TranslationDict = {
   "inspector.lbl_fs": "Ֆայլային համակարգ",
   "inspector.lbl_scheme": "Բաժանման սխեման",
   "inspector.lbl_mount": "Միացման ուղի",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Սկավառակի թույլտվություն",
   "inspector.val_rw": "Կարդալ-գրել",
   "inspector.val_ro": "Միայն կարդալու համար (Պաշտպանված է գրելը)",

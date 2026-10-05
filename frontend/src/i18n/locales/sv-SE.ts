@@ -383,6 +383,8 @@ export const svSe: TranslationDict = {
   "inspector.lbl_fs": "Filsystem",
   "inspector.lbl_scheme": "Partitionsschema",
   "inspector.lbl_mount": "Monteringssökväg",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Diskbehörighet",
   "inspector.val_rw": "Läs-skriv",
   "inspector.val_ro": "Skrivskyddad (skrivskyddad)",

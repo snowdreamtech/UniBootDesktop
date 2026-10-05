@@ -375,6 +375,8 @@ export const heIl: TranslationDict = {
   "inspector.lbl_fs": "מערכת קבצים",
   "inspector.lbl_scheme": "תכנית החלוקה",
   "inspector.lbl_mount": "נתיב עיגון",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "הרשאת דיסק",
   "inspector.val_rw": "קריאה-כתיבה",
   "inspector.val_ro": "לקריאה בלבד (מוגן בכתיבה)",

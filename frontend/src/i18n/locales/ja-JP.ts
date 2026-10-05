@@ -384,6 +384,8 @@ export const jaJp: TranslationDict = {
   "inspector.lbl_fs": "ファイルシステム",
   "inspector.lbl_scheme": "パーティション形式",
   "inspector.lbl_mount": "マウントパス",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "アクセス権限",
   "inspector.val_rw": "読み書き可能 (Read-Write)",
   "inspector.val_ro": "読み取り専用 (Read-Only)",
