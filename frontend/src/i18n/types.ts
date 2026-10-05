@@ -367,6 +367,8 @@ export interface TranslationDict {
   "inspector.lbl_fs": string;
   "inspector.lbl_scheme": string;
   "inspector.lbl_mount": string;
+  "inspector.lbl_device"?: string;
+  "inspector.val_unmounted"?: string;
   "inspector.lbl_perm": string;
   "inspector.val_rw": string;
   "inspector.val_ro": string;

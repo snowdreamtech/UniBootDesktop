@@ -372,6 +372,8 @@ export const zhCn: TranslationDict = {
   "inspector.lbl_fs": "文件系统",
   "inspector.lbl_scheme": "分区表类型",
   "inspector.lbl_mount": "挂载路径",
+  "inspector.lbl_device": "物理设备路径",
+  "inspector.val_unmounted": "未挂载 (无卷标盘符)",
   "inspector.lbl_perm": "磁盘读写权限",
   "inspector.val_rw": "可读可写 (Read-Write)",
   "inspector.val_ro": "只读保护 (Read-Only)",

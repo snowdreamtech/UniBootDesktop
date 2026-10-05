@@ -373,7 +373,7 @@
       <div class="selected-target">
         <span>{{ t("deploy.target_device") }}</span>
         <strong v-if="selectionMode === 'single'">
-          {{ selectedDisk ? selectedDisk.name + " (" + selectedDisk.device + ")" : t("disk.no_disk") }}
+          {{ selectedDisk ? formatSelectedDiskTarget(selectedDisk) : t("disk.no_disk") }}
         </strong>
         <strong v-else>
           {{ selectedDevices.size > 0 ? t("deploy.batch_target", { count: selectedDevices.size }) : t("disk.no_disk") }}
@@ -582,7 +582,7 @@
       <p class="vm-desc">
         {{ t("vm.target") }}
         <strong v-if="activeVmTargetDevice" class="target-highlight">
-          {{ activeVmTargetName }} ({{ activeVmTargetDevice }})
+          {{ formatVmTargetDisplay(activeVmTargetName, activeVmTargetDevice) }}
         </strong>
         <span v-else class="target-warn">
           {{ t("vm.no_disk_warn") }}
@@ -665,6 +665,34 @@ function formatStatsTime(seconds?: number): string {
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
   return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+
+function formatSelectedDiskTarget(disk: DiskInfo): string {
+  const name = disk.name || disk.device;
+  const dev = disk.device;
+  const mp = disk.mountPoint;
+  if (mp && /^[A-Za-z]:[\\/]?$/.test(mp.trim())) {
+    const cleanMp = mp.trim().endsWith("\\") ? mp.trim() : mp.trim() + "\\";
+    return `${name} (${cleanMp} • ${dev})`;
+  }
+  if (mp && mp.trim() !== dev.trim()) {
+    return `${name} (${mp.trim()} • ${dev})`;
+  }
+  return `${name} (${dev})`;
+}
+
+function formatVmTargetDisplay(name: string, dev: string): string {
+  if (props.selectedDisk && props.selectedDisk.device === dev && props.selectedDisk.mountPoint) {
+    const mp = props.selectedDisk.mountPoint;
+    if (/^[A-Za-z]:[\\/]?$/.test(mp.trim())) {
+      const cleanMp = mp.trim().endsWith("\\") ? mp.trim() : mp.trim() + "\\";
+      return `${name} (${cleanMp} • ${dev})`;
+    }
+    if (mp.trim() !== dev.trim()) {
+      return `${name} (${mp.trim()} • ${dev})`;
+    }
+  }
+  return `${name} (${dev})`;
 }
 
 const emit = defineEmits<{

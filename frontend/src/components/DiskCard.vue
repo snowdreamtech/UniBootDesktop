@@ -255,7 +255,7 @@
         <span v-if="disk.isFakeUsb3" class="fake-badge" :title="t('disk.fake_usb3_warning')"> ⚠️ Fake USB 3.0 </span>
       </div>
       <div class="disk-meta">
-        {{ disk.device }} • {{ formatDiskCapacity(disk.formatted) }}
+        {{ formattedDevicePath }} • {{ formatDiskCapacity(disk.formatted) }}
         <span class="speed-tag" :class="disk.protocolCode || 'usb2'">
           {{ disk.usbVersion || "USB 2.0" }} • {{ disk.usbSpeed || "480 Mb/s" }}
         </span>
@@ -489,6 +489,21 @@ const diskNameParts = computed(() => {
   }
 
   return { prefix: suffixMatch[1], suffix: suffixMatch[2].trim() };
+});
+
+const formattedDevicePath = computed(() => {
+  const dev = props.disk.device;
+  const mp = props.disk.mountPoint;
+  if (!mp || mp.trim() === "") return dev;
+  // Windows drive letter like "E:\" or "E:"
+  if (/^[A-Za-z]:[\\/]?$/.test(mp.trim())) {
+    const cleanMp = mp.trim().endsWith("\\") ? mp.trim() : mp.trim() + "\\";
+    return `${cleanMp} (${dev})`;
+  }
+  if (mp.trim() !== dev.trim()) {
+    return `${mp.trim()} (${dev})`;
+  }
+  return dev;
 });
 </script>
 

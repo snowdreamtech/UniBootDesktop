@@ -407,9 +407,10 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
       } else {
         // Fallback mock for browser preview demonstrating genuine vs fake USB 3.0
         await new Promise((resolve) => setTimeout(resolve, 450));
+        const isWin = typeof navigator !== "undefined" && /Win/i.test(navigator.platform || navigator.userAgent);
         diskList.value = [
           {
-            device: "/dev/disk2",
+            device: isWin ? "\\\\.\\PhysicalDrive1" : "/dev/disk2",
             name: "SanDisk Ultra USB 3.0 Flash Drive",
             size: 32000000000,
             formatted: "32 GB",
@@ -441,10 +442,10 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             isGenericBoot: false,
             thirdPartyBootType: "",
             thirdPartyBootCode: "",
-            mountPoint: "",
+            mountPoint: isWin ? "E:\\" : "/Volumes/SANDISK",
           },
           {
-            device: "/dev/disk3",
+            device: isWin ? "\\\\.\\PhysicalDrive2" : "/dev/disk3",
             name: "Kingston DataTraveler 3.0",
             size: 64000000000,
             formatted: "64 GB",
@@ -476,10 +477,10 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             isGenericBoot: false,
             thirdPartyBootType: "",
             thirdPartyBootCode: "",
-            mountPoint: "",
+            mountPoint: isWin ? "F:\\" : "/Volumes/KINGSTON",
           },
           {
-            device: "/dev/disk4",
+            device: isWin ? "\\\\.\\PhysicalDrive3" : "/dev/disk4",
             name: "Samsung Type-C Duo 3.1",
             size: 128000000000,
             formatted: "128 GB",
@@ -511,7 +512,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
             isGenericBoot: false,
             thirdPartyBootType: "",
             thirdPartyBootCode: "",
-            mountPoint: "",
+            mountPoint: isWin ? "G:\\" : "/Volumes/SAMSUNG",
           },
         ];
         if (previousSelectedDevice) {
