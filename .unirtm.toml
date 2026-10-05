@@ -296,8 +296,8 @@ BUILD_TAGS=()
 if [ "$(go env GOOS)" = "linux" ] && pkg-config --exists webkit2gtk-4.1 && ! pkg-config --exists webkit2gtk-4.0; then
     BUILD_TAGS+=("-tags" "webkit2_41")
 fi
-unirtm exec -- wails build -s -clean ${BUILD_TAGS[@]+"${BUILD_TAGS[@]}"}
-node -e "const fs = require('fs'); fs.rmSync('build/bin', { recursive: true, force: true });"
+unirtm exec -- wails build -s ${BUILD_TAGS[@]+"${BUILD_TAGS[@]}"}
+node -e "const fs = require('fs'); const path = require('path'); const binDir = 'build/bin'; if (fs.existsSync(binDir)) { fs.readdirSync(binDir).forEach(f => { if (!f.includes('-dev')) { try { fs.rmSync(path.join(binDir, f), { recursive: true, force: true }); } catch (e) {} } }); }"
 '''
 output = "interleaved"
 
