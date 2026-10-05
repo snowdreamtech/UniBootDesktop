@@ -495,13 +495,9 @@ const formattedDevicePath = computed(() => {
   const dev = props.disk.device;
   const mp = props.disk.mountPoint;
   if (!mp || mp.trim() === "") return dev;
-  // Windows drive letter like "E:\" or "E:"
+  // Windows drive letter like "E:\" or "E:" -> show clean "E:"
   if (/^[A-Za-z]:[\\/]?$/.test(mp.trim())) {
-    const cleanMp = mp.trim().endsWith("\\") ? mp.trim() : mp.trim() + "\\";
-    return `${cleanMp} (${dev})`;
-  }
-  if (mp.trim() !== dev.trim()) {
-    return `${mp.trim()} (${dev})`;
+    return mp.trim().replace(/[\\/]+$/, "");
   }
   return dev;
 });
