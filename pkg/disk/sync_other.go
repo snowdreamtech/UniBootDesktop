@@ -56,3 +56,40 @@ type winUsbDeviceInfo struct {
 func getUsbDeviceInfoWindows(pnpDeviceID string, serialNumber string) *winUsbDeviceInfo {
 	return nil
 }
+
+// winPhysicalDiskInfo represents hardware attributes returned directly from native Win32 physical disk IOCTLs.
+type winPhysicalDiskInfo struct {
+	DiskNumber     int
+	DevicePath     string
+	Size           uint64
+	BytesPerSector uint32
+	BusType        uint32
+	IsRemovable    bool
+	Vendor         string
+	Product        string
+	Revision       string
+	SerialNumber   string
+}
+
+// queryPhysicalDiskWindows is a stub on other platforms.
+func queryPhysicalDiskWindows(diskNum int) (*winPhysicalDiskInfo, error) {
+	return nil, fmt.Errorf("not supported on this platform")
+}
+
+// InvalidateWindowsUSBCache is a stub on other platforms.
+func InvalidateWindowsUSBCache() {}
+
+// hasConnectedUSBStorageWindows is a stub on other platforms.
+func hasConnectedUSBStorageWindows() bool {
+	return false
+}
+
+// getVolumeSnapshotWindows is a stub on other platforms.
+func getVolumeSnapshotWindows() string {
+	return ""
+}
+
+// getWindowsDisksNative is a stub on other platforms.
+func getWindowsDisksNative() ([]DiskInfo, error) {
+	return nil, fmt.Errorf("not supported on this platform")
+}

@@ -236,6 +236,41 @@ func TestGetUsbDeviceInfoWindows(t *testing.T) {
 	assert.Equal(t, "BOT (Bulk-Only Transport)", info.TransportProtocol)
 }
 
+func TestHasConnectedUSBStorageWindows(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("Windows only")
+	}
+	_ = hasConnectedUSBStorageWindows()
+}
+
+func TestGetVolumeSnapshotWindows(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("Windows only")
+	}
+	snap := getVolumeSnapshotWindows()
+	assert.NotEmpty(t, snap)
+	assert.Contains(t, snap, "mask:")
+	assert.Contains(t, snap, "usb:")
+	assert.Contains(t, snap, "phys:")
+}
+
+func TestGetWindowsDisksNative(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("Windows only")
+	}
+	disks, err := getWindowsDisksNative()
+	assert.NoError(t, err)
+	_ = disks
+}
+
+func TestInvalidateWindowsUSBCache(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("Windows only")
+	}
+	InvalidateWindowsUSBCache()
+	assert.Empty(t, winUSBCacheMap)
+}
+
 func TestValidateUserEjectTarget(t *testing.T) {
 	assert.Error(t, ValidateUserEjectTarget(""))
 	assert.Error(t, ValidateUserEjectTarget("/"))

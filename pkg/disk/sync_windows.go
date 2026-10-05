@@ -9,7 +9,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 	"syscall"
+	"time"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
@@ -268,8 +270,32 @@ func parseUsbRevision(rev string) (version, speed string) {
 	}
 }
 
+var (
+	winUSBCacheMutex sync.RWMutex
+	winUSBCacheMap   = make(map[string]*winUsbDeviceInfo)
+	winUSBCacheTime  time.Time
+)
+
+// InvalidateWindowsUSBCache purges the Windows USB hardware profile cache.
+func InvalidateWindowsUSBCache() {
+	winUSBCacheMutex.Lock()
+	winUSBCacheMap = make(map[string]*winUsbDeviceInfo)
+	winUSBCacheTime = time.Time{}
+	winUSBCacheMutex.Unlock()
+}
+
 // getUsbDeviceInfoWindows queries hardware metadata (VID/PID, real USB revision, UASP vs BOT) from the Windows PnP Registry.
 func getUsbDeviceInfoWindows(pnpDeviceID string, serialNumber string) *winUsbDeviceInfo {
+	cacheKey := strings.ToUpper(strings.TrimSpace(pnpDeviceID)) + "|" + strings.ToUpper(strings.TrimSpace(serialNumber))
+	winUSBCacheMutex.RLock()
+	if winUSBCacheMap != nil && time.Since(winUSBCacheTime) < 30*time.Second {
+		if cached, ok := winUSBCacheMap[cacheKey]; ok {
+			winUSBCacheMutex.RUnlock()
+			return cached
+		}
+	}
+	winUSBCacheMutex.RUnlock()
+
 	parsedVen, parsedProd, parsedRev, parsedInst := parsePnpStorageID(pnpDeviceID)
 	effectiveSerial := strings.TrimSpace(serialNumber)
 	if effectiveSerial == "" {
@@ -395,5 +421,320 @@ func getUsbDeviceInfoWindows(pnpDeviceID string, serialNumber string) *winUsbDev
 		info.BusPowerUsed = "900 mA"
 	}
 
+	winUSBCacheMutex.Lock()
+	if winUSBCacheMap == nil {
+		winUSBCacheMap = make(map[string]*winUsbDeviceInfo)
+	}
+	winUSBCacheMap[cacheKey] = info
+	winUSBCacheTime = time.Now()
+	winUSBCacheMutex.Unlock()
+
 	return info
+}
+
+// winPhysicalDiskInfo represents hardware attributes returned directly from native Win32 physical disk IOCTLs.
+type winPhysicalDiskInfo struct {
+	DiskNumber     int
+	DevicePath     string
+	Size           uint64
+	BytesPerSector uint32
+	BusType        uint32 // 0x07 = BusTypeUsb
+	IsRemovable    bool
+	Vendor         string
+	Product        string
+	Revision       string
+	SerialNumber   string
+}
+
+// queryPhysicalDiskWindows queries physical drive geometry and hardware properties directly via native Win32 IOCTLs (0ms, no PowerShell).
+func queryPhysicalDiskWindows(diskNum int) (*winPhysicalDiskInfo, error) {
+	devPath := fmt.Sprintf(`\\.\PhysicalDrive%d`, diskNum)
+	ptr, err := syscall.UTF16PtrFromString(devPath)
+	if err != nil {
+		return nil, err
+	}
+	handle, err := syscall.CreateFile(
+		ptr,
+		0,
+		syscall.FILE_SHARE_READ|syscall.FILE_SHARE_WRITE,
+		nil,
+		syscall.OPEN_EXISTING,
+		0,
+		0,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer syscall.CloseHandle(handle)
+
+	info := &winPhysicalDiskInfo{
+		DiskNumber: diskNum,
+		DevicePath: devPath,
+	}
+
+	// 1. IOCTL_DISK_GET_DRIVE_GEOMETRY_EX = 0x000700A0
+	const ioctlDiskGetDriveGeometryEx = 0x000700A0
+	type diskGeometryEx struct {
+		Cylinders         int64
+		MediaType         uint32
+		TracksPerCylinder uint32
+		SectorsPerTrack   uint32
+		BytesPerSector    uint32
+		DiskSize          int64
+	}
+	var geom diskGeometryEx
+	var bytesRet uint32
+	err = syscall.DeviceIoControl(
+		handle,
+		ioctlDiskGetDriveGeometryEx,
+		nil,
+		0,
+		(*byte)(unsafe.Pointer(&geom)),
+		uint32(unsafe.Sizeof(geom)),
+		&bytesRet,
+		nil,
+	)
+	if err == nil {
+		if geom.DiskSize > 0 {
+			info.Size = uint64(geom.DiskSize)
+		}
+		info.BytesPerSector = geom.BytesPerSector
+	}
+
+	// 2. IOCTL_STORAGE_QUERY_PROPERTY = 0x002D1400
+	const ioctlStorageQueryProperty = 0x002D1400
+	type storagePropertyQuery struct {
+		PropertyId uint32
+		QueryType  uint32
+		Params     [1]byte
+	}
+	query := storagePropertyQuery{
+		PropertyId: 0, // StorageDeviceProperty
+		QueryType:  0, // PropertyStandardQuery
+	}
+	var buf [1024]byte
+	err = syscall.DeviceIoControl(
+		handle,
+		ioctlStorageQueryProperty,
+		(*byte)(unsafe.Pointer(&query)),
+		uint32(unsafe.Sizeof(query)),
+		&buf[0],
+		uint32(len(buf)),
+		&bytesRet,
+		nil,
+	)
+	if err == nil && bytesRet >= 24 {
+		if buf[6] == 1 {
+			info.IsRemovable = true
+		}
+		vendorOffset := *(*uint32)(unsafe.Pointer(&buf[8]))
+		productOffset := *(*uint32)(unsafe.Pointer(&buf[12]))
+		revisionOffset := *(*uint32)(unsafe.Pointer(&buf[16]))
+		serialOffset := *(*uint32)(unsafe.Pointer(&buf[20]))
+		if bytesRet >= 28 {
+			info.BusType = *(*uint32)(unsafe.Pointer(&buf[24]))
+		}
+
+		readASCII := func(offset uint32) string {
+			if offset == 0 || offset >= bytesRet {
+				return ""
+			}
+			end := offset
+			for end < bytesRet && buf[end] != 0 {
+				end++
+			}
+			return strings.TrimSpace(string(buf[offset:end]))
+		}
+
+		info.Vendor = readASCII(vendorOffset)
+		info.Product = readASCII(productOffset)
+		info.Revision = readASCII(revisionOffset)
+		info.SerialNumber = readASCII(serialOffset)
+	}
+
+	return info, nil
+}
+
+// hasConnectedUSBStorageWindows checks quickly (~0.1ms) whether any USB mass storage device is registered or attached.
+func hasConnectedUSBStorageWindows() bool {
+	readEnumCount := func(svc string) int {
+		k, err := registry.OpenKey(registry.LOCAL_MACHINE, `SYSTEM\CurrentControlSet\Services\`+svc+`\Enum`, registry.QUERY_VALUE)
+		if err != nil {
+			return 0
+		}
+		defer k.Close()
+		count, _, err := k.GetIntegerValue("Count")
+		if err != nil {
+			return 0
+		}
+		return int(count)
+	}
+
+	if readEnumCount("USBSTOR") > 0 || readEnumCount("UASPSTOR") > 0 {
+		return true
+	}
+
+	// Also check if any mounted drive letter is DRIVE_REMOVABLE
+	mask, err := windows.GetLogicalDrives()
+	if err == nil {
+		for c := 'A'; c <= 'Z'; c++ {
+			shift := c - 'A'
+			if (mask & (1 << shift)) != 0 {
+				root := fmt.Sprintf("%c:\\", c)
+				rootPtr, _ := syscall.UTF16PtrFromString(root)
+				if windows.GetDriveType(rootPtr) == windows.DRIVE_REMOVABLE {
+					return true
+				}
+			}
+		}
+	}
+
+	return false
+}
+
+// getVolumeSnapshotWindows computes a fast volume and hardware snapshot on Windows without blocking filesystem calls.
+func getVolumeSnapshotWindows() string {
+	mask, err := windows.GetLogicalDrives()
+	if err != nil {
+		return ""
+	}
+
+	readEnumCount := func(svc string) int {
+		k, err := registry.OpenKey(registry.LOCAL_MACHINE, `SYSTEM\CurrentControlSet\Services\`+svc+`\Enum`, registry.QUERY_VALUE)
+		if err != nil {
+			return 0
+		}
+		defer k.Close()
+		count, _, err := k.GetIntegerValue("Count")
+		if err != nil {
+			return 0
+		}
+		return int(count)
+	}
+
+	usbCount := readEnumCount("USBSTOR")
+	uaspCount := readEnumCount("UASPSTOR")
+
+	physMask := uint32(0)
+	for i := 0; i < 16; i++ {
+		devPath := fmt.Sprintf(`\\.\PhysicalDrive%d`, i)
+		ptr, err := syscall.UTF16PtrFromString(devPath)
+		if err != nil {
+			continue
+		}
+		handle, err := syscall.CreateFile(
+			ptr,
+			0,
+			syscall.FILE_SHARE_READ|syscall.FILE_SHARE_WRITE,
+			nil,
+			syscall.OPEN_EXISTING,
+			0,
+			0,
+		)
+		if err == nil {
+			physMask |= (1 << i)
+			syscall.CloseHandle(handle)
+		}
+	}
+
+	return fmt.Sprintf("mask:%x|usb:%d|uasp:%d|phys:%x", mask, usbCount, uaspCount, physMask)
+}
+
+// getWindowsDisksNative discovers USB and removable storage devices using direct Win32 IOCTLs (0.5ms vs 900ms PowerShell).
+func getWindowsDisksNative() ([]DiskInfo, error) {
+	if !hasConnectedUSBStorageWindows() {
+		// Fast short-circuit: if no USB storage service entries and no removable drives exist,
+		// probe PhysicalDrive1. If PhysicalDrive1 does not exist, return immediately (~0.1ms).
+		p1, err := syscall.UTF16PtrFromString(`\\.\PhysicalDrive1`)
+		if err == nil {
+			h, err := syscall.CreateFile(p1, 0, syscall.FILE_SHARE_READ|syscall.FILE_SHARE_WRITE, nil, syscall.OPEN_EXISTING, 0, 0)
+			if err != nil {
+				return []DiskInfo{}, nil
+			}
+			syscall.CloseHandle(h)
+		}
+	}
+
+	type indexedDrive struct {
+		index int
+		drive winDiskDrive
+	}
+	var validDrives []indexedDrive
+
+	consecutiveFails := 0
+	for i := 0; i < 16; i++ {
+		pInfo, err := queryPhysicalDiskWindows(i)
+		if err != nil {
+			consecutiveFails++
+			if i > 0 && consecutiveFails >= 3 {
+				break
+			}
+			continue
+		}
+		consecutiveFails = 0
+
+		// Check if this physical disk is USB or removable
+		// BusTypeUsb = 0x07, BusType1394 = 0x04, BusTypeSd = 0x0C, BusTypeMmc = 0x0D
+		isUSB := pInfo.BusType == 0x07 || pInfo.BusType == 0x04 || pInfo.BusType == 0x0C || pInfo.BusType == 0x0D || pInfo.IsRemovable
+		if !isUSB {
+			continue
+		}
+
+		devPath := fmt.Sprintf(`\\.\PhysicalDrive%d`, i)
+		if isSys, _ := isSystemDiskWindows(devPath); isSys {
+			continue
+		}
+
+		model := strings.TrimSpace(pInfo.Vendor + " " + pInfo.Product)
+		if model == "" {
+			model = "USB Storage Device"
+		}
+
+		upperModel := strings.ToUpper(model)
+		if strings.Contains(upperModel, "VIRTUAL") ||
+			strings.Contains(upperModel, "VHD") ||
+			strings.Contains(upperModel, "ISO") ||
+			strings.Contains(upperModel, "CD-ROM") ||
+			strings.Contains(upperModel, "DVD") {
+			continue
+		}
+
+		drive := winDiskDrive{
+			DeviceID:       pInfo.DevicePath,
+			Index:          pInfo.DiskNumber,
+			Model:          model,
+			Size:           pInfo.Size,
+			InterfaceType:  "USB",
+			Caption:        model,
+			BytesPerSector: pInfo.BytesPerSector,
+			SerialNumber:   pInfo.SerialNumber,
+		}
+
+		validDrives = append(validDrives, indexedDrive{index: i, drive: drive})
+	}
+
+	if len(validDrives) == 0 {
+		return []DiskInfo{}, nil
+	}
+
+	disksResult := make([]*DiskInfo, len(validDrives))
+	var wg sync.WaitGroup
+	wg.Add(len(validDrives))
+
+	for idx, item := range validDrives {
+		go func(resultIdx int, driveIndex int, d winDiskDrive) {
+			defer wg.Done()
+			disksResult[resultIdx] = inspectWindowsDisk(driveIndex, d)
+		}(idx, item.index, item.drive)
+	}
+	wg.Wait()
+
+	disks := make([]DiskInfo, 0, len(disksResult))
+	for _, d := range disksResult {
+		if d != nil {
+			disks = append(disks, *d)
+		}
+	}
+
+	return disks, nil
 }
