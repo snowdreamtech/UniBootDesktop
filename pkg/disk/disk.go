@@ -1113,6 +1113,7 @@ func InvalidateDiskCache() {
 	// to ensure fresh disk serial numbers and hardware metadata after hotplug.
 	invalidateDarwinDiskutilCache()
 	InvalidateDarwinUSBCache()
+	InvalidateWindowsUSBCache()
 }
 
 // InvalidateDarwinUSBCache forces an immediate purge of the macOS USB hardware profile cache.
@@ -1207,14 +1208,7 @@ func getVolumeSnapshot() string {
 		sort.Strings(names)
 		return strings.Join(names, "|")
 	case "windows":
-		var letters []string
-		for c := 'C'; c <= 'Z'; c++ {
-			drive := fmt.Sprintf("%c:\\", c)
-			if _, err := os.Stat(drive); err == nil {
-				letters = append(letters, string(c))
-			}
-		}
-		return strings.Join(letters, "|")
+		return getVolumeSnapshotWindows()
 	default:
 		dirs := []string{"/media", "/run/media", "/mnt"}
 		var names []string
@@ -2487,6 +2481,14 @@ type winDiskDrive struct {
 }
 
 func getWindowsDisks() ([]DiskInfo, error) {
+	// Optimization mirroring macOS: Use fast native Win32 IOCTL probe (~0.5ms)
+	// to avoid the expensive PowerShell subprocess (~900ms-1500ms).
+	nativeDisks, err := getWindowsDisksNative()
+	if err == nil {
+		return nativeDisks, nil
+	}
+	logger.Warn("Native Windows disk discovery failed, using fallback PowerShell scan", "error", err)
+
 	disks := make([]DiskInfo, 0)
 	psScript := `$drives = Get-CimInstance Win32_DiskDrive | Where-Object { ($_.InterfaceType -eq 'USB' -or ($_.MediaType -like '*Removable*' -and $_.MediaType -notlike '*Fixed*')) -and $_.Model -notmatch 'Virtual|VHD|ISO|CD-ROM|DVD' -and $_.InterfaceType -ne 'FileBackedVirtual' }; $parts = Get-CimInstance Win32_DiskPartition; $drives | ForEach-Object { $d = $_; $dp = $parts | Where-Object { $_.DiskIndex -eq $d.Index }; [PSCustomObject]@{ DeviceID = $d.DeviceID; Index = $d.Index; Model = $d.Model; Size = $d.Size; InterfaceType = $d.InterfaceType; Caption = $d.Caption; BytesPerSector = $d.BytesPerSector; PNPDeviceID = $d.PNPDeviceID; SerialNumber = $d.SerialNumber; PartitionList = @($dp | ForEach-Object { [PSCustomObject]@{ Index = $_.Index; Type = $_.Type; Size = $_.Size } }) } } | ConvertTo-Json -Depth 3`
 	cmd := execCommand("powershell", "-NoProfile", "-Command", psScript)
