@@ -6,6 +6,8 @@
 package sysinfo
 
 import (
+	"fmt"
+
 	"golang.org/x/sys/windows/registry"
 )
 
@@ -22,4 +24,23 @@ func IsSystemDarkTheme() bool {
 		return false
 	}
 	return val == 0
+}
+
+// SupportsMicaBackdrop checks whether the current Windows build supports modern backdrop materials (Windows 11 22H2+ build >= 22621).
+func SupportsMicaBackdrop() bool {
+	k, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows NT\CurrentVersion`, registry.QUERY_VALUE)
+	if err != nil {
+		return false
+	}
+	defer k.Close()
+
+	buildStr, _, err := k.GetStringValue("CurrentBuild")
+	if err != nil {
+		return false
+	}
+	var build int
+	if _, err := fmt.Sscanf(buildStr, "%d", &build); err == nil {
+		return build >= 22621
+	}
+	return false
 }
