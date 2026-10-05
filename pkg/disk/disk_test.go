@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 	"time"
 
@@ -146,6 +147,32 @@ func TestIsSystemDiskWindows(t *testing.T) {
 	isSys, err = isSystemDiskWindows(`\\.\PhysicalDrive99`)
 	assert.NoError(t, err)
 	assert.False(t, isSys, `PhysicalDrive99 should not be detected as system disk`)
+}
+
+func TestGetVolumesForDiskWindows(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("Windows only")
+	}
+
+	sysDiskNum, err := getSystemDriveDiskNumberWindows()
+	assert.NoError(t, err)
+	assert.GreaterOrEqual(t, sysDiskNum, 0)
+
+	vols, err := getVolumesForDiskWindows(sysDiskNum)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, vols, "System disk should have at least one mounted volume")
+
+	foundC := false
+	for _, v := range vols {
+		if strings.EqualFold(v.DriveLetter, "C:") {
+			foundC = true
+			assert.NotEmpty(t, v.FileSystem, "C: volume should report a valid file system (e.g. NTFS)")
+			assert.Greater(t, v.TotalSize, uint64(0), "C: total size should be > 0")
+			assert.Greater(t, v.FreeSpace, uint64(0), "C: free space should be > 0")
+		}
+	}
+	assert.True(t, foundC, "C: must be present in volumes discovered for system disk")
+	assert.Greater(t, getMountFreeSpace(`C:\`), uint64(0), "C: mount point free space should be > 0")
 }
 
 func TestValidateUserEjectTarget(t *testing.T) {
