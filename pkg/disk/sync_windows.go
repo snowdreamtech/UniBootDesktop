@@ -13,6 +13,7 @@ import (
 	"unsafe"
 
 	"golang.org/x/sys/windows"
+	"golang.org/x/sys/windows/registry"
 )
 
 // syncPlatformBuffers flushes file buffers across all accessible Windows volumes,
@@ -200,4 +201,199 @@ func getVolumesForDiskWindows(diskNumber int) ([]winVolumeInfo, error) {
 		})
 	}
 	return results, nil
+}
+
+// winUsbDeviceInfo contains detailed hardware attributes for a USB storage device on Windows.
+type winUsbDeviceInfo struct {
+	VendorID          string
+	ProductID         string
+	SerialNumber      string
+	UsbVersion        string
+	UsbSpeed          string
+	TransportProtocol string
+	Vendor            string
+	Product           string
+	BusPower          string
+	BusPowerUsed      string
+}
+
+// parsePnpStorageID extracts vendor, product, revision, and serial/instance from a Windows PNPDeviceID.
+// Example: USBSTOR\DISK&VEN_SANDISK&PROD_ULTRA&REV_1.00\0123456789ABCDEF&0
+func parsePnpStorageID(pnpID string) (vendor, product, rev, instance string) {
+	parts := strings.Split(strings.TrimSpace(pnpID), `\`)
+	if len(parts) >= 3 {
+		instance = parts[len(parts)-1]
+		instance = strings.TrimSuffix(instance, "&0")
+		instance = strings.TrimSuffix(instance, "&1")
+		desc := parts[1]
+		for _, token := range strings.Split(desc, "&") {
+			upper := strings.ToUpper(token)
+			if strings.HasPrefix(upper, "VEN_") {
+				vendor = strings.TrimPrefix(token, token[:4])
+				vendor = strings.ReplaceAll(vendor, "_", " ")
+				vendor = strings.TrimSpace(vendor)
+			} else if strings.HasPrefix(upper, "PROD_") {
+				product = strings.TrimPrefix(token, token[:5])
+				product = strings.ReplaceAll(product, "_", " ")
+				product = strings.TrimSpace(product)
+			} else if strings.HasPrefix(upper, "REV_") {
+				rev = strings.TrimPrefix(token, token[:4])
+			}
+		}
+	} else if len(parts) == 2 {
+		instance = parts[1]
+	}
+	return
+}
+
+// parseUsbRevision maps a USB BCD revision string to human-readable USB version and physical speed.
+func parseUsbRevision(rev string) (version, speed string) {
+	upper := strings.ToUpper(strings.TrimSpace(rev))
+	upper = strings.TrimPrefix(upper, "REV_")
+	switch {
+	case strings.HasPrefix(upper, "04") || strings.HasPrefix(upper, "4"):
+		return "USB4", "40 Gb/s"
+	case strings.HasPrefix(upper, "032") || strings.HasPrefix(upper, "3.2"):
+		return "USB 3.2", "20 Gb/s"
+	case strings.HasPrefix(upper, "031") || strings.HasPrefix(upper, "3.1"):
+		return "USB 3.1", "10 Gb/s"
+	case strings.HasPrefix(upper, "03") || strings.HasPrefix(upper, "3.0") || strings.HasPrefix(upper, "3"):
+		return "USB 3.0", "5 Gb/s"
+	case strings.HasPrefix(upper, "02") || strings.HasPrefix(upper, "2.0") || strings.HasPrefix(upper, "2"):
+		return "USB 2.0", "480 Mb/s"
+	case strings.HasPrefix(upper, "01") || strings.HasPrefix(upper, "1.1") || strings.HasPrefix(upper, "1.0"):
+		return "USB 1.1", "12 Mb/s"
+	default:
+		return "USB 2.0", "480 Mb/s"
+	}
+}
+
+// getUsbDeviceInfoWindows queries hardware metadata (VID/PID, real USB revision, UASP vs BOT) from the Windows PnP Registry.
+func getUsbDeviceInfoWindows(pnpDeviceID string, serialNumber string) *winUsbDeviceInfo {
+	parsedVen, parsedProd, parsedRev, parsedInst := parsePnpStorageID(pnpDeviceID)
+	effectiveSerial := strings.TrimSpace(serialNumber)
+	if effectiveSerial == "" {
+		effectiveSerial = parsedInst
+	}
+
+	transportProto := "BOT (Bulk-Only Transport)"
+	if strings.Contains(strings.ToUpper(pnpDeviceID), "UASP") || strings.HasPrefix(strings.ToUpper(pnpDeviceID), "SCSI\\") {
+		transportProto = "UASP (USB Attached SCSI)"
+	}
+
+	info := &winUsbDeviceInfo{
+		Vendor:            parsedVen,
+		Product:           parsedProd,
+		SerialNumber:      effectiveSerial,
+		UsbVersion:        "USB 2.0",
+		UsbSpeed:          "480 Mb/s",
+		TransportProtocol: transportProto,
+		BusPower:          "500 mA",
+		BusPowerUsed:      "500 mA",
+	}
+
+	if parsedRev != "" {
+		v, s := parseUsbRevision(parsedRev)
+		info.UsbVersion = v
+		info.UsbSpeed = s
+	}
+
+	// Open HKLM\SYSTEM\CurrentControlSet\Enum\USB to correlate with the parent USB entity
+	usbKey, err := registry.OpenKey(registry.LOCAL_MACHINE, `SYSTEM\CurrentControlSet\Enum\USB`, registry.READ)
+	if err != nil {
+		return info
+	}
+	defer usbKey.Close()
+
+	subkeys, err := usbKey.ReadSubKeyNames(-1)
+	if err != nil {
+		return info
+	}
+
+	for _, sub := range subkeys {
+		upperSub := strings.ToUpper(sub)
+		if !strings.HasPrefix(upperSub, "VID_") {
+			continue
+		}
+		devKey, err := registry.OpenKey(usbKey, sub, registry.READ)
+		if err != nil {
+			continue
+		}
+		instNames, err := devKey.ReadSubKeyNames(-1)
+		if err != nil {
+			devKey.Close()
+			continue
+		}
+
+		matched := false
+		for _, inst := range instNames {
+			upperInst := strings.ToUpper(inst)
+			cleanInst := strings.TrimSuffix(upperInst, "&0")
+			cleanInst = strings.TrimSuffix(cleanInst, "&1")
+
+			// Match against serial or instance id
+			isSerialMatch := effectiveSerial != "" && (cleanInst == strings.ToUpper(effectiveSerial) ||
+				strings.Contains(strings.ToUpper(effectiveSerial), cleanInst) ||
+				strings.Contains(cleanInst, strings.ToUpper(effectiveSerial)))
+			isInstMatch := parsedInst != "" && (cleanInst == strings.ToUpper(parsedInst) ||
+				strings.Contains(strings.ToUpper(pnpDeviceID), cleanInst))
+
+			if isSerialMatch || isInstMatch {
+				matched = true
+
+				// Extract VID and PID from "VID_xxxx&PID_yyyy"
+				tokens := strings.Split(upperSub, "&")
+				for _, tok := range tokens {
+					if strings.HasPrefix(tok, "VID_") {
+						info.VendorID = "0x" + strings.ToLower(strings.TrimPrefix(tok, "VID_"))
+					} else if strings.HasPrefix(tok, "PID_") {
+						info.ProductID = "0x" + strings.ToLower(strings.TrimPrefix(tok, "PID_"))
+					}
+				}
+
+				instKey, err := registry.OpenKey(devKey, inst, registry.READ)
+				if err == nil {
+					// Detect UASP vs BOT service
+					if svc, _, errSvc := instKey.GetStringValue("Service"); errSvc == nil {
+						if strings.EqualFold(svc, "UASPSTOR") {
+							info.TransportProtocol = "UASP (USB Attached SCSI)"
+						}
+					}
+					// Parse HardwareID for REV_xxxx
+					if hwIDs, _, errHw := instKey.GetStringsValue("HardwareID"); errHw == nil {
+						for _, hw := range hwIDs {
+							if strings.Contains(hw, "REV_") {
+								revParts := strings.Split(hw, "REV_")
+								if len(revParts) >= 2 {
+									v, s := parseUsbRevision(revParts[1])
+									info.UsbVersion = v
+									info.UsbSpeed = s
+									break
+								}
+							}
+						}
+					}
+					// Check manufacturer if not present in disk PNP string
+					if mfg, _, errMfg := instKey.GetStringValue("Mfg"); errMfg == nil && mfg != "" && !strings.HasPrefix(mfg, "@") {
+						if info.Vendor == "" || strings.EqualFold(info.Vendor, "Generic") {
+							info.Vendor = strings.TrimSpace(mfg)
+						}
+					}
+					instKey.Close()
+				}
+				break
+			}
+		}
+		devKey.Close()
+		if matched {
+			break
+		}
+	}
+
+	if strings.HasPrefix(info.UsbVersion, "USB 3") || strings.HasPrefix(info.UsbVersion, "USB4") {
+		info.BusPower = "900 mA"
+		info.BusPowerUsed = "900 mA"
+	}
+
+	return info
 }

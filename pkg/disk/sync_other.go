@@ -37,3 +37,22 @@ func getSystemDriveDiskNumberWindows() (int, error) {
 func getVolumesForDiskWindows(diskNumber int) ([]winVolumeInfo, error) {
 	return nil, nil
 }
+
+// winUsbDeviceInfo contains detailed hardware attributes for a USB storage device on Windows.
+type winUsbDeviceInfo struct {
+	VendorID          string
+	ProductID         string
+	SerialNumber      string
+	UsbVersion        string
+	UsbSpeed          string
+	TransportProtocol string
+	Vendor            string
+	Product           string
+	BusPower          string
+	BusPowerUsed      string
+}
+
+// getUsbDeviceInfoWindows is a stub on other platforms.
+func getUsbDeviceInfoWindows(pnpDeviceID string, serialNumber string) *winUsbDeviceInfo {
+	return nil
+}

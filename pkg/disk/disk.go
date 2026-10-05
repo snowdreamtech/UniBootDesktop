@@ -2609,15 +2609,60 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 		sectorSize = fmt.Sprintf("%d Bytes", drive.BytesPerSector)
 	}
 
-	usbVer := "USB 3.0"
-	usbSpeed := "5 Gb/s"
-	if strings.Contains(strings.ToUpper(displayName), "2.0") || strings.Contains(strings.ToUpper(drive.Model), "2.0") {
-		usbVer = "USB 2.0"
-		usbSpeed = "480 Mb/s"
+	// Inspect authentic USB hardware metadata (VID/PID, real revision, UASP vs BOT)
+	usbInfo := getUsbDeviceInfoWindows(drive.PNPDeviceID, drive.SerialNumber)
+	usbVer := "USB 2.0"
+	usbSpeed := "480 Mb/s"
+	vendor := "Generic"
+	serialNum := drive.SerialNumber
+	vendorID := ""
+	productID := ""
+	busPower := "500 mA"
+	busPowerUsed := "500 mA"
+	transportProtocol := "BOT (Bulk-Only Transport)"
+
+	if usbInfo != nil {
+		if usbInfo.UsbVersion != "" {
+			usbVer = usbInfo.UsbVersion
+		}
+		if usbInfo.UsbSpeed != "" {
+			usbSpeed = usbInfo.UsbSpeed
+		}
+		if usbInfo.Vendor != "" {
+			vendor = usbInfo.Vendor
+		}
+		if usbInfo.SerialNumber != "" {
+			serialNum = usbInfo.SerialNumber
+		}
+		vendorID = usbInfo.VendorID
+		productID = usbInfo.ProductID
+		if usbInfo.BusPower != "" {
+			busPower = usbInfo.BusPower
+		}
+		if usbInfo.BusPowerUsed != "" {
+			busPowerUsed = usbInfo.BusPowerUsed
+		}
+		if usbInfo.TransportProtocol != "" {
+			transportProtocol = usbInfo.TransportProtocol
+		}
+	} else {
+		// Fallback inspection from drive Model/Caption if USB info unavailable
+		upperModel := strings.ToUpper(drive.Model + " " + displayName)
+		if strings.Contains(upperModel, "3.2") {
+			usbVer = "USB 3.2"
+			usbSpeed = "20 Gb/s"
+		} else if strings.Contains(upperModel, "3.1") {
+			usbVer = "USB 3.1"
+			usbSpeed = "10 Gb/s"
+		} else if strings.Contains(upperModel, "3.0") || strings.Contains(upperModel, "SUPERSPEED") {
+			usbVer = "USB 3.0"
+			usbSpeed = "5 Gb/s"
+		}
 	}
 
 	isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
 	protoCode := MapProtocolCode(usbVer, usbSpeed)
+	ctrlVendor := InferControllerVendor(vendorID, productID, vendor)
 
 	// Detect if this is a system disk
 	isSystemDisk, _ := isSystemDiskWindows(devNode)
@@ -2686,18 +2731,21 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 		IsSystem:           isSystemDisk,
 		UsbVersion:         usbVer,
 		UsbSpeed:           usbSpeed,
-		Vendor:             "Generic",
+		Vendor:             vendor,
+		SerialNumber:       serialNum,
+		VendorId:           vendorID,
+		ProductId:          productID,
 		FileSystem:         fileSystem,
 		PartitionScheme:    partitionScheme,
 		Writable:           true,
 		SmartStatus:        "Verified",
-		BusPower:           "500 mA",
-		BusPowerUsed:       "500 mA",
+		BusPower:           busPower,
+		BusPowerUsed:       busPowerUsed,
 		SectorSize:         sectorSize,
-		TransportProtocol:  "BOT (Bulk-Only Transport)",
+		TransportProtocol:  transportProtocol,
 		BootStatus:         bootStatusWin,
 		BootStatusCode:     bootStatusCodeWin,
-		ControllerVendor:   InferControllerVendor("", "", "Generic"),
+		ControllerVendor:   ctrlVendor,
 		IsFakeUsb3:         isFake,
 		ProtocolCode:       protoCode,
 		IsRealVentoy:       isRealVentoyWin,
