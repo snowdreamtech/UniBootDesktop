@@ -1019,8 +1019,15 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		return err
 	}
 	firmware.SetCustomUniBootDir(cfg.UniBootPath)
+	a.SetTheme(cfg.Theme)
+	logger.Info("Application preferences saved successfully")
+	return nil
+}
+
+// SetTheme updates the application window appearance and synchronizes the native titlebar theme.
+func (a *App) SetTheme(theme string) {
 	if a.ctx != nil && a.ctx.Value("frontend") != nil {
-		switch cfg.Theme {
+		switch theme {
 		case "dark":
 			wailsRuntime.WindowSetDarkTheme(a.ctx)
 			wailsRuntime.WindowSetBackgroundColour(a.ctx, 11, 15, 25, 255)
@@ -1036,8 +1043,8 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 			}
 		}
 	}
-	logger.Info("Application preferences saved successfully")
-	return nil
+	sysinfo.SyncTitleBarTheme(theme)
+	logger.Info("Synchronized application and titlebar theme", "theme", theme)
 }
 
 // ClearProxyPassword removes the saved proxy password from the system credential store.
