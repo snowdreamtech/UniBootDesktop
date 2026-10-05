@@ -129,10 +129,31 @@ func getDriveLetterDiskNumberWindows(driveLetter string) (int, error) {
 		&bytesReturned,
 		nil,
 	)
-	if err != nil {
-		return -1, err
+	if err == nil {
+		return int(sdn.DeviceNumber), nil
 	}
-	return int(sdn.DeviceNumber), nil
+
+	// Fallback to IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS = 0x00560000
+	const ioctlVolumeGetVolumeDiskExtents = 0x00560000
+	var extBuf [512]byte
+	errExt := syscall.DeviceIoControl(
+		handle,
+		ioctlVolumeGetVolumeDiskExtents,
+		nil,
+		0,
+		&extBuf[0],
+		uint32(len(extBuf)),
+		&bytesReturned,
+		nil,
+	)
+	if errExt == nil && bytesReturned >= 8 {
+		numExtents := *(*uint32)(unsafe.Pointer(&extBuf[0]))
+		if numExtents > 0 {
+			return int(*(*uint32)(unsafe.Pointer(&extBuf[8]))), nil
+		}
+	}
+
+	return -1, err
 }
 
 // getSystemDriveDiskNumberWindows returns the physical disk index of the Windows SystemDrive (e.g. C:).
@@ -144,64 +165,162 @@ func getSystemDriveDiskNumberWindows() (int, error) {
 	return getDriveLetterDiskNumberWindows(sysDrive)
 }
 
-// getVolumesForDiskWindows scans all mounted Windows drive letters and returns those residing on diskNumber.
+// getVolumesForDiskWindows scans all mounted Windows drive letters and volume GUID paths, returning all residing on diskNumber.
 func getVolumesForDiskWindows(diskNumber int) ([]winVolumeInfo, error) {
-	drivesMask, err := windows.GetLogicalDrives()
-	if err != nil {
-		return nil, err
-	}
-
 	var results []winVolumeInfo
-	for c := 'A'; c <= 'Z'; c++ {
-		if (drivesMask & (1 << (c - 'A'))) == 0 {
-			continue
+	seenLetters := make(map[string]bool)
+
+	// 1. Scan drive letters A-Z
+	drivesMask, err := windows.GetLogicalDrives()
+	if err == nil {
+		for c := 'A'; c <= 'Z'; c++ {
+			if (drivesMask & (1 << (c - 'A'))) == 0 {
+				continue
+			}
+			driveLetter := fmt.Sprintf("%c:", c)
+			dn, errDn := getDriveLetterDiskNumberWindows(driveLetter)
+			if errDn != nil || dn != diskNumber {
+				continue
+			}
+
+			rootPath := fmt.Sprintf("%c:\\", c)
+			rootPtr, errPtr := syscall.UTF16PtrFromString(rootPath)
+			if errPtr != nil {
+				continue
+			}
+
+			var volNameBuf [260]uint16
+			var fsNameBuf [260]uint16
+			var serialNum, maxLen, flags uint32
+			_ = windows.GetVolumeInformation(
+				rootPtr,
+				&volNameBuf[0],
+				uint32(len(volNameBuf)),
+				&serialNum,
+				&maxLen,
+				&flags,
+				&fsNameBuf[0],
+				uint32(len(fsNameBuf)),
+			)
+			volName := syscall.UTF16ToString(volNameBuf[:])
+			fsName := syscall.UTF16ToString(fsNameBuf[:])
+
+			var freeBytesAvailable, totalBytes, totalFreeBytes uint64
+			_ = windows.GetDiskFreeSpaceEx(
+				rootPtr,
+				&freeBytesAvailable,
+				&totalBytes,
+				&totalFreeBytes,
+			)
+			dt := windows.GetDriveType(rootPtr)
+
+			seenLetters[driveLetter] = true
+			results = append(results, winVolumeInfo{
+				DriveLetter: driveLetter,
+				VolumeName:  strings.TrimSpace(volName),
+				FileSystem:  strings.TrimSpace(fsName),
+				FreeSpace:   totalFreeBytes,
+				TotalSize:   totalBytes,
+				DriveType:   dt,
+			})
 		}
-		driveLetter := fmt.Sprintf("%c:", c)
-		dn, err := getDriveLetterDiskNumberWindows(driveLetter)
-		if err != nil || dn != diskNumber {
-			continue
-		}
-
-		rootPath := fmt.Sprintf("%c:\\", c)
-		rootPtr, err := syscall.UTF16PtrFromString(rootPath)
-		if err != nil {
-			continue
-		}
-
-		var volNameBuf [260]uint16
-		var fsNameBuf [260]uint16
-		var serialNum, maxLen, flags uint32
-		_ = windows.GetVolumeInformation(
-			rootPtr,
-			&volNameBuf[0],
-			uint32(len(volNameBuf)),
-			&serialNum,
-			&maxLen,
-			&flags,
-			&fsNameBuf[0],
-			uint32(len(fsNameBuf)),
-		)
-		volName := syscall.UTF16ToString(volNameBuf[:])
-		fsName := syscall.UTF16ToString(fsNameBuf[:])
-
-		var freeBytesAvailable, totalBytes, totalFreeBytes uint64
-		_ = windows.GetDiskFreeSpaceEx(
-			rootPtr,
-			&freeBytesAvailable,
-			&totalBytes,
-			&totalFreeBytes,
-		)
-		dt := windows.GetDriveType(rootPtr)
-
-		results = append(results, winVolumeInfo{
-			DriveLetter: driveLetter,
-			VolumeName:  strings.TrimSpace(volName),
-			FileSystem:  strings.TrimSpace(fsName),
-			FreeSpace:   totalFreeBytes,
-			TotalSize:   totalBytes,
-			DriveType:   dt,
-		})
 	}
+
+	// 2. Scan FindFirstVolume to discover unlettered partitions (e.g. UNIBOOT, VTOYEFI, EFI) on diskNumber
+	var volGuidBuf [512]uint16
+	hFind, errFind := windows.FindFirstVolume(&volGuidBuf[0], uint32(len(volGuidBuf)))
+	if errFind == nil {
+		defer windows.FindVolumeClose(hFind)
+		for {
+			guidPath := syscall.UTF16ToString(volGuidBuf[:])
+			cleanGuid := strings.TrimSuffix(guidPath, `\`)
+
+			rootPtr, _ := syscall.UTF16PtrFromString(guidPath)
+			var pathsBuf [512]uint16
+			var pathsLen uint32
+			_ = windows.GetVolumePathNamesForVolumeName(rootPtr, &pathsBuf[0], uint32(len(pathsBuf)), &pathsLen)
+			driveLetter := strings.TrimSuffix(syscall.UTF16ToString(pathsBuf[:]), `\`)
+
+			if driveLetter == "" || !seenLetters[driveLetter] {
+				ptr, errPtr := syscall.UTF16PtrFromString(cleanGuid)
+				if errPtr == nil {
+					handle, errH := syscall.CreateFile(
+						ptr,
+						0,
+						syscall.FILE_SHARE_READ|syscall.FILE_SHARE_WRITE,
+						nil,
+						syscall.OPEN_EXISTING,
+						0,
+						0,
+					)
+					if errH == nil {
+						const ioctlVolumeGetVolumeDiskExtents = 0x00560000
+						var extBuf [512]byte
+						var bytesRet uint32
+						errExt := syscall.DeviceIoControl(
+							handle,
+							ioctlVolumeGetVolumeDiskExtents,
+							nil,
+							0,
+							&extBuf[0],
+							uint32(len(extBuf)),
+							&bytesRet,
+							nil,
+						)
+						dn := -1
+						if errExt == nil && bytesRet >= 8 {
+							numExtents := *(*uint32)(unsafe.Pointer(&extBuf[0]))
+							if numExtents > 0 {
+								dn = int(*(*uint32)(unsafe.Pointer(&extBuf[8])))
+							}
+						}
+						syscall.CloseHandle(handle)
+
+						if dn == diskNumber {
+							var volNameBuf [260]uint16
+							var fsNameBuf [260]uint16
+							var serialNum, maxLen, flags uint32
+							_ = windows.GetVolumeInformation(
+								rootPtr,
+								&volNameBuf[0],
+								uint32(len(volNameBuf)),
+								&serialNum,
+								&maxLen,
+								&flags,
+								&fsNameBuf[0],
+								uint32(len(fsNameBuf)),
+							)
+							volName := syscall.UTF16ToString(volNameBuf[:])
+							fsName := syscall.UTF16ToString(fsNameBuf[:])
+
+							var freeBytesAvailable, totalBytes, totalFreeBytes uint64
+							_ = windows.GetDiskFreeSpaceEx(
+								rootPtr,
+								&freeBytesAvailable,
+								&totalBytes,
+								&totalFreeBytes,
+							)
+							dt := windows.GetDriveType(rootPtr)
+
+							results = append(results, winVolumeInfo{
+								DriveLetter: driveLetter,
+								VolumeName:  strings.TrimSpace(volName),
+								FileSystem:  strings.TrimSpace(fsName),
+								FreeSpace:   totalFreeBytes,
+								TotalSize:   totalBytes,
+								DriveType:   dt,
+							})
+						}
+					}
+				}
+			}
+
+			if errNext := windows.FindNextVolume(hFind, &volGuidBuf[0], uint32(len(volGuidBuf))); errNext != nil {
+				break
+			}
+		}
+	}
+
 	return results, nil
 }
 
@@ -296,7 +415,7 @@ func getUsbDeviceInfoWindows(pnpDeviceID string, serialNumber string) *winUsbDev
 	}
 	winUSBCacheMutex.RUnlock()
 
-	parsedVen, parsedProd, parsedRev, parsedInst := parsePnpStorageID(pnpDeviceID)
+	parsedVen, parsedProd, _, parsedInst := parsePnpStorageID(pnpDeviceID)
 	effectiveSerial := strings.TrimSpace(serialNumber)
 	if effectiveSerial == "" {
 		effectiveSerial = parsedInst
@@ -316,12 +435,6 @@ func getUsbDeviceInfoWindows(pnpDeviceID string, serialNumber string) *winUsbDev
 		TransportProtocol: transportProto,
 		BusPower:          "500 mA",
 		BusPowerUsed:      "500 mA",
-	}
-
-	if parsedRev != "" {
-		v, s := parseUsbRevision(parsedRev)
-		info.UsbVersion = v
-		info.UsbSpeed = s
 	}
 
 	// Open HKLM\SYSTEM\CurrentControlSet\Enum\USB to correlate with the parent USB entity
@@ -444,6 +557,8 @@ type winPhysicalDiskInfo struct {
 	Product        string
 	Revision       string
 	SerialNumber   string
+	UsbVersion     string
+	UsbSpeed       string
 }
 
 // queryPhysicalDiskWindows queries physical drive geometry and hardware properties directly via native Win32 IOCTLs (0ms, no PowerShell).
@@ -501,38 +616,36 @@ func queryPhysicalDiskWindows(diskNum int) (*winPhysicalDiskInfo, error) {
 		info.BytesPerSector = geom.BytesPerSector
 	}
 
-	// 2. IOCTL_STORAGE_QUERY_PROPERTY = 0x002D1400
+	// 2. IOCTL_STORAGE_QUERY_PROPERTY = 0x002D1400 (StorageDeviceProperty = 0)
 	const ioctlStorageQueryProperty = 0x002D1400
 	type storagePropertyQuery struct {
 		PropertyId uint32
 		QueryType  uint32
 		Params     [1]byte
 	}
-	query := storagePropertyQuery{
+	queryDevice := storagePropertyQuery{
 		PropertyId: 0, // StorageDeviceProperty
 		QueryType:  0, // PropertyStandardQuery
 	}
-	var buf [1024]byte
+	var bufDev [1024]byte
 	err = syscall.DeviceIoControl(
 		handle,
 		ioctlStorageQueryProperty,
-		(*byte)(unsafe.Pointer(&query)),
-		uint32(unsafe.Sizeof(query)),
-		&buf[0],
-		uint32(len(buf)),
+		(*byte)(unsafe.Pointer(&queryDevice)),
+		uint32(unsafe.Sizeof(queryDevice)),
+		&bufDev[0],
+		uint32(len(bufDev)),
 		&bytesRet,
 		nil,
 	)
-	if err == nil && bytesRet >= 24 {
-		if buf[6] == 1 {
-			info.IsRemovable = true
-		}
-		vendorOffset := *(*uint32)(unsafe.Pointer(&buf[8]))
-		productOffset := *(*uint32)(unsafe.Pointer(&buf[12]))
-		revisionOffset := *(*uint32)(unsafe.Pointer(&buf[16]))
-		serialOffset := *(*uint32)(unsafe.Pointer(&buf[20]))
-		if bytesRet >= 28 {
-			info.BusType = *(*uint32)(unsafe.Pointer(&buf[24]))
+	if err == nil && bytesRet >= 28 {
+		info.IsRemovable = bufDev[10] == 1
+		vendorOffset := *(*uint32)(unsafe.Pointer(&bufDev[12]))
+		productOffset := *(*uint32)(unsafe.Pointer(&bufDev[16]))
+		revisionOffset := *(*uint32)(unsafe.Pointer(&bufDev[20]))
+		serialOffset := *(*uint32)(unsafe.Pointer(&bufDev[24]))
+		if bytesRet >= 32 {
+			info.BusType = *(*uint32)(unsafe.Pointer(&bufDev[28]))
 		}
 
 		readASCII := func(offset uint32) string {
@@ -540,16 +653,59 @@ func queryPhysicalDiskWindows(diskNum int) (*winPhysicalDiskInfo, error) {
 				return ""
 			}
 			end := offset
-			for end < bytesRet && buf[end] != 0 {
+			for end < bytesRet && bufDev[end] != 0 {
 				end++
 			}
-			return strings.TrimSpace(string(buf[offset:end]))
+			return strings.TrimSpace(string(bufDev[offset:end]))
 		}
 
 		info.Vendor = readASCII(vendorOffset)
 		info.Product = readASCII(productOffset)
 		info.Revision = readASCII(revisionOffset)
 		info.SerialNumber = readASCII(serialOffset)
+	}
+
+	// 3. IOCTL_STORAGE_QUERY_PROPERTY = 0x002D1400 (StorageAdapterProperty = 1)
+	queryAdapter := storagePropertyQuery{
+		PropertyId: 1, // StorageAdapterProperty
+		QueryType:  0, // PropertyStandardQuery
+	}
+	var bufAdap [1024]byte
+	errAdap := syscall.DeviceIoControl(
+		handle,
+		ioctlStorageQueryProperty,
+		(*byte)(unsafe.Pointer(&queryAdapter)),
+		uint32(unsafe.Sizeof(queryAdapter)),
+		&bufAdap[0],
+		uint32(len(bufAdap)),
+		&bytesRet,
+		nil,
+	)
+	if errAdap == nil && bytesRet >= 30 {
+		busMajor := *(*uint16)(unsafe.Pointer(&bufAdap[26]))
+		busMinor := *(*uint16)(unsafe.Pointer(&bufAdap[28]))
+		switch busMajor {
+		case 4:
+			info.UsbVersion = "USB4"
+			info.UsbSpeed = "40 Gb/s"
+		case 3:
+			if busMinor >= 2 {
+				info.UsbVersion = "USB 3.2"
+				info.UsbSpeed = "20 Gb/s"
+			} else if busMinor == 1 {
+				info.UsbVersion = "USB 3.1"
+				info.UsbSpeed = "10 Gb/s"
+			} else {
+				info.UsbVersion = "USB 3.0"
+				info.UsbSpeed = "5 Gb/s"
+			}
+		case 2:
+			info.UsbVersion = "USB 2.0"
+			info.UsbSpeed = "480 Mb/s"
+		case 1:
+			info.UsbVersion = "USB 1.1"
+			info.UsbSpeed = "12 Mb/s"
+		}
 	}
 
 	return info, nil
@@ -699,6 +855,11 @@ func getWindowsDisksNative() ([]DiskInfo, error) {
 			continue
 		}
 
+		pnpID := ""
+		if pInfo.Vendor != "" || pInfo.Product != "" {
+			pnpID = fmt.Sprintf(`USBSTOR\Disk&Ven_%s&Prod_%s&Rev_%s\%s&0`, pInfo.Vendor, pInfo.Product, pInfo.Revision, pInfo.SerialNumber)
+		}
+
 		drive := winDiskDrive{
 			DeviceID:       pInfo.DevicePath,
 			Index:          pInfo.DiskNumber,
@@ -707,7 +868,10 @@ func getWindowsDisksNative() ([]DiskInfo, error) {
 			InterfaceType:  "USB",
 			Caption:        model,
 			BytesPerSector: pInfo.BytesPerSector,
+			PNPDeviceID:    pnpID,
 			SerialNumber:   pInfo.SerialNumber,
+			UsbVersion:     pInfo.UsbVersion,
+			UsbSpeed:       pInfo.UsbSpeed,
 		}
 
 		validDrives = append(validDrives, indexedDrive{index: i, drive: drive})
