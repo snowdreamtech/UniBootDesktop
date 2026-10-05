@@ -175,6 +175,67 @@ func TestGetVolumesForDiskWindows(t *testing.T) {
 	assert.Greater(t, getMountFreeSpace(`C:\`), uint64(0), "C: mount point free space should be > 0")
 }
 
+func TestParsePnpStorageID_Windows(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("Windows only")
+	}
+
+	ven, prod, rev, inst := parsePnpStorageID(`USBSTOR\DISK&VEN_SANDISK&PROD_ULTRA&REV_1.00\0123456789ABCDEF&0`)
+	assert.Equal(t, "SANDISK", ven)
+	assert.Equal(t, "ULTRA", prod)
+	assert.Equal(t, "1.00", rev)
+	assert.Equal(t, "0123456789ABCDEF", inst)
+
+	ven, prod, rev, inst = parsePnpStorageID(`USBSTOR\Disk&Ven_VendorCo&Prod_ProductCode&Rev_2.00\6275981091237119587&0`)
+	assert.Equal(t, "VendorCo", ven)
+	assert.Equal(t, "ProductCode", prod)
+	assert.Equal(t, "2.00", rev)
+	assert.Equal(t, "6275981091237119587", inst)
+}
+
+func TestParseUsbRevision_Windows(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("Windows only")
+	}
+
+	v, s := parseUsbRevision("REV_0200")
+	assert.Equal(t, "USB 2.0", v)
+	assert.Equal(t, "480 Mb/s", s)
+
+	v, s = parseUsbRevision("REV_0300")
+	assert.Equal(t, "USB 3.0", v)
+	assert.Equal(t, "5 Gb/s", s)
+
+	v, s = parseUsbRevision("REV_0310")
+	assert.Equal(t, "USB 3.1", v)
+	assert.Equal(t, "10 Gb/s", s)
+
+	v, s = parseUsbRevision("REV_0320")
+	assert.Equal(t, "USB 3.2", v)
+	assert.Equal(t, "20 Gb/s", s)
+
+	v, s = parseUsbRevision("REV_0400")
+	assert.Equal(t, "USB4", v)
+	assert.Equal(t, "40 Gb/s", s)
+}
+
+func TestGetUsbDeviceInfoWindows(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("Windows only")
+	}
+
+	info := getUsbDeviceInfoWindows(`USBSTOR\Disk&Ven_VendorCo&Prod_ProductCode&Rev_2.00\6275981091237119587&0`, "")
+	assert.NotNil(t, info)
+	assert.Equal(t, "VendorCo", info.Vendor)
+	assert.Equal(t, "ProductCode", info.Product)
+	assert.Equal(t, "6275981091237119587", info.SerialNumber)
+	assert.Equal(t, "0x346d", info.VendorID)
+	assert.Equal(t, "0x5678", info.ProductID)
+	assert.Equal(t, "USB 2.0", info.UsbVersion)
+	assert.Equal(t, "480 Mb/s", info.UsbSpeed)
+	assert.Equal(t, "BOT (Bulk-Only Transport)", info.TransportProtocol)
+}
+
 func TestValidateUserEjectTarget(t *testing.T) {
 	assert.Error(t, ValidateUserEjectTarget(""))
 	assert.Error(t, ValidateUserEjectTarget("/"))
