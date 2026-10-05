@@ -5,7 +5,10 @@
 
 package disk
 
-import "syscall"
+import (
+	"fmt"
+	"syscall"
+)
 
 // syncPlatformBuffers issues a kernel-level sync() on Unix systems (macOS and Linux),
 // flushing all unwritten filesystem dirty pages and metadata to underlying block devices.
@@ -20,4 +23,9 @@ func getMountFreeSpace(mountPath string) uint64 {
 		return stat.Bavail * uint64(stat.Bsize)
 	}
 	return 0
+}
+
+// getSystemDriveDiskNumberWindows is a stub on Unix.
+func getSystemDriveDiskNumberWindows() (int, error) {
+	return -1, fmt.Errorf("not supported on unix")
 }

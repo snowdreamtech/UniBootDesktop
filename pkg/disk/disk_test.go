@@ -129,6 +129,25 @@ func TestParseWindowsDiskNumber(t *testing.T) {
 	}
 }
 
+func TestIsSystemDiskWindows(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("Windows only")
+	}
+
+	isSys, err := isSystemDiskWindows("C:")
+	assert.NoError(t, err)
+	assert.True(t, isSys, "C: must be detected as system disk")
+
+	isSys, err = isSystemDiskWindows(`\\.\PhysicalDrive0`)
+	assert.NoError(t, err)
+	assert.True(t, isSys, `\\.\PhysicalDrive0 must be detected as system disk`)
+
+	// Non-existent or removable drive should not be detected as system disk
+	isSys, err = isSystemDiskWindows(`\\.\PhysicalDrive99`)
+	assert.NoError(t, err)
+	assert.False(t, isSys, `PhysicalDrive99 should not be detected as system disk`)
+}
+
 func TestValidateUserEjectTarget(t *testing.T) {
 	assert.Error(t, ValidateUserEjectTarget(""))
 	assert.Error(t, ValidateUserEjectTarget("/"))
