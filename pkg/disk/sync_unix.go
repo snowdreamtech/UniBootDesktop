@@ -25,7 +25,27 @@ func getMountFreeSpace(mountPath string) uint64 {
 	return 0
 }
 
+// winVolumeInfo contains volume metadata discovered for a mounted drive letter on Windows.
+type winVolumeInfo struct {
+	DriveLetter string
+	VolumeName  string
+	FileSystem  string
+	FreeSpace   uint64
+	TotalSize   uint64
+	DriveType   uint32
+}
+
+// getDriveLetterDiskNumberWindows is a stub on Unix.
+func getDriveLetterDiskNumberWindows(driveLetter string) (int, error) {
+	return -1, fmt.Errorf("not supported on unix")
+}
+
 // getSystemDriveDiskNumberWindows is a stub on Unix.
 func getSystemDriveDiskNumberWindows() (int, error) {
 	return -1, fmt.Errorf("not supported on unix")
+}
+
+// getVolumesForDiskWindows is a stub on Unix.
+func getVolumesForDiskWindows(diskNumber int) ([]winVolumeInfo, error) {
+	return nil, nil
 }

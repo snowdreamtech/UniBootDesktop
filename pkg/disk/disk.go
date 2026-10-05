@@ -899,16 +899,24 @@ func GetDiskMountPoints(targetDisk string) []string {
 	} else if runtime.GOOS == "windows" {
 		diskNum, err := parseWindowsDiskNumber(targetDisk)
 		if err != nil {
-			return results
+			if dn, dnErr := getDriveLetterDiskNumberWindows(targetDisk); dnErr == nil {
+				diskNum = dn
+				err = nil
+			}
 		}
-		out, err := execCommand("powershell", "-NoProfile", "-NonInteractive", "-Command",
-			fmt.Sprintf("Get-Partition -DiskNumber %d | Get-Volume | Select-Object -ExpandProperty DriveLetter", diskNum)).Output()
 		if err == nil {
-			for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
-				letter := strings.TrimSpace(line)
-				if letter != "" {
-					add(letter + ":\\")
+			vols, vErr := getVolumesForDiskWindows(diskNum)
+			if vErr == nil {
+				for _, v := range vols {
+					if v.DriveLetter != "" {
+						add(v.DriveLetter + `\`)
+					}
 				}
+			}
+		}
+		if len(results) == 0 {
+			if len(targetDisk) == 2 && targetDisk[1] == ':' {
+				add(targetDisk + `\`)
 			}
 		}
 	}
@@ -2419,19 +2427,52 @@ func inspectLinuxDisk(dev linuxBlockDevice) *DiskInfo {
 	}
 }
 
+// winPartition represents a physical partition entry on Windows.
+type winPartition struct {
+	Index uint32 `json:"Index"`
+	Type  string `json:"Type"`
+	Size  uint64 `json:"Size"`
+}
+
+// winPartitionList handles deserializing either a single winPartition or a slice from PowerShell JSON.
+type winPartitionList []winPartition
+
+func (w *winPartitionList) UnmarshalJSON(data []byte) error {
+	if len(data) == 0 || string(data) == "null" {
+		*w = nil
+		return nil
+	}
+	var list []winPartition
+	if err := json.Unmarshal(data, &list); err == nil {
+		*w = list
+		return nil
+	}
+	var single winPartition
+	if err := json.Unmarshal(data, &single); err == nil {
+		*w = []winPartition{single}
+		return nil
+	}
+	return nil
+}
+
 // Windows disk probing via PowerShell Win32_DiskDrive
 type winDiskDrive struct {
-	DeviceID      string `json:"DeviceID"`
-	Model         string `json:"Model"`
-	Size          uint64 `json:"Size"`
-	InterfaceType string `json:"InterfaceType"`
-	Caption       string `json:"Caption"`
+	DeviceID       string           `json:"DeviceID"`
+	Index          int              `json:"Index"`
+	Model          string           `json:"Model"`
+	Size           uint64           `json:"Size"`
+	InterfaceType  string           `json:"InterfaceType"`
+	Caption        string           `json:"Caption"`
+	BytesPerSector uint32           `json:"BytesPerSector"`
+	PNPDeviceID    string           `json:"PNPDeviceID"`
+	SerialNumber   string           `json:"SerialNumber"`
+	PartitionList  winPartitionList `json:"PartitionList"`
 }
 
 func getWindowsDisks() ([]DiskInfo, error) {
 	disks := make([]DiskInfo, 0)
-	cmd := execCommand("powershell", "-NoProfile", "-Command",
-		"Get-CimInstance Win32_DiskDrive | Where-Object { ($_.InterfaceType -eq 'USB' -or ($_.MediaType -like '*Removable*' -and $_.MediaType -notlike '*Fixed*')) -and $_.Model -notmatch 'Virtual|VHD|ISO|CD-ROM|DVD' -and $_.InterfaceType -ne 'FileBackedVirtual' } | Select-Object DeviceID, Model, Size, InterfaceType, Caption | ConvertTo-Json")
+	psScript := `$drives = Get-CimInstance Win32_DiskDrive | Where-Object { ($_.InterfaceType -eq 'USB' -or ($_.MediaType -like '*Removable*' -and $_.MediaType -notlike '*Fixed*')) -and $_.Model -notmatch 'Virtual|VHD|ISO|CD-ROM|DVD' -and $_.InterfaceType -ne 'FileBackedVirtual' }; $parts = Get-CimInstance Win32_DiskPartition; $drives | ForEach-Object { $d = $_; $dp = $parts | Where-Object { $_.DiskIndex -eq $d.Index }; [PSCustomObject]@{ DeviceID = $d.DeviceID; Index = $d.Index; Model = $d.Model; Size = $d.Size; InterfaceType = $d.InterfaceType; Caption = $d.Caption; BytesPerSector = $d.BytesPerSector; PNPDeviceID = $d.PNPDeviceID; SerialNumber = $d.SerialNumber; PartitionList = @($dp | ForEach-Object { [PSCustomObject]@{ Index = $_.Index; Type = $_.Type; Size = $_.Size } }) } } | ConvertTo-Json -Depth 3`
+	cmd := execCommand("powershell", "-NoProfile", "-Command", psScript)
 	output, err := cmd.Output()
 	if err != nil || len(output) == 0 {
 		return disks, nil
@@ -2495,25 +2536,85 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 	if devNode == "" {
 		devNode = fmt.Sprintf(`\\.\PhysicalDrive%d`, i)
 	}
-	driveLetter := fmt.Sprintf("%c:", 'E'+i)
-	displayName := drive.Model
-	if displayName == "" {
-		displayName = drive.Caption
+	diskNum, err := parseWindowsDiskNumber(devNode)
+	if err != nil {
+		diskNum = drive.Index
 	}
-	if displayName == "" {
+
+	// Query mounted volumes for this physical disk using native Win32 APIs
+	vols, _ := getVolumesForDiskWindows(diskNum)
+
+	var primaryVol *winVolumeInfo
+	for idx := range vols {
+		if !IsIgnoredVolume(vols[idx].VolumeName) {
+			primaryVol = &vols[idx]
+			break
+		}
+	}
+	if primaryVol == nil && len(vols) > 0 {
+		primaryVol = &vols[0]
+	}
+
+	displayName := ""
+	if primaryVol != nil && strings.TrimSpace(primaryVol.VolumeName) != "" {
+		displayName = strings.TrimSpace(primaryVol.VolumeName)
+	} else if strings.TrimSpace(drive.Model) != "" {
+		displayName = strings.TrimSpace(drive.Model)
+	} else if strings.TrimSpace(drive.Caption) != "" {
+		displayName = strings.TrimSpace(drive.Caption)
+	} else {
 		displayName = "USB Storage Device"
+	}
+
+	mountPoint := ""
+	fileSystem := "RAW / Unformatted"
+	freeSpace := uint64(0)
+	if primaryVol != nil {
+		if primaryVol.DriveLetter != "" {
+			mountPoint = primaryVol.DriveLetter + `\`
+		}
+		if primaryVol.FileSystem != "" {
+			fileSystem = primaryVol.FileSystem
+		}
+		freeSpace = primaryVol.FreeSpace
+	}
+
+	formattedSize := FormatBytesDual(drive.Size)
+	freeFormatted := FormatBytes(freeSpace)
+	if freeSpace == 0 && primaryVol == nil {
+		freeFormatted = formattedSize
+	}
+
+	// Determine partition scheme
+	partitionScheme := "MBR"
+	for _, p := range drive.PartitionList {
+		if strings.Contains(strings.ToUpper(p.Type), "GPT") {
+			partitionScheme = "GPT"
+			break
+		}
+	}
+	if partitionScheme == "MBR" {
+		if secBuf, err := privilege.ReadSector(devNode, 1024); err == nil && len(secBuf) >= 1024 {
+			if bytes.Equal(secBuf[512:520], []byte("EFI PART")) || secBuf[450] == 0xEE {
+				partitionScheme = "GPT"
+			}
+		}
+	}
+
+	// Format sector size
+	sectorSize := "512 Bytes (512n/512e)"
+	if drive.BytesPerSector == 4096 {
+		sectorSize = "4096 Bytes (4Kn)"
+	} else if drive.BytesPerSector > 0 {
+		sectorSize = fmt.Sprintf("%d Bytes", drive.BytesPerSector)
 	}
 
 	usbVer := "USB 3.0"
 	usbSpeed := "5 Gb/s"
-	if strings.Contains(strings.ToUpper(displayName), "2.0") {
+	if strings.Contains(strings.ToUpper(displayName), "2.0") || strings.Contains(strings.ToUpper(drive.Model), "2.0") {
 		usbVer = "USB 2.0"
 		usbSpeed = "480 Mb/s"
 	}
-
-	formattedSize := FormatBytesDual(drive.Size)
-	freeSpace := uint64(float64(drive.Size) * 0.8)
-	freeFormatted := FormatBytes(freeSpace)
 
 	isFake := CheckFakeUsb3(displayName, usbVer, usbSpeed)
 	protoCode := MapProtocolCode(usbVer, usbSpeed)
@@ -2521,23 +2622,58 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 	// Detect if this is a system disk
 	isSystemDisk, _ := isSystemDiskWindows(devNode)
 
-	manifestWin := GetDiskUniBootManifest(driveLetter)
-	isRealVentoyWin := IsRealVentoyDisk(driveLetter)
-	isCloudModeWin := IsCloudModeDisk(driveLetter)
+	// Collect all mount points on this physical disk for bootloader inspection
+	var diskMountPoints []string
+	for _, v := range vols {
+		if v.DriveLetter != "" {
+			diskMountPoints = append(diskMountPoints, v.DriveLetter+`\`)
+		}
+	}
+	if len(diskMountPoints) == 0 && mountPoint != "" {
+		diskMountPoints = append(diskMountPoints, mountPoint)
+	}
+
+	var manifestWin *UniBootManifest
+	for _, mp := range diskMountPoints {
+		if m, err := ReadUniBootManifest(mp); err == nil && m != nil {
+			manifestWin = m
+			break
+		}
+	}
+	if manifestWin == nil {
+		manifestWin = GetDiskUniBootManifest(devNode)
+	}
+
+	isRealVentoyWin := CheckVentoyMbrSignature(devNode)
+	isCloudModeWin := false
+	for _, v := range vols {
+		if strings.EqualFold(v.VolumeName, "VTOYEFI") || strings.EqualFold(v.VolumeName, "VENTOY") {
+			isRealVentoyWin = true
+		}
+		if HasVentoyEngineFiles(v.DriveLetter + `\`) {
+			isRealVentoyWin = true
+		}
+		if HasUniBootCloudFiles(v.DriveLetter + `\`) {
+			isCloudModeWin = true
+		}
+	}
+
 	if manifestWin != nil {
 		if manifestWin.Mode == "cloud" {
 			isCloudModeWin = true
+			isRealVentoyWin = false
 		} else if manifestWin.Mode == "hybrid" {
 			isRealVentoyWin = true
 		}
 	}
+
 	thirdPartyBootWin := BootTypeNone
 	isGenBootWin := false
 	if !isCloudModeWin && !isRealVentoyWin {
-		thirdPartyBootWin = GetDiskThirdPartyBoot(driveLetter)
+		thirdPartyBootWin = IdentifyThirdPartyBoot(diskMountPoints)
 		isGenBootWin = thirdPartyBootWin != BootTypeNone
 	}
-	bootStatusWin, bootStatusCodeWin := DetectBootStatus("GPT / MBR", isRealVentoyWin, isCloudModeWin, thirdPartyBootWin, manifestWin, false)
+	bootStatusWin, bootStatusCodeWin := DetectBootStatus(partitionScheme, isRealVentoyWin, isCloudModeWin, thirdPartyBootWin, manifestWin, false)
 
 	return &DiskInfo{
 		Device:             devNode,
@@ -2551,13 +2687,13 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 		UsbVersion:         usbVer,
 		UsbSpeed:           usbSpeed,
 		Vendor:             "Generic",
-		FileSystem:         "FAT32 / NTFS",
-		PartitionScheme:    "GPT / MBR",
+		FileSystem:         fileSystem,
+		PartitionScheme:    partitionScheme,
 		Writable:           true,
 		SmartStatus:        "Verified",
 		BusPower:           "500 mA",
 		BusPowerUsed:       "500 mA",
-		SectorSize:         "512 Bytes (512n/512e)",
+		SectorSize:         sectorSize,
 		TransportProtocol:  "BOT (Bulk-Only Transport)",
 		BootStatus:         bootStatusWin,
 		BootStatusCode:     bootStatusCodeWin,
@@ -2581,7 +2717,7 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 			}
 			return ""
 		}(),
-		MountPoint: driveLetter,
+		MountPoint: mountPoint,
 	}
 }
 
