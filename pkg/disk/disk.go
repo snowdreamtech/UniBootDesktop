@@ -2566,10 +2566,29 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 	vols, _ := getVolumesForDiskWindows(diskNum)
 
 	var primaryVol *winVolumeInfo
+	// First pass: prefer non-ignored volume with an assigned drive letter
 	for idx := range vols {
-		if !IsIgnoredVolume(vols[idx].VolumeName) {
+		if !IsIgnoredVolume(vols[idx].VolumeName) && vols[idx].DriveLetter != "" {
 			primaryVol = &vols[idx]
 			break
+		}
+	}
+	// Second pass: any non-ignored volume (e.g. unlettered main partition labeled UNIBOOT)
+	if primaryVol == nil {
+		for idx := range vols {
+			if !IsIgnoredVolume(vols[idx].VolumeName) {
+				primaryVol = &vols[idx]
+				break
+			}
+		}
+	}
+	// Third pass: any volume with an assigned drive letter
+	if primaryVol == nil {
+		for idx := range vols {
+			if vols[idx].DriveLetter != "" {
+				primaryVol = &vols[idx]
+				break
+			}
 		}
 	}
 	if primaryVol == nil && len(vols) > 0 {
@@ -2598,6 +2617,21 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 			fileSystem = primaryVol.FileSystem
 		}
 		freeSpace = primaryVol.FreeSpace
+	}
+	// If primaryVol had no drive letter, scan remaining volumes on this physical disk for any mounted drive letter
+	if mountPoint == "" {
+		for _, v := range vols {
+			if v.DriveLetter != "" {
+				mountPoint = v.DriveLetter + `\`
+				if fileSystem == "RAW / Unformatted" && v.FileSystem != "" {
+					fileSystem = v.FileSystem
+				}
+				if freeSpace == 0 {
+					freeSpace = v.FreeSpace
+				}
+				break
+			}
+		}
 	}
 
 	formattedSize := FormatBytesDual(drive.Size)

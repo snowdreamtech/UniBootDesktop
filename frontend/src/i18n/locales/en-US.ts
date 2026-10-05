@@ -383,6 +383,8 @@ export const enUs: TranslationDict = {
   "inspector.lbl_fs": "File System",
   "inspector.lbl_scheme": "Partition Scheme",
   "inspector.lbl_mount": "Mount Path",
+  "inspector.lbl_device": "Device Path",
+  "inspector.val_unmounted": "Unmounted",
   "inspector.lbl_perm": "Disk Permission",
   "inspector.val_rw": "Read-Write",
   "inspector.val_ro": "Read-Only (Write Protected)",

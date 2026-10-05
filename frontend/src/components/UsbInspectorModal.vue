@@ -98,6 +98,11 @@
 
           <div class="spec-item">
             <span class="spec-label">{{ t("inspector.lbl_mount") }}</span>
+            <span class="spec-val code highlight">{{ disk.mountPoint || t("inspector.val_unmounted") || "N/A" }}</span>
+          </div>
+
+          <div class="spec-item">
+            <span class="spec-label">{{ t("inspector.lbl_device") || "Device Path" }}</span>
             <span class="spec-val code">{{ disk.device }}</span>
           </div>
 
