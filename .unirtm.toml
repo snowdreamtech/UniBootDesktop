@@ -74,10 +74,7 @@ python = "3.14.7"
 [tasks]
 [tasks.dev]
 description = "Launch Wails GUI application in development mode with smart port resolution"
-run = '''
-  mkdir -p .cache/go .cache/go-tmp
-  GOCACHE="$PWD/.cache/go" GOTMPDIR="$PWD/.cache/go-tmp" unirtm exec -- node scripts/run-dev.mjs
-'''
+run = "unirtm exec -- node scripts/run-dev.mjs"
 output = "interleaved"
 
 [tasks.build]

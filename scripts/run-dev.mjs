@@ -3,6 +3,9 @@
 
 import { createServer } from "node:net";
 import { spawn, execSync } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 /**
  * Check if a TCP port is currently free on the specified host.
@@ -36,6 +39,23 @@ export async function findNextFreePort(startPort, host = "127.0.0.1", maxAttempt
     }
   }
   throw new Error(`Unable to find an available port in range [${startPort}, ${startPort + maxAttempts})`);
+}
+
+/**
+ * Determine if this script is being executed directly.
+ * @returns {boolean}
+ */
+export function isMainModule() {
+  if (!process.argv[1]) return false;
+  try {
+    const scriptPath = fileURLToPath(import.meta.url);
+    const entryPath = path.resolve(process.argv[1]);
+    return (
+      scriptPath === entryPath || (process.platform === "win32" && scriptPath.toLowerCase() === entryPath.toLowerCase())
+    );
+  } catch {
+    return false;
+  }
 }
 
 async function main() {
@@ -93,8 +113,16 @@ async function main() {
     `\x1b[36m[SmartPort] Launching Wails Dev (Backend: localhost:${backend.port}, Frontend: localhost:${frontend.port})...\x1b[0m\n`
   );
 
+  const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+  const cacheGo = path.join(rootDir, ".cache", "go");
+  const cacheGoTmp = path.join(rootDir, ".cache", "go-tmp");
+  fs.mkdirSync(cacheGo, { recursive: true });
+  fs.mkdirSync(cacheGoTmp, { recursive: true });
+
   const childEnv = {
     ...process.env,
+    GOCACHE: process.env.GOCACHE || cacheGo,
+    GOTMPDIR: process.env.GOTMPDIR || cacheGoTmp,
     PORT: String(frontend.port),
     VITE_PORT: String(frontend.port),
   };
@@ -136,7 +164,7 @@ async function main() {
 }
 
 // Only execute when run directly from command line
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (isMainModule()) {
   main().catch((err) => {
     console.error(`\x1b[31m[SmartPort] Error during smart port resolution: ${err.message}\x1b[0m`);
     process.exit(1);
