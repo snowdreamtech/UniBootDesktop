@@ -79,6 +79,13 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
       });
 
       window.runtime.EventsOn("disk-list-changed", () => {
+        console.log("[RuntimeEvents] Removable storage change detected, refreshing drive list");
+        appendLogEntry({
+          id: Date.now(),
+          timestamp: new Date().toISOString(),
+          level: "INFO",
+          message: "Removable storage change detected, refreshing drive list",
+        });
         if (!isDeploying.value) {
           refreshDisks();
         }
