@@ -26,9 +26,57 @@ export function ensureFrontendDeps() {
     needsInstall = true;
   } else {
     for (const bin of requiredBins) {
-      if (!fs.existsSync(path.join(binDir, bin))) {
+      const binPath = path.join(binDir, bin);
+      if (!fs.existsSync(binPath)) {
         needsInstall = true;
         break;
+      }
+      if (!isWindows) {
+        try {
+          fs.accessSync(binPath, fs.constants.X_OK);
+        } catch {
+          try {
+            fs.chmodSync(binPath, 0o755);
+            fs.accessSync(binPath, fs.constants.X_OK);
+          } catch {
+            needsInstall = true;
+            break;
+          }
+        }
+      }
+    }
+
+    // Auto-heal all POSIX execute bits in node_modules/.bin
+    if (!needsInstall && !isWindows) {
+      try {
+        const files = fs.readdirSync(binDir);
+        for (const file of files) {
+          if (!file.endsWith(".cmd") && !file.endsWith(".ps1")) {
+            const filePath = path.join(binDir, file);
+            try {
+              const stat = fs.statSync(filePath);
+              if (stat.isFile() && (stat.mode & 0o111) === 0) {
+                fs.chmodSync(filePath, stat.mode | 0o755);
+              }
+            } catch {
+              // ignore individual stat/chmod errors
+            }
+          }
+        }
+      } catch {
+        // ignore readdir errors
+      }
+
+      // Check platform native rollup binding when rollup is present
+      const rollupDir = path.join(nodeModulesDir, "rollup");
+      if (fs.existsSync(rollupDir)) {
+        const targetRollupDir = path.join(nodeModulesDir, "@rollup", `rollup-${process.platform}-${process.arch}`);
+        if (!fs.existsSync(targetRollupDir)) {
+          console.warn(
+            `\x1b[33m[Preflight] Platform native rollup module missing (@rollup/rollup-${process.platform}-${process.arch}).\x1b[0m`
+          );
+          needsInstall = true;
+        }
       }
     }
   }
