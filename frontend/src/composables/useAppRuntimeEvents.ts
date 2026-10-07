@@ -78,8 +78,10 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
         }
       });
 
+      let diskChangedDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
       window.runtime.EventsOn("disk-list-changed", () => {
-        console.log("[RuntimeEvents] Removable storage change detected, refreshing drive list");
+        console.log("[RuntimeEvents] Removable storage change detected, debouncing drive list refresh");
         appendLogEntry({
           id: Date.now(),
           timestamp: new Date().toISOString(),
@@ -87,7 +89,13 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
           message: "Removable storage change detected, refreshing drive list",
         });
         if (!isDeploying.value) {
-          refreshDisks();
+          if (diskChangedDebounceTimer) {
+            clearTimeout(diskChangedDebounceTimer);
+          }
+          diskChangedDebounceTimer = setTimeout(() => {
+            diskChangedDebounceTimer = null;
+            refreshDisks();
+          }, 250);
         }
       });
 
