@@ -212,7 +212,6 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
         onEjectSuccess(disk.device);
       }
       showToast(t("disk.toast_ejected_success", { device: disk.device, name: disk.name || disk.device }), "success");
-      await refreshDisks();
     } catch (err: any) {
       showToast(
         t("disk.toast_ejected_failed", { device: disk.device, error: err?.toString() || "Unknown error" }),
@@ -260,7 +259,6 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
         );
       }
     } finally {
-      await refreshDisks();
       for (const dev of targets) {
         unmarkEjecting(dev);
       }
@@ -317,7 +315,6 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
         showToast(t("disk.toast_batch_eject_partial", { successCount, failCount }), "warning");
       }
     } finally {
-      await refreshDisks();
       for (const device of targets) {
         unmarkEjecting(device);
       }
