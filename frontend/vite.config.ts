@@ -23,5 +23,8 @@ export default defineConfig({
   server: {
     port: process.env.PORT ? parseInt(process.env.PORT, 10) : 5173,
     strictPort: false,
+    watch: {
+      usePolling: true,
+    },
   },
 });

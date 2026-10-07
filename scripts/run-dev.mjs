@@ -1,11 +1,12 @@
 // Copyright (c) 2026 SnowdreamTech. All rights reserved.
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
-import { createServer } from "node:net";
-import { spawn, execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { createServer } from "node:net";
+import { spawn, execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { preflight } from "./preflight.mjs";
 
 /**
  * Check if a TCP port is currently free on the specified host.
@@ -59,6 +60,8 @@ export function isMainModule() {
 }
 
 async function main() {
+  await preflight();
+
   const preferredBackendPort = 34115;
   const preferredFrontendPort = 5173;
 
