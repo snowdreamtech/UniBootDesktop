@@ -66,6 +66,7 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
   const isInspectorOpen = ref(false);
   const targetInspectorDisk = ref<DiskInfo | null>(null);
   const isScanningDisks = ref(false);
+  let hasPendingRefresh = false;
   const pendingRestoreDevice = ref<string>("");
 
   watch(selectionMode, (newMode) => {
@@ -325,7 +326,10 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
 
   // Wails JS binding fallbacks / mock data for standalone preview
   async function refreshDisks() {
-    if (isScanningDisks.value) return;
+    if (isScanningDisks.value) {
+      hasPendingRefresh = true;
+      return;
+    }
     if (options.isLocked && options.isLocked()) return;
     isScanningDisks.value = true;
 
@@ -524,6 +528,12 @@ export function useDiskSelection(options: UseDiskSelectionOptions) {
       }
     } finally {
       isScanningDisks.value = false;
+      if (hasPendingRefresh) {
+        hasPendingRefresh = false;
+        setTimeout(() => {
+          refreshDisks();
+        }, 150);
+      }
     }
   }
 
