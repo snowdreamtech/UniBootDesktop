@@ -43,6 +43,7 @@ behavioral rules distributed to 50+ IDEs via a symlink/redirect pattern.
 git clone <repo-url>
 cd <repo>
 git config core.ignorecase false   # MANDATORY on macOS/Windows
+git config core.filemode false     # Recommended on Windows
 uniboot run setup                          # installs uniboot + core tools
 uniboot run install                        # installs project dependencies (Node, Python venv)
 uniboot run verify                         # validates everything is green
