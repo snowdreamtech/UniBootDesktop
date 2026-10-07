@@ -135,66 +135,68 @@
 
     <!-- Native Empty & Scanning Canvas -->
     <div v-else class="empty-state-canvas">
-      <div v-if="isScanningDisks" class="scanner-container">
-        <div class="radar-scan-box">
-          <div class="radar-wave wave-1"></div>
-          <div class="radar-wave wave-2"></div>
-          <div class="radar-core">
+      <transition name="fade-state" mode="out-in">
+        <div v-if="showScannerAnimation" key="scanner" class="scanner-container">
+          <div class="radar-scan-box">
+            <div class="radar-wave wave-1"></div>
+            <div class="radar-wave wave-2"></div>
+            <div class="radar-core">
+              <svg
+                class="radar-usb-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M10 2v7M14 2v7M8 9h8v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V9z" />
+                <path d="M10 5h4" />
+              </svg>
+            </div>
+          </div>
+          <div class="canvas-text">
+            <h3 class="canvas-title pulse-text">{{ t("disk.scanning") }}</h3>
+            <p class="canvas-desc">{{ t("disk.select_desc") }}</p>
+          </div>
+        </div>
+
+        <div v-else key="empty" class="empty-notice-box">
+          <div class="empty-icon-wrapper">
             <svg
-              class="radar-usb-icon"
+              class="empty-usb-icon"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="1.8"
+              stroke-width="1.6"
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <path d="M10 2v7M14 2v7M8 9h8v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V9z" />
-              <path d="M10 5h4" />
+              <rect x="7" y="2" width="10" height="20" rx="3" />
+              <path d="M10 6h4M10 10h4" />
+              <circle cx="12" cy="16" r="1.5" fill="currentColor" />
             </svg>
           </div>
+          <div class="canvas-text">
+            <h3 class="canvas-title">{{ t("disk.empty_list") }}</h3>
+            <p class="canvas-desc">{{ t("disk.select_desc") }}</p>
+          </div>
+          <button class="btn-rescan-subtle" @click="emit('refresh-disks')">
+            <svg
+              class="rescan-subtle-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+            </svg>
+            <span>{{ t("disk.rescan") }}</span>
+          </button>
         </div>
-        <div class="canvas-text">
-          <h3 class="canvas-title pulse-text">{{ t("disk.scanning") }}</h3>
-          <p class="canvas-desc">{{ t("disk.select_desc") }}</p>
-        </div>
-      </div>
-
-      <div v-else class="empty-notice-box">
-        <div class="empty-icon-wrapper">
-          <svg
-            class="empty-usb-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <rect x="7" y="2" width="10" height="20" rx="3" />
-            <path d="M10 6h4M10 10h4" />
-            <circle cx="12" cy="16" r="1.5" fill="currentColor" />
-          </svg>
-        </div>
-        <div class="canvas-text">
-          <h3 class="canvas-title">{{ t("disk.empty_list") }}</h3>
-          <p class="canvas-desc">{{ t("disk.select_desc") }}</p>
-        </div>
-        <button class="btn-rescan-subtle" @click="emit('refresh-disks')">
-          <svg
-            class="rescan-subtle-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
-          </svg>
-          <span>{{ t("disk.rescan") }}</span>
-        </button>
-      </div>
+      </transition>
     </div>
 
     <!-- Privilege Trust Modal -->
@@ -203,7 +205,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import type { disk } from "../../wailsjs/go/models";
 import { t } from "../i18n";
 import DiskCard from "./DiskCard.vue";
@@ -239,6 +241,30 @@ const emit = defineEmits<{
 
 const isPrivileged = ref(false);
 const showPrivilegeModal = ref(false);
+
+const showScannerAnimation = ref(false);
+let scannerTimer: ReturnType<typeof setTimeout> | null = null;
+
+watch(
+  () => props.isScanningDisks,
+  (scanning) => {
+    if (scanning) {
+      if (!scannerTimer) {
+        scannerTimer = setTimeout(() => {
+          showScannerAnimation.value = true;
+          scannerTimer = null;
+        }, 180);
+      }
+    } else {
+      if (scannerTimer) {
+        clearTimeout(scannerTimer);
+        scannerTimer = null;
+      }
+      showScannerAnimation.value = false;
+    }
+  },
+  { immediate: true }
+);
 
 const checkPrivilegeStatus = async (retryCount = 0) => {
   try {
@@ -816,5 +842,16 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
 .disk-item-leave-to {
   opacity: 0;
   transform: translateY(8px);
+}
+
+/* Smooth transition between scanner and empty state */
+.fade-state-enter-active,
+.fade-state-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.fade-state-enter-from,
+.fade-state-leave-to {
+  opacity: 0;
+  transform: scale(0.98);
 }
 </style>
