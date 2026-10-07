@@ -1225,15 +1225,6 @@ func getVolumeSnapshot() string {
 
 // GetRemovableDisks lists removable USB drives safely while protecting system drives.
 func GetRemovableDisks() ([]DiskInfo, error) {
-	diskCacheMutex.Lock()
-	if diskCacheList != nil && !diskCacheTime.IsZero() && time.Since(diskCacheTime) < 5*time.Second {
-		cached := make([]DiskInfo, len(diskCacheList))
-		copy(cached, diskCacheList)
-		diskCacheMutex.Unlock()
-		return cached, nil
-	}
-	diskCacheMutex.Unlock()
-
 	currentSnapshot := getVolumeSnapshot()
 
 	diskCacheMutex.Lock()
