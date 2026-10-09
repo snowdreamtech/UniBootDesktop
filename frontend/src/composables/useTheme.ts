@@ -84,30 +84,57 @@ function updateDomAndWindow(resolved: "dark" | "light") {
   }
 }
 
-export function syncWindowTheme() {
-  updateDomAndWindow(resolveEffectiveTheme(currentTheme.value));
+export async function syncWindowTheme() {
+  if (currentTheme.value === "system") {
+    let resolved: "dark" | "light" | null = null;
+    try {
+      const app = (window as any)?.go?.main?.App;
+      if (app && typeof app.IsSystemDarkTheme === "function") {
+        const isDark = await app.IsSystemDarkTheme();
+        resolved = isDark ? "dark" : "light";
+      }
+    } catch (e) {
+      // Fall back to browser media query
+    }
+    if (!resolved) {
+      resolved = getSystemPreferredTheme();
+    }
+    updateDomAndWindow(resolved);
+  } else {
+    updateDomAndWindow(resolveEffectiveTheme(currentTheme.value));
+  }
 }
 
 // Ensure DOM and window theme are synchronized immediately upon script evaluation
 if (typeof document !== "undefined") {
   updateDomAndWindow(resolveEffectiveTheme(currentTheme.value));
+  syncWindowTheme();
 }
 
-// Global listener for system theme changes (e.g. macOS appearance toggle or sunset/sunrise)
-if (typeof window !== "undefined" && window.matchMedia) {
-  const mql = window.matchMedia("(prefers-color-scheme: dark)");
-  const handleSystemThemeChange = (e: MediaQueryListEvent | MediaQueryList) => {
-    if (currentTheme.value === "system") {
-      const nextResolved = e.matches ? "dark" : "light";
-      updateDomAndWindow(nextResolved);
-    }
-  };
+// Global listener for system theme changes (e.g. macOS appearance toggle, Windows settings, or sunset/sunrise)
+if (typeof window !== "undefined") {
+  if (window.matchMedia) {
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleSystemThemeChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      if (currentTheme.value === "system") {
+        const nextResolved = e.matches ? "dark" : "light";
+        updateDomAndWindow(nextResolved);
+      }
+    };
 
-  if (typeof mql.addEventListener === "function") {
-    mql.addEventListener("change", handleSystemThemeChange);
-  } else if (typeof (mql as any).addListener === "function") {
-    (mql as any).addListener(handleSystemThemeChange);
+    if (typeof mql.addEventListener === "function") {
+      mql.addEventListener("change", handleSystemThemeChange);
+    } else if (typeof (mql as any).addListener === "function") {
+      (mql as any).addListener(handleSystemThemeChange);
+    }
   }
+
+  // Re-verify system theme whenever user switches focus back to the window
+  window.addEventListener("focus", () => {
+    if (currentTheme.value === "system") {
+      syncWindowTheme();
+    }
+  });
 }
 
 export function useTheme() {
@@ -124,8 +151,11 @@ export function useTheme() {
       // localStorage may be unavailable
     }
 
-    const resolved = resolveEffectiveTheme(theme);
-    updateDomAndWindow(resolved);
+    if (theme === "system") {
+      syncWindowTheme();
+    } else {
+      updateDomAndWindow(resolveEffectiveTheme(theme));
+    }
     return theme;
   }
 
