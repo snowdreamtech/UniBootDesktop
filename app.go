@@ -595,7 +595,12 @@ func (a *App) DeployHybridModeBatch(targetDisks []string, fsType string, isoPath
 	batchProgressCb := func(p installer.BatchDeployProgress) {
 		wailsRuntime.EventsEmit(a.ctx, "deploy-batch-progress", p)
 	}
-	return installer.DeployHybridModeBatchWithAllProgress(deployCtx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected, batchProgressCb)
+	res, err := installer.DeployHybridModeBatchWithAllProgress(deployCtx, targetDisks, fsType, ventoyPath, isoPaths, progressCb, expected, batchProgressCb)
+	disk.InvalidateDiskCache()
+	if a.ctx != nil {
+		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
+	}
+	return res, err
 }
 
 // PreflightIsoCopy checks existing target filenames before any deployment writes begin.
@@ -651,7 +656,12 @@ func (a *App) DeployHybridModeBatchWithPlans(targetDisks []string, fsType string
 	batchProgressCb := func(p installer.BatchDeployProgress) {
 		wailsRuntime.EventsEmit(a.ctx, "deploy-batch-progress", p)
 	}
-	return installer.DeployHybridModeBatchWithIsoPlans(deployCtx, targetDisks, fsType, ventoyPath, isoPaths, plans, progressCb, expected, batchProgressCb)
+	res, err := installer.DeployHybridModeBatchWithIsoPlans(deployCtx, targetDisks, fsType, ventoyPath, isoPaths, plans, progressCb, expected, batchProgressCb)
+	disk.InvalidateDiskCache()
+	if a.ctx != nil {
+		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
+	}
+	return res, err
 }
 
 // DeployCloudMode triggers Cloud Mode (Cloud Pure Mode) with customizable file system.
@@ -666,6 +676,10 @@ func (a *App) DeployCloudMode(targetDisk string, fsType string, expected disk.Di
 	}
 
 	res, err := installer.DeployCloudModeWithExpectedDisk(deployCtx, targetDisk, fsType, expected, progressCallback)
+	disk.InvalidateDiskCache()
+	if a.ctx != nil {
+		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
+	}
 	if err != nil && res != nil {
 		return res, nil
 	}
@@ -685,6 +699,10 @@ func (a *App) DeployCloudModeBatch(targetDisks []string, fsType string, expected
 	}
 
 	results, err := installer.DeployCloudModeBatchWithExpectedDisks(deployCtx, targetDisks, fsType, expected, progressCallback)
+	disk.InvalidateDiskCache()
+	if a.ctx != nil {
+		wailsRuntime.EventsEmit(a.ctx, "disk-list-changed")
+	}
 	return results, err
 }
 

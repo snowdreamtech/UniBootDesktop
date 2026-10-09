@@ -1215,10 +1215,30 @@ func getVolumeSnapshot() string {
 		for _, d := range dirs {
 			if entries, err := os.ReadDir(d); err == nil {
 				for _, e := range entries {
+					if e == nil {
+						continue
+					}
 					names = append(names, e.Name())
+					// On Linux, desktop file managers mount volumes under /media/<user>/<volume>
+					subDir := filepath.Join(d, e.Name())
+					if subEntries, subErr := os.ReadDir(subDir); subErr == nil {
+						for _, se := range subEntries {
+							if se != nil {
+								names = append(names, filepath.Join(e.Name(), se.Name()))
+							}
+						}
+					}
 				}
 			}
 		}
+		// Also track block devices /dev/sd* and /dev/nvme* so insertions/removals are caught immediately
+		if devEntries, err := filepath.Glob("/dev/sd[a-z]*"); err == nil {
+			names = append(names, devEntries...)
+		}
+		if nvmeEntries, err := filepath.Glob("/dev/nvme*"); err == nil {
+			names = append(names, nvmeEntries...)
+		}
+		sort.Strings(names)
 		return strings.Join(names, "|")
 	}
 }
