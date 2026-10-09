@@ -134,4 +134,62 @@ describe("useAppSettings composable", () => {
     expect(currentTheme.value).toBe("dark");
     expect(lastReloadedMenuLang).toBe("ja-JP");
   });
+
+  it("loadConfig adopts concrete localStorage preferences when backend has defaults and syncs them", async () => {
+    store.set("uniboot_theme_cache", "light");
+    store.set("uniboot_locale", "zh-CN");
+
+    mockConfigState = {
+      mode: "cloud",
+      theme: "system",
+      language: "auto",
+      fileSystem: "exFAT",
+    };
+
+    const { useAppSettings } = await import("./useAppSettings");
+    const selectedFsType = ref<"exFAT" | "NTFS" | "FAT32" | "ext4">("exFAT");
+    const activeMode = ref<"cloud" | "hybrid">("cloud");
+    const autoEjectAfterDeploy = ref(false);
+
+    const { loadConfig, currentTheme } = useAppSettings({
+      selectedFsType,
+      activeMode,
+      autoEjectAfterDeploy,
+    });
+
+    await loadConfig();
+
+    expect(currentTheme.value).toBe("light");
+    expect(store.get("uniboot_theme_cache")).toBe("light");
+    expect(store.get("uniboot_locale")).toBe("zh-CN");
+    expect(lastSavedConfig).not.toBeNull();
+    expect(lastSavedConfig.theme).toBe("light");
+    expect(lastSavedConfig.language).toBe("zh-CN");
+  });
+
+  it("loadConfig applies concrete backend preferences when backend specifies them", async () => {
+    mockConfigState = {
+      mode: "cloud",
+      theme: "dark",
+      language: "fr-FR",
+      fileSystem: "exFAT",
+    };
+
+    const { useAppSettings } = await import("./useAppSettings");
+    const selectedFsType = ref<"exFAT" | "NTFS" | "FAT32" | "ext4">("exFAT");
+    const activeMode = ref<"cloud" | "hybrid">("cloud");
+    const autoEjectAfterDeploy = ref(false);
+
+    const { loadConfig, currentTheme } = useAppSettings({
+      selectedFsType,
+      activeMode,
+      autoEjectAfterDeploy,
+    });
+
+    await loadConfig();
+
+    expect(currentTheme.value).toBe("dark");
+    expect(store.get("uniboot_theme_cache")).toBe("dark");
+    expect(store.get("uniboot_locale")).toBe("fr-FR");
+  });
 });

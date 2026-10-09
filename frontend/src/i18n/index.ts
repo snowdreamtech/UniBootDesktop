@@ -126,7 +126,7 @@ export function getInitialLocale(): string {
 }
 
 export const selectedLangSetting = ref<string>(
-  (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_locale")) || "auto"
+  (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_locale")) || DEFAULT_LOCALE
 );
 export const currentLocale = ref<string>(getInitialLocale());
 export const currentLang = currentLocale;
