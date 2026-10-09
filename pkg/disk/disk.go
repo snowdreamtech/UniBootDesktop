@@ -2202,6 +2202,7 @@ type linuxBlockDevice struct {
 	Tran       string             `json:"tran"`
 	Fstype     string             `json:"fstype"`
 	Pttype     string             `json:"pttype"`
+	Label      string             `json:"label"`
 	Children   []linuxBlockDevice `json:"children"`
 }
 
@@ -2211,7 +2212,7 @@ type linuxLsblkOutput struct {
 
 func getLinuxDisks() ([]DiskInfo, error) {
 	disks := make([]DiskInfo, 0)
-	cmd := execCommand("lsblk", "-J", "-b", "-o", "NAME,SIZE,FSAVAIL,RM,RO,TYPE,MOUNTPOINT,MODEL,VENDOR,TRAN,FSTYPE,PTTYPE")
+	cmd := execCommand("lsblk", "-J", "-b", "-o", "NAME,SIZE,FSAVAIL,RM,RO,TYPE,MOUNTPOINT,MODEL,VENDOR,TRAN,FSTYPE,PTTYPE,LABEL")
 	output, err := cmd.Output()
 	if err != nil {
 		return disks, nil
@@ -2283,19 +2284,21 @@ func inspectLinuxDisk(dev linuxBlockDevice) *DiskInfo {
 		partitionScheme = "MBR (Master Boot Record)"
 	}
 
-	displayName := strings.TrimSpace(dev.Vendor + " " + dev.Model)
-	if displayName == "" {
-		displayName = dev.Name
-	}
-	if displayName == "" {
-		displayName = "USB Storage Device"
+	primaryVolName := strings.TrimSpace(dev.Label)
+	if IsIgnoredVolume(primaryVolName) {
+		primaryVolName = ""
 	}
 
 	// Labels are UI metadata only. They must never be used as device identity,
 	// cache key, or safety gate. Prefer the real block device path instead.
 	for _, child := range dev.Children {
+		childLabel := strings.TrimSpace(child.Label)
+		baseMount := filepath.Base(child.MountPoint)
+		if childLabel == "" && baseMount != "" && !IsIgnoredVolume(baseMount) && baseMount != child.Name {
+			childLabel = baseMount
+		}
+
 		if child.MountPoint != "" {
-			baseMount := filepath.Base(child.MountPoint)
 			if !IsIgnoredVolume(baseMount) || mountPath == "" {
 				mountPath = child.MountPoint
 				if child.Fstype != "" {
@@ -2304,21 +2307,37 @@ func inspectLinuxDisk(dev linuxBlockDevice) *DiskInfo {
 				if child.Fsavail > 0 {
 					freeSpace = child.Fsavail
 				}
-				if displayName == "USB Storage Device" || displayName == dev.Name {
-					if !IsIgnoredVolume(baseMount) {
-						displayName = baseMount
-					}
+				if primaryVolName == "" && childLabel != "" && !IsIgnoredVolume(childLabel) {
+					primaryVolName = childLabel
 				}
 			}
 			if !IsIgnoredVolume(baseMount) {
 				break
 			}
+		} else if primaryVolName == "" && childLabel != "" && !IsIgnoredVolume(childLabel) {
+			primaryVolName = childLabel
 		}
 	}
 
 	// Filter out unmounted devices or devices with only ignored volumes (e.g. EFI only) on Linux
 	if mountPath == "" || IsIgnoredVolume(filepath.Base(mountPath)) {
 		return nil
+	}
+
+	hardwareModel := strings.TrimSpace(dev.Vendor + " " + dev.Model)
+	if hardwareModel == "" {
+		hardwareModel = dev.Name
+	}
+
+	// Cross-platform alignment (aligned with Darwin and Windows):
+	// Prioritize primary volume label (e.g. UNIBOOT, Ventoy) if present,
+	// and fallback to hardware model / device name when no volume label exists.
+	displayName := primaryVolName
+	if displayName == "" {
+		displayName = hardwareModel
+	}
+	if displayName == "" {
+		displayName = "USB Storage Device"
 	}
 
 	if fileSystem == "" {
