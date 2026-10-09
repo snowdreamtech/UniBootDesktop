@@ -84,11 +84,11 @@ func (d *KVMDriver) Detect() *VMStatus {
 		return &VMStatus{
 			Type:       TypeKVM,
 			Name:       "Kernel-based Virtual Machine (/dev/kvm)",
-			Installed:  true,
+			Installed:  false,
 			Path:       "/dev/kvm",
-			Version:    "Linux KVM Kernel Module",
+			Version:    "Kernel module available, userspace runner (qemu-system-x86 or virt-manager) missing",
 			Priority:   d.Priority(),
-			CanBootRaw: true,
+			CanBootRaw: false,
 		}
 	}
 
