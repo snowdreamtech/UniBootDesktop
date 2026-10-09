@@ -489,6 +489,26 @@ func ResolveMountPoint(targetDisk string) (string, error) {
 				return m, nil
 			}
 		}
+
+		// If partition 1 is not mounted, attempt to mount it via udisksctl and check again
+		_ = execCommand("udisksctl", "mount", "-b", part1).Run()
+		out3, err3 := execCommand("findmnt", "-n", "-o", "TARGET", part1).Output()
+		if err3 == nil {
+			m := strings.TrimSpace(string(out3))
+			if m != "" {
+				return m, nil
+			}
+		}
+
+		// Also check targetDisk itself in case of unpartitioned filesystem
+		outDev, errDev := execCommand("findmnt", "-n", "-o", "TARGET", targetDisk).Output()
+		if errDev == nil {
+			m := strings.TrimSpace(string(outDev))
+			if m != "" {
+				return m, nil
+			}
+		}
+
 		return "", fmt.Errorf("could not resolve mount point for partition 1 (%s) on target disk %s", part1, targetDisk)
 	}
 

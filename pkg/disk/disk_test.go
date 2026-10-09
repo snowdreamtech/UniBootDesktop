@@ -537,3 +537,36 @@ func TestDetectBootStatus_Classification(t *testing.T) {
 	assert.Equal(t, "数据存储盘 (未检测到引导包)", status)
 	assert.Equal(t, "data_storage", code)
 }
+
+func TestInspectLinuxDisk(t *testing.T) {
+	dev := linuxBlockDevice{
+		Name:   "sdb",
+		Size:   8053063680,
+		Vendor: "ChipsBnk",
+		Model:  "Flash Reader",
+		Tran:   "usb",
+		Rm:     true,
+		Children: []linuxBlockDevice{
+			{
+				Name:       "sdb1",
+				Size:       8019509248,
+				MountPoint: "/media/ansible/Ventoy",
+				Fstype:     "exfat",
+				Fsavail:    8000000000,
+			},
+			{
+				Name:   "sdb2",
+				Size:   33554432,
+				Fstype: "vfat",
+			},
+		},
+	}
+
+	info := inspectLinuxDisk(dev)
+	assert.NotNil(t, info)
+	assert.Equal(t, "/dev/sdb", info.Device, "Device must be the block device path (/dev/sdb), not the mount point")
+	assert.Equal(t, "/media/ansible/Ventoy", info.MountPoint)
+	assert.Equal(t, "ChipsBnk Flash Reader", info.Name)
+	assert.Equal(t, "exfat", info.FileSystem)
+	assert.NoError(t, ValidateTargetDisk(info.Device))
+}
