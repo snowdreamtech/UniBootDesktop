@@ -237,6 +237,7 @@ export const srLatn: TranslationDict = {
     "Opciona funkcija: Pregled pokretanja sa USB-a u virtuelnoj mašini bez ponovnog pokretanja računara.",
   "vm.installed": "Hipervizor otkriven",
   "vm.not_installed": "Hipervizor nije otkriven",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Cilj testa:",
   "vm.no_disk_warn": "Nije izabran nijedan disk (Izaberite disk sa levog panela)",
   "vm.run_test": "Pokreni test simulacije",

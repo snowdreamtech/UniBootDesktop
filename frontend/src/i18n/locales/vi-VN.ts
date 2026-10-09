@@ -233,6 +233,7 @@ export const viVn: TranslationDict = {
   "vm.desc_optional": "Tính năng tùy chọn: Xem trước khởi động USB trong máy ảo mà không cần khởi động lại máy tính.",
   "vm.installed": "Đã phát hiện Hypervisor",
   "vm.not_installed": "Không phát hiện Hypervisor",
+  "vm.click_to_rescan": "Nhấp để phát hiện lại máy ảo",
   "vm.target": "Mục tiêu thử nghiệm:",
   "vm.no_disk_warn": "Chưa chọn đĩa (Vui lòng chọn ổ đĩa từ bảng bên trái)",
   "vm.run_test": "Bắt đầu thử nghiệm mô phỏng",

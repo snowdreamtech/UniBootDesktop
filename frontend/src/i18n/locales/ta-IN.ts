@@ -240,6 +240,7 @@ export const taIn: TranslationDict = {
   "vm.desc_optional": "விருப்ப அம்சம்: கணினியை மறுதொடக்க વિના மெய்நிகர் יחיദையில் USB பூட் முன்னோட்டம் காணவும்.",
   "vm.installed": "ஹைப்பர்வைசர் கண்டறியப்பட்டது",
   "vm.not_installed": "ஹைப்பர்வைசர் கண்டறியப்படவில்லை",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "சோதனை இலக்கு:",
   "vm.no_disk_warn": "டிரைவ் எதுவும் தேர்ந்தெடுக்கப்படவில்லை (இடது பேனலில் இருந்து ஒரு டிரைவைத் தேர்ந்தெடுக்கவும்)",
   "vm.run_test": "உருவகப்படுத்துதல் சோதனையைத் தொடங்கு",

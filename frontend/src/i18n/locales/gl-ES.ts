@@ -238,6 +238,7 @@ export const glEs: TranslationDict = {
   "vm.desc_optional": "Función opcional: Previsualice o arranque USB nunha máquina virtual sen reiniciar o equipo.",
   "vm.installed": "Hipervisor detectado",
   "vm.not_installed": "Non se detectou ningún hipervisor",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Obxectivo da proba:",
   "vm.no_disk_warn": "Ningún disco seleccionado (Seleccione un disco do panel esquerdo)",
   "vm.run_test": "Iniciar proba de simulación",

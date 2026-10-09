@@ -237,6 +237,7 @@ export const plPl: TranslationDict = {
     "Funkcja opcjonalna: Podgląd rozruchu USB w maszynie wirtualnej bez ponownego uruchamiania komputera.",
   "vm.installed": "Wykryto hipernadzorcę",
   "vm.not_installed": "Nie wykryto hipernadzorcy",
+  "vm.click_to_rescan": "Kliknij, aby ponownie wykryć maszyny wirtualne",
   "vm.target": "Cel testu:",
   "vm.no_disk_warn": "Nie wybrano dysku (Wybierz dysk z lewego panelu)",
   "vm.run_test": "Uruchom test symulacji",

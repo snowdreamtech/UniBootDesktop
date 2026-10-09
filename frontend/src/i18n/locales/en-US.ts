@@ -232,6 +232,7 @@ export const enUs: TranslationDict = {
   "vm.desc_optional": "Optional Feature: Preview disk boot direct on desktop in VM without rebooting real PC.",
   "vm.installed": "Hypervisor Detected",
   "vm.not_installed": "No Hypervisor Detected",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Test Target:",
   "vm.no_disk_warn": "No Disk Selected (Please select a drive from the left panel)",
   "vm.run_test": "Launch Simulation Test",

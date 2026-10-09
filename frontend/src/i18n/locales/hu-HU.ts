@@ -236,6 +236,7 @@ export const huHu: TranslationDict = {
   "vm.desc_optional": "Opcionális funkció: USB indítás előnézete virtuális gépben a PC újraindítása nélkül.",
   "vm.installed": "Hipervizor észlelve",
   "vm.not_installed": "Nem található hipervizor",
+  "vm.click_to_rescan": "Kattintson a virtuális gépek újbóli kereséséhez",
   "vm.target": "Teszt célpont:",
   "vm.no_disk_warn": "Nincs lemez kiválasztva (Válasszon egy meghajtót a bal oldali panelből)",
   "vm.run_test": "Szimulációs teszt indítása",

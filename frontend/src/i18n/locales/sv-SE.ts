@@ -232,6 +232,7 @@ export const svSe: TranslationDict = {
   "vm.desc_optional": "Valfri funktion: Förhandsgranska USB-boot i virtuell maskin utan att starta om datorn.",
   "vm.installed": "Hypervisor upptäckt",
   "vm.not_installed": "Ingen hypervisor upptäckt",
+  "vm.click_to_rescan": "Klicka för att identifiera virtuella maskiner igen",
   "vm.target": "Testmål:",
   "vm.no_disk_warn": "Ingen disk vald (Välj en disk från vänster panel)",
   "vm.run_test": "Starta simuleringstest",

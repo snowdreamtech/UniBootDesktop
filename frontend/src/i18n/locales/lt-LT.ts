@@ -239,6 +239,7 @@ export const ltLt: TranslationDict = {
     "Pasirinktinė funkcija: Peržiūrėkite USB paleistį virtualioje mašinoje nepaleisdami kompiuterio iš naujo.",
   "vm.installed": "Aptiktas hipervizorius",
   "vm.not_installed": "Hipervizorius neaptiktas",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Testo tikslas:",
   "vm.no_disk_warn": "Nepasirinktas joks diskas (Pasirinkite diską iš kairiojo skydelio)",
   "vm.run_test": "Pradėti simuliacijos testą",

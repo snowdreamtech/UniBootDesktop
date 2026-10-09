@@ -236,6 +236,7 @@ export const srCyrl: TranslationDict = {
     "Опциона функција: Преглед покретања са USB-а у виртуелној машини без поновног покретања рачунара.",
   "vm.installed": "Хипервизор откривен",
   "vm.not_installed": "Хипервизор није откривен",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Циљ теста:",
   "vm.no_disk_warn": "Није изабран ниједан диск (Изаберите диск са левог панела)",
   "vm.run_test": "Покрени тест симулације",

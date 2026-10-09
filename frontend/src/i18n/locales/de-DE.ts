@@ -235,6 +235,7 @@ export const deDe: TranslationDict = {
   "vm.desc_optional": "Optionale Funktion: Vorschau des USB-Boots in einer VM direkt auf dem Desktop ohne PC-Neustart.",
   "vm.installed": "Hypervisor erkannt",
   "vm.not_installed": "Kein Hypervisor erkannt",
+  "vm.click_to_rescan": "Klicken, um virtuelle Maschinen erneut zu suchen",
   "vm.target": "Testziel:",
   "vm.no_disk_warn": "Keines Laufwerk ausgewählt (Bitte wählen Sie ein Laufwerk aus der linken Liste)",
   "vm.run_test": "Simulationstest starten",

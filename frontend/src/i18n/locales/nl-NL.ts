@@ -235,6 +235,7 @@ export const nlNl: TranslationDict = {
   "vm.desc_optional": "Optionele functie: Bekijk USB-boot in een virtuele machine zonder de pc opnieuw op te starten.",
   "vm.installed": "Hypervisor gedetecteerd",
   "vm.not_installed": "Geen hypervisor gedetecteerd",
+  "vm.click_to_rescan": "Klik om virtuele machines opnieuw te detecteren",
   "vm.target": "Testdoel:",
   "vm.no_disk_warn": "Geen schijf geselecteerd (Selecteer een schijf in het linkerpaneel)",
   "vm.run_test": "Simulatietest starten",

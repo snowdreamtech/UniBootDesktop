@@ -42,6 +42,7 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
   } = options;
 
   let onConfigReady: (() => void) | null = null;
+  let onWindowFocus: (() => void) | null = null;
 
   onMounted(() => {
     syncWindowTheme();
@@ -54,6 +55,12 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
       checkVentoyStatus();
     };
     window.addEventListener("uniboot:config-ready", onConfigReady);
+
+    onWindowFocus = () => {
+      checkQemu();
+      checkVentoyStatus();
+    };
+    window.addEventListener("focus", onWindowFocus);
 
     GetRecentLogs()
       .then((logs: any[]) => {
@@ -106,6 +113,7 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
           diskChangedDebounceTimer = setTimeout(() => {
             diskChangedDebounceTimer = null;
             refreshDisks();
+            checkQemu();
           }, 250);
         }
       });
@@ -148,6 +156,10 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
     if (onConfigReady) {
       window.removeEventListener("uniboot:config-ready", onConfigReady);
       onConfigReady = null;
+    }
+    if (onWindowFocus) {
+      window.removeEventListener("focus", onWindowFocus);
+      onWindowFocus = null;
     }
     if (window.runtime && typeof window.runtime.OnFileDropOff === "function") {
       window.runtime.OnFileDropOff();

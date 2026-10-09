@@ -234,6 +234,7 @@ export const beBy: TranslationDict = {
   "vm.desc_optional": "Дадатковая функцыя: Папярэдні прагляд загрузкі USB у віртуальнай машыне без перазагрузкі ПК.",
   "vm.installed": "Выяўлены гіпервізар",
   "vm.not_installed": "Гіпервізар не выяўлены",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Мэта тэставання:",
   "vm.no_disk_warn": "Дыск не выбраны (Калі ласка, абярыце дыск са спісу злева)",
   "vm.run_test": "Запусціць тэст сімуляцыі",

@@ -227,6 +227,7 @@ export const arSa: TranslationDict = {
   "vm.desc_optional": "ميزة إضافية: معاينة تمهيد USB في جهاز وهمي دون إعادة تشغيل الكمبيوتر.",
   "vm.installed": "تم اكتشاف برنامج Hypervisor",
   "vm.not_installed": "لم يتم كشف أي برنامج Hypervisor",
+  "vm.click_to_rescan": "انقر لإعادة فحص الأجهزة الافتراضية",
   "vm.target": "هدف الاختبار:",
   "vm.no_disk_warn": "لم يتم تحديد قرص (يرجى تحديد قرص من القائمة اليسرى)",
   "vm.run_test": "بدء اختبار المحاكاة",

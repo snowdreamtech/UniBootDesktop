@@ -234,6 +234,7 @@ export const csCz: TranslationDict = {
   "vm.desc_optional": "Volitelná funkce: Náhled bootování USB virtuální mašiny bez restartu PC.",
   "vm.installed": "Hypervizor zjištěn",
   "vm.not_installed": "Nebyl zjištěn žádný hypervizor",
+  "vm.click_to_rescan": "Klikněte pro opětovné zjištění virtuálních strojů",
   "vm.target": "Cíl testu:",
   "vm.no_disk_warn": "Nebyl vybrán žádný disk (Vyberte disk z levého panelu)",
   "vm.run_test": "Spustit test simulace",

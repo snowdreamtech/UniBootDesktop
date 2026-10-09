@@ -237,6 +237,7 @@ export const mlIn: TranslationDict = {
   "vm.desc_optional": "ഓപ്ഷണൽ ഫീച്ചർ: കമ്പ്യൂട്ടർ റീബൂട്ട് ചെയ്യാതെ തന്നെ വെർച്വൽ മെഷീനിൽ USB ബൂട്ട് പ്രിവ്യൂ കാണുക.",
   "vm.installed": "ഹൈപ്പർവൈസർ കണ്ടെത്തി",
   "vm.not_installed": "ഹൈപ്പർവൈസർ കണ്ടെത്തിയില്ല",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "പരിശോധനാ ലക്ഷ്യം:",
   "vm.no_disk_warn": "ഡ്രൈവ് തിരഞ്ഞെടുത്തിട്ടില്ല (ദയവായി ഇടത് പാനലിൽ നിന്ന് ഡ്രൈവ് തിരഞ്ഞെടുക്കുക)",
   "vm.run_test": "സിമുലേഷൻ പരിശോധന ആരംഭിക്കുക",

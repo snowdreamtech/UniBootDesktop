@@ -237,6 +237,7 @@ export const fiFi: TranslationDict = {
     "Valinnainen ominaisuus: Esikatsele USB-käynnistystä virtuaalikoneessa ilman tietokoneen uudelleenkäynnistystä.",
   "vm.installed": "Hypervisor havaittu",
   "vm.not_installed": "Hypervisoria ei havaittu",
+  "vm.click_to_rescan": "Napsauta tunnistaaksesi virtuaalikoneet uudelleen",
   "vm.target": "Testikohde:",
   "vm.no_disk_warn": "Levytä ei ole valittu (Valitse levyn vasemmasta paneelista)",
   "vm.run_test": "Aloita simulaatiotesti",

@@ -236,6 +236,7 @@ export const kaGe: TranslationDict = {
     "არასავალდებულო ფუნქცია: USB ჩატვირთვის წინასწარი გადახედვა ვირტუალურ მანქანაში კომპიუტერის გადატვირთვის გარეშე.",
   "vm.installed": "ჰიპერვიზორი ნაპოვნია",
   "vm.not_installed": "ჰიპერვიზორი ვერ მოიძებნა",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "ტესტის სამიზნე:",
   "vm.no_disk_warn": "დისკი არ არის არჩეული (აირჩიეთ დისკი მარცხენა სიიდან)",
   "vm.run_test": "სიმულაციის ტესტის დაწყება",

@@ -235,6 +235,7 @@ export const etEe: TranslationDict = {
   "vm.desc_optional": "Valikuline funktsioon: Eelvaadake USB-laadimist virtuaalmasinas ilma arvutit taaskäivitamata.",
   "vm.installed": "Hüperviisor tuvastatud",
   "vm.not_installed": "Hüperviisorit ei tuvastatud",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Testi sihtmärk:",
   "vm.no_disk_warn": "Ketast pole valitud (Palun valige ketas vasakpoolsest paneelist)",
   "vm.run_test": "Alusta simulatsioonitesti",

@@ -234,6 +234,7 @@ export const jaJp: TranslationDict = {
     "任意プレビュー機能：PC を再起動せずに、デスクトップ上の仮想マシンで USB ブート動作を確認できます。",
   "vm.installed": "ハイパーバイザー検出済み",
   "vm.not_installed": "ハイパーバイザー未検出",
+  "vm.click_to_rescan": "クリックして仮想マシンを再検出",
   "vm.target": "テスト対象:",
   "vm.no_disk_warn": "ドライブが選択されていません（左側のリストからテストするドライブを選択してください）",
   "vm.run_test": "シミュレーションテストを起動",

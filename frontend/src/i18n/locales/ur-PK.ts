@@ -234,6 +234,7 @@ export const urPk: TranslationDict = {
   "vm.desc_optional": "اختیاری خصوصیت: پی سی کو ریبوٹ کیے بغیر ورچوئل مشین میں ڈسک بوٹ کا پیش نظارہ کریں۔",
   "vm.installed": "ہائپروائزر کا پتہ چلا",
   "vm.not_installed": "کوئی ہائپروائزر نہیں ملا",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "ٹیسٹ ٹارگٹ:",
   "vm.no_disk_warn": "کوئی ڈسک منتخب نہیں کی گئی (براہ کرم بائیں پینل سے ڈسک منتخب کریں)",
   "vm.run_test": "سمیولیشن ٹیسٹ شروع کریں",

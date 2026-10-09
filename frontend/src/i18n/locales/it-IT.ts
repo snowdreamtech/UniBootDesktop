@@ -233,6 +233,7 @@ export const itIt: TranslationDict = {
   "vm.desc_optional": "Funzione opzionale: Anteprima dell'avvio USB in una macchina virtuale senza riavviare il PC.",
   "vm.installed": "Hypervisor rilevato",
   "vm.not_installed": "Nessun hypervisor rilevato",
+  "vm.click_to_rescan": "Fare clic per rilevare nuovamente le macchine virtuali",
   "vm.target": "Obiettivo del test:",
   "vm.no_disk_warn": "Nessun disco selezionato (Selezionare un disco dal pannello a sinistra)",
   "vm.run_test": "Avvia test di simulazione",

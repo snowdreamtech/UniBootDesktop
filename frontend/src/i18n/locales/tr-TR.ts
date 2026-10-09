@@ -234,6 +234,7 @@ export const trTr: TranslationDict = {
   "vm.desc_optional": "İsteğe bağlı özellik: PC'yi yeniden başlatmadan USB önyüklemesini sanal makinede önizleyin.",
   "vm.installed": "Hipervizör Algılandı",
   "vm.not_installed": "Hipervizör Algılanmadı",
+  "vm.click_to_rescan": "Sanal makineleri yeniden algılamak için tıklayın",
   "vm.target": "Test Hedefi:",
   "vm.no_disk_warn": "Disk Seçilmedi (Lütfen sol panelden bir disk seçin)",
   "vm.run_test": "Simülasyon Testini Başlat",

@@ -227,6 +227,7 @@ export const heIl: TranslationDict = {
   "vm.desc_optional": "תכונה אופציונלית: תצוגה מקדימה של אתחול ה-USB במכונה וירטואלית ללא הפעלה מחדש של המחשב.",
   "vm.installed": "זוהה Hypervisor",
   "vm.not_installed": "לא זוהה Hypervisor",
+  "vm.click_to_rescan": "לחץ כדי לזהות מחדש מכונות וירטואליות",
   "vm.target": "יעד בדיקה:",
   "vm.no_disk_warn": "לא נבחר דיסק (אנא בחר דיסק מהרשימה משמאל)",
   "vm.run_test": "הפעל בדיקת סימולציה",
