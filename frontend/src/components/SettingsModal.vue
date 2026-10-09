@@ -237,7 +237,7 @@
                     v-model.number="proxyPort"
                     type="number"
                     class="form-input"
-                    placeholder="1080"
+                    :placeholder="defaultProxyPortPlaceholder"
                     min="1"
                     max="65535"
                   />
@@ -666,6 +666,10 @@ const proxyPort = ref<number | "">("");
 const proxyUser = ref("");
 const proxyPassword = ref("");
 
+const defaultProxyPortPlaceholder = computed(() => {
+  return proxyProtocol.value === "socks4" || proxyProtocol.value === "socks5" ? "1080" : "7890";
+});
+
 // Ventoy CLI & Options state
 const ventoyPath = ref("");
 const ventoySecureBoot = ref(true);
@@ -1069,7 +1073,7 @@ async function testNetworkProxy() {
     proxyTestResult.value = t("settings.proxyTestSuccess", {
       protocol: proxyProtocol.value.toUpperCase(),
       host: proxyHost.value,
-      port: proxyPort.value || 1080,
+      port: proxyPort.value || Number(defaultProxyPortPlaceholder.value),
     });
   }, 450);
 }
