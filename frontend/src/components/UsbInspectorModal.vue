@@ -251,7 +251,8 @@ function formatBootStatus(disk?: any): string {
       }
     }
     if (disk.thirdPartyBootType) {
-      return `第三方引导: ${disk.thirdPartyBootType}`;
+      const prefix = t("inspector.prefix_third_party" as any) || t("inspector.val_boot_thirdparty");
+      return `${prefix}: ${disk.thirdPartyBootType}`;
     }
     return t("inspector.val_boot_thirdparty");
   }

@@ -583,4 +583,6 @@ export const enUs: TranslationDict = {
   "about.stagingPackage": "Staging update package...",
   "about.preparingApplyScript": "Preparing update apply script...",
   "about.verifyingChecksum": "Verifying download checksum...",
+  "deploy.toast_duplicate_iso": "Selected image file is already in the list, duplicate ignored",
+  "deploy.toast_file_picker_fallback": "Failed to open native file dialog, switched to web fallback",
 };

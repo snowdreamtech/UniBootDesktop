@@ -34,7 +34,7 @@ export const zhCn: TranslationDict = {
   "settings.proxyAuthPassPlaceholder": "默认为空（若无需认证留空即可）",
   "settings.testingProxy": "正在测试代理...",
   "settings.testProxyConn": "测试网络代理连通性",
-  "settings.firmwareMatrixTitle": "UniBoot 核心固件与 ISO 打包矩阵",
+  "settings.firmwareMatrixTitle": "UniBoot 固件与镜像矩阵",
   "settings.embeddedBadge": "已打包嵌入 (`embed.FS`)",
   "settings.localVersion": "当前本地版本:",
   "settings.cloudRelease": "云端最新 Release:",
@@ -568,4 +568,6 @@ export const zhCn: TranslationDict = {
   "about.stagingPackage": "正在暂存升级包...",
   "about.preparingApplyScript": "正在准备更新脚本...",
   "about.verifyingChecksum": "正在校验更新包完整性...",
+  "deploy.toast_duplicate_iso": "所选镜像文件已在列表中，已自动忽略重复项",
+  "deploy.toast_file_picker_fallback": "打开原生文件选择器失败，已切换至备用文件选择",
 };
