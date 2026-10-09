@@ -206,10 +206,21 @@ export function useDeployment(options: UseDeploymentOptions) {
       : null;
   });
 
-  async function checkVentoyStatus() {
+  async function checkVentoyStatus(customPath?: string) {
     if (window.go && window.go.main && window.go.main.App && window.go.main.App.ValidateVentoyCli) {
       try {
-        const res = await window.go.main.App.ValidateVentoyCli("");
+        let pathToCheck = typeof customPath === "string" ? customPath.trim() : "";
+        if (!pathToCheck && window.go.main.App.GetConfig) {
+          try {
+            const cfg = await window.go.main.App.GetConfig();
+            if (cfg && typeof cfg.ventoyPath === "string" && cfg.ventoyPath.trim()) {
+              pathToCheck = cfg.ventoyPath.trim();
+            }
+          } catch (cfgErr) {
+            console.warn("Failed to get config for Ventoy path, relying on backend default:", cfgErr);
+          }
+        }
+        const res = await window.go.main.App.ValidateVentoyCli(pathToCheck);
         if (res) {
           ventoyStatus.value = res;
         }

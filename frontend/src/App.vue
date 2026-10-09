@@ -166,8 +166,8 @@
       :isOpen="isSettingsOpen"
       :initialTab="settingsInitialTab"
       :currentProxy="currentGithubProxy"
-      @close="isSettingsOpen = false"
-      @save="onSaveSettings"
+      @close="handleCloseSettings"
+      @save="handleSaveSettings"
     />
 
     <!-- Ventoy Missing Alert Modal -->
@@ -415,6 +415,16 @@ openSettingsFn = openSettings;
 function handleToggleTheme() {
   const next = toggleTheme();
   onSaveSettings({ theme: next, language: selectedLangSetting.value });
+}
+
+function handleCloseSettings() {
+  isSettingsOpen.value = false;
+  checkVentoyStatus();
+}
+
+async function handleSaveSettings(payload: any) {
+  await onSaveSettings(payload);
+  await checkVentoyStatus();
 }
 
 import { isClickOnScrollbar, triggerNativeDrag } from "./utils/windowDrag";

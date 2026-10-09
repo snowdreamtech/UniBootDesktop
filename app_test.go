@@ -15,6 +15,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/snowdreamtech/unibootdesktop/internal/env"
@@ -221,9 +222,17 @@ func TestApp_UniBootOperations(t *testing.T) {
 	// Deployment cancellation when no deployment is active
 	assert.False(t, app.CancelDeployment())
 
-	// Validate Ventoy CLI with empty or safe path
+	// Validate Ventoy CLI with non-existent, empty, and excessively long paths
 	res := app.ValidateVentoyCli("non-existent-ventoy-path")
 	assert.NotNil(t, res)
+
+	resEmpty := app.ValidateVentoyCli("")
+	assert.NotNil(t, resEmpty)
+
+	resLong := app.ValidateVentoyCli(strings.Repeat("a", 5000))
+	assert.NotNil(t, resLong)
+	assert.False(t, resLong.Valid)
+	assert.Equal(t, "path_too_long", resLong.Code)
 
 	// App info
 	appInfo := app.GetAppInfo()
