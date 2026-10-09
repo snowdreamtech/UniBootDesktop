@@ -354,7 +354,7 @@ var menuDataStores = map[string]MenuTranslations{
 
 // DetectSystemLocale returns the detected host operating system language locale.
 func DetectSystemLocale() string {
-	for _, envKey := range []string{"LC_ALL", "LC_MESSAGES", "LANG", "LANGUAGE"} {
+	for _, envKey := range []string{"LANGUAGE", "LC_ALL", "LC_MESSAGES", "LANG", "LC_CTYPE"} {
 		val := strings.TrimSpace(env.Get(envKey))
 		if val != "" && val != "C" && val != "POSIX" {
 			norm := strings.ToLower(val)
