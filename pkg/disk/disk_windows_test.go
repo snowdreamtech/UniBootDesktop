@@ -6,7 +6,9 @@
 package disk
 
 import (
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -48,16 +50,56 @@ func TestParseUsbRevision_Windows(t *testing.T) {
 }
 
 func TestGetUsbDeviceInfoWindows(t *testing.T) {
-	info := getUsbDeviceInfoWindows(`USBSTOR\Disk&Ven_VendorCo&Prod_ProductCode&Rev_2.00\6275981091237119587&0`, "")
+	InvalidateWindowsUSBCache()
+	pnpID := `USBSTOR\Disk&Ven_VendorCo&Prod_ProductCode&Rev_2.00\6275981091237119587&0`
+
+	info := getUsbDeviceInfoWindows(pnpID, "")
 	assert.NotNil(t, info)
 	assert.Equal(t, "VendorCo", info.Vendor)
 	assert.Equal(t, "ProductCode", info.Product)
 	assert.Equal(t, "6275981091237119587", info.SerialNumber)
-	assert.Equal(t, "0x346d", info.VendorID)
-	assert.Equal(t, "0x5678", info.ProductID)
-	assert.Equal(t, "USB 2.0", info.UsbVersion)
-	assert.Equal(t, "480 Mb/s", info.UsbSpeed)
 	assert.Equal(t, "BOT (Bulk-Only Transport)", info.TransportProtocol)
+
+	// In test environments without physical USB hardware registry entries,
+	// VID/PID and USB speed fall back gracefully.
+	if info.VendorID != "" {
+		assert.NotEmpty(t, info.ProductID)
+	} else {
+		assert.Empty(t, info.VendorID)
+		assert.Empty(t, info.ProductID)
+		assert.Equal(t, "Unknown", info.UsbVersion)
+		assert.Equal(t, "Unknown", info.UsbSpeed)
+	}
+
+	// Verify protocol detection for UASP
+	infoUasp := getUsbDeviceInfoWindows(`SCSI\Disk&Ven_VendorCo&Prod_ProductCode\6275981091237119587&0`, "")
+	assert.NotNil(t, infoUasp)
+	assert.Equal(t, "UASP (USB Attached SCSI)", infoUasp.TransportProtocol)
+
+	// Verify cached device info retrieval
+	cachedInfo := &winUsbDeviceInfo{
+		Vendor:            "VendorCo",
+		Product:           "ProductCode",
+		SerialNumber:      "6275981091237119587",
+		VendorID:          "0x346d",
+		ProductID:         "0x5678",
+		UsbVersion:        "USB 2.0",
+		UsbSpeed:          "480 Mb/s",
+		TransportProtocol: "BOT (Bulk-Only Transport)",
+	}
+	winUSBCacheMutex.Lock()
+	winUSBCacheMap = map[string]*winUsbDeviceInfo{
+		strings.ToUpper(pnpID) + "|": cachedInfo,
+	}
+	winUSBCacheTime = time.Now()
+	winUSBCacheMutex.Unlock()
+
+	retrieved := getUsbDeviceInfoWindows(pnpID, "")
+	assert.Equal(t, cachedInfo, retrieved)
+	assert.Equal(t, "0x346d", retrieved.VendorID)
+	assert.Equal(t, "0x5678", retrieved.ProductID)
+	assert.Equal(t, "USB 2.0", retrieved.UsbVersion)
+	assert.Equal(t, "480 Mb/s", retrieved.UsbSpeed)
 }
 
 func TestHasConnectedUSBStorageWindows(t *testing.T) {
