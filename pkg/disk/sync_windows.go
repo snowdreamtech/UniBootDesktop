@@ -385,7 +385,7 @@ func parseUsbRevision(rev string) (version, speed string) {
 	case strings.HasPrefix(upper, "01") || strings.HasPrefix(upper, "1.1") || strings.HasPrefix(upper, "1.0"):
 		return "USB 1.1", "12 Mb/s"
 	default:
-		return "USB 2.0", "480 Mb/s"
+		return "Unknown", "Unknown"
 	}
 }
 
@@ -430,8 +430,8 @@ func getUsbDeviceInfoWindows(pnpDeviceID string, serialNumber string) *winUsbDev
 		Vendor:            parsedVen,
 		Product:           parsedProd,
 		SerialNumber:      effectiveSerial,
-		UsbVersion:        "USB 2.0",
-		UsbSpeed:          "480 Mb/s",
+		UsbVersion:        "Unknown",
+		UsbSpeed:          "Unknown",
 		TransportProtocol: transportProto,
 		BusPower:          "500 mA",
 		BusPowerUsed:      "500 mA",
