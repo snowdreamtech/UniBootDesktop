@@ -36,6 +36,24 @@ describe("i18n module", () => {
     expect(SUPPORTED_LANGUAGES.length).toBe(53);
   });
 
+  it("persists selectedLangSetting and local storage correctly", async () => {
+    const store = new Map<string, string>();
+    (globalThis as any).localStorage = {
+      getItem: (k: string) => store.get(k) ?? null,
+      setItem: (k: string, v: string) => store.set(k, String(v)),
+      removeItem: (k: string) => store.delete(k),
+      clear: () => store.clear(),
+    };
+    await setLanguage("zh-CN");
+    const { selectedLangSetting } = await import("./index");
+    expect(selectedLangSetting.value).toBe("zh-CN");
+    expect(store.get("uniboot_locale")).toBe("zh-CN");
+
+    await setLanguage("en-US");
+    expect(selectedLangSetting.value).toBe("en-US");
+    expect(store.get("uniboot_locale")).toBe("en-US");
+  });
+
   it("ensures all 53 locales contain all translation keys from en-US", async () => {
     const enModule = await import("./locales/en-US");
     const enDict = enModule.enUs;

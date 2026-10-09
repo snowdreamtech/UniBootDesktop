@@ -1,6 +1,6 @@
 import { ref, watch, type Ref } from "vue";
 import { GetConfig, ReloadAppMenu, SaveConfig } from "../../wailsjs/go/main/App";
-import { setLanguage } from "../i18n";
+import { currentLocale, selectedLangSetting, setLanguage, syncSystemLocale } from "../i18n";
 import { logUserAction } from "../utils/logger";
 import { useTheme } from "./useTheme";
 
@@ -36,6 +36,7 @@ export function useAppSettings(options: UseAppSettingsOptions) {
       const cfg = await GetConfig();
       if (cfg) {
         cfg.language = langVal;
+        cfg.theme = currentTheme.value;
         await SaveConfig(cfg);
       }
     } catch (e) {
@@ -82,7 +83,13 @@ export function useAppSettings(options: UseAppSettingsOptions) {
         if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
         if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
         if (cfg.language) {
-          setLanguage(cfg.language);
+          if (cfg.language === "auto") {
+            const detected = await syncSystemLocale();
+            await setLanguage("auto");
+            currentLocale.value = detected;
+          } else {
+            await setLanguage(cfg.language);
+          }
           if (window.go?.main?.App?.ReloadAppMenu) {
             window.go.main.App.ReloadAppMenu(cfg.language).catch(() => {});
           }
@@ -103,11 +110,14 @@ export function useAppSettings(options: UseAppSettingsOptions) {
       proxyUrl = payload;
       currentGithubProxy.value = payload;
     } else if (payload && typeof payload === "object") {
-      proxyUrl = payload.githubProxy || "";
-      currentGithubProxy.value = proxyUrl;
+      if (typeof payload.githubProxy === "string") {
+        proxyUrl = payload.githubProxy;
+        currentGithubProxy.value = proxyUrl;
+      }
       if (payload.fileSystem) selectedFsType.value = payload.fileSystem as any;
       if (payload.mode) activeMode.value = payload.mode as any;
       if (payload.theme) applyTheme(payload.theme);
+      if (payload.language) await setLanguage(payload.language);
       if (typeof payload.autoEjectAfterDeploy === "boolean") autoEjectAfterDeploy.value = payload.autoEjectAfterDeploy;
     }
 
@@ -128,6 +138,9 @@ export function useAppSettings(options: UseAppSettingsOptions) {
           payload && payload.proxyHost !== undefined ? payload.proxyHost.trim() : currentCfg?.proxyHost || "";
         const port = !isDirect && host ? Number(payload?.proxyPort ?? currentCfg?.proxyPort) || 0 : 0;
 
+        const effectiveTheme = payload?.theme || currentTheme.value || currentCfg?.theme || "system";
+        const effectiveLang = payload?.language || selectedLangSetting.value || currentCfg?.language || "auto";
+
         const configObj = {
           ...(currentCfg || {}),
           mode: payload?.mode || currentCfg?.mode || activeMode.value,
@@ -135,10 +148,12 @@ export function useAppSettings(options: UseAppSettingsOptions) {
             typeof payload?.autoCheckUpdate === "boolean"
               ? payload.autoCheckUpdate
               : currentCfg?.autoCheckUpdate !== false,
-          theme: payload?.theme || currentCfg?.theme || currentTheme.value,
-          language: payload?.language || currentCfg?.language || "auto",
+          theme: effectiveTheme,
+          language: effectiveLang,
           githubProxy:
-            typeof payload?.githubProxy === "string" ? payload.githubProxy : currentCfg?.githubProxy || proxyUrl,
+            typeof payload?.githubProxy === "string"
+              ? payload.githubProxy
+              : currentCfg?.githubProxy || currentGithubProxy.value || proxyUrl,
           fileSystem: payload?.fileSystem || currentCfg?.fileSystem || selectedFsType.value,
           proxyProtocol: payload?.proxyProtocol || currentCfg?.proxyProtocol || "direct",
           proxyHost: host,

@@ -33,8 +33,8 @@ function getInitialTheme(): AppTheme {
   return "system";
 }
 
-const currentTheme = ref<AppTheme>(getInitialTheme());
-const effectiveTheme = computed<"dark" | "light">(() => resolveEffectiveTheme(currentTheme.value));
+export const currentTheme = ref<AppTheme>(getInitialTheme());
+export const effectiveTheme = computed<"dark" | "light">(() => resolveEffectiveTheme(currentTheme.value));
 
 function updateDomAndWindow(resolved: "dark" | "light") {
   if (typeof document !== "undefined") {

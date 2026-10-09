@@ -552,13 +552,13 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import { useTheme } from "../composables/useTheme";
+import { currentTheme, useTheme } from "../composables/useTheme";
 import { useToast } from "../composables/useToast";
-import { setLanguage, SUPPORTED_LANGUAGES, t } from "../i18n";
+import { selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES, t } from "../i18n";
 import type { VentoyValidation } from "../utils/ventoyValidation";
 import CustomSelect from "./CustomSelect.vue";
 
-const { applyTheme, getActiveTheme } = useTheme();
+const { applyTheme } = useTheme();
 const { showToast } = useToast();
 
 const languageSelectOptions = computed(() => [
@@ -653,8 +653,21 @@ const defaultMode = ref("cloud");
 const defaultFs = ref("exFAT");
 const autoCheckUpdate = ref(true);
 const autoEjectAfterDeploy = ref(false);
-const appTheme = ref(getActiveTheme());
-const appLanguage = ref("auto");
+const appTheme = ref(currentTheme.value);
+const appLanguage = ref(selectedLangSetting.value);
+
+watch(currentTheme, (val) => {
+  if (val && appTheme.value !== val) {
+    appTheme.value = val;
+  }
+});
+
+watch(selectedLangSetting, (val) => {
+  if (val && appLanguage.value !== val) {
+    appLanguage.value = val;
+  }
+});
+
 const enableTray = ref(false);
 const closeAction = ref<"quit" | "minimize_to_tray">("quit");
 
@@ -845,19 +858,13 @@ function triggerAutoSave() {
 
 function onLanguageChange(val: string) {
   setLanguage(val);
-  triggerAutoSave();
+  saveConfigImmediate();
 }
 
 async function onThemeChange(val: string) {
   applyTheme(val);
   await saveConfigImmediate();
 }
-
-watch(appTheme, (newTheme) => {
-  if (newTheme === "light" || newTheme === "dark" || newTheme === "system") {
-    applyTheme(newTheme);
-  }
-});
 
 let ventoyDebounceTimer: any = null;
 
@@ -867,8 +874,6 @@ watch(
     defaultFs,
     autoCheckUpdate,
     autoEjectAfterDeploy,
-    appTheme,
-    appLanguage,
     proxyInputUrl,
     proxyProtocol,
     proxyHost,
@@ -938,6 +943,10 @@ async function loadFullConfig() {
   }
 
   isInitializing = true;
+  if (saveTimer) {
+    clearTimeout(saveTimer);
+    saveTimer = null;
+  }
   try {
     const cfg = await app.GetConfig();
     if (cfg) {
@@ -949,12 +958,12 @@ async function loadFullConfig() {
       closeAction.value = cfg.closeAction || "quit";
       if (cfg.theme === "light" || cfg.theme === "dark" || cfg.theme === "system") {
         appTheme.value = cfg.theme;
-      } else {
-        appTheme.value = "system";
+        applyTheme(appTheme.value);
       }
-      applyTheme(appTheme.value);
-      appLanguage.value = cfg.language || "auto";
-      setLanguage(appLanguage.value);
+      if (cfg.language && cfg.language !== "") {
+        appLanguage.value = cfg.language;
+        setLanguage(appLanguage.value);
+      }
       proxyInputUrl.value = cfg.githubProxy || "";
       proxyProtocol.value = cfg.proxyProtocol || "direct";
       proxyHost.value = cfg.proxyHost || "";
@@ -982,7 +991,7 @@ async function loadFullConfig() {
   } finally {
     setTimeout(() => {
       isInitializing = false;
-    }, 100);
+    }, 250);
   }
 }
 

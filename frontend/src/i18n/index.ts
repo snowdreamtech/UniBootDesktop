@@ -81,9 +81,33 @@ const DEFAULT_LOCALE = "zh-CN";
 
 export function detectSystemLocale(): string {
   if (typeof navigator === "undefined") return DEFAULT_LOCALE;
+  if (Array.isArray(navigator.languages) && navigator.languages.length > 0) {
+    for (const l of navigator.languages) {
+      const matched = SUPPORTED_LANGUAGES.find((item) => item.code === l || item.code.startsWith(l.split("-")[0]));
+      if (matched) return matched.code;
+    }
+  }
   const navLang = navigator.language;
-  const matched = SUPPORTED_LANGUAGES.find((l) => l.code === navLang || l.code.startsWith(navLang.split("-")[0]));
-  return matched ? matched.code : DEFAULT_LOCALE;
+  if (navLang) {
+    const matched = SUPPORTED_LANGUAGES.find((l) => l.code === navLang || l.code.startsWith(navLang.split("-")[0]));
+    if (matched) return matched.code;
+  }
+  return DEFAULT_LOCALE;
+}
+
+export async function syncSystemLocale(): Promise<string> {
+  try {
+    const app = (window as any)?.go?.main?.App;
+    if (app && typeof app.GetSystemLocale === "function") {
+      const sysLoc = await app.GetSystemLocale();
+      if (sysLoc && SUPPORTED_LANGUAGES.some((l) => l.code === sysLoc)) {
+        return sysLoc;
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return detectSystemLocale();
 }
 
 export function resolveAutoLocale(): string {

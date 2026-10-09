@@ -136,7 +136,12 @@ func RunWails() error {
 			Assets: assets,
 		},
 		BackgroundColour: backgroundColour,
-		Menu:             BuildAppMenu(app, "auto"),
+		Menu:             BuildAppMenu(app, func() string {
+			if cfg, err := config.Load(); err == nil && cfg != nil && cfg.Language != "" {
+				return cfg.Language
+			}
+			return "auto"
+		}()),
 		DragAndDrop: &options.DragAndDrop{
 			EnableFileDrop:     true,
 			DisableWebViewDrop: false,
