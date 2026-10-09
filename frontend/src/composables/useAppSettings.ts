@@ -36,6 +36,10 @@ export function useAppSettings(options: UseAppSettingsOptions) {
       const cfg = await GetConfig();
       if (cfg) {
         cfg.language = langVal;
+        cfg.theme =
+          currentTheme.value ||
+          ((typeof localStorage !== "undefined" && localStorage.getItem("uniboot_theme_cache")) as any) ||
+          cfg.theme;
         await SaveConfig(cfg);
       }
     } catch (e) {
@@ -131,14 +135,24 @@ export function useAppSettings(options: UseAppSettingsOptions) {
           payload && payload.proxyHost !== undefined ? payload.proxyHost.trim() : currentCfg?.proxyHost || "";
         const port = !isDirect && host ? Number(payload?.proxyPort ?? currentCfg?.proxyPort) || 0 : 0;
 
+        const savedTheme = (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_theme_cache")) as any;
+        const savedLang = typeof localStorage !== "undefined" ? localStorage.getItem("uniboot_locale") : null;
+
         const effectiveTheme =
           payload && payload.theme !== undefined
             ? payload.theme
-            : currentCfg?.theme || currentTheme.value || "system";
+            : currentTheme.value || savedTheme || currentCfg?.theme || "system";
         const effectiveLang =
           payload && payload.language !== undefined
             ? payload.language
-            : currentCfg?.language || selectedLangSetting.value || "auto";
+            : selectedLangSetting.value || savedLang || currentCfg?.language || "auto";
+
+        if (effectiveTheme && effectiveTheme !== currentTheme.value) {
+          applyTheme(effectiveTheme);
+        }
+        if (effectiveLang && effectiveLang !== selectedLangSetting.value) {
+          await setLanguage(effectiveLang);
+        }
 
         const configObj = {
           ...(currentCfg || {}),

@@ -108,7 +108,9 @@ export async function syncWindowTheme() {
 // Ensure DOM and window theme are synchronized immediately upon script evaluation
 if (typeof document !== "undefined") {
   updateDomAndWindow(resolveEffectiveTheme(currentTheme.value));
-  syncWindowTheme();
+  if (currentTheme.value === "system") {
+    syncWindowTheme();
+  }
 }
 
 // Global listener for system theme changes (e.g. macOS appearance toggle, Windows settings, or sunset/sunrise)

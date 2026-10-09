@@ -653,8 +653,16 @@ const defaultMode = ref("cloud");
 const defaultFs = ref("exFAT");
 const autoCheckUpdate = ref(true);
 const autoEjectAfterDeploy = ref(false);
-const appTheme = ref(currentTheme.value);
-const appLanguage = ref(selectedLangSetting.value);
+const appTheme = ref(
+  currentTheme.value ||
+    ((typeof localStorage !== "undefined" && localStorage.getItem("uniboot_theme_cache")) as any) ||
+    "system"
+);
+const appLanguage = ref(
+  selectedLangSetting.value ||
+    (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_locale")) ||
+    "auto"
+);
 
 watch(currentTheme, (val) => {
   if (val && appTheme.value !== val) {
@@ -813,8 +821,8 @@ function buildConfigPayload() {
     autoEjectAfterDeploy: autoEjectAfterDeploy.value,
     enableTray: enableTray.value,
     closeAction: closeAction.value,
-    theme: appTheme.value,
-    language: appLanguage.value,
+    theme: appTheme.value || currentTheme.value,
+    language: appLanguage.value || selectedLangSetting.value,
     ventoyPath: ventoyPath.value.trim(),
     ventoySecureBoot: ventoySecureBoot.value,
     ventoyPartitionStyle: ventoyPartitionStyle.value,
@@ -834,13 +842,6 @@ async function saveConfigImmediate() {
   }
   const payload = buildConfigPayload();
   emit("save", payload);
-  if (window.go && window.go.main && window.go.main.App) {
-    try {
-      await window.go.main.App.SaveConfig(payload as any);
-    } catch (e: any) {
-      console.error("Failed to save config:", e);
-    }
-  }
 }
 
 function triggerAutoSave() {
@@ -958,10 +959,14 @@ async function loadFullConfig() {
       enableTray.value = cfg.enableTray === true;
       closeAction.value = cfg.closeAction || "quit";
       if (cfg.theme === "light" || cfg.theme === "dark" || cfg.theme === "system") {
-        appTheme.value = cfg.theme;
+        if (cfg.theme !== "system" || !currentTheme.value || currentTheme.value === "system") {
+          appTheme.value = cfg.theme;
+        }
       }
       if (cfg.language && cfg.language !== "") {
-        appLanguage.value = cfg.language;
+        if (cfg.language !== "auto" || !selectedLangSetting.value || selectedLangSetting.value === "auto") {
+          appLanguage.value = cfg.language;
+        }
       }
       proxyInputUrl.value = cfg.githubProxy || "";
       proxyProtocol.value = cfg.proxyProtocol || "direct";
