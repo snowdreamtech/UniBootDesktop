@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
 import { ref } from "vue";
-import { currentLang, t } from "../i18n";
+import { t } from "../i18n";
 import { SelectIsoFiles } from "../../wailsjs/go/main/App";
 import { logUserAction } from "../utils/logger";
 
@@ -75,12 +75,7 @@ export function useIsoManager(showToast: (msg: string, type: "info" | "warning" 
     if (added > 0) {
       showToast(t("deploy.toast_added_iso", { count: added }), "success");
     } else if (duplicateCount > 0) {
-      showToast(
-        currentLang.value.startsWith("zh")
-          ? "所选镜像文件已在列表中，已自动忽略重复项"
-          : "Selected image file is already in the list, duplicate ignored",
-        "info"
-      );
+      showToast(t("deploy.toast_duplicate_iso"), "info");
     } else if (invalidCount > 0) {
       showToast(t("iso.drag_unsupported"), "warning");
     }
@@ -141,7 +136,7 @@ export function useIsoManager(showToast: (msg: string, type: "info" | "warning" 
         }
       } catch (err: any) {
         console.error("SelectIsoFiles error:", err);
-        showToast(err?.message || "打开原生文件选择器失败，已切换至备用文件选择", "warning");
+        showToast(err?.message || t("deploy.toast_file_picker_fallback"), "warning");
         triggerHtmlFileInput();
       }
     } else {

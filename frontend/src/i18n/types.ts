@@ -182,6 +182,8 @@ export interface TranslationDict {
   "deploy.toast_select_target": string;
   "deploy.toast_select_batch": string;
   "deploy.toast_no_disks": string;
+  "deploy.toast_duplicate_iso": string;
+  "deploy.toast_file_picker_fallback": string;
   "deploy.tip_writing": string;
   "deploy.tip_select_single": string;
   "deploy.tip_select_batch": string;
