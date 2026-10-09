@@ -352,6 +352,36 @@ var menuDataStores = map[string]MenuTranslations{
 	},
 }
 
+// DetectSystemLocale returns the detected host operating system language locale.
+func DetectSystemLocale() string {
+	for _, envKey := range []string{"LC_ALL", "LC_MESSAGES", "LANG", "LANGUAGE"} {
+		val := strings.TrimSpace(env.Get(envKey))
+		if val != "" && val != "C" && val != "POSIX" {
+			norm := strings.ToLower(val)
+			if strings.Contains(norm, "zh_tw") || strings.Contains(norm, "zh_hk") || strings.Contains(norm, "zh-hant") {
+				return "zh-TW"
+			} else if strings.Contains(norm, "zh") {
+				return "zh-CN"
+			} else if strings.Contains(norm, "de") {
+				return "de-DE"
+			} else if strings.Contains(norm, "fr") {
+				return "fr-FR"
+			} else if strings.Contains(norm, "es") {
+				return "es-ES"
+			} else if strings.Contains(norm, "ja") {
+				return "ja-JP"
+			} else if strings.Contains(norm, "ko") {
+				return "ko-KR"
+			} else if strings.Contains(norm, "ru") {
+				return "ru-RU"
+			} else if strings.Contains(norm, "en") {
+				return "en-US"
+			}
+		}
+	}
+	return "zh-CN"
+}
+
 // GetMenuTranslations returns localized menu strings based on target language code or system language fallback.
 func GetMenuTranslations(langCode string) MenuTranslations {
 	langCode = strings.TrimSpace(langCode)
@@ -361,26 +391,7 @@ func GetMenuTranslations(langCode string) MenuTranslations {
 		}
 	}
 	if langCode == "" || langCode == "auto" {
-		langCode = env.Get("LANG")
-		if strings.Contains(strings.ToLower(langCode), "zh_tw") || strings.Contains(strings.ToLower(langCode), "zh_hk") {
-			langCode = "zh-TW"
-		} else if strings.Contains(strings.ToLower(langCode), "zh") {
-			langCode = "zh-CN"
-		} else if strings.Contains(strings.ToLower(langCode), "de") {
-			langCode = "de-DE"
-		} else if strings.Contains(strings.ToLower(langCode), "fr") {
-			langCode = "fr-FR"
-		} else if strings.Contains(strings.ToLower(langCode), "es") {
-			langCode = "es-ES"
-		} else if strings.Contains(strings.ToLower(langCode), "ja") {
-			langCode = "ja-JP"
-		} else if strings.Contains(strings.ToLower(langCode), "ko") {
-			langCode = "ko-KR"
-		} else if strings.Contains(strings.ToLower(langCode), "ru") {
-			langCode = "ru-RU"
-		} else {
-			langCode = "en-US"
-		}
+		langCode = DetectSystemLocale()
 	}
 
 	// Normalize locale string (e.g., zh_CN -> zh-CN)

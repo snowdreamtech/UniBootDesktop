@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/i18n"
 	"github.com/snowdreamtech/unibootdesktop/internal/logger"
 	"github.com/snowdreamtech/unibootdesktop/internal/sysinfo"
 	"github.com/snowdreamtech/unibootdesktop/pkg/config"
@@ -1068,6 +1069,11 @@ func (a *App) SetTheme(theme string) {
 // IsSystemDarkTheme queries the native host OS (Windows, macOS, Linux) to determine if dark mode is active.
 func (a *App) IsSystemDarkTheme() bool {
 	return sysinfo.IsSystemDarkTheme()
+}
+
+// GetSystemLocale queries the native host OS (Windows, macOS, Linux) to determine the system language.
+func (a *App) GetSystemLocale() string {
+	return i18n.DetectSystemLocale()
 }
 
 // ClearProxyPassword removes the saved proxy password from the system credential store.

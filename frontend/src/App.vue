@@ -21,7 +21,7 @@
     <AppHeader
       :activeMode="activeMode"
       :isLogCardVisible="isLogCardVisible"
-      :currentLang="currentLang"
+      :currentLang="selectedLangSetting"
       :currentTheme="currentTheme"
       :isActionBusy="!canSwitchMode"
       @select-mode="selectMode"
@@ -217,7 +217,7 @@ import { useIsoManager } from "./composables/useIsoManager";
 import { useLogPanel } from "./composables/useLogPanel";
 import { useToast } from "./composables/useToast";
 import { useVirtualMachine } from "./composables/useVirtualMachine";
-import { currentLang, t } from "./i18n";
+import { selectedLangSetting, t } from "./i18n";
 
 // 1. Global Toast
 const { toastMessage, toastType, showToast, dismissToast } = useToast();
@@ -414,7 +414,7 @@ openSettingsFn = openSettings;
 
 function handleToggleTheme() {
   const next = toggleTheme();
-  onSaveSettings({ theme: next });
+  onSaveSettings({ theme: next, language: selectedLangSetting.value });
 }
 
 import { isClickOnScrollbar, triggerNativeDrag } from "./utils/windowDrag";
