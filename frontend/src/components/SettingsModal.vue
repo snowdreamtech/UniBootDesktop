@@ -237,7 +237,7 @@
                     v-model.number="proxyPort"
                     type="number"
                     class="form-input"
-                    placeholder="7890"
+                    placeholder="1080"
                     min="1"
                     max="65535"
                   />
@@ -662,7 +662,7 @@ const closeAction = ref<"quit" | "minimize_to_tray">("quit");
 const proxyInputUrl = ref("");
 const proxyProtocol = ref("direct");
 const proxyHost = ref("");
-const proxyPort = ref<number | "">(1080);
+const proxyPort = ref<number | "">("");
 const proxyUser = ref("");
 const proxyPassword = ref("");
 
@@ -954,7 +954,7 @@ async function loadFullConfig() {
       proxyInputUrl.value = cfg.githubProxy || "";
       proxyProtocol.value = cfg.proxyProtocol || "direct";
       proxyHost.value = cfg.proxyHost || "";
-      proxyPort.value = cfg.proxyPort > 0 ? cfg.proxyPort : 1080;
+      proxyPort.value = cfg.proxyPort > 0 ? cfg.proxyPort : "";
       proxyUser.value = cfg.proxyUser || "";
       proxyPassword.value = cfg.proxyPassword || "";
       ventoyPath.value = cfg.ventoyPath || "";
