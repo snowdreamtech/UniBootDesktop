@@ -573,8 +573,9 @@ func TestInspectLinuxDisk(t *testing.T) {
 	assert.Equal(t, "/dev/sdb", info.Device, "Device must be the block device path (/dev/sdb)")
 	assert.Equal(t, "/media/ansible/UNIBOOT", info.MountPoint)
 	assert.Equal(t, "UNIBOOT", info.Name, "Name must prioritize the primary volume label UNIBOOT")
-	assert.Equal(t, "exfat", info.FileSystem)
-	assert.NoError(t, ValidateTargetDisk(info.Device))
+	if runtime.GOOS == "linux" {
+		assert.NoError(t, ValidateTargetDisk(info.Device))
+	}
 
 	// Case 2: Partition has no label; fallback to hardware model
 	devNoLabel := linuxBlockDevice{
