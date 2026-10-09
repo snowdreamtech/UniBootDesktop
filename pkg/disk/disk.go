@@ -2270,7 +2270,10 @@ func getLinuxDisks() ([]DiskInfo, error) {
 
 func inspectLinuxDisk(dev linuxBlockDevice) *DiskInfo {
 	devPath := "/dev/" + dev.Name
-	mountPath := devPath
+	mountPath := ""
+	if dev.MountPoint != "" {
+		mountPath = dev.MountPoint
+	}
 	fileSystem := dev.Fstype
 	freeSpace := dev.Fsavail
 	partitionScheme := "GPT / MBR"
@@ -2292,29 +2295,29 @@ func inspectLinuxDisk(dev linuxBlockDevice) *DiskInfo {
 	// cache key, or safety gate. Prefer the real block device path instead.
 	for _, child := range dev.Children {
 		if child.MountPoint != "" {
-			mountPath = child.MountPoint
-			if child.Fstype != "" {
-				fileSystem = child.Fstype
-			}
-			if child.Fsavail > 0 {
-				freeSpace = child.Fsavail
-			}
-			if displayName == "USB Storage Device" || displayName == dev.Name {
-				baseMount := filepath.Base(child.MountPoint)
-				if baseMount != "" && !IsIgnoredVolume(baseMount) {
-					displayName = baseMount
+			baseMount := filepath.Base(child.MountPoint)
+			if !IsIgnoredVolume(baseMount) || mountPath == "" {
+				mountPath = child.MountPoint
+				if child.Fstype != "" {
+					fileSystem = child.Fstype
+				}
+				if child.Fsavail > 0 {
+					freeSpace = child.Fsavail
+				}
+				if displayName == "USB Storage Device" || displayName == dev.Name {
+					if !IsIgnoredVolume(baseMount) {
+						displayName = baseMount
+					}
 				}
 			}
-			break
+			if !IsIgnoredVolume(baseMount) {
+				break
+			}
 		}
 	}
 
-	if IsIgnoredVolume(filepath.Base(mountPath)) {
-		return nil
-	}
-
-	// Filter out completely unmounted devices (no active mount point) on Linux
-	if mountPath == devPath || mountPath == "" {
+	// Filter out unmounted devices or devices with only ignored volumes (e.g. EFI only) on Linux
+	if mountPath == "" || IsIgnoredVolume(filepath.Base(mountPath)) {
 		return nil
 	}
 
@@ -2384,7 +2387,7 @@ func inspectLinuxDisk(dev linuxBlockDevice) *DiskInfo {
 	bootStatusLinux, bootStatusCodeLinux := DetectBootStatus(partitionScheme, isRealVentoyLinux, isCloudModeLinux, thirdPartyBootLinux, manifestLinux, hasUnmountedEspLinux)
 
 	return &DiskInfo{
-		Device:             mountPath,
+		Device:             devPath,
 		Name:               displayName,
 		Size:               dev.Size,
 		Formatted:          formattedSize,
