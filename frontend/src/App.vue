@@ -415,7 +415,7 @@ openSettingsFn = openSettings;
 
 function handleToggleTheme() {
   const next = toggleTheme();
-  onSaveSettings({ theme: next });
+  onSaveSettings({ theme: next, language: selectedLangSetting.value });
 }
 
 function handleCloseSettings() {

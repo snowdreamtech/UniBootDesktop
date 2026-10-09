@@ -44,9 +44,9 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
   let onConfigReady: (() => void) | null = null;
   let onWindowFocus: (() => void) | null = null;
 
-  onMounted(() => {
-    syncWindowTheme();
-    loadConfig();
+  onMounted(async () => {
+    await loadConfig();
+    await syncWindowTheme();
     refreshDisks();
     checkQemu();
     checkVentoyStatus();
