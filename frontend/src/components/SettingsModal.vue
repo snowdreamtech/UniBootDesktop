@@ -443,27 +443,19 @@
                   <span>{{ t("settings.browse_btn") }}</span>
                 </button>
               </div>
+              <!-- macOS Ventoy CLI limitation notice (only prompted on macOS) -->
               <div
-                v-if="ventoyValidation"
-                class="ventoy-status-card"
-                :class="ventoyValidation.valid ? 'success-card' : 'error-card'"
+                v-if="isMacOs"
+                class="ventoy-status-card warning-card"
               >
                 <div class="status-header">
-                  <span class="status-indicator" :class="ventoyValidation.valid ? 'success' : 'error'">
-                    {{ ventoyValidation.valid ? "✓" : "!" }}
-                  </span>
+                  <span class="status-indicator warning">⚠️</span>
                   <span class="status-title">
-                    {{ getVentoyValidationTitle(ventoyValidation) }}
-                  </span>
-                  <span v-if="ventoyValidation.valid && ventoyValidation.version" class="version-badge-green">
-                    {{ ventoyValidation.version }}
+                    {{ t("deploy.macos_alert_title") }}
                   </span>
                 </div>
                 <div class="status-message">
-                  {{ getVentoyValidationMessage(ventoyValidation) }}
-                </div>
-                <div v-if="ventoyValidation.executablePath" class="exec-path">
-                  <code>{{ ventoyValidation.executablePath }}</code>
+                  {{ t("deploy.macos_alert_desc") }}
                 </div>
               </div>
             </div>
@@ -572,7 +564,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useTheme } from "../composables/useTheme";
 import { useToast } from "../composables/useToast";
 import { setLanguage, SUPPORTED_LANGUAGES, t } from "../i18n";
-import { getVentoyValidationMessage, getVentoyValidationTitle, type VentoyValidation } from "../utils/ventoyValidation";
+import type { VentoyValidation } from "../utils/ventoyValidation";
 import CustomSelect from "./CustomSelect.vue";
 
 const { applyTheme, getActiveTheme } = useTheme();
@@ -702,6 +694,12 @@ const latestVentoyTag = ref("");
 const localVentoyVersionTag = ref("");
 const hasVentoyUpdate = ref(false);
 const isVentoyOsSupported = ref(true);
+const isMacOs = computed(() => {
+  return (
+    !isVentoyOsSupported.value ||
+    (typeof navigator !== "undefined" && (navigator.userAgent.includes("Mac") || navigator.platform.includes("Mac")))
+  );
+});
 
 // Auto save state
 let isInitializing = true;
@@ -1880,6 +1878,11 @@ onMounted(() => {
   border-color: rgba(239, 68, 68, 0.3);
 }
 
+.ventoy-status-card.warning-card {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
 .status-header {
   display: flex;
   align-items: center;
@@ -1910,6 +1913,13 @@ onMounted(() => {
   color: #ef4444;
   border: 1px solid rgba(239, 68, 68, 0.65);
   box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+}
+
+.status-indicator.warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.65);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
 }
 
 .status-title {
