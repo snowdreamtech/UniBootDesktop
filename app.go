@@ -970,6 +970,7 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 		"he-IL":   true,
 		"id-ID":   true,
 		"nb-NO":   true,
+		"no-NO":   true,
 		"uk-UA":   true,
 		"el-GR":   true,
 		"sv-SE":   true,

@@ -1,5 +1,4 @@
 import { ref, watch, type Ref } from "vue";
-import { GetConfig, ReloadAppMenu, SaveConfig } from "../../wailsjs/go/main/App";
 import { selectedLangSetting, setLanguage } from "../i18n";
 import { logUserAction } from "../utils/logger";
 import { useTheme } from "./useTheme";
@@ -31,27 +30,11 @@ export function useAppSettings(options: UseAppSettingsOptions) {
     logUserAction("INFO", "User opened settings modal", tab);
   }
 
-  async function saveLangToConfig(langVal: string) {
-    try {
-      const cfg = await GetConfig();
-      if (cfg) {
-        cfg.language = langVal;
-        cfg.theme =
-          currentTheme.value ||
-          ((typeof localStorage !== "undefined" && localStorage.getItem("uniboot_theme_cache")) as any) ||
-          cfg.theme;
-        await SaveConfig(cfg);
-      }
-    } catch (e) {
-      console.error("Failed to save language config:", e);
-    }
-  }
-
-  function selectLanguage(langVal: string) {
-    setLanguage(langVal);
-    saveLangToConfig(langVal);
-    ReloadAppMenu(langVal).catch((err: any) => {
-      console.warn("Failed to reload app menu:", err);
+  async function selectLanguage(langVal: string) {
+    await setLanguage(langVal);
+    await onSaveSettings({
+      language: langVal,
+      theme: currentTheme.value,
     });
   }
 
@@ -97,7 +80,9 @@ export function useAppSettings(options: UseAppSettingsOptions) {
         autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
       }
     } finally {
-      window.dispatchEvent(new Event("uniboot:config-ready"));
+      if (typeof window !== "undefined" && typeof window.dispatchEvent === "function") {
+        window.dispatchEvent(new Event("uniboot:config-ready"));
+      }
     }
   }
 
@@ -209,7 +194,9 @@ export function useAppSettings(options: UseAppSettingsOptions) {
       } catch (e) {
         console.error("Failed to save config:", e);
       } finally {
-        window.dispatchEvent(new Event("uniboot:config-ready"));
+        if (typeof window !== "undefined" && typeof window.dispatchEvent === "function") {
+          window.dispatchEvent(new Event("uniboot:config-ready"));
+        }
       }
     }
   }

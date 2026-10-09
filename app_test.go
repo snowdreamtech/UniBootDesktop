@@ -238,3 +238,48 @@ func TestApp_UniBootOperations(t *testing.T) {
 	appInfo := app.GetAppInfo()
 	assert.Equal(t, env.ProjectName, appInfo.ProjectName)
 }
+
+func TestApp_SaveConfigAndThemeLanguageValidation(t *testing.T) {
+	app := NewApp()
+	require.NotNil(t, app)
+
+	cfg, err := app.GetConfig()
+	require.NoError(t, err)
+	require.NotNil(t, cfg)
+
+	allLocales := []string{
+		"auto", "zh-CN", "en-US", "zh-TW", "ja-JP", "ko-KR", "de-DE", "fr-FR",
+		"es-ES", "es-LA", "ru-RU", "pt-BR", "pt-PT", "it-IT", "tr-TR", "pl-PL",
+		"vi-VN", "ar-SA", "ur-PK", "az-AZ", "da-DK", "ka-GE", "fa-IR", "sl-SI",
+		"oc-FR", "cs-CZ", "sk-SK", "bn-BD", "hi-IN", "nl-NL", "ro-RO", "hr-HR",
+		"hu-HU", "sr-Latn", "sr-Cyrl", "th-TH", "lt-LT", "mk-MK", "he-IL", "id-ID",
+		"nb-NO", "no-NO", "uk-UA", "el-GR", "sv-SE", "bg-BG", "hy-AM", "fi-FI",
+		"gl-ES", "ca-ES", "ta-IN", "be-BY", "ml-IN", "et-EE",
+	}
+
+	for _, loc := range allLocales {
+		cfg.Language = loc
+		cfg.Theme = "light"
+		err := app.SaveConfig(cfg)
+		assert.NoError(t, err, "locale %s must be accepted by SaveConfig", loc)
+	}
+
+	for _, th := range []string{"light", "dark", "system"} {
+		cfg.Theme = th
+		cfg.Language = "zh-CN"
+		err := app.SaveConfig(cfg)
+		assert.NoError(t, err, "theme %s must be accepted by SaveConfig", th)
+	}
+
+	// Invalid language should be rejected
+	cfg.Language = "invalid-lang-code"
+	err = app.SaveConfig(cfg)
+	assert.Error(t, err)
+
+	// Invalid theme should normalize to system
+	cfg.Language = "zh-CN"
+	cfg.Theme = "invalid-theme"
+	err = app.SaveConfig(cfg)
+	assert.NoError(t, err)
+	assert.Equal(t, "system", cfg.Theme)
+}
