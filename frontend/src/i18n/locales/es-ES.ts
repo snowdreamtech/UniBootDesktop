@@ -237,6 +237,7 @@ export const esEs: TranslationDict = {
     "Función opcional: Previsualice el arranque de disco en una máquina virtual sin reiniciar el equipo.",
   "vm.installed": "Hipervisor detectado",
   "vm.not_installed": "No se detectó ningún hipervisor",
+  "vm.click_to_rescan": "Haga clic para volver a detectar máquinas virtuales",
   "vm.target": "Objetivo de prueba:",
   "vm.no_disk_warn": "Ningún disco seleccionado (Seleccione un disco del panel izquierdo)",
   "vm.run_test": "Iniciar prueba de simulación",

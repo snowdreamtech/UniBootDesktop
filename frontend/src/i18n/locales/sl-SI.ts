@@ -236,6 +236,7 @@ export const slSi: TranslationDict = {
   "vm.desc_optional": "Izbirna funkcija: Predogled zagona USB v virtualnem stroju brez ponovnega zagona računalnika.",
   "vm.installed": "Hipervizor zaznan",
   "vm.not_installed": "Hipervizor ni zaznan",
+  "vm.click_to_rescan": "Kliknite za ponovno zaznavanje navideznih računalnikov",
   "vm.target": "Cilj preizkusa:",
   "vm.no_disk_warn": "Noben disk ni izbran (izberite disk na levi plošči)",
   "vm.run_test": "Zaženi simulacijski preizkus",

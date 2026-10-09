@@ -221,6 +221,7 @@ export interface TranslationDict {
   "vm.startSuccess_vm": string;
   "vm.installed": string;
   "vm.not_installed": string;
+  "vm.click_to_rescan": string;
   "vm.target": string;
   "vm.no_disk_warn": string;
   "vm.run_test": string;

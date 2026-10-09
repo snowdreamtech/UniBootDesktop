@@ -228,6 +228,7 @@ export const zhTw: TranslationDict = {
   "vm.desc_optional": "可選預覽功能：製作完成後無需重啟真實電腦，即可在桌面直接拉起虛擬機預覽磁碟引導效果。",
   "vm.installed": "已檢測到虛擬機",
   "vm.not_installed": "未檢測到可用虛擬機",
+  "vm.click_to_rescan": "點擊重新檢測虛擬機",
   "vm.target": "測試目標:",
   "vm.no_disk_warn": "未選擇磁碟（請在左側列表中點擊選擇要測試的磁碟）",
   "vm.run_test": "啟動模擬測試",

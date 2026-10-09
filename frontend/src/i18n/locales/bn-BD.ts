@@ -235,6 +235,7 @@ export const bnBd: TranslationDict = {
   "vm.desc_optional": "ঐচ্ছিক বৈশিষ্ট্য: পিসি রিবুট না করেই ভার্চুয়াল মেশিনে USB বুটের পূর্বরূপ দেখুন।",
   "vm.installed": "হাইপারভাইজার শনাক্ত হয়েছে",
   "vm.not_installed": "কোনো হাইপারভাইজার শনাক্ত হয়নি",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "পরীক্ষার টার্গেট:",
   "vm.no_disk_warn": "কোনো ডিস্ক নির্বাচন করা হয়নি (বাম প্যানেল থেকে একটি ডিস্ক নির্বাচন করুন)",
   "vm.run_test": "সিমুলেশন পরীক্ষা শুরু করুন",

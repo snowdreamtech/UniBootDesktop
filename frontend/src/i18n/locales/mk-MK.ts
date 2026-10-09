@@ -238,6 +238,7 @@ export const mkMk: TranslationDict = {
     "Изборна функција: Преглед на покренувањето од USB во виртуелна машина без рестартирање на компјутерот.",
   "vm.installed": "Хипервизор е откриен",
   "vm.not_installed": "Хипервизор не е откриен",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Цел за тестирање:",
   "vm.no_disk_warn": "Не е избран диск (изберете диск од левиот панел)",
   "vm.run_test": "Вклучи тест за симулација",

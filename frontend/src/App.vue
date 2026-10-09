@@ -108,6 +108,7 @@
         @safely-eject-success="handleSafelyEjectAfterDeploy"
         @launch-vm="launchVM"
         @stop-vm="stopVM"
+        @refresh-vm="checkQemu"
         @update:is-verifying="(val: boolean) => fsm.setVerifyingDevice(activeVmTargetDevice, val)"
       />
 

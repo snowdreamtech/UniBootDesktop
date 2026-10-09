@@ -236,6 +236,7 @@ export const frFr: TranslationDict = {
     "Fonction optionnelle : Prévisualisez le démarrage sur disque dans une machine virtuelle sans redémarrer le PC.",
   "vm.installed": "Hyperviseur détecté",
   "vm.not_installed": "Aucun hyperviseur détecté",
+  "vm.click_to_rescan": "Cliquer pour redétecter les machines virtuelles",
   "vm.target": "Cible de test :",
   "vm.no_disk_warn": "Aucun disque sélectionné (Veuillez sélectionner un disque dans la liste de gauche)",
   "vm.run_test": "Lancer la simulation",

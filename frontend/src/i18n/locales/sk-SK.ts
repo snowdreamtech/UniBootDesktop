@@ -235,6 +235,7 @@ export const skSk: TranslationDict = {
   "vm.desc_optional": "Voliteľná funkcia: Náhľad bootovania USB vo virtuálnom stroji bez reštartovania PC.",
   "vm.installed": "Hypervízor zistený",
   "vm.not_installed": "Nebol zistený žiadny hypervízor",
+  "vm.click_to_rescan": "Kliknite pre opätovnú detekciu virtuálnych strojov",
   "vm.target": "Cieľ testu:",
   "vm.no_disk_warn": "Nebol vybraný žiadny disk (Vyberte disk z ľavého panela)",
   "vm.run_test": "Spustiť test simulácie",

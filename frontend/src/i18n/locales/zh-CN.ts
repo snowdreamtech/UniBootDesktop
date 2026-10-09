@@ -227,6 +227,7 @@ export const zhCn: TranslationDict = {
   "vm.desc_optional": "可选预览功能：制作完成后无需重启真实电脑，即可在桌面直接拉起虚拟机预览磁盘引导效果。",
   "vm.installed": "已检测到虚拟机",
   "vm.not_installed": "未检测到可用虚拟机",
+  "vm.click_to_rescan": "点击重新检测虚拟机",
   "vm.target": "测试目标:",
   "vm.no_disk_warn": "未选择磁盘（请在左侧列表中点击选择要测试的磁盘）",
   "vm.run_test": "启动模拟测试",

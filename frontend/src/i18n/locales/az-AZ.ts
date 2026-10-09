@@ -234,6 +234,7 @@ export const azAz: TranslationDict = {
     "İstəyə bağlı funksiya: Kompüteri yenidən başlatmadan USB yüklənməsini virtual maşında nəzərdən keçirin.",
   "vm.installed": "Hipervizor Aşkar Edildi",
   "vm.not_installed": "Hipervizor Tapılmadı",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Test Hədəfi:",
   "vm.no_disk_warn": "Disk Seçilməyib (Lütfən sol paneldən disk seçin)",
   "vm.run_test": "Simulyasiya Testini Başlat",

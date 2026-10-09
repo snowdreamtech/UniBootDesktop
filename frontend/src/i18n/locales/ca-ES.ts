@@ -239,6 +239,7 @@ export const caEs: TranslationDict = {
     "Funció opcional: Previsualitzeu l'arrencada USB en una màquina virtual sense reiniciar l'ordinador.",
   "vm.installed": "Hipervisor detectat",
   "vm.not_installed": "No s'ha detectat cap hipervisor",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Objectiu de la prova:",
   "vm.no_disk_warn": "Cap disc seleccionat (Seleccioneu un disc del panell esquerra)",
   "vm.run_test": "Iniciar prova de simulació",

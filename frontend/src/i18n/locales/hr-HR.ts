@@ -239,6 +239,7 @@ export const hrHr: TranslationDict = {
     "Neobavezna značajka: Pregledajte pokretanje USB-a u virtualnom stroju bez ponovnog pokretanja računala.",
   "vm.installed": "Hipervizor otkriven",
   "vm.not_installed": "Hipervizor nije otkriven",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Cilj testa:",
   "vm.no_disk_warn": "Nije odabran nijedan disk (Odaberite disk s lijeve ploče)",
   "vm.run_test": "Pokreni test simulacije",

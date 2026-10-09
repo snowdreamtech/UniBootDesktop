@@ -241,6 +241,7 @@ export const hyAm: TranslationDict = {
     "Ընտրովի ֆունկցիա. Նախադիտեք USB բեռնավորումը վիրտուալ մեքենայում առանց համակարգիչը վերաբեռնելու:",
   "vm.installed": "Հիպերվիզորը հայտնաբերված է",
   "vm.not_installed": "Հիպերվիզոր չի հայտնաբերվել",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Թիրախային ստուգում:",
   "vm.no_disk_warn": "Սկավառակ ընտրված չէ (Ընտրեք սկավառակ ձախ ցանկից)",
   "vm.run_test": "Սկսել սիմուլյացիոն թեստը",

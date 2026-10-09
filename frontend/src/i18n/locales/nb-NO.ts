@@ -232,6 +232,7 @@ export const nbNo: TranslationDict = {
   "vm.desc_optional": "Valgfri funksjon: Forhåndsvis USB-boot i virtuell maskin uten å starte på nytt.",
   "vm.installed": "Hypervisor oppdaget",
   "vm.not_installed": "Ingen hypervisor oppdaget",
+  "vm.click_to_rescan": "Klikk for å oppdage virtuelle maskiner på nytt",
   "vm.target": "Testmål:",
   "vm.no_disk_warn": "Ingen disk valgt (Velg en disk fra venstre panel)",
   "vm.run_test": "Start simuleringstest",

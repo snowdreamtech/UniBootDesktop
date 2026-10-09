@@ -235,6 +235,7 @@ export const idId: TranslationDict = {
   "vm.desc_optional": "Fitur opsional: Pratinjau booting USB dalam mesin virtual tanpa menyalakan ulang PC.",
   "vm.installed": "Hypervisor Terdeteksi",
   "vm.not_installed": "Hypervisor Tidak Terdeteksi",
+  "vm.click_to_rescan": "Klik untuk mendeteksi ulang mesin virtual",
   "vm.target": "Target Uji:",
   "vm.no_disk_warn": "Tidak ada disk yang dipilih (Silakan pilih drive dari panel kiri)",
   "vm.run_test": "Jalankan Uji Simulasi",

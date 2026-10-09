@@ -235,6 +235,7 @@ export const roRo: TranslationDict = {
   "vm.desc_optional": "Funcție opțională: Previzualizați bootarea USB într-o mașină virtuală fără repornirea PC-ului.",
   "vm.installed": "Hipervizor detectat",
   "vm.not_installed": "Niciun hipervizor detectat",
+  "vm.click_to_rescan": "Faceți clic pentru a detecta din nou mașinile virtuale",
   "vm.target": "Țintă test:",
   "vm.no_disk_warn": "Niciun disc selectat (Vă rugăm să selectați un disc din panoul din stânga)",
   "vm.run_test": "Pornește testul de simulare",

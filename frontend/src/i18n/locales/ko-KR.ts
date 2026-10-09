@@ -229,6 +229,7 @@ export const koKr: TranslationDict = {
   "vm.desc_optional": "선택적 미리보기 기능: PC를 재부팅하지 않고 데스크톱 가상 머신에서 USB 부팅을 미리 확인합니다.",
   "vm.installed": "하이퍼바이저 감지됨",
   "vm.not_installed": "하이퍼바이저 감지되지 않음",
+  "vm.click_to_rescan": "가상 머신 다시 감지하려면 클릭",
   "vm.target": "테스트 대상:",
   "vm.no_disk_warn": "드라이브가 선택되지 않았습니다 (왼쪽 목록에서 테스트할 드라이브를 선택하세요)",
   "vm.run_test": "시뮬레이션 테스트 시작",

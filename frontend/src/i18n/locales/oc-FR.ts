@@ -236,6 +236,7 @@ export const ocFr: TranslationDict = {
   "vm.desc_optional": "Foncion opcionala : Visualizar lo darrèrament USB sens reamontar lo PC.",
   "vm.installed": "Ipervisor detectat",
   "vm.not_installed": "Cap d'ipervisor pas detectat",
+  "vm.click_to_rescan": "Click to re-detect virtual machines",
   "vm.target": "Cibla del tèst:",
   "vm.no_disk_warn": "Pas de disc seleccionat (Seleccionatz un disc dins lo panèl d'esquèrra)",
   "vm.run_test": "Aviar lo tèst de simulacion",

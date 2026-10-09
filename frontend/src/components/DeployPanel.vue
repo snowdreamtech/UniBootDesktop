@@ -504,8 +504,17 @@
         <!-- Single Hypervisor Badge -->
         <div v-if="hypervisorList.length <= 1" class="vm-selector-container">
           <span class="vm-selector-label">{{ t("vm.select_vm_label") }}</span>
-          <span class="badge" :class="hypervisorList.length === 1 ? 'success' : 'muted'">
+          <span
+            class="badge"
+            :class="[
+              hypervisorList.length === 1 ? 'success' : 'muted',
+              { 'clickable-badge': hypervisorList.length === 0 }
+            ]"
+            :title="hypervisorList.length === 0 ? t('vm.click_to_rescan') : ''"
+            @click="hypervisorList.length === 0 ? emit('refresh-vm') : undefined"
+          >
             {{ hypervisorList.length === 1 ? hypervisorList[0].name : t("vm.not_installed") }}
+            <span v-if="hypervisorList.length === 0" class="badge-refresh-icon">↻</span>
           </span>
         </div>
 
@@ -710,6 +719,7 @@ const emit = defineEmits<{
   (e: "safely-eject-success"): void;
   (e: "launch-vm"): void;
   (e: "stop-vm"): void;
+  (e: "refresh-vm"): void;
   (e: "update:isVerifying", verifying: boolean): void;
 }>();
 
@@ -2574,6 +2584,26 @@ function getFileIcon(filename: string): string {
 .badge.muted {
   background: var(--btn-sec-bg);
   color: var(--text-muted);
+}
+
+.clickable-badge {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.clickable-badge:hover {
+  background: var(--input-border);
+  color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+.badge-refresh-icon {
+  font-size: 0.85rem;
+  line-height: 1;
 }
 
 .vm-desc {

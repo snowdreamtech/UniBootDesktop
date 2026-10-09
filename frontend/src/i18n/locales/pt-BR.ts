@@ -234,6 +234,7 @@ export const ptBr: TranslationDict = {
     "Recurso opcional: Pré-visualize a inicialização do USB em uma máquina virtual sem reiniciar o PC.",
   "vm.installed": "Hipervisor detectado",
   "vm.not_installed": "Nenhum hipervisor detectado",
+  "vm.click_to_rescan": "Clique para detectar máquinas virtuais novamente",
   "vm.target": "Alvo do Teste:",
   "vm.no_disk_warn": "Nenhum disco selecionado (Selecione um disco no painel esquerdo)",
   "vm.run_test": "Iniciar Teste de Simulação",

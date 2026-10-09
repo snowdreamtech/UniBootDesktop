@@ -233,6 +233,7 @@ export const daDk: TranslationDict = {
   "vm.desc_optional": "Valgfri funktion: Forhåndsvis USB-boot i virtuel maskine uden at genstarte pc'en.",
   "vm.installed": "Hypervisor fundet",
   "vm.not_installed": "Ingen hypervisor fundet",
+  "vm.click_to_rescan": "Klik for at genregistrere virtuelle maskiner",
   "vm.target": "Testmål:",
   "vm.no_disk_warn": "Ingen disk valgt (Vælg et drev fra venstre panel)",
   "vm.run_test": "Start simuleringstest",
