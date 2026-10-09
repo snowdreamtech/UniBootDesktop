@@ -249,7 +249,8 @@ export const esLa: TranslationDict = {
   "vm.launching": "Iniciando prueba de simulación...",
   "vm.running": "Simulación en ejecución...",
   "vm.tip_launching": "Lanzando el emulador VM...",
-  "vm.tip_running": "La máquina virtual está ejecutándose. La unidad USB se volverá a montar automáticamente al cerrarse.",
+  "vm.tip_running":
+    "La máquina virtual está ejecutándose. La unidad USB se volverá a montar automáticamente al cerrarse.",
   "vm.tip_deploying": "Implementando archivos de inicio, espere hasta que termine",
   "vm.tip_not_installed": "Emulador VM no encontrado. Instale VM primero (VM/VirtualBox/KVM)",
   "vm.tip_select_target": "Primero seleccione una disco de destino en el panel izquierdo",

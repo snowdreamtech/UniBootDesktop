@@ -136,7 +136,7 @@ func RunWails() error {
 			Assets: assets,
 		},
 		BackgroundColour: backgroundColour,
-		Menu:             BuildAppMenu(app, func() string {
+		Menu: BuildAppMenu(app, func() string {
 			if cfg, err := config.Load(); err == nil && cfg != nil && cfg.Language != "" {
 				return cfg.Language
 			}
@@ -187,7 +187,7 @@ func RunWails() error {
 				LightModeBorder:            windows.RGB(226, 232, 240),
 				LightModeBorderInactive:    windows.RGB(226, 232, 240),
 			},
-			BackdropType:         winBackdrop,
+			BackdropType: winBackdrop,
 		},
 		Mac: &mac.Options{
 			TitleBar:             mac.TitleBarHiddenInset(),

@@ -242,7 +242,8 @@ export const ukUa: TranslationDict = {
   "vm.launching": "Запуск тесту симуляції...",
   "vm.running": "Симуляція виконується...",
   "vm.tip_launching": "Запуск емулятора VM...",
-  "vm.tip_running": "Віртуальна машина запущена. Цільовий USB-накопичувач буде автоматично знову змонтовано після закриття.",
+  "vm.tip_running":
+    "Віртуальна машина запущена. Цільовий USB-накопичувач буде автоматично знову змонтовано після закриття.",
   "vm.tip_deploying": "Розгортання завантажувальних файлів, будь ласка, дочекайтеся завершення",
   "vm.tip_not_installed": "Емулятор VM не знайдено. Спочатку встановіть VM (VM/VirtualBox/KVM)",
   "vm.tip_select_target": "Спочатку виберіть цільовий USB-диск на лівій панелі",
@@ -250,8 +251,7 @@ export const ukUa: TranslationDict = {
   "vm.session_ended_success": "Тестування симуляції завершено. Цільовий диск успішно змонтовано.",
   "vm.session_ended_error": "Тестування симуляції завершено: {error}",
   "vm.toast_select_first": "Натисніть, щоб спочатку вибрати цільовий USB-диск на лівій панелі!",
-  "vm.toast_not_installed":
-    "Емулятор VM не знайдено! Будь ласка, встановіть VM (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "Емулятор VM не знайдено! Будь ласка, встановіть VM (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "Симуляція SecureBoot",
   "vm.cfg_accel": "Апаратне прискорення",
   "vm.cfg_ram": "Виділення ОЗП",

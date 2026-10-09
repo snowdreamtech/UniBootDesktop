@@ -21,4 +21,3 @@ func TestSyncTitleBarTheme(t *testing.T) {
 	SyncTitleBarTheme("light")
 	SyncTitleBarTheme("system")
 }
-

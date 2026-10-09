@@ -249,8 +249,7 @@ export const csCz: TranslationDict = {
   "vm.session_ended_success": "Test simulace byl ukončen. Cílový disk byl úspěšně znovu připojen.",
   "vm.session_ended_error": "Test simulace byl ukončen: {error}",
   "vm.toast_select_first": "Nejprve kliknutím vyberte cílovou jednotku USB z levého panelu!",
-  "vm.toast_not_installed":
-    "Emulátor VM nebyl nalezen! Nainstalujte prosím VM (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "Emulátor VM nebyl nalezen! Nainstalujte prosím VM (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "Simulace SecureBoot",
   "vm.cfg_accel": "Hardwarová akcelerace",
   "vm.cfg_ram": "Alokace RAM",
@@ -547,8 +546,7 @@ export const csCz: TranslationDict = {
   "privilege.status_standard": "Neautorizováno",
   "privilege.btn_elevate": "Vyžádat přístup správce",
   "privilege.modal_title": "Vyžadována oprávnění správce",
-  "privilege.elevation_prompt":
-    "UniBootDesktop vyžaduje oprávnění správce pro přístup k fyzickým úložištím.",
+  "privilege.elevation_prompt": "UniBootDesktop vyžaduje oprávnění správce pro přístup k fyzickým úložištím.",
   "privilege.modal_subtitle": "K načtení spouštěcích dat a zápisu na disky je vyžadována autorizace systému",
   "privilege.reason_title": "Proč jsou vyžadována oprávnění správce?",
   "privilege.reason_desc":

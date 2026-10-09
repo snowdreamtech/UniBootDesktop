@@ -242,7 +242,8 @@ export const deDe: TranslationDict = {
   "vm.launching": "Simulationstest wird gestartet...",
   "vm.running": "Simulation läuft...",
   "vm.tip_launching": "VM-Emulator wird gestartet...",
-  "vm.tip_running": "Virtuelle Maschine läuft. Der Ziel-USB-Stick wird nach dem Schließen automatisch wieder eingebunden.",
+  "vm.tip_running":
+    "Virtuelle Maschine läuft. Der Ziel-USB-Stick wird nach dem Schließen automatisch wieder eingebunden.",
   "vm.tip_deploying": "Bereitstellung läuft. Bitte warten bis abgeschlossen",
   "vm.tip_not_installed": "VM-Emulator nicht gefunden. Bitte zuerst VM installieren",
   "vm.tip_select_target": "Bitte zuerst ein Ziel-Datenträger aus der linken Liste auswählen",

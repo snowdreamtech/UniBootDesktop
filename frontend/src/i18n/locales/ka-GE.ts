@@ -549,8 +549,7 @@ export const kaGe: TranslationDict = {
   "privilege.status_standard": "არაავტორიზებული",
   "privilege.btn_elevate": "ადმინისტრატორის წვდომის მოთხოვნა",
   "privilege.modal_title": "საჭიროა ადმინისტრატორის ნებართვა",
-  "privilege.elevation_prompt":
-    "UniBootDesktop საჭიროებს ადმინისტრატორის უფლებებს ფიზიკურ მეხსიერებაზე წვდომისთვის.",
+  "privilege.elevation_prompt": "UniBootDesktop საჭიროებს ადმინისტრატორის უფლებებს ფიზიკურ მეხსიერებაზე წვდომისთვის.",
   "privilege.modal_subtitle": "ჩატვირთვის მონაცემების წასაკითხად და დისკზე ჩასაწერად საჭიროა სისტემური ავტორიზაცია",
   "privilege.reason_title": "რატომ არის საჭირო ადმინისტრატორის უფლებები?",
   "privilege.reason_desc":

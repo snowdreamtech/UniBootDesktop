@@ -65,4 +65,3 @@ func SupportsMicaBackdrop() bool {
 // SyncTitleBarTheme is a no-op on Linux as window decorations are managed by the window manager/GTK.
 func SyncTitleBarTheme(theme string) {
 }
-

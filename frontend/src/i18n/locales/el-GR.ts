@@ -249,7 +249,8 @@ export const elGr: TranslationDict = {
   "vm.launching": "Έναρξη δοκιμής προσομοίωσης...",
   "vm.running": "Η προσομοίωση εκτελείται...",
   "vm.tip_launching": "Εκκίνηση του εξομοιωτή VM...",
-  "vm.tip_running": "Η εικονική μηχανή εκτελείται. Η μονάδα USB προορισμού θα επαναπροσαρτηθεί αυτόματα κατά το κλείσιμο.",
+  "vm.tip_running":
+    "Η εικονική μηχανή εκτελείται. Η μονάδα USB προορισμού θα επαναπροσαρτηθεί αυτόματα κατά το κλείσιμο.",
   "vm.tip_deploying": "Ανάπτυξη αρχείων εκκίνησης, περιμένετε μέχρι να ολοκληρωθεί",
   "vm.tip_not_installed": "Δεν βρέθηκε εξομοιωτής VM. Εγκαταστήστε πρώτα το VM (VM/VirtualBox/KVM)",
   "vm.tip_select_target": "Επιλέξτε πρώτα μια στοχευόμενη μονάδα USB από τον αριστερό πίνακα",
@@ -258,8 +259,7 @@ export const elGr: TranslationDict = {
   "vm.session_ended_success": "Η δοκιμή προσομοίωσης ολοκληρώθηκε. Ο δίσκος επαναπροσαρτήθηκε επιτυχώς.",
   "vm.session_ended_error": "Η δοκιμή προσομοίωσης ολοκληρώθηκε: {error}",
   "vm.toast_select_first": "Κάντε κλικ για να επιλέξετε πρώτα μια μονάδα USB-στόχου από τον αριστερό πίνακα!",
-  "vm.toast_not_installed":
-    "Ο εξομοιωτής VM δεν βρέθηκε! Εγκαταστήστε το VM (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "Ο εξομοιωτής VM δεν βρέθηκε! Εγκαταστήστε το VM (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "Προσομοίωση SecureBoot",
   "vm.cfg_accel": "Επιτάχυνση υλικού",
   "vm.cfg_ram": "Εκχώρηση RAM",

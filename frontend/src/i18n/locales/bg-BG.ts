@@ -254,8 +254,7 @@ export const bgBg: TranslationDict = {
   "vm.session_ended_success": "Тестът на симулацията приключи. Целевият диск е монтиран отново успешно.",
   "vm.session_ended_error": "Тестът на симулацията приключи: {error}",
   "vm.toast_select_first": "Моля, щракнете, за да изберете първо целево USB устройство от левия панел!",
-  "vm.toast_not_installed":
-    "VM емулаторът не е намерен! Моля, инсталирайте VM (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "VM емулаторът не е намерен! Моля, инсталирайте VM (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "Симулация на SecureBoot",
   "vm.cfg_accel": "Хардуерно ускорение",
   "vm.cfg_ram": "Разпределение на RAM",

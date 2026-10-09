@@ -245,7 +245,8 @@ export const glEs: TranslationDict = {
   "vm.launching": "Iniciando proba de simulación...",
   "vm.running": "Simulación en execución...",
   "vm.tip_launching": "Iniciando o emulador VM...",
-  "vm.tip_running": "A máquina virtual estase executando. A unidade USB de destino volverá montarse automaticamente ao pechar.",
+  "vm.tip_running":
+    "A máquina virtual estase executando. A unidade USB de destino volverá montarse automaticamente ao pechar.",
   "vm.tip_deploying": "Implementando ficheiros de arranque, agarde ata que remate",
   "vm.tip_not_installed": "Non se atopou o emulador VM. Instale VM primeiro (VM/VirtualBox/KVM)",
   "vm.tip_select_target": "Seleccione primeiro unha unidade USB de destino no panel esquerdo",

@@ -6,7 +6,6 @@ const toastType = ref<"info" | "warning" | "error" | "success">("info");
 let toastTimer: number | undefined;
 
 export function useToast() {
-
   function showToast(msg: string, type: "info" | "warning" | "error" | "success" = "info") {
     const cleanMsg = msg ? msg.replace(/^[\s\uFE0F]*[⚠️❌🎉ℹ️✅🚨⚡️❗][\s\uFE0F]*/, "").trim() : "";
     toastMessage.value = cleanMsg || msg;

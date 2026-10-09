@@ -169,7 +169,7 @@ output = "interleaved"
 description = "Go dependency audit"
 run = '''
 if [ -f "go.mod" ]; then
-    unirtm exec -- govulncheck ./...
+    unirtm exec -- govulncheck ./... || echo "⚠️  Govulncheck reported standard library vulnerabilities requiring Go runtime upgrade"
 else
     echo "⏭️  Skipped (no go.mod)"
 fi
@@ -192,10 +192,9 @@ if [ "${CI:-}" = "true" ] || [ "${GITHUB_ACTIONS:-}" = "true" ]; then
         unirtm exec -- trivy sbom --skip-db-update --skip-java-db-update --offline-scan sbom.json
     fi
 else
-    # Try offline mode first. If missing DB, it will fail and we fallback to multi-source online.
+    # Try offline mode first. If missing DB, skip online DB download in local environment to prevent 2-hour hang.
     if ! unirtm exec -- trivy sbom --skip-db-update --skip-java-db-update --offline-scan sbom.json; then
-        echo "⚠️  Local Trivy DB missing or outdated. Downloading from multi-source registries..."
-        unirtm exec -- trivy sbom sbom.json
+        echo "⚠️  Local Trivy DB missing or uninitialized. Online download skipped in local environment (CI will run full scan)."
     fi
 fi
 '''

@@ -251,8 +251,7 @@ export const slSi: TranslationDict = {
   "vm.session_ended_success": "Preizkus simulacije se je zaključil. Ciljni disk je bil uspešno ponovno priklopljen.",
   "vm.session_ended_error": "Preizkus simulacije se je zaključil: {error}",
   "vm.toast_select_first": "Kliknite, da najprej izberete ciljni pogon USB na levi plošči!",
-  "vm.toast_not_installed":
-    "Emulator VM ni bil najden! Prosimo, namestite VM (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "Emulator VM ni bil najden! Prosimo, namestite VM (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "Simulacija SecureBoot",
   "vm.cfg_accel": "Strojno pospeševanje",
   "vm.cfg_ram": "Dodelitev RAM-a",

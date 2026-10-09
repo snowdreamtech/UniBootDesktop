@@ -250,8 +250,7 @@ export const skSk: TranslationDict = {
   "vm.session_ended_success": "Test simulácie bol ukončený. Cieľový disk bol úspešne znova pripojený.",
   "vm.session_ended_error": "Test simulácie bol ukončený: {error}",
   "vm.toast_select_first": "Najprv kliknutím vyberte cieľovú jednotku USB z ľavého panela!",
-  "vm.toast_not_installed":
-    "Emulátor VM sa nenašiel! Nainštalujte si prosím VM (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "Emulátor VM sa nenašiel! Nainštalujte si prosím VM (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "Simulácia SecureBoot",
   "vm.cfg_accel": "Hardvérová akcelerácia",
   "vm.cfg_ram": "Alokácia RAM",
@@ -548,8 +547,7 @@ export const skSk: TranslationDict = {
   "privilege.status_standard": "Neautorizované",
   "privilege.btn_elevate": "Požiadať o prístup správcu",
   "privilege.modal_title": "Vyžadujú sa oprávnenia správcu",
-  "privilege.elevation_prompt":
-    "UniBootDesktop vyžaduje oprávnenia správcu na prístup k fyzickým diskom.",
+  "privilege.elevation_prompt": "UniBootDesktop vyžaduje oprávnenia správcu na prístup k fyzickým diskom.",
   "privilege.modal_subtitle": "Na načítanie spúšťacích údajov a zápis na disky sa vyžaduje autorizácia systému",
   "privilege.reason_title": "Prečo sú potrebné oprávnenia správcu?",
   "privilege.reason_desc":

@@ -249,8 +249,7 @@ export const urPk: TranslationDict = {
   "vm.session_ended_success": "نقلی ٹیسٹ ختم ہو گیا۔ ہدف ڈسک کامیابی سے دوبارہ ماؤنٹ ہو گئی۔",
   "vm.session_ended_error": "نقلی ٹیسٹ ختم ہو گیا: {error}",
   "vm.toast_select_first": "براہ کرم پہلے بائیں پینل سے ٹارگٹ ڈسک ڈرائیو منتخب کرنے کے لیے کلک کریں!",
-  "vm.toast_not_installed":
-    "VM ایمولیٹر نہیں ملا! براہ کرم VM انسٹال کریں (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "VM ایمولیٹر نہیں ملا! براہ کرم VM انسٹال کریں (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "SecureBoot کی نقالی",
   "vm.cfg_accel": "ہارڈ ویئر ایکسلریشن",
   "vm.cfg_ram": "ریم کی تخصیص",
@@ -545,8 +544,7 @@ export const urPk: TranslationDict = {
   "privilege.status_standard": "غیر مجاز",
   "privilege.btn_elevate": "ایڈمن تک رسائی کی درخواست کریں",
   "privilege.modal_title": "ایڈمنسٹریٹر کی اجازت درکار ہے",
-  "privilege.elevation_prompt":
-    "UniBootDesktop کو سٹوریج ڈیوائسز تک رسائی کے لیے منتظم کے حقوق درکار ہیں۔",
+  "privilege.elevation_prompt": "UniBootDesktop کو سٹوریج ڈیوائسز تک رسائی کے لیے منتظم کے حقوق درکار ہیں۔",
   "privilege.modal_subtitle": "بوٹ ڈیٹا پڑھنے اور ڈسک پر لکھنے کے لیے سسٹم کی اجازت درکار ہے",
   "privilege.reason_title": "ایڈمنسٹریٹر کے اختیارات کیوں درکار ہیں؟",
   "privilege.reason_desc":

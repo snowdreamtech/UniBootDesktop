@@ -246,7 +246,8 @@ export const hrHr: TranslationDict = {
   "vm.launching": "Pokretanje testa simulacije...",
   "vm.running": "Simulacija je u tijeku...",
   "vm.tip_launching": "Pokretanje VM emulatora...",
-  "vm.tip_running": "Virtualno računalo je pokrenuto. Ciljni USB pogon automatski će se ponovno montirati nakon zatvaranja.",
+  "vm.tip_running":
+    "Virtualno računalo je pokrenuto. Ciljni USB pogon automatski će se ponovno montirati nakon zatvaranja.",
   "vm.tip_deploying": "Postavljanje datoteka za pokretanje, pričekajte do završetka",
   "vm.tip_not_installed": "VM emulator nije pronađen. Prvo instalirajte VM (brew/port instalacija qemu)",
   "vm.tip_select_target": "Prvo odaberite ciljani USB pogon s lijeve ploče",

@@ -241,7 +241,8 @@ export const ruRu: TranslationDict = {
   "vm.launching": "Запуск теста симуляции...",
   "vm.running": "Симуляция выполняется...",
   "vm.tip_launching": "Запуск эмулятора VM...",
-  "vm.tip_running": "Виртуальная машина запущена. Целевой USB-накопитель будет автоматически перемонтирован после закрытия.",
+  "vm.tip_running":
+    "Виртуальная машина запущена. Целевой USB-накопитель будет автоматически перемонтирован после закрытия.",
   "vm.tip_deploying": "Развертывание файлов загрузки, подождите завершения",
   "vm.tip_not_installed": "Эмулятор VM не найден. Сначала установите VM",
   "vm.tip_select_target": "Пожалуйста, сначала выберите целевой диск в левой панели",
@@ -547,8 +548,7 @@ export const ruRu: TranslationDict = {
   "privilege.status_standard": "Не авторизовано",
   "privilege.btn_elevate": "Запросить права администратора",
   "privilege.modal_title": "Требуются права администратора",
-  "privilege.elevation_prompt":
-    "UniBootDesktop требуются права администратора для прямого доступа к накопителям.",
+  "privilege.elevation_prompt": "UniBootDesktop требуются права администратора для прямого доступа к накопителям.",
   "privilege.modal_subtitle": "Требуется системное разрешение для чтения загрузочных секторов и записи дисков",
   "privilege.reason_title": "Зачем нужны права администратора?",
   "privilege.reason_desc":

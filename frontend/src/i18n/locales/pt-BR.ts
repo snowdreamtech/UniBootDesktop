@@ -241,7 +241,8 @@ export const ptBr: TranslationDict = {
   "vm.launching": "Iniciando teste de simulação...",
   "vm.running": "Simulação em execução...",
   "vm.tip_launching": "Iniciando emulador VM...",
-  "vm.tip_running": "A máquina virtual está em execução. O pendrive de destino será remontado automaticamente ao fechar.",
+  "vm.tip_running":
+    "A máquina virtual está em execução. O pendrive de destino será remontado automaticamente ao fechar.",
   "vm.tip_deploying": "Implantando arquivos de boot, aguarde a conclusão",
   "vm.tip_not_installed": "Emulador VM não encontrado. Por favor, instale o VM primeiro",
   "vm.tip_select_target": "Por favor, selecione primeiro uma disco no painel esquerdo",

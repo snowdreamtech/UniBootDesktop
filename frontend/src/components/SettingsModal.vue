@@ -435,10 +435,7 @@
                 </button>
               </div>
               <!-- macOS Ventoy CLI limitation notice (only prompted on macOS) -->
-              <div
-                v-if="isMacOs"
-                class="ventoy-status-card warning-card"
-              >
+              <div v-if="isMacOs" class="ventoy-status-card warning-card">
                 <div class="status-header">
                   <span class="status-indicator warning">⚠️</span>
                   <span class="status-title">
@@ -659,9 +656,7 @@ const appTheme = ref(
     "system"
 );
 const appLanguage = ref(
-  selectedLangSetting.value ||
-    (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_locale")) ||
-    "auto"
+  selectedLangSetting.value || (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_locale")) || "auto"
 );
 
 watch(currentTheme, (val) => {
@@ -1161,7 +1156,10 @@ async function checkVentoyRelease() {
 
 async function downloadVentoyToolchain() {
   if (!isVentoyOsSupported.value) {
-    showToast(t("settings.ventoyMacNoDownloadTitle") || "macOS does not support native Ventoy CLI formatting", "warning");
+    showToast(
+      t("settings.ventoyMacNoDownloadTitle") || "macOS does not support native Ventoy CLI formatting",
+      "warning"
+    );
     return;
   }
   logUserAction("INFO", "User initiated Ventoy toolchain download/update");
