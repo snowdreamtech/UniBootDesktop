@@ -246,7 +246,8 @@ export const caEs: TranslationDict = {
   "vm.launching": "Iniciant prova de simulació...",
   "vm.running": "Simulació en execució...",
   "vm.tip_launching": "S'està iniciant l'emulador VM...",
-  "vm.tip_running": "La màquina virtual s'està executant. La unitat USB de destinació es tornarà a muntar automàticament en tancar.",
+  "vm.tip_running":
+    "La màquina virtual s'està executant. La unitat USB de destinació es tornarà a muntar automàticament en tancar.",
   "vm.tip_deploying": "S'estan desplegant els fitxers d'arrencada, espereu fins que acabi",
   "vm.tip_not_installed": "No s'ha trobat l'emulador VM. Instal·leu VM primer (VM/VirtualBox/KVM)",
   "vm.tip_select_target": "Seleccioneu primer una unitat USB de destinació al panell esquerre",

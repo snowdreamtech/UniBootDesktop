@@ -587,5 +587,6 @@ export const jaJp: TranslationDict = {
   "about.preparingApplyScript": "更新適用スクリプトを準備中...",
   "about.verifyingChecksum": "ダウンロードのチェックサムを検証中...",
   "deploy.toast_duplicate_iso": "選択したイメージファイルはすでにリストに存在するため重複を無視しました",
-  "deploy.toast_file_picker_fallback": "ネイティブファイルダイアログの起動に失敗したためWebファイル選択に切り替えました",
+  "deploy.toast_file_picker_fallback":
+    "ネイティブファイルダイアログの起動に失敗したためWebファイル選択に切り替えました",
 };

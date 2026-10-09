@@ -243,7 +243,8 @@ export const frFr: TranslationDict = {
   "vm.launching": "Lancement de la simulation en cours...",
   "vm.running": "Simulation en cours d'exécution...",
   "vm.tip_launching": "Lancement de l'émulateur VM...",
-  "vm.tip_running": "La machine virtuelle est en cours d'exécution. La clé USB cible sera automatiquement remontée à la fermeture.",
+  "vm.tip_running":
+    "La machine virtuelle est en cours d'exécution. La clé USB cible sera automatiquement remontée à la fermeture.",
   "vm.tip_deploying": "Déploiement en cours, veuillez patienter...",
   "vm.tip_not_installed": "Émulateur VM introuvable. Veuillez installer VM d'abord",
   "vm.tip_select_target": "Veuillez d'abord sélectionner un disque USB cible dans le panneau gauche",

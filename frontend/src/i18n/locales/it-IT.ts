@@ -240,7 +240,8 @@ export const itIt: TranslationDict = {
   "vm.launching": "Avvio del test di simulazione...",
   "vm.running": "Simulazione in esecuzione...",
   "vm.tip_launching": "Avvio emulatore VM...",
-  "vm.tip_running": "La macchina virtuale è in esecuzione. L'unità USB di destinazione verrà rimontata automaticamente alla chiusura.",
+  "vm.tip_running":
+    "La macchina virtuale è in esecuzione. L'unità USB di destinazione verrà rimontata automaticamente alla chiusura.",
   "vm.tip_deploying": "Distribuzione in corso, attendere il completamento",
   "vm.tip_not_installed": "Emulatore VM non trovato. Installare prima VM",
   "vm.tip_select_target": "Selezionare prima un'disco di destinazione dal pannello di sinistra",
@@ -574,7 +575,8 @@ export const itIt: TranslationDict = {
   "deploy.stage_verifying": "Verifica della struttura di avvio...",
   "deploy.stage_done": "Distribuzione completata",
   "settings.enable_tray": "Abilita icona nella barra di sistema",
-  "settings.enable_tray_desc": "Mantieni l'icona nella barra delle applicazioni (disabilitata per impostazione predefinita)",
+  "settings.enable_tray_desc":
+    "Mantieni l'icona nella barra delle applicazioni (disabilitata per impostazione predefinita)",
   "settings.close_action": "Alla chiusura della finestra:",
   "settings.close_action_quit": "Chiudi l'applicazione",
   "settings.close_action_tray": "Riduci nella barra di sistema",

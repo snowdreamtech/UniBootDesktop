@@ -540,8 +540,7 @@ export const thTh: TranslationDict = {
   "privilege.status_standard": "ยังไม่ได้รับอนุญาต",
   "privilege.btn_elevate": "ขอสิทธิ์ผู้ดูแลระบบ",
   "privilege.modal_title": "ต้องใช้สิทธิ์ผู้ดูแลระบบ",
-  "privilege.elevation_prompt":
-    "UniBootDesktop ต้องการสิทธิ์ผู้ดูแลระบบเพื่อเข้าถึงอุปกรณ์จัดเก็บข้อมูลทางกายภาพ",
+  "privilege.elevation_prompt": "UniBootDesktop ต้องการสิทธิ์ผู้ดูแลระบบเพื่อเข้าถึงอุปกรณ์จัดเก็บข้อมูลทางกายภาพ",
   "privilege.modal_subtitle": "จำเป็นต้องได้รับการอนุญาตจากระบบเพื่ออ่านข้อมูลบูตและเขียนลงดิสก์",
   "privilege.reason_title": "ทำไมต้องใช้สิทธิ์ผู้ดูแลระบบ?",
   "privilege.reason_desc":

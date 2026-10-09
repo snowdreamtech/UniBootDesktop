@@ -244,15 +244,13 @@ export const roRo: TranslationDict = {
   "vm.tip_launching": "Se lansează emulator VM...",
   "vm.tip_running": "Mașina virtuală rulează. Unitatea USB țintă se va remonta automat la închidere.",
   "vm.tip_deploying": "Implementarea fișierelor de boot, așteptați până când ați terminat",
-  "vm.tip_not_installed":
-    "Emulator VM nu a fost găsit. Vă rugăm să instalați mai întâi VM (VM/VirtualBox/KVM)",
+  "vm.tip_not_installed": "Emulator VM nu a fost găsit. Vă rugăm să instalați mai întâi VM (VM/VirtualBox/KVM)",
   "vm.tip_select_target": "Vă rugăm să selectați mai întâi o unitate USB țintă din panoul din stânga",
   "vm.tip_ready": "Faceți clic pentru a lansa VM VM pentru a verifica bootloader-ul USB pe desktopul curent",
   "vm.session_ended_success": "Testul de simulare s-a încheiat. Discul a fost remontat cu succes.",
   "vm.session_ended_error": "Testul de simulare s-a încheiat: {error}",
   "vm.toast_select_first": "Faceți clic mai întâi pentru a selecta o unitate USB țintă din panoul din stânga!",
-  "vm.toast_not_installed":
-    "Emulatorul VM nu a fost găsit! Vă rugăm să instalați VM (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "Emulatorul VM nu a fost găsit! Vă rugăm să instalați VM (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "Simulare SecureBoot",
   "vm.cfg_accel": "Accelerare hardware",
   "vm.cfg_ram": "Alocare RAM",

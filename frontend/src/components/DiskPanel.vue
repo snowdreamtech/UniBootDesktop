@@ -847,7 +847,9 @@ function getCustomIcon(disk: DiskInfo): DiskIconType | undefined {
 /* Smooth transition between scanner and empty state */
 .fade-state-enter-active,
 .fade-state-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 .fade-state-enter-from,
 .fade-state-leave-to {

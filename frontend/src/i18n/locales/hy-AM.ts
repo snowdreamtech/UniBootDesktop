@@ -256,8 +256,7 @@ export const hyAm: TranslationDict = {
   "vm.session_ended_success": "Սիմուլյացիայի թեստն ավարտվեց: Թիրախային սկավառակը հաջողությամբ վերամիացվեց:",
   "vm.session_ended_error": "Սիմուլյացիայի թեստն ավարտվեց: {error}",
   "vm.toast_select_first": "Խնդրում ենք սեղմել՝ ձախ վահանակից նախ նպատակային USB կրիչ ընտրելու համար:",
-  "vm.toast_not_installed":
-    "VM էմուլյատորը չի գտնվել: Խնդրում ենք տեղադրել VM (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "VM էմուլյատորը չի գտնվել: Խնդրում ենք տեղադրել VM (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "SecureBoot սիմուլյացիա",
   "vm.cfg_accel": "Սարքաշարային արագացում",
   "vm.cfg_ram": "RAM հատկացում",
@@ -600,5 +599,6 @@ export const hyAm: TranslationDict = {
   "about.preparingApplyScript": "Թարմացման սկրիպտի նախապատրաստում...",
   "about.verifyingChecksum": "Ստուգիչ գումարի ստուգում...",
   "deploy.toast_duplicate_iso": "Ընտրված պատկերը արդեն ցուցակում է, կրկնօրինակն անտեսվեց",
-  "deploy.toast_file_picker_fallback": "Չհաջողվեց բացել համակարգային երկխոսությունը, անցում կատարվեց պահուստային տարբերակին",
+  "deploy.toast_file_picker_fallback":
+    "Չհաջողվեց բացել համակարգային երկխոսությունը, անցում կատարվեց պահուստային տարբերակին",
 };

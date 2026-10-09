@@ -284,6 +284,7 @@ repos:
         entry: unirtm hook-exec govulncheck ./...
         types: [go]
         pass_filenames: false
+        stages: [manual, pre-push] # Run in CI or manual audit
         description: "Official Go vulnerability checker for source code and dependencies."
 
       - id: npm-pnpm-audit

@@ -244,7 +244,8 @@ export const plPl: TranslationDict = {
   "vm.launching": "Uruchamianie testu symulacji...",
   "vm.running": "Symulacja jest uruchomiona...",
   "vm.tip_launching": "Uruchamianie emulatora VM...",
-  "vm.tip_running": "Maszyna wirtualna jest uruchomiona. Docelowy dysk USB zostanie automatycznie ponownie zamontowany po zamknięciu.",
+  "vm.tip_running":
+    "Maszyna wirtualna jest uruchomiona. Docelowy dysk USB zostanie automatycznie ponownie zamontowany po zamknięciu.",
   "vm.tip_deploying": "Wdrażanie plików rozruchowych, poczekaj na zakończenie",
   "vm.tip_not_installed": "Nie znaleziono emulatora VM. Zainstaluj najpierw VM",
   "vm.tip_select_target": "Najpierw wybierz docelowy dysk USB z lewego panelu",

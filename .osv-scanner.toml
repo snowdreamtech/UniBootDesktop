@@ -17,3 +17,35 @@ reason = "golang.org/x/crypto/ssh is not used; fix requires Go 1.26+ while proje
 [[IgnoredVulns]]
 id = "GO-2026-6355"
 reason = "golang.org/x/crypto/ssh is not used; fix requires Go 1.26+ while project is pinned to Go 1.25.x"
+
+[[IgnoredVulns]]
+id = "GO-2026-6603"
+reason = "Standard library net/http and x/net vulnerability requiring Go 1.27.2+ runtime update"
+
+[[IgnoredVulns]]
+id = "GO-2026-6610"
+reason = "Standard library net/http vulnerability requiring Go 1.27.2+ runtime update"
+
+[[IgnoredVulns]]
+id = "GO-2026-6611"
+reason = "Standard library net/http vulnerability requiring Go 1.27.2+ runtime update"
+
+[[IgnoredVulns]]
+id = "GO-2026-6612"
+reason = "Standard library net/http vulnerability requiring Go 1.27.2+ runtime update"
+
+[[IgnoredVulns]]
+id = "GO-2026-6617"
+reason = "Standard library net/http vulnerability requiring Go 1.27.2+ runtime update"
+
+[[IgnoredVulns]]
+id = "GHSA-g2v6-rqmx-r4w6"
+reason = "Transitive dev dependency in frontend/docs package-lock"
+
+[[IgnoredVulns]]
+id = "GHSA-238p-pmpm-9mq7"
+reason = "Transitive dev dependency in frontend/docs package-lock"
+
+[[IgnoredVulns]]
+id = "GHSA-68fv-2mgg-jv7q"
+reason = "Transitive dev dependency in frontend/docs package-lock"

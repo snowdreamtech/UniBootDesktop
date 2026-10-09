@@ -255,8 +255,7 @@ export const taIn: TranslationDict = {
   "vm.session_ended_success": "உருவகப்படுத்துதல் சோதனை முடிந்தது. இலக்கு வட்டு வெற்றிகரமாக மீண்டும் ஏற்றப்பட்டது.",
   "vm.session_ended_error": "உருவகப்படுத்துதல் சோதனை முடிந்தது: {error}",
   "vm.toast_select_first": "முதலில் இடது பேனலில் இருந்து இலக்கு USB டிரைவைத் தேர்ந்தெடுக்க கிளிக் செய்யவும்!",
-  "vm.toast_not_installed":
-    "VM எமுலேட்டர் கிடைக்கவில்லை! VM ஐ நிறுவவும் (புரூ நிறுவ qemu அல்லது port install qemu)",
+  "vm.toast_not_installed": "VM எமுலேட்டர் கிடைக்கவில்லை! VM ஐ நிறுவவும் (புரூ நிறுவ qemu அல்லது port install qemu)",
   "vm.cfg_secure_boot": "SecureBoot போலி",
   "vm.cfg_accel": "வன்பொருள் முடுக்கம்",
   "vm.cfg_ram": "ரேம் ஒதுக்கீடு",
@@ -556,8 +555,7 @@ export const taIn: TranslationDict = {
   "privilege.status_standard": "அங்கீகரிக்கப்படவில்லை",
   "privilege.btn_elevate": "நிர்வாகி அணுகலைக் கோரவும்",
   "privilege.modal_title": "நிர்வாகி அனுமதி தேவை",
-  "privilege.elevation_prompt":
-    "UniBootDesktop-க்கு சேமிப்பக சாதனங்களை அணுக நிர்வாகி சலுகைகள் தேவை.",
+  "privilege.elevation_prompt": "UniBootDesktop-க்கு சேமிப்பக சாதனங்களை அணுக நிர்வாகி சலுகைகள் தேவை.",
   "privilege.modal_subtitle": "துவக்கத் தரவைப் படிக்கவும் வட்டில் எழுதவும் கணினி அங்கீகாரம் தேவை",
   "privilege.reason_title": "நிர்வாகி சிறப்புரிமை ஏன் தேவை?",
   "privilege.reason_desc":

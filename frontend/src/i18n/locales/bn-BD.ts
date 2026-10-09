@@ -547,8 +547,7 @@ export const bnBd: TranslationDict = {
   "privilege.status_standard": "অননুমোদিত",
   "privilege.btn_elevate": "অ্যাডমিন অ্যাক্সেসের অনুরোধ করুন",
   "privilege.modal_title": "অ্যাডমিনিস্ট্রেটরের অনুমতি প্রয়োজন",
-  "privilege.elevation_prompt":
-    "UniBootDesktop এর স্টোরেজ ডিভাইসে সরাসরি অ্যাক্সেসের জন্য প্রশাসকের সুবিধা প্রয়োজন।",
+  "privilege.elevation_prompt": "UniBootDesktop এর স্টোরেজ ডিভাইসে সরাসরি অ্যাক্সেসের জন্য প্রশাসকের সুবিধা প্রয়োজন।",
   "privilege.modal_subtitle": "বুট ডেটা পড়তে এবং ডিস্কে লিখতে সিস্টেম অনুমোদনের প্রয়োজন",
   "privilege.reason_title": "কেন অ্যাডমিনিস্ট্রেটরের বিশেষাধিকার প্রয়োজন?",
   "privilege.reason_desc":

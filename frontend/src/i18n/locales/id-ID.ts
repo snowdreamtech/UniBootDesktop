@@ -244,15 +244,13 @@ export const idId: TranslationDict = {
   "vm.tip_launching": "Meluncurkan emulator VM...",
   "vm.tip_running": "Mesin virtual sedang berjalan. Drive USB target akan otomatis dipasang kembali saat ditutup.",
   "vm.tip_deploying": "Menyebarkan file boot, harap tunggu hingga selesai",
-  "vm.tip_not_installed":
-    "Emulator VM tidak ditemukan. Silahkan install VM terlebih dahulu (VM/VirtualBox/KVM)",
+  "vm.tip_not_installed": "Emulator VM tidak ditemukan. Silahkan install VM terlebih dahulu (VM/VirtualBox/KVM)",
   "vm.tip_select_target": "Silakan pilih drive USB target dari panel kiri terlebih dahulu",
   "vm.tip_ready": "Klik untuk meluncurkan VM VM untuk memverifikasi bootloader USB di desktop saat ini",
   "vm.session_ended_success": "Uji simulasi selesai. Disk target berhasil dipasang kembali.",
   "vm.session_ended_error": "Uji simulasi selesai: {error}",
   "vm.toast_select_first": "Silakan klik untuk memilih drive USB target dari panel kiri terlebih dahulu!",
-  "vm.toast_not_installed":
-    "Emulator VM tidak ditemukan! Silakan instal VM (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "Emulator VM tidak ditemukan! Silakan instal VM (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "Simulasi SecureBoot",
   "vm.cfg_accel": "Akselerasi Perangkat Keras",
   "vm.cfg_ram": "Alokasi RAM",

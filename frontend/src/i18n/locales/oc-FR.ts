@@ -243,7 +243,8 @@ export const ocFr: TranslationDict = {
   "vm.launching": "Aviada del tèst de simulacion...",
   "vm.running": "Simulacion en cors d'execucion...",
   "vm.tip_launching": "Lançament de l'emulator VM...",
-  "vm.tip_running": "La maquina virtuala es en cors d'execucion. La clau USB serà automaticament remontada a la tampadura.",
+  "vm.tip_running":
+    "La maquina virtuala es en cors d'execucion. La clau USB serà automaticament remontada a la tampadura.",
   "vm.tip_deploying": "Desplegament dels fichièrs d'aviada, esperatz fins a l'acabat",
   "vm.tip_not_installed": "L'emulator VM pas trobat. Mercés d'installar VM d'en primièr (VM/VirtualBox/KVM)",
   "vm.tip_select_target": "Seleccionatz d'en primièr una unitat USB cibla del panèl esquèrra",
@@ -251,8 +252,7 @@ export const ocFr: TranslationDict = {
   "vm.session_ended_success": "Tèst de simulacion acabat. Disc cibla remontat amb succès.",
   "vm.session_ended_error": "Tèst de simulacion acabat: {error}",
   "vm.toast_select_first": "Mercés de clicar per seleccionar una unitat USB cibla del panèl esquèrra d'en primièr!",
-  "vm.toast_not_installed":
-    "L'emulator VM pas trobat ! Mercés de installar VM (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "L'emulator VM pas trobat ! Mercés de installar VM (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "Simulation SecureBoot",
   "vm.cfg_accel": "Accélération matérielle",
   "vm.cfg_ram": "Allocation RAM",

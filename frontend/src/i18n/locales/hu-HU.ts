@@ -251,8 +251,7 @@ export const huHu: TranslationDict = {
   "vm.session_ended_success": "A szimulációs teszt befejeződött. A célmeghajtó sikeresen újracsatlakoztatva.",
   "vm.session_ended_error": "A szimulációs teszt befejeződött: {error}",
   "vm.toast_select_first": "Kérjük, kattintson először a cél USB-meghajtó kiválasztásához a bal oldali panelen!",
-  "vm.toast_not_installed":
-    "A VM emulátor nem található! Kérjük, telepítse a VM-t (VM, VirtualBox, KVM)",
+  "vm.toast_not_installed": "A VM emulátor nem található! Kérjük, telepítse a VM-t (VM, VirtualBox, KVM)",
   "vm.cfg_secure_boot": "SecureBoot szimuláció",
   "vm.cfg_accel": "Hardveres gyorsítás",
   "vm.cfg_ram": "RAM alokáció",
@@ -551,8 +550,7 @@ export const huHu: TranslationDict = {
   "privilege.status_standard": "Nincs engedélyezve",
   "privilege.btn_elevate": "Rendszergazdai hozzáférés kérése",
   "privilege.modal_title": "Rendszergazdai jogosultság szükséges",
-  "privilege.elevation_prompt":
-    "A UniBootDesktop rendszergazdai jogosultságot igényel a fizikai tárolók eléréséhez.",
+  "privilege.elevation_prompt": "A UniBootDesktop rendszergazdai jogosultságot igényel a fizikai tárolók eléréséhez.",
   "privilege.modal_subtitle": "Rendszerengedély szükséges a rendszerindítási adatok olvasásához és a lemezek írásához",
   "privilege.reason_title": "Miért van szükség rendszergazdai jogosultságra?",
   "privilege.reason_desc":

@@ -508,7 +508,7 @@
             class="badge"
             :class="[
               hypervisorList.length === 1 ? 'success' : 'muted',
-              { 'clickable-badge': hypervisorList.length === 0 }
+              { 'clickable-badge': hypervisorList.length === 0 },
             ]"
             :title="hypervisorList.length === 0 ? t('vm.click_to_rescan') : ''"
             @click="hypervisorList.length === 0 ? emit('refresh-vm') : undefined"
@@ -804,9 +804,7 @@ function getHypervisorShortName(vm?: { type: string; name: string } | null): str
 
 const activeHypervisor = computed(() => {
   if (!props.hypervisorList || props.hypervisorList.length === 0) return null;
-  return (
-    props.hypervisorList.find((h) => h.type === props.selectedVMType) || props.hypervisorList[0]
-  );
+  return props.hypervisorList.find((h) => h.type === props.selectedVMType) || props.hypervisorList[0];
 });
 
 const hypervisorBadgeText = computed(() => {

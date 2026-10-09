@@ -244,7 +244,8 @@ export const esEs: TranslationDict = {
   "vm.launching": "Iniciando prueba de simulación...",
   "vm.running": "Simulación en ejecución...",
   "vm.tip_launching": "Iniciando emulador VM...",
-  "vm.tip_running": "La máquina virtual se está ejecutando. La unidad USB de destino se volverá a montar automáticamente al cerrar.",
+  "vm.tip_running":
+    "La máquina virtual se está ejecutando. La unidad USB de destino se volverá a montar automáticamente al cerrar.",
   "vm.tip_deploying": "Desplegando archivos, por favor espere...",
   "vm.tip_not_installed": "Emulador VM no encontrado. Por favor instale VM primero",
   "vm.tip_select_target": "Por favor seleccione primero una disco objetivo en el panel izquierdo",

@@ -244,7 +244,8 @@ export const ptPt: TranslationDict = {
   "vm.launching": "A iniciar teste de simulação...",
   "vm.running": "Simulação em execução...",
   "vm.tip_launching": "Iniciando o emulador VM...",
-  "vm.tip_running": "A máquina virtual está em execução. O disco USB de destino será remontado automaticamente ao fechar.",
+  "vm.tip_running":
+    "A máquina virtual está em execução. O disco USB de destino será remontado automaticamente ao fechar.",
   "vm.tip_deploying": "Implantando arquivos de inicialização, aguarde até terminar",
   "vm.tip_not_installed": "Emulador VM não encontrado. Instale o VM primeiro (VM/VirtualBox/KVM)",
   "vm.tip_select_target": "Selecione primeiro uma disco de destino no painel esquerdo",
