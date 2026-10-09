@@ -476,7 +476,7 @@
             <span class="optional-badge">{{ t("common.optional") }}</span>
           </h3>
           <span class="badge success" v-if="hypervisorList.length > 0">
-            {{ t("vm.installed") }}
+            {{ hypervisorBadgeText }}
           </span>
         </div>
       </div>
@@ -768,6 +768,45 @@ const canChangeFs = computed(() => props.canChangeFs ?? (!props.isDeploying && !
 const canManageIso = computed(() => props.canManageIso ?? (!props.isDeploying && !props.isVmRunning));
 const canVerifyHash = computed(() => props.canVerifyHash ?? (!props.isDeploying && !props.isVmRunning));
 const canConfigureVm = computed(() => props.canConfigureVm ?? (!props.isDeploying && !props.isVmRunning));
+
+function getHypervisorShortName(vm?: { type: string; name: string } | null): string {
+  if (!vm) return "QEMU";
+  switch (vm.type?.toLowerCase()) {
+    case "kvm":
+      return "KVM";
+    case "qemu":
+      return "QEMU";
+    case "utm":
+      return "UTM";
+    case "virtualbox":
+    case "vbox":
+      return "VirtualBox";
+    case "vmware":
+      return "VMware";
+    case "hyperv":
+      return "Hyper-V";
+    case "parallels":
+      return "Parallels";
+    default:
+      return vm.name || vm.type?.toUpperCase() || "VM";
+  }
+}
+
+const activeHypervisor = computed(() => {
+  if (!props.hypervisorList || props.hypervisorList.length === 0) return null;
+  return (
+    props.hypervisorList.find((h) => h.type === props.selectedVMType) || props.hypervisorList[0]
+  );
+});
+
+const hypervisorBadgeText = computed(() => {
+  if (!props.hypervisorList || props.hypervisorList.length === 0) {
+    return "";
+  }
+  const vm = activeHypervisor.value;
+  const name = getHypervisorShortName(vm);
+  return t("vm.detected_single", { name });
+});
 
 // Checksum State & Logic
 const selectedChecksumIsoIndex = ref(0);
