@@ -794,13 +794,73 @@ func UpdateVolumeLabel(targetDisk string, mountPoint string, newLabel string) st
 		if strings.Contains(targetDisk, "nvme") || strings.Contains(targetDisk, "mmcblk") {
 			part1 = targetDisk + "p1"
 		}
-		cmd := execCommand("fatlabel", part1, newLabel)
-		if err := cmd.Run(); err != nil {
-			cmd2 := execCommand("exfatlabel", part1, newLabel)
-			_ = cmd2.Run()
+
+		// Detect filesystem type to select matching label utility
+		fstypeOut, _ := execCommand("lsblk", "-no", "FSTYPE", part1).Output()
+		fstype := strings.ToLower(strings.TrimSpace(string(fstypeOut)))
+
+		// On Linux, FAT/exFAT label utilities require unmounted exclusive device access
+		wasMounted := false
+		if mountPoint != "" {
+			wasMounted = true
+			disk.SyncDiskBuffers()
+			_ = execCommand("udisksctl", "unmount", "-b", part1).Run()
+			_, _ = runPartitionCommand(findLinuxTool("umount"), part1)
+		}
+
+		runLabelCmd := func(tool string, args ...string) error {
+			toolPath := findLinuxTool(tool)
+			out, err := runPartitionCommand(toolPath, args...)
+			if err != nil {
+				logger.Debug("Linux volume label tool execution", "tool", tool, "output", string(out), "error", err)
+			}
+			return err
+		}
+
+		if strings.Contains(fstype, "exfat") {
+			if err := runLabelCmd("tune.exfat", "-L", newLabel, part1); err != nil {
+				_ = runLabelCmd("exfatlabel", part1, newLabel)
+			}
+		} else if strings.Contains(fstype, "ext") {
+			if err := runLabelCmd("e2label", part1, newLabel); err != nil {
+				_ = runLabelCmd("tune2fs", "-L", newLabel, part1)
+			}
+		} else if strings.Contains(fstype, "ntfs") {
+			_ = runLabelCmd("ntfslabel", part1, newLabel)
+		} else {
+			// Default / FAT32
+			if err := runLabelCmd("fatlabel", part1, newLabel); err != nil {
+				if err2 := runLabelCmd("dosfslabel", part1, newLabel); err2 != nil {
+					if err3 := runLabelCmd("tune.exfat", "-L", newLabel, part1); err3 != nil {
+						_ = runLabelCmd("exfatlabel", part1, newLabel)
+					}
+				}
+			}
+		}
+
+		if wasMounted {
+			// Re-mount device and resolve updated mount point path
+			_ = execCommand("udisksctl", "mount", "-b", part1).Run()
+			if newMount, err := ResolveMountPoint(targetDisk); err == nil && newMount != "" {
+				return newMount
+			}
 		}
 		return mountPoint
 	}
 
 	return mountPoint
+}
+
+// findLinuxTool locates a system binary in standard PATH or administrative sbin directories.
+func findLinuxTool(name string) string {
+	if p, err := exec.LookPath(name); err == nil {
+		return p
+	}
+	for _, dir := range []string{"/sbin", "/usr/sbin", "/usr/local/sbin", "/bin", "/usr/bin"} {
+		p := filepath.Join(dir, name)
+		if fi, err := os.Stat(p); err == nil && !fi.IsDir() {
+			return p
+		}
+	}
+	return name
 }

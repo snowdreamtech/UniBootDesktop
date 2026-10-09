@@ -539,7 +539,8 @@ func TestDetectBootStatus_Classification(t *testing.T) {
 }
 
 func TestInspectLinuxDisk(t *testing.T) {
-	dev := linuxBlockDevice{
+	// Case 1: Partition has UNIBOOT volume label (aligned with macOS/Windows)
+	devWithLabel := linuxBlockDevice{
 		Name:   "sdb",
 		Size:   8053063680,
 		Vendor: "ChipsBnk",
@@ -550,7 +551,8 @@ func TestInspectLinuxDisk(t *testing.T) {
 			{
 				Name:       "sdb1",
 				Size:       8019509248,
-				MountPoint: "/media/ansible/Ventoy",
+				MountPoint: "/media/ansible/UNIBOOT",
+				Label:      "UNIBOOT",
 				Fstype:     "exfat",
 				Fsavail:    8000000000,
 			},
@@ -558,15 +560,39 @@ func TestInspectLinuxDisk(t *testing.T) {
 				Name:   "sdb2",
 				Size:   33554432,
 				Fstype: "vfat",
+				Label:  "VTOYEFI",
 			},
 		},
 	}
 
-	info := inspectLinuxDisk(dev)
+	info := inspectLinuxDisk(devWithLabel)
 	assert.NotNil(t, info)
-	assert.Equal(t, "/dev/sdb", info.Device, "Device must be the block device path (/dev/sdb), not the mount point")
-	assert.Equal(t, "/media/ansible/Ventoy", info.MountPoint)
-	assert.Equal(t, "ChipsBnk Flash Reader", info.Name)
+	assert.Equal(t, "/dev/sdb", info.Device, "Device must be the block device path (/dev/sdb)")
+	assert.Equal(t, "/media/ansible/UNIBOOT", info.MountPoint)
+	assert.Equal(t, "UNIBOOT", info.Name, "Name must prioritize the primary volume label UNIBOOT")
 	assert.Equal(t, "exfat", info.FileSystem)
 	assert.NoError(t, ValidateTargetDisk(info.Device))
+
+	// Case 2: Partition has no label; fallback to hardware model
+	devNoLabel := linuxBlockDevice{
+		Name:   "sdb",
+		Size:   8053063680,
+		Vendor: "ChipsBnk",
+		Model:  "Flash Reader",
+		Tran:   "usb",
+		Rm:     true,
+		Children: []linuxBlockDevice{
+			{
+				Name:       "sdb1",
+				Size:       8019509248,
+				MountPoint: "/media/ansible/sdb1",
+				Fstype:     "exfat",
+				Fsavail:    8000000000,
+			},
+		},
+	}
+
+	infoFallback := inspectLinuxDisk(devNoLabel)
+	assert.NotNil(t, infoFallback)
+	assert.Equal(t, "ChipsBnk Flash Reader", infoFallback.Name, "Name must fallback to hardware model when no label is present")
 }
