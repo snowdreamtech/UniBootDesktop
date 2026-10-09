@@ -299,9 +299,6 @@
                     >{{ t("settings.cloudRelease") }}
                     <strong class="highlight-tag">UniBoot {{ latestReleaseTag }}</strong></span
                   >
-                  <span v-if="!hasUniBootUpdate" class="badge success">
-                    {{ t("settings.ventoyUpToDate") }}
-                  </span>
                 </div>
                 <button
                   class="btn-primary-sm"
@@ -397,9 +394,6 @@
                   >
                   <span v-if="!isVentoyOsSupported" class="badge warning">
                     {{ t("settings.ventoyMacUnsupportedBadge") }}
-                  </span>
-                  <span v-else-if="!hasVentoyUpdate && (localVentoyVersionTag || ventoyValidation?.valid)" class="badge success">
-                    {{ t("settings.ventoyUpToDate") }}
                   </span>
                 </div>
                 <button
