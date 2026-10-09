@@ -221,18 +221,18 @@ func GetLocalUniBootVersion() string {
 		}
 		if err := json.Unmarshal(data, &ver); err == nil {
 			if ver.TagName != "" {
-				return ver.TagName + " (Embedded)"
+				return ver.TagName
 			}
 			if ver.Version != "" {
-				return "v" + ver.Version + " (Embedded)"
+				return "v" + ver.Version
 			}
 		}
 	}
 
-	return "v1.0.0 (Embedded)"
+	return "v1.0.0"
 }
 
-// GetCleanUniBootVersion returns a normalized SemVer string (e.g. "1.0.0") without 'v' prefix or "(Embedded)" suffix.
+// GetCleanUniBootVersion returns a normalized SemVer string (e.g. "1.0.0") without 'v' prefix.
 func GetCleanUniBootVersion() string {
 	raw := GetLocalUniBootVersion()
 	raw = strings.TrimSpace(strings.TrimSuffix(raw, "(Embedded)"))

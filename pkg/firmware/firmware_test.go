@@ -277,8 +277,8 @@ func TestGetLocalUniBootVersion(t *testing.T) {
 	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", emptyDataDir)
 
 	embeddedVer := GetLocalUniBootVersion()
-	if embeddedVer != "v1.0.0 (Embedded)" {
-		t.Errorf("expected embedded version 'v1.0.0 (Embedded)', got '%s'", embeddedVer)
+	if embeddedVer != "v1.0.0" {
+		t.Errorf("expected embedded version 'v1.0.0', got '%s'", embeddedVer)
 	}
 
 	cleanVer := GetCleanUniBootVersion()
