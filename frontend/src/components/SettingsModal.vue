@@ -827,7 +827,7 @@ function buildConfigPayload() {
 }
 
 async function saveConfigImmediate() {
-  if (isInitializing) return;
+  if (isInitializing || !props.isOpen) return;
   if (saveTimer) {
     clearTimeout(saveTimer);
     saveTimer = null;
@@ -844,10 +844,11 @@ async function saveConfigImmediate() {
 }
 
 function triggerAutoSave() {
-  if (isInitializing) return;
+  if (isInitializing || !props.isOpen) return;
   if (saveTimer) clearTimeout(saveTimer);
 
   saveTimer = setTimeout(async () => {
+    if (!props.isOpen) return;
     await saveConfigImmediate();
     isAutoSaving.value = true;
     setTimeout(() => {
@@ -958,11 +959,9 @@ async function loadFullConfig() {
       closeAction.value = cfg.closeAction || "quit";
       if (cfg.theme === "light" || cfg.theme === "dark" || cfg.theme === "system") {
         appTheme.value = cfg.theme;
-        applyTheme(appTheme.value);
       }
       if (cfg.language && cfg.language !== "") {
         appLanguage.value = cfg.language;
-        setLanguage(appLanguage.value);
       }
       proxyInputUrl.value = cfg.githubProxy || "";
       proxyProtocol.value = cfg.proxyProtocol || "direct";

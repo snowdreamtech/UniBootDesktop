@@ -10,14 +10,14 @@ function getSystemPreferredTheme(): "dark" | "light" {
   if (typeof window !== "undefined" && window.matchMedia) {
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
-  return "dark";
+  return "light";
 }
 
 function resolveEffectiveTheme(theme: AppTheme): "dark" | "light" {
   if (theme === "system") {
     return getSystemPreferredTheme();
   }
-  return theme === "light" ? "light" : "dark";
+  return theme === "dark" ? "dark" : "light";
 }
 
 function getInitialTheme(): AppTheme {

@@ -122,7 +122,7 @@ export function getInitialLocale(): string {
   if (saved && SUPPORTED_LANGUAGES.some((l) => l.code === saved)) {
     return saved;
   }
-  return resolveAutoLocale();
+  return DEFAULT_LOCALE;
 }
 
 export const selectedLangSetting = ref<string>(
@@ -135,7 +135,7 @@ export async function setLocale(locale: string) {
   selectedLangSetting.value = locale;
   let targetLocale = locale;
   if (locale === "auto") {
-    targetLocale = resolveAutoLocale();
+    targetLocale = await syncSystemLocale();
     if (typeof localStorage !== "undefined") {
       localStorage.setItem("uniboot_locale", "auto");
     }

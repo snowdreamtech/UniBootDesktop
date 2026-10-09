@@ -1,6 +1,6 @@
 import { ref, watch, type Ref } from "vue";
 import { GetConfig, ReloadAppMenu, SaveConfig } from "../../wailsjs/go/main/App";
-import { currentLocale, selectedLangSetting, setLanguage, syncSystemLocale } from "../i18n";
+import { selectedLangSetting, setLanguage } from "../i18n";
 import { logUserAction } from "../utils/logger";
 import { useTheme } from "./useTheme";
 
@@ -36,7 +36,6 @@ export function useAppSettings(options: UseAppSettingsOptions) {
       const cfg = await GetConfig();
       if (cfg) {
         cfg.language = langVal;
-        cfg.theme = currentTheme.value;
         await SaveConfig(cfg);
       }
     } catch (e) {
@@ -83,13 +82,7 @@ export function useAppSettings(options: UseAppSettingsOptions) {
         if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
         if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
         if (cfg.language) {
-          if (cfg.language === "auto") {
-            const detected = await syncSystemLocale();
-            await setLanguage("auto");
-            currentLocale.value = detected;
-          } else {
-            await setLanguage(cfg.language);
-          }
+          await setLanguage(cfg.language);
           if (window.go?.main?.App?.ReloadAppMenu) {
             window.go.main.App.ReloadAppMenu(cfg.language).catch(() => {});
           }
@@ -138,8 +131,14 @@ export function useAppSettings(options: UseAppSettingsOptions) {
           payload && payload.proxyHost !== undefined ? payload.proxyHost.trim() : currentCfg?.proxyHost || "";
         const port = !isDirect && host ? Number(payload?.proxyPort ?? currentCfg?.proxyPort) || 0 : 0;
 
-        const effectiveTheme = payload?.theme || currentTheme.value || currentCfg?.theme || "system";
-        const effectiveLang = payload?.language || selectedLangSetting.value || currentCfg?.language || "auto";
+        const effectiveTheme =
+          payload && payload.theme !== undefined
+            ? payload.theme
+            : currentCfg?.theme || currentTheme.value || "system";
+        const effectiveLang =
+          payload && payload.language !== undefined
+            ? payload.language
+            : currentCfg?.language || selectedLangSetting.value || "auto";
 
         const configObj = {
           ...(currentCfg || {}),
