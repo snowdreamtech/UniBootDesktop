@@ -1047,6 +1047,11 @@ func (a *App) SetTheme(theme string) {
 	logger.Info("Synchronized application and titlebar theme", "theme", theme)
 }
 
+// IsSystemDarkTheme queries the native host OS (Windows, macOS, Linux) to determine if dark mode is active.
+func (a *App) IsSystemDarkTheme() bool {
+	return sysinfo.IsSystemDarkTheme()
+}
+
 // ClearProxyPassword removes the saved proxy password from the system credential store.
 func (a *App) ClearProxyPassword() error {
 	return config.DeleteProxyPassword()

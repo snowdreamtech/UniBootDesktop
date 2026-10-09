@@ -60,6 +60,7 @@ declare global {
           GetConfig(): Promise<any>;
           SaveConfig(cfg: any): Promise<any>;
           SetTheme?(theme: string): Promise<void>;
+          IsSystemDarkTheme?(): Promise<boolean>;
           OpenURL(url: string): Promise<void>;
           GetDiskList(): Promise<any[]>;
           SelectIsoFiles(title?: string, ventoyFilter?: string, allFilter?: string): Promise<string[]>;
