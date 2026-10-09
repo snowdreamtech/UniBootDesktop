@@ -1,7 +1,7 @@
 import { ref, watch, type Ref } from "vue";
-import { selectedLangSetting, setLanguage } from "../i18n";
+import { selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from "../i18n";
 import { logUserAction } from "../utils/logger";
-import { useTheme } from "./useTheme";
+import { useTheme, type AppTheme } from "./useTheme";
 
 export interface UseAppSettingsOptions {
   selectedFsType: Ref<"exFAT" | "NTFS" | "FAT32" | "ext4">;
@@ -68,15 +68,56 @@ export function useAppSettings(options: UseAppSettingsOptions) {
       if (cfg) {
         if (cfg.githubProxy) currentGithubProxy.value = cfg.githubProxy;
         if (cfg.fileSystem) selectedFsType.value = cfg.fileSystem as any;
-        if (cfg.language) {
-          await setLanguage(cfg.language);
-          if (window.go?.main?.App?.ReloadAppMenu) {
-            window.go.main.App.ReloadAppMenu(cfg.language).catch(() => {});
+
+        const savedTheme = (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_theme_cache")) as any;
+        const hasConcreteCfgTheme = cfg.theme === "light" || cfg.theme === "dark";
+        const hasConcreteSavedTheme = savedTheme === "light" || savedTheme === "dark";
+
+        let resolvedTheme: AppTheme = "system";
+        if (hasConcreteCfgTheme) {
+          resolvedTheme = cfg.theme;
+        } else if (hasConcreteSavedTheme) {
+          resolvedTheme = savedTheme;
+        } else if (cfg.theme === "system" || savedTheme === "system") {
+          resolvedTheme = "system";
+        }
+        applyTheme(resolvedTheme);
+
+        const savedLang = typeof localStorage !== "undefined" ? localStorage.getItem("uniboot_locale") : null;
+        const hasConcreteCfgLang = Boolean(
+          cfg.language && cfg.language !== "auto" && SUPPORTED_LANGUAGES.some((l) => l.code === cfg.language)
+        );
+        const hasConcreteSavedLang = Boolean(
+          savedLang && savedLang !== "auto" && SUPPORTED_LANGUAGES.some((l) => l.code === savedLang)
+        );
+
+        let resolvedLang = "auto";
+        if (hasConcreteCfgLang && cfg.language) {
+          resolvedLang = cfg.language;
+        } else if (hasConcreteSavedLang && savedLang) {
+          resolvedLang = savedLang;
+        } else if (cfg.language && cfg.language !== "") {
+          resolvedLang = cfg.language;
+        } else if (savedLang && savedLang !== "") {
+          resolvedLang = savedLang;
+        } else {
+          resolvedLang = "zh-CN";
+        }
+
+        await setLanguage(resolvedLang);
+        if (window.go?.main?.App?.ReloadAppMenu) {
+          window.go.main.App.ReloadAppMenu(resolvedLang).catch(() => {});
+        }
+
+        // If backend config was missing or defaulted while user had a concrete choice saved in localStorage, sync it back to backend atomically
+        if ((!hasConcreteCfgTheme && hasConcreteSavedTheme) || (!hasConcreteCfgLang && hasConcreteSavedLang)) {
+          cfg.theme = resolvedTheme;
+          cfg.language = resolvedLang;
+          if (window.go?.main?.App?.SaveConfig) {
+            window.go.main.App.SaveConfig(cfg).catch((e: any) => console.error("Initial config sync failed:", e));
           }
         }
-        if (cfg.theme) {
-          applyTheme(cfg.theme);
-        }
+
         autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
       }
     } finally {

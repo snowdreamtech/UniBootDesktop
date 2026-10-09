@@ -5,7 +5,7 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UniBootDesktop</title>
-    <!-- Theme pre-load: apply saved or system theme synchronously before any render -->
+    <!-- Theme and language pre-load: apply saved preferences synchronously before any render -->
     <script>
       (function () {
         try {
@@ -14,6 +14,19 @@
             window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
           var theme = cachedTheme === "light" || cachedTheme === "dark" ? cachedTheme : systemTheme;
           document.documentElement.setAttribute("data-theme", theme);
+
+          var cachedLang = localStorage.getItem("uniboot_locale") || "zh-CN";
+          if (cachedLang !== "auto") {
+            document.documentElement.setAttribute("lang", cachedLang);
+            var rtlLangs = ["ar-sa", "he-il", "fa-ir", "ur-pk"];
+            var isRtl =
+              rtlLangs.indexOf(cachedLang.toLowerCase()) !== -1 ||
+              cachedLang.toLowerCase().indexOf("ar") === 0 ||
+              cachedLang.toLowerCase().indexOf("he") === 0 ||
+              cachedLang.toLowerCase().indexOf("fa") === 0 ||
+              cachedLang.toLowerCase().indexOf("ur") === 0;
+            document.documentElement.setAttribute("dir", isRtl ? "rtl" : "ltr");
+          }
         } catch (e) {
           document.documentElement.setAttribute(
             "data-theme",
