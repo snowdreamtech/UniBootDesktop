@@ -221,7 +221,7 @@ func InferControllerVendor(vendorID string, productID string, vendor string) str
 		return "JMicron Bridge Controller"
 	case strings.Contains(vid, "0x174c"):
 		return "ASMedia Controller"
-	case strings.Contains(vid, "0x1e3d"):
+	case strings.Contains(vid, "0x1e3d") || strings.Contains(vid, "1e3d"):
 		return "Chipsbank Controller"
 	case strings.Contains(vid, "0x0bda"):
 		return "Realtek Controller"
@@ -229,6 +229,9 @@ func InferControllerVendor(vendorID string, productID string, vendor string) str
 		return "Genesys Logic Controller"
 	}
 	if vendor != "" && vendor != "Generic" {
+		if strings.EqualFold(vendor, "chipsbnk") || strings.Contains(strings.ToLower(vendor), "chipsbank") {
+			return "Chipsbank Controller"
+		}
 		return vendor + " Controller"
 	}
 	return "Standard Controller"
@@ -1403,7 +1406,7 @@ func parseDarwinUSBSpeed(speed string, bcd string) (version string, phySpeed str
 			return "USB 2.0", "480 Mb/s"
 		}
 	}
-	return "USB 2.0", "480 Mb/s"
+	return "Unknown", "Unknown"
 }
 
 var (
@@ -1630,8 +1633,8 @@ func inspectDarwinDisk(wholeDisk darwinDiskutilWholeDisk, usbMap map[string]*dar
 		freeFormatted = formattedSize
 	}
 
-	usbVer := "USB 2.0"
-	usbSpeed := "480 Mb/s"
+	usbVer := "Unknown"
+	usbSpeed := "Unknown"
 	vendor := "Generic"
 	displayName := primaryVolName
 	serialNum := ""
@@ -2036,8 +2039,8 @@ func getDarwinDisks() ([]DiskInfo, error) {
 			transportProtoStr = "UASP (USB Attached SCSI)"
 		}
 
-		usbVer := "USB 2.0"
-		usbSpeed := "480 Mb/s"
+		usbVer := "Unknown"
+		usbSpeed := "Unknown"
 		vendor := "Generic"
 		displayName := volName
 		serialNum := ""
@@ -2289,6 +2292,124 @@ func getLinuxDisks() ([]DiskInfo, error) {
 	return disks, nil
 }
 
+type linuxUSBProperties struct {
+	UsbVersion   string
+	UsbSpeed     string
+	VendorID     string
+	ProductID    string
+	Manufacturer string
+	Product      string
+	BusPower     string
+}
+
+func queryLinuxUSBProperties(devName string) linuxUSBProperties {
+	props := linuxUSBProperties{
+		UsbVersion: "Unknown",
+		UsbSpeed:   "Unknown",
+		BusPower:   "500 mA",
+	}
+
+	blockPath := fmt.Sprintf("/sys/block/%s", devName)
+	realPath, err := filepath.EvalSymlinks(blockPath)
+	if err != nil {
+		return props
+	}
+
+	curr := realPath
+	for curr != "" && curr != "/" && curr != "." {
+		speedPath := filepath.Join(curr, "speed")
+		versionPath := filepath.Join(curr, "version")
+		idVendorPath := filepath.Join(curr, "idVendor")
+
+		hasSpeed := false
+		if _, err := os.Stat(speedPath); err == nil {
+			hasSpeed = true
+		}
+		hasVid := false
+		if _, err := os.Stat(idVendorPath); err == nil {
+			hasVid = true
+		}
+		hasVer := false
+		if _, err := os.Stat(versionPath); err == nil {
+			hasVer = true
+		}
+
+		if hasSpeed || hasVid || hasVer {
+			if spBytes, err := os.ReadFile(speedPath); err == nil {
+				sp := strings.TrimSpace(string(spBytes))
+				switch sp {
+				case "1.5":
+					props.UsbVersion = "USB 1.0"
+					props.UsbSpeed = "1.5 Mb/s"
+				case "12":
+					props.UsbVersion = "USB 1.1"
+					props.UsbSpeed = "12 Mb/s"
+				case "480":
+					props.UsbVersion = "USB 2.0"
+					props.UsbSpeed = "480 Mb/s"
+				case "5000":
+					props.UsbVersion = "USB 3.0"
+					props.UsbSpeed = "5 Gb/s"
+				case "10000":
+					props.UsbVersion = "USB 3.1"
+					props.UsbSpeed = "10 Gb/s"
+				case "20000":
+					props.UsbVersion = "USB 3.2"
+					props.UsbSpeed = "20 Gb/s"
+				case "40000":
+					props.UsbVersion = "USB4"
+					props.UsbSpeed = "40 Gb/s"
+				}
+			}
+
+			if verBytes, err := os.ReadFile(versionPath); err == nil {
+				v := strings.TrimSpace(string(verBytes))
+				if strings.HasPrefix(v, "2.") && props.UsbVersion == "USB 3.0" {
+					props.UsbVersion = "USB 2.0"
+				} else if strings.HasPrefix(v, "3.0") && props.UsbVersion == "USB 2.0" && props.UsbSpeed != "480 Mb/s" {
+					props.UsbVersion = "USB 3.0"
+				}
+			}
+
+			if vidBytes, err := os.ReadFile(idVendorPath); err == nil {
+				props.VendorID = strings.TrimSpace(string(vidBytes))
+			}
+
+			idProductPath := filepath.Join(curr, "idProduct")
+			if pidBytes, err := os.ReadFile(idProductPath); err == nil {
+				props.ProductID = strings.TrimSpace(string(pidBytes))
+			}
+
+			mfgPath := filepath.Join(curr, "manufacturer")
+			if mfgBytes, err := os.ReadFile(mfgPath); err == nil {
+				props.Manufacturer = strings.TrimSpace(string(mfgBytes))
+			}
+
+			prodPath := filepath.Join(curr, "product")
+			if prodBytes, err := os.ReadFile(prodPath); err == nil {
+				props.Product = strings.TrimSpace(string(prodBytes))
+			}
+
+			maxPwrPath := filepath.Join(curr, "bMaxPower")
+			if pwrBytes, err := os.ReadFile(maxPwrPath); err == nil {
+				props.BusPower = FormatMilliAmperes(string(pwrBytes))
+			}
+
+			if props.VendorID != "" || props.ProductID != "" || hasSpeed {
+				break
+			}
+		}
+
+		parent := filepath.Dir(curr)
+		if parent == curr {
+			break
+		}
+		curr = parent
+	}
+
+	return props
+}
+
 func inspectLinuxDisk(dev linuxBlockDevice) *DiskInfo {
 	devPath := "/dev/" + dev.Name
 	mountPath := ""
@@ -2364,27 +2485,27 @@ func inspectLinuxDisk(dev linuxBlockDevice) *DiskInfo {
 		fileSystem = "vfat / exfat"
 	}
 
-	usbVer := "USB 3.0"
-	usbSpeed := "5 Gb/s"
+	usbProps := queryLinuxUSBProperties(dev.Name)
+	usbVer := usbProps.UsbVersion
+	if usbVer == "" {
+		usbVer = "Unknown"
+	}
+	usbSpeed := usbProps.UsbSpeed
+	if usbSpeed == "" {
+		usbSpeed = "Unknown"
+	}
 	vendor := strings.TrimSpace(dev.Vendor)
+	if vendor == "" && usbProps.Manufacturer != "" {
+		vendor = usbProps.Manufacturer
+	}
 	if vendor == "" {
 		vendor = "Generic"
 	}
-
-	// Check sysfs for physical USB speed if available
-	sysSpeed, sysErr := os.ReadFile(fmt.Sprintf("/sys/block/%s/device/speed", dev.Name))
-	if sysErr == nil {
-		sp := strings.TrimSpace(string(sysSpeed))
-		if sp == "480" {
-			usbVer = "USB 2.0"
-			usbSpeed = "480 Mb/s"
-		} else if sp == "5000" {
-			usbVer = "USB 3.0"
-			usbSpeed = "5 Gb/s"
-		} else if sp == "10000" {
-			usbVer = "USB 3.1"
-			usbSpeed = "10 Gb/s"
-		}
+	vendorId := usbProps.VendorID
+	productId := usbProps.ProductID
+	busPower := usbProps.BusPower
+	if busPower == "" {
+		busPower = "500 mA"
 	}
 
 	formattedSize := FormatBytesDual(dev.Size)
@@ -2440,14 +2561,17 @@ func inspectLinuxDisk(dev linuxBlockDevice) *DiskInfo {
 		FileSystem:         fileSystem,
 		PartitionScheme:    partitionScheme,
 		Writable:           !dev.Ro,
+		SerialNumber:       "",
+		VendorId:           vendorId,
+		ProductId:          productId,
 		SmartStatus:        "Verified",
-		BusPower:           "500 mA",
-		BusPowerUsed:       "500 mA",
+		BusPower:           busPower,
+		BusPowerUsed:       busPower,
 		SectorSize:         "512 Bytes (512n/512e)",
 		TransportProtocol:  "BOT (Bulk-Only Transport)",
 		BootStatus:         bootStatusLinux,
 		BootStatusCode:     bootStatusCodeLinux,
-		ControllerVendor:   InferControllerVendor("", "", vendor),
+		ControllerVendor:   InferControllerVendor(vendorId, productId, vendor),
 		IsFakeUsb3:         isFake,
 		ProtocolCode:       protoCode,
 		IsRealVentoy:       isRealVentoyLinux,
@@ -2699,8 +2823,8 @@ func inspectWindowsDisk(i int, drive winDiskDrive) *DiskInfo {
 
 	// Inspect authentic USB hardware metadata (VID/PID, real revision, UASP vs BOT)
 	usbInfo := getUsbDeviceInfoWindows(drive.PNPDeviceID, drive.SerialNumber)
-	usbVer := "USB 2.0"
-	usbSpeed := "480 Mb/s"
+	usbVer := "Unknown"
+	usbSpeed := "Unknown"
 	if drive.UsbVersion != "" {
 		usbVer = drive.UsbVersion
 		if drive.UsbSpeed != "" {

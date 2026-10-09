@@ -320,6 +320,9 @@ func TestGetRemovableDisks(t *testing.T) {
 	disks, err := GetRemovableDisks()
 	assert.NoError(t, err)
 	assert.NotNil(t, disks)
+	for _, d := range disks {
+		t.Logf("DISK: Device=%s, Name=%s, UsbVersion=%s, UsbSpeed=%s, VendorId=%s, ProductId=%s, ControllerVendor=%s", d.Device, d.Name, d.UsbVersion, d.UsbSpeed, d.VendorId, d.ProductId, d.ControllerVendor)
+	}
 }
 
 func TestGetRemovableDisksCaching(t *testing.T) {
@@ -595,4 +598,12 @@ func TestInspectLinuxDisk(t *testing.T) {
 	infoFallback := inspectLinuxDisk(devNoLabel)
 	assert.NotNil(t, infoFallback)
 	assert.Equal(t, "ChipsBnk Flash Reader", infoFallback.Name, "Name must fallback to hardware model when no label is present")
+}
+
+func TestUSBDefaults_NeverUSB3(t *testing.T) {
+	// Ensure default USB version and speed are Unknown, never arbitrarily guessed as USB 3.0
+	props := queryLinuxUSBProperties("nonexistent_device_xyz")
+	assert.Equal(t, "Unknown", props.UsbVersion)
+	assert.Equal(t, "Unknown", props.UsbSpeed)
+	assert.NotEqual(t, "USB 3.0", props.UsbVersion)
 }
