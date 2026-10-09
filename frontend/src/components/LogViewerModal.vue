@@ -80,8 +80,11 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, nextTick } from "vue";
+import { useToast } from "../composables/useToast";
 import { t } from "../i18n";
 import { formatLogTime, formatLogsToText } from "../utils/logFormatter";
+
+const { showToast } = useToast();
 
 export interface LogItem {
   id?: number;
@@ -177,7 +180,7 @@ function copyAllLogs() {
   logUserAction("INFO", "User copied logs from full Log Viewer modal");
   const text = formatLogsToText(filteredLogs.value);
   navigator.clipboard.writeText(text);
-  alert(t("log.copied_toast"));
+  showToast(t("log.copied_toast"), "success");
 }
 
 function exportLogFile() {
