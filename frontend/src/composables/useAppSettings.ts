@@ -195,6 +195,8 @@ export function useAppSettings(options: UseAppSettingsOptions) {
         }
       } catch (e) {
         console.error("Failed to save config:", e);
+      } finally {
+        window.dispatchEvent(new Event("uniboot:config-ready"));
       }
     }
   }

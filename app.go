@@ -538,19 +538,19 @@ func (a *App) DeployHybridMode(targetDisk string, fsType string, isoPaths []stri
 	return res, err
 }
 
-// ValidateVentoyCli verifies the user-specified Ventoy CLI path.
+// ValidateVentoyCli verifies the user-specified Ventoy CLI path, falling back to configured or default installation directory if empty.
 func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidationResult {
-	// 验证路径输入
-	if strings.TrimSpace(ventoyPath) == "" {
-		return &installer.VentoyCliValidationResult{
-			Valid:   false,
-			Code:    "path_empty",
-			Message: "Ventoy CLI path cannot be empty",
+	cleanPath := strings.TrimSpace(ventoyPath)
+	if cleanPath == "" {
+		if cfg, err := config.Load(); err == nil && cfg != nil && strings.TrimSpace(cfg.VentoyPath) != "" {
+			cleanPath = strings.TrimSpace(cfg.VentoyPath)
+		} else {
+			cleanPath = env.GetVentoyDir()
 		}
 	}
 
 	// 验证路径长度
-	if len(ventoyPath) > 4096 {
+	if len(cleanPath) > 4096 {
 		return &installer.VentoyCliValidationResult{
 			Valid:   false,
 			Code:    "path_too_long",
@@ -558,7 +558,7 @@ func (a *App) ValidateVentoyCli(ventoyPath string) *installer.VentoyCliValidatio
 		}
 	}
 
-	return installer.ValidateVentoyCli(ventoyPath)
+	return installer.ValidateVentoyCli(cleanPath)
 }
 
 // UniBootStatus represents the lightweight cross-platform ready status of native UniBoot engine.
@@ -1039,6 +1039,7 @@ func (a *App) SaveConfig(cfg *config.AppConfig) error {
 	}
 	firmware.SetCustomUniBootDir(cfg.UniBootPath)
 	a.SetTheme(cfg.Theme)
+	a.emitEvent("ventoy-status-changed")
 	logger.Info("Application preferences saved successfully")
 	return nil
 }
@@ -1141,6 +1142,7 @@ func (a *App) DownloadVentoyRelease() (*installer.VentoyReleaseInfo, error) {
 		cfg.VentoyPath = ventoyPath
 		_ = cfg.Save()
 	}
+	a.emitEvent("ventoy-status-changed")
 	return info, nil
 }
 
@@ -1334,7 +1336,7 @@ func (a *App) RequestPrivilegeElevation(customPrompt string) (bool, error) {
 
 // emitEvent safely emits a Wails event if the app context is ready.
 func (a *App) emitEvent(eventName string, optionalData ...interface{}) {
-	if a.ctx == nil {
+	if a.ctx == nil || a.ctx.Value("frontend") == nil {
 		return
 	}
 	if len(optionalData) > 0 {

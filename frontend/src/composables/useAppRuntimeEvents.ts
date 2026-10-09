@@ -41,12 +41,19 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
     batchDeployInfo,
   } = options;
 
+  let onConfigReady: (() => void) | null = null;
+
   onMounted(() => {
     syncWindowTheme();
     loadConfig();
     refreshDisks();
     checkQemu();
     checkVentoyStatus();
+
+    onConfigReady = () => {
+      checkVentoyStatus();
+    };
+    window.addEventListener("uniboot:config-ready", onConfigReady);
 
     GetRecentLogs()
       .then((logs: any[]) => {
@@ -57,6 +64,10 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
       });
 
     if (window.runtime && window.runtime.EventsOn) {
+      window.runtime.EventsOn("ventoy-status-changed", () => {
+        checkVentoyStatus();
+      });
+
       window.runtime.EventsOn("log:entry", (entry: any) => {
         appendLogEntry(entry);
       });
@@ -134,6 +145,10 @@ export function useAppRuntimeEvents(options: UseAppRuntimeEventsOptions) {
   });
 
   onUnmounted(() => {
+    if (onConfigReady) {
+      window.removeEventListener("uniboot:config-ready", onConfigReady);
+      onConfigReady = null;
+    }
     if (window.runtime && typeof window.runtime.OnFileDropOff === "function") {
       window.runtime.OnFileDropOff();
     }
