@@ -1,5 +1,94 @@
 # Changelog
 
+## [0.5.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.4.0...v0.5.0) (2026-10-09)
+
+
+### 🚀 Features
+
+* **events:** log disk change runtime events to console and log center ([7e4e340](https://github.com/snowdreamtech/UniBootDesktop/commit/7e4e340a8a2c7c14ca1b6fcec0171f12c20195d3))
+* **i18n:** localize recent vm, settings and updater keys across all 53 languages ([4b9f4b2](https://github.com/snowdreamtech/UniBootDesktop/commit/4b9f4b2823c1f11178113f05741f94104685dce5))
+* **installer:** disable exFAT warning for VHD boot via VTOY_VHD_NO_WARNING ([f76af93](https://github.com/snowdreamtech/UniBootDesktop/commit/f76af93311af09a5df2ac19a1178e699c062a8b3))
+* **installer:** embed and auto-deploy ventoy_vhdboot.img for hybrid mode ([cf4520e](https://github.com/snowdreamtech/UniBootDesktop/commit/cf4520ec94c81ae083c089168b886dc86f2b3889))
+* **installer:** embed and auto-deploy ventoy_wimboot.img for hybrid mode ([3031079](https://github.com/snowdreamtech/UniBootDesktop/commit/303107919f90061bfca8fde861b53afe15ba8080))
+* **installer:** non-destructively preserve user ventoy.json sections during upgrade ([6d6bd64](https://github.com/snowdreamtech/UniBootDesktop/commit/6d6bd64a5e188f203e064ca7358e7c789d02ce1c))
+* **installer:** strip UTF-8 BOM and recover corrupted ventoy.json gracefully ([896639a](https://github.com/snowdreamtech/UniBootDesktop/commit/896639a862d71677c12b10c72dc11f66c0f61a85))
+* **pre-commit:** disallow absolute symlinks in check-symlinks hook ([59cc552](https://github.com/snowdreamtech/UniBootDesktop/commit/59cc55297e9b44e45bcaf0d22e6b482a8067fbf9))
+* **settings:** add option to toggle Ventoy secondary boot mode menu ([70c0433](https://github.com/snowdreamtech/UniBootDesktop/commit/70c0433bb08f44244ed88ebfce033b946872ba87))
+* **settings:** dynamically switch proxy port placeholder based on protocol ([abbf0ee](https://github.com/snowdreamtech/UniBootDesktop/commit/abbf0ee2e1a9c391dc192a4ec06b31044659abc2))
+* **theme:** enhance cross-platform system theme detection for Windows, Linux, and macOS ([ff523f6](https://github.com/snowdreamtech/UniBootDesktop/commit/ff523f62ac22494fa0b3cad78b2c72fda2fb075a))
+* **theme:** resolve native window titlebar synchronization with dark and light themes ([8547672](https://github.com/snowdreamtech/UniBootDesktop/commit/8547672a4cf995afdea1767559ffa513477b356e))
+* **theme:** synchronize native windows titlebar with active application theme ([c24bdc3](https://github.com/snowdreamtech/UniBootDesktop/commit/c24bdc386a9aec1a2023e5d749dbdce235493f41))
+* **vm:** add automatic and manual hypervisor re-detection ([4ba5ec2](https://github.com/snowdreamtech/UniBootDesktop/commit/4ba5ec2b7cbeaff187a0e59573798b42e9dc5dff))
+* **window:** enable windows 11 mica backdrop translucency support ([496dc8f](https://github.com/snowdreamtech/UniBootDesktop/commit/496dc8f4fa24135b3d216a160eafd78bc0ecc68f))
+
+
+### 🐛 Bug Fixes
+
+* **dev:** avoid cleaning locked dev binary in test:wails ([c44c9c4](https://github.com/snowdreamtech/UniBootDesktop/commit/c44c9c434a6ef840fbac089231f4eaf344411925))
+* **dev:** implement cross-platform preflight self-healing and task runners ([6cf975d](https://github.com/snowdreamtech/UniBootDesktop/commit/6cf975d914aa12cc5bf50f93389377cec57cde4d))
+* **dev:** resolve main module detection and cross-platform task execution ([813027d](https://github.com/snowdreamtech/UniBootDesktop/commit/813027d99869755b1a9a2852a228df7b62139cd9))
+* **dev:** use cross-platform node script for test:wails artifact cleanup ([e33baa2](https://github.com/snowdreamtech/UniBootDesktop/commit/e33baa2e33e5f560b15cd46c6cdfb910a1b15600))
+* **disk:** align linux disk display name with macos and windows by prioritizing volume label ([b016539](https://github.com/snowdreamtech/UniBootDesktop/commit/b016539a375bdae6c26ee8252f1e616c93694759))
+* **disk:** enable multi-partition bootloader and manifest detection on windows ([3329f1e](https://github.com/snowdreamtech/UniBootDesktop/commit/3329f1ea799de120ef6eb203f12f5930085db02e))
+* **disk:** enhance linux snapshot detection and ensure cache invalidation after deployment ([4ee79b2](https://github.com/snowdreamtech/UniBootDesktop/commit/4ee79b2934062b0ec4aaa43c3d8ff458dff7856d))
+* **disk:** ensure linux DiskInfo.Device uses block device path instead of mount point ([85eee5c](https://github.com/snowdreamtech/UniBootDesktop/commit/85eee5c38bdc4002077d6a6a0a9e294479540e3c))
+* **disk:** guard linux disk path validation on non-linux platforms in unit test ([3c1570e](https://github.com/snowdreamtech/UniBootDesktop/commit/3c1570ee44087ab62a5fb60e8c788cf00ae50b9d))
+* **disk:** handle missing registry hardware keys in windows usb tests ([f0842bc](https://github.com/snowdreamtech/UniBootDesktop/commit/f0842bcc49eb6ebc65ad3193cdee807078b489c0))
+* **disk:** implement accurate usb protocol, speed, and hardware inspection on windows ([b37d84a](https://github.com/snowdreamtech/UniBootDesktop/commit/b37d84a534c9f6fbc08c2efadebd47d7e7fb3ff6))
+* **disk:** query authentic volume labels, filesystem, and freespace on windows ([21313b8](https://github.com/snowdreamtech/UniBootDesktop/commit/21313b8accde1e313eefd0745be0a2e1a66aa2ad))
+* **disk:** query true USB hardware properties via sysfs tree and prevent guessing USB 3.0 ([5efe332](https://github.com/snowdreamtech/UniBootDesktop/commit/5efe33274f02b9a0fc50e33d194cd41812dcb178))
+* **disk:** rely on volume snapshot validation for cache reuse ([a10994b](https://github.com/snowdreamtech/UniBootDesktop/commit/a10994b08645d230ccf1d9ac6aea44ff6c0e7c49))
+* **disk:** remove redundant manual rescan calls during disk ejection ([11017b5](https://github.com/snowdreamtech/UniBootDesktop/commit/11017b5eee60ca54465fd13c0503ded5f8c47c8c))
+* **disk:** resolve windows mount path and device path display in ui ([99cb19f](https://github.com/snowdreamtech/UniBootDesktop/commit/99cb19fd67473025fd6b69997ab5fa736317e9ac))
+* **disk:** resolve windows system disk detection and physical device path ([03a234c](https://github.com/snowdreamtech/UniBootDesktop/commit/03a234c05fb70bd202a68393960d2d889e0c4e71))
+* **disk:** resolve windows volume label resolution and usb protocol detection ([276a514](https://github.com/snowdreamtech/UniBootDesktop/commit/276a514b0d8927469abbc79e0c11dbc04db15f59))
+* **disk:** support physical drive resolution in windows disk ejection ([431c153](https://github.com/snowdreamtech/UniBootDesktop/commit/431c15324ab8b52dd76b5adf399a61abe28d1054))
+* **events:** debounce disk change notifications to prevent scan bursts ([727459a](https://github.com/snowdreamtech/UniBootDesktop/commit/727459aee02fc692fa89202e8389ea6a20b1be9a))
+* **frontend:** queue pending disk refresh when scanning is busy ([b539b4d](https://github.com/snowdreamtech/UniBootDesktop/commit/b539b4ded4aca487e01c3cf8477ca04e55cfbe45))
+* **hypervisor:** require userspace runner before marking KVM as installed ([f38d733](https://github.com/snowdreamtech/UniBootDesktop/commit/f38d7336ac0ae01f8d993d99def37f5645319ad8))
+* **i18n:** ensure canonical en-US.ts is also formatted by prettier on sync ([30047ca](https://github.com/snowdreamtech/UniBootDesktop/commit/30047ca167da5ea8b1bd9db887d3386a71e062e2))
+* **i18n:** format updated locale files with prettier and support flexible quote parsing ([0b05a6b](https://github.com/snowdreamtech/UniBootDesktop/commit/0b05a6bf96eb297a7485054b9edbba462d256b88))
+* **i18n:** generalize VM and simulation terminology across all 53 locales ([f11c910](https://github.com/snowdreamtech/UniBootDesktop/commit/f11c910f14f3417c004b87b656a7a99f1edf3b0f))
+* **lint:** enhance cross-platform pre-commit hooks and symlink handling ([ceea243](https://github.com/snowdreamtech/UniBootDesktop/commit/ceea2437d47daf1c1fd4d3b9e55bb91bb4de5ce9))
+* **preflight:** ensure POSIX execute permissions and validate platform native modules ([c98573b](https://github.com/snowdreamtech/UniBootDesktop/commit/c98573b2f953a2f2925224e73ac050c791819d76))
+* **settings:** change proxy port default to empty and set 1080 as placeholder hint ([c10724e](https://github.com/snowdreamtech/UniBootDesktop/commit/c10724e8fac71dc39bcba6aa3af295facfa90d43))
+* **test:** resolve Windows symlink privilege and test timing flakiness ([133719a](https://github.com/snowdreamtech/UniBootDesktop/commit/133719a47df961aceecdb17ce37d577ac4ecc20e))
+* **theme,i18n:** eliminate theme and language drift across restarts and modal updates ([bbc25fb](https://github.com/snowdreamtech/UniBootDesktop/commit/bbc25fb9f29a315ac84a5c5b983e0407a34e2b3d))
+* **theme,i18n:** eliminate theme and language drift race conditions and prioritize saved settings ([cf6f1f6](https://github.com/snowdreamtech/UniBootDesktop/commit/cf6f1f672df803f0586d0019f70d583ac5f9ee1b))
+* **theme,i18n:** ensure concrete theme and language preferences take precedence and persist reliably ([04d0f25](https://github.com/snowdreamtech/UniBootDesktop/commit/04d0f2504f6d708842ede166acaccb66ea93c99d))
+* **theme,i18n:** prevent theme and language drift across state sync and lifecycle ([97df43a](https://github.com/snowdreamtech/UniBootDesktop/commit/97df43a884020590e63ba50280e6b63356ccdf3c))
+* **theme,i18n:** unify persistence pipeline, guard cross-platform events and validate all 53 locales ([697aa7e](https://github.com/snowdreamtech/UniBootDesktop/commit/697aa7e145561af8e2bc39d5915747f2fb4f361e))
+* **ventoy:** fallback to configured Ventoy CLI path and sync detection state ([ec01f5e](https://github.com/snowdreamtech/UniBootDesktop/commit/ec01f5e2496ac6e6cd56ebf4f098827fa3455bfd))
+* **vm:** display actual detected hypervisor name in simulation badge instead of hardcoded QEMU ([fc50353](https://github.com/snowdreamtech/UniBootDesktop/commit/fc50353117dabd5adb94ec6ada593d835f65456e))
+
+
+### ⚡️ Performance Improvements
+
+* **disk:** optimize windows disk probing with fast short-circuiting and native ioctl ([0bc400e](https://github.com/snowdreamtech/UniBootDesktop/commit/0bc400eae1120555551ece0ac142fa53ed4335fb))
+
+
+### 🛠 Refactoring
+
+* **firmware:** remove redundant (Embedded) suffix from local version tag ([b5c5f7f](https://github.com/snowdreamtech/UniBootDesktop/commit/b5c5f7f47aa10fea8db2bdab9ec77413552f8ce0))
+* **ui:** replace native browser alert dialogs with global toast notifications ([d8d1ab3](https://github.com/snowdreamtech/UniBootDesktop/commit/d8d1ab3eeece9cc5afb1f0fba41509271d2795e1))
+
+
+### 📖 Documentation
+
+* **git:** add core.filemode and env-agnostic config guidelines ([ca7125b](https://github.com/snowdreamtech/UniBootDesktop/commit/ca7125b1fbc1a23df22877d13b700c6b54ab289a))
+
+
+### ♻️ Miscellaneous Chores
+
+* **ci:** format codebase and configure audit tools for local and CI workflows ([a30db55](https://github.com/snowdreamtech/UniBootDesktop/commit/a30db55fb5171588143baf71561a0389def4c200))
+* **deps:** sync dependabot config and unirtm toolchain ([45bb911](https://github.com/snowdreamtech/UniBootDesktop/commit/45bb911414f2b3151ee00e439996f695340090e5))
+* **deps:** sync dependabot config and unirtm toolchain ([d56f4d3](https://github.com/snowdreamtech/UniBootDesktop/commit/d56f4d30252eafd45d929d8ee74dfd47b3180fa9))
+* **deps:** sync dependabot config and unirtm toolchain ([d6727cd](https://github.com/snowdreamtech/UniBootDesktop/commit/d6727cd744681aa3b45c0f0d3e4a57a53193c7f9))
+* **deps:** update unirtm.lock for windows-amd64 toolchains ([7d22092](https://github.com/snowdreamtech/UniBootDesktop/commit/7d220926ed204f81db78e48310b9afabbbd9e6e5))
+* **i18n:** synchronize inspector keys across all locales ([e0eefcd](https://github.com/snowdreamtech/UniBootDesktop/commit/e0eefcd307d83fafe629077565cf5a34460c7212))
+* remove obsolete workflows symlinks for kilocode and windsurf ([0d843dd](https://github.com/snowdreamtech/UniBootDesktop/commit/0d843dd06df7a539fda7be133af4e3537a9c0fc2))
+* update verification configs and isolate proxy test environment ([b2a8850](https://github.com/snowdreamtech/UniBootDesktop/commit/b2a88507700f2c1b10b355d3a1e0a9bc3d926e11))
+
 ## [0.4.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.3.0...v0.4.0) (2026-10-02)
 
 
