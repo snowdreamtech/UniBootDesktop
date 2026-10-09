@@ -570,11 +570,13 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { useTheme } from "../composables/useTheme";
+import { useToast } from "../composables/useToast";
 import { setLanguage, SUPPORTED_LANGUAGES, t } from "../i18n";
 import { getVentoyValidationMessage, getVentoyValidationTitle, type VentoyValidation } from "../utils/ventoyValidation";
 import CustomSelect from "./CustomSelect.vue";
 
 const { applyTheme, getActiveTheme } = useTheme();
+const { showToast } = useToast();
 
 const languageSelectOptions = computed(() => [
   { value: "auto", label: t("common.autoDetect") },
@@ -1105,7 +1107,7 @@ async function syncFirmware() {
         setTimeout(() => {
           isSyncing.value = false;
           syncProgress.value = 0;
-          alert(t("settings.syncSuccessAlert", { tag: info.tagName }));
+          showToast(t("settings.syncSuccessAlert", { tag: info.tagName }), "success");
         }, 300);
       }
     } else {
@@ -1114,7 +1116,7 @@ async function syncFirmware() {
         setTimeout(() => {
           isSyncing.value = false;
           syncProgress.value = 0;
-          alert(t("settings.syncSuccessShortAlert"));
+          showToast(t("settings.syncSuccessShortAlert"), "success");
         }, 300);
       }, 800);
     }
@@ -1122,7 +1124,7 @@ async function syncFirmware() {
     console.error(e);
     isSyncing.value = false;
     syncProgress.value = 0;
-    alert(t("settings.syncFailedAlert", { error: e?.message || String(e) }));
+    showToast(t("settings.syncFailedAlert", { error: e?.message || String(e) }), "error");
   } finally {
     clearInterval(timer);
   }
@@ -1153,7 +1155,7 @@ async function checkVentoyRelease() {
 
 async function downloadVentoyToolchain() {
   if (!isVentoyOsSupported.value) {
-    alert(t("settings.ventoyMacNoDownloadTitle") || "macOS does not support native Ventoy CLI formatting");
+    showToast(t("settings.ventoyMacNoDownloadTitle") || "macOS does not support native Ventoy CLI formatting", "warning");
     return;
   }
   logUserAction("INFO", "User initiated Ventoy toolchain download/update");
@@ -1183,7 +1185,7 @@ async function downloadVentoyToolchain() {
         setTimeout(() => {
           isDownloadingVentoy.value = false;
           ventoyDownloadProgress.value = 0;
-          alert(t("settings.ventoySyncSuccessAlert", { tag: info.tagName || "v1.1.17" }));
+          showToast(t("settings.ventoySyncSuccessAlert", { tag: info.tagName || "v1.1.17" }), "success");
         }, 300);
       }
     } else {
@@ -1192,7 +1194,7 @@ async function downloadVentoyToolchain() {
         setTimeout(() => {
           isDownloadingVentoy.value = false;
           ventoyDownloadProgress.value = 0;
-          alert(t("settings.ventoySyncSuccessAlert", { tag: "v1.1.17" }));
+          showToast(t("settings.ventoySyncSuccessAlert", { tag: "v1.1.17" }), "success");
         }, 300);
       }, 1000);
     }
@@ -1200,7 +1202,7 @@ async function downloadVentoyToolchain() {
     console.error("Ventoy download failed:", e);
     isDownloadingVentoy.value = false;
     ventoyDownloadProgress.value = 0;
-    alert(t("settings.ventoySyncFailedAlert", { error: e?.message || String(e) }));
+    showToast(t("settings.ventoySyncFailedAlert", { error: e?.message || String(e) }), "error");
   } finally {
     clearInterval(timer);
   }

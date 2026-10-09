@@ -604,10 +604,13 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
+import { useToast } from "../composables/useToast";
 import CustomSelect from "./CustomSelect.vue";
 import ProgressBar from "./ProgressBar.vue";
 import type { DiskInfo } from "./DiskPanel.vue";
 import { t } from "../i18n";
+
+const { showToast } = useToast();
 
 const props = defineProps<{
   activeMode: "cloud" | "hybrid";
@@ -1111,10 +1114,10 @@ async function handleSumsFileSelected(event: Event) {
       expectedHashInput.value = "";
     }
 
-    alert(t("checksum.cache_loaded", { count: totalHashes }) + algoSwitchedMsg);
+    showToast(t("checksum.cache_loaded", { count: totalHashes }) + algoSwitchedMsg, "success");
   } else {
     expectedHashInput.value = "";
-    alert(t("checksum.no_valid_hashes"));
+    showToast(t("checksum.no_valid_hashes"), "warning");
   }
 }
 
