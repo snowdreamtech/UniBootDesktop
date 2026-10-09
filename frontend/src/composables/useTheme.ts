@@ -36,6 +36,8 @@ function getInitialTheme(): AppTheme {
 export const currentTheme = ref<AppTheme>(getInitialTheme());
 export const effectiveTheme = computed<"dark" | "light">(() => resolveEffectiveTheme(currentTheme.value));
 
+let lastSyncedTheme: string | null = null;
+
 function updateDomAndWindow(resolved: "dark" | "light") {
   if (typeof document !== "undefined") {
     document.documentElement.setAttribute("data-theme", resolved);
@@ -73,10 +75,13 @@ function updateDomAndWindow(resolved: "dark" | "light") {
 
     // Trigger backend SetTheme to force native Windows/DWM frame recalculation and title bar update
     try {
-      if (typeof SetTheme === "function") {
-        SetTheme(currentTheme.value).catch(() => {});
-      } else if (typeof (window as any).go?.main?.App?.SetTheme === "function") {
-        (window as any).go.main.App.SetTheme(currentTheme.value);
+      if (lastSyncedTheme !== currentTheme.value) {
+        lastSyncedTheme = currentTheme.value;
+        if (typeof SetTheme === "function") {
+          SetTheme(currentTheme.value).catch(() => {});
+        } else if (typeof (window as any).go?.main?.App?.SetTheme === "function") {
+          (window as any).go.main.App.SetTheme(currentTheme.value);
+        }
       }
     } catch (e) {
       // Ignore errors in non-wails environment
@@ -132,11 +137,13 @@ if (typeof window !== "undefined") {
   }
 
   // Re-verify system theme whenever user switches focus back to the window
-  window.addEventListener("focus", () => {
-    if (currentTheme.value === "system") {
-      syncWindowTheme();
-    }
-  });
+  if (typeof window.addEventListener === "function") {
+    window.addEventListener("focus", () => {
+      if (currentTheme.value === "system") {
+        syncWindowTheme();
+      }
+    });
+  }
 }
 
 export function useTheme() {

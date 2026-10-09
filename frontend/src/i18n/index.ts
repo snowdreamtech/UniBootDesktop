@@ -164,12 +164,15 @@ export async function setLocale(locale: string) {
     }
   }
 
+  const previousLocale = currentLocale.value;
   currentLocale.value = targetLocale;
   updateDocumentDir();
 
-  const app = typeof window !== "undefined" ? (window as any)?.go?.main?.App : undefined;
-  if (app && typeof app.LogAction === "function") {
-    app.LogAction("INFO", "Application display language changed", targetLocale);
+  if (previousLocale !== targetLocale) {
+    const app = typeof window !== "undefined" ? (window as any)?.go?.main?.App : undefined;
+    if (app && typeof app.LogAction === "function") {
+      app.LogAction("INFO", "Application display language changed", targetLocale);
+    }
   }
 }
 
