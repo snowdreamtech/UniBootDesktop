@@ -1138,7 +1138,10 @@ func (a *App) DownloadVentoyRelease() (*installer.VentoyReleaseInfo, error) {
 	if ventoyPath == "" {
 		ventoyPath = env.GetVentoyDir()
 	}
-	info, err := installer.DownloadAndExtractVentoy(a.ctx, proxy, ventoyPath)
+	progressCb := func(p updater.UpdateProgress) {
+		a.emitEvent("ventoy-download-progress", p)
+	}
+	info, err := installer.DownloadAndExtractVentoyWithProgress(a.ctx, proxy, ventoyPath, progressCb)
 	if err != nil {
 		return nil, err
 	}

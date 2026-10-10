@@ -125,6 +125,20 @@ func FetchLatestVentoyRelease(ctx context.Context, proxyPrefix string, localVent
 
 	client := pkgHttp.NewClientWithTimeout(15 * time.Second)
 	resp, err := client.Do(req)
+
+	// Fallback to direct URL if proxy request fails or returns non-200 (since gh-proxy mirrors only proxy github.com and not api.github.com)
+	if (err != nil || resp.StatusCode != http.StatusOK) && finalURL != apiURL {
+		if resp != nil {
+			resp.Body.Close()
+		}
+		fallbackReq, fallbackErr := http.NewRequestWithContext(ctx, http.MethodGet, apiURL, nil)
+		if fallbackErr == nil {
+			fallbackReq.Header.Set("User-Agent", "UniBootDesktop-VentoyDetector/1.0")
+			fallbackReq.Header.Set("Accept", "application/vnd.github.v3+json")
+			resp, err = client.Do(fallbackReq)
+		}
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch Ventoy release from GitHub: %w", err)
 	}
@@ -197,6 +211,12 @@ func selectVentoyAssetForOS(targetOS string, assets []VentoyReleaseAsset) string
 // DownloadAndExtractVentoy downloads and extracts the official Ventoy toolchain for the current platform
 // into the strictly designated target directory.
 func DownloadAndExtractVentoy(ctx context.Context, proxyPrefix string, targetDir string) (*VentoyReleaseInfo, error) {
+	return DownloadAndExtractVentoyWithProgress(ctx, proxyPrefix, targetDir, nil)
+}
+
+// DownloadAndExtractVentoyWithProgress downloads and extracts the official Ventoy toolchain for the current platform
+// into the strictly designated target directory with real-time stage and download progress reporting.
+func DownloadAndExtractVentoyWithProgress(ctx context.Context, proxyPrefix string, targetDir string, onProgress updater.ProgressFunc) (*VentoyReleaseInfo, error) {
 	if runtime.GOOS == "darwin" {
 		return nil, fmt.Errorf("official Ventoy CLI is not supported on macOS")
 	}
@@ -204,6 +224,14 @@ func DownloadAndExtractVentoy(ctx context.Context, proxyPrefix string, targetDir
 	destDir := GetEffectiveVentoyDir(targetDir)
 	if destDir == "" {
 		return nil, fmt.Errorf("ventoy target directory cannot be empty")
+	}
+
+	if onProgress != nil {
+		onProgress(updater.UpdateProgress{
+			Percentage: 5,
+			Status:     "正在检查云端最新 Ventoy 版本...",
+			Stage:      "checking",
+		})
 	}
 
 	rel, err := FetchLatestVentoyRelease(ctx, proxyPrefix, destDir)
@@ -239,12 +267,27 @@ func DownloadAndExtractVentoy(ctx context.Context, proxyPrefix string, targetDir
 	archivePath := filepath.Join(cacheDir, targetAsset.Name)
 	defer os.Remove(archivePath)
 
-	if err := updater.DownloadFileWithProxy(ctx, targetAsset.BrowserDownloadURL, archivePath, proxyPrefix); err != nil {
+	if onProgress != nil {
+		onProgress(updater.UpdateProgress{
+			Percentage: 10,
+			Status:     fmt.Sprintf("正在拉取 %s...", targetAsset.Name),
+			Stage:      "downloading",
+		})
+	}
+
+	if err := updater.DownloadWithProgress(ctx, targetAsset.BrowserDownloadURL, archivePath, proxyPrefix, onProgress, 10, 80); err != nil {
 		return nil, fmt.Errorf("failed to download Ventoy asset %s: %w", targetAsset.Name, err)
 	}
 
 	// Validate SHA256 if sha256.txt is available
 	if sha256Asset != nil {
+		if onProgress != nil {
+			onProgress(updater.UpdateProgress{
+				Percentage: 82,
+				Status:     "正在校验安装包哈希完整性...",
+				Stage:      "verifying",
+			})
+		}
 		sha256Path := filepath.Join(cacheDir, "ventoy_sha256.txt")
 		if err := updater.DownloadFileWithProxy(ctx, sha256Asset.BrowserDownloadURL, sha256Path, proxyPrefix); err == nil {
 			defer os.Remove(sha256Path)
@@ -260,6 +303,14 @@ func DownloadAndExtractVentoy(ctx context.Context, proxyPrefix string, targetDir
 
 	if err := os.MkdirAll(destDir, 0755); err != nil {
 		return nil, fmt.Errorf("failed to create Ventoy target directory %s: %w", destDir, err)
+	}
+
+	if onProgress != nil {
+		onProgress(updater.UpdateProgress{
+			Percentage: 90,
+			Status:     "正在解压与配置 Ventoy 工具链...",
+			Stage:      "extracting",
+		})
 	}
 
 	// Extract with root directory flattening
@@ -289,6 +340,14 @@ func DownloadAndExtractVentoy(ctx context.Context, proxyPrefix string, targetDir
 	}
 	if vData, err := json.MarshalIndent(versionRecord, "", "  "); err == nil {
 		_ = os.WriteFile(filepath.Join(destDir, "version.json"), vData, 0644)
+	}
+
+	if onProgress != nil {
+		onProgress(updater.UpdateProgress{
+			Percentage: 100,
+			Status:     "Ventoy 工具链就绪",
+			Stage:      "completed",
+		})
 	}
 
 	rel.LocalVersion = rel.TagName
