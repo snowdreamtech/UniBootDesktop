@@ -101,42 +101,57 @@ async function main() {
   const effectivePath = process.env.PATH || process.env.Path || "";
   const extraPaths = [];
 
+  // 1. Priority 1: The Node.js and npm directory running this script (direct binary, bypassing shims)
+  const nodeDir = path.dirname(process.execPath);
+  if (fs.existsSync(nodeDir)) {
+    extraPaths.push(nodeDir);
+  }
+
+  // 2. Priority 2: Direct Wails executable directory
   const wailsDir = path.dirname(wailsCmd);
-  if (fs.existsSync(wailsDir)) {
+  if (fs.existsSync(wailsDir) && !extraPaths.includes(wailsDir)) {
     extraPaths.push(wailsDir);
   }
 
-  // Ensure UniRTM shims directory is in extraPaths (contains npm.exe / npm.cmd / node.exe)
+  // 3. Priority 3: Resolve active tools via unirtm which
+  const userBin = path.join(process.env.USERPROFILE || process.env.HOME || "", "bin");
+  const unirtmCandidates = ["unirtm", path.join(userBin, isWindows ? "unirtm.exe" : "unirtm")];
+  for (const cmd of ["node", "npm", "wails"]) {
+    for (const u of unirtmCandidates) {
+      try {
+        const out = execSync(`"${u}" which ${cmd}`, { stdio: ["ignore", "pipe", "ignore"] })
+          .toString()
+          .trim();
+        if (out && fs.existsSync(out)) {
+          const binDir = path.dirname(out);
+          if (!extraPaths.includes(binDir)) {
+            extraPaths.push(binDir);
+          }
+          break;
+        }
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  // 4. Priority 4: UniRTM shims directory as fallback
   const localAppData = process.env.LOCALAPPDATA;
   if (isWindows && localAppData) {
     const shimDir = path.join(localAppData, "unirtm", "shims");
-    if (fs.existsSync(shimDir)) {
+    if (fs.existsSync(shimDir) && !extraPaths.includes(shimDir)) {
       extraPaths.push(shimDir);
     }
   }
   const homeDir = process.env.HOME || process.env.USERPROFILE;
   if (homeDir) {
     const unixShimDir = path.join(homeDir, ".local", "share", "unirtm", "shims");
-    if (fs.existsSync(unixShimDir)) {
+    if (fs.existsSync(unixShimDir) && !extraPaths.includes(unixShimDir)) {
       extraPaths.push(unixShimDir);
     }
   }
-
-  // Ensure Node.js and npm runtime directories are in extraPaths
-  for (const cmd of ["node", "npm"]) {
-    try {
-      const out = execSync(`unirtm which ${cmd}`, { stdio: ["ignore", "pipe", "ignore"] })
-        .toString()
-        .trim();
-      if (out && fs.existsSync(out)) {
-        const binDir = path.dirname(out);
-        if (!extraPaths.includes(binDir)) {
-          extraPaths.push(binDir);
-        }
-      }
-    } catch {
-      // fallback
-    }
+  if (fs.existsSync(userBin) && !extraPaths.includes(userBin)) {
+    extraPaths.push(userBin);
   }
 
   // Construct deduplicated PATH with extraPaths prepended
