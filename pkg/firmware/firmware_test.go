@@ -7,6 +7,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"testing"
 )
@@ -276,29 +277,48 @@ func TestGetLocalUniBootVersion(t *testing.T) {
 	emptyDataDir := t.TempDir()
 	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", emptyDataDir)
 
-	embeddedVer := GetLocalUniBootVersion()
-	if embeddedVer != "v1.0.0" {
-		t.Errorf("expected embedded version 'v1.0.0', got '%s'", embeddedVer)
+	embeddedVer := GetEmbeddedUniBootVersion()
+	if !strings.HasPrefix(embeddedVer, "v") {
+		t.Errorf("expected embedded version to have 'v' prefix, got '%s'", embeddedVer)
+	}
+
+	localVer := GetLocalUniBootVersion()
+	if localVer != embeddedVer {
+		t.Errorf("expected local version '%s' to match embedded '%s'", localVer, embeddedVer)
 	}
 
 	cleanVer := GetCleanUniBootVersion()
-	if cleanVer != "1.0.0" {
-		t.Errorf("expected clean version '1.0.0', got '%s'", cleanVer)
+	if cleanVer != strings.TrimPrefix(embeddedVer, "v") {
+		t.Errorf("expected clean version '%s', got '%s'", strings.TrimPrefix(embeddedVer, "v"), cleanVer)
 	}
 
-	// 2. With local cached version.json (simulating online sync)
+	// 2. With local cached version.json older than embedded (e.g., stale v0.8.0 cache)
 	fwDir := filepath.Join(emptyDataDir, "firmware")
 	_ = os.MkdirAll(fwDir, 0755)
-	_ = os.WriteFile(filepath.Join(fwDir, "version.json"), []byte(`{"tagName":"v1.2.5"}`), 0644)
+	_ = os.WriteFile(filepath.Join(fwDir, "version.json"), []byte(`{"tagName":"v0.8.0","version":"0.8.0"}`), 0644)
+
+	staleCachedVer := GetCachedUniBootVersion()
+	if staleCachedVer != "v0.8.0" {
+		t.Errorf("expected cached version 'v0.8.0', got '%s'", staleCachedVer)
+	}
+
+	// Embedded version must win over older cached version and heal the cache
+	healedVer := GetLocalUniBootVersion()
+	if healedVer != embeddedVer {
+		t.Errorf("expected newer embedded version '%s' to take precedence over stale cache, got '%s'", embeddedVer, healedVer)
+	}
+
+	// 3. With local cached version.json newer than embedded (simulating cloud update to v1.9.9)
+	_ = os.WriteFile(filepath.Join(fwDir, "version.json"), []byte(`{"tagName":"v1.9.9","version":"1.9.9"}`), 0644)
 
 	cachedVer := GetLocalUniBootVersion()
-	if cachedVer != "v1.2.5" {
-		t.Errorf("expected cached version 'v1.2.5', got '%s'", cachedVer)
+	if cachedVer != "v1.9.9" {
+		t.Errorf("expected newer cached version 'v1.9.9', got '%s'", cachedVer)
 	}
 
 	cleanCachedVer := GetCleanUniBootVersion()
-	if cleanCachedVer != "1.2.5" {
-		t.Errorf("expected clean cached version '1.2.5', got '%s'", cleanCachedVer)
+	if cleanCachedVer != "1.9.9" {
+		t.Errorf("expected clean cached version '1.9.9', got '%s'", cleanCachedVer)
 	}
 }
 
