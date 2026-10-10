@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn, execSync } from "node:child_process";
 import { preflight } from "./preflight.mjs";
-import { resolveWailsCommand } from "./run-dev.mjs";
+import { cleanDevArtifacts, resolveWailsCommand } from "./run-dev.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const scriptsDir = path.dirname(__filename);
@@ -14,6 +14,7 @@ const projectRoot = path.resolve(scriptsDir, "..");
 
 async function main() {
   await preflight();
+  cleanDevArtifacts(projectRoot);
 
   // Reset and prepare Go cache directories
   const cacheDir = path.join(projectRoot, ".cache");
@@ -200,6 +201,7 @@ async function main() {
   });
 
   child.on("exit", (code, signal) => {
+    cleanDevArtifacts(projectRoot);
     if (signal) {
       process.kill(process.pid, signal);
     } else {

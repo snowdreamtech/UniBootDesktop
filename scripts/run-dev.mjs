@@ -125,8 +125,35 @@ export function resolveWailsCommand() {
   return defaultCmd;
 }
 
+/**
+ * Remove any leftover development binaries (*-dev, *-dev.exe) from build/bin.
+ * @param {string} root
+ */
+export function cleanDevArtifacts(root) {
+  const binDir = path.join(root, "build", "bin");
+  if (!fs.existsSync(binDir)) return;
+  try {
+    const entries = fs.readdirSync(binDir);
+    for (const entry of entries) {
+      if (entry.includes("-dev")) {
+        const fullPath = path.join(binDir, entry);
+        try {
+          fs.rmSync(fullPath, { force: true });
+        } catch {
+          // ignore locked files
+        }
+      }
+    }
+  } catch {
+    // ignore
+  }
+}
+
 async function main() {
   await preflight();
+
+  const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+  cleanDevArtifacts(rootDir);
 
   const preferredBackendPort = 34115;
   const preferredFrontendPort = 5173;
@@ -176,21 +203,12 @@ async function main() {
     }
   }
 
-  const args = [
-    "dev",
-    "-devserver",
-    `127.0.0.1:${backend.port}`,
-    "-viteservertimeout",
-    "60",
-    ...autoTags,
-    ...userArgs,
-  ];
+  const args = ["dev", "-devserver", `127.0.0.1:${backend.port}`, "-viteservertimeout", "60", ...autoTags, ...userArgs];
 
   console.log(
     `\x1b[36m[SmartPort] Launching Wails Dev (Backend: 127.0.0.1:${backend.port}, Frontend: 127.0.0.1:${frontend.port})...\x1b[0m\n`
   );
 
-  const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
   const cacheGo = path.join(rootDir, ".cache", "go");
   const cacheGoTmp = path.join(rootDir, ".cache", "go-tmp");
   fs.mkdirSync(cacheGo, { recursive: true });
@@ -316,6 +334,7 @@ async function main() {
   process.on("SIGTERM", () => forwardSignal("SIGTERM"));
 
   child.on("exit", (code, signal) => {
+    cleanDevArtifacts(rootDir);
     if (signal) {
       process.kill(process.pid, signal);
     } else {
