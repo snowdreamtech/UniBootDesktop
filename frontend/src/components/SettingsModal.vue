@@ -417,6 +417,9 @@
               </div>
               <div v-if="isDownloadingVentoy" class="sync-progress">
                 <div class="progress-bar-inner" :style="{ width: ventoyDownloadProgress + '%' }"></div>
+                <div class="progress-status-desc" v-if="ventoyDownloadStatusText">
+                  {{ ventoyDownloadStatusText }} ({{ ventoyDownloadProgress }}%)
+                </div>
               </div>
             </div>
 
@@ -548,7 +551,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { currentTheme, useTheme } from "../composables/useTheme";
 import { useToast } from "../composables/useToast";
 import { selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES, t } from "../i18n";
@@ -701,6 +704,7 @@ const ventoyValidation = ref<VentoyValidation | null>(null);
 const checkingVentoyRelease = ref(false);
 const isDownloadingVentoy = ref(false);
 const ventoyDownloadProgress = ref(0);
+const ventoyDownloadStatusText = ref("");
 const latestVentoyTag = ref("");
 const localVentoyVersionTag = ref("");
 const hasVentoyUpdate = ref(false);
@@ -1164,13 +1168,8 @@ async function downloadVentoyToolchain() {
   }
   logUserAction("INFO", "User initiated Ventoy toolchain download/update");
   isDownloadingVentoy.value = true;
-  ventoyDownloadProgress.value = 15;
-
-  const timer = setInterval(() => {
-    if (ventoyDownloadProgress.value < 85) {
-      ventoyDownloadProgress.value += 15;
-    }
-  }, 300);
+  ventoyDownloadProgress.value = 5;
+  ventoyDownloadStatusText.value = t("settings.pullingVentoy") || "正在拉取与解压 Ventoy 工具链...";
 
   const app = getWailsApp();
   try {
@@ -1178,7 +1177,7 @@ async function downloadVentoyToolchain() {
       const info = await app.DownloadVentoyRelease();
       ventoyDownloadProgress.value = 100;
       if (info) {
-        latestVentoyTag.value = info.tagName || latestVentoyTag.value || "v1.1.17";
+        latestVentoyTag.value = info.tagName || latestVentoyTag.value || "v1.1.18";
         localVentoyVersionTag.value = info.localVersion || info.tagName;
         hasVentoyUpdate.value = false;
         if (info.installDir) {
@@ -1189,8 +1188,9 @@ async function downloadVentoyToolchain() {
         setTimeout(() => {
           isDownloadingVentoy.value = false;
           ventoyDownloadProgress.value = 0;
-          showToast(t("settings.ventoySyncSuccessAlert", { tag: info.tagName || "v1.1.17" }), "success");
-        }, 300);
+          ventoyDownloadStatusText.value = "";
+          showToast(t("settings.ventoySyncSuccessAlert", { tag: info.tagName || "v1.1.18" }), "success");
+        }, 500);
       }
     } else {
       setTimeout(() => {
@@ -1198,17 +1198,17 @@ async function downloadVentoyToolchain() {
         setTimeout(() => {
           isDownloadingVentoy.value = false;
           ventoyDownloadProgress.value = 0;
-          showToast(t("settings.ventoySyncSuccessAlert", { tag: "v1.1.17" }), "success");
-        }, 300);
+          ventoyDownloadStatusText.value = "";
+          showToast(t("settings.ventoySyncSuccessAlert", { tag: "v1.1.18" }), "success");
+        }, 500);
       }, 1000);
     }
   } catch (e: any) {
     console.error("Ventoy download failed:", e);
     isDownloadingVentoy.value = false;
     ventoyDownloadProgress.value = 0;
+    ventoyDownloadStatusText.value = "";
     showToast(t("settings.ventoySyncFailedAlert", { error: e?.message || String(e) }), "error");
-  } finally {
-    clearInterval(timer);
   }
 }
 
@@ -1265,11 +1265,33 @@ function close() {
   emit("close");
 }
 
+let unlistenVentoyProgress: (() => void) | null = null;
+
 onMounted(() => {
   loadFullConfig();
   fetchFirmwareList();
   checkUniBootRelease();
   checkVentoyRelease();
+
+  const runtime = (window as any)?.runtime;
+  if (runtime && typeof runtime.EventsOn === "function") {
+    unlistenVentoyProgress = runtime.EventsOn("ventoy-download-progress", (p: any) => {
+      if (p) {
+        if (typeof p.percentage === "number") {
+          ventoyDownloadProgress.value = p.percentage;
+        }
+        if (p.status) {
+          ventoyDownloadStatusText.value = p.status;
+        }
+      }
+    });
+  }
+});
+
+onUnmounted(() => {
+  if (unlistenVentoyProgress) {
+    unlistenVentoyProgress();
+  }
 });
 </script>
 
@@ -2008,5 +2030,12 @@ onMounted(() => {
   background: #dcfce7;
   color: #15803d;
   border: 1px solid #86efac;
+}
+
+.progress-status-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  text-align: center;
 }
 </style>

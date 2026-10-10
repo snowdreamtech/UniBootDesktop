@@ -256,7 +256,7 @@ func DownloadWithProgress(
 ) error {
 	proxyPrefix = strings.TrimSpace(proxyPrefix)
 
-	client := pkgHttp.NewClientWithTimeout(60 * time.Second)
+	client := pkgHttp.NewClient()
 	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 		if len(via) >= 10 {
 			return fmt.Errorf("stopped after 10 redirects")
@@ -341,6 +341,48 @@ func DownloadWithProgress(
 		case <-ctx.Done():
 			return ctx.Err()
 		case <-time.After(time.Duration(i+1) * time.Second):
+		}
+	}
+
+	// Fallback to direct download if proxy attempts failed
+	if lastErr != nil && finalURL != rawURL {
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
+		if err == nil {
+			req.Header.Set("User-Agent", "UniBootDesktop/1.0")
+			req.Header.Set("Accept", "*/*")
+			resp, err := client.Do(req)
+			if err == nil && resp.StatusCode == http.StatusOK {
+				if err := os.MkdirAll(filepath.Dir(destPath), 0755); err == nil {
+					tmpPath := destPath + ".tmp"
+					if out, err := os.Create(tmpPath); err == nil {
+						tracker := &progressTrackingReader{
+							reader:     resp.Body,
+							totalBytes: resp.ContentLength,
+							startPct:   startPct,
+							endPct:     endPct,
+							onProgress: onProgress,
+						}
+						copyBuf := make([]byte, 64*1024)
+						_, copyErr := io.CopyBuffer(out, tracker, copyBuf)
+						resp.Body.Close()
+						out.Close()
+						if copyErr == nil {
+							if err := os.Rename(tmpPath, destPath); err == nil {
+								if onProgress != nil {
+									onProgress(UpdateProgress{
+										Percentage: endPct,
+										Status:     "Download completed",
+										Stage:      "download_completed",
+									})
+								}
+								return nil
+							}
+						}
+						os.Remove(tmpPath)
+					}
+				}
+				resp.Body.Close()
+			}
 		}
 	}
 
