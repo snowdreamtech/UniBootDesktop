@@ -1,4 +1,4 @@
-﻿import type { TranslationDict } from "../types";
+import type { TranslationDict } from "../types";
 
 export const zhTw: TranslationDict = {
   "iso.preflight_title": "寫入前檢查",

@@ -425,7 +425,9 @@
                       done: ['verifying', 'extracting', 'completed'].includes(ventoyDownloadStage),
                     }"
                   >
-                    <span class="step-indicator">{{ ['verifying', 'extracting', 'completed'].includes(ventoyDownloadStage) ? '✓' : '1' }}</span>
+                    <span class="step-indicator">{{
+                      ["verifying", "extracting", "completed"].includes(ventoyDownloadStage) ? "✓" : "1"
+                    }}</span>
                     <span>正在下载</span>
                   </span>
                   <span class="stage-arrow">➔</span>
@@ -436,7 +438,9 @@
                       done: ['extracting', 'completed'].includes(ventoyDownloadStage),
                     }"
                   >
-                    <span class="step-indicator">{{ ['extracting', 'completed'].includes(ventoyDownloadStage) ? '✓' : '2' }}</span>
+                    <span class="step-indicator">{{
+                      ["extracting", "completed"].includes(ventoyDownloadStage) ? "✓" : "2"
+                    }}</span>
                     <span>正在校验 SHA256</span>
                   </span>
                   <span class="stage-arrow">➔</span>
@@ -447,7 +451,7 @@
                       done: ventoyDownloadStage === 'completed',
                     }"
                   >
-                    <span class="step-indicator">{{ ventoyDownloadStage === 'completed' ? '✓' : '3' }}</span>
+                    <span class="step-indicator">{{ ventoyDownloadStage === "completed" ? "✓" : "3" }}</span>
                     <span>正在解压工具链</span>
                   </span>
                 </div>
