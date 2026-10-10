@@ -134,7 +134,7 @@ func RunWorkerServer(socketPath, token string, parentPID int) error {
 	// Parent process watchdog: if GUI app crashes or is force-killed, auto-restore and exit
 	if parentPID > 0 {
 		go func() {
-			ticker := time.NewTicker(2 * time.Second)
+			ticker := time.NewTicker(200 * time.Millisecond)
 			defer ticker.Stop()
 			for range ticker.C {
 				if !isProcessAlive(parentPID) {
