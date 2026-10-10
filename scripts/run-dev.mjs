@@ -171,6 +171,22 @@ async function main() {
   if (fs.existsSync(wailsDir) && !effectivePath.includes(wailsDir)) {
     extraPaths.push(wailsDir);
   }
+
+  // Ensure Node.js runtime directory is in extraPaths for lifecycle hooks (esbuild/npm)
+  try {
+    const nodeOut = execSync("unirtm which node", { stdio: ["ignore", "pipe", "ignore"] })
+      .toString()
+      .trim();
+    if (nodeOut && fs.existsSync(nodeOut)) {
+      const nodeDir = path.dirname(nodeOut);
+      if (!effectivePath.includes(nodeDir)) {
+        extraPaths.push(nodeDir);
+      }
+    }
+  } catch {
+    // fallback
+  }
+
   const fullPath =
     extraPaths.length > 0 ? `${extraPaths.join(path.delimiter)}${path.delimiter}${effectivePath}` : effectivePath;
 
