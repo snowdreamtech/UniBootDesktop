@@ -10,11 +10,7 @@
  * On macOS/Linux:
  * - with name "UNIBOOT" and device "/dev/disk2" -> "UNIBOOT (/dev/disk2)"
  */
-export function formatDiskFriendlyName(disk?: {
-  mountPoint?: string;
-  name?: string;
-  device?: string;
-}): string {
+export function formatDiskFriendlyName(disk?: { mountPoint?: string; name?: string; device?: string }): string {
   if (!disk) return "";
   const mp = (disk.mountPoint || "").trim();
   const name = (disk.name || "").trim();
@@ -26,7 +22,10 @@ export function formatDiskFriendlyName(disk?: {
     const letter = driveLetterMatch[1].toUpperCase();
     if (name) {
       // Strip leading redundant drive letter like "E: " or "E: (UNIBOOT)" -> "UNIBOOT"
-      const cleanName = name.replace(/^[A-Za-z]:\s*\(?/, "").replace(/\)$/, "").trim();
+      const cleanName = name
+        .replace(/^[A-Za-z]:\s*\(?/, "")
+        .replace(/\)$/, "")
+        .trim();
       if (cleanName) {
         return `${letter} (${cleanName})`;
       }
@@ -49,10 +48,7 @@ export function formatDiskFriendlyName(disk?: {
  * Format a device path, preferring Windows drive letter if available.
  * e.g. "E:" instead of "\\.\PhysicalDrive1"
  */
-export function formatDiskDriveLetter(disk?: {
-  mountPoint?: string;
-  device?: string;
-}): string {
+export function formatDiskDriveLetter(disk?: { mountPoint?: string; device?: string }): string {
   if (!disk) return "";
   const mp = (disk.mountPoint || "").trim();
   const driveLetterMatch = mp.match(/^([A-Za-z]:)[\\/]?$/);

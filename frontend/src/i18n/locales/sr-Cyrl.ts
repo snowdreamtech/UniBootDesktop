@@ -1,4 +1,4 @@
-﻿import type { TranslationDict } from "../types";
+import type { TranslationDict } from "../types";
 
 export const srCyrl: TranslationDict = {
   "menu.app": "UniBootDesktop",

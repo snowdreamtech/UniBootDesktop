@@ -1,4 +1,4 @@
-﻿import type { TranslationDict } from "../types";
+import type { TranslationDict } from "../types";
 
 export const caEs: TranslationDict = {
   "menu.app": "UniBootDesktop",
