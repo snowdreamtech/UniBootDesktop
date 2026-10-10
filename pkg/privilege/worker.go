@@ -427,6 +427,33 @@ func (c *WorkerClient) Close() error {
 	return nil
 }
 
+// Terminate explicitly sends an exit command to the privileged worker process and closes the connection.
+func (c *WorkerClient) Terminate() error {
+	if c == nil {
+		return nil
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.closed {
+		return nil
+	}
+	c.closed = true
+
+	if c.conn != nil {
+		_ = c.conn.SetDeadline(time.Now().Add(500 * time.Millisecond))
+		req := WorkerRequest{
+			Token:  c.token,
+			Action: WorkerActionExit,
+		}
+		_ = json.NewEncoder(c.conn).Encode(req)
+		var resp WorkerResponse
+		_ = json.NewDecoder(c.conn).Decode(&resp)
+		_ = c.conn.Close()
+	}
+	return nil
+}
+
 // handleWorkerConnection handles RPC requests from the main application.
 func handleWorkerConnection(conn net.Conn, expectedToken string, snapshots map[string]diskSnapshot, mu *sync.Mutex) {
 	defer conn.Close()

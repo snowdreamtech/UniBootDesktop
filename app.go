@@ -160,8 +160,11 @@ func (a *App) shutdown(ctx context.Context) {
 
 	// Cleanly disconnect and terminate active privileged worker session
 	if client := privilege.GetActiveWorkerClient(); client != nil {
-		_ = client.Close()
+		_ = client.Terminate()
 		privilege.SetActiveWorkerClient(nil)
+		if runtime.GOOS == "windows" {
+			time.Sleep(150 * time.Millisecond)
+		}
 	}
 }
 
