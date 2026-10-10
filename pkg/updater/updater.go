@@ -48,6 +48,7 @@ type UpdateProgress struct {
 	Detail      string `json:"detail,omitempty"`
 	LoadedBytes int64  `json:"loadedBytes,omitempty"`
 	TotalBytes  int64  `json:"totalBytes,omitempty"`
+	Speed       string `json:"speed,omitempty"`
 }
 
 // ProgressFunc reports update progress.
@@ -107,9 +108,14 @@ func CheckUpdate(ctx context.Context) *UpdateStatus {
 }
 
 // BuildProxyURL formats a URL with the given GitHub proxy prefix if configured.
+// GitHub API endpoints (api.github.com) are excluded from proxying because gh-proxy workers
+// only mirror Git assets and download URLs, returning 404 for GitHub API endpoints.
 func BuildProxyURL(rawURL string, proxyPrefix string) string {
 	proxyPrefix = strings.TrimSpace(proxyPrefix)
 	if proxyPrefix == "" || strings.EqualFold(proxyPrefix, "direct") {
+		return rawURL
+	}
+	if strings.Contains(rawURL, "api.github.com") {
 		return rawURL
 	}
 	if !strings.HasSuffix(proxyPrefix, "/") {
@@ -194,15 +200,28 @@ func FindGuiReleaseAsset(assets []updater.ReleaseAsset, targetOS, targetArch str
 	return &matched[0], nil
 }
 
+func formatByteSpeed(bytesPerSec float64) string {
+	if bytesPerSec <= 0 {
+		return "0 KB/s"
+	}
+	if bytesPerSec >= 1048576 {
+		return fmt.Sprintf("%.1f MB/s", bytesPerSec/1048576.0)
+	}
+	return fmt.Sprintf("%.0f KB/s", bytesPerSec/1024.0)
+}
+
 type progressTrackingReader struct {
-	reader     io.Reader
-	totalBytes int64
-	readBytes  int64
-	startPct   int
-	endPct     int
-	lastPct    int
-	lastUpdate time.Time
-	onProgress ProgressFunc
+	reader        io.Reader
+	totalBytes    int64
+	readBytes     int64
+	startPct      int
+	endPct        int
+	lastPct       int
+	lastUpdate    time.Time
+	lastSpeedTime time.Time
+	lastSpeedByte int64
+	currentSpeed  string
+	onProgress    ProgressFunc
 }
 
 func (pt *progressTrackingReader) Read(p []byte) (int, error) {
@@ -222,15 +241,28 @@ func (pt *progressTrackingReader) Read(p []byte) (int, error) {
 			}
 
 			now := time.Now()
+			speedElapsed := now.Sub(pt.lastSpeedTime)
+			if speedElapsed >= 500*time.Millisecond {
+				deltaBytes := pt.readBytes - pt.lastSpeedByte
+				bytesPerSec := float64(deltaBytes) / speedElapsed.Seconds()
+				pt.currentSpeed = formatByteSpeed(bytesPerSec)
+				pt.lastSpeedByte = pt.readBytes
+				pt.lastSpeedTime = now
+			}
+
 			if currentPct != pt.lastPct && (currentPct-pt.lastPct >= 1 || now.Sub(pt.lastUpdate) >= 200*time.Millisecond) {
 				pt.lastPct = currentPct
 				pt.lastUpdate = now
 				var status string
 				if pt.totalBytes > 0 {
-					status = fmt.Sprintf("Downloading update: %.1f MB / %.1f MB (%d%%)",
-						float64(pt.readBytes)/1048576.0, float64(pt.totalBytes)/1048576.0, currentPct)
+					filePct := int(float64(pt.readBytes) * 100 / float64(pt.totalBytes))
+					status = fmt.Sprintf("%.1f MB / %.1f MB (%d%%)",
+						float64(pt.readBytes)/1048576.0, float64(pt.totalBytes)/1048576.0, filePct)
 				} else {
-					status = fmt.Sprintf("Downloading update: %.1f MB", float64(pt.readBytes)/1048576.0)
+					status = fmt.Sprintf("%.1f MB", float64(pt.readBytes)/1048576.0)
+				}
+				if pt.currentSpeed != "" {
+					status += " · " + pt.currentSpeed
 				}
 				pt.onProgress(UpdateProgress{
 					Percentage:  currentPct,
@@ -238,6 +270,7 @@ func (pt *progressTrackingReader) Read(p []byte) (int, error) {
 					Stage:       "downloading",
 					LoadedBytes: pt.readBytes,
 					TotalBytes:  pt.totalBytes,
+					Speed:       pt.currentSpeed,
 				})
 			}
 		}
@@ -298,12 +331,15 @@ func DownloadWithProgress(
 				return fmt.Errorf("failed to create temp destination file: %w", err)
 			}
 
+			now := time.Now()
 			tracker := &progressTrackingReader{
-				reader:     resp.Body,
-				totalBytes: resp.ContentLength,
-				startPct:   startPct,
-				endPct:     endPct,
-				onProgress: onProgress,
+				reader:        resp.Body,
+				totalBytes:    resp.ContentLength,
+				startPct:      startPct,
+				endPct:        endPct,
+				lastUpdate:    now,
+				lastSpeedTime: now,
+				onProgress:    onProgress,
 			}
 
 			copyBuf := make([]byte, 64*1024)
@@ -355,12 +391,15 @@ func DownloadWithProgress(
 				if err := os.MkdirAll(filepath.Dir(destPath), 0755); err == nil {
 					tmpPath := destPath + ".tmp"
 					if out, err := os.Create(tmpPath); err == nil {
+						now := time.Now()
 						tracker := &progressTrackingReader{
-							reader:     resp.Body,
-							totalBytes: resp.ContentLength,
-							startPct:   startPct,
-							endPct:     endPct,
-							onProgress: onProgress,
+							reader:        resp.Body,
+							totalBytes:    resp.ContentLength,
+							startPct:      startPct,
+							endPct:        endPct,
+							lastUpdate:    now,
+							lastSpeedTime: now,
+							onProgress:    onProgress,
 						}
 						copyBuf := make([]byte, 64*1024)
 						_, copyErr := io.CopyBuffer(out, tracker, copyBuf)
