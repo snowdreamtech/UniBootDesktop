@@ -21,6 +21,7 @@ import (
 
 	"github.com/snowdreamtech/unibootdesktop/internal/env"
 	pkgHttp "github.com/snowdreamtech/unibootdesktop/internal/http"
+	"github.com/snowdreamtech/unibootdesktop/internal/version"
 	"github.com/snowdreamtech/unibootdesktop/pkg/updater"
 )
 
@@ -148,6 +149,7 @@ type UniBootReleaseInfo struct {
 	Body        string                `json:"body"`
 	Assets      []UniBootReleaseAsset `json:"assets"`
 	LocalTag    string                `json:"localTag"`
+	EmbeddedTag string                `json:"embeddedTag,omitempty"`
 	HasUpdate   bool                  `json:"hasUpdate"`
 }
 
@@ -201,19 +203,8 @@ func TargetPathForReleaseAsset(name string) string {
 	return ""
 }
 
-// GetLocalUniBootVersion returns current local/cached UniBoot version tag.
-func GetLocalUniBootVersion() string {
-	versionFile := filepath.Join(GetEffectiveFirmwareDir(), "version.json")
-	if data, err := os.ReadFile(versionFile); err == nil {
-		var ver struct {
-			TagName string `json:"tagName"`
-		}
-		if err := json.Unmarshal(data, &ver); err == nil && ver.TagName != "" {
-			return ver.TagName
-		}
-	}
-
-	// Priority 2: Read baseline version declared in embedded assets
+// GetEmbeddedUniBootVersion returns the baseline UniBoot version packaged in embedded assets.
+func GetEmbeddedUniBootVersion() string {
 	if data, err := embeddedAssets.ReadFile("assets/version.json"); err == nil {
 		var ver struct {
 			TagName string `json:"tagName"`
@@ -224,12 +215,65 @@ func GetLocalUniBootVersion() string {
 				return ver.TagName
 			}
 			if ver.Version != "" {
-				return "v" + ver.Version
+				return "v" + strings.TrimPrefix(ver.Version, "v")
 			}
 		}
 	}
-
 	return "v1.0.0"
+}
+
+// GetCachedUniBootVersion returns the version recorded in local storage/cache directory, or empty string if absent.
+func GetCachedUniBootVersion() string {
+	versionFile := filepath.Join(GetEffectiveFirmwareDir(), "version.json")
+	if data, err := os.ReadFile(versionFile); err == nil {
+		var ver struct {
+			TagName string `json:"tagName"`
+			Version string `json:"version"`
+		}
+		if err := json.Unmarshal(data, &ver); err == nil {
+			if ver.TagName != "" {
+				return ver.TagName
+			}
+			if ver.Version != "" {
+				return "v" + strings.TrimPrefix(ver.Version, "v")
+			}
+		}
+	}
+	return ""
+}
+
+// GetLocalUniBootVersion returns current effective UniBoot version.
+// It compares the local cached/downloaded version with the binary-embedded baseline version.
+// If the embedded version is newer (or if local cache does not exist), the embedded version wins
+// and the local cache is automatically updated so that newly embedded releases take precedence.
+func GetLocalUniBootVersion() string {
+	embeddedVer := GetEmbeddedUniBootVersion()
+	cachedVer := GetCachedUniBootVersion()
+
+	if cachedVer == "" {
+		return embeddedVer
+	}
+
+	// Compare embedded vs cached version using SemVer
+	if version.CompareVersions(embeddedVer, cachedVer) > 0 {
+		// Newly packaged/embedded version is higher than older local download cache.
+		// Refresh local cache version.json to align with newer embedded release.
+		fwDir := GetEffectiveFirmwareDir()
+		if err := os.MkdirAll(fwDir, 0755); err == nil {
+			record := map[string]interface{}{
+				"tagName":     embeddedVer,
+				"version":     strings.TrimPrefix(embeddedVer, "v"),
+				"installedAt": time.Now().Format(time.RFC3339),
+				"source":      "embedded",
+			}
+			if vData, err := json.MarshalIndent(record, "", "  "); err == nil {
+				_ = os.WriteFile(filepath.Join(fwDir, "version.json"), vData, 0644)
+			}
+		}
+		return embeddedVer
+	}
+
+	return cachedVer
 }
 
 // GetCleanUniBootVersion returns a normalized SemVer string (e.g. "1.0.0") without 'v' prefix.
@@ -304,7 +348,8 @@ func FetchLatestUniBootRelease(ctx context.Context, proxyPrefix string) (*UniBoo
 	}
 
 	localTag := GetLocalUniBootVersion()
-	hasUpdate := localTag != ghRelease.TagName
+	embeddedTag := GetEmbeddedUniBootVersion()
+	hasUpdate := version.CompareVersions(ghRelease.TagName, localTag) > 0
 
 	releaseInfo := &UniBootReleaseInfo{
 		TagName:     ghRelease.TagName,
@@ -312,6 +357,7 @@ func FetchLatestUniBootRelease(ctx context.Context, proxyPrefix string) (*UniBoo
 		PublishedAt: ghRelease.PublishedAt,
 		Body:        ghRelease.Body,
 		LocalTag:    localTag,
+		EmbeddedTag: embeddedTag,
 		HasUpdate:   hasUpdate,
 	}
 
@@ -432,6 +478,16 @@ func firmwareSyncComplete(downloadedCount int, expectedCount int) bool {
 // Priority 1: User specified custom directory / cached firmware in GetEffectiveFirmwareDir()/<releaseName>
 // Priority 2: Built-in embedded binary (embed.FS)
 func GetFirmwareData(releaseName string) ([]byte, string, error) {
+	// If the embedded version is newer than stale local cache, purge stale cache
+	customDir := GetCustomUniBootDir()
+	if customDir == "" {
+		cachedVer := GetCachedUniBootVersion()
+		embeddedVer := GetEmbeddedUniBootVersion()
+		if cachedVer != "" && version.CompareVersions(embeddedVer, cachedVer) > 0 {
+			_ = CleanDirectoryContents(env.GetFirmwareDir())
+		}
+	}
+
 	// Check user data directory or custom directory for firmware
 	localPath := filepath.Join(GetEffectiveFirmwareDir(), releaseName)
 	if info, err := os.Stat(localPath); err == nil && !info.IsDir() && info.Size() > 0 {
