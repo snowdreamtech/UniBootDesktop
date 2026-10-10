@@ -8,6 +8,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/snowdreamtech/unibootdesktop/pkg/disk"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -114,4 +115,49 @@ func TestDeployCloudModeBatchPartialFailure(t *testing.T) {
 	assert.True(t, results[0].Success)
 	assert.False(t, results[1].Success)
 	assert.NotNil(t, results[1].Diagnostics)
+}
+
+func TestFormatDiskFriendlyTarget(t *testing.T) {
+	// Fallback to targetDisk when diskInfo is nil
+	assert.Equal(t, `\\.\PhysicalDrive1`, FormatDiskFriendlyTarget(`\\.\PhysicalDrive1`, nil))
+
+	// Windows: drive letter with clean label
+	diskWin := &disk.DiskInfo{
+		Device:     `\\.\PhysicalDrive1`,
+		Name:       "UNIBOOT",
+		MountPoint: "E:\\",
+	}
+	assert.Equal(t, "E: (UNIBOOT)", FormatDiskFriendlyTarget(`\\.\PhysicalDrive1`, diskWin))
+
+	// Windows: drive letter with redundant drive letter in name
+	diskWinRedundant := &disk.DiskInfo{
+		Device:     `\\.\PhysicalDrive1`,
+		Name:       "E: (UNIBOOT)",
+		MountPoint: "E:",
+	}
+	assert.Equal(t, "E: (UNIBOOT)", FormatDiskFriendlyTarget(`\\.\PhysicalDrive1`, diskWinRedundant))
+
+	// Windows: drive letter without label
+	diskWinNoLabel := &disk.DiskInfo{
+		Device:     `\\.\PhysicalDrive1`,
+		Name:       "",
+		MountPoint: "E:\\",
+	}
+	assert.Equal(t, "E:", FormatDiskFriendlyTarget(`\\.\PhysicalDrive1`, diskWinNoLabel))
+
+	// No mount point, has distinct name
+	diskRaw := &disk.DiskInfo{
+		Device:     `\\.\PhysicalDrive2`,
+		Name:       "SanDisk Ultra",
+		MountPoint: "",
+	}
+	assert.Equal(t, `SanDisk Ultra (\\.\PhysicalDrive2)`, FormatDiskFriendlyTarget(`\\.\PhysicalDrive2`, diskRaw))
+
+	// Unix / macOS volume
+	diskUnix := &disk.DiskInfo{
+		Device:     "/dev/sdb",
+		Name:       "UNIBOOT",
+		MountPoint: "/mnt/usb",
+	}
+	assert.Equal(t, "UNIBOOT (/dev/sdb)", FormatDiskFriendlyTarget("/dev/sdb", diskUnix))
 }

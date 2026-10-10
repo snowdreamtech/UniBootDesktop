@@ -53,7 +53,7 @@
           <!-- Single Disk Summary -->
           <div v-if="targetDisks.length === 1 && targetDisk" class="target-disk-item">
             <div class="disk-main-info">
-              <span class="disk-name">{{ targetDisk.name }}</span>
+              <span class="disk-name">{{ formatDiskFriendlyName(targetDisk) }}</span>
               <span class="disk-path">{{ targetDisk.device }}</span>
             </div>
             <div class="disk-meta-pills">
@@ -96,7 +96,7 @@
               <div class="batch-device-list">
                 <div v-for="disk in ventoyDiskDetails" :key="disk.device" class="batch-device-detail safe-dev-tag">
                   <div class="batch-dev-header">
-                    <strong>🛡️ {{ disk.name || disk.device }}</strong>
+                    <strong>🛡️ {{ formatDiskFriendlyName(disk) }}</strong>
                     <span class="batch-dev-path">{{ disk.device }}</span>
                   </div>
                   <div class="batch-dev-info-grid">
@@ -128,7 +128,7 @@
               <div class="batch-device-list">
                 <div v-for="disk in blankDiskDetails" :key="disk.device" class="batch-device-detail danger-dev-tag">
                   <div class="batch-dev-header">
-                    <strong>💾 {{ disk.name || disk.device }}</strong>
+                    <strong>💾 {{ formatDiskFriendlyName(disk) }}</strong>
                     <span class="batch-dev-path">{{ disk.device }}</span>
                   </div>
                   <div class="batch-dev-info-grid">
@@ -164,7 +164,7 @@
               <div class="batch-device-list">
                 <div v-for="disk in ventoyDiskDetails" :key="disk.device" class="batch-device-detail safe-dev-tag">
                   <div class="batch-dev-header">
-                    <strong>🛡️ {{ disk.name || disk.device }}</strong>
+                    <strong>🛡️ {{ formatDiskFriendlyName(disk) }}</strong>
                     <span class="batch-dev-path">{{ disk.device }}</span>
                   </div>
                   <div class="batch-dev-info-grid">
@@ -197,7 +197,7 @@
             <div class="batch-device-list">
               <div v-for="disk in targetDiskDetails" :key="disk.device" class="batch-device-detail danger-dev-tag">
                 <div class="batch-dev-header">
-                  <strong>💾 {{ disk.name || disk.device }}</strong>
+                  <strong>💾 {{ formatDiskFriendlyName(disk) }}</strong>
                   <span class="batch-dev-path">{{ disk.device }}</span>
                 </div>
                 <div class="batch-dev-info-grid">
@@ -245,6 +245,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { t, formatDiskCapacity } from "../i18n";
+import { formatDiskFriendlyName } from "../utils/diskFormatter";
 import type { disk } from "../../wailsjs/go/models";
 
 type DiskInfo = disk.DiskInfo;
