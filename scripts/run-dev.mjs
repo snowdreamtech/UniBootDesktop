@@ -59,6 +59,45 @@ export function isMainModule() {
   }
 }
 
+/**
+ * Resolve the Wails executable binary path reliably across all environments.
+ * @returns {string}
+ */
+export function resolveWailsCommand() {
+  const isWindows = process.platform === "win32";
+  const defaultCmd = isWindows ? "wails.exe" : "wails";
+
+  // 1. Try resolving via `unirtm which wails`
+  try {
+    const whichOut = execSync("unirtm which wails", { stdio: ["ignore", "pipe", "ignore"] })
+      .toString()
+      .trim();
+    if (whichOut && fs.existsSync(whichOut)) {
+      return whichOut;
+    }
+  } catch {
+    // ignore
+  }
+
+  // 2. Check unirtm shims
+  const localAppData = process.env.LOCALAPPDATA;
+  if (isWindows && localAppData) {
+    const shimPath = path.join(localAppData, "unirtm", "shims", defaultCmd);
+    if (fs.existsSync(shimPath)) {
+      return shimPath;
+    }
+  }
+  const homeDir = process.env.HOME || process.env.USERPROFILE;
+  if (homeDir) {
+    const unixShimPath = path.join(homeDir, ".local", "share", "unirtm", "shims", defaultCmd);
+    if (fs.existsSync(unixShimPath)) {
+      return unixShimPath;
+    }
+  }
+
+  return defaultCmd;
+}
+
 async function main() {
   await preflight();
 
@@ -122,16 +161,28 @@ async function main() {
   fs.mkdirSync(cacheGo, { recursive: true });
   fs.mkdirSync(cacheGoTmp, { recursive: true });
 
+  const isWindows = process.platform === "win32";
+  const wailsCmd = resolveWailsCommand();
+
+  // Normalize PATH and Path for Windows cross-shell compatibility (MSYS2 / Git Bash / PowerShell)
+  const effectivePath = process.env.PATH || process.env.Path || "";
+  const wailsDir = path.dirname(wailsCmd);
+  const extraPaths = [];
+  if (fs.existsSync(wailsDir) && !effectivePath.includes(wailsDir)) {
+    extraPaths.push(wailsDir);
+  }
+  const fullPath =
+    extraPaths.length > 0 ? `${extraPaths.join(path.delimiter)}${path.delimiter}${effectivePath}` : effectivePath;
+
   const childEnv = {
     ...process.env,
+    PATH: fullPath,
+    ...(isWindows ? { Path: fullPath } : {}),
     GOCACHE: process.env.GOCACHE || cacheGo,
     GOTMPDIR: process.env.GOTMPDIR || cacheGoTmp,
     PORT: String(frontend.port),
     VITE_PORT: String(frontend.port),
   };
-
-  const isWindows = process.platform === "win32";
-  const wailsCmd = isWindows ? "wails.exe" : "wails";
 
   const child = spawn(wailsCmd, args, {
     env: childEnv,
