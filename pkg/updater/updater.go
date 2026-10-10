@@ -108,8 +108,8 @@ func CheckUpdate(ctx context.Context) *UpdateStatus {
 }
 
 // BuildProxyURL formats a URL with the given GitHub proxy prefix if configured.
-// GitHub API endpoints (api.github.com) are excluded from proxying because gh-proxy workers
-// only mirror Git assets and download URLs, returning 404 for GitHub API endpoints.
+// GitHub API endpoints (api.github.com) are excluded from proxying because reverse proxy
+// services typically only mirror raw/release download endpoints and do not support the REST API.
 func BuildProxyURL(rawURL string, proxyPrefix string) string {
 	proxyPrefix = strings.TrimSpace(proxyPrefix)
 	if proxyPrefix == "" || strings.EqualFold(proxyPrefix, "direct") {

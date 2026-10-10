@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const svSe: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -281,7 +281,7 @@ export const svSe: TranslationDict = {
   "settings.auto_eject_enabled": "Automatisk utmatning (rekommenderas ej)",
   "settings.auto_eject_disabled": "Ej automatisk utmatning (rekommenderas)",
   "settings.github_proxy": "GitHub spegel / proxy-prefix:",
-  "settings.proxy_placeholder": "Tomt som standard (Direct GitHub). Exempel: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Tomt som standard (Direct GitHub). Exempel: https://proxy.example.com/",
   "settings.test_net": "Testa GitHub-anslutningen",
   "settings.testing_net": "Testar anslutning...",
   "settings.system_proxy": "Systemets globala proxyinställningar (HTTP / HTTPS / SOCKS4 / SOCKS5)",

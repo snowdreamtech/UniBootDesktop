@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const mlIn: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -287,7 +287,7 @@ export const mlIn: TranslationDict = {
   "settings.auto_eject_enabled": "സ്വയം പുറത്തെടുക്കൽ (ശുപാർശ ചെയ്യുന്നില്ല)",
   "settings.auto_eject_disabled": "സ്വയം പുറത്തെടുക്കൽ വേണ്ട (ശുപാർശ ചെയ്യുന്നത്)",
   "settings.github_proxy": "GitHub മിറർ / പ്രോക്സി പ്രിഫിക്സ്:",
-  "settings.proxy_placeholder": "സ്ഥിരസ്ഥിതി ശൂന്യമാണ് (Direct GitHub). ഉദാഹരണം: https://ghproxy.net/",
+  "settings.proxy_placeholder": "സ്ഥിരസ്ഥിതി ശൂന്യമാണ് (Direct GitHub). ഉദാഹരണം: https://proxy.example.com/",
   "settings.test_net": "GitHub കണക്ഷൻ പരീക്ഷിക്കുക",
   "settings.testing_net": "കണക്റ്റിവിറ്റി പരിശോധിക്കുന്നു...",
   "settings.system_proxy": "സിസ്റ്റം ഗ്ലോബൽ പ്രോക്സി ക്രമീകരണങ്ങൾ (HTTP / HTTPS / SOCKS4 / SOCKS5)",

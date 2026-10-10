@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const bgBg: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -287,7 +287,7 @@ export const bgBg: TranslationDict = {
   "settings.auto_eject_enabled": "Автоматично изваждане (не се препоръчва)",
   "settings.auto_eject_disabled": "Без автоматично изваждане (препоръчително)",
   "settings.github_proxy": "Огледален сървър / префикс на прокси за GitHub:",
-  "settings.proxy_placeholder": "По подразбиране е празно (Direct GitHub). Пример: https://ghproxy.net/",
+  "settings.proxy_placeholder": "По подразбиране е празно (Direct GitHub). Пример: https://proxy.example.com/",
   "settings.test_net": "Тествайте връзката с GitHub",
   "settings.testing_net": "Тестване на връзката...",
   "settings.system_proxy": "Системни глобални прокси настройки (HTTP / HTTPS / SOCKS4 / SOCKS5)",

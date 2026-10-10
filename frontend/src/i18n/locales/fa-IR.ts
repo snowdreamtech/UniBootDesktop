@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const faIr: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -281,7 +281,7 @@ export const faIr: TranslationDict = {
   "settings.auto_eject_enabled": "خروج خودکار (توصیه نمی‌شود)",
   "settings.auto_eject_disabled": "بدون خروج خودکار (توصیه می‌شود)",
   "settings.github_proxy": "پیشوند سرور میرور / پروکسی GitHub:",
-  "settings.proxy_placeholder": "پیش فرض خالی (GitHub مستقیم). مثال: https://ghproxy.net/",
+  "settings.proxy_placeholder": "پیش فرض خالی (GitHub مستقیم). مثال: https://proxy.example.com/",
   "settings.test_net": "اتصال GitHub را آزمایش کنید",
   "settings.testing_net": "تست اتصال...",
   "settings.system_proxy": "تنظیمات پروکسی جهانی سیستم (HTTP / HTTPS / SOCKS4 / SOCKS5)",

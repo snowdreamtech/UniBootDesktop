@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const thTh: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -280,7 +280,7 @@ export const thTh: TranslationDict = {
   "settings.auto_eject_enabled": "นำออกอัตโนมัติ (ไม่แนะนำ)",
   "settings.auto_eject_disabled": "ไม่นำออกอัตโนมัติ (แนะนำ)",
   "settings.github_proxy": "คำนำหน้า GitHub Proxy/Mirror:",
-  "settings.proxy_placeholder": "ค่าเริ่มต้นว่างเปล่า (Direct GitHub) ตัวอย่าง: https://ghproxy.net/",
+  "settings.proxy_placeholder": "ค่าเริ่มต้นว่างเปล่า (Direct GitHub) ตัวอย่าง: https://proxy.example.com/",
   "settings.test_net": "ทดสอบการเชื่อมต่อ GitHub",
   "settings.testing_net": "กำลังทดสอบการเชื่อมต่อ...",
   "settings.system_proxy": "การตั้งค่าพร็อกซีสากลของระบบ (HTTP / HTTPS / SOCKS4 / SOCKS5)",

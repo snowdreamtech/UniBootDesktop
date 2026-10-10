@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const koKr: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -277,7 +277,7 @@ export const koKr: TranslationDict = {
   "settings.auto_eject_enabled": "자동 꺼내기 (권장하지 않음)",
   "settings.auto_eject_disabled": "자동 꺼내기 안 함 (권장)",
   "settings.github_proxy": "GitHub 프록시 / 미러 접두사:",
-  "settings.proxy_placeholder": "기본값은 빈 칸 (GitHub 공식 직접 연결). 예: https://ghproxy.net/",
+  "settings.proxy_placeholder": "기본값은 빈 칸 (GitHub 공식 직접 연결). 예: https://proxy.example.com/",
   "settings.test_net": "GitHub 연결 테스트",
   "settings.testing_net": "연결 테스트 중...",
   "settings.system_proxy": "시스템 글로벌 프록시 설정 (HTTP / HTTPS / SOCKS4 / SOCKS5)",

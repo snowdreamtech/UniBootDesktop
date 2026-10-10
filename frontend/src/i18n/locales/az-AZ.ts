@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const azAz: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -283,7 +283,7 @@ export const azAz: TranslationDict = {
   "settings.auto_eject_enabled": "Avtomatik çıxarılma (tövsiyə olunmur)",
   "settings.auto_eject_disabled": "Avtomatik çıxarılmasın (tövsiyə olunur)",
   "settings.github_proxy": "GitHub güzgü / proksi prefiksi:",
-  "settings.proxy_placeholder": "Defolt boşdur (Direct GitHub). Misal: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Defolt boşdur (Direct GitHub). Misal: https://proxy.example.com/",
   "settings.test_net": "GitHub Bağlantısını sınayın",
   "settings.testing_net": "Bağlantı yoxlanılır...",
   "settings.system_proxy": "Sistem Qlobal Proksi Parametrləri (HTTP / HTTPS / SOCKS4 / SOCKS5)",

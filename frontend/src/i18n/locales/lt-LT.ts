@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const ltLt: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -288,7 +288,7 @@ export const ltLt: TranslationDict = {
   "settings.auto_eject_enabled": "Automatinis išstūmimas (nerekomenduojama)",
   "settings.auto_eject_disabled": "Be automatinio išstūmimo (rekomenduojama)",
   "settings.github_proxy": "GitHub veidrodinio serverio / įgaliotojo serverio prefiksas:",
-  "settings.proxy_placeholder": "Numatytasis tuščias (Direct GitHub). Pavyzdys: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Numatytasis tuščias (Direct GitHub). Pavyzdys: https://proxy.example.com/",
   "settings.test_net": "Išbandykite „GitHub“ ryšį",
   "settings.testing_net": "Bandomas ryšys...",
   "settings.system_proxy": "Sistemos visuotiniai tarpinio serverio nustatymai (HTTP / HTTPS / SOCKS4 / SOCKS5)",

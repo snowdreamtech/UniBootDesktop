@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const ptPt: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -286,7 +286,7 @@ export const ptPt: TranslationDict = {
   "settings.auto_eject_enabled": "Ejetar automaticamente (não recomendado)",
   "settings.auto_eject_disabled": "Não ejetar automaticamente (recomendado)",
   "settings.github_proxy": "Prefixo de proxy/espelho GitHub:",
-  "settings.proxy_placeholder": "Padrão vazio (GitHub direto). Exemplo: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Padrão vazio (GitHub direto). Exemplo: https://proxy.example.com/",
   "settings.test_net": "Teste a conexão do GitHub",
   "settings.testing_net": "Testando conectividade...",
   "settings.system_proxy": "Configurações globais de proxy do sistema (HTTP/HTTPS/SOCKS4/SOCKS5)",

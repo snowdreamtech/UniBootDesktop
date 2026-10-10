@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const arSa: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -275,7 +275,7 @@ export const arSa: TranslationDict = {
   "settings.auto_eject_enabled": "إخراج تلقائي (غير مُوصى به)",
   "settings.auto_eject_disabled": "عدم الإخراج التلقائي (مُوصى به)",
   "settings.github_proxy": "بادئة وكيل/مرآة GitHub:",
-  "settings.proxy_placeholder": "فارغ افتراضيًا (اتصال مباشر). مثال: https://ghproxy.net/",
+  "settings.proxy_placeholder": "فارغ افتراضيًا (اتصال مباشر). مثال: https://proxy.example.com/",
   "settings.test_net": "اختبار الاتصال بـ GitHub",
   "settings.testing_net": "جاري اختبار الاتصال...",
   "settings.system_proxy": "إعدادات وكيل النظام (HTTP / HTTPS / SOCKS4 / SOCKS5)",

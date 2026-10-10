@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const urPk: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -282,7 +282,7 @@ export const urPk: TranslationDict = {
   "settings.auto_eject_enabled": "خودکار اخراج (سفارش نہیں کی جاتی)",
   "settings.auto_eject_disabled": "خودکار اخراج نہیں (سفارش شدہ)",
   "settings.github_proxy": "GitHub مرر / پروکسی سابقہ:",
-  "settings.proxy_placeholder": "ڈیفالٹ خالی (ڈائریکٹ گٹ ہب)۔ مثال: https://ghproxy.net/",
+  "settings.proxy_placeholder": "ڈیفالٹ خالی (ڈائریکٹ گٹ ہب)۔ مثال: https://proxy.example.com/",
   "settings.test_net": "GitHub کنکشن کی جانچ کریں۔",
   "settings.testing_net": "رابطے کی جانچ ہو رہی ہے...",
   "settings.system_proxy": "سسٹم گلوبل پراکسی سیٹنگز (HTTP / HTTPS / SOCKS4 / SOCKS5)",

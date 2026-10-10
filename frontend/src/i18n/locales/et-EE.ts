@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const etEe: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -283,7 +283,7 @@ export const etEe: TranslationDict = {
   "settings.auto_eject_enabled": "Automaatne eemaldamine (ei ole soovitatav)",
   "settings.auto_eject_disabled": "Automaatset eemaldamist pole (soovitatav)",
   "settings.github_proxy": "GitHubi peegli / proksi eesliide:",
-  "settings.proxy_placeholder": "Vaikimisi tühi (Direct GitHub). Näide: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Vaikimisi tühi (Direct GitHub). Näide: https://proxy.example.com/",
   "settings.test_net": "Testige GitHubi ühendust",
   "settings.testing_net": "Ühenduvuse testimine...",
   "settings.system_proxy": "Süsteemi globaalsed puhverserveri sätted (HTTP / HTTPS / SOCKS4 / SOCKS5)",

@@ -40,9 +40,9 @@ func TestBuildProxyURL(t *testing.T) {
 		}
 	}
 
-	// Verify GitHub API URLs are not prefixed by gh-proxy mirrors
+	// Verify GitHub API URLs are not prefixed by reverse proxy prefixes
 	apiURL := "https://api.github.com/repos/ventoy/Ventoy/releases/latest"
-	if got := BuildProxyURL(apiURL, "https://gh-proxy.sn0wdr1am.com/"); got != apiURL {
+	if got := BuildProxyURL(apiURL, "https://proxy.example.com/"); got != apiURL {
 		t.Errorf("expected GitHub API URL to bypass proxy, got %q", got)
 	}
 }

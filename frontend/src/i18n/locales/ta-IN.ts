@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const taIn: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -288,7 +288,7 @@ export const taIn: TranslationDict = {
   "settings.auto_eject_enabled": "தானியங்கி வெளியேற்றம் (பரிந்துரைக்கப்படவில்லை)",
   "settings.auto_eject_disabled": "தானியங்கி வெளியேற்றம் இல்லை (பரிந்துரைக்கப்படுகிறது)",
   "settings.github_proxy": "GitHub பிரதிபலிப்பு / ப்ராக்ஸி முன்னொட்டு:",
-  "settings.proxy_placeholder": "இயல்புநிலை காலியாக உள்ளது (Direct GitHub). எடுத்துக்காட்டு: https://ghproxy.net/",
+  "settings.proxy_placeholder": "இயல்புநிலை காலியாக உள்ளது (Direct GitHub). எடுத்துக்காட்டு: https://proxy.example.com/",
   "settings.test_net": "கிட்ஹப் இணைப்பைச் சோதிக்கவும்",
   "settings.testing_net": "இணைப்பைச் சோதிக்கிறது...",
   "settings.system_proxy": "சிஸ்டம் குளோபல் ப்ராக்ஸி அமைப்புகள் (HTTP / HTTPS / SOCKS4 / SOCKS5)",

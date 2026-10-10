@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const esEs: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -286,7 +286,7 @@ export const esEs: TranslationDict = {
   "settings.auto_eject_enabled": "Expulsar automáticamente (no recomendado)",
   "settings.auto_eject_disabled": "No expulsar automáticamente (recomendado)",
   "settings.github_proxy": "Prefijo de proxy/espejo de GitHub:",
-  "settings.proxy_placeholder": "Por defecto vacío (Conexión directa). Ejemplo: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Por defecto vacío (Conexión directa). Ejemplo: https://proxy.example.com/",
   "settings.test_net": "Probar conexión con GitHub",
   "settings.testing_net": "Probando conectividad...",
   "settings.system_proxy": "Ajustes de proxy del sistema (HTTP / HTTPS / SOCKS4 / SOCKS5)",

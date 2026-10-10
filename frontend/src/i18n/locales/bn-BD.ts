@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const bnBd: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -284,7 +284,7 @@ export const bnBd: TranslationDict = {
   "settings.auto_eject_enabled": "স্বয়ংক্রিয় বের করা (সুপারিশ করা হয় না)",
   "settings.auto_eject_disabled": "স্বয়ংক্রিয় বের না করা (সুপারিশকৃত)",
   "settings.github_proxy": "GitHub মিরর / প্রক্সি প্রিফিক্স:",
-  "settings.proxy_placeholder": "ডিফল্ট খালি (ডাইরেক্ট গিটহাব)। উদাহরণ: https://ghproxy.net/",
+  "settings.proxy_placeholder": "ডিফল্ট খালি (ডাইরেক্ট গিটহাব)। উদাহরণ: https://proxy.example.com/",
   "settings.test_net": "গিটহাব সংযোগ পরীক্ষা করুন",
   "settings.testing_net": "সংযোগ পরীক্ষা করা হচ্ছে...",
   "settings.system_proxy": "সিস্টেম গ্লোবাল প্রক্সি সেটিংস (HTTP / HTTPS / SOCKS4 / SOCKS5)",

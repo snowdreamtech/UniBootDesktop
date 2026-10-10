@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const viVn: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -281,7 +281,7 @@ export const viVn: TranslationDict = {
   "settings.auto_eject_enabled": "Tự động tháo (không khuyến nghị)",
   "settings.auto_eject_disabled": "Không tự động tháo (khuyến nghị)",
   "settings.github_proxy": "Tiền tố proxy/gương GitHub:",
-  "settings.proxy_placeholder": "Mặc định để trống (Kết nối trực tiếp). Ví dụ: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Mặc định để trống (Kết nối trực tiếp). Ví dụ: https://proxy.example.com/",
   "settings.test_net": "Kiểm tra kết nối GitHub",
   "settings.testing_net": "Đang kiểm tra kết nối...",
   "settings.system_proxy": "Cài đặt Proxy Hệ thống (HTTP / HTTPS / SOCKS4 / SOCKS5)",

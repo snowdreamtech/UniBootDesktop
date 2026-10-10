@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const fiFi: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -285,7 +285,7 @@ export const fiFi: TranslationDict = {
   "settings.auto_eject_enabled": "Automaattinen poisto (ei suositella)",
   "settings.auto_eject_disabled": "Ei automaattista poistoa (suositellaan)",
   "settings.github_proxy": "GitHub-peili / välityspalvelimen etuliite:",
-  "settings.proxy_placeholder": "Oletuksena tyhjä (Direct GitHub). Esimerkki: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Oletuksena tyhjä (Direct GitHub). Esimerkki: https://proxy.example.com/",
   "settings.test_net": "Testaa GitHub-yhteyttä",
   "settings.testing_net": "Testataan yhteyttä...",
   "settings.system_proxy": "Järjestelmän yleiset välityspalvelimen asetukset (HTTP / HTTPS / SOCKS4 / SOCKS5)",

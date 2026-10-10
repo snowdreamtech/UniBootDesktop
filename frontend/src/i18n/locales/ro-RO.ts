@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const roRo: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -283,7 +283,7 @@ export const roRo: TranslationDict = {
   "settings.auto_eject_enabled": "Ejectare automată (nerecomandat)",
   "settings.auto_eject_disabled": "Fără ejectare automată (recomandat)",
   "settings.github_proxy": "Prefix oglindă / proxy GitHub:",
-  "settings.proxy_placeholder": "Implicit gol (Direct GitHub). Exemplu: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Implicit gol (Direct GitHub). Exemplu: https://proxy.example.com/",
   "settings.test_net": "Testați conexiunea GitHub",
   "settings.testing_net": "Se testează conexiunea...",
   "settings.system_proxy": "Setări proxy globale ale sistemului (HTTP/HTTPS/SOCKS4/SOCKS5)",

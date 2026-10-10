@@ -126,7 +126,7 @@ func FetchLatestVentoyRelease(ctx context.Context, proxyPrefix string, localVent
 	client := pkgHttp.NewClientWithTimeout(15 * time.Second)
 	resp, err := client.Do(req)
 
-	// Fallback to direct URL if proxy request fails or returns non-200 (since gh-proxy mirrors only proxy github.com and not api.github.com)
+	// Fallback to direct URL if proxy request fails or returns non-200
 	if (err != nil || resp.StatusCode != http.StatusOK) && finalURL != apiURL {
 		if resp != nil {
 			resp.Body.Close()

@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const elGr: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -292,7 +292,7 @@ export const elGr: TranslationDict = {
   "settings.auto_eject_enabled": "Αυτόματη εξαγωγή (δεν συνιστάται)",
   "settings.auto_eject_disabled": "Χωρίς αυτόματη εξαγωγή (συνιστάται)",
   "settings.github_proxy": "Πρόθεμα διακομιστή μεσολάβησης / καθρέφτη GitHub:",
-  "settings.proxy_placeholder": "Προεπιλογή κενό (Direct GitHub). Παράδειγμα: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Προεπιλογή κενό (Direct GitHub). Παράδειγμα: https://proxy.example.com/",
   "settings.test_net": "Δοκιμάστε τη σύνδεση GitHub",
   "settings.testing_net": "Δοκιμή συνδεσιμότητας...",
   "settings.system_proxy": "Καθολικές ρυθμίσεις διακομιστή μεσολάβησης συστήματος (HTTP / HTTPS / SOCKS4 / SOCKS5)",

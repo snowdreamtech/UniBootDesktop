@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const jaJp: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -282,7 +282,7 @@ export const jaJp: TranslationDict = {
   "settings.auto_eject_enabled": "自動取り出し（非推奨）",
   "settings.auto_eject_disabled": "自動取り出しなし（推奨）",
   "settings.github_proxy": "GitHub プロキシ/ミラープレフィックス:",
-  "settings.proxy_placeholder": "デフォルトは空 (GitHub 公式へ直連)。例: https://ghproxy.net/",
+  "settings.proxy_placeholder": "デフォルトは空 (GitHub 公式へ直連)。例: https://proxy.example.com/",
   "settings.test_net": "GitHub 接続テスト",
   "settings.testing_net": "接続確認中...",
   "settings.system_proxy": "システムプロキシ設定 (HTTP / HTTPS / SOCKS4 / SOCKS5)",

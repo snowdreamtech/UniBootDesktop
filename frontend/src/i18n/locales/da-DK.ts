@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const daDk: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -282,7 +282,7 @@ export const daDk: TranslationDict = {
   "settings.auto_eject_enabled": "Automatisk udskubning (anbefales ikke)",
   "settings.auto_eject_disabled": "Ikke automatisk udskubning (anbefalet)",
   "settings.github_proxy": "GitHub spejl / proxy-præfiks:",
-  "settings.proxy_placeholder": "Standard tom (Direct GitHub). Eksempel: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Standard tom (Direct GitHub). Eksempel: https://proxy.example.com/",
   "settings.test_net": "Test GitHub-forbindelsen",
   "settings.testing_net": "Tester forbindelse...",
   "settings.system_proxy": "System globale proxyindstillinger (HTTP / HTTPS / SOCKS4 / SOCKS5)",
