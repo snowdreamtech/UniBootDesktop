@@ -284,7 +284,7 @@ func DownloadAndExtractVentoyWithProgress(ctx context.Context, proxyPrefix strin
 		if onProgress != nil {
 			onProgress(updater.UpdateProgress{
 				Percentage: 82,
-				Status:     "正在校验安装包哈希完整性...",
+				Status:     "正在校验安装包 SHA256 哈希完整性...",
 				Stage:      "verifying",
 			})
 		}

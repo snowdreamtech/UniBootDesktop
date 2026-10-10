@@ -415,10 +415,52 @@
                   }}</span>
                 </button>
               </div>
-              <div v-if="isDownloadingVentoy" class="sync-progress">
-                <div class="progress-bar-inner" :style="{ width: ventoyDownloadProgress + '%' }"></div>
-                <div class="progress-status-desc" v-if="ventoyDownloadStatusText">
-                  {{ ventoyDownloadStatusText }} ({{ ventoyDownloadProgress }}%)
+              <div v-if="isDownloadingVentoy" class="ventoy-progress-card">
+                <!-- 阶段提示（正在下载 ➔ 正在校验 SHA256 ➔ 正在解压工具链） -->
+                <div class="stage-stepper">
+                  <span
+                    class="stage-step"
+                    :class="{
+                      active: ventoyDownloadStage === 'downloading' || ventoyDownloadStage === 'checking',
+                      done: ['verifying', 'extracting', 'completed'].includes(ventoyDownloadStage),
+                    }"
+                  >
+                    <span class="step-indicator">{{ ['verifying', 'extracting', 'completed'].includes(ventoyDownloadStage) ? '✓' : '1' }}</span>
+                    <span>正在下载</span>
+                  </span>
+                  <span class="stage-arrow">➔</span>
+                  <span
+                    class="stage-step"
+                    :class="{
+                      active: ventoyDownloadStage === 'verifying',
+                      done: ['extracting', 'completed'].includes(ventoyDownloadStage),
+                    }"
+                  >
+                    <span class="step-indicator">{{ ['extracting', 'completed'].includes(ventoyDownloadStage) ? '✓' : '2' }}</span>
+                    <span>正在校验 SHA256</span>
+                  </span>
+                  <span class="stage-arrow">➔</span>
+                  <span
+                    class="stage-step"
+                    :class="{
+                      active: ventoyDownloadStage === 'extracting',
+                      done: ventoyDownloadStage === 'completed',
+                    }"
+                  >
+                    <span class="step-indicator">{{ ventoyDownloadStage === 'completed' ? '✓' : '3' }}</span>
+                    <span>正在解压工具链</span>
+                  </span>
+                </div>
+                <!-- 进度条轨道 -->
+                <div class="sync-progress-track">
+                  <div class="progress-bar-inner" :style="{ width: ventoyDownloadProgress + '%' }"></div>
+                </div>
+                <!-- 状态与速率描述行: 如 3.5 MB / 16.7 MB (21%) · 25 KB/s -->
+                <div class="progress-meta-row">
+                  <span class="progress-status-desc">
+                    {{ ventoyDownloadStatusText || "正在处理..." }}
+                  </span>
+                  <span class="progress-pct-badge">{{ ventoyDownloadProgress }}%</span>
                 </div>
               </div>
             </div>
@@ -705,6 +747,8 @@ const checkingVentoyRelease = ref(false);
 const isDownloadingVentoy = ref(false);
 const ventoyDownloadProgress = ref(0);
 const ventoyDownloadStatusText = ref("");
+const ventoyDownloadStage = ref("downloading");
+const ventoyDownloadSpeed = ref("");
 const latestVentoyTag = ref("");
 const localVentoyVersionTag = ref("");
 const hasVentoyUpdate = ref(false);
@@ -1169,13 +1213,16 @@ async function downloadVentoyToolchain() {
   logUserAction("INFO", "User initiated Ventoy toolchain download/update");
   isDownloadingVentoy.value = true;
   ventoyDownloadProgress.value = 5;
+  ventoyDownloadStage.value = "checking";
   ventoyDownloadStatusText.value = t("settings.pullingVentoy") || "正在拉取与解压 Ventoy 工具链...";
+  ventoyDownloadSpeed.value = "";
 
   const app = getWailsApp();
   try {
     if (app && typeof app.DownloadVentoyRelease === "function") {
       const info = await app.DownloadVentoyRelease();
       ventoyDownloadProgress.value = 100;
+      ventoyDownloadStage.value = "completed";
       if (info) {
         latestVentoyTag.value = info.tagName || latestVentoyTag.value || "v1.1.18";
         localVentoyVersionTag.value = info.localVersion || info.tagName;
@@ -1189,16 +1236,21 @@ async function downloadVentoyToolchain() {
           isDownloadingVentoy.value = false;
           ventoyDownloadProgress.value = 0;
           ventoyDownloadStatusText.value = "";
+          ventoyDownloadStage.value = "";
+          ventoyDownloadSpeed.value = "";
           showToast(t("settings.ventoySyncSuccessAlert", { tag: info.tagName || "v1.1.18" }), "success");
         }, 500);
       }
     } else {
       setTimeout(() => {
         ventoyDownloadProgress.value = 100;
+        ventoyDownloadStage.value = "completed";
         setTimeout(() => {
           isDownloadingVentoy.value = false;
           ventoyDownloadProgress.value = 0;
           ventoyDownloadStatusText.value = "";
+          ventoyDownloadStage.value = "";
+          ventoyDownloadSpeed.value = "";
           showToast(t("settings.ventoySyncSuccessAlert", { tag: "v1.1.18" }), "success");
         }, 500);
       }, 1000);
@@ -1208,6 +1260,8 @@ async function downloadVentoyToolchain() {
     isDownloadingVentoy.value = false;
     ventoyDownloadProgress.value = 0;
     ventoyDownloadStatusText.value = "";
+    ventoyDownloadStage.value = "";
+    ventoyDownloadSpeed.value = "";
     showToast(t("settings.ventoySyncFailedAlert", { error: e?.message || String(e) }), "error");
   }
 }
@@ -1282,6 +1336,12 @@ onMounted(() => {
         }
         if (p.status) {
           ventoyDownloadStatusText.value = p.status;
+        }
+        if (p.stage) {
+          ventoyDownloadStage.value = p.stage;
+        }
+        if (p.speed) {
+          ventoyDownloadSpeed.value = p.speed;
         }
       }
     });
@@ -1869,6 +1929,112 @@ onUnmounted(() => {
   height: 100%;
   background: var(--accent-cyan);
   transition: width 0.2s ease;
+}
+
+.ventoy-progress-card {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(14, 165, 233, 0.06);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stage-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.stage-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.stage-step .step-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 0.68rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+}
+
+.stage-step.active {
+  color: var(--accent-cyan);
+  font-weight: 600;
+  background: rgba(6, 182, 212, 0.12);
+}
+
+.stage-step.active .step-indicator {
+  background: var(--accent-cyan);
+  color: #0b1120;
+  font-weight: bold;
+}
+
+.stage-step.done {
+  color: #10b981;
+}
+
+.stage-step.done .step-indicator {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.stage-arrow {
+  color: var(--text-muted);
+  opacity: 0.5;
+  font-size: 0.75rem;
+}
+
+.sync-progress-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  font-family: monospace;
+}
+
+.progress-status-desc {
+  color: var(--text-main);
+  opacity: 0.9;
+}
+
+.progress-pct-badge {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+[data-theme="light"] .ventoy-progress-card {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+[data-theme="light"] .stage-step .step-indicator {
+  background: #e2e8f0;
+  color: #64748b;
+}
+
+[data-theme="light"] .sync-progress-track {
+  background: #e2e8f0;
 }
 
 .input-with-btn {

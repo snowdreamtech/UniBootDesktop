@@ -39,6 +39,12 @@ func TestBuildProxyURL(t *testing.T) {
 			t.Errorf("BuildProxyURL(%q, %q) = %q; want %q", rawURL, tt.proxyPrefix, got, tt.expected)
 		}
 	}
+
+	// Verify GitHub API URLs are not prefixed by gh-proxy mirrors
+	apiURL := "https://api.github.com/repos/ventoy/Ventoy/releases/latest"
+	if got := BuildProxyURL(apiURL, "https://gh-proxy.sn0wdr1am.com/"); got != apiURL {
+		t.Errorf("expected GitHub API URL to bypass proxy, got %q", got)
+	}
 }
 
 func TestHasNewVersion(t *testing.T) {
