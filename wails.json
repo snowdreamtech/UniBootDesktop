@@ -8,6 +8,7 @@
   "frontend:dev:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
+  "viteServerTimeout": 60,
   "devServer": "localhost:34115",
   "wailsjsdir": "./frontend",
   "preBuildHooks": {
