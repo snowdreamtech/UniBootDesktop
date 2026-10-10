@@ -6,6 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn, execSync } from "node:child_process";
 import { preflight } from "./preflight.mjs";
+import { resolveWailsCommand } from "./run-dev.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const scriptsDir = path.dirname(__filename);
@@ -93,14 +94,26 @@ async function main() {
 
   const args = ["build", "-clean", "-trimpath", "-m", "-nosyncgomod", ...autoTags, "-ldflags", ldflags, ...userArgs];
 
+  const isWindows = process.platform === "win32";
+  const wailsCmd = resolveWailsCommand();
+
+  // Normalize PATH and Path for Windows cross-shell compatibility (MSYS2 / Git Bash / PowerShell)
+  const effectivePath = process.env.PATH || process.env.Path || "";
+  const wailsDir = path.dirname(wailsCmd);
+  const extraPaths = [];
+  if (fs.existsSync(wailsDir) && !effectivePath.includes(wailsDir)) {
+    extraPaths.push(wailsDir);
+  }
+  const fullPath =
+    extraPaths.length > 0 ? `${extraPaths.join(path.delimiter)}${path.delimiter}${effectivePath}` : effectivePath;
+
   const childEnv = {
     ...process.env,
+    PATH: fullPath,
+    ...(isWindows ? { Path: fullPath } : {}),
     GOCACHE: goCacheDir,
     GOTMPDIR: goTmpDir,
   };
-
-  const isWindows = process.platform === "win32";
-  const wailsCmd = isWindows ? "wails.exe" : "wails";
 
   const child = spawn(wailsCmd, args, {
     cwd: projectRoot,
