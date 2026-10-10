@@ -179,7 +179,7 @@ async function main() {
   const args = [
     "dev",
     "-devserver",
-    `localhost:${backend.port}`,
+    `127.0.0.1:${backend.port}`,
     "-viteservertimeout",
     "60",
     ...autoTags,
@@ -187,7 +187,7 @@ async function main() {
   ];
 
   console.log(
-    `\x1b[36m[SmartPort] Launching Wails Dev (Backend: localhost:${backend.port}, Frontend: localhost:${frontend.port})...\x1b[0m\n`
+    `\x1b[36m[SmartPort] Launching Wails Dev (Backend: 127.0.0.1:${backend.port}, Frontend: 127.0.0.1:${frontend.port})...\x1b[0m\n`
   );
 
   const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");

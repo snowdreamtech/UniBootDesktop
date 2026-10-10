@@ -9,7 +9,7 @@
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
   "viteServerTimeout": 60,
-  "devServer": "localhost:34115",
+  "devServer": "127.0.0.1:34115",
   "wailsjsdir": "./frontend",
   "preBuildHooks": {
     "*/*": "node -e \"import((require('node:fs').existsSync('scripts/preflight.mjs')?'./scripts':'../../scripts')+'/preflight.mjs')\""
