@@ -386,8 +386,8 @@
           <div class="batch-current-disk" v-if="batchDeployInfo && batchDeployInfo.totalDisks > 1">
             {{ t("deploy.batch_current") }}: {{ batchDeployInfo.currentDiskIndex }}/{{ batchDeployInfo.totalDisks }}
           </div>
-          <div class="batch-disk-name" v-if="batchDeployInfo?.currentDisk">
-            {{ batchDeployInfo.currentDisk }}
+          <div class="batch-disk-name" v-if="displayCurrentDiskName">
+            {{ displayCurrentDiskName }}
           </div>
           <div class="batch-current-stage">
             {{ batchDeployInfo?.currentStage || t("deploy.stage_preparing") }}
@@ -617,6 +617,7 @@ import { useToast } from "../composables/useToast";
 import CustomSelect from "./CustomSelect.vue";
 import ProgressBar from "./ProgressBar.vue";
 import type { DiskInfo } from "./DiskPanel.vue";
+import { formatDiskFriendlyName } from "../utils/diskFormatter";
 import { t } from "../i18n";
 
 const { showToast } = useToast();
@@ -680,25 +681,18 @@ function formatStatsTime(seconds?: number): string {
 }
 
 function formatSelectedDiskTarget(disk: DiskInfo): string {
-  const name = disk.name || disk.device;
-  const dev = disk.device;
-  const mp = disk.mountPoint;
-  if (mp && /^[A-Za-z]:[\\/]?$/.test(mp.trim())) {
-    const driveLetter = mp.trim().replace(/[\\/]+$/, "");
-    return `${name} (${driveLetter})`;
-  }
-  return `${name} (${dev})`;
+  return formatDiskFriendlyName(disk);
 }
 
 function formatVmTargetDisplay(name: string, dev: string): string {
-  if (props.selectedDisk && props.selectedDisk.device === dev && props.selectedDisk.mountPoint) {
-    const mp = props.selectedDisk.mountPoint;
-    if (/^[A-Za-z]:[\\/]?$/.test(mp.trim())) {
-      const driveLetter = mp.trim().replace(/[\\/]+$/, "");
-      return `${name} (${driveLetter})`;
-    }
+  if (props.selectedDisk && props.selectedDisk.device === dev) {
+    return formatDiskFriendlyName(props.selectedDisk);
   }
-  return `${name} (${dev})`;
+  const found = props.diskList.find((d) => d.device === dev);
+  if (found) {
+    return formatDiskFriendlyName(found);
+  }
+  return formatDiskFriendlyName({ name, device: dev });
 }
 
 const emit = defineEmits<{
@@ -778,6 +772,20 @@ const canChangeFs = computed(() => props.canChangeFs ?? (!props.isDeploying && !
 const canManageIso = computed(() => props.canManageIso ?? (!props.isDeploying && !props.isVmRunning));
 const canVerifyHash = computed(() => props.canVerifyHash ?? (!props.isDeploying && !props.isVmRunning));
 const canConfigureVm = computed(() => props.canConfigureVm ?? (!props.isDeploying && !props.isVmRunning));
+
+const displayCurrentDiskName = computed(() => {
+  const current = props.batchDeployInfo?.currentDisk;
+  if (current) {
+    if (/^[A-Za-z]:\s*\(/.test(current)) return current;
+    const found = props.diskList.find((d) => d.device === current || d.name === current);
+    if (found) return formatDiskFriendlyName(found);
+    return current;
+  }
+  if (props.selectedDisk) {
+    return formatDiskFriendlyName(props.selectedDisk);
+  }
+  return "";
+});
 
 function getHypervisorShortName(vm?: { type: string; name: string } | null): string {
   if (!vm) return "QEMU";

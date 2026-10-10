@@ -3,7 +3,7 @@
 
 import { ref, computed, type Ref, type ComputedRef } from "vue";
 import type { DiskInfo } from "../components/DiskPanel.vue";
-
+import { formatDiskFriendlyName } from "../utils/diskFormatter";
 import type { VentoyValidation } from "../utils/ventoyValidation";
 
 /**
@@ -340,12 +340,12 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
       return runningVmTarget.value.name;
     }
     if (selectionMode.value === "single") {
-      return selectedDisk.value?.name || selectedDisk.value?.device || "";
+      return selectedDisk.value ? formatDiskFriendlyName(selectedDisk.value) : "";
     }
     if (selectedDevices.value.size > 0) {
       const firstDev = Array.from(selectedDevices.value)[0];
       const found = diskList.value.find((d) => d.device === firstDev);
-      return found?.name || firstDev;
+      return found ? formatDiskFriendlyName(found) : firstDev;
     }
     return "";
   });
@@ -483,12 +483,14 @@ export function useDiskStateMachine(options: DiskStateMachineOptions): DiskState
         selectedDevices.value.forEach((dev) => {
           const d = diskList.value.find((disk) => disk.device === dev);
           if (d && (d.writable === false || (d as any).is_readonly)) {
-            roNames.push(d.name || d.device);
+            roNames.push(formatDiskFriendlyName(d));
           }
         });
         return t("deploy.error_readonly_disk", { disks: roNames.join(", ") || "Selected disks" });
       }
-      const devName = selectedDisk.value?.name || activeVmTargetName.value || activeVmTargetDevice.value || "";
+      const devName = selectedDisk.value
+        ? formatDiskFriendlyName(selectedDisk.value)
+        : activeVmTargetName.value || activeVmTargetDevice.value || "";
       return t("deploy.error_readonly_disk", { disks: devName });
     }
 

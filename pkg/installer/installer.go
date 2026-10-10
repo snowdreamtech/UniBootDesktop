@@ -51,6 +51,47 @@ type DeployResult struct {
 	Diagnostics *InstallDiagnostics `json:"diagnostics,omitempty"`
 }
 
+// FormatDiskFriendlyTarget formats a target disk identifier into a friendly display name,
+// e.g. "E: (UNIBOOT)" on Windows when a drive letter and volume label are available.
+func FormatDiskFriendlyTarget(targetDisk string, diskInfo *disk.DiskInfo) string {
+	if diskInfo != nil {
+		mp := strings.TrimSpace(diskInfo.MountPoint)
+		mpClean := strings.ToUpper(strings.TrimRight(mp, `/\`))
+		if len(mpClean) == 2 && mpClean[1] == ':' && mpClean[0] >= 'A' && mpClean[0] <= 'Z' {
+			name := strings.TrimSpace(diskInfo.Name)
+			if name != "" {
+				cleanName := name
+				if len(cleanName) >= 2 && cleanName[1] == ':' {
+					cleanName = strings.TrimSpace(cleanName[2:])
+					cleanName = strings.TrimPrefix(cleanName, "(")
+					cleanName = strings.TrimSuffix(cleanName, ")")
+					cleanName = strings.TrimSpace(cleanName)
+				}
+				if cleanName != "" {
+					return fmt.Sprintf("%s (%s)", mpClean, cleanName)
+				}
+			}
+			return mpClean
+		}
+
+		name := strings.TrimSpace(diskInfo.Name)
+		dev := strings.TrimSpace(diskInfo.Device)
+		if dev == "" {
+			dev = targetDisk
+		}
+		if name != "" && name != dev {
+			if dev != "" {
+				return fmt.Sprintf("%s (%s)", name, dev)
+			}
+			return name
+		}
+		if dev != "" {
+			return dev
+		}
+	}
+	return targetDisk
+}
+
 func validateLiveTargetDisk(targetDisk string) error {
 	return validateLiveTargetDiskSnapshot(targetDisk, nil)
 }
@@ -118,7 +159,7 @@ func deployHybridModeWithStage(ctx context.Context, targetDisk string, fsType st
 	modeLabel := fmt.Sprintf("Hybrid Mode (%s)", fsType)
 	tracker := NewDeployTracker(targetDisk, modeLabel, expected)
 
-	logger.Info("Starting Hybrid Mode deployment...", "target", targetDisk, "fsType", fsType)
+	logger.Info("Starting Hybrid Mode deployment...", "target", FormatDiskFriendlyTarget(targetDisk, expected), "device", targetDisk, "fsType", fsType)
 
 	// Step 1: Target Disk & Snapshot Validation
 	if stageCb != nil {
@@ -349,6 +390,8 @@ func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []s
 		var currentSpeed float64
 		var currentEta int
 
+		friendlyDisk := FormatDiskFriendlyTarget(d, snapshotPtr)
+
 		stageCallback := func(diskProg int, stage string) {
 			if batchProgressCb != nil {
 				elapsed := int(time.Since(batchStartTime).Seconds())
@@ -356,7 +399,7 @@ func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []s
 				batchProgressCb(BatchDeployProgress{
 					TotalDisks:       totalDisks,
 					CurrentDiskIndex: index + 1,
-					CurrentDisk:      d,
+					CurrentDisk:      friendlyDisk,
 					CurrentStage:     stage,
 					DiskProgress:     diskProg,
 					OverallProgress:  overallProgress,
@@ -381,7 +424,7 @@ func deployHybridModeBatchWithExpectedDisks(ctx context.Context, targetDisks []s
 				batchProgressCb(BatchDeployProgress{
 					TotalDisks:       totalDisks,
 					CurrentDiskIndex: index + 1,
-					CurrentDisk:      d,
+					CurrentDisk:      friendlyDisk,
 					CurrentStage:     stage,
 					DiskProgress:     diskProg,
 					OverallProgress:  overallProgress,
@@ -490,7 +533,7 @@ func deployCloudModeWithStage(ctx context.Context, targetDisk string, fsType str
 	modeLabel := fmt.Sprintf("Cloud Mode (%s)", fsType)
 	tracker := NewDeployTracker(targetDisk, modeLabel, expected)
 
-	logger.Info("Starting Cloud Mode deployment...", "target", targetDisk, "fsType", fsType)
+	logger.Info("Starting Cloud Mode deployment...", "target", FormatDiskFriendlyTarget(targetDisk, expected), "device", targetDisk, "fsType", fsType)
 
 	// Report initial progress
 	if progressCallback != nil {
@@ -645,6 +688,8 @@ func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []st
 			snapshot = &expected[index]
 		}
 
+		friendlyDisk := FormatDiskFriendlyTarget(d, snapshot)
+
 		// Calculate progress for batch operations: each disk contributes equally
 		diskProgressCallback := func(diskProgress int, stage string) {
 			if progressCallback != nil {
@@ -671,7 +716,7 @@ func deployCloudModeBatchWithExpectedDisks(ctx context.Context, targetDisks []st
 				progressCallback(BatchDeployProgress{
 					TotalDisks:       totalDisks,
 					CurrentDiskIndex: index + 1, // 1-based index for display
-					CurrentDisk:      d,
+					CurrentDisk:      friendlyDisk,
 					CurrentStage:     stage,
 					DiskProgress:     diskProgress,
 					OverallProgress:  overallProgress,
