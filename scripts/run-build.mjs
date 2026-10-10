@@ -99,21 +99,83 @@ async function main() {
 
   // Normalize PATH and Path for Windows cross-shell compatibility (MSYS2 / Git Bash / PowerShell)
   const effectivePath = process.env.PATH || process.env.Path || "";
-  const wailsDir = path.dirname(wailsCmd);
   const extraPaths = [];
-  if (fs.existsSync(wailsDir) && !effectivePath.includes(wailsDir)) {
+
+  const wailsDir = path.dirname(wailsCmd);
+  if (fs.existsSync(wailsDir)) {
     extraPaths.push(wailsDir);
   }
-  const fullPath =
-    extraPaths.length > 0 ? `${extraPaths.join(path.delimiter)}${path.delimiter}${effectivePath}` : effectivePath;
 
-  const childEnv = {
-    ...process.env,
-    PATH: fullPath,
-    ...(isWindows ? { Path: fullPath } : {}),
-    GOCACHE: goCacheDir,
-    GOTMPDIR: goTmpDir,
-  };
+  // Ensure UniRTM shims directory is in extraPaths (contains npm.exe / npm.cmd / node.exe)
+  const localAppData = process.env.LOCALAPPDATA;
+  if (isWindows && localAppData) {
+    const shimDir = path.join(localAppData, "unirtm", "shims");
+    if (fs.existsSync(shimDir)) {
+      extraPaths.push(shimDir);
+    }
+  }
+  const homeDir = process.env.HOME || process.env.USERPROFILE;
+  if (homeDir) {
+    const unixShimDir = path.join(homeDir, ".local", "share", "unirtm", "shims");
+    if (fs.existsSync(unixShimDir)) {
+      extraPaths.push(unixShimDir);
+    }
+  }
+
+  // Ensure Node.js and npm runtime directories are in extraPaths
+  for (const cmd of ["node", "npm"]) {
+    try {
+      const out = execSync(`unirtm which ${cmd}`, { stdio: ["ignore", "pipe", "ignore"] })
+        .toString()
+        .trim();
+      if (out && fs.existsSync(out)) {
+        const binDir = path.dirname(out);
+        if (!extraPaths.includes(binDir)) {
+          extraPaths.push(binDir);
+        }
+      }
+    } catch {
+      // fallback
+    }
+  }
+
+  // Construct deduplicated PATH with extraPaths prepended
+  const pathParts = [];
+  for (const p of extraPaths) {
+    if (p && !pathParts.includes(p)) {
+      pathParts.push(p);
+    }
+  }
+  for (const p of effectivePath.split(path.delimiter)) {
+    if (p && !pathParts.includes(p)) {
+      pathParts.push(p);
+    }
+  }
+  const fullPath = pathParts.join(path.delimiter);
+
+  // Guarantee PATHEXT on Windows for MSYS2/Git Bash/CMD (so npm resolves to npm.cmd)
+  const defaultPathExt = ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC";
+  const effectivePathExt = process.env.PATHEXT || process.env.PathExt || defaultPathExt;
+
+  const childEnv = { ...process.env };
+  // Purge any case collisions of PATH / PATHEXT
+  for (const key of Object.keys(childEnv)) {
+    const lower = key.toLowerCase();
+    if (lower === "path") {
+      delete childEnv[key];
+    } else if (isWindows && lower === "pathext") {
+      delete childEnv[key];
+    }
+  }
+
+  childEnv.PATH = fullPath;
+  if (isWindows) {
+    childEnv.Path = fullPath;
+    childEnv.PATHEXT = effectivePathExt;
+    childEnv.PathExt = effectivePathExt;
+  }
+  childEnv.GOCACHE = goCacheDir;
+  childEnv.GOTMPDIR = goTmpDir;
 
   const child = spawn(wailsCmd, args, {
     cwd: projectRoot,
