@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const hiIn: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -283,7 +283,7 @@ export const hiIn: TranslationDict = {
   "settings.auto_eject_enabled": "स्वचालित निष्कासन (अनुशंसित नहीं)",
   "settings.auto_eject_disabled": "स्वचालित निष्कासन नहीं (अनुशंसित)",
   "settings.github_proxy": "GitHub दर्पण / प्रॉक्सी उपसर्ग:",
-  "settings.proxy_placeholder": "डिफ़ॉल्ट खाली (डायरेक्ट GitHub)। उदाहरण: https://ghproxy.net/",
+  "settings.proxy_placeholder": "डिफ़ॉल्ट खाली (डायरेक्ट GitHub)। उदाहरण: https://proxy.example.com/",
   "settings.test_net": "GitHub कनेक्शन का परीक्षण करें",
   "settings.testing_net": "कनेक्टिविटी का परीक्षण...",
   "settings.system_proxy": "सिस्टम ग्लोबल प्रॉक्सी सेटिंग्स (HTTP / HTTPS / SOCKS4 / SOCKS5)",

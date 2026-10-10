@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const slSi: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -284,7 +284,7 @@ export const slSi: TranslationDict = {
   "settings.auto_eject_enabled": "Samodejna odstranitev (ni priporočljivo)",
   "settings.auto_eject_disabled": "Brez samodejne odstranitve (priporočeno)",
   "settings.github_proxy": "GitHub preslikovalni / posredniški predpona:",
-  "settings.proxy_placeholder": "Privzeto prazno (Direct GitHub). Primer: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Privzeto prazno (Direct GitHub). Primer: https://proxy.example.com/",
   "settings.test_net": "Preizkusite povezavo GitHub",
   "settings.testing_net": "Preizkušanje povezljivosti ...",
   "settings.system_proxy": "Sistemske globalne nastavitve proxyja (HTTP / HTTPS / SOCKS4 / SOCKS5)",

@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const hyAm: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -289,7 +289,7 @@ export const hyAm: TranslationDict = {
   "settings.auto_eject_enabled": "Ավտոմատ անջատում (խորհուրդ չի տրվում)",
   "settings.auto_eject_disabled": "Առանց ավտոմատ անջատման (խորհուրդ է տրվում)",
   "settings.github_proxy": "GitHub կրկնօրինակման / պրոքսի նախածանց․",
-  "settings.proxy_placeholder": "Կանխադրված դատարկ (Direct GitHub): Օրինակ՝ https://ghproxy.net/",
+  "settings.proxy_placeholder": "Կանխադրված դատարկ (Direct GitHub): Օրինակ՝ https://proxy.example.com/",
   "settings.test_net": "Փորձարկել GitHub կապը",
   "settings.testing_net": "Միացման փորձարկում...",
   "settings.system_proxy": "Համակարգի գլոբալ վստահված անձի կարգավորումներ (HTTP / HTTPS / SOCKS4 / SOCKS5)",

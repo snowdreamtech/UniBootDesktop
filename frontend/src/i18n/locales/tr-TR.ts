@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const trTr: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -282,7 +282,7 @@ export const trTr: TranslationDict = {
   "settings.auto_eject_enabled": "Otomatik çıkar (önerilmez)",
   "settings.auto_eject_disabled": "Otomatik çıkarma yapma (önerilen)",
   "settings.github_proxy": "GitHub proxy / Ayna öneki:",
-  "settings.proxy_placeholder": "Varsayılan olarak boş (Doğrudan Bağlantı). Örnek: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Varsayılan olarak boş (Doğrudan Bağlantı). Örnek: https://proxy.example.com/",
   "settings.test_net": "GitHub Bağlantısını Test Et",
   "settings.testing_net": "Bağlantı test ediliyor...",
   "settings.system_proxy": "Sistem Vekil Sunucu Ayarları (HTTP / HTTPS / SOCKS4 / SOCKS5)",

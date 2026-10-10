@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const ocFr: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -285,7 +285,7 @@ export const ocFr: TranslationDict = {
   "settings.auto_eject_enabled": "Ejeccion automatica (pas recomandat)",
   "settings.auto_eject_disabled": "Sens ejeccion automatica (recomandat)",
   "settings.github_proxy": "Prefix de miralh / proxy GitHub :",
-  "settings.proxy_placeholder": "Vuèg per defaut (GitHub dirècte). Exemple: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Vuèg per defaut (GitHub dirècte). Exemple: https://proxy.example.com/",
   "settings.test_net": "Testar la connexion GitHub",
   "settings.testing_net": "Testar la connectivitat...",
   "settings.system_proxy": "Paramètres del proxy global del sistèma (HTTP / HTTPS / SOCKS4 / SOCKS5)",

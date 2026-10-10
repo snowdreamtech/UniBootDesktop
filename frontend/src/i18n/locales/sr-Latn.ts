@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const srLatn: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -286,7 +286,7 @@ export const srLatn: TranslationDict = {
   "settings.auto_eject_enabled": "Automatsko izbacivanje (ne preporučuje se)",
   "settings.auto_eject_disabled": "Bez automatskog izbacivanja (preporučeno)",
   "settings.github_proxy": "GitHub ogledalski / proxy prefiks:",
-  "settings.proxy_placeholder": "Подразумевано празно (Дирецт ГитХуб). Пример: хттпс://гхпроки.нет/",
+  "settings.proxy_placeholder": "Подразумевано празно (Дирецт ГитХуб). Пример: https://proxy.example.com/",
   "settings.test_net": "Тестирајте ГитХуб везу",
   "settings.testing_net": "Тестирање повезивања...",
   "settings.system_proxy": "Глобална подешавања проксија система (ХТТП / ХТТПС / СОЦКС4 / СОЦКС5)",

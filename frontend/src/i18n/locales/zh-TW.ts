@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const zhTw: TranslationDict = {
   "iso.preflight_title": "寫入前檢查",
@@ -276,7 +276,7 @@ export const zhTw: TranslationDict = {
   "settings.auto_eject_enabled": "自動彈出（不推薦）",
   "settings.auto_eject_disabled": "不自動彈出（推薦）",
   "settings.github_proxy": "GitHub 代理 / 鏡像前綴:",
-  "settings.proxy_placeholder": "預設為空 (直連 GitHub 官方)。示例: https://ghproxy.net/",
+  "settings.proxy_placeholder": "預設為空 (直連 GitHub 官方)。示例: https://proxy.example.com/",
   "settings.test_net": "測試 GitHub 網路連通性",
   "settings.testing_net": "正在測試連通性...",
   "settings.system_proxy": "系統全域代理伺服器設定 (HTTP / HTTPS / SOCKS4 / SOCKS5)",

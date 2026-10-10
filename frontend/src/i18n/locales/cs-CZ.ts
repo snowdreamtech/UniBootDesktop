@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const csCz: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -282,7 +282,7 @@ export const csCz: TranslationDict = {
   "settings.auto_eject_enabled": "Automaticky odebrat (nedoporučuje se)",
   "settings.auto_eject_disabled": "Neodebírat automaticky (doporučeno)",
   "settings.github_proxy": "Předpona zrcadla / proxy GitHub:",
-  "settings.proxy_placeholder": "Výchozí prázdné (Direct GitHub). Příklad: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Výchozí prázdné (Direct GitHub). Příklad: https://proxy.example.com/",
   "settings.test_net": "Otestujte připojení GitHub",
   "settings.testing_net": "Testování připojení...",
   "settings.system_proxy": "Globální nastavení serveru proxy (HTTP / HTTPS / SOCKS4 / SOCKS5)",

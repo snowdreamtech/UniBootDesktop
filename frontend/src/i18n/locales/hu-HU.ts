@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const huHu: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -284,7 +284,7 @@ export const huHu: TranslationDict = {
   "settings.auto_eject_enabled": "Automatikus eltávolítás (nem ajánlott)",
   "settings.auto_eject_disabled": "Nincs automatikus eltávolítás (ajánlott)",
   "settings.github_proxy": "GitHub tükör / proxy előtag:",
-  "settings.proxy_placeholder": "Alapértelmezett üres (Direct GitHub). Példa: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Alapértelmezett üres (Direct GitHub). Példa: https://proxy.example.com/",
   "settings.test_net": "A GitHub-kapcsolat tesztelése",
   "settings.testing_net": "Kapcsolat tesztelése...",
   "settings.system_proxy": "Rendszer globális proxybeállításai (HTTP / HTTPS / SOCKS4 / SOCKS5)",

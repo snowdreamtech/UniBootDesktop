@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const zhCn: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -275,7 +275,7 @@ export const zhCn: TranslationDict = {
   "settings.auto_eject_enabled": "自动弹出（不推荐）",
   "settings.auto_eject_disabled": "不自动弹出（推荐）",
   "settings.github_proxy": "GitHub 代理 / 镜像前缀:",
-  "settings.proxy_placeholder": "默认为空 (直连 GitHub 官方)。示例: https://ghproxy.net/",
+  "settings.proxy_placeholder": "默认为空 (直连 GitHub 官方)。示例: https://proxy.example.com/",
   "settings.test_net": "测试 GitHub 网络连通性",
   "settings.testing_net": "正在测试连通性...",
   "settings.system_proxy": "系统全局代理服务器设置 (HTTP / HTTPS / SOCKS4 / SOCKS5)",

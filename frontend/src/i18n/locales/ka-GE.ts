@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const kaGe: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -285,7 +285,7 @@ export const kaGe: TranslationDict = {
   "settings.auto_eject_enabled": "ავტომატური ამოღება (არ არის რეკომენდებული)",
   "settings.auto_eject_disabled": "ავტომატური ამოღების გარეშე (რეკომენდებული)",
   "settings.github_proxy": "GitHub სარკის / პროქსის პრეფიქსი:",
-  "settings.proxy_placeholder": "ნაგულისხმევი ცარიელია (პირდაპირი GitHub). მაგალითი: https://ghproxy.net/",
+  "settings.proxy_placeholder": "ნაგულისხმევი ცარიელია (პირდაპირი GitHub). მაგალითი: https://proxy.example.com/",
   "settings.test_net": "შეამოწმეთ GitHub კავშირი",
   "settings.testing_net": "დაკავშირების ტესტირება...",
   "settings.system_proxy": "სისტემის გლობალური პროქსის პარამეტრები (HTTP / HTTPS / SOCKS4 / SOCKS5)",

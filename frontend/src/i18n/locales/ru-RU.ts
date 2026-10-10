@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const ruRu: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -283,7 +283,7 @@ export const ruRu: TranslationDict = {
   "settings.auto_eject_enabled": "Автоматически извлекать (не рекомендуется)",
   "settings.auto_eject_disabled": "Не извлекать автоматически (рекомендуется)",
   "settings.github_proxy": "Префикс прокси/зеркала GitHub:",
-  "settings.proxy_placeholder": "По умолчанию пусто (Прямое подключение). Пример: https://ghproxy.net/",
+  "settings.proxy_placeholder": "По умолчанию пусто (Прямое подключение). Пример: https://proxy.example.com/",
   "settings.test_net": "Проверить подключение к GitHub",
   "settings.testing_net": "Проверка подключения...",
   "settings.system_proxy": "Системный прокси-сервер (HTTP / HTTPS / SOCKS4 / SOCKS5)",

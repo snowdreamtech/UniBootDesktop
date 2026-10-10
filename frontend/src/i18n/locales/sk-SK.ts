@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const skSk: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -283,7 +283,7 @@ export const skSk: TranslationDict = {
   "settings.auto_eject_enabled": "Automaticky odpojiť (neodporúča sa)",
   "settings.auto_eject_disabled": "Neodpájať automaticky (odporúčané)",
   "settings.github_proxy": "Predpona zrkadla / proxy GitHub:",
-  "settings.proxy_placeholder": "Predvolené prázdne (Direct GitHub). Príklad: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Predvolené prázdne (Direct GitHub). Príklad: https://proxy.example.com/",
   "settings.test_net": "Otestujte pripojenie GitHub",
   "settings.testing_net": "Testovanie pripojenia...",
   "settings.system_proxy": "Globálne nastavenia servera proxy (HTTP / HTTPS / SOCKS4 / SOCKS5)",

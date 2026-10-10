@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const heIl: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -275,7 +275,7 @@ export const heIl: TranslationDict = {
   "settings.auto_eject_enabled": "הוצאה אוטומטית (לא מומלץ)",
   "settings.auto_eject_disabled": "ללא הוצאה אוטומטית (מומלץ)",
   "settings.github_proxy": "קידומת מראה / פרוקסי של GitHub:",
-  "settings.proxy_placeholder": "ריק כברירת מחדל (Direct GitHub). דוגמה: https://ghproxy.net/",
+  "settings.proxy_placeholder": "ריק כברירת מחדל (Direct GitHub). דוגמה: https://proxy.example.com/",
   "settings.test_net": "בדוק את חיבור GitHub",
   "settings.testing_net": "בודק קישוריות...",
   "settings.system_proxy": "הגדרות פרוקסי גלובליות של המערכת (HTTP / HTTPS / SOCKS4 / SOCKS5)",

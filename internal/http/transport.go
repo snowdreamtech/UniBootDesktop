@@ -32,7 +32,6 @@ var ProxyBypassDomains = []string{
 	"goproxy.cn",
 	"goproxy.io",
 	"gems.ruby-china.com",
-	"sn0wdr1am.com",
 }
 
 // ShouldBypassProxy returns true if the given host should bypass the proxy.

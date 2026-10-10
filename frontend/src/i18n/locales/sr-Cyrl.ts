@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const srCyrl: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -285,7 +285,7 @@ export const srCyrl: TranslationDict = {
   "settings.auto_eject_enabled": "Аутоматско избацивање (не препоручује се)",
   "settings.auto_eject_disabled": "Без аутоматског избацивања (препоручено)",
   "settings.github_proxy": "GitHub огледалски / proxy префикс:",
-  "settings.proxy_placeholder": "Подразумевано празно (Дирецт ГитХуб). Пример: хттпс://гхпроки.нет/",
+  "settings.proxy_placeholder": "Подразумевано празно (Дирецт ГитХуб). Пример: https://proxy.example.com/",
   "settings.test_net": "Тестирајте ГитХуб везу",
   "settings.testing_net": "Тестирање повезивања...",
   "settings.system_proxy": "Глобална подешавања проксија система (ХТТП / ХТТПС / СОЦКС4 / СОЦКС5)",

@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const idId: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -283,7 +283,7 @@ export const idId: TranslationDict = {
   "settings.auto_eject_enabled": "Pelepasan otomatis (tidak direkomendasikan)",
   "settings.auto_eject_disabled": "Tanpa pelepasan otomatis (direkomendasikan)",
   "settings.github_proxy": "Prefiks Cermin / Proksi GitHub:",
-  "settings.proxy_placeholder": "Defaultnya kosong (GitHub Langsung). Contoh: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Defaultnya kosong (GitHub Langsung). Contoh: https://proxy.example.com/",
   "settings.test_net": "Uji Koneksi GitHub",
   "settings.testing_net": "Menguji Konektivitas...",
   "settings.system_proxy": "Pengaturan Proksi Global Sistem (HTTP / HTTPS / SOCKS4 / SOCKS5)",

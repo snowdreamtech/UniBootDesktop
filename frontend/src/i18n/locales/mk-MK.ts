@@ -1,4 +1,4 @@
-import type { TranslationDict } from "../types";
+﻿import type { TranslationDict } from "../types";
 
 export const mkMk: TranslationDict = {
   "menu.app": "UniBootDesktop",
@@ -288,7 +288,7 @@ export const mkMk: TranslationDict = {
   "settings.auto_eject_enabled": "Автоматско исфрлање (не се препорачува)",
   "settings.auto_eject_disabled": "Без автоматско исфрлање (препорачано)",
   "settings.github_proxy": "GitHub пресликувачки / proxy префикс:",
-  "settings.proxy_placeholder": "Стандардно празно (Директен GitHub). Пример: https://ghproxy.net/",
+  "settings.proxy_placeholder": "Стандардно празно (Директен GitHub). Пример: https://proxy.example.com/",
   "settings.test_net": "Тестирајте ја врската со GitHub",
   "settings.testing_net": "Тестирање на поврзување...",
   "settings.system_proxy": "Системски глобални поставки за прокси (HTTP / HTTPS / SOCKS4 / SOCKS5)",
