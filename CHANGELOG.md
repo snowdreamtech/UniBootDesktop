@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.6.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.5.0...v0.6.0) (2026-10-11)
+
+
+### 🚀 Features
+
+* **deploy:** display friendly disk names with drive letters and volume labels ([7fd53e5](https://github.com/snowdreamtech/UniBootDesktop/commit/7fd53e54627d24d49c0d9f5169f8612bee748a65))
+* **firmware:** prioritize newer embedded version over stale local cache ([737ba6c](https://github.com/snowdreamtech/UniBootDesktop/commit/737ba6c6970736090df44fadea34fc37425f5f72))
+* **settings:** update local and embedded firmware fallback tags to v1.1.0 ([66cf172](https://github.com/snowdreamtech/UniBootDesktop/commit/66cf172392bd8b9692d28c11401c314668715716))
+* **ventoy:** stream real-time download speed and display multi-stage progression ([63e6efb](https://github.com/snowdreamtech/UniBootDesktop/commit/63e6efb41b26948f72b81adc7f4675d4a0f157a1))
+
+
+### 🐛 Bug Fixes
+
+* **dev:** bind dev servers explicitly to IPv4 127.0.0.1 to avoid Windows IPv6 socket permission EACCES error ([e7ba712](https://github.com/snowdreamtech/UniBootDesktop/commit/e7ba712d3302d1c3109e13555a037a5805bc9b7b))
+* **dev:** prioritize active node directory and increase vite server timeout ([6be34c5](https://github.com/snowdreamtech/UniBootDesktop/commit/6be34c5ed6c50753231ee8b3e3f196a6090ef721))
+* **i18n:** remove illegal utf-8 bom and format frontend files ([30a821a](https://github.com/snowdreamtech/UniBootDesktop/commit/30a821ad0e1a4e8958dec8ec9d2b8ad2077b0a3c))
+* **privilege:** explicitly terminate worker daemon on shutdown to prevent Windows binary file lock ([ef339bc](https://github.com/snowdreamtech/UniBootDesktop/commit/ef339bcb87f92f386ef57bca432b6cc0fd09689e))
+* **privilege:** tighten unix worker watchdog check interval to 200ms ([06929df](https://github.com/snowdreamtech/UniBootDesktop/commit/06929dfc711f91d2ba6c010379fce26bdffd1c1a))
+* **proxy:** eliminate all hardcoded proxy servers and sanitize domain bypasses ([123bce4](https://github.com/snowdreamtech/UniBootDesktop/commit/123bce4ceb8a9d8d359c46fac8ed2b61bd4b8ccb))
+* **scripts:** ensure node directory is in extraPaths for lifecycle hooks ([7839207](https://github.com/snowdreamtech/UniBootDesktop/commit/783920772acb9896d48a635b964cfb12546b3206))
+* **scripts:** guarantee PATHEXT and UniRTM shims in build and dev environments ([895eb4f](https://github.com/snowdreamtech/UniBootDesktop/commit/895eb4f9b7f883aee28c3539a8cbbf4c5fb24ef3))
+* **scripts:** purge temporary development binaries on startup and exit ([4156fcb](https://github.com/snowdreamtech/UniBootDesktop/commit/4156fcbcb38d0d1746ba8ee74abb78edf132a905))
+* **scripts:** robustly resolve wails binary path and synchronize PATH/Path for windows shell compatibility ([56f504a](https://github.com/snowdreamtech/UniBootDesktop/commit/56f504afd8bed698b7fd717ddb9c6e750c37f19f))
+* **toolchain:** replace python debug and freethreaded packages with standard install_only distributions ([9a87d2d](https://github.com/snowdreamtech/UniBootDesktop/commit/9a87d2d6adea9a0b315c45fc1b4e60673841fe11))
+* **ventoy:** fallback to direct api when proxy returns 404 and stream download progress ([3d2650c](https://github.com/snowdreamtech/UniBootDesktop/commit/3d2650ceaebc122043ba60b77660dca41fd43196))
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** sync dependabot config and unirtm toolchain ([c2ff313](https://github.com/snowdreamtech/UniBootDesktop/commit/c2ff313b6e4c00c3953322569b5f59164547ae79))
+* **deps:** upgrade unirtm-version to 0.34.0 ([c008ffe](https://github.com/snowdreamtech/UniBootDesktop/commit/c008ffedabb2fbd69818b360fd273b244c43d98f))
+* **firmware:** update embedded version.json baseline to v1.1.0 ([25f25d5](https://github.com/snowdreamtech/UniBootDesktop/commit/25f25d5496a0f89adecd60e016d32fdb8d6bfed4))
+
 ## [0.5.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.4.0...v0.5.0) (2026-10-09)
 
 
