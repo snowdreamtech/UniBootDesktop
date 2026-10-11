@@ -170,11 +170,23 @@ export async function ensureAppIcon() {
 }
 
 /**
+ * Ensure embedded UniBoot firmware assets are downloaded and verified.
+ */
+export async function ensureFirmwareAssets() {
+  const firmwareScript = path.join(scriptsDir, "fetch-firmware.mjs");
+  if (fs.existsSync(firmwareScript)) {
+    const { fetchFirmwareAssets } = await import(pathToFileURL(firmwareScript).href);
+    await fetchFirmwareAssets();
+  }
+}
+
+/**
  * Run full preflight verification suite.
  */
 export async function preflight() {
   ensureFrontendDeps();
   await ensureAppIcon();
+  await ensureFirmwareAssets();
   ensureWailsBindings();
 }
 

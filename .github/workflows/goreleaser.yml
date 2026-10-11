@@ -333,6 +333,11 @@ jobs:
           done
           echo "⚠️ Proxy might not be ready, but proceeding anyway..."
 
+      - name: "📥 Fetch Embedded UniBoot Firmware"
+        shell: bash
+        run: |
+          unirtm exec -- node scripts/fetch-firmware.mjs
+
       - name: "🚀 Distribute Artifacts (GoReleaser)"
         uses: goreleaser/goreleaser-action@5daf1e915a5f0af01ddbcd89a43b8061ff4f1a89 # v7.2.2
         continue-on-error: true # We manually check status below to allow third-party failures but catch core failures

@@ -232,6 +232,7 @@ description = "Run comprehensive tests (frontend build & unit tests, then Go uni
 #                (GitHub Actions ubuntu-latest has ~7GB RAM; -race multiplies usage 5-10x)
 # CGO_ENABLED=0: force pure-Go build — all test files must use modernc.org/sqlite, not mattn/go-sqlite3
 run = '''
+unirtm run preflight
 unirtm run test:frontend
 unirtm exec -- go test -cover -v -timeout 10m -p 4 ./...
 '''

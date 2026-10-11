@@ -10,6 +10,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 )
 
 var envMutex sync.Mutex
@@ -344,7 +345,8 @@ func TestFetchLatestUniBootRelease(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping network test in short mode")
 	}
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
 	info, err := FetchLatestUniBootRelease(ctx, "")
 	if err != nil {
 		t.Logf("FetchLatestUniBootRelease network query warning (acceptable in offline env): %v", err)
@@ -364,7 +366,8 @@ func TestSyncUniBootFirmware(t *testing.T) {
 	tmpDataDir := t.TempDir()
 	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", tmpDataDir)
 
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
 	info, err := SyncUniBootFirmware(ctx, "")
 	if err != nil {
 		t.Logf("SyncUniBootFirmware network query warning (acceptable in offline env): %v", err)

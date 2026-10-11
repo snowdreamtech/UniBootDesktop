@@ -46,6 +46,16 @@ ci_summary.md
 .ci_path_cache
 
 # =============================================================================
+# UniBoot Firmware Binaries (dynamically fetched during build or dev)
+# =============================================================================
+pkg/firmware/assets/*.efi
+pkg/firmware/assets/*.lkrn
+pkg/firmware/assets/*.kpxe
+pkg/firmware/assets/*.iso
+pkg/firmware/assets/*.tmp-*
+pkg/firmware/assets/*.download-*
+
+# =============================================================================
 
 ### macOS ###
 .DS_Store
