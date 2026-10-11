@@ -95,10 +95,7 @@ export async function fetchFirmwareAssets(options = {}) {
   // Repository files tracked directly in git are excluded from downloads
   const gitTrackedAssets = new Set(["background.png", "boot.ipxe", "uniboot.ipxe", "version.json", "checksums.sha256"]);
 
-  let proxy = process.env.GITHUB_PROXY || "";
-  if (!proxy && process.env.ENABLE_GITHUB_PROXY === "1") {
-    proxy = "https://ghproxy.net/";
-  }
+  const proxy = process.env.GITHUB_PROXY || "";
   const proxyPrefix = proxy && proxy !== "0" && proxy !== "direct" ? (proxy.endsWith("/") ? proxy : `${proxy}/`) : "";
 
   let downloadedCount = 0;
