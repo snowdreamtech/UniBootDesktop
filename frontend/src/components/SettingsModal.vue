@@ -390,7 +390,7 @@
                   <span class="divider">•</span>
                   <span
                     >{{ t("settings.cloudRelease") }}
-                    <strong class="highlight-tag">Ventoy {{ latestVentoyTag || "v1.1.17" }}</strong></span
+                    <strong class="highlight-tag">Ventoy {{ latestVentoyTag || "v1.1.18" }}</strong></span
                   >
                   <span v-if="!isVentoyOsSupported" class="badge warning">
                     {{ t("settings.ventoyMacUnsupportedBadge") }}
@@ -410,7 +410,7 @@
                       : !isVentoyOsSupported
                         ? t("settings.ventoyMacNoDownload")
                         : hasVentoyUpdate
-                          ? t("settings.upgradeVentoyNow", { version: latestVentoyTag || "v1.1.17" })
+                          ? t("settings.upgradeVentoyNow", { version: latestVentoyTag || "v1.1.18" })
                           : t("settings.reinstallVentoy")
                   }}</span>
                 </button>
@@ -1190,7 +1190,7 @@ async function checkVentoyRelease() {
     try {
       const info = await app.GetVentoyReleaseInfo();
       if (info) {
-        latestVentoyTag.value = info.tagName || "v1.1.17";
+        latestVentoyTag.value = info.tagName || "v1.1.18";
         localVentoyVersionTag.value = info.localVersion || "";
         hasVentoyUpdate.value = info.hasUpdate === true;
         isVentoyOsSupported.value = info.isSupportedOS !== false;

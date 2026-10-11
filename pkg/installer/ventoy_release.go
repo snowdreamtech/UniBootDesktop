@@ -110,7 +110,6 @@ func FetchLatestVentoyRelease(ctx context.Context, proxyPrefix string, localVent
 
 	if targetOS == "darwin" {
 		info.Message = "macOS does not have official native Ventoy CLI formatting binaries. Please use Cloud Mode or prepare Ventoy on Windows/Linux."
-		return info, nil
 	}
 
 	apiURL := "https://api.github.com/repos/ventoy/Ventoy/releases/latest"
@@ -118,6 +117,10 @@ func FetchLatestVentoyRelease(ctx context.Context, proxyPrefix string, localVent
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, finalURL, nil)
 	if err != nil {
+		if targetOS == "darwin" {
+			info.TagName = "v1.1.18"
+			return info, nil
+		}
 		return nil, fmt.Errorf("failed to create Ventoy release request: %w", err)
 	}
 	req.Header.Set("User-Agent", "UniBootDesktop-VentoyDetector/1.0")
@@ -127,7 +130,7 @@ func FetchLatestVentoyRelease(ctx context.Context, proxyPrefix string, localVent
 	resp, err := client.Do(req)
 
 	// Fallback to direct URL if proxy request fails or returns non-200
-	if (err != nil || resp.StatusCode != http.StatusOK) && finalURL != apiURL {
+	if (err != nil || (resp != nil && resp.StatusCode != http.StatusOK)) && finalURL != apiURL {
 		if resp != nil {
 			resp.Body.Close()
 		}
@@ -140,11 +143,19 @@ func FetchLatestVentoyRelease(ctx context.Context, proxyPrefix string, localVent
 	}
 
 	if err != nil {
+		if targetOS == "darwin" {
+			info.TagName = "v1.1.18"
+			return info, nil
+		}
 		return nil, fmt.Errorf("failed to fetch Ventoy release from GitHub: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
+		if targetOS == "darwin" {
+			info.TagName = "v1.1.18"
+			return info, nil
+		}
 		return nil, fmt.Errorf("github api returned status %d for Ventoy release", resp.StatusCode)
 	}
 

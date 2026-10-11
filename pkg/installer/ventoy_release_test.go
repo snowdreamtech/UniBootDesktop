@@ -220,4 +220,8 @@ func TestFetchLatestVentoyReleaseOnDarwin(t *testing.T) {
 	if info.TargetAsset != "" {
 		t.Errorf("expected empty target asset on darwin")
 	}
+	if info.TagName == "" {
+		t.Errorf("expected non-empty TagName on darwin")
+	}
+	t.Logf("Darwin fetched TagName: %s", info.TagName)
 }
