@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.7.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.6.0...v0.7.0) (2026-10-11)
+
+
+### 🚀 Features
+
+* **firmware:** synchronize embedded firmware version and checksums to v1.3.0 ([955a754](https://github.com/snowdreamtech/UniBootDesktop/commit/955a7541a32fd4eef78cea0de14cbc5b90857dce))
+* **firmware:** untrack firmware binaries and fetch dynamically for build ([89dd2a6](https://github.com/snowdreamtech/UniBootDesktop/commit/89dd2a6aaf7a297e12e2a305f5f2800b90427f26))
+
+
+### 🐛 Bug Fixes
+
+* **ci:** strengthen firmware asset download with curl and token support ([503c983](https://github.com/snowdreamtech/UniBootDesktop/commit/503c9838e875eedee2475a672bbf414e7aa9f009))
+* **config:** resolve Windows file sharing violation during atomic config save ([6839ec0](https://github.com/snowdreamtech/UniBootDesktop/commit/6839ec0cf1b9709fedfd643b879d19f0641a2ffa))
+* **firmware:** enforce strict checksum verification without bypass ([eb9d3e3](https://github.com/snowdreamtech/UniBootDesktop/commit/eb9d3e3a8cef53489985585bb1d170d0c1bbfa09))
+* **firmware:** remove embedded default reverse proxy from fetch script ([6725eac](https://github.com/snowdreamtech/UniBootDesktop/commit/6725eac6c28fe93b21f45f338022021c0e39e15b))
+* **firmware:** synchronize UniBoot.iso checksum with published release asset ([ad05774](https://github.com/snowdreamtech/UniBootDesktop/commit/ad05774bd77c2eb9d36edcb908fb58e5bad81384))
+* **ventoy:** query cloud release on macos and update fallback to v1.1.18 ([70c08a8](https://github.com/snowdreamtech/UniBootDesktop/commit/70c08a8cc48cfc81b19a4b402e3f2123856906ec))
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** sync dependabot config and unirtm toolchain ([44ab279](https://github.com/snowdreamtech/UniBootDesktop/commit/44ab279eb88e043bea68fd10888e99c98c1299d8))
+
 ## [0.6.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.5.0...v0.6.0) (2026-10-11)
 
 
