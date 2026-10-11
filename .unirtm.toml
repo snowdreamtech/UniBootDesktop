@@ -65,7 +65,7 @@ node = "20.18.3"
 "pipx:pre-commit" = "4.6.2"
 "pipx:yamllint" = "1.38.0"
 python = "3.14.7"
-"go:golang.org/x/vuln/cmd/govulncheck" = "v1.8.0"
+"go:golang.org/x/vuln/cmd/govulncheck" = "v1.9.0"
 
 "go:golang.org/x/tools/cmd/goimports" = "v0.49.0"
 "go:github.com/golangci/golangci-lint/cmd/golangci-lint" = "v1.64.8"

@@ -997,6 +997,26 @@ backend = "go-pkg"
 
 [tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.windows-arm64"]
 
+[[tools."go:golang.org/x/vuln/cmd/govulncheck"]]
+version = "v1.9.0"
+backend = "go-pkg"
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.linux-amd64"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.linux-amd64-musl"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.linux-arm64"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.linux-arm64-musl"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.macos-amd64"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.macos-arm64"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.windows-amd64"]
+
+[tools."go:golang.org/x/vuln/cmd/govulncheck"."platforms.windows-arm64"]
+
 [[tools."go:mvdan.cc/sh/v3/cmd/shfmt"]]
 version = "v3.13.0"
 backend = "go"
