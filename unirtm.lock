@@ -1353,6 +1353,26 @@ backend = "npm"
 
 [tools."npm:prettier"."platforms.windows-arm64"]
 
+[[tools."npm:prettier"]]
+version = "3.9.10"
+backend = "npm"
+
+[tools."npm:prettier"."platforms.linux-amd64"]
+
+[tools."npm:prettier"."platforms.linux-amd64-musl"]
+
+[tools."npm:prettier"."platforms.linux-arm64"]
+
+[tools."npm:prettier"."platforms.linux-arm64-musl"]
+
+[tools."npm:prettier"."platforms.macos-amd64"]
+
+[tools."npm:prettier"."platforms.macos-arm64"]
+
+[tools."npm:prettier"."platforms.windows-amd64"]
+
+[tools."npm:prettier"."platforms.windows-arm64"]
+
 [[tools."npm:sort-package-json"]]
 version = "4.0.0"
 backend = "npm"
@@ -1558,26 +1578,25 @@ version = "3.14.7"
 backend = "native"
 
 [tools."python"."platforms.linux-amd64"]
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-x86_64-unknown-linux-gnu-install_only.tar.gz"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-x86_64-unknown-linux-gnu-freethreaded-install_only.tar.gz"
 
 [tools."python"."platforms.linux-amd64-musl"]
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-x86_64-unknown-linux-musl-install_only.tar.gz"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-x86_64-unknown-linux-gnu-freethreaded-install_only.tar.gz"
 
 [tools."python"."platforms.linux-arm64"]
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-aarch64-unknown-linux-gnu-install_only.tar.gz"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-aarch64-unknown-linux-gnu-freethreaded-install_only.tar.gz"
 
 [tools."python"."platforms.linux-arm64-musl"]
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-aarch64-unknown-linux-musl-install_only.tar.gz"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-aarch64-unknown-linux-gnu-freethreaded-install_only.tar.gz"
 
 [tools."python"."platforms.macos-amd64"]
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-x86_64-apple-darwin-install_only.tar.gz"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-x86_64-apple-darwin-freethreaded-install_only.tar.gz"
 
 [tools."python"."platforms.macos-arm64"]
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-aarch64-apple-darwin-install_only.tar.gz"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-aarch64-apple-darwin-freethreaded-install_only.tar.gz"
 
 [tools."python"."platforms.windows-amd64"]
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-x86_64-pc-windows-msvc-install_only.tar.gz"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-x86_64-pc-windows-msvc-freethreaded-install_only.tar.gz"
 
 [tools."python"."platforms.windows-arm64"]
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-aarch64-pc-windows-msvc-install_only.tar.gz"
-
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7%2B20260929-aarch64-pc-windows-msvc-freethreaded-install_only.tar.gz"
