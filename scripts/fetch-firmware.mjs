@@ -118,10 +118,6 @@ export async function fetchFirmwareAssets(options = {}) {
       if (!silent) {
         console.warn(`[Firmware] Checksum mismatch for ${filename}, re-downloading...`);
       }
-      if (process.env.SKIP_FIRMWARE_CHECKSUM === "1") {
-        verifiedCount++;
-        continue;
-      }
       fs.rmSync(filePath, { force: true });
     }
 
