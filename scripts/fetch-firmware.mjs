@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
 import https from "node:https";
 import http from "node:http";
 
@@ -28,6 +29,23 @@ function calculateSha256(filePath) {
 async function downloadToFile(url, destPath) {
   const tmpPath = `${destPath}.tmp-${Date.now()}`;
   try {
+    // 1. Try native curl first for robust streaming and runner .curlrc retry support
+    const curlBin = process.platform === "win32" ? "curl.exe" : "curl";
+    try {
+      execFileSync(
+        curlBin,
+        ["-sSL", "--fail", "--retry", "5", "--retry-delay", "2", "--connect-timeout", "15", "-o", tmpPath, url],
+        { stdio: "ignore" }
+      );
+      if (fs.existsSync(tmpPath) && fs.statSync(tmpPath).size > 0) {
+        fs.renameSync(tmpPath, destPath);
+        return;
+      }
+    } catch {
+      // Fallback to fetch if curl is unavailable or fails
+    }
+
+    // 2. Fallback to native Node.js fetch
     const res = await fetch(url, {
       redirect: "follow",
       headers: {
@@ -130,6 +148,9 @@ export async function fetchFirmwareAssets(options = {}) {
           break;
         } catch (err) {
           lastError = err;
+          if (!silent) {
+            console.warn(`[Firmware] Attempt ${attempt}/3 failed for ${filename} (${url}): ${err.message}`);
+          }
           fs.rmSync(filePath, { force: true });
           await new Promise((r) => setTimeout(r, 1000 * attempt));
         }

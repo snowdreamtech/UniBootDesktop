@@ -249,6 +249,8 @@ jobs:
 
       - name: Fetch Embedded UniBoot Firmware
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
         run: unirtm exec -- node scripts/fetch-firmware.mjs
 
       - name: Generate Wails bindings
