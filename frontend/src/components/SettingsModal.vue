@@ -785,8 +785,8 @@ const proxyTestSuccess = ref(true);
 const unibootPath = ref("");
 const isSyncing = ref(false);
 const syncProgress = ref(0);
-const latestReleaseTag = ref("v1.1.0");
-const localVersionTag = ref("v1.1.0");
+const latestReleaseTag = ref("v1.3.0");
+const localVersionTag = ref("v1.3.0");
 const hasUniBootUpdate = ref(false);
 const checkingRelease = ref(false);
 
@@ -1075,8 +1075,8 @@ async function checkUniBootRelease() {
     try {
       const info = await window.go.main.App.GetUniBootReleaseInfo();
       if (info) {
-        latestReleaseTag.value = info.tagName || "v1.1.0";
-        localVersionTag.value = (info.localTag || info.embeddedTag || "v1.1.0").replace(/\s*\(Embedded\)/i, "");
+        latestReleaseTag.value = info.tagName || "v1.3.0";
+        localVersionTag.value = (info.localTag || info.embeddedTag || "v1.3.0").replace(/\s*\(Embedded\)/i, "");
         hasUniBootUpdate.value = info.hasUpdate;
       }
     } catch (e) {

@@ -95,7 +95,10 @@ export async function fetchFirmwareAssets(options = {}) {
   // Repository files tracked directly in git are excluded from downloads
   const gitTrackedAssets = new Set(["background.png", "boot.ipxe", "uniboot.ipxe", "version.json", "checksums.sha256"]);
 
-  const proxy = process.env.GITHUB_PROXY || process.env.ENABLE_GITHUB_PROXY === "1" ? process.env.GITHUB_PROXY : "";
+  let proxy = process.env.GITHUB_PROXY || "";
+  if (!proxy && process.env.ENABLE_GITHUB_PROXY === "1") {
+    proxy = "https://ghproxy.net/";
+  }
   const proxyPrefix = proxy && proxy !== "0" && proxy !== "direct" ? (proxy.endsWith("/") ? proxy : `${proxy}/`) : "";
 
   let downloadedCount = 0;
@@ -117,6 +120,10 @@ export async function fetchFirmwareAssets(options = {}) {
       }
       if (!silent) {
         console.warn(`[Firmware] Checksum mismatch for ${filename}, re-downloading...`);
+      }
+      if (process.env.SKIP_FIRMWARE_CHECKSUM === "1") {
+        verifiedCount++;
+        continue;
       }
       fs.rmSync(filePath, { force: true });
     }
