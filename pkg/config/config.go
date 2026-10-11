@@ -87,41 +87,12 @@ func validateTOMLData(data []byte) error {
 	return nil
 }
 
-func restoreConfigBackup(cfgPath, backupPath string) error {
-	if backupPath == "" {
-		return fmt.Errorf("no config backup available")
-	}
-	if err := os.Remove(cfgPath); err != nil && !os.IsNotExist(err) {
-		return fmt.Errorf("remove failed config: %w", err)
-	}
-	if err := os.Rename(backupPath, cfgPath); err != nil {
-		return fmt.Errorf("restore backup: %w", err)
-	}
-	return nil
-}
-
-func backupExistingConfig(cfgPath string) (string, bool, error) {
-	if _, err := os.Stat(cfgPath); err != nil {
-		if os.IsNotExist(err) {
-			return "", false, nil
-		}
-		return "", false, fmt.Errorf("stat current config: %w", err)
-	}
-	backupPath := cfgPath + ".corrupt"
-	if err := os.Remove(backupPath); err != nil && !os.IsNotExist(err) {
-		return "", false, fmt.Errorf("remove stale backup: %w", err)
-	}
-	if err := os.Rename(cfgPath, backupPath); err != nil {
-		return "", false, fmt.Errorf("backup config: %w", err)
-	}
-	return backupPath, true, nil
-}
-
 func writeConfigAtomically(cfgPath string, data []byte) error {
-	if err := os.MkdirAll(filepath.Dir(cfgPath), 0o755); err != nil {
+	dir := filepath.Dir(cfgPath)
+	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return fmt.Errorf("create config dir: %w", err)
 	}
-	file, err := os.CreateTemp(filepath.Dir(cfgPath), ".unibootdesktop-*.toml")
+	file, err := os.CreateTemp(dir, ".unibootdesktop-*.toml")
 	if err != nil {
 		return fmt.Errorf("create temp config: %w", err)
 	}
@@ -138,24 +109,23 @@ func writeConfigAtomically(cfgPath string, data []byte) error {
 	if err := file.Close(); err != nil {
 		return fmt.Errorf("close temp config: %w", err)
 	}
-	if err := os.Rename(tmpPath, cfgPath); err != nil {
-		return fmt.Errorf("replace config file: %w", err)
-	}
-	if err := os.Chmod(cfgPath, 0o600); err != nil {
-		return fmt.Errorf("set config permissions: %w", err)
-	}
-	return nil
-}
+	_ = os.Chmod(tmpPath, 0o600)
 
-func atomicRestoreDefaultConfig(cfgPath string) error {
-	defaultCfg := GetDefaultConfig()
-	data, err := toml.Marshal(defaultCfg)
-	if err != nil {
-		return fmt.Errorf("marshal default config: %w", err)
+	var renameErr error
+	for i := 0; i < 5; i++ {
+		renameErr = os.Rename(tmpPath, cfgPath)
+		if renameErr == nil {
+			break
+		}
+		time.Sleep(time.Duration(15*(i+1)) * time.Millisecond)
 	}
-	if err := writeConfigAtomically(cfgPath, data); err != nil {
-		return fmt.Errorf("write default config: %w", err)
+	if renameErr != nil {
+		if directErr := os.WriteFile(cfgPath, data, 0o600); directErr != nil {
+			return fmt.Errorf("replace config file: %w (fallback direct write: %v)", renameErr, directErr)
+		}
 	}
+
+	_ = os.Chmod(cfgPath, 0o600)
 	return nil
 }
 
@@ -278,16 +248,11 @@ func (c *AppConfig) Save() error {
 	defer configWriteMutex.Unlock()
 
 	cfgPath := env.GetGlobalConfigPath()
-	lockFile, unlockLock, err := acquireConfigLock(cfgPath)
+	_, unlockLock, err := acquireConfigLock(cfgPath)
 	if err != nil {
 		return fmt.Errorf("acquire config lock: %w", err)
 	}
 	defer unlockLock()
-	defer func() {
-		if lockFile != nil {
-			_ = lockFile.Close()
-		}
-	}()
 
 	if isEmptyConfig(c) {
 		if _, statErr := os.Stat(cfgPath); statErr != nil && os.IsNotExist(statErr) {
@@ -304,32 +269,8 @@ func (c *AppConfig) Save() error {
 		return fmt.Errorf("validate config payload: %w", err)
 	}
 
-	backupFile, _, backupErr := backupExistingConfig(cfgPath)
-	if backupErr != nil {
-		return fmt.Errorf("prepare backup for config write: %w", backupErr)
-	}
 	if writeErr := writeConfigAtomically(cfgPath, data); writeErr != nil {
-		if backupFile != "" {
-			if restoreErr := restoreConfigBackup(cfgPath, backupFile); restoreErr != nil {
-				return fmt.Errorf("save failed and backup restore failed: %w (restoreErr=%v)", writeErr, restoreErr)
-			}
-		}
 		return fmt.Errorf("write config file: %w", writeErr)
-	}
-
-	if err := validateTOMLDataFromFile(cfgPath); err != nil {
-		if backupFile != "" {
-			if restoreErr := restoreConfigBackup(cfgPath, backupFile); restoreErr != nil {
-				return fmt.Errorf("post-write validation failed and backup restore failed: %w (restoreErr=%v)", err, restoreErr)
-			}
-		} else if restoreErr := atomicRestoreDefaultConfig(cfgPath); restoreErr != nil {
-			return fmt.Errorf("post-write validation failed and default restore failed: %w (restoreErr=%v)", err, restoreErr)
-		}
-		return fmt.Errorf("post-write validation failed: %w", err)
-	}
-
-	if backupFile != "" {
-		_ = os.Remove(backupFile)
 	}
 
 	// Update the in-memory cache so subsequent Load() calls do not re-read disk.
@@ -344,14 +285,6 @@ func (c *AppConfig) Save() error {
 	configCacheMu.Unlock()
 
 	return nil
-}
-
-func validateTOMLDataFromFile(cfgPath string) error {
-	data, err := os.ReadFile(cfgPath)
-	if err != nil {
-		return fmt.Errorf("read config file: %w", err)
-	}
-	return validateTOMLData(data)
 }
 
 // ConfigHealth describes the current health of the persisted config state.

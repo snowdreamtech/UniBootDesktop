@@ -20,12 +20,18 @@ import (
 
 	"github.com/snowdreamtech/unibootdesktop/internal/env"
 	internalUpdater "github.com/snowdreamtech/unibootdesktop/internal/updater"
+	"github.com/snowdreamtech/unibootdesktop/pkg/config"
 	"github.com/snowdreamtech/unibootdesktop/pkg/updater"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestApp_LifecycleAndAPIs(t *testing.T) {
+	tmpDir := t.TempDir()
+	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", filepath.Join(tmpDir, "data"))
+	config.InvalidateConfigCache()
+
 	app := NewApp()
 	require.NotNil(t, app)
 
@@ -195,6 +201,11 @@ func TestApp_ContextLifecycle(t *testing.T) {
 }
 
 func TestApp_UniBootOperations(t *testing.T) {
+	tmpDir := t.TempDir()
+	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", filepath.Join(tmpDir, "data"))
+	config.InvalidateConfigCache()
+
 	app := NewApp()
 	require.NotNil(t, app)
 
@@ -240,6 +251,11 @@ func TestApp_UniBootOperations(t *testing.T) {
 }
 
 func TestApp_SaveConfigAndThemeLanguageValidation(t *testing.T) {
+	tmpDir := t.TempDir()
+	t.Setenv("UNIBOOTDESKTOP_CONFIG_DIR", tmpDir)
+	t.Setenv("UNIBOOTDESKTOP_DATA_DIR", filepath.Join(tmpDir, "data"))
+	config.InvalidateConfigCache()
+
 	app := NewApp()
 	require.NotNil(t, app)
 
