@@ -5,6 +5,8 @@ package firmware
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"os"
 	"path/filepath"
 	"strings"
@@ -61,6 +63,38 @@ func TestFirmwareSyncCompleteness(t *testing.T) {
 	}
 	if !firmwareSyncComplete(2, 2) {
 		t.Fatal("all required firmware downloads should be committed")
+	}
+}
+
+func TestAllManifestAssetsEmbeddedAndVerified(t *testing.T) {
+	manifest, err := firmwareChecksumManifest()
+	if err != nil {
+		t.Fatalf("failed to load checksum manifest: %v", err)
+	}
+	if len(manifest) == 0 {
+		t.Fatalf("checksum manifest is empty")
+	}
+
+	// 1. Ensure all StandardFirmwareMappings exist in manifest
+	mappings := GetFirmwareMappings()
+	for _, m := range mappings {
+		if _, ok := manifest[m.ReleaseName]; !ok {
+			t.Errorf("StandardFirmwareMapping %s missing from checksum manifest", m.ReleaseName)
+		}
+	}
+
+	// 2. Ensure every asset in manifest is embedded and its SHA256 matches exactly
+	for releaseName, expectedHash := range manifest {
+		data, err := embeddedAssets.ReadFile("assets/" + releaseName)
+		if err != nil {
+			t.Errorf("manifest asset %s failed to load from embedded assets: %v", releaseName, err)
+			continue
+		}
+		actual := sha256.Sum256(data)
+		actualHex := hex.EncodeToString(actual[:])
+		if !strings.EqualFold(actualHex, expectedHash) {
+			t.Errorf("manifest asset %s checksum mismatch: expected %s, got %s", releaseName, expectedHash, actualHex)
+		}
 	}
 }
 

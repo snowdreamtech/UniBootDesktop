@@ -165,11 +165,35 @@ export async function fetchFirmwareAssets(options = {}) {
     }
   }
 
-  if (!silent) {
-    console.log(`[Firmware] Assets verification complete: ${verifiedCount} cached, ${downloadedCount} downloaded.`);
+  // Final exhaustive audit: guarantee 100% manifest completeness with zero missing or corrupted assets
+  const missing = [];
+  const corrupted = [];
+  for (const [filename, expectedHash] of manifest.entries()) {
+    const assetPath = path.join(assetsDir, filename);
+    if (!fs.existsSync(assetPath)) {
+      missing.push(filename);
+      continue;
+    }
+    const actualHash = await calculateSha256(assetPath);
+    if (actualHash !== expectedHash) {
+      corrupted.push({ filename, expected: expectedHash, actual: actualHash });
+    }
   }
 
-  return { verifiedCount, downloadedCount };
+  if (missing.length > 0 || corrupted.length > 0) {
+    const missingMsg = missing.length > 0 ? `Missing (${missing.length}): [${missing.join(", ")}]` : "";
+    const corruptMsg =
+      corrupted.length > 0 ? `Corrupted (${corrupted.length}): [${corrupted.map((c) => c.filename).join(", ")}]` : "";
+    throw new Error(`Firmware integrity audit failed! ${[missingMsg, corruptMsg].filter(Boolean).join("; ")}`);
+  }
+
+  if (!silent) {
+    console.log(
+      `[Firmware] Assets verification complete: all ${manifest.size} manifest assets verified (${verifiedCount} cached, ${downloadedCount} downloaded).`
+    );
+  }
+
+  return { verifiedCount, downloadedCount, totalCount: manifest.size };
 }
 
 // Only execute directly when invoked as a script
