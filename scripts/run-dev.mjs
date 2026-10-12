@@ -126,6 +126,71 @@ export function resolveWailsCommand() {
 }
 
 /**
+ * Automatically resolve the best DISPLAY for Linux (prioritizing remote client XQuartz / SSH X11 when over SSH).
+ * @returns {string | null}
+ */
+export function resolveDisplay() {
+  if (process.platform !== "linux") return null;
+
+  // 1. If connecting via SSH, probe the SSH client IP directly (e.g. Mac XQuartz on :0)
+  const sshClient = process.env.SSH_CLIENT || process.env.SSH_CONNECTION || "";
+  const clientIp = sshClient.trim().split(/\s+/)[0];
+  if (clientIp) {
+    try {
+      execSync(`DISPLAY="${clientIp}:0" timeout 1 xdpyinfo`, { stdio: "ignore" });
+      console.log(`\x1b[32m[SmartDisplay] Auto-detected reachable Mac/Remote XQuartz display: ${clientIp}:0\x1b[0m`);
+      return `${clientIp}:0`;
+    } catch {
+      // not reachable or not authorized
+    }
+  }
+
+  // 2. Probe current DISPLAY if it is an SSH forwarded display or custom remote display
+  const currentDisplay = process.env.DISPLAY;
+  if (currentDisplay && currentDisplay !== ":0" && currentDisplay !== ":1") {
+    try {
+      execSync(`DISPLAY="${currentDisplay}" timeout 1 xdpyinfo`, { stdio: "ignore" });
+      return currentDisplay;
+    } catch {
+      // not valid
+    }
+  }
+
+  // 3. Probe common SSH X11 forward displays (localhost:10.0, 127.0.0.1:10.0)
+  for (const d of ["localhost:10.0", "127.0.0.1:10.0", ":10.0"]) {
+    try {
+      execSync(`DISPLAY="${d}" timeout 1 xdpyinfo`, { stdio: "ignore" });
+      console.log(`\x1b[32m[SmartDisplay] Auto-detected reachable SSH forwarded display: ${d}\x1b[0m`);
+      return d;
+    } catch {
+      // not reachable
+    }
+  }
+
+  // 4. If current DISPLAY is set and valid, use it
+  if (currentDisplay) {
+    try {
+      execSync(`DISPLAY="${currentDisplay}" timeout 1 xdpyinfo`, { stdio: "ignore" });
+      return currentDisplay;
+    } catch {
+      // not valid
+    }
+  }
+
+  // 5. Fallback to local host displays :0 or :1 if reachable
+  for (const d of [":0", ":1"]) {
+    try {
+      execSync(`DISPLAY="${d}" timeout 1 xdpyinfo`, { stdio: "ignore" });
+      return d;
+    } catch {
+      // not reachable
+    }
+  }
+
+  return null;
+}
+
+/**
  * Remove any leftover development binaries (*-dev, *-dev.exe) from build/bin.
  * @param {string} root
  */
@@ -313,6 +378,16 @@ async function main() {
   childEnv.GOTMPDIR = process.env.GOTMPDIR || cacheGoTmp;
   childEnv.PORT = String(frontend.port);
   childEnv.VITE_PORT = String(frontend.port);
+
+  if (process.platform === "linux") {
+    const autoDisplay = resolveDisplay();
+    if (autoDisplay) {
+      childEnv.DISPLAY = autoDisplay;
+      childEnv.GDK_BACKEND = "x11";
+      childEnv.WEBKIT_DISABLE_COMPOSITING_MODE = "1";
+      childEnv.LIBGL_ALWAYS_SOFTWARE = "1";
+    }
+  }
 
   const child = spawn(wailsCmd, args, {
     env: childEnv,
