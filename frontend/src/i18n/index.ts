@@ -77,7 +77,7 @@ const loadedDictionaries = ref<Record<string, TranslationDict>>({
   "en-US": enUs,
 });
 
-const DEFAULT_LOCALE = "zh-CN";
+const DEFAULT_LOCALE = "en-US";
 
 export function detectSystemLocale(): string {
   if (typeof navigator === "undefined") return DEFAULT_LOCALE;
@@ -116,7 +116,7 @@ export function resolveAutoLocale(): string {
 
 export function getInitialLocale(): string {
   const saved = typeof localStorage !== "undefined" ? localStorage.getItem("uniboot_locale") : null;
-  if (saved === "auto") {
+  if (saved === "auto" || !saved) {
     return resolveAutoLocale();
   }
   if (saved && SUPPORTED_LANGUAGES.some((l) => l.code === saved)) {
@@ -126,7 +126,7 @@ export function getInitialLocale(): string {
 }
 
 export const selectedLangSetting = ref<string>(
-  (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_locale")) || DEFAULT_LOCALE
+  (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_locale")) || "auto"
 );
 export const currentLocale = ref<string>(getInitialLocale());
 export const currentLang = currentLocale;
@@ -209,8 +209,8 @@ if (initLoc !== "zh-CN" && initLoc !== "en-US") {
 }
 
 export function t(key: keyof TranslationDict, params?: Record<string, string | number>): string {
-  const dict = loadedDictionaries.value[currentLocale.value] || loadedDictionaries.value[DEFAULT_LOCALE] || zhCn;
-  let text = dict[key] || loadedDictionaries.value[DEFAULT_LOCALE]?.[key] || zhCn[key] || key;
+  const dict = loadedDictionaries.value[currentLocale.value] || loadedDictionaries.value[DEFAULT_LOCALE] || enUs;
+  let text = dict[key] || loadedDictionaries.value[DEFAULT_LOCALE]?.[key] || enUs[key] || key;
 
   if (params) {
     Object.keys(params).forEach((pKey) => {

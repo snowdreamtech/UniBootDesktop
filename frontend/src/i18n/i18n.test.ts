@@ -70,4 +70,10 @@ describe("i18n module", () => {
       expect(missingKeys, `Missing keys in ${lang.code}`).toEqual([]);
     }
   }, 60000);
+
+  it("falls back to en-US when encountering unknown locale or missing fallback key", async () => {
+    await setLanguage("invalid-locale");
+    expect(currentLocale.value).toBe("en-US");
+    expect(t("common.close")).toBe("Close");
+  });
 });

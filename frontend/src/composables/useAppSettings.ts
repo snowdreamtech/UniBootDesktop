@@ -101,7 +101,7 @@ export function useAppSettings(options: UseAppSettingsOptions) {
         } else if (savedLang && savedLang !== "") {
           resolvedLang = savedLang;
         } else {
-          resolvedLang = "zh-CN";
+          resolvedLang = "en-US";
         }
 
         await setLanguage(resolvedLang);
