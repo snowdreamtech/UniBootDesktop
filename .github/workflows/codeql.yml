@@ -56,8 +56,8 @@ jobs:
       matrix:
         language:
           - actions
+          - go
           # Uncomment the following lines when source files exist in the repo:
-          # - go # Go (*.go) — golangci-lint, gofmt
           # - python                # Python (*.py) — ruff, ansible-lint
           # - javascript-typescript # JS/TS (*.js, *.ts, *.jsx, *.tsx) — eslint
           # - c-cpp                 # C/C++/Obj-C (*.c, *.cpp, *.h) — clang-format

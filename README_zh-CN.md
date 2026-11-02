@@ -1,167 +1,131 @@
-# Snowdream Tech AI IDE 模板
+# UniGo
 
-[![CI 流水线](https://img.shields.io/github/actions/workflow/status/snowdreamtech/template/ci.yml?branch=main&label=CI%20Pipeline)](https://github.com/snowdreamtech/template/actions/workflows/ci.yml)
-[![CD 自动化发布](https://img.shields.io/github/actions/workflow/status/snowdreamtech/template/cd.yml?branch=main&label=CD%20Pipeline)](https://github.com/snowdreamtech/template/actions/workflows/cd.yml)
-[![文档站点](https://img.shields.io/github/actions/workflow/status/snowdreamtech/template/pages.yml?branch=main&label=%E6%96%87%E6%A1%A3&logo=github)](https://github.com/snowdreamtech/template/actions/workflows/pages.yml)
-[![CodeQL 审计](https://img.shields.io/github/actions/workflow/status/snowdreamtech/template/codeql.yml?branch=main&label=CodeQL&logo=github)](https://github.com/snowdreamtech/template/actions/workflows/codeql.yml)
-[![跨平台验证](https://img.shields.io/badge/Verified-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/snowdreamtech/template/actions/workflows/ci.yml)
-[![安全审计](https://img.shields.io/badge/Security-Zizmor%20%7C%20Trivy%20%7C%20Gitleaks-brightgreen)](https://github.com/snowdreamtech/template/actions/workflows/ci.yml)
-[![UniRTM 质量守卫](https://img.shields.io/badge/Quality%20Guard-UniRTM%20Native-blue)](https://github.com/snowdreamtech/UniRTM)
-[![SBOM 背书](https://img.shields.io/badge/SBOM-Available-success)](https://github.com/snowdreamtech/template/releases/latest)
+[![CI 流水线](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/ci.yml?branch=main&label=CI%20Pipeline)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)
+[![CD 自动化发布](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/cd.yml?branch=main&label=CD%20Pipeline)](https://github.com/snowdreamtech/UniGo/actions/workflows/cd.yml)
+[![文档站点](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/pages.yml?branch=main&label=%E6%96%87%E6%A1%A3&logo=github)](https://github.com/snowdreamtech/UniGo/actions/workflows/pages.yml)
+[![CodeQL 审计](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/codeql.yml?branch=main&label=CodeQL&logo=github)](https://github.com/snowdreamtech/UniGo/actions/workflows/codeql.yml)
+[![跨平台验证](https://img.shields.io/badge/Verified-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)
+[![安全审计](https://img.shields.io/badge/Security-Zizmor%20%7C%20Trivy%20%7C%20Gitleaks-brightgreen)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)
+[![SBOM 背书](https://img.shields.io/badge/SBOM-Available-success)](https://github.com/snowdreamtech/UniGo/releases/latest)
 [![许可证: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/license/MIT)
-[![最新发布](https://img.shields.io/github/v/release/snowdreamtech/template?logo=github&sort=semver)](https://github.com/snowdreamtech/template/releases/latest)
-[![Dependabot 已启用](https://img.shields.io/badge/Dependabot-Enabled-brightgreen?logo=dependabot)](https://github.com/snowdreamtech/template/blob/main/.github/dependabot.yml)
-[![GitHub Stars](https://img.shields.io/github/stars/snowdreamtech/template?style=social)](https://github.com/snowdreamtech/template)
-[![GitHub Issues](https://img.shields.io/github/issues/snowdreamtech/template)](https://github.com/snowdreamtech/template/issues)
-[![代码规模](https://img.shields.io/github/languages/code-size/snowdreamtech/template)](https://github.com/snowdreamtech/template)
+[![最新发布](https://img.shields.io/github/v/release/snowdreamtech/UniGo?logo=github&sort=semver)](https://github.com/snowdreamtech/UniGo/releases/latest)
+[![Dependabot 已启用](https://img.shields.io/badge/Dependabot-Enabled-brightgreen?logo=dependabot)](https://github.com/snowdreamtech/UniGo/blob/main/.github/dependabot.yml)
+[![pre-commit 已启用](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![GitHub Stars](https://img.shields.io/github/stars/snowdreamtech/UniGo?style=social)](https://github.com/snowdreamtech/UniGo)
+[![GitHub Issues](https://img.shields.io/github/issues/snowdreamtech/UniGo)](https://github.com/snowdreamtech/UniGo/issues)
+[![代码规模](https://img.shields.io/github/languages/code-size/snowdreamtech/UniGo)](https://github.com/snowdreamtech/UniGo)
 
 [English](README.md) | [简体中文](README_zh-CN.md)
 
-基于 [UniRTM](https://github.com/snowdreamtech/UniRTM) 构建的企业级多 AI IDE 协作脚手架。本项目采用针对 AI 智能体的**零侵入架构 (Zero-Footprint Architecture)**，提供标准 Model Context Protocol (MCP) 服务、确定性锁版本工具链以及覆盖 Linux、macOS 和 Windows 的全链路工程质量守卫。
+UniGo 是一个快速、灵活且企业级的 Golang CLI 模板，深受 UniRTM 和 helloworld 的启发。它为构建现代 Go 命令行应用程序提供了一个坚实的基础，内置了精美的终端输出、结构化日志、缓存管理机制以及全套的 CI/CD 流水线。
 
----
+## 🌟 特性
 
-## 🌟 核心特性
+- **现代 CLI 架构**：基于 Go 1.24+ 和 Cobra 构建，提供结构化且易于扩展的命令行框架。
+- **精美输出**：使用 `pterm` 实现丰富、多彩且交互友好的终端输出效果。
+- **结构化日志**：内置对 Go 标准库 `slog` 的支持，提供高性能的结构化日志记录。
+- **丰富的内置工具**：自带 `doctor`、`self-update`、`cache`、`config` 和 `license` 等实用命令。
+- **三重保证质量**：通过 IDE 实时检查、Pre-commit 本地拦截和 GitHub Actions 远端全量审计，构建 100% 代码纯净度防线。
+- **跨平台就绪**：在 macOS、Linux 和 Windows 上均可无缝运行。
 
-- **零侵入 AI 集成 (Zero-Footprint)**：通过标准 Model Context Protocol (`unirtm mcp`) 对接任意 AI IDE 或智能体（Cursor、Windsurf、Claude Code、GitHub Copilot、Roo Code、Trae、Zed 等），无需在仓库根目录提交 50+ 个私有配置目录（如 `.cursor/`、`.cline/` 等）。
-- **UniRTM 确定性工具链**：通过 [unirtm.lock](unirtm.lock) 锁定各编译器运行时（Node.js、Go、Python）及所有开发工具的精准版本与 SHA-256 跨平台完整性哈希。
-- **原生质量守卫 (Quality Guard)**：内置开箱即用的约定式提交验证（`builtin:commit-msg`）、代码格式化与代码检查，本地毫秒级校验，彻底摆脱重型外部运行时包装。
-- **企业级安全防线**：基于 Gitleaks 的提交级硬编码机密扫描、基于 Zizmor 的 GitHub Actions 工作流安全审计，以及基于 OSV-Scanner 与 Trivy 的多层依赖漏洞检测。
-- **可复现 DevContainer**：标准化的 `.devcontainer` 环境，实现本地开发机与云端开发容器的 100% 环境一致性。
-- **双语文档站点**：现代化的 VitePress 文档架构，自动化构建并持续部署至 GitHub Pages。
+## 🏗️ 架构与设计
 
----
+### 概览
 
-## 🏗️ 架构设计
+UniGo 旨在解决每次启动新的 Go CLI 项目时遇到的模板化和重复配置问题。它提供了开箱即用的标准开发环境、架构模式和自动化流水线。
 
-```mermaid
-graph TD
-    subgraph "AI IDEs 与智能体"
-        IDE["Cursor / Windsurf / Claude Code / Copilot / Trae / Zed"]
-    end
+### 核心组件
 
-    subgraph "UniRTM 统一运行时基座"
-        MCP["UniRTM MCP 服务<br/>(unirtm mcp)"]
-        CLI["UniRTM 任务执行器<br/>(unirtm run ...)"]
-        Guard["质量守卫 Quality Guard<br/>(builtin:commit-msg, 格式化, 代码检查)"]
-        Lock["确定性工具链<br/>(.unirtm.toml / unirtm.lock)"]
-    end
+- **CLI 框架**：使用 `spf13/cobra` 和 `spf13/viper` 进行强大的命令解析和配置管理。
+- **UI 与 日志**：集成了 `pterm` 作为 UI 组件，并使用 `slog` 进行结构化的事件记录。
+- **数据库与缓存**：由 SQLite 驱动 (通过 `modernc.org/sqlite`)，支持本地缓存和事务性数据存储。
+- **任务编排**：内置了 `UniRTM` 配置，用于管理本地开发工作流（lint、test、verify）。
 
-    subgraph "CI / CD 流水线"
-        GH["GitHub Actions<br/>(Ubuntu / macOS / Windows)"]
-        Sec["安全审计<br/>(Zizmor, Gitleaks, Trivy, OSV)"]
-        Pages["文档自动部署<br/>(GitHub Pages)"]
-    end
+## 📖 使用指南
 
-    IDE <-->|通过 stdio 进行 MCP 协议通信| MCP
-    MCP -->|动态注入规则与工作流| Lock
-    CLI --> Guard
-    CLI --> Lock
-    GH --> Guard
-    GH --> Sec
-    GH --> Pages
+### 前置条件
+
+- **运行时**: Go (>= 1.24)。
+- **Git**: 需要全局安装 git。
+- **UniRTM**: 必须安装以执行任务编排。
+
+### 安装
+
+**通过 NPM 安装**:
+
+```sh-session
+npm install -g @snowdreamtech/unigo
 ```
 
-### 核心架构原则
+**通过 PyPI 安装**:
 
-1. **零仓库污染 (Zero Pollution)**：AI 智能体的提示词规则与工作流通过 stdio MCP 动态提供（`unirtm://config`、`unirtm://conventions`），严禁在项目根目录产生工具碎片。
-2. **单一事实来源 (SSoT)**：所有开发工具链、任务流水线与代码质量契约集中在 [.unirtm.toml](.unirtm.toml) 中声明，并在 [unirtm.lock](unirtm.lock) 中固化版本与哈希。
-3. **三重质量护城河**：由 IDE 本地格式化、Git Pre-commit 守卫阻断与多平台 GitHub Actions CI 构筑坚实的代码纯净度防线。
+```sh-session
+pip install snowdreamtech-unigo
+```
 
----
+### 快速开始
 
-## 📖 快速开始
+1. **安装 UniRTM**：请确保系统已安装 `unirtm`。
+2. **初始化**：`unirtm run setup`（引导安装核心工具与钩子）。
+3. **安装依赖**：`unirtm run install`（安装项目依赖）。
+4. **验证**：`unirtm run verify`（确保所有代码检查通过）。
+5. **构建**：`go build -o unigo main.go`
 
-### 前置要求
+### 可用命令
 
-- **[UniRTM](https://github.com/snowdreamtech/UniRTM) (>= 0.39.0)**：全局统一运行时与任务管理工具。
-- **Git**：建议配置好提交用户邮箱与 GPG 签名密钥。
+- `unigo version`: 打印版本号
+- `unigo doctor`: 检查系统健康状况并诊断问题
+- `unigo self-update`: 更新到最新版本
+- `unigo cache`: 管理本地缓存
+- `unigo config`: 管理配置
+- `unigo license`: 管理源代码文件中的版权许可头
 
-### 引导流程
+## 🛠️ 运维指南
+
+### 部署前检查清单
+
+1. 运行 `unirtm run verify` 确保所有质量门禁均为绿色（执行格式化、Lint、测试及安全审计）。
+2. 确保 `CHANGELOG.md` 已更新。
+
+### 故障排除
+
+- **问题**: `unirtm run verify` 报测试失败。
+  - **解决方案**: 确保代码通过所有 Go 单元测试。UniGo 会执行严格的代码覆盖率和竞态条件 (race) 检查。
+- **问题**: Pre-commit 钩子报错。
+  - **解决方案**: 许多钩子（如代码格式化）会自动修复问题。将修改后的文件重新 `git add` 并再次提交即可。
+
+## 🔒 安全注意事项
+
+### 安全模型
+
+- **审计日志**: 所有的关键操作与安全扫描，均在使用 `unirtm run verify` 时，由 `trivy`、`gitleaks` 和 `govulncheck` 等工具自动执行。
+- **依赖管理**: 由 Dependabot 支持，以确保所有项目依赖项始终保持最新且安全的状态。
+
+## 🧑‍💻 开发者指南
+
+### 本地开发设置
 
 ```bash
-# 1. 克隆仓库
-git clone https://github.com/snowdreamtech/template.git
-cd template
-
-# 2. 信任仓库配置
-unirtm trust
-
-# 3. 安装工具链并配置本地 Git 钩子
+git clone https://github.com/snowdreamtech/UniGo.git
+cd UniGo
 unirtm run setup
-
-# 4. 验证环境并执行全工作区质量验证
-unirtm run verify
+unirtm run install
 ```
 
----
+### 🚀 代理使用场景
 
-## 🛠️ 任务清单参考
+`GITHUB_PROXY` (默认: `https://gh-proxy.sn0wdr1am.com/`) 针对特定的网络加速场景进行了优化。在不支持的协议（如 Git）上误用它会导致错误。
 
-所有常规工作流均通过 [.unirtm.toml](.unirtm.toml) 中的 UniRTM 任务标准化定义：
+| 场景                   | 是否支持      | 示例 / 说明                                    |
+| :--------------------- | :------------ | :--------------------------------------------- |
+| **Release 文件**       | ✅ 支持       | `.../releases/download/v1.0/tool.zip`          |
+| **源码归档 (Archive)** | ✅ 支持       | `.../archive/master.zip` 或 `.tar.gz`          |
+| **文件直接链接**       | ✅ 支持       | `.../blob/master/filename`                     |
+| **Git Clone**          | ❌ **不支持** | **请勿**用于 `git clone` 或 `insteadOf` 配置。 |
+| **项目文件夹**         | ❌ **不支持** | 不支持通过代理进行项目文件夹的浏览或克隆。     |
 
-| 命令 | 用途 | 说明 |
-| :--- | :--- | :--- |
-| `unirtm run setup` | 工具链引导 | 安装锁定版本的编译器、工具并配置钩子 |
-| `unirtm run verify` | 全量质量检查 | 执行所有代码格式化、Linter 及安全规则校验 |
-| `unirtm run audit` | 安全漏洞审计 | 运行 Gitleaks、Zizmor、Trivy 及 OSV-Scanner |
-| `unirtm run fix` | 自动修复 | 自动修正支持的代码格式与可修复语法规则 |
-| `unirtm run docs:dev` | 本地文档服务 | 启动 VitePress 实时热更新文档开发服务器 |
-| `unirtm run docs:build` | 编译文档 | 编译用于生产部署的静态文档站点 |
-| `unirtm mcp` | AI 智能体服务 | 启动标准 Model Context Protocol 服务端 |
-
----
-
-## 📂 项目结构
-
-```text
-project-root/
-├── .devcontainer/        # 🐳 标准化可复现 DevContainer 开发容器配置
-├── .github/              # 🐙 GitHub 集成与自动化流水线
-│   └── workflows/        # 🚀 经多系统验证的 Actions 工作流 (CI, CD, Pages, CodeQL)
-├── .vscode/              # 💻 推荐的编辑器设置与任务定义
-├── docs/                 # 📖 VitePress 完整中英双语文档站点
-│   ├── guide/            # 架构理念、CI/CD 与预提交钩子说明
-│   ├── reference/        # 配置手册、工具链参考与规范
-│   ├── security/         # 供应链安全分析与防护指南
-│   └── workflows/        # 规范化工作流文档
-├── schemas/              # 📐 UniRTM 工具链与清单的 JSON Schema 定义
-├── .editorconfig         # 📝 跨编辑器基础格式化规范
-├── .unirtm.toml          # 🔧 仓库工具链、质量守卫规则与任务定义
-├── unirtm.lock           # 🔒 精确固化的工具版本与跨平台 SHA-256 完整性哈希
-├── CHANGELOG.md          # 📜 版本变更历史（基于 Release-Please 自动生成）
-├── CONTRIBUTING.md       # 🤝 贡献者指南与社区规范
-├── LICENSE               # ⚖️ MIT 开源许可证
-└── VERSION               # 🏷️ 语义化版本声明文件
-```
-
----
-
-## 🔒 安全保障机制
-
-- **机密防护**：在暂存区与历史提交上严格执行 Gitleaks 密钥检测，防止凭据泄露。
-- **流水线加固**：通过 Zizmor 与 Actionlint 审计 Actions 最小权限与语法安全。
-- **依赖审计**：通过 Google OSV-Scanner 与 Aqua Trivy 双重扫描第三方依赖安全隐患。
-- **可复现构建**：所有外部二进制与工具均与 `unirtm.lock` 中的 SHA-256 哈希进行密码学强校验。
-
----
-
-## ❓ 常见问题排查
-
-- **配置未信任警告**：
-  - *现象*：`Tasks in .unirtm.toml are ignored because the configuration file is not trusted`。
-  - *解决*：在项目根目录下执行 `unirtm trust` 即可。
-- **Windows PowerShell 脚本执行策略受限**：
-  - *现象*：Windows 终端下运行任务时报错提示脚本执行策略限制。
-  - *解决*：在终端运行 `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`。
-- **Gitleaks 误报测试用例数据**：
-  - *现象*：测试文件中的 Mock 数据或特定格式字符串被识别为泄露。
-  - *解决*：将指纹或规则添加到 [.gitleaksignore](.gitleaksignore) 或在 [.gitleaks.toml](.gitleaks.toml) 中配置白名单。
-- **生成锁文件时报告平台不完整**：
-  - *现象*：某些特定架构上游未发布官方二进制，执行 `unirtm lock` 出现缺失提示。
-  - *解决*：使用 `unirtm lock --allow-incomplete` 命令完成对已有支持平台的精准锁定。
-
----
+> [!IMPORTANT]
+> 为了防止破坏工具链（如 `unirtm`），本模板显式禁用了通过此代理进行的 Git 重定向。请仅在脚本中进行直接 HTTP 下载时使用它。
 
 ## 📄 许可证
 
@@ -169,6 +133,6 @@ project-root/
 版权所有 (c) 2026-现在 [SnowdreamTech Inc.](https://github.com/snowdreamtech)
 详见 [LICENSE](./LICENSE) 文件。
 
-## 🌟 Star History
+## Star History
 
-[![Star History Chart](https://api.star-history.com/image?repos=snowdreamtech/template&type=date&legend=top-left)](https://www.star-history.com/?repos=snowdreamtech%2Ftemplate&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/image?repos=snowdreamtech/UniGo&type=date&legend=top-left)](https://www.star-history.com/?repos=snowdreamtech%2FUniGo&type=date&legend=top-left)

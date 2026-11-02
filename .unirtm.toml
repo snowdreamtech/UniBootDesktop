@@ -206,8 +206,12 @@ run = "unirtm check --all"
 output = "interleaved"
 
 [tasks.test]
-description = "Run template sanity check"
-run = "unirtm version"
+description = "Run Go unit tests for all packages recursively"
+# -timeout 10m : prevent a single hung test from consuming the entire CI budget (default: 10m)
+# -p 4         : limit the number of packages compiled/tested in parallel to prevent CI OOM
+#                (GitHub Actions ubuntu-latest has ~7GB RAM; -race multiplies usage 5-10x)
+# CGO_ENABLED=0: force pure-Go build — all test files must use modernc.org/sqlite, not mattn/go-sqlite3
+run = "unirtm exec -- go test -cover -v -timeout 10m -p 4 ./..."
 output = "interleaved"
 env = { GOTOOLCHAIN = "auto", CGO_ENABLED = "0" }
 

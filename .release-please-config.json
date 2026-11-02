@@ -1,9 +1,18 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
-  "release-type": "simple",
-  "changelog-path": "CHANGELOG.md",
   "packages": {
-    ".": {}
+    ".": {
+      "release-type": "go",
+      "include-component-in-tag": false,
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        "docker/rocky/Dockerfile",
+        "docker/debian/Dockerfile",
+        "docker/alpine/Dockerfile",
+        ".github/workflows/docker.yml",
+        "VERSION"
+      ]
+    }
   },
   "initial-version": "0.1.0",
   "include-v-in-tag": true,

@@ -2,16 +2,16 @@ import { defineConfig } from "vitepress";
 
 export default defineConfig({
   lang: "en-US",
-  title: "Snowdream Tech AI IDE Template",
+  title: "UniGo",
   description:
     "An enterprise-grade foundational template for multi-AI IDE collaboration, unifying rules, workflows, and configurations across 50+ AI coding assistants.",
 
-  base: "/template/",
+  base: "/UniGo/",
 
   // Ignore dead links for files outside docs directory
   ignoreDeadLinks: [/\/benchmarks\//, /\/\.kiro\//],
 
-  head: [["link", { rel: "icon", href: "/template/favicon.ico" }]],
+  head: [["link", { rel: "icon", href: "/UniGo/favicon.ico" }]],
 
   themeConfig: {
     logo: "/logo.png",
@@ -34,7 +34,7 @@ export default defineConfig({
       { text: "Reference", link: "/reference/unirtm-tasks" },
       {
         text: "Changelog",
-        link: "https://github.com/snowdreamtech/template/blob/main/CHANGELOG.md",
+        link: "https://github.com/snowdreamtech/UniGo/blob/main/CHANGELOG.md",
       },
     ],
 
@@ -239,7 +239,7 @@ export default defineConfig({
     socialLinks: [
       {
         icon: "github",
-        link: "https://github.com/snowdreamtech/template",
+        link: "https://github.com/snowdreamtech/UniGo",
       },
     ],
 
@@ -249,7 +249,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: "https://github.com/snowdreamtech/template/edit/main/docs/:path",
+      pattern: "https://github.com/snowdreamtech/UniGo/edit/main/docs/:path",
       text: "Edit this page on GitHub",
     },
 

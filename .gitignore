@@ -805,4 +805,5 @@ coverage.svg
 sbom.json
 completions/
 manpages/
+unigo
 .trivycache/
