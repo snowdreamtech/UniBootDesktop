@@ -5,20 +5,19 @@ package http
 
 import (
 	"net/http"
-	"os"
 	"testing"
 	"time"
 )
 
 func TestDefaultTransport_EnvVars(t *testing.T) {
-	// Backup
-	origAll := os.Getenv("ALL_PROXY")
-	origH2 := os.Getenv("HTTP2")
-	defer func() {
-		t.Setenv("ALL_PROXY", origAll)
-		t.Setenv("HTTP2", origH2)
-	}()
-
+	t.Setenv("HTTP_PROXY", "")
+	t.Setenv("HTTPS_PROXY", "")
+	t.Setenv("http_proxy", "")
+	t.Setenv("https_proxy", "")
+	t.Setenv("UNIGO_HTTP_PROXY", "")
+	t.Setenv("UNIGO_HTTPS_PROXY", "")
+	t.Setenv("MISE_HTTP_PROXY", "")
+	t.Setenv("MISE_HTTPS_PROXY", "")
 	t.Setenv("ALL_PROXY", "socks5://127.0.0.1:1080")
 	t.Setenv("HTTP2", "0")
 
@@ -50,16 +49,10 @@ func TestDefaultTransport_EnvVars(t *testing.T) {
 
 // Test proxy logic without ALL_PROXY
 func TestDefaultTransport_EnvVars_NoAllProxy(t *testing.T) {
-	origAll := os.Getenv("ALL_PROXY")
-	origHttp := os.Getenv("HTTP_PROXY")
-	origHttps := os.Getenv("HTTPS_PROXY")
-	defer func() {
-		t.Setenv("ALL_PROXY", origAll)
-		t.Setenv("HTTP_PROXY", origHttp)
-		t.Setenv("HTTPS_PROXY", origHttps)
-	}()
-
 	t.Setenv("ALL_PROXY", "")
+	t.Setenv("all_proxy", "")
+	t.Setenv("UNIGO_ALL_PROXY", "")
+	t.Setenv("MISE_ALL_PROXY", "")
 	t.Setenv("HTTP_PROXY", "http://127.0.0.1:8080")
 	t.Setenv("HTTPS_PROXY", "http://127.0.0.1:8080")
 
