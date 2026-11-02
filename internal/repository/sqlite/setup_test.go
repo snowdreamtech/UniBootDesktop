@@ -9,8 +9,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/snowdreamtech/unigo/internal/database"
 	"github.com/stretchr/testify/require"
+
+	"github.com/snowdreamtech/unigo/internal/database"
 )
 
 // setupTestDB creates a temporary SQLite database for testing and returns the connection and a cleanup function.

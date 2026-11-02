@@ -55,7 +55,7 @@ func NewCacheManager(repo repository.CacheRepository, auditRepo repository.Audit
 	}
 
 	// Ensure cache directory exists
-	if err := os.MkdirAll(config.CacheDir, 0755); err != nil {
+	if err := os.MkdirAll(config.CacheDir, 0o755); err != nil {
 		return nil, fmt.Errorf("create cache directory: %w", err)
 	}
 
@@ -121,7 +121,7 @@ func (cm *CacheManager) Get(ctx context.Context, key string) ([]byte, error) {
 
 // GetWithChecksum retrieves a cache entry and verifies its checksum
 // Validates Requirements: 10.4 (Verify checksum), 10.5 (Delete and re-download on failure)
-func (cm *CacheManager) GetWithChecksum(ctx context.Context, key string, expectedChecksum string) ([]byte, error) {
+func (cm *CacheManager) GetWithChecksum(ctx context.Context, key, expectedChecksum string) ([]byte, error) {
 	value, err := cm.Get(ctx, key)
 	if err != nil {
 		return nil, err
@@ -305,7 +305,6 @@ func (cm *CacheManager) calculateCacheSize() (int64, error) {
 		}
 		return nil
 	})
-
 	if err != nil {
 		return 0, fmt.Errorf("walk cache directory: %w", err)
 	}

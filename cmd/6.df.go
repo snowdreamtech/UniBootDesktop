@@ -9,9 +9,10 @@ import (
 	"path/filepath"
 
 	"github.com/pterm/pterm"
+	"github.com/spf13/cobra"
+
 	"github.com/snowdreamtech/unigo/internal/env"
 	"github.com/snowdreamtech/unigo/internal/utils"
-	"github.com/spf13/cobra"
 )
 
 var dfHumanReadable bool

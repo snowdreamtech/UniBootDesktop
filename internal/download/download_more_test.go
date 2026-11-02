@@ -106,7 +106,7 @@ func TestHTTPDownloader_VerifyGPGSignature_500(t *testing.T) {
 	defer ts.Close()
 
 	dest := filepath.Join(dir, "test2.txt")
-	os.WriteFile(dest, []byte("data"), 0644)
+	os.WriteFile(dest, []byte("data"), 0o644)
 
 	// Mock valid keyring but fetch fails
 	t.Setenv("UNIGO_DATA_DIR", dir)

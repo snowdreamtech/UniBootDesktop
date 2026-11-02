@@ -18,7 +18,7 @@ func CalculateDirectorySize(path string) (int64, error) {
 	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
 		if err != nil {
 			// If there's an error accessing a path (e.g. permission denied), just skip it and continue
-			return nil
+			return nil //nolint:nilerr
 		}
 		if !info.IsDir() {
 			size += info.Size()

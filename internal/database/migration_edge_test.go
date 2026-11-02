@@ -9,10 +9,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	_ "modernc.org/sqlite" // SQLite driver
-
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	_ "modernc.org/sqlite" // SQLite driver
 )
 
 func TestMigrationManager_Rollback_EdgeCases(t *testing.T) {

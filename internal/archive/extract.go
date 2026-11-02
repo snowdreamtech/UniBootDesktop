@@ -145,7 +145,7 @@ func ExtractArchive(archiveData []byte, destDir string) error {
 			return err
 		}
 		// Try to give it executable permissions by default if it's a raw binary
-		return os.Chmod(path, 0755)
+		return os.Chmod(path, 0o755)
 	}
 
 	tr := tar.NewReader(decompressed)
@@ -161,7 +161,7 @@ func ExtractArchive(archiveData []byte, destDir string) error {
 			if err := writeToFile(path, decompressedAgain); err != nil {
 				return err
 			}
-			return os.Chmod(path, 0755)
+			return os.Chmod(path, 0o755)
 		}
 		if err := extractTarFile(tr, hdr, destDir); err != nil {
 			return err
@@ -172,7 +172,7 @@ func ExtractArchive(archiveData []byte, destDir string) error {
 }
 
 // ExtractArchiveFromFile extracts an archive directly from a file path without loading the entire archive into memory.
-func ExtractArchiveFromFile(archiveFilePath string, destDir string) error {
+func ExtractArchiveFromFile(archiveFilePath, destDir string) error {
 	f, err := os.Open(archiveFilePath)
 	if err != nil {
 		return fmt.Errorf("failed to open archive file: %w", err)
@@ -213,7 +213,7 @@ func ExtractArchiveFromFile(archiveFilePath string, destDir string) error {
 		if err := writeToFile(path, decompressed); err != nil {
 			return err
 		}
-		return os.Chmod(path, 0755)
+		return os.Chmod(path, 0o755)
 	}
 
 	tr := tar.NewReader(decompressed)
@@ -229,7 +229,7 @@ func ExtractArchiveFromFile(archiveFilePath string, destDir string) error {
 					if err := writeToFile(path, d2); err != nil {
 						return err
 					}
-					return os.Chmod(path, 0755)
+					return os.Chmod(path, 0o755)
 				}
 			}
 			return fmt.Errorf("failed to extract tar stream: %w", err)
@@ -276,7 +276,7 @@ func extractZipFile(f *zip.File, destDir string) error {
 		return err
 	}
 
-	if err := os.MkdirAll(filepath.Dir(targetPath), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(targetPath), 0o755); err != nil {
 		return err
 	}
 
@@ -339,7 +339,7 @@ func extractTarFile(tr *tar.Reader, hdr *tar.Header, destDir string) error {
 
 	mode := os.FileMode(hdr.Mode)
 
-	if err := os.MkdirAll(filepath.Dir(targetPath), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(targetPath), 0o755); err != nil {
 		return err
 	}
 
@@ -374,7 +374,7 @@ func extractTarFile(tr *tar.Reader, hdr *tar.Header, destDir string) error {
 			return fmt.Errorf("failed to create hardlink %s: %w", targetPath, err)
 		}
 		return nil
-	case tar.TypeReg, tar.TypeRegA:
+	case tar.TypeReg:
 		if err := writeToFile(targetPath, tr); err != nil {
 			return err
 		}
@@ -402,7 +402,7 @@ func sanitizeExtractMode(mode os.FileMode) os.FileMode {
 }
 
 func writeToFile(path string, r io.Reader) error {
-	out, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666) // Actual mode set by Chmod later
+	out, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o666) // Actual mode set by Chmod later
 	if err != nil {
 		return err
 	}

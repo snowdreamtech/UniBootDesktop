@@ -104,7 +104,7 @@ func TestEnv_GetLockFilePath(t *testing.T) {
 
 	// Create a dummy lockfile in tmpDir so it finds it, instead of searching up to repo root
 	dummyLock := filepath.Join(tmpDir, ".unigo.lock")
-	os.WriteFile(dummyLock, []byte(""), 0644)
+	os.WriteFile(dummyLock, []byte(""), 0o644)
 
 	lock := GetLockFilePath()
 	// Depending on logic, it might return dummyLock or some other path

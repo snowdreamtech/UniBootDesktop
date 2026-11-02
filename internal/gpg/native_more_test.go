@@ -24,7 +24,7 @@ func TestNativeGPGVerifier_Verify_BinarySig(t *testing.T) {
 	dataPath := filepath.Join(dir, "data.txt")
 	sigPath := filepath.Join(dir, "data.txt.sig")
 
-	os.WriteFile(dataPath, []byte(data), 0644)
+	os.WriteFile(dataPath, []byte(data), 0o644)
 
 	// Mock the HTTP server for fetching the key
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +43,7 @@ func TestNativeGPGVerifier_Verify_BinarySig(t *testing.T) {
 	// 1. Valid binary signature (requires conversion or raw binary)
 	// For coverage, we just pass invalid binary signature to hit the `invalid binary signature format` path.
 	// We'll use a nil slice which might cause NewPGPSignature to return nil or fail during Verify
-	os.WriteFile(sigPath, []byte("garbage binary data that is not pgp"), 0644)
+	os.WriteFile(sigPath, []byte("garbage binary data that is not pgp"), 0o644)
 	err := v.Verify(ctx, sigPath, dataPath, []string{fingerprint})
 	if err == nil {
 		t.Errorf("expected error, got nil")
@@ -59,7 +59,7 @@ func TestNativeGPGVerifier_Verify_BinarySig(t *testing.T) {
 	}
 
 	// 3. Invalid armored signature
-	os.WriteFile(sigPath, []byte("-----BEGIN PGP SIGNATURE-----\nINVALID\n-----END PGP SIGNATURE-----"), 0644)
+	os.WriteFile(sigPath, []byte("-----BEGIN PGP SIGNATURE-----\nINVALID\n-----END PGP SIGNATURE-----"), 0o644)
 	v.client.Transport = &mockTransport{
 		tsURL:      ts.URL,
 		armoredKey: armoredKey,
@@ -157,7 +157,7 @@ func TestNativeGPGVerifier_Verify_IOErrors(t *testing.T) {
 
 	// sigPath exists, dataPath does not
 	sigPath := filepath.Join(dir, "sig")
-	os.WriteFile(sigPath, []byte("sig"), 0644)
+	os.WriteFile(sigPath, []byte("sig"), 0o644)
 	err = v.Verify(ctx, sigPath, filepath.Join(dir, "no-data"), []string{"fp"})
 	if err == nil || !strings.Contains(err.Error(), "failed to open data file") {
 		t.Errorf("expected open data error, got %v", err)

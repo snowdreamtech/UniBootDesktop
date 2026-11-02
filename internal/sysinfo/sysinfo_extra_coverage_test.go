@@ -23,7 +23,7 @@ func TestCheckMusl_MockLdd_Musl(t *testing.T) {
 echo "musl libc (x86_64)"
 exit 0
 `
-	if err := os.WriteFile(lddPath, []byte(script), 0755); err != nil {
+	if err := os.WriteFile(lddPath, []byte(script), 0o755); err != nil {
 		t.Fatal(err)
 	}
 
@@ -53,7 +53,7 @@ func TestCheckMusl_MockLdd_Glibc(t *testing.T) {
 echo "ldd (GNU libc) 2.31"
 exit 0
 `
-	if err := os.WriteFile(lddPath, []byte(script), 0755); err != nil {
+	if err := os.WriteFile(lddPath, []byte(script), 0o755); err != nil {
 		t.Fatal(err)
 	}
 

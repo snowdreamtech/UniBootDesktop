@@ -160,7 +160,7 @@ func (m *mockInstallationRepository) Upsert(ctx context.Context, installation *I
 	return nil
 }
 
-func (m *mockInstallationRepository) FindByToolAndVersion(ctx context.Context, tool string, version string) (*Installation, error) {
+func (m *mockInstallationRepository) FindByToolAndVersion(ctx context.Context, tool, version string) (*Installation, error) {
 	return nil, nil
 }
 
@@ -172,7 +172,7 @@ func (m *mockInstallationRepository) ListByTool(ctx context.Context, tool string
 	return nil, nil
 }
 
-func (m *mockInstallationRepository) Delete(ctx context.Context, tool string, version string) error {
+func (m *mockInstallationRepository) Delete(ctx context.Context, tool, version string) error {
 	return nil
 }
 

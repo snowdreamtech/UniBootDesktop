@@ -8,13 +8,14 @@ import (
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
+	sha30 "crypto/sha3"
 	"crypto/sha512"
 	"encoding/hex"
 	"fmt"
 	"hash"
 	"io"
 	"math/rand"
-
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -27,9 +28,6 @@ import (
 	"github.com/zeebo/blake3"
 	"golang.org/x/crypto/blake2b"
 	"golang.org/x/crypto/blake2s"
-	"golang.org/x/crypto/sha3"
-
-	"net"
 
 	"github.com/snowdreamtech/unigo/internal/env"
 	"github.com/snowdreamtech/unigo/internal/errors"
@@ -134,7 +132,7 @@ func (h *HTTPDownloader) DownloadTimeout() time.Duration {
 	return h.client.Timeout
 }
 
-func (h *HTTPDownloader) Download(ctx context.Context, url string, destination string, opts DownloadOptions) error {
+func (h *HTTPDownloader) Download(ctx context.Context, url, destination string, opts DownloadOptions) error {
 	// Inject proxy into context for CheckRedirect
 	if opts.GitHubProxy != "" {
 		ctx = context.WithValue(ctx, githubProxyKey, opts.GitHubProxy)
@@ -221,7 +219,7 @@ func (h *HTTPDownloader) Download(ctx context.Context, url string, destination s
 			if opts.VerifyGPG {
 				err := h.verifyGPGSignature(ctx, url, destination, opts)
 				if err != nil {
-					if err == ErrGPGSkipped {
+					if errors.Is(err, ErrGPGSkipped) {
 						if opts.GPGResult != nil {
 							opts.GPGResult.Status = "Skipped"
 						}
@@ -284,7 +282,7 @@ func (h *HTTPDownloader) Download(ctx context.Context, url string, destination s
 }
 
 // downloadOnce performs a single download attempt without retry logic.
-func (h *HTTPDownloader) downloadOnce(ctx context.Context, url string, destination string, opts DownloadOptions) error {
+func (h *HTTPDownloader) downloadOnce(ctx context.Context, url, destination string, opts DownloadOptions) error {
 	// 1. Pre-flight check: Get content length and range support using HEAD
 	headReq, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
 	if err == nil {
@@ -327,12 +325,12 @@ func (h *HTTPDownloader) downloadOnce(ctx context.Context, url string, destinati
 		return errors.NewExternalError(fmt.Sprintf("HTTP %d from %q", resp.StatusCode, url), nil)
 	}
 	// Ensure destination directory exists
-	if err := os.MkdirAll(filepath.Dir(destination), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(destination), 0o755); err != nil {
 		return errors.NewSystemError(fmt.Sprintf("create directory %q", filepath.Dir(destination)), err)
 	}
 
 	// Create destination file with restricted permissions (0600) to prevent poisoning
-	file, err := os.OpenFile(destination, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+	file, err := os.OpenFile(destination, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o600)
 	if err != nil {
 		return errors.NewSystemError(fmt.Sprintf("create file %q", destination), err)
 	}
@@ -388,7 +386,7 @@ func (h *HTTPDownloader) downloadOnce(ctx context.Context, url string, destinati
 //   - Returns ErrChecksumMismatch when checksums don't match
 //   - Deletes the file if checksum verification fails
 //   - Supports the format "sha256:hash" or just "hash" (assuming SHA-256)
-func (h *HTTPDownloader) VerifyChecksum(ctx context.Context, file string, expectedChecksum string) error {
+func (h *HTTPDownloader) VerifyChecksum(ctx context.Context, file, expectedChecksum string) error {
 	// Parse checksum format
 	algorithm, expectedHash, err := parseChecksum(expectedChecksum)
 	if err != nil {
@@ -401,35 +399,40 @@ func (h *HTTPDownloader) VerifyChecksum(ctx context.Context, file string, expect
 
 	if algorithm == "auto" {
 		l := len(expectedHash)
-		if l == 32 {
+		switch l {
+		case 32:
 			hashers = append(hashers, md5.New())
 			algos = append(algos, "md5")
 			logger.Warn("Security Warning: Auto-detected length 32 implies weak MD5 algorithm, which is not cryptographically secure.")
-		} else if l == 40 {
+		case 40:
 			hashers = append(hashers, sha1.New())
 			algos = append(algos, "sha1")
 			logger.Warn("Security Warning: Auto-detected length 40 implies weak SHA-1 algorithm, which is not cryptographically secure.")
-		} else if l == 56 {
-			hashers = append(hashers, sha256.New224(), sha3.New224())
+		case 56:
+			hashers = append(hashers, sha256.New224(), hash.
+				Hash(sha30.New224()))
 			algos = append(algos, "sha224", "sha3-224")
-		} else if l == 64 {
-			hashers = append(hashers, sha256.New(), sha3.New256(), blake3.New())
+		case 64:
+			hashers = append(hashers, sha256.New(), hash.
+				Hash(sha30.New256()), blake3.New())
 			algos = append(algos, "sha256", "sha3-256", "blake3")
 			if b2s, err := blake2s.New256(nil); err == nil {
 				hashers = append(hashers, b2s)
 				algos = append(algos, "blake2s")
 			}
-		} else if l == 96 {
-			hashers = append(hashers, sha512.New384(), sha3.New384())
+		case 96:
+			hashers = append(hashers, sha512.New384(), hash.
+				Hash(sha30.New384()))
 			algos = append(algos, "sha384", "sha3-384")
-		} else if l == 128 {
-			hashers = append(hashers, sha512.New(), sha3.New512())
+		case 128:
+			hashers = append(hashers, sha512.New(), hash.
+				Hash(sha30.New512()))
 			algos = append(algos, "sha512", "sha3-512")
 			if b2b, err := blake2b.New512(nil); err == nil {
 				hashers = append(hashers, b2b)
 				algos = append(algos, "blake2b")
 			}
-		} else {
+		default:
 			return errors.NewUserError(fmt.Sprintf("unsupported auto checksum length %d for hash: %s", l, expectedHash), nil)
 		}
 	} else {
@@ -448,13 +451,17 @@ func (h *HTTPDownloader) VerifyChecksum(ctx context.Context, file string, expect
 		case "sha512":
 			hashers = append(hashers, sha512.New())
 		case "sha3-224":
-			hashers = append(hashers, sha3.New224())
+			hashers = append(hashers, hash.
+				Hash(sha30.New224()))
 		case "sha3-256":
-			hashers = append(hashers, sha3.New256())
+			hashers = append(hashers, hash.
+				Hash(sha30.New256()))
 		case "sha3-384":
-			hashers = append(hashers, sha3.New384())
+			hashers = append(hashers, hash.
+				Hash(sha30.New384()))
 		case "sha3-512":
-			hashers = append(hashers, sha3.New512())
+			hashers = append(hashers, hash.
+				Hash(sha30.New512()))
 		case "blake2s":
 			if b2s, err := blake2s.New256(nil); err == nil {
 				hashers = append(hashers, b2s)
@@ -676,7 +683,7 @@ func parseChecksum(checksum string) (string, string, error) {
 }
 
 // downloadConcurrent performs a multi-threaded download using Range requests.
-func (h *HTTPDownloader) downloadConcurrent(ctx context.Context, url string, destination string, totalSize int64, opts DownloadOptions) error {
+func (h *HTTPDownloader) downloadConcurrent(ctx context.Context, url, destination string, totalSize int64, opts DownloadOptions) error {
 	// 1. Determine optimal number of threads
 	numThreads := 4
 	if totalSize > 200*1024*1024 {
@@ -701,10 +708,10 @@ func (h *HTTPDownloader) downloadConcurrent(ctx context.Context, url string, des
 	}
 
 	// Pre-allocate file
-	if err := os.MkdirAll(filepath.Dir(destination), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(destination), 0o755); err != nil {
 		return err
 	}
-	file, err := os.OpenFile(destination, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+	file, err := os.OpenFile(destination, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o600)
 	if err != nil {
 		return err
 	}

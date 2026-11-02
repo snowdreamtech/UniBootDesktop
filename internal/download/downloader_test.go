@@ -8,9 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/snowdreamtech/unigo/internal/download"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/snowdreamtech/unigo/internal/download"
 )
 
 // TestDefaultDownloadOptions verifies that DefaultDownloadOptions returns sensible defaults.

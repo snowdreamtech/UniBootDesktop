@@ -11,10 +11,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/snowdreamtech/unigo/internal/repository"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
+	"github.com/snowdreamtech/unigo/internal/repository"
 )
 
 // MockCacheRepository is a mock implementation of repository.CacheRepository
@@ -625,10 +626,10 @@ func TestCacheManager_GetCacheSize(t *testing.T) {
 		testFile1 := filepath.Join(tmpDir, "file1.txt")
 		testFile2 := filepath.Join(tmpDir, "file2.txt")
 
-		err = os.WriteFile(testFile1, []byte("test content 1"), 0644)
+		err = os.WriteFile(testFile1, []byte("test content 1"), 0o644)
 		require.NoError(t, err)
 
-		err = os.WriteFile(testFile2, []byte("test content 2 longer"), 0644)
+		err = os.WriteFile(testFile2, []byte("test content 2 longer"), 0o644)
 		require.NoError(t, err)
 
 		size, err := cm.GetCacheSize()
@@ -672,7 +673,7 @@ func TestCacheManager_AutoCleanup(t *testing.T) {
 
 		// Create a file that exceeds the threshold
 		testFile := filepath.Join(tmpDir, "large-file.txt")
-		err = os.WriteFile(testFile, []byte("this is a large file content"), 0644)
+		err = os.WriteFile(testFile, []byte("this is a large file content"), 0o644)
 		require.NoError(t, err)
 
 		ctx := context.Background()
@@ -699,7 +700,7 @@ func TestCacheManager_AutoCleanup(t *testing.T) {
 
 		// Create a small file
 		testFile := filepath.Join(tmpDir, "small-file.txt")
-		err = os.WriteFile(testFile, []byte("small"), 0644)
+		err = os.WriteFile(testFile, []byte("small"), 0o644)
 		require.NoError(t, err)
 
 		ctx := context.Background()
@@ -726,7 +727,7 @@ func TestCacheManager_AutoCleanup(t *testing.T) {
 
 		// Create a file that exceeds the threshold
 		testFile := filepath.Join(tmpDir, "large-file.txt")
-		err = os.WriteFile(testFile, []byte("this is a large file content"), 0644)
+		err = os.WriteFile(testFile, []byte("this is a large file content"), 0o644)
 		require.NoError(t, err)
 
 		ctx := context.Background()

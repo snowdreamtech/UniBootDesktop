@@ -9,8 +9,9 @@ import (
 	"path/filepath"
 
 	"github.com/pelletier/go-toml/v2"
-	"github.com/snowdreamtech/unigo/internal/env"
 	"gopkg.in/yaml.v3"
+
+	"github.com/snowdreamtech/unigo/internal/env"
 )
 
 // Config represents the application configuration.
@@ -58,7 +59,7 @@ func (c *Config) Save() error {
 	configPath := env.GetGlobalConfigPath() // Defaults to unigo.toml
 
 	dir := filepath.Dir(configPath)
-	if err := os.MkdirAll(dir, 0755); err != nil {
+	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return fmt.Errorf("failed to create config directory: %w", err)
 	}
 
@@ -76,7 +77,7 @@ func (c *Config) Save() error {
 		_ = os.Remove(tmpName)
 	}()
 
-	if err := tmpFile.Chmod(0600); err != nil {
+	if err := tmpFile.Chmod(0o600); err != nil {
 		_ = tmpFile.Close()
 		return fmt.Errorf("failed to chmod temporary config file: %w", err)
 	}

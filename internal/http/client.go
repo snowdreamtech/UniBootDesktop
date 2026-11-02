@@ -72,7 +72,7 @@ func DefaultTransport() *http.Transport {
 
 	trans.Proxy = func(req *http.Request) (*url.URL, error) {
 		if ShouldBypassProxy(req.URL.Hostname()) {
-			return nil, nil // DIRECT connection for domestic mirrors
+			return nil, nil //nolint:nilnil // DIRECT connection for domestic mirrors
 		}
 		return proxyFunc(req.URL)
 	}

@@ -58,13 +58,13 @@ func TestExtractTarFile_MkdirError(t *testing.T) {
 	tempDir := t.TempDir()
 
 	// Create a file where a directory needs to be
-	err := os.WriteFile(filepath.Join(tempDir, "mydir"), []byte("file"), 0644)
+	err := os.WriteFile(filepath.Join(tempDir, "mydir"), []byte("file"), 0o644)
 	require.NoError(t, err)
 
 	hdr := &tar.Header{
 		Name:     "mydir",
 		Typeflag: tar.TypeDir,
-		Mode:     0755,
+		Mode:     0o755,
 	}
 	err = extractTarFile(nil, hdr, tempDir)
 	assert.Error(t, err) // MkdirAll fails
@@ -72,7 +72,7 @@ func TestExtractTarFile_MkdirError(t *testing.T) {
 	hdrFile := &tar.Header{
 		Name:     "mydir/file.txt",
 		Typeflag: tar.TypeReg,
-		Mode:     0644,
+		Mode:     0o644,
 	}
 	err = extractTarFile(nil, hdrFile, tempDir)
 	assert.Error(t, err) // MkdirAll of parent fails
@@ -82,18 +82,18 @@ func TestExtractZipFile_MkdirError(t *testing.T) {
 	tempDir := t.TempDir()
 
 	// Create a file where a directory needs to be
-	err := os.WriteFile(filepath.Join(tempDir, "mydir"), []byte("file"), 0644)
+	err := os.WriteFile(filepath.Join(tempDir, "mydir"), []byte("file"), 0o644)
 	require.NoError(t, err)
 
 	var buf bytes.Buffer
 	zw := zip.NewWriter(&buf)
 	hdrDir := &zip.FileHeader{Name: "mydir/"}
-	hdrDir.SetMode(os.ModeDir | 0755)
+	hdrDir.SetMode(os.ModeDir | 0o755)
 	_, err = zw.CreateHeader(hdrDir)
 	require.NoError(t, err)
 
 	hdrFile := &zip.FileHeader{Name: "mydir/file.txt"}
-	hdrFile.SetMode(0644)
+	hdrFile.SetMode(0o644)
 	_, err = zw.CreateHeader(hdrFile)
 	require.NoError(t, err)
 	require.NoError(t, zw.Close())
@@ -109,7 +109,7 @@ func TestExtractZipFile_MkdirError(t *testing.T) {
 }
 
 func TestSanitizeExtractModeStripsSetuidBits(t *testing.T) {
-	got := sanitizeExtractMode(os.ModeSetuid | os.ModeSetgid | os.ModeSticky | 0777)
-	assert.Equal(t, os.FileMode(0777), got)
+	got := sanitizeExtractMode(os.ModeSetuid | os.ModeSetgid | os.ModeSticky | 0o777)
+	assert.Equal(t, os.FileMode(0o777), got)
 	assert.Equal(t, os.FileMode(0), got&(os.ModeSetuid|os.ModeSetgid|os.ModeSticky))
 }

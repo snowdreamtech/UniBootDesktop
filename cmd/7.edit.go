@@ -8,9 +8,10 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/spf13/cobra"
+
 	"github.com/snowdreamtech/unigo/internal/config"
 	"github.com/snowdreamtech/unigo/internal/env"
-	"github.com/spf13/cobra"
 )
 
 var editCmd = &cobra.Command{
@@ -49,7 +50,7 @@ func runEdit(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to initialize config file: %w", err)
 	}
 
-	c := exec.Command(editor, targetFile)
+	c := exec.CommandContext(cmd.Context(), editor, targetFile)
 	c.Stdin = os.Stdin
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr

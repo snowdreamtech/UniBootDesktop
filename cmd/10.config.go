@@ -9,9 +9,10 @@ import (
 	"strings"
 
 	"github.com/pterm/pterm"
+	"github.com/spf13/cobra"
+
 	"github.com/snowdreamtech/unigo/internal/config"
 	"github.com/snowdreamtech/unigo/internal/logger"
-	"github.com/spf13/cobra"
 )
 
 func init() {

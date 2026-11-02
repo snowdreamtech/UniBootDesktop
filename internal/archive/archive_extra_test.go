@@ -22,7 +22,7 @@ func TestExtractTarFile(t *testing.T) {
 	hdr := &tar.Header{
 		Name:     "mydir",
 		Typeflag: tar.TypeDir,
-		Mode:     0755,
+		Mode:     0o755,
 	}
 	err := extractTarFile(nil, hdr, tempDir)
 	require.NoError(t, err)
@@ -70,7 +70,7 @@ func TestExtractZipFileModes(t *testing.T) {
 	hdrDir := &zip.FileHeader{
 		Name: "mydir/",
 	}
-	hdrDir.SetMode(os.ModeDir | 0755)
+	hdrDir.SetMode(os.ModeDir | 0o755)
 	_, err := zw.CreateHeader(hdrDir)
 	require.NoError(t, err)
 
@@ -78,7 +78,7 @@ func TestExtractZipFileModes(t *testing.T) {
 	hdrSymlink := &zip.FileHeader{
 		Name: "symlink",
 	}
-	hdrSymlink.SetMode(os.ModeSymlink | 0777)
+	hdrSymlink.SetMode(os.ModeSymlink | 0o777)
 	fw, err := zw.CreateHeader(hdrSymlink)
 	require.NoError(t, err)
 	fw.Write([]byte("mydir"))

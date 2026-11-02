@@ -48,7 +48,7 @@ func (d *DummyRepository) Upsert(ctx context.Context, installation *Installation
 }
 
 // FindByToolAndVersion implements InstallationRepository.
-func (d *DummyRepository) FindByToolAndVersion(ctx context.Context, tool string, version string) (*Installation, error) {
+func (d *DummyRepository) FindByToolAndVersion(ctx context.Context, tool, version string) (*Installation, error) {
 	return nil, ErrNotFound
 }
 
@@ -63,7 +63,7 @@ func (d *DummyRepository) List(ctx context.Context) ([]*Installation, error) {
 }
 
 // Delete implements InstallationRepository.
-func (d *DummyRepository) Delete(ctx context.Context, tool string, version string) error {
+func (d *DummyRepository) Delete(ctx context.Context, tool, version string) error {
 	return nil
 }
 
@@ -141,7 +141,7 @@ type InstallationRepository interface {
 	Upsert(ctx context.Context, installation *Installation) error
 
 	// FindByToolAndVersion finds an installation by tool and version
-	FindByToolAndVersion(ctx context.Context, tool string, version string) (*Installation, error)
+	FindByToolAndVersion(ctx context.Context, tool, version string) (*Installation, error)
 
 	// ListByTool lists all installations for a specific tool
 	ListByTool(ctx context.Context, tool string) ([]*Installation, error)
@@ -150,7 +150,7 @@ type InstallationRepository interface {
 	List(ctx context.Context) ([]*Installation, error)
 
 	// Delete removes an installation record
-	Delete(ctx context.Context, tool string, version string) error
+	Delete(ctx context.Context, tool, version string) error
 }
 
 // CacheRepository manages cache entries with TTL support

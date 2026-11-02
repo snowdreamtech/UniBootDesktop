@@ -25,7 +25,7 @@ var manpageCmd = &cobra.Command{
 		if manpageDir == "" {
 			return fmt.Errorf("output directory is required (use -d/--dir)")
 		}
-		if err := os.MkdirAll(manpageDir, 0755); err != nil {
+		if err := os.MkdirAll(manpageDir, 0o755); err != nil {
 			return fmt.Errorf("failed to create directory: %w", err)
 		}
 

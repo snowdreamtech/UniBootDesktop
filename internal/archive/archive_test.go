@@ -58,12 +58,12 @@ func TestCompressAndExtractZip(t *testing.T) {
 	files := map[string]FileEntry{
 		"test.txt": {
 			Data:    []byte("hello archive"),
-			Mode:    0644,
+			Mode:    0o644,
 			ModTime: time.Now(),
 		},
 		"dir/file.txt": {
 			Data:    []byte("in dir"),
-			Mode:    0644,
+			Mode:    0o644,
 			ModTime: time.Now(),
 		},
 	}
@@ -101,7 +101,7 @@ func TestCompressAndExtractCompressedTar(t *testing.T) {
 			files := map[string]FileEntry{
 				"test.txt": {
 					Data:    []byte("hello " + string(format)),
-					Mode:    0644,
+					Mode:    0o644,
 					ModTime: time.Now(),
 				},
 			}
@@ -138,7 +138,7 @@ func TestCompressAndExtractTar(t *testing.T) {
 	files := map[string]FileEntry{
 		"test.txt": {
 			Data:    []byte("hello tar"),
-			Mode:    0644,
+			Mode:    0o644,
 			ModTime: time.Now(),
 		},
 	}
@@ -164,7 +164,7 @@ func TestExtractArchiveFromFile(t *testing.T) {
 	files := map[string]FileEntry{
 		"sub/file.txt": {
 			Data:    []byte("stream extraction test content"),
-			Mode:    0644,
+			Mode:    0o644,
 			ModTime: time.Now(),
 		},
 	}
@@ -176,7 +176,7 @@ func TestExtractArchiveFromFile(t *testing.T) {
 			require.NoError(t, err)
 
 			tmpFile := filepath.Join(t.TempDir(), "archive_test")
-			require.NoError(t, os.WriteFile(tmpFile, buf.Bytes(), 0644))
+			require.NoError(t, os.WriteFile(tmpFile, buf.Bytes(), 0o644))
 
 			destDir := t.TempDir()
 			err = ExtractArchiveFromFile(tmpFile, destDir)

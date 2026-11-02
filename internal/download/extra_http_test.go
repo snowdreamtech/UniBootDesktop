@@ -13,6 +13,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/snowdreamtech/unigo/internal/errors"
 )
 
 func TestHTTPDownloader_CheckRedirect(t *testing.T) {
@@ -103,7 +105,7 @@ func TestHTTPDownloader_VerifyGPGSignature(t *testing.T) {
 	ctx := context.Background()
 	dir := t.TempDir()
 	dest := filepath.Join(dir, "test.txt")
-	os.WriteFile(dest, []byte("test data"), 0644)
+	os.WriteFile(dest, []byte("test data"), 0o644)
 
 	// Mock server
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -112,7 +114,7 @@ func TestHTTPDownloader_VerifyGPGSignature(t *testing.T) {
 	defer ts.Close()
 
 	err := d.verifyGPGSignature(ctx, ts.URL+"/file", dest, DownloadOptions{})
-	if err != ErrGPGSkipped {
+	if !errors.Is(err, ErrGPGSkipped) {
 		t.Errorf("expected ErrGPGSkipped, got %v", err)
 	}
 }

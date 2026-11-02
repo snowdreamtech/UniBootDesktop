@@ -15,19 +15,19 @@ func TestCalculateDirectorySize(t *testing.T) {
 
 	// Create some files with known sizes
 	file1 := filepath.Join(tempDir, "file1.txt")
-	err := os.WriteFile(file1, []byte("hello"), 0644)
+	err := os.WriteFile(file1, []byte("hello"), 0o644)
 	if err != nil {
 		t.Fatalf("Failed to create file: %v", err)
 	}
 
 	subDir := filepath.Join(tempDir, "subdir")
-	err = os.Mkdir(subDir, 0755)
+	err = os.Mkdir(subDir, 0o755)
 	if err != nil {
 		t.Fatalf("Failed to create subdir: %v", err)
 	}
 
 	file2 := filepath.Join(subDir, "file2.txt")
-	err = os.WriteFile(file2, []byte("world!"), 0644)
+	err = os.WriteFile(file2, []byte("world!"), 0o644)
 	if err != nil {
 		t.Fatalf("Failed to create file: %v", err)
 	}

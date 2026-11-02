@@ -88,7 +88,6 @@ func ExampleDownloader_basic() {
 		"/tmp/tool-v1.0.0.tar.gz",
 		opts,
 	)
-
 	if err != nil {
 		log.Fatalf("Download failed: %v", err)
 	}
@@ -118,7 +117,6 @@ func ExampleDownloader_withChecksum() {
 		"/tmp/tool.tar.gz",
 		opts,
 	)
-
 	if err != nil {
 		log.Fatalf("Download failed: %v", err)
 	}
@@ -158,7 +156,6 @@ func ExampleDownloader_withProgress() {
 		"/tmp/large-file.tar.gz",
 		opts,
 	)
-
 	if err != nil {
 		log.Fatalf("Download failed: %v", err)
 	}
@@ -183,7 +180,6 @@ func ExampleDownloader_VerifyChecksum() {
 		"/tmp/tool-v1.0.0.tar.gz",
 		"sha256:abc123def456789",
 	)
-
 	if err != nil {
 		log.Fatalf("Checksum verification failed: %v", err)
 	}
@@ -213,7 +209,6 @@ func ExampleDownloader_contextCancellation() {
 
 	opts := download.DefaultDownloadOptions()
 	err := downloader.Download(ctx, "https://example.com/file.tar.gz", "/tmp/file.tar.gz", opts)
-
 	if err != nil {
 		fmt.Printf("Download cancelled: %v\n", err)
 	}

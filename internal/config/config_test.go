@@ -21,7 +21,7 @@ func TestLoadTOML(t *testing.T) {
 	defer os.Unsetenv("UNIGO_CONFIG_DIR")
 
 	tomlContent := []byte(`debug = true`)
-	err = os.WriteFile(filepath.Join(tmpDir, "unigo.toml"), tomlContent, 0644)
+	err = os.WriteFile(filepath.Join(tmpDir, "unigo.toml"), tomlContent, 0o644)
 	if err != nil {
 		t.Fatalf("Failed to write toml: %v", err)
 	}
@@ -46,7 +46,7 @@ func TestLoadYAML(t *testing.T) {
 	defer os.Unsetenv("UNIGO_CONFIG_DIR")
 
 	yamlContent := []byte(`debug: true`)
-	err = os.WriteFile(filepath.Join(tmpDir, "unigo.yaml"), yamlContent, 0644)
+	err = os.WriteFile(filepath.Join(tmpDir, "unigo.yaml"), yamlContent, 0o644)
 	if err != nil {
 		t.Fatalf("Failed to write yaml: %v", err)
 	}
@@ -93,7 +93,7 @@ func TestLoadInvalidTOML(t *testing.T) {
 	os.Setenv("UNIGO_CONFIG_DIR", tmpDir)
 	defer os.Unsetenv("UNIGO_CONFIG_DIR")
 
-	os.WriteFile(filepath.Join(tmpDir, "unigo.toml"), []byte(`[invalid`), 0644)
+	os.WriteFile(filepath.Join(tmpDir, "unigo.toml"), []byte(`[invalid`), 0o644)
 
 	_, err := Load()
 	if err == nil {
@@ -107,7 +107,7 @@ func TestLoadInvalidYAML(t *testing.T) {
 	os.Setenv("UNIGO_CONFIG_DIR", tmpDir)
 	defer os.Unsetenv("UNIGO_CONFIG_DIR")
 
-	os.WriteFile(filepath.Join(tmpDir, "unigo.yaml"), []byte(`invalid: yaml: :`), 0644)
+	os.WriteFile(filepath.Join(tmpDir, "unigo.yaml"), []byte(`invalid: yaml: :`), 0o644)
 
 	_, err := Load()
 	if err == nil {
@@ -129,7 +129,7 @@ func TestLoadUnreadableConfig(t *testing.T) {
 	defer os.Unsetenv("UNIGO_CONFIG_DIR")
 
 	file := filepath.Join(tmpDir, "unigo.toml")
-	os.WriteFile(file, []byte(`debug = true`), 0200) // write-only
+	os.WriteFile(file, []byte(`debug = true`), 0o200) // write-only
 
 	_, err := Load()
 	if err == nil {
@@ -143,7 +143,7 @@ func TestSaveMkdirError(t *testing.T) {
 
 	// Create a file where the config dir should be
 	badDir := filepath.Join(tmpDir, "bad_dir")
-	os.WriteFile(badDir, []byte("file"), 0644)
+	os.WriteFile(badDir, []byte("file"), 0o644)
 
 	os.Setenv("UNIGO_CONFIG_DIR", badDir)
 	defer os.Unsetenv("UNIGO_CONFIG_DIR")
@@ -164,14 +164,14 @@ func TestSaveWriteError(t *testing.T) {
 	}
 	tmpDir, _ := os.MkdirTemp("", "unigo_config_test")
 	defer func() {
-		_ = os.Chmod(tmpDir, 0755)
+		_ = os.Chmod(tmpDir, 0o755)
 		_ = os.RemoveAll(tmpDir)
 	}()
 	os.Setenv("UNIGO_CONFIG_DIR", tmpDir)
 	defer os.Unsetenv("UNIGO_CONFIG_DIR")
 
 	// Pre-create read-only directory so CreateTemp fails
-	if err := os.Chmod(tmpDir, 0500); err != nil {
+	if err := os.Chmod(tmpDir, 0o500); err != nil {
 		t.Fatalf("Failed to chmod directory: %v", err)
 	}
 

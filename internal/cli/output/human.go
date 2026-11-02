@@ -32,7 +32,7 @@ const (
 )
 
 // colorize wraps text in ANSI color codes if colors are enabled
-func (h *HumanFormatter) colorize(text string, color string) string {
+func (h *HumanFormatter) colorize(text, color string) string {
 	if h.noColor {
 		return text
 	}

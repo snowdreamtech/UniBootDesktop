@@ -32,7 +32,7 @@ type Config struct {
 func Open(ctx context.Context, config Config) (*DB, error) {
 	// Ensure the directory exists
 	dir := filepath.Dir(config.Path)
-	if err := os.MkdirAll(dir, 0755); err != nil {
+	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return nil, fmt.Errorf("create database directory: %w", err)
 	}
 

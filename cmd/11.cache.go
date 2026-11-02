@@ -11,13 +11,14 @@ import (
 	"time"
 
 	"github.com/pterm/pterm"
+	"github.com/spf13/cobra"
+	"golang.org/x/term"
+
 	"github.com/snowdreamtech/unigo/internal/cli/output"
 	"github.com/snowdreamtech/unigo/internal/database"
 	"github.com/snowdreamtech/unigo/internal/env"
 	"github.com/snowdreamtech/unigo/internal/repository/sqlite"
 	"github.com/snowdreamtech/unigo/internal/service"
-	"github.com/spf13/cobra"
-	"golang.org/x/term"
 )
 
 // init registers the cache command and its subcommands to the root command.
@@ -351,17 +352,18 @@ func runCacheStats(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-// getDefaultCacheDir returns the default cache directory path.
-func getDefaultCacheDir() string {
-	return env.GetCacheDir()
-}
-
 // listCacheFiles walks the cache directory and returns a list of file info maps.
 func listCacheFiles(dir string) ([]map[string]string, error) {
 	var entries []map[string]string
 
 	info, err := os.Stat(dir)
-	if err != nil || !info.IsDir() {
+	if err != nil {
+		if os.IsNotExist(err) {
+			return entries, nil
+		}
+		return nil, fmt.Errorf("stat cache directory: %w", err)
+	}
+	if !info.IsDir() {
 		return entries, nil
 	}
 

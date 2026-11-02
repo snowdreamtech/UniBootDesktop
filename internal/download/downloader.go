@@ -46,7 +46,7 @@ type Downloader interface {
 	//   - Verify the checksum after download if specified in opts
 	//   - Clean up partial downloads on failure
 	//   - Return descriptive errors with context (URL, attempt count, failure reason)
-	Download(ctx context.Context, url string, destination string, opts DownloadOptions) error
+	Download(ctx context.Context, url, destination string, opts DownloadOptions) error
 
 	// VerifyChecksum verifies that the file at the given path matches the expected checksum.
 	// The checksum format should be "algorithm:hash" (e.g., "sha256:abc123...").
@@ -65,7 +65,7 @@ type Downloader interface {
 	//   - Return ErrChecksumMismatch from internal/errors when checksums don't match
 	//   - Delete the file if checksum verification fails
 	//   - Support the format "sha256:hash" or just "hash" (assuming SHA-256)
-	VerifyChecksum(ctx context.Context, file string, expectedChecksum string) error
+	VerifyChecksum(ctx context.Context, file, expectedChecksum string) error
 }
 
 // DownloadOptions configures the behavior of a download operation.

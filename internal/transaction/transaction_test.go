@@ -10,11 +10,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"github.com/snowdreamtech/unigo/internal/database"
 	"github.com/snowdreamtech/unigo/internal/repository"
 	"github.com/snowdreamtech/unigo/internal/repository/sqlite"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func setupTestDB(t *testing.T) (*database.DB, func()) {

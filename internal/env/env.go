@@ -70,31 +70,31 @@ func GithubProxy() string {
 }
 
 var (
-	//ProjectName Project Name
+	// ProjectName Project Name
 	ProjectName string = "unigo"
 
-	//Author Author
+	// Author Author
 	Author string = "Snowdream Tech <snowdreamtech@qq.com>"
 
-	//BuildTime Build Time
+	// BuildTime Build Time
 	BuildTime string = "N/A"
 
-	//GitTag Git Tag
+	// GitTag Git Tag
 	GitTag string = "N/A"
 
-	//CommitHash Commit Hash
+	// CommitHash Commit Hash
 	CommitHash string = "N/A"
 
-	//CommitHashFull Commit Hash
+	// CommitHashFull Commit Hash
 	CommitHashFull string = "N/A"
 
-	//COPYRIGHT COPYRIGHT
+	// COPYRIGHT COPYRIGHT
 	COPYRIGHT string = "Copyright (c) 2023-present SnowdreamTech Inc."
 
-	//LICENSE LICENSE
+	// LICENSE LICENSE
 	LICENSE string = "MIT <https://github.com/snowdreamtech/unigo/blob/main/LICENSE>"
 
-	//Config Config File Path
+	// Config Config File Path
 	Config string = "unigo.toml"
 
 	// Debug indicates whether the application should run in debug mode.

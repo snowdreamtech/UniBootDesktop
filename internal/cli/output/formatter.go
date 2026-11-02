@@ -97,9 +97,10 @@ func NewFormatter(opts FormatterOptions) Formatter {
 		fallthrough
 	default:
 		noColor := opts.NoColor || zerolog.GlobalLevel() == zerolog.Disabled
-		if opts.Color == "always" {
+		switch opts.Color {
+		case "always":
 			noColor = false
-		} else if opts.Color == "never" {
+		case "never":
 			noColor = true
 		}
 		return &HumanFormatter{

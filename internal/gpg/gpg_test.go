@@ -18,7 +18,7 @@ import (
 )
 
 // generateTestKeyAndSig creates a test key, signs data, and returns key, sig, data, and fingerprint
-func generateTestKeyAndSig(t *testing.T) (armoredKey, armoredSig, data string, fingerprint string) {
+func generateTestKeyAndSig(t *testing.T) (armoredKey, armoredSig, data, fingerprint string) {
 	// 1. Generate a key
 	key, err := crypto.GenerateKey("test", "test@example.com", "rsa", 2048)
 	if err != nil {
@@ -78,8 +78,8 @@ func TestNativeGPGVerifier_Verify(t *testing.T) {
 	dataPath := filepath.Join(dir, "data.txt")
 	sigPath := filepath.Join(dir, "data.txt.sig")
 
-	os.WriteFile(dataPath, []byte(data), 0644)
-	os.WriteFile(sigPath, []byte(armoredSig), 0644)
+	os.WriteFile(dataPath, []byte(data), 0o644)
+	os.WriteFile(sigPath, []byte(armoredSig), 0o644)
 
 	// Mock the HTTP server for fetching the key
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -130,7 +130,7 @@ func TestNativeGPGVerifier_Verify(t *testing.T) {
 
 	// 5. Corrupted signature
 	badSigPath := filepath.Join(dir, "bad.sig")
-	os.WriteFile(badSigPath, []byte("NOT A VALID SIG"), 0644)
+	os.WriteFile(badSigPath, []byte("NOT A VALID SIG"), 0o644)
 	err = v.Verify(ctx, badSigPath, dataPath, []string{fingerprint})
 	if err == nil {
 		t.Errorf("expected error for corrupted signature")
@@ -189,6 +189,7 @@ type mockBody struct {
 func newMockBody(s string) *mockBody {
 	return &mockBody{data: strings.NewReader(s)}
 }
+
 func (m *mockBody) Read(p []byte) (n int, err error) {
 	if m.err {
 		return 0, os.ErrClosed
@@ -256,7 +257,7 @@ func TestSystemGPGVerifier(t *testing.T) {
 			"exit 0\n"
 
 		mockGpgPath := filepath.Join(mockGpgDir, "gpg")
-		if err := os.WriteFile(mockGpgPath, []byte(mockScript), 0755); err != nil {
+		if err := os.WriteFile(mockGpgPath, []byte(mockScript), 0o755); err != nil {
 			t.Fatalf("failed to write mock gpg: %v", err)
 		}
 
@@ -320,7 +321,7 @@ func TestNativeGPGVerifier_Verify_Errors(t *testing.T) {
 	// 2. Missing data file
 	dir := t.TempDir()
 	sigPath := filepath.Join(dir, "sig.sig")
-	os.WriteFile(sigPath, []byte("some sig"), 0644)
+	os.WriteFile(sigPath, []byte("some sig"), 0o644)
 	err = v.Verify(ctx, sigPath, "nonexistent.txt", []string{"FP"})
 	if err == nil || !strings.Contains(err.Error(), "failed to open data file") {
 		t.Errorf("expected failed to open data file error, got %v", err)
@@ -328,7 +329,7 @@ func TestNativeGPGVerifier_Verify_Errors(t *testing.T) {
 
 	// 3. No fingerprints
 	dataPath := filepath.Join(dir, "data.txt")
-	os.WriteFile(dataPath, []byte("data"), 0644)
+	os.WriteFile(dataPath, []byte("data"), 0o644)
 	err = v.Verify(ctx, sigPath, dataPath, nil)
 	if err == nil || !strings.Contains(err.Error(), "no trusted keys matched") {
 		t.Errorf("expected no trusted keys matched error, got %v", err)
@@ -341,8 +342,8 @@ func TestNativeGPGVerifier_Verify_Errors(t *testing.T) {
 	dir4 := t.TempDir()
 	sigPath4 := filepath.Join(dir4, "sig4.sig")
 	dataPath4 := filepath.Join(dir4, "data4.txt")
-	os.WriteFile(sigPath4, []byte("some sig"), 0644)
-	os.WriteFile(dataPath4, []byte("data"), 0644)
+	os.WriteFile(sigPath4, []byte("some sig"), 0o644)
+	os.WriteFile(dataPath4, []byte("data"), 0o644)
 
 	v.client.Transport = &mockTransport{
 		armoredKey: armoredKey,

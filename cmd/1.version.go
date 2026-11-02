@@ -9,9 +9,10 @@ import (
 	"strings"
 
 	"github.com/common-nighthawk/go-figure"
+	"github.com/spf13/cobra"
+
 	"github.com/snowdreamtech/unigo/internal/env"
 	"github.com/snowdreamtech/unigo/internal/sysinfo"
-	"github.com/spf13/cobra"
 )
 
 // init registers the version command to the root command.

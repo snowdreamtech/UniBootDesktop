@@ -46,8 +46,7 @@ func (v *SystemGPGVerifier) Verify(ctx context.Context, sigPath, dataPath string
 	// Basic verification command
 	// gpg --verify --status-fd 1 <sig> <data>
 	// We use --status-fd 1 to get machine-readable status updates
-	args := []string{"--verify", "--status-fd", "1"}
-	args = append(args, sigPath, dataPath)
+	args := []string{"--verify", "--status-fd", "1", sigPath, dataPath}
 
 	cmd := exec.CommandContext(ctx, "gpg", args...)
 	output, err := cmd.CombinedOutput()
@@ -57,7 +56,7 @@ func (v *SystemGPGVerifier) Verify(ctx context.Context, sigPath, dataPath string
 		if strings.Contains(outputStr, "NO_PUBKEY") || strings.Contains(outputStr, "Can't check signature") {
 			return fmt.Errorf("gpg: missing public key for verification")
 		}
-		return fmt.Errorf("gpg verification failed: %v\nOutput: %s", err, outputStr)
+		return fmt.Errorf("gpg verification failed: %w\nOutput: %s", err, outputStr)
 	}
 
 	// If fingerprints are provided, we MUST ensure the signing key matches one of them
@@ -95,7 +94,7 @@ func (v *SystemGPGVerifier) ImportKey(ctx context.Context, keyIDOrFingerprint st
 		if output, err := cmd.CombinedOutput(); err == nil {
 			return nil
 		} else {
-			lastErr = fmt.Errorf("failed to fetch from %s: %v (output: %s)", server, err, string(output))
+			lastErr = fmt.Errorf("failed to fetch from %s: %w (output: %s)", server, err, string(output))
 		}
 	}
 

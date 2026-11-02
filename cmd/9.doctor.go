@@ -14,12 +14,13 @@ import (
 	"time"
 
 	"github.com/pterm/pterm"
+	"github.com/spf13/cobra"
+
 	"github.com/snowdreamtech/unigo/internal/cli/output"
 	"github.com/snowdreamtech/unigo/internal/database"
 	"github.com/snowdreamtech/unigo/internal/env"
 	pkgHttp "github.com/snowdreamtech/unigo/internal/http"
 	"github.com/snowdreamtech/unigo/internal/utils"
-	"github.com/spf13/cobra"
 )
 
 func init() {
@@ -68,7 +69,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		{"config", env.GetConfigDir(), "-"},
 		{"data", env.GetDataDir(), getDirSize(env.GetDataDir())},
 	}
-	var dirTable [][]string
+	dirTable := make([][]string, 0, 1+len(dirData))
 	dirTable = append(dirTable, []string{"Type", "Path", "Size"})
 	for _, d := range dirData {
 		dirTable = append(dirTable, []string{pterm.Bold.Sprint(d[0]), pterm.FgGray.Sprint(d[1]), pterm.LightCyan(d[2])})

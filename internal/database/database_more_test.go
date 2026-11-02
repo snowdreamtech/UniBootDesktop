@@ -18,7 +18,7 @@ func TestDatabase_Open_MkdirError(t *testing.T) {
 	// Create a regular file to use as a directory path
 	// This guarantees MkdirAll will fail cross-platform (not a directory error)
 	tmpFile := filepath.Join(t.TempDir(), "not-a-dir")
-	require.NoError(t, os.WriteFile(tmpFile, []byte("test"), 0644))
+	require.NoError(t, os.WriteFile(tmpFile, []byte("test"), 0o644))
 
 	invalidPath := filepath.Join(tmpFile, "test.db")
 

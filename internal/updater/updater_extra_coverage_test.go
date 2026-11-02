@@ -11,10 +11,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/snowdreamtech/unigo/internal/env"
-	pkgHttp "github.com/snowdreamtech/unigo/internal/http"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/snowdreamtech/unigo/internal/env"
+	pkgHttp "github.com/snowdreamtech/unigo/internal/http"
 )
 
 type customTransport struct {

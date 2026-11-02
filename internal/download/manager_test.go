@@ -15,7 +15,7 @@ func (m *mockDownloader) Download(ctx context.Context, url, destination string, 
 	return nil
 }
 
-func (m *mockDownloader) VerifyChecksum(ctx context.Context, file string, expectedChecksum string) error {
+func (m *mockDownloader) VerifyChecksum(ctx context.Context, file, expectedChecksum string) error {
 	return nil
 }
 

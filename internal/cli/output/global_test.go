@@ -7,9 +7,10 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/snowdreamtech/unigo/internal/env"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/snowdreamtech/unigo/internal/env"
 )
 
 func TestSetGetGlobalFormatter(t *testing.T) {

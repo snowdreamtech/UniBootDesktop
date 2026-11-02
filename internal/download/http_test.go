@@ -16,10 +16,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/snowdreamtech/unigo/internal/download"
-	"github.com/snowdreamtech/unigo/internal/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/snowdreamtech/unigo/internal/download"
+	"github.com/snowdreamtech/unigo/internal/errors"
 )
 
 // TestHTTPDownloader_NewHTTPDownloader verifies that NewHTTPDownloader creates a valid instance.
@@ -371,7 +372,7 @@ func TestHTTPDownloader_VerifyChecksum_Success(t *testing.T) {
 	tmpDir := t.TempDir()
 	file := filepath.Join(tmpDir, "test.txt")
 	content := []byte("test content")
-	err := os.WriteFile(file, content, 0644)
+	err := os.WriteFile(file, content, 0o644)
 	require.NoError(t, err)
 
 	// Compute expected checksum
@@ -396,7 +397,7 @@ func TestHTTPDownloader_VerifyChecksum_WithoutAlgorithm(t *testing.T) {
 	tmpDir := t.TempDir()
 	file := filepath.Join(tmpDir, "test.txt")
 	content := []byte("test content")
-	err := os.WriteFile(file, content, 0644)
+	err := os.WriteFile(file, content, 0o644)
 	require.NoError(t, err)
 
 	// Compute expected checksum
@@ -417,7 +418,7 @@ func TestHTTPDownloader_VerifyChecksum_Mismatch(t *testing.T) {
 	tmpDir := t.TempDir()
 	file := filepath.Join(tmpDir, "test.txt")
 	content := []byte("test content")
-	err := os.WriteFile(file, content, 0644)
+	err := os.WriteFile(file, content, 0o644)
 	require.NoError(t, err)
 
 	// Use wrong checksum
@@ -451,7 +452,7 @@ func TestHTTPDownloader_VerifyChecksum_InvalidFormat(t *testing.T) {
 			// Create temporary file
 			tmpDir := t.TempDir()
 			file := filepath.Join(tmpDir, "test.txt")
-			err := os.WriteFile(file, []byte("content"), 0644)
+			err := os.WriteFile(file, []byte("content"), 0o644)
 			require.NoError(t, err)
 
 			// Verify checksum with invalid format
@@ -603,7 +604,7 @@ func TestHTTPDownloader_VerifyGPGSignature_Skipped(t *testing.T) {
 	t.Setenv("UNIGO_DATA_DIR", tmpDir)
 	// Create a dummy keyring file so it passes the open check, but it might fail to parse keyring.
 	keyringPath := filepath.Join(tmpDir, "keyring.gpg")
-	os.WriteFile(keyringPath, []byte{}, 0644)
+	os.WriteFile(keyringPath, []byte{}, 0o644)
 
 	downloader := download.NewHTTPDownloader()
 	res := &download.GPGResult{}

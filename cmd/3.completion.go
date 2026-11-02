@@ -11,10 +11,11 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/spf13/cobra"
+
 	"github.com/snowdreamtech/unigo/internal/cli/output"
 	"github.com/snowdreamtech/unigo/internal/cli/shell"
 	"github.com/snowdreamtech/unigo/internal/env"
-	"github.com/spf13/cobra"
 )
 
 var (
@@ -174,7 +175,7 @@ func exportCompletionsToDir(formatter output.Formatter, cmd *cobra.Command, dest
 		return nil
 	}
 
-	if err := os.MkdirAll(destDir, 0755); err != nil {
+	if err := os.MkdirAll(destDir, 0o755); err != nil {
 		return fmt.Errorf("failed to create directory %s: %w", destDir, err)
 	}
 
@@ -211,7 +212,7 @@ func installAllCompletions(formatter output.Formatter, cmd *cobra.Command) error
 	if dryRun {
 		formatter.Info(fmt.Sprintf("[dry-run] Would ensure completion directory: %s", compDir), nil)
 	} else {
-		if err := os.MkdirAll(compDir, 0755); err != nil {
+		if err := os.MkdirAll(compDir, 0o755); err != nil {
 			return fmt.Errorf("failed to create completions directory: %w", err)
 		}
 	}
@@ -298,7 +299,7 @@ func generateCompletion(cmd *cobra.Command, shellType shell.ShellType, out io.Wr
 // writeCompletionFile generates a completion script for shellType and writes it to destFile.
 // The file is created (or overwritten) atomically. This operation is idempotent.
 func writeCompletionFile(cmd *cobra.Command, shellType shell.ShellType, destFile string) error {
-	if err := os.MkdirAll(filepath.Dir(destFile), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(destFile), 0o755); err != nil {
 		return fmt.Errorf("failed to create parent directory for %s: %w", destFile, err)
 	}
 	f, err := os.Create(destFile)
@@ -332,7 +333,7 @@ func installCompletion(formatter output.Formatter, cmd *cobra.Command, shellType
 	dataDir := env.GetDataDir()
 	compDir := filepath.Join(dataDir, "completions")
 
-	if err := os.MkdirAll(compDir, 0755); err != nil {
+	if err := os.MkdirAll(compDir, 0o755); err != nil {
 		return fmt.Errorf("failed to create completions directory: %w", err)
 	}
 

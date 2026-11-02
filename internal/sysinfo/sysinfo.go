@@ -4,12 +4,14 @@
 package sysinfo
 
 import (
+	"context"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"sync"
+	"time"
 )
 
 // SysInfo provides system environment and runtime information.
@@ -44,7 +46,9 @@ func checkMusl() bool {
 	}
 
 	// 3. Check ldd output
-	cmd := exec.Command("ldd", "--version")
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, "ldd", "--version")
 	out, _ := cmd.CombinedOutput()
 	// ldd --version might exit with 1 on musl, but it still prints to stdout/stderr
 	if strings.Contains(strings.ToLower(string(out)), "musl") {

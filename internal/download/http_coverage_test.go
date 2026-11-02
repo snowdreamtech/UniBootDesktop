@@ -396,10 +396,10 @@ func TestVerifyGPGSignature_FailedToParseKeyring(t *testing.T) {
 	// Create a tmp data dir with a corrupt (invalid GPG) keyring file
 	tmpDir := t.TempDir()
 	keysDir := filepath.Join(tmpDir, "unigo")
-	require.NoError(t, os.MkdirAll(keysDir, 0755))
+	require.NoError(t, os.MkdirAll(keysDir, 0o755))
 	keyringPath := filepath.Join(keysDir, "keyring.gpg")
 	// Write garbage so openpgp.ReadKeyRing fails
-	require.NoError(t, os.WriteFile(keyringPath, []byte("NOT A VALID GPG KEYRING GARBAGE DATA"), 0644))
+	require.NoError(t, os.WriteFile(keyringPath, []byte("NOT A VALID GPG KEYRING GARBAGE DATA"), 0o644))
 
 	t.Setenv("UNIGO_DATA_DIR", tmpDir)
 
@@ -459,7 +459,7 @@ func TestDownloadConcurrent_WriteError(t *testing.T) {
 	// Use a directory as destination – OpenFile will fail, not reach write phase
 	tmpDir := t.TempDir()
 	subDir := filepath.Join(tmpDir, "actually-a-dir")
-	require.NoError(t, os.MkdirAll(subDir, 0755))
+	require.NoError(t, os.MkdirAll(subDir, 0o755))
 
 	d := NewHTTPDownloader()
 	opts := DefaultDownloadOptions().WithMaxRetries(0)

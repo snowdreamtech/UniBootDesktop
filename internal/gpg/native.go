@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	pkgHttp "github.com/snowdreamtech/unigo/internal/http"
-
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
+
+	pkgHttp "github.com/snowdreamtech/unigo/internal/http"
 )
 
 // NativeGPGVerifier implements Verifier using the pure-Go gopenpgp library.
@@ -37,20 +37,20 @@ func (v *NativeGPGVerifier) Verify(ctx context.Context, sigPath, dataPath string
 	// Read signature
 	sigData, err := os.ReadFile(sigPath)
 	if err != nil {
-		return fmt.Errorf("failed to read signature file: %v", err)
+		return fmt.Errorf("failed to read signature file: %w", err)
 	}
 
 	// Read data
 	dataPipe, err := os.Open(dataPath)
 	if err != nil {
-		return fmt.Errorf("failed to open data file: %v", err)
+		return fmt.Errorf("failed to open data file: %w", err)
 	}
 	defer dataPipe.Close()
 
 	// Read all data once for verification
 	data, err := io.ReadAll(dataPipe)
 	if err != nil {
-		return fmt.Errorf("failed to read data file: %v", err)
+		return fmt.Errorf("failed to read data file: %w", err)
 	}
 
 	// We need the public key to verify.
@@ -78,7 +78,7 @@ func (v *NativeGPGVerifier) Verify(ctx context.Context, sigPath, dataPath string
 		}
 
 		if sigErr != nil {
-			return fmt.Errorf("invalid signature format: %v", sigErr)
+			return fmt.Errorf("invalid signature format: %w", sigErr)
 		}
 
 		// Verify
@@ -91,7 +91,7 @@ func (v *NativeGPGVerifier) Verify(ctx context.Context, sigPath, dataPath string
 	}
 
 	if lastErr != nil {
-		return fmt.Errorf("gpg verification failed: %v", lastErr)
+		return fmt.Errorf("gpg verification failed: %w", lastErr)
 	}
 
 	return fmt.Errorf("gpg verification failed: no trusted keys matched")

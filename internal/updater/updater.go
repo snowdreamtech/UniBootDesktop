@@ -17,6 +17,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 	"github.com/pterm/pterm"
+
 	"github.com/snowdreamtech/unigo/internal/env"
 	pkgHttp "github.com/snowdreamtech/unigo/internal/http"
 	"github.com/snowdreamtech/unigo/internal/version"
@@ -84,11 +85,11 @@ func writeCache(cache *UpdateCache) error {
 	}
 
 	dir := filepath.Dir(getCachePath())
-	if err := os.MkdirAll(dir, 0755); err != nil {
+	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return err
 	}
 
-	return os.WriteFile(getCachePath(), data, 0600)
+	return os.WriteFile(getCachePath(), data, 0o600)
 }
 
 // ClearCache clears the update cache from disk.
@@ -203,7 +204,7 @@ func CheckUpdateAsync(currentVersion string) {
 }
 
 // PromptIfAvailable prints an update prompt if a newer version is available and constraints are met.
-func PromptIfAvailable(currentVersion string, cmdName string) {
+func PromptIfAvailable(currentVersion, cmdName string) {
 	if env.Silent || env.Quiet {
 		return
 	}

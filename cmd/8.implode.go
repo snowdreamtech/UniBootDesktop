@@ -11,13 +11,13 @@ import (
 	"time"
 
 	"github.com/pterm/pterm"
-	"github.com/snowdreamtech/unigo/internal/env"
+	"github.com/pterm/pterm/putils"
 	"github.com/spf13/cobra"
+
+	"github.com/snowdreamtech/unigo/internal/env"
 )
 
-var (
-	implodeConfig bool
-)
+var implodeConfig bool
 
 func init() {
 	implodeCmd.Flags().BoolVar(&implodeConfig, "config", false, "also remove configuration directory (~/.config/unigo)")
@@ -46,8 +46,8 @@ func runImplode(cmd *cobra.Command, args []string) error {
 	// 1. Visual Banner
 	pterm.DefaultCenter.Println(pterm.Red("!!! DANGER ZONE !!!"))
 	pterm.DefaultBigText.WithLetters(
-		pterm.NewLettersFromStringWithStyle("IM", pterm.NewStyle(pterm.FgRed)),
-		pterm.NewLettersFromStringWithStyle("PLODE", pterm.NewStyle(pterm.FgWhite)),
+		putils.LettersFromStringWithStyle("IM", pterm.NewStyle(pterm.FgRed)),
+		putils.LettersFromStringWithStyle("PLODE", pterm.NewStyle(pterm.FgWhite)),
 	).Render()
 
 	configDir := env.GetConfigDir()

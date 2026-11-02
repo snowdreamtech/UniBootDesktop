@@ -53,9 +53,9 @@ func TestUpdateCache_Corrupt(t *testing.T) {
 
 	// Write corrupt JSON
 	cachePath := getCachePath()
-	err := os.MkdirAll(filepath.Dir(cachePath), 0755)
+	err := os.MkdirAll(filepath.Dir(cachePath), 0o755)
 	require.NoError(t, err)
-	err = os.WriteFile(cachePath, []byte("invalid json"), 0644)
+	err = os.WriteFile(cachePath, []byte("invalid json"), 0o644)
 	require.NoError(t, err)
 
 	// Reading corrupt cache should return empty struct instead of error

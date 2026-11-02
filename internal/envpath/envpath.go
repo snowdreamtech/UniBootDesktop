@@ -15,8 +15,10 @@ import (
 // EnvPathHelper provides path formatting and manipulation utilities.
 type EnvPathHelper struct{}
 
-var isWindowsMode = runtime.GOOS == "windows"
-var winDriveRegex = regexp.MustCompile(`^([A-Za-z]):[\\/](.*)$`)
+var (
+	isWindowsMode = runtime.GOOS == "windows"
+	winDriveRegex = regexp.MustCompile(`^([A-Za-z]):[\\/](.*)$`)
+)
 
 // JoinForOS joins multiple paths into a single string using the native operating system's
 // list separator (e.g. ';' on Windows, ':' on Posix). This must be used when injecting
@@ -29,7 +31,7 @@ func JoinForOS(paths []string) string {
 // (Bash, Zsh, Sh). It strictly uses the POSIX separator ':' regardless of the underlying OS,
 // and sanitizes Windows backslashes into forward slashes to prevent shell escape bugs.
 func JoinForPosix(paths []string) string {
-	var posixPaths []string
+	posixPaths := make([]string, 0, len(paths))
 	for _, p := range paths {
 		posixPaths = append(posixPaths, FormatDirForPosix(p))
 	}

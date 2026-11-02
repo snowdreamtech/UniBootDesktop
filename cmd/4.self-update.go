@@ -16,12 +16,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/spf13/cobra"
+
 	"github.com/snowdreamtech/unigo/internal/archive"
 	"github.com/snowdreamtech/unigo/internal/env"
 	pkgHttp "github.com/snowdreamtech/unigo/internal/http"
 	"github.com/snowdreamtech/unigo/internal/updater"
 	"github.com/snowdreamtech/unigo/internal/version"
-	"github.com/spf13/cobra"
 )
 
 var skipChecksum bool
@@ -162,7 +163,7 @@ func runSelfUpdate(cmd *cobra.Command, args []string) error {
 	}
 
 	tmpPath := execPath + ".new"
-	tmpFile, err := os.OpenFile(tmpPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0755)
+	tmpFile, err := os.OpenFile(tmpPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o755)
 	if err != nil {
 		return fmt.Errorf("failed to create temp file: %w", err)
 	}

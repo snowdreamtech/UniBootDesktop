@@ -11,9 +11,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/snowdreamtech/unigo/internal/download"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/snowdreamtech/unigo/internal/download"
 )
 
 // TestHTTPDownloader_VerifyChecksum_OpenError verifies error handling when the file cannot be read.
@@ -23,7 +24,7 @@ func TestHTTPDownloader_VerifyChecksum_OpenError(t *testing.T) {
 
 	// Use a directory to guarantee a read error cross-platform (since Windows ignores 0000 permissions)
 	dirAsFile := filepath.Join(tmpDir, "directory_not_file")
-	require.NoError(t, os.Mkdir(dirAsFile, 0755))
+	require.NoError(t, os.Mkdir(dirAsFile, 0o755))
 
 	err := downloader.VerifyChecksum(context.Background(), dirAsFile, "sha256:dummy")
 	assert.Error(t, err)
@@ -59,7 +60,7 @@ func TestHTTPDownloader_VerifyGPGSignature_FullFailure(t *testing.T) {
 	keyringPath := filepath.Join(tmpDir, "keyring.gpg")
 	// Must be a valid empty keyring to pass openpgp.ReadKeyRing.
 	// Actually an empty file will result in empty keyring. Let's write an empty keyring.
-	err := os.WriteFile(keyringPath, []byte{}, 0644)
+	err := os.WriteFile(keyringPath, []byte{}, 0o644)
 	require.NoError(t, err)
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
