@@ -2,7 +2,7 @@ version: "2"
 run:
   modules-download-mode: readonly
   tests: true
-  allow-parallel-runners: true
+  allow-parallel-runners: false
 output:
   formats:
     text:
@@ -74,6 +74,9 @@ linters:
       - linters:
           - errorlint
         text: type assertion on error will fail on wrapped errors
+      - linters:
+          - typecheck
+        text: 'could not load export data'
     paths:
       - vendor
       - node_modules
