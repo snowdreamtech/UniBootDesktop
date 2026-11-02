@@ -2,7 +2,6 @@
 
 [![CI Pipeline](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/ci.yml?branch=main&label=CI%20Pipeline)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)
 [![CD Pipeline](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/cd.yml?branch=main&label=CD%20Pipeline)](https://github.com/snowdreamtech/UniGo/actions/workflows/cd.yml)
-[![GitHub Pages](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/pages.yml?branch=main&label=Docs&logo=github)](https://github.com/snowdreamtech/UniGo/actions/workflows/pages.yml)
 [![CodeQL](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/codeql.yml?branch=main&label=CodeQL&logo=github)](https://github.com/snowdreamtech/UniGo/actions/workflows/codeql.yml)
 [![Multi-OS Verified](https://img.shields.io/badge/Verified-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)
 [![Security Audit](https://img.shields.io/badge/Security-Zizmor%20%7C%20Trivy%20%7C%20Gitleaks-brightgreen)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)

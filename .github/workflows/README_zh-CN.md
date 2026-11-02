@@ -14,7 +14,7 @@ GitHub Actions 基础设施提供了一个健壮的多层验证系统，确保�
 
 - **自动化质量门禁**：在每次 PR 时进行统一的代码校验和安全审计。
 - **跨平台测试**：支持 Python、Node.js、Go、Shell 和 PowerShell 的多语言验证。
-- **持续交付**：自动化版本管理、更新日志生成及文档部署。
+- **持续交付**：自动化版本管理及更新日志生成。
 - **资源效率**：通过智能缓存和高效的并发管理节省计算资源。
 
 ### 架构图
@@ -32,8 +32,6 @@ graph TD
     D1 & D2 & D3 --> E{准备发布?}
     D2 -- Tag v* --> F[goreleaser.yml]
     F --> G[生产环境发布]
-    D2 --> H[pages.yml]
-    H --> I[GitHub Pages 文档]
 ```
 
 ### 设计原则
@@ -86,7 +84,6 @@ graph TD
 ├── ci.yml              # Continuous Integration (统一 CI)
 ├── cd.yml              # Continuous Delivery (统一 CD)
 ├── codeql.yml          # 深度安全分析
-├── pages.yml           # 文档部署
 ├── cache.yml           # 缓存清理维护
 ├── labeler.yml         # PR 自动分类
 ├── stale.yml           # Issue 维护管理

@@ -14,7 +14,7 @@ The GitHub Actions infrastructure provides a robust, multi-layered validation sy
 
 - **Automated Quality Gates**: Unified linting and security auditing on every PR.
 - **Cross-Stack Testing**: Validation across Python, Node.js, Go, Shell, and PowerShell.
-- **Continuous Delivery**: Automated versioning, changelog generation, and Pages deployment.
+- **Continuous Delivery**: Automated versioning and changelog generation.
 - **Resource Efficiency**: Intelligent caching and aggressive concurrency management.
 
 ### Architecture Diagram
@@ -32,8 +32,6 @@ graph TD
     D1 & D2 & D3 --> E{Release Ready?}
     D2 -- Tag v* --> F[goreleaser.yml]
     F --> G[Production Release]
-    D2 --> H[pages.yml]
-    H --> I[GitHub Pages Docs]
 ```
 
 ### Design Principles
@@ -86,7 +84,6 @@ graph TD
 ├── ci.yml              # Continuous Integration (Lint -> Test -> Audit)
 ├── cd.yml              # Continuous Delivery (Verify -> Release Please)
 ├── codeql.yml          # Deep security analysis
-├── pages.yml           # Docs deployment
 ├── cache.yml           # Cache maintenance
 ├── labeler.yml         # PR categorization
 ├── stale.yml           # Issue management

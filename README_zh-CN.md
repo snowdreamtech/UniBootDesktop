@@ -2,7 +2,6 @@
 
 [![CI 流水线](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/ci.yml?branch=main&label=CI%20Pipeline)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)
 [![CD 自动化发布](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/cd.yml?branch=main&label=CD%20Pipeline)](https://github.com/snowdreamtech/UniGo/actions/workflows/cd.yml)
-[![文档站点](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/pages.yml?branch=main&label=%E6%96%87%E6%A1%A3&logo=github)](https://github.com/snowdreamtech/UniGo/actions/workflows/pages.yml)
 [![CodeQL 审计](https://img.shields.io/github/actions/workflow/status/snowdreamtech/UniGo/codeql.yml?branch=main&label=CodeQL&logo=github)](https://github.com/snowdreamtech/UniGo/actions/workflows/codeql.yml)
 [![跨平台验证](https://img.shields.io/badge/Verified-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)
 [![安全审计](https://img.shields.io/badge/Security-Zizmor%20%7C%20Trivy%20%7C%20Gitleaks-brightgreen)](https://github.com/snowdreamtech/UniGo/actions/workflows/ci.yml)
