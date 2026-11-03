@@ -156,8 +156,12 @@ export function resolveDisplay() {
     }
   }
 
-  // 3. Probe common SSH X11 forward displays (localhost:10.0, 127.0.0.1:10.0)
-  for (const d of ["localhost:10.0", "127.0.0.1:10.0", ":10.0"]) {
+  // 3. Probe common SSH X11 forward displays (localhost:10.0 .. localhost:20.0)
+  const candidateDisplays = [];
+  for (let i = 10; i <= 20; i++) {
+    candidateDisplays.push(`localhost:${i}.0`, `127.0.0.1:${i}.0`, `:${i}.0`);
+  }
+  for (const d of candidateDisplays) {
     try {
       execSync(`DISPLAY="${d}" timeout 1 xdpyinfo`, { stdio: "ignore" });
       console.log(`\x1b[32m[SmartDisplay] Auto-detected reachable SSH forwarded display: ${d}\x1b[0m`);
@@ -379,6 +383,9 @@ async function main() {
   childEnv.PORT = String(frontend.port);
   childEnv.VITE_PORT = String(frontend.port);
 
+  let execBinary = wailsCmd;
+  let execArgs = args;
+
   if (process.platform === "linux") {
     const autoDisplay = resolveDisplay();
     if (autoDisplay) {
@@ -386,10 +393,34 @@ async function main() {
       childEnv.GDK_BACKEND = "x11";
       childEnv.WEBKIT_DISABLE_COMPOSITING_MODE = "1";
       childEnv.LIBGL_ALWAYS_SOFTWARE = "1";
+    } else {
+      let hasXvfb = false;
+      try {
+        execSync("which xvfb-run", { stdio: "ignore" });
+        hasXvfb = true;
+      } catch {
+        // xvfb-run not available
+      }
+
+      if (hasXvfb) {
+        console.log(
+          "\x1b[33m[SmartDisplay] No reachable physical or SSH X11 display found; automatically running under xvfb-run virtual display.\x1b[0m\n"
+        );
+        execBinary = "xvfb-run";
+        execArgs = ["-a", wailsCmd, ...args];
+        delete childEnv.DISPLAY;
+        childEnv.GDK_BACKEND = "x11";
+        childEnv.WEBKIT_DISABLE_COMPOSITING_MODE = "1";
+        childEnv.LIBGL_ALWAYS_SOFTWARE = "1";
+      } else {
+        console.warn(
+          "\x1b[31m[SmartDisplay] Warning: No reachable X11 display found and xvfb-run is not installed. GTK initialization may fail.\x1b[0m\n"
+        );
+      }
     }
   }
 
-  const child = spawn(wailsCmd, args, {
+  const child = spawn(execBinary, execArgs, {
     env: childEnv,
     stdio: "inherit",
     shell: isWindows,
