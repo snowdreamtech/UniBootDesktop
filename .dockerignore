@@ -575,10 +575,6 @@ build/
 .nuxt/
 .output/
 
-### VitePress ###
-docs/.vitepress/dist
-docs/.vitepress/cache
-
 ### General Frontend Build ###
 dist/
 .turbo/
@@ -675,6 +671,5 @@ test-results/
 # DOCKER CONTEXT HYGIENE (EXPLICIT FOLDERS)
 # -----------------------------------------------------------------------------
 .github/
-docs/
 tests/
 scripts/

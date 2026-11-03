@@ -79,8 +79,6 @@ target/
 .output/
 .turbo/
 .svelte-kit/
-docs/.vitepress/dist
-docs/.vitepress/cache
 .nyc_output/
 .coverage/
 coverage/

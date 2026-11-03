@@ -30,8 +30,6 @@ exclude = [
   "https://unirtm.snowdream.tech.*",
   "https://github.com/snowdreamtech/UniRTM/discussions",
   "https://github.com/snowdreamtech/template/blob/.*",
-  ".*docs/glossary.md",
-  ".*docs/index.md",                                        # Unreleased version compare links (tags don't exist yet)
   'https://github\.com/.*/compare/.*\.\.\.v\d+\.\d+\.\d+$',
 ]
 
