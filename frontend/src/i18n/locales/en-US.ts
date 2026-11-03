@@ -138,7 +138,7 @@ export const enUs: TranslationDict = {
   "privilege.cancel_btn": "Cancel",
   "privilege.success_msg": "Administrator privilege granted",
 
-    "log.title": "Log Center",
+  "log.title": "Log Center",
   "log.live": "LIVE",
   "log.search_placeholder": "Search log entries...",
   "log.empty": "No log entries recorded",

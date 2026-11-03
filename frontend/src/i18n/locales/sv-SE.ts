@@ -135,7 +135,7 @@ export const svSe: TranslationDict = {
   "privilege.confirm_btn": "Authorize Now",
   "privilege.cancel_btn": "Cancel",
   "privilege.success_msg": "Administrator privilege granted",
-    "log.title": "Loggcenter",
+  "log.title": "Loggcenter",
   "log.live": "LIVE",
   "log.search_placeholder": "Search log entries...",
   "log.empty": "No log entries recorded",

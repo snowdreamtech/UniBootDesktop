@@ -136,7 +136,7 @@ export const ocFr: TranslationDict = {
   "privilege.confirm_btn": "Authorize Now",
   "privilege.cancel_btn": "Cancel",
   "privilege.success_msg": "Administrator privilege granted",
-    "log.title": "Centre de registres",
+  "log.title": "Centre de registres",
   "log.live": "LIVE",
   "log.search_placeholder": "Search log entries...",
   "log.empty": "No log entries recorded",

@@ -133,7 +133,7 @@ export const zhCn: TranslationDict = {
   "privilege.cancel_btn": "暂不授权",
   "privilege.success_msg": "已获得管理员权限",
 
-    "log.title": "日志中心",
+  "log.title": "日志中心",
   "log.live": "实时",
   "log.search_placeholder": "搜索日志关键词...",
   "log.empty": "暂无日志记录",

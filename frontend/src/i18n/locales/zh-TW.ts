@@ -134,7 +134,7 @@ export const zhTw: TranslationDict = {
   "privilege.confirm_btn": "Authorize Now",
   "privilege.cancel_btn": "Cancel",
   "privilege.success_msg": "Administrator privilege granted",
-    "log.title": "日誌中心",
+  "log.title": "日誌中心",
   "log.live": "即時",
   "log.search_placeholder": "搜尋日誌關鍵字...",
   "log.empty": "暫無日誌記錄",

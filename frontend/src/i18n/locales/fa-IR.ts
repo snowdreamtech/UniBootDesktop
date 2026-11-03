@@ -136,7 +136,7 @@ export const faIr: TranslationDict = {
   "privilege.confirm_btn": "Authorize Now",
   "privilege.cancel_btn": "Cancel",
   "privilege.success_msg": "Administrator privilege granted",
-    "log.title": "مرکز ثبت رویدادها",
+  "log.title": "مرکز ثبت رویدادها",
   "log.live": "LIVE",
   "log.search_placeholder": "Search log entries...",
   "log.empty": "No log entries recorded",

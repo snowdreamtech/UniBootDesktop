@@ -135,7 +135,7 @@ export const nlNl: TranslationDict = {
   "privilege.confirm_btn": "Authorize Now",
   "privilege.cancel_btn": "Cancel",
   "privilege.success_msg": "Administrator privilege granted",
-    "log.title": "Logcentrum",
+  "log.title": "Logcentrum",
   "log.live": "LIVE",
   "log.search_placeholder": "Search log entries...",
   "log.empty": "No log entries recorded",
