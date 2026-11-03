@@ -253,6 +253,7 @@ description = "Run Go unit tests for all packages recursively"
 # CGO_ENABLED=0: force pure-Go build — all test files must use modernc.org/sqlite, not mattn/go-sqlite3
 run = '''
 unirtm run test:frontend
+unirtm exec -- node scripts/fetch-firmware.mjs
 unirtm exec -- go test -cover -v -timeout 10m -p 4 ./...
 '''
 output = "interleaved"
