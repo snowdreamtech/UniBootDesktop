@@ -6,6 +6,7 @@
 package main
 
 import (
+	"context"
 	"os/exec"
 	"syscall"
 )
@@ -19,7 +20,7 @@ func detachProcess(cmd *exec.Cmd) {
 
 // newDetachedCmd creates a new exec.Cmd configured to run detached from the current process group.
 func newDetachedCmd(name string, args ...string) *exec.Cmd {
-	cmd := exec.Command(name, args...)
+	cmd := exec.CommandContext(context.Background(), name, args...)
 	detachProcess(cmd)
 	return cmd
 }

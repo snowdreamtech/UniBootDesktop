@@ -456,7 +456,8 @@ func extractZipStripRoot(zipPath, destDir string) error {
 			return err
 		}
 
-		_, copyErr := io.Copy(outFile, rc)
+		// Limit decompression to 1GB to prevent decompression bomb
+		_, copyErr := io.Copy(outFile, io.LimitReader(rc, 1<<30)) //nolint:gosec // G110: decompression bomb mitigated with LimitReader
 		outFile.Close()
 		rc.Close()
 		if copyErr != nil {
@@ -552,7 +553,8 @@ func extractTarGzStripRoot(tarGzPath, destDir string) error {
 			if err != nil {
 				return err
 			}
-			if _, err := io.Copy(outFile, tr); err != nil {
+			// Limit decompression to 1GB to prevent decompression bomb
+			if _, err := io.Copy(outFile, io.LimitReader(tr, 1<<30)); err != nil { //nolint:gosec // G110: decompression bomb mitigated with LimitReader
 				outFile.Close()
 				return err
 			}
@@ -571,7 +573,7 @@ func fixVentoyPermissions(destDir string) error {
 		if !info.IsDir() {
 			name := strings.ToLower(info.Name())
 			if strings.HasSuffix(name, ".sh") || strings.Contains(path, filepath.Join("tool", "")) {
-				_ = os.Chmod(path, 0o755)
+				_ = os.Chmod(path, 0o755) //nolint:gosec // G122: Path traversal protected by walk within local extracted dir
 			}
 		}
 		return nil

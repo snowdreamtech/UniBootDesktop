@@ -52,7 +52,8 @@ func (r *UIRunner) Start(ctx context.Context) error {
 	})
 
 	// Find available local port
-	ln, err := net.Listen("tcp", "127.0.0.1:0")
+	var lc net.ListenConfig
+	ln, err := lc.Listen(ctx, "tcp", "127.0.0.1:0")
 	if err != nil {
 		r.mu.Unlock()
 		return fmt.Errorf("failed to bind local desktop port: %w", err)

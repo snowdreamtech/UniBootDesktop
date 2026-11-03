@@ -221,8 +221,8 @@ var menuDataStores = map[string]MenuTranslations{
 	"fa-IR": {
 		App: "UniBootDesktop", About: "درباره UniBootDesktop", Hide: "پنهان کردن UniBootDesktop", ShowAll: "نمایش همه",
 		Quit: "خروج از UniBootDesktop", Edit: "ویرایش", Undo: "واکشی", Redo: "انجام دوباره",
-		Cut: "برش", Copy: "کپی", Paste: "جای‌گذاری", SelectAll: "انتخاب همه",
-		Window: "پنجره", Minimize: "کمینه کردن", Zoom: "بزرگ‌نمایی", Help: "راهنما",
+		Cut: "برش", Copy: "کپی", Paste: "جای\u200cگذاری", SelectAll: "انتخاب همه",
+		Window: "پنجره", Minimize: "کمینه کردن", Zoom: "بزرگ\u200cنمایی", Help: "راهنما",
 	},
 	"hi-IN": {
 		App: "UniBootDesktop", About: "UniBootDesktop के बारे में", Hide: "UniBootDesktop छिपाएं", ShowAll: "सभी दिखाएं",

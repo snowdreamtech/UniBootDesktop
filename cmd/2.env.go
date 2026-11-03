@@ -48,7 +48,7 @@ func runEnv(cmd *cobra.Command, args []string) error {
 
 	if isTerminal {
 		pterm.DefaultSection.Println("🔑 Environment Variables")
-		var data [][]string
+		data := make([][]string, 0, 1+len(vars))
 		data = append(data, []string{"Variable", "Value"})
 		for _, v := range vars {
 			data = append(data, []string{

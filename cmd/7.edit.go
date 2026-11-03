@@ -53,7 +53,7 @@ func runEdit(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to initialize config file: %w", err)
 	}
 
-	c := exec.Command(editor, targetFile)
+	c := exec.CommandContext(cmd.Context(), editor, targetFile)
 	c.Stdin = os.Stdin
 	c.Stdout = os.Stdout
 	c.Stderr = os.Stderr

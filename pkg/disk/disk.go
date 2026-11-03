@@ -1771,11 +1771,10 @@ func getDarwinDisks() ([]DiskInfo, error) {
 	// when no external disks are attached, avoiding the expensive system_profiler SPUSBDataType call (~1000ms).
 	// If external disks exist, getDarwinDisksBatch fetches or reuses the cached USB map.
 	batchDisks, err := getDarwinDisksBatch(nil)
-	if err != nil {
-		logger.Warn("Batch disk discovery failed, using fallback scan", "error", err)
-	} else if len(batchDisks) > 0 || err == nil {
+	if err == nil {
 		return batchDisks, nil
 	}
+	logger.Warn("Batch disk discovery failed, using fallback scan", "error", err)
 
 	disks := make([]DiskInfo, 0)
 	usbMap := getCachedDarwinUSBMap()
