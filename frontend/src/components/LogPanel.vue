@@ -153,6 +153,7 @@ watch(
   -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
+  min-height: 500px;
 }
 
 .log-section-header {
@@ -353,8 +354,9 @@ watch(
   border: 1px solid var(--terminal-border, rgba(255, 255, 255, 0.08));
   border-radius: 10px;
   padding: 0.9rem 1.15rem;
-  min-height: 280px;
-  max-height: 460px;
+  min-height: 440px;
+  max-height: 560px;
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
