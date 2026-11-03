@@ -1,5 +1,41 @@
 # Changelog
 
+## [0.13.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.12.0...v0.13.0) (2026-11-03)
+
+
+### 🚀 Features
+
+* align with template dev and retain unigo configs ([f2702f3](https://github.com/snowdreamtech/UniGoDesktop/commit/f2702f38d105ae550b932c9d11750ace65c15b7e))
+* align with unigo dev and retain unigodesktop configs ([91774bf](https://github.com/snowdreamtech/UniGoDesktop/commit/91774bfac25115ab4fc20e64cb75b80797a5477b))
+* initial release of snowdreamtech project template powered by unirtm ([24e923b](https://github.com/snowdreamtech/UniGoDesktop/commit/24e923b5e147ea84e68241c21d75ab6ef2940f1a))
+
+
+### 🐛 Bug Fixes
+
+* **lint:** migrate golangci-lint config to v2 format and resolve lint issues ([f911d4a](https://github.com/snowdreamtech/UniGoDesktop/commit/f911d4aaf782f1fe87f8d595ff06f4ca3974fafe))
+* **security:** bump golang.org/x/net to v0.62.0 and ignore unused crypto openpgp in osv-scanner ([0b8e325](https://github.com/snowdreamtech/UniGoDesktop/commit/0b8e325b39723217d1a5317d3ff0ae29da57fd17))
+* **toolchain:** align Go to 1.27.3, bump golangci-lint to v2.15.0 and exclude template links in lychee ([1b8d0b5](https://github.com/snowdreamtech/UniGoDesktop/commit/1b8d0b58ca6e2c4a6e33c904ea6a654a630f111d))
+* **toolchain:** align Go toolchain to 1.27.1 and harden typecheck exclusion ([2ad1aa5](https://github.com/snowdreamtech/UniGoDesktop/commit/2ad1aa55d90e4ba1786c9fedf7ffd2261635d81b))
+
+
+### 📖 Documentation
+
+* **unirtm:** fix dead link in unirtm-configuration.md ([4739b04](https://github.com/snowdreamtech/UniGoDesktop/commit/4739b04a552029f057ef2e0699f044f23d7d2fe1))
+* update README with Zero-Footprint MCP architecture and UniRTM workflow ([814ad43](https://github.com/snowdreamtech/UniGoDesktop/commit/814ad438d08f5cb48f4f0a255ca533721f2bb5a8))
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** bump vite in /docs in the all-dependencies group ([d82e459](https://github.com/snowdreamtech/UniGoDesktop/commit/d82e4593038f11a664275e1a8a15462d2242098e))
+* **deps:** remove commitlint tools and obsolete configs ([1aa1467](https://github.com/snowdreamtech/UniGoDesktop/commit/1aa14677ad6db61d83c2f5eb6c782a51d036d07c))
+* **deps:** sync dependabot config and unirtm toolchain ([e124d2e](https://github.com/snowdreamtech/UniGoDesktop/commit/e124d2eae5b0451d21787b4dfdc9bd7729e239e0))
+* **deps:** sync dependabot config and unirtm toolchain ([57785fc](https://github.com/snowdreamtech/UniGoDesktop/commit/57785fc161176b9bea6562e1e7a1ddfc1824552b))
+* **deps:** sync dependabot config and unirtm toolchain ([3685ed4](https://github.com/snowdreamtech/UniGoDesktop/commit/3685ed4b8b1b703e6de3843f8d68beab20460b3b))
+* release main ([0e42fd3](https://github.com/snowdreamtech/UniGoDesktop/commit/0e42fd3ba7596e9b9e2b47621d2cc8aee582b67d))
+* release main ([80422b3](https://github.com/snowdreamtech/UniGoDesktop/commit/80422b3a7cc9968cab27a4d902ae9409083848a9))
+* release main ([72bdaa7](https://github.com/snowdreamtech/UniGoDesktop/commit/72bdaa77106e77ca67751f682df13af72b9c30df))
+* remove template docs and cleanup configurations ([5684232](https://github.com/snowdreamtech/UniGoDesktop/commit/5684232d35c267771140efaa1993f268ddac85fb))
+
 ## [0.12.0](https://github.com/snowdreamtech/UniGoDesktop/compare/v0.11.0...v0.12.0) (2026-10-11)
 
 
