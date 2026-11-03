@@ -19,7 +19,20 @@ export function isPortFree(port, host = "127.0.0.1") {
     const server = createServer();
     server.once("error", () => resolve(false));
     server.once("listening", () => {
-      server.close(() => resolve(true));
+      if (host === "127.0.0.1") {
+        const server6 = createServer();
+        server6.once("error", () => {
+          server.close(() => resolve(false));
+        });
+        server6.once("listening", () => {
+          server6.close(() => {
+            server.close(() => resolve(true));
+          });
+        });
+        server6.listen(port, "::1");
+      } else {
+        server.close(() => resolve(true));
+      }
     });
     server.listen(port, host);
   });
@@ -132,36 +145,25 @@ export function resolveWailsCommand() {
 export function resolveDisplay() {
   if (process.platform !== "linux") return null;
 
-  // 1. If connecting via SSH, probe the SSH client IP directly (e.g. Mac XQuartz on :0)
-  const sshClient = process.env.SSH_CLIENT || process.env.SSH_CONNECTION || "";
-  const clientIp = sshClient.trim().split(/\s+/)[0];
-  if (clientIp) {
-    try {
-      execSync(`DISPLAY="${clientIp}:0" timeout 1 xdpyinfo`, { stdio: "ignore" });
-      console.log(`\x1b[32m[SmartDisplay] Auto-detected reachable Mac/Remote XQuartz display: ${clientIp}:0\x1b[0m`);
-      return `${clientIp}:0`;
-    } catch {
-      // not reachable or not authorized
-    }
-  }
-
-  // 2. Probe current DISPLAY if it is an SSH forwarded display or custom remote display
+  // 1. Probe current DISPLAY environment variable if set and working
   const currentDisplay = process.env.DISPLAY;
-  if (currentDisplay && currentDisplay !== ":0" && currentDisplay !== ":1") {
+  if (currentDisplay) {
     try {
       execSync(`DISPLAY="${currentDisplay}" timeout 1 xdpyinfo`, { stdio: "ignore" });
+      console.log(`\x1b[32m[SmartDisplay] Using active DISPLAY: ${currentDisplay}\x1b[0m`);
       return currentDisplay;
     } catch {
-      // not valid
+      // current DISPLAY is invalid or stale (e.g. expired SSH session)
     }
   }
 
-  // 3. Probe common SSH X11 forward displays (localhost:10.0 .. localhost:20.0)
+  // 2. Probe common SSH X11 forward displays (localhost:10.0 .. localhost:20.0)
   const candidateDisplays = [];
   for (let i = 10; i <= 20; i++) {
     candidateDisplays.push(`localhost:${i}.0`, `127.0.0.1:${i}.0`, `:${i}.0`);
   }
   for (const d of candidateDisplays) {
+    if (d === currentDisplay) continue;
     try {
       execSync(`DISPLAY="${d}" timeout 1 xdpyinfo`, { stdio: "ignore" });
       console.log(`\x1b[32m[SmartDisplay] Auto-detected reachable SSH forwarded display: ${d}\x1b[0m`);
@@ -171,20 +173,34 @@ export function resolveDisplay() {
     }
   }
 
-  // 4. If current DISPLAY is set and valid, use it
-  if (currentDisplay) {
+  // 3. If connecting via SSH, probe the SSH client IP directly (e.g. Mac XQuartz on :0)
+  const sshClient = process.env.SSH_CLIENT || process.env.SSH_CONNECTION || "";
+  const clientIp = sshClient.trim().split(/\s+/)[0];
+  if (clientIp) {
     try {
-      execSync(`DISPLAY="${currentDisplay}" timeout 1 xdpyinfo`, { stdio: "ignore" });
-      return currentDisplay;
-    } catch {
-      // not valid
+      execSync(`DISPLAY="${clientIp}:0" timeout 1 xdpyinfo`, { stdio: "pipe" });
+      console.log(`\x1b[32m[SmartDisplay] Auto-detected reachable Mac/Remote XQuartz display: ${clientIp}:0\x1b[0m`);
+      return `${clientIp}:0`;
+    } catch (e) {
+      const errOutput = (e.stderr ? e.stderr.toString() : "") + (e.stdout ? e.stdout.toString() : "");
+      if (errOutput.includes("Authorization required") || errOutput.includes("Invalid MIT-MAGIC-COOKIE")) {
+        console.log(
+          `\x1b[33m[SmartDisplay] Found Mac XQuartz at ${clientIp}:0, but access requires authorization.\x1b[0m`
+        );
+        console.log(
+          `\x1b[33m[SmartDisplay] 👉 Please run "xhost +" in your Mac terminal so the window can pop up!\x1b[0m\n`
+        );
+        return `${clientIp}:0`;
+      }
     }
   }
 
-  // 5. Fallback to local host displays :0 or :1 if reachable
+  // 4. Fallback to local host displays :0 or :1 if reachable
   for (const d of [":0", ":1"]) {
+    if (d === currentDisplay) continue;
     try {
       execSync(`DISPLAY="${d}" timeout 1 xdpyinfo`, { stdio: "ignore" });
+      console.log(`\x1b[32m[SmartDisplay] Auto-detected local display: ${d}\x1b[0m`);
       return d;
     } catch {
       // not reachable
@@ -388,12 +404,16 @@ async function main() {
 
   if (process.platform === "linux") {
     const autoDisplay = resolveDisplay();
+    const sshClient = process.env.SSH_CLIENT || process.env.SSH_CONNECTION || "";
+    const clientIp = sshClient.trim().split(/\s+/)[0];
+    const wantsHeadless = userArgs.includes("--headless") || process.env.HEADLESS === "1" || process.env.CI === "true";
+
     if (autoDisplay) {
       childEnv.DISPLAY = autoDisplay;
       childEnv.GDK_BACKEND = "x11";
       childEnv.WEBKIT_DISABLE_COMPOSITING_MODE = "1";
       childEnv.LIBGL_ALWAYS_SOFTWARE = "1";
-    } else {
+    } else if (wantsHeadless) {
       let hasXvfb = false;
       try {
         execSync("which xvfb-run", { stdio: "ignore" });
@@ -403,20 +423,22 @@ async function main() {
       }
 
       if (hasXvfb) {
-        console.log(
-          "\x1b[33m[SmartDisplay] No reachable physical or SSH X11 display found; automatically running under xvfb-run virtual display.\x1b[0m\n"
-        );
+        console.log("\x1b[33m[SmartDisplay] Running in headless mode under xvfb-run virtual display.\x1b[0m\n");
         execBinary = "xvfb-run";
         execArgs = ["-a", wailsCmd, ...args];
         delete childEnv.DISPLAY;
         childEnv.GDK_BACKEND = "x11";
         childEnv.WEBKIT_DISABLE_COMPOSITING_MODE = "1";
         childEnv.LIBGL_ALWAYS_SOFTWARE = "1";
-      } else {
-        console.warn(
-          "\x1b[31m[SmartDisplay] Warning: No reachable X11 display found and xvfb-run is not installed. GTK initialization may fail.\x1b[0m\n"
-        );
       }
+    } else {
+      // Default to remote Mac client display if connected via SSH, or retain inherited DISPLAY
+      if (!childEnv.DISPLAY && clientIp) {
+        childEnv.DISPLAY = `${clientIp}:0`;
+      }
+      childEnv.GDK_BACKEND = "x11";
+      childEnv.WEBKIT_DISABLE_COMPOSITING_MODE = "1";
+      childEnv.LIBGL_ALWAYS_SOFTWARE = "1";
     }
   }
 
