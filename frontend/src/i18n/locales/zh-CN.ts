@@ -133,6 +133,21 @@ export const zhCn: TranslationDict = {
   "privilege.cancel_btn": "暂不授权",
   "privilege.success_msg": "已获得管理员权限",
 
+    "log.title": "日志中心",
+  "log.live": "实时",
+  "log.search_placeholder": "搜索日志关键词...",
+  "log.empty": "暂无日志记录",
+  "log.auto_scroll": "自动滚动到底部",
+  "log.copy": "复制",
+  "log.export": "导出日志",
+  "log.clear": "清空",
+  "log.copied_toast": "🎉 日志内容已成功复制到剪贴板！",
+  "log.level_all": "全部",
+  "log.level_info": "信息",
+  "log.level_warn": "警告",
+  "log.level_error": "错误",
+  "log.level_debug": "调试",
+
   "disk.nominal": "标称",
 
   "inspector.title": "USB 设备底层深度检测",

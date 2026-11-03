@@ -128,6 +128,21 @@ export interface TranslationDict {
   "privilege.cancel_btn": string;
   "privilege.success_msg": string;
 
+  "log.title": string;
+  "log.live": string;
+  "log.search_placeholder": string;
+  "log.empty": string;
+  "log.auto_scroll": string;
+  "log.copy": string;
+  "log.export": string;
+  "log.clear": string;
+  "log.copied_toast": string;
+  "log.level_all": string;
+  "log.level_info": string;
+  "log.level_warn": string;
+  "log.level_error": string;
+  "log.level_debug": string;
+
   "disk.nominal": string;
 
   "inspector.title": string;
