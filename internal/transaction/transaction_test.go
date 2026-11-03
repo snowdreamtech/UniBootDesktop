@@ -13,9 +13,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/snowdreamtech/unigo/internal/database"
-	"github.com/snowdreamtech/unigo/internal/repository"
-	"github.com/snowdreamtech/unigo/internal/repository/sqlite"
+	"github.com/snowdreamtech/unigodesktop/internal/database"
+	"github.com/snowdreamtech/unigodesktop/internal/repository"
+	"github.com/snowdreamtech/unigodesktop/internal/repository/sqlite"
 )
 
 func setupTestDB(t *testing.T) (*database.DB, func()) {

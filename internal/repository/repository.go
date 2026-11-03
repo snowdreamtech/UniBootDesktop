@@ -7,7 +7,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/snowdreamtech/unigo/internal/errors"
+	"github.com/snowdreamtech/unigodesktop/internal/errors"
 )
 
 // Common repository errors

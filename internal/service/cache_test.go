@@ -15,7 +15,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/snowdreamtech/unigo/internal/repository"
+	"github.com/snowdreamtech/unigodesktop/internal/repository"
 )
 
 // MockCacheRepository is a mock implementation of repository.CacheRepository

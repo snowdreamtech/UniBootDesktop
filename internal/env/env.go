@@ -5,73 +5,32 @@ package env
 
 import (
 	"crypto/rand"
-	"fmt"
 	"os"
-	"strings"
 )
 
-// EnvManager provides environment variable operations.
-type EnvManager struct{}
-
 // Get returns the value of the environment variable with the given key,
-// searching with prefixes in order: UNIGO_, MISE_, and then the raw key.
-// Note: PATH is retrieved directly to avoid pollution from UNIGO_PATH/MISE_PATH.
+// searching with prefix UNIGODESKTOP_ first, and then the raw key.
+// Note: PATH is retrieved directly to avoid pollution from UNIGODESKTOP_PATH.
 func Get(key string) string {
 	if key == "PATH" {
 		return os.Getenv("PATH")
 	}
-
-	value := ""
-	// 1. UNIGO_ prefix
-	if v := os.Getenv("UNIGO_" + key); v != "" {
-		value = v
+	// 1. UNIGODESKTOP_ prefix (Primary)
+	if v := os.Getenv("UNIGODESKTOP_" + key); v != "" {
+		return v
 	}
-	// 2. MISE_ prefix
-	if value == "" {
-		if v := os.Getenv("MISE_" + key); v != "" {
-			value = v
-		}
-	}
-	// 3. Raw key (Native)
-	if value == "" {
-		value = os.Getenv(key)
-	}
-
-	// Validate specific critical environment variables
-	switch key {
-	case "GITHUB_PROXY":
-		if value != "" && value != "direct" {
-			if !strings.HasPrefix(value, "http://") && !strings.HasPrefix(value, "https://") {
-				return ""
-			}
-		}
-	case "JOBS":
-		if value != "" {
-			var n int
-			if _, err := fmt.Sscanf(value, "%d", &n); err != nil || n < 1 || n > 256 {
-				return ""
-			}
-		}
-	case "HTTP2":
-		if value != "" && value != "0" && value != "1" {
-			return ""
-		}
-	}
-
-	return value
+	// 2. Raw key (Native)
+	return os.Getenv(key)
 }
 
-// GithubProxy returns the configured GitHub proxy URL or a stable public default.
+// GithubProxy returns the configured GitHub proxy URL or empty string by default.
 func GithubProxy() string {
-	if proxy := Get("GITHUB_PROXY"); proxy != "" {
-		return proxy
-	}
-	return "https://gh-proxy.sn0wdr1am.com/"
+	return Get("GITHUB_PROXY")
 }
 
 var (
 	// ProjectName Project Name
-	ProjectName string = "unigo"
+	ProjectName string = "unigodesktop"
 
 	// Author Author
 	Author string = "Snowdream Tech <snowdreamtech@qq.com>"
@@ -92,22 +51,16 @@ var (
 	COPYRIGHT string = "Copyright (c) 2023-present SnowdreamTech Inc."
 
 	// LICENSE LICENSE
-	LICENSE string = "MIT <https://github.com/snowdreamtech/unigo/blob/main/LICENSE>"
+	LICENSE string = "MIT <https://github.com/snowdreamtech/unigodesktop/blob/main/LICENSE>"
 
 	// Config Config File Path
-	Config string = "unigo.toml"
+	Config string = "unigodesktop.toml"
 
 	// Debug indicates whether the application should run in debug mode.
 	Debug bool
 
-	// Trace indicates whether the application should run in trace mode.
-	Trace bool
-
 	// Quiet indicates whether the application should run in quiet mode.
 	Quiet bool
-
-	// Cwd specifies the current working directory for the application.
-	Cwd string
 
 	// Silent indicates whether to suppress all output and non-error messages.
 	Silent bool

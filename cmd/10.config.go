@@ -11,8 +11,8 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 
-	"github.com/snowdreamtech/unigo/internal/config"
-	"github.com/snowdreamtech/unigo/internal/logger"
+	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unigodesktop/pkg/config"
 )
 
 func init() {
@@ -27,7 +27,7 @@ func init() {
 var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "Manage configuration",
-	Long:  "Query or modify the UniGo configuration settings stored in unigo.toml.",
+	Long:  "Query or modify the UniGoDesktop configuration settings stored in unigodesktop.toml.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return configListCmd.RunE(cmd, args)
 	},
@@ -43,11 +43,20 @@ var configListCmd = &cobra.Command{
 			return fmt.Errorf("failed to load configuration: %w", err)
 		}
 
-		tableData := [][]string{
-			{"KEY", "VALUE"},
-			{"debug", strconv.FormatBool(cfg.Debug)},
+		tableData := pterm.TableData{
+			{"Key", "Value"},
+			{"debug", fmt.Sprintf("%t", cfg.Debug)},
+			{"autoCheckUpdate", fmt.Sprintf("%t", cfg.AutoCheckUpdate)},
+			{"theme", cfg.Theme},
+			{"language", cfg.Language},
+			{"githubProxy", cfg.GithubProxy},
+			{"proxyProtocol", cfg.ProxyProtocol},
+			{"proxyHost", cfg.ProxyHost},
+			{"proxyPort", strconv.Itoa(cfg.ProxyPort)},
+			{"proxyUser", cfg.ProxyUser},
 		}
 
+		pterm.DefaultSection.Println("⚙️ UniGoDesktop Configuration")
 		return pterm.DefaultTable.WithHasHeader().WithData(tableData).Render()
 	},
 }
@@ -68,8 +77,26 @@ var configGetCmd = &cobra.Command{
 		switch key {
 		case "debug":
 			fmt.Println(cfg.Debug)
+		case "autocheckupdate":
+			fmt.Println(cfg.AutoCheckUpdate)
+		case "theme":
+			fmt.Println(cfg.Theme)
+		case "language":
+			fmt.Println(cfg.Language)
+		case "githubproxy":
+			fmt.Println(cfg.GithubProxy)
+		case "proxyprotocol":
+			fmt.Println(cfg.ProxyProtocol)
+		case "proxyhost":
+			fmt.Println(cfg.ProxyHost)
+		case "proxyport":
+			fmt.Println(cfg.ProxyPort)
+		case "proxyuser":
+			fmt.Println(cfg.ProxyUser)
+		case "proxypassword":
+			fmt.Println(cfg.ProxyPassword)
 		default:
-			pterm.Warning.Printf("Key '%s' not found in configuration\n", key)
+			pterm.Warning.Printf("Key '%s' not recognized in configuration\n", args[0])
 		}
 		return nil
 	},
@@ -86,18 +113,44 @@ var configSetCmd = &cobra.Command{
 
 		cfg, err := config.Load()
 		if err != nil {
-			return fmt.Errorf("failed to load configuration: %w", err)
+			cfg = config.GetDefaultConfig()
 		}
 
 		switch key {
 		case "debug":
-			b, err := strconv.ParseBool(val)
+			parsed, err := strconv.ParseBool(val)
 			if err != nil {
 				return fmt.Errorf("invalid boolean value for debug: %w", err)
 			}
-			cfg.Debug = b
+			cfg.Debug = parsed
+		case "autocheckupdate":
+			parsed, err := strconv.ParseBool(val)
+			if err != nil {
+				return fmt.Errorf("invalid boolean value for autoCheckUpdate: %w", err)
+			}
+			cfg.AutoCheckUpdate = parsed
+		case "theme":
+			cfg.Theme = val
+		case "language":
+			cfg.Language = val
+		case "githubproxy":
+			cfg.GithubProxy = val
+		case "proxyprotocol":
+			cfg.ProxyProtocol = val
+		case "proxyhost":
+			cfg.ProxyHost = val
+		case "proxyport":
+			port, err := strconv.Atoi(val)
+			if err != nil {
+				return fmt.Errorf("invalid port integer: %w", err)
+			}
+			cfg.ProxyPort = port
+		case "proxyuser":
+			cfg.ProxyUser = val
+		case "proxypassword":
+			cfg.ProxyPassword = val
 		default:
-			return fmt.Errorf("unsupported configuration key '%s'", key)
+			return fmt.Errorf("unknown configuration key '%s'", args[0])
 		}
 
 		if err := cfg.Save(); err != nil {
@@ -105,7 +158,7 @@ var configSetCmd = &cobra.Command{
 			return err
 		}
 
-		pterm.Success.Printf("Set '%s' to '%s'\n", key, val)
+		pterm.Success.Printf("Set '%s' to '%s' in unigodesktop.toml\n", args[0], val)
 		return nil
 	},
 }

@@ -21,6 +21,7 @@ UNIRTM_HOOK_ALLOW_MISSING = "1"
 "github:google/osv-scanner" = "2.7.0"
 "github:koalaman/shellcheck" = "0.11.0"
 "go:mvdan.cc/sh/v3/cmd/shfmt" = "v3.14.0"
+"go:github.com/wailsapp/wails/v2/cmd/wails" = "v2.16.0"
 "github:rhysd/actionlint" = "1.7.12"
 "github:zizmorcore/zizmor" = "1.31.1"
 "github:goreleaser/goreleaser" = "2.19.0"
@@ -205,13 +206,55 @@ description = "Full lint: Audit all repository files with Go-native Quality Guar
 run = "unirtm check --all"
 output = "interleaved"
 
+
+[tasks.preflight]
+description = "Verify and auto-heal developer environment, frontend dependencies, and assets"
+run = "unirtm exec -- node scripts/preflight.mjs"
+output = "interleaved"
+
+[tasks.dev]
+description = "Launch Wails GUI application in development mode with smart port resolution"
+run = "unirtm exec -- node scripts/run-dev.mjs"
+output = "interleaved"
+
+[tasks."test:frontend"]
+description = "Run frontend verification (i18n check, unit tests, and production build)"
+run = '''
+cd frontend
+if [ ! -d "node_modules" ]; then
+    unirtm exec -- npm ci
+fi
+unirtm exec -- npm run i18n:check
+unirtm exec -- npm test
+unirtm exec -- npm run build
+'''
+output = "interleaved"
+
+[tasks."test:wails"]
+description = "Fast compile check for Wails binary"
+run = '''
+if [ ! -f "frontend/dist/index.html" ]; then
+    unirtm run test:frontend
+fi
+BUILD_TAGS=()
+if [ "$(go env GOOS)" = "linux" ] && pkg-config --exists webkit2gtk-4.1 && ! pkg-config --exists webkit2gtk-4.0; then
+    BUILD_TAGS+=("-tags" "webkit2_41")
+fi
+unirtm exec -- wails build -s ${BUILD_TAGS[@]+"${BUILD_TAGS[@]}"}
+node -e "const fs = require('fs'); const path = require('path'); const binDir = 'build/bin'; if (fs.existsSync(binDir)) { fs.readdirSync(binDir).forEach(f => { if (!f.includes('-dev')) { try { fs.rmSync(path.join(binDir, f), { recursive: true, force: true }); } catch (e) {} } }); }"
+'''
+output = "interleaved"
+
 [tasks.test]
 description = "Run Go unit tests for all packages recursively"
 # -timeout 10m : prevent a single hung test from consuming the entire CI budget (default: 10m)
 # -p 4         : limit the number of packages compiled/tested in parallel to prevent CI OOM
 #                (GitHub Actions ubuntu-latest has ~7GB RAM; -race multiplies usage 5-10x)
 # CGO_ENABLED=0: force pure-Go build — all test files must use modernc.org/sqlite, not mattn/go-sqlite3
-run = "unirtm exec -- go test -cover -v -timeout 10m -p 4 ./..."
+run = '''
+unirtm run test:frontend
+unirtm exec -- go test -cover -v -timeout 10m -p 4 ./...
+'''
 output = "interleaved"
 env = { GOTOOLCHAIN = "auto", CGO_ENABLED = "0" }
 
@@ -226,6 +269,7 @@ else
     unirtm run lint
 fi
 unirtm run test
+unirtm run test:wails
 unirtm run audit
 '''
 output = "interleaved"

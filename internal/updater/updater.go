@@ -18,13 +18,13 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/pterm/pterm"
 
-	"github.com/snowdreamtech/unigo/internal/env"
-	pkgHttp "github.com/snowdreamtech/unigo/internal/http"
-	"github.com/snowdreamtech/unigo/internal/version"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
+	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
+	"github.com/snowdreamtech/unigodesktop/internal/version"
 )
 
 const (
-	githubAPIURL = "https://api.github.com/repos/snowdreamtech/UniGo/releases/latest"
+	githubAPIURL = "https://api.github.com/repos/snowdreamtech/UniGoDesktop/releases/latest"
 	cacheFile    = "update-cache.json"
 	checkPeriod  = 24 * time.Hour
 	promptPeriod = 24 * time.Hour
@@ -89,7 +89,7 @@ func writeCache(cache *UpdateCache) error {
 		return err
 	}
 
-	return os.WriteFile(getCachePath(), data, 0o600)
+	return os.WriteFile(getCachePath(), data, 0o644)
 }
 
 // ClearCache clears the update cache from disk.
@@ -124,7 +124,7 @@ func FetchLatestReleaseInfo(ctx context.Context) (*ReleaseInfo, error) {
 
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 
-	// Uses internal/http transport which respects HTTP_PROXY/HTTPS_PROXY/UNIRTM_HTTP_PROXY/NO_PROXY env vars
+	// Uses internal/http transport which respects HTTP_PROXY/HTTPS_PROXY/UNIRTM_HTTP_PROXY/NO_PROXY env vars and bypasses Chinese mirrors
 	client := pkgHttp.NewClient()
 
 	var resp *http.Response
@@ -152,7 +152,7 @@ func FetchLatestReleaseInfo(ctx context.Context) (*ReleaseInfo, error) {
 	}
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(io.LimitReader(resp.Body, 10*1024*1024)) // 限制10MB响应体
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -242,8 +242,8 @@ func PromptIfAvailable(currentVersion, cmdName string) {
 	}
 
 	// Print prompt to Stderr
-	pterm.Warning.Printf("unigo version %s available\n", cache.LatestVersion)
-	pterm.Warning.Printf("To update, run `unigo self-update`\n")
+	pterm.Warning.Printf("unigodesktop version %s available\n", cache.LatestVersion)
+	pterm.Warning.Printf("To update, run `unigodesktop self-update`\n")
 
 	// Update prompt time
 	cache.LastPrompted = time.Now()

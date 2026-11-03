@@ -18,11 +18,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/snowdreamtech/unigo/internal/archive"
-	"github.com/snowdreamtech/unigo/internal/env"
-	pkgHttp "github.com/snowdreamtech/unigo/internal/http"
-	"github.com/snowdreamtech/unigo/internal/updater"
-	"github.com/snowdreamtech/unigo/internal/version"
+	"github.com/snowdreamtech/unigodesktop/internal/archive"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
+	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
+	"github.com/snowdreamtech/unigodesktop/internal/updater"
+	"github.com/snowdreamtech/unigodesktop/internal/version"
 )
 
 var skipChecksum bool
@@ -143,9 +143,9 @@ func runSelfUpdate(cmd *cobra.Command, args []string) error {
 	}
 
 	fmt.Printf("Extracting binary...\n")
-	binaryName := "unigo"
+	binaryName := "unigodesktop"
 	if goos == "windows" {
-		binaryName = "unigo.exe"
+		binaryName = "unigodesktop.exe"
 	}
 
 	binaryData, err := archive.ExtractBinary(archiveData, binaryName)

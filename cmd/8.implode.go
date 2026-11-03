@@ -14,28 +14,28 @@ import (
 	"github.com/pterm/pterm/putils"
 	"github.com/spf13/cobra"
 
-	"github.com/snowdreamtech/unigo/internal/env"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
 )
 
 var implodeConfig bool
 
 func init() {
-	implodeCmd.Flags().BoolVar(&implodeConfig, "config", false, "also remove configuration directory (~/.config/unigo)")
+	implodeCmd.Flags().BoolVar(&implodeConfig, "config", false, "also remove configuration directory (~/.config/unigodesktop)")
 
 	if rootCmd != nil {
 		rootCmd.AddCommand(implodeCmd)
 	}
 }
 
-// implodeCmd removes all UniGo data, cache, and configuration.
+// implodeCmd removes all UniGoDesktop data, cache, and configuration.
 var implodeCmd = &cobra.Command{
 	Use:   "implode",
-	Short: "Completely remove all UniGo data and configurations",
-	Long: `Completely remove all UniGo data and configurations.
+	Short: "Completely remove all UniGoDesktop data and configurations",
+	Long: `Completely remove all UniGoDesktop data and configurations.
 
 This command will internal-combust and erase:
   • All download caches and temporary files
-  • (Optional) Your configuration directory (~/.config/unigo)
+  • (Optional) Your configuration directory (~/.config/unigodesktop)
 
 WARNING: This action is permanent and IRREVERSIBLE.`,
 	Args: cobra.NoArgs,
@@ -70,7 +70,7 @@ func runImplode(cmd *cobra.Command, args []string) error {
 	// 2. Confirmation
 	if !yes {
 		pterm.Warning.Prefix = pterm.Prefix{Text: "WARNING", Style: pterm.NewStyle(pterm.BgRed, pterm.FgWhite)}
-		pterm.Warning.Println("This will permanently destroy ALL UniGo data.")
+		pterm.Warning.Println("This will permanently destroy ALL UniGoDesktop data.")
 		fmt.Printf("\nSelected Targets:\n")
 		for _, t := range targets {
 			pterm.BulletListPrinter{}.WithItems([]pterm.BulletListItem{

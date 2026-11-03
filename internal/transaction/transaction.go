@@ -8,8 +8,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/snowdreamtech/unigo/internal/repository"
-	"github.com/snowdreamtech/unigo/internal/repository/sqlite"
+	"github.com/snowdreamtech/unigodesktop/internal/repository"
+	"github.com/snowdreamtech/unigodesktop/internal/repository/sqlite"
 )
 
 var (

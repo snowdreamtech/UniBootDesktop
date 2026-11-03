@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/snowdreamtech/unigo/internal/download"
+	"github.com/snowdreamtech/unigodesktop/internal/download"
 )
 
 // TestHTTPDownloader_VerifyChecksum_OpenError verifies error handling when the file cannot be read.

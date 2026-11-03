@@ -9,16 +9,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/snowdreamtech/unigo/internal/cli/output"
-	"github.com/snowdreamtech/unigo/internal/env"
-	"github.com/snowdreamtech/unigo/internal/errors"
-	"github.com/snowdreamtech/unigo/internal/hello"
-	"github.com/snowdreamtech/unigo/internal/logger"
-	"github.com/snowdreamtech/unigo/internal/updater"
+	"github.com/snowdreamtech/unigodesktop/internal/cli/output"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unigodesktop/internal/errors"
+	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unigodesktop/internal/updater"
 )
-
-// RootCmd represents the base command structure.
-type RootCmd struct{}
 
 var (
 	quiet       bool
@@ -37,10 +33,12 @@ func getOutputFormat() output.OutputFormat {
 	return output.FormatHuman
 }
 
+var WailsRunner func() error
+
 var rootCmd = &cobra.Command{
-	Use:   "unigo",
-	Short: "UniGo is a Golang template hello world application",
-	Long:  `A fast and flexible Golang template referencing UniRTM and helloworld.`,
+	Use:   "unigodesktop",
+	Short: "UniGoDesktop is a modern cross-platform desktop application",
+	Long:  `A fast, cross-platform desktop application built with Go, Wails, and Vue 3.`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// Change directory if --cd is provided
 		if cdDir != "" {
@@ -64,12 +62,15 @@ var rootCmd = &cobra.Command{
 		updater.PromptIfAvailable(env.GitTag, cmd.Name())
 		return nil
 	},
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if showVersion {
 			runVersion(cmd, args)
-			return
+			return nil
 		}
-		hello.PrintHello()
+		if WailsRunner != nil {
+			return WailsRunner()
+		}
+		return cmd.Help()
 	},
 }
 

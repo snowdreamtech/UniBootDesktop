@@ -315,10 +315,7 @@ jobs:
             mkdir -p "${HOME}/.local/bin"
             cp -f "${COSIGN_BIN}" "${HOME}/.local/bin/" || true
           fi
-      - name: "❄️ Install Nix (for GoReleaser nix pipe)"
-        uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
-        with:
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: "🌡️ Warm up Go Proxy"
         if: startsWith(github.ref, 'refs/tags/')
         shell: sh
@@ -327,7 +324,7 @@ jobs:
           echo "Warming up Go Proxy for ${TAG}..."
           # Wait up to 60 seconds for Go proxy to sync the new tag
           for i in $(seq 1 12); do
-            if curl -s -f "https://proxy.golang.org/github.com/snowdreamtech/unigo/@v/${TAG}.info" > /dev/null; then
+            if curl -s -f "https://proxy.golang.org/github.com/snowdreamtech/unigodesktop/@v/${TAG}.info" > /dev/null; then
               echo "✅ Go Proxy is ready!"
               exit 0
             fi
@@ -343,7 +340,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
           WORKFLOW_SECRET: ${{ secrets.WORKFLOW_SECRET }}
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
-          AUR_KEY: ${{ secrets.AUR_KEY }}
         with:
           # Orchestrates the optimized build and distribution of cross-compiled Go binaries.
           distribution: goreleaser
@@ -354,103 +350,13 @@ jobs:
       - name: "🔍 Verify Core Artifacts Generation"
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          if [ ! -f dist/metadata.json ]; then
-            echo "❌ GoReleaser failed to compile or generate core artifacts!"
+          if [ ! -s dist/checksums.txt ]; then
+            echo "❌ GoReleaser failed to generate dist/checksums.txt!"
+            ls -la dist/ || true
             exit 1
           fi
-          echo "✅ Core artifacts successfully generated. Proceeding to downstream publishers."
-
-      - name: "📦 Setup Node.js for npm Publishing"
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
-        with:
-          node-version: "24"
-          registry-url: "https://registry.npmjs.org"
-
-      - name: "🔨 Build npm Platform Packages"
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: sh
-        run: |
-          # Read the clean version from GoReleaser's metadata (already normalized:
-          # v-prefix stripped, date formats converted, etc.)
-          # Use node (already set up) instead of jq to avoid tool dependency
-          VERSION=$(node -p "require('./dist/metadata.json').version")
-          echo "Building npm packages for version: ${VERSION}"
-          sh npm/scripts/build.sh --version "${VERSION}"
-
-      - name: "🚀 Publish npm Platform Packages"
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: sh
-        run: |
-          # npm/scripts/build.sh was already executed by GoReleaser after_hooks.
-          # Platform packages (npm/unigo-*/bin/) and package.json files are ready.
-          echo '=== Publishing platform sub-packages ==='
-          for pkg in npm/*/; do
-            [ -f "${pkg}package.json" ] || continue
-            case "${pkg}" in
-              *-*/)
-                pkg_name=$(node -p "require('./${pkg}package.json').name" 2>/dev/null || echo "${pkg}")
-                pkg_ver=$(node -p "require('./${pkg}package.json').version" 2>/dev/null || echo "")
-                if [ -n "${pkg_name}" ] && [ -n "${pkg_ver}" ] && npm view "${pkg_name}@${pkg_ver}" version >/dev/null 2>&1; then
-                  echo "⚠️  [skip] ${pkg_name}@${pkg_ver} is already published on npm."
-                  continue
-                fi
-                echo "[publish] ${pkg_name} (${pkg_ver}) ..."
-                npm publish "${pkg}" --access public --provenance --registry=https://registry.npmjs.org
-                ;;
-            esac
-          done
-
-          echo ""
-          echo '=== Publishing root package ==='
-          for pkg in npm/*/; do
-            [ -f "${pkg}package.json" ] || continue
-            case "${pkg}" in
-              *-*/) ;;
-              *)
-                root_name=$(node -p "require('./${pkg}package.json').name" 2>/dev/null || echo "${pkg}")
-                root_ver=$(node -p "require('./${pkg}package.json').version" 2>/dev/null || echo "")
-                if [ -n "${root_name}" ] && [ -n "${root_ver}" ] && npm view "${root_name}@${root_ver}" version >/dev/null 2>&1; then
-                  echo "⚠️  [skip] ${root_name}@${root_ver} is already published on npm."
-                else
-                  echo "[publish] ${root_name} (${root_ver}) ..."
-                  npm publish "${pkg}" --access public --provenance --registry=https://registry.npmjs.org
-                fi
-                ;;
-            esac
-          done
-
-          echo ""
-          echo '[done] All npm packages published successfully!'
-
-      - name: "🐍 Setup Python for PyPI Publishing"
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f # v5.1.1
-        with:
-          python-version: "3.12"
-
-      - name: "📦 Install Python Build Tools"
-        if: startsWith(github.ref, 'refs/tags/')
-        run: pip install build twine wheel setuptools
-
-      - name: "🔨 Build PyPI Platform Packages (Wheels)"
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: sh
-        run: |
-          VERSION=$(node -p "require('./dist/metadata.json').version")
-          echo "Building PyPI packages for version: ${VERSION}"
-          sh pypi/scripts/build.sh --version "${VERSION}"
-
-      - name: "🚀 Publish PyPI Packages"
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: sh
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          echo "Publishing wheels to PyPI..."
-          # The build.sh script outputs wheels into pypi/dist/
-          twine upload pypi/dist/*.whl --skip-existing
+          echo "✅ Core artifacts and checksums.txt successfully generated:"
+          head -n 20 dist/checksums.txt
 
       - name: "🛡️ Attest Build Provenance (SLSA)"
         if: startsWith(github.ref, 'refs/tags/')
@@ -458,15 +364,15 @@ jobs:
         with:
           subject-checksums: dist/checksums.txt
 
-      - name: "🧹 Cleanup on Failure (Rollback)"
+      - name: "🧹 Cleanup Partial Release on Failure"
         if: failure() && startsWith(github.ref, 'refs/tags/')
         shell: sh
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
         run: |
-          echo "⚠️ Release process failed for ${GITHUB_REF_NAME}. Rolling back partial release..."
-          # Delete the partial GitHub release and the associated tag to allow for a clean retry.
-          gh release delete "${GITHUB_REF_NAME}" --yes --cleanup-tag
+          echo "⚠️ Release process failed for ${GITHUB_REF_NAME}. Keeping git tag intact for audit and forward-fix."
+          # Delete partial GitHub release object if created, but NEVER delete the Git tag
+          gh release delete "${GITHUB_REF_NAME}" --yes 2>/dev/null || true
 
   verify:
     name: "🔍 Verify Release Signature"
@@ -521,8 +427,8 @@ jobs:
           GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
         run: |
           gh release download "$TAG" \
-            --repo snowdreamtech/UniGo \
-            --pattern 'unigo_*linux_amd64.tar.gz' \
+            --repo snowdreamtech/UniGoDesktop \
+            --pattern 'unigodesktop-cli_*linux_amd64.tar.gz' \
             --pattern 'checksums.txt' \
             --pattern 'checksums.txt.sigstore.json' || true
 
@@ -538,7 +444,7 @@ jobs:
             VERIFIED=false
             for attempt in 1 2 3; do
               if cosign verify-blob \
-                --certificate-identity "https://github.com/snowdreamtech/UniGo/.github/workflows/goreleaser.yml@refs/tags/$TAG" \
+                --certificate-identity "https://github.com/snowdreamtech/UniGoDesktop/.github/workflows/goreleaser.yml@refs/tags/$TAG" \
                 --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
                 --bundle checksums.txt.sigstore.json \
                 checksums.txt; then
@@ -560,12 +466,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
         run: |
-          TARGET_ASSET=$(find . -maxdepth 1 -name 'unigo_*linux_amd64.tar.gz' | head -n 1)
+          TARGET_ASSET=$(find . -maxdepth 1 -name 'unigodesktop-cli_*linux_amd64.tar.gz' | head -n 1)
           if [ -n "$TARGET_ASSET" ]; then
             for attempt in 1 2 3; do
               if gh attestation verify "$TARGET_ASSET" \
-                --repo snowdreamtech/UniGo \
-                --signer-repo snowdreamtech/UniGo; then
+                --repo snowdreamtech/UniGoDesktop \
+                --signer-repo snowdreamtech/UniGoDesktop; then
                 echo "SLSA attestation verified successfully on attempt $attempt"
                 exit 0
               fi

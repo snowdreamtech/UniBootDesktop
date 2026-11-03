@@ -6,7 +6,7 @@
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
 
 version: 2
-project_name: unigo
+project_name: unigodesktop
 
 report_sizes: true
 
@@ -23,30 +23,31 @@ git:
 
 before:
   hooks:
-    # You may remove this if you don't use go modules.
     - go mod tidy
     # Generate shell completion scripts dynamically before building packages
-    - go run ./main.go completion -d ./completions --all
+    # NOTE: Uses -tags nogui to compile CLI-only (no Wails/CGO/frontend deps)
+    - go run -tags nogui . completion -d ./completions --all
     # Generate manpages
-    - go run ./main.go generate manpage -d ./manpages
+    - go run -tags nogui . generate manpage -d ./manpages
 
 builds:
-  - id: unigo
-    binary: unigo
+  - id: unigodesktop-cli
+    binary: unigodesktop
     env:
       - CGO_ENABLED=0
     flags:
       - -trimpath
+      - -tags=nogui
     ldflags:
       - -s -w
-      - -X 'github.com/snowdreamtech/unigo/internal/env.ProjectName=unigo'
-      - -X 'github.com/snowdreamtech/unigo/internal/env.Author=Snowdream Tech <snowdreamtech@qq.com>'
-      - -X github.com/snowdreamtech/unigo/internal/env.BuildTime={{.Date}}
-      - -X github.com/snowdreamtech/unigo/internal/env.CommitHash={{.ShortCommit}}
-      - -X github.com/snowdreamtech/unigo/internal/env.CommitHashFull={{.FullCommit}}
-      - -X github.com/snowdreamtech/unigo/internal/env.GitTag={{.Tag}}
-      - -X 'github.com/snowdreamtech/unigo/internal/env.COPYRIGHT=Copyright (c) 2026-present SnowdreamTech Inc.'
-      - -X 'github.com/snowdreamtech/unigo/internal/env.LICENSE=MIT <https://github.com/snowdreamtech/unigo/blob/main/LICENSE>'
+      - -X 'github.com/snowdreamtech/unigodesktop/internal/env.ProjectName=unigodesktop'
+      - -X 'github.com/snowdreamtech/unigodesktop/internal/env.Author=Snowdream Tech <snowdreamtech@qq.com>'
+      - -X github.com/snowdreamtech/unigodesktop/internal/env.BuildTime={{.Date}}
+      - -X github.com/snowdreamtech/unigodesktop/internal/env.CommitHash={{.ShortCommit}}
+      - -X github.com/snowdreamtech/unigodesktop/internal/env.CommitHashFull={{.FullCommit}}
+      - -X github.com/snowdreamtech/unigodesktop/internal/env.GitTag={{.Tag}}
+      - -X 'github.com/snowdreamtech/unigodesktop/internal/env.COPYRIGHT=Copyright (c) 2026-present SnowdreamTech Inc.'
+      - -X 'github.com/snowdreamtech/unigodesktop/internal/env.LICENSE=MIT <https://github.com/snowdreamtech/unigodesktop/blob/main/LICENSE>'
     goos:
       - linux
       - darwin
@@ -68,11 +69,11 @@ builds:
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 archives:
-  - id: unigo
+  - id: unigodesktop-cli
     formats: [tar.gz]
     # This name template makes the OS and Arch compatible with uname and includes the version.
     name_template: >-
-      {{- .ProjectName }}_
+      {{- .ProjectName }}-cli_
       {{- .Version }}_
       {{- .Os }}_
       {{- .Arch }}
@@ -128,15 +129,17 @@ release:
   prerelease: auto
   github:
     owner: snowdreamtech
-    name: unigo
+    name: unigodesktop
+  # GUI installers/packages are produced by the dedicated Wails workflow on
+  # native OS runners and uploaded separately to this GitHub Release.
   header: |
-    **UniGo** is a fast, flexible, and enterprise-grade Golang CLI application and foundational template.
+    **UniGoDesktop** is a modern, high-performance cross-platform desktop application built with Go, Wails, and Vue 3.
   footer: |
-    **Full Changelog**: https://github.com/snowdreamtech/unigo/compare/{{ .PreviousTag }}...{{ .Tag }}
+    **Full Changelog**: https://github.com/snowdreamtech/unigodesktop/compare/{{ .PreviousTag }}...{{ .Tag }}
 
     ## 🤝 Contributing
 
-    Contributions are welcome! Please read our [Contributing Guide](https://github.com/snowdreamtech/unigo/blob/main/CONTRIBUTING.md) first.
+    Contributions are welcome! Please read our [Contributing Guide](https://github.com/snowdreamtech/unigodesktop/blob/main/CONTRIBUTING.md) first.
 
 source:
   enabled: true
@@ -185,11 +188,11 @@ changelog:
 
 nfpms:
   - id: default
-    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    homepage: https://github.com/snowdreamtech/unigo
+    file_name_template: "{{ .ProjectName }}-cli_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    homepage: https://github.com/snowdreamtech/unigodesktop
     maintainer: "Snowdream Tech <snowdreamtech@qq.com>"
     description: |-
-      UniGo is a fast, flexible, and enterprise-grade Golang CLI application and foundational template.
+      UniGoDesktop is a modern cross-platform desktop application built with Go, Wails, and Vue 3.
     license: MIT
     vendor: SnowdreamTech
     bindir: /usr/bin
@@ -203,18 +206,18 @@ nfpms:
     dependencies:
       - git
     contents:
-      - src: ./completions/unigo.bash
-        dst: /usr/share/bash-completion/completions/unigo
+      - src: ./completions/unigodesktop.bash
+        dst: /usr/share/bash-completion/completions/unigodesktop
         file_info:
           mode: 0644
           mtime: "{{ .CommitDate }}"
-      - src: ./completions/unigo.zsh
-        dst: /usr/share/zsh/vendor-completions/_unigo
+      - src: ./completions/unigodesktop.zsh
+        dst: /usr/share/zsh/vendor-completions/_unigodesktop
         file_info:
           mode: 0644
           mtime: "{{ .CommitDate }}"
-      - src: ./completions/unigo.fish
-        dst: /usr/share/fish/vendor_completions.d/unigo.fish
+      - src: ./completions/unigodesktop.fish
+        dst: /usr/share/fish/vendor_completions.d/unigodesktop.fish
         file_info:
           mode: 0644
           mtime: "{{ .CommitDate }}"
@@ -224,7 +227,7 @@ nfpms:
           mode: 0644
           mtime: "{{ .CommitDate }}"
       - src: LICENSE
-        dst: /usr/share/doc/unigo/copyright
+        dst: /usr/share/doc/unigodesktop/copyright
         file_info:
           mode: 0644
           mtime: "{{ .CommitDate }}"
@@ -241,22 +244,13 @@ nfpms:
 
 snapcrafts:
   - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    summary: UniGo CLI Application
+    summary: Modern cross-platform desktop application built with Go, Wails, and Vue 3
     description: |
-      UniGo is a fast, flexible, and enterprise-grade Golang CLI application and foundational template.
+      UniGoDesktop is a modern, extensible cross-platform desktop application built with Go, Wails, and Vue 3.
     grade: stable
     confinement: classic
     publish: false
     disable: "{{ if .IsNightly }}true{{ end }}"
-
-flatpak:
-  - app_id: io.github.snowdreamtech.unigo
-    runtime: org.freedesktop.Platform
-    runtime_version: "24.08"
-    sdk: org.freedesktop.Sdk
-    finish_args:
-      - --share=network
-      - --filesystem=host
 
 universal_binaries:
   - replace: false
@@ -278,91 +272,3 @@ signs:
       - "--bundle=${signature}"
       - "${artifact}"
       - --yes # Enables keyless signing via OIDC token
-
-homebrew_casks:
-  - name: unigo
-    binaries:
-      - unigo
-    manpages:
-      - manpages/unigo.1
-    completions:
-      bash: completions/unigo.bash
-      zsh: completions/unigo.zsh
-      fish: completions/unigo.fish
-    repository:
-      owner: snowdreamtech
-      name: homebrew-tap
-    homepage: "https://github.com/snowdreamtech/unigo"
-    url:
-      template: "https://github.com/snowdreamtech/unigo/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    description: "UniGo is a fast, flexible, and enterprise-grade Golang CLI application and foundational template."
-    license: "MIT"
-    hooks:
-      post:
-        install: |
-          if OS.mac?
-            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/unigo"]
-          end
-
-winget:
-  - name: unigo
-    publisher: SnowdreamTech
-    license: MIT
-    homepage: https://github.com/snowdreamtech/unigo
-    short_description: UniGo CLI Application
-    repository:
-      owner: snowdreamtech
-      name: winget-pkgs
-      token: "{{ .Env.WORKFLOW_SECRET }}"
-      branch: "unigo-{{.Version}}"
-      pull_request:
-        enabled: true
-        base:
-          owner: microsoft
-          name: winget-pkgs
-          branch: master
-
-scoops:
-  - repository:
-      owner: snowdreamtech
-      name: scoop-bucket
-      token: "{{ .Env.WORKFLOW_SECRET }}"
-    homepage: https://github.com/snowdreamtech/unigo
-    description: UniGo is a fast, flexible, and enterprise-grade Golang CLI application and foundational template.
-    license: MIT
-
-nix:
-  - repository:
-      owner: snowdreamtech
-      name: nur
-      token: "{{ .Env.WORKFLOW_SECRET }}"
-    homepage: https://github.com/snowdreamtech/unigo
-    description: UniGo is a fast, flexible, and enterprise-grade Golang CLI application and foundational template.
-    license: mit
-    skip_upload: auto
-
-aurs:
-  - homepage: https://github.com/snowdreamtech/unigo
-    description: UniGo is a fast, flexible, and enterprise-grade Golang CLI application and foundational template.
-    maintainers:
-      - "Snowdream Tech <snowdreamtech@qq.com>"
-    license: MIT
-    private_key: "{{ .Env.AUR_KEY }}"
-    git_url: "ssh://aur@aur.archlinux.org/unigo-bin.git"
-    package: |-
-      # bin
-      install -Dm755 "./unigo" "${pkgdir}/usr/bin/unigo"
-
-      # license
-      install -Dm644 "./LICENSE" "${pkgdir}/usr/share/licenses/unigo/LICENSE"
-
-      # completions
-      mkdir -p "${pkgdir}/usr/share/bash-completion/completions/"
-      mkdir -p "${pkgdir}/usr/share/zsh/site-functions/"
-      mkdir -p "${pkgdir}/usr/share/fish/vendor_completions.d/"
-      install -Dm644 "./completions/unigo.bash" "${pkgdir}/usr/share/bash-completion/completions/unigo"
-      install -Dm644 "./completions/unigo.zsh" "${pkgdir}/usr/share/zsh/site-functions/_unigo"
-      install -Dm644 "./completions/unigo.fish" "${pkgdir}/usr/share/fish/vendor_completions.d/unigo.fish"
-
-      # man pages
-      install -Dm644 "./manpages/unigo.1.gz" "${pkgdir}/usr/share/man/man1/unigo.1.gz"

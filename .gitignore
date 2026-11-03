@@ -803,4 +803,19 @@ sbom.json
 completions/
 manpages/
 unigo
+unigodesktop
+*.md5
 .trivycache/
+
+# Wails Build Assets
+!build/
+build/*
+!build/darwin/
+!build/darwin/**
+!build/windows/
+!build/windows/**
+!build/linux/
+!build/linux/**
+!build/appicon.png
+build/bin/
+frontend/wailsjs/

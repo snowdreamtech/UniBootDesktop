@@ -94,6 +94,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-trivy-
 
+      - name: "📦 Install Linux build dependencies"
+        if: runner.os == 'Linux'
+        shell: bash
+        run: sh scripts/install-linux-gui-deps.sh
+
       - name: "🧪 Execute Full Quality & Safety Verification"
         shell: sh
         run: |

@@ -19,8 +19,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/snowdreamtech/unigo/internal/download"
-	"github.com/snowdreamtech/unigo/internal/errors"
+	"github.com/snowdreamtech/unigodesktop/internal/download"
+	"github.com/snowdreamtech/unigodesktop/internal/errors"
 )
 
 // TestHTTPDownloader_NewHTTPDownloader verifies that NewHTTPDownloader creates a valid instance.

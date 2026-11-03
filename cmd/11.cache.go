@@ -14,11 +14,11 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 
-	"github.com/snowdreamtech/unigo/internal/cli/output"
-	"github.com/snowdreamtech/unigo/internal/database"
-	"github.com/snowdreamtech/unigo/internal/env"
-	"github.com/snowdreamtech/unigo/internal/repository/sqlite"
-	"github.com/snowdreamtech/unigo/internal/service"
+	"github.com/snowdreamtech/unigodesktop/internal/cli/output"
+	"github.com/snowdreamtech/unigodesktop/internal/database"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unigodesktop/internal/repository/sqlite"
+	"github.com/snowdreamtech/unigodesktop/internal/service"
 )
 
 // init registers the cache command and its subcommands to the root command.
@@ -37,8 +37,8 @@ func init() {
 // cacheCmd is the parent cache command.
 var cacheCmd = &cobra.Command{
 	Use:   "cache",
-	Short: "Manage UniRTM cache",
-	Long: `Manage the UniRTM download cache.
+	Short: "Manage UniGoDesktop cache",
+	Long: `Manage the UniGoDesktop download cache.
 
 If no subcommand is provided, it displays the path to the cache directory.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -91,7 +91,7 @@ var cacheListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"ls"},
 	Short:   "List all cached artifacts",
-	Long:    `List all cached artifacts stored in the UniRTM cache directory.`,
+	Long:    `List all cached artifacts stored in the UniGoDesktop cache directory.`,
 	Args:    cobra.NoArgs,
 	RunE:    runCacheList,
 }
@@ -105,10 +105,10 @@ var cacheClearCmd = &cobra.Command{
 
 Examples:
   # Clear all cache
-  unirtm cache clear
+  unigodesktop cache clear
 
   # Clear cache for a specific tool
-  unirtm cache clear node`,
+  unigodesktop cache clear node`,
 	Args: cobra.MaximumNArgs(1),
 	RunE: runCacheClear,
 }

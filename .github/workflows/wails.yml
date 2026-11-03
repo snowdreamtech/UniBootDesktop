@@ -1,0 +1,928 @@
+---
+name: "🪟 Wails GUI Packaging"
+
+"on":
+  # Run only after the primary CLI release is successfully published.
+  # This keeps GUI packaging in the same release chain while preserving the
+  # native Wails bundle generation step as a second-stage artifact job.
+  workflow_run:
+    workflows: ["📦 GoReleaser"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Git tag to attach GUI assets to"
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  gui:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    name: "Build and attach native GUI artifacts"
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            target: darwin/universal
+            asset_glob: "build/bin/*.dmg"
+          - os: windows-latest
+            target: windows/amd64
+            asset_glob: "build/bin/*installer*.exe build/bin/*portable*.zip"
+          - os: ubuntu-latest
+            target: linux/amd64
+            asset_glob: "build/bin/*.tar.gz build/bin/*.deb build/bin/*.rpm build/bin/*.AppImage"
+          - os: ubuntu-24.04-arm
+            target: linux/arm64
+            asset_glob: "build/bin/*.tar.gz build/bin/*.deb build/bin/*.rpm build/bin/*.AppImage"
+          # TODO: Add windows/arm64 when GitHub Actions provides Windows ARM runners
+          # - os: windows-11-arm
+          #   target: windows/arm64
+          #   asset_glob: "build/bin/*installer*.exe build/bin/*portable*.zip"
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    concurrency:
+      group: wails-${{ matrix.os }}-${{ github.ref }}
+      cancel-in-progress: false
+    env:
+      UNIRTM_LOCKED: 1
+      GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Configure curl retry resilience
+        shell: bash
+        run: |
+          mkdir -p "${HOME}"
+          cat << 'EOF' > "${HOME}/.curlrc"
+          retry = 10
+          retry-delay = 5
+          retry-max-time = 120
+          retry-connrefused
+          EOF
+          cp "${HOME}/.curlrc" "${HOME}/_curlrc" 2>/dev/null || true
+          if [ -n "${USERPROFILE:-}" ]; then
+            cp "${HOME}/.curlrc" "${USERPROFILE}/.curlrc" 2>/dev/null || true
+            cp "${HOME}/.curlrc" "${USERPROFILE}/_curlrc" 2>/dev/null || true
+          fi
+          echo "CURL_HOME=${HOME}" >> "$GITHUB_ENV"
+
+      - name: Resolve release tag
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --tags --force 2>/dev/null || true
+          if [ -n "$INPUT_TAG" ]; then
+            TAG="$INPUT_TAG"
+          else
+            TAG="$(git tag --points-at "$HEAD_SHA" | head -n 1)"
+          fi
+          if [ -z "$TAG" ]; then
+            echo "No release tag points at ${HEAD_SHA}" >&2
+            exit 1
+          fi
+          echo "TAG=${TAG}" >> "$GITHUB_ENV"
+          echo "Release tag: ${TAG}"
+
+      - name: Setup UniRTM
+        uses: snowdreamtech/setup-unirtm@663cc55933eafea30cd63f43e837cecd4a587f45 # v0.7.0
+        with:
+          unirtm-version: "0.33.2"
+          install: true
+          trust: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+
+      - name: Cache dependencies and build artifacts
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+            ~/AppData/Local/go-build
+            ~/.npm
+            ~/AppData/Local/npm-cache
+          key: ${{ runner.os }}-${{ runner.arch }}-wails-${{ hashFiles('go.sum', 'frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-wails-
+
+      - name: Resolve build metadata
+        env:
+          MATRIX_TARGET: ${{ matrix.target }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          CLEAN_VERSION="${TAG#v}"
+          TARGET_OS="${MATRIX_TARGET%/*}"
+          TARGET_ARCH="${MATRIX_TARGET#*/}"
+          COMMIT="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
+          COMMIT_FULL="$(git rev-parse HEAD 2>/dev/null || echo unknown)"
+          DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          MODULE_PATH="$(unirtm exec -- go list -m -f '{{.Path}}')"
+          PKG="${MODULE_PATH}/internal/env"
+          PROJECT_NAME="${MODULE_PATH##*/}"
+          LDFLAGS="-s -w -X '${PKG}.GitTag=${TAG}' -X '${PKG}.CommitHash=${COMMIT}' -X '${PKG}.CommitHashFull=${COMMIT_FULL}' -X '${PKG}.BuildTime=${DATE}' -X '${PKG}.ProjectName=${PROJECT_NAME}'"
+          echo "CLEAN_VERSION=${CLEAN_VERSION}" >> "$GITHUB_ENV"
+          echo "TARGET_OS=${TARGET_OS}" >> "$GITHUB_ENV"
+          echo "TARGET_ARCH=${TARGET_ARCH}" >> "$GITHUB_ENV"
+          echo "COMMIT=${COMMIT}" >> "$GITHUB_ENV"
+          echo "COMMIT_FULL=${COMMIT_FULL}" >> "$GITHUB_ENV"
+          echo "DATE=${DATE}" >> "$GITHUB_ENV"
+          echo "MODULE_PATH=${MODULE_PATH}" >> "$GITHUB_ENV"
+          echo "PKG=${PKG}" >> "$GITHUB_ENV"
+          echo "PROJECT_NAME=${PROJECT_NAME}" >> "$GITHUB_ENV"
+          echo "LDFLAGS=${LDFLAGS}" >> "$GITHUB_ENV"
+
+      - name: Install frontend dependencies
+        shell: bash
+        run: |
+          cd frontend
+          unirtm exec -- npm ci
+
+      - name: Sync build metadata versions
+        shell: bash
+        run: unirtm exec -- node scripts/sync-build-metadata.mjs
+
+      - name: Cache Release Tools (Cosign & Syft)
+        id: cache-release-tools
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.local/bin
+          key: release-tools-${{ runner.os }}-${{ runner.arch }}-cosign-v3.0.6-syft-v1.42.3
+
+      - name: Setup Release Tools PATH
+        shell: bash
+        run: |
+          mkdir -p "${HOME}/.local/bin"
+          echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
+          if command -v cosign >/dev/null 2>&1; then
+            echo "COSIGN_CACHED=true" >> "$GITHUB_ENV"
+            echo "Cosign already cached and available in PATH"
+            cosign version || true
+          fi
+          if command -v syft >/dev/null 2>&1; then
+            echo "SYFT_CACHED=true" >> "$GITHUB_ENV"
+            echo "Syft already cached and available in PATH"
+            syft version || true
+          fi
+
+      - name: Install Cosign
+        if: env.COSIGN_CACHED != 'true'
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+        with:
+          curl-retries: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+
+      - name: Backup Cosign to Cache Directory
+        if: env.COSIGN_CACHED != 'true'
+        shell: bash
+        run: |
+          COSIGN_BIN="$(command -v cosign 2>/dev/null || true)"
+          if [ -n "${COSIGN_BIN}" ] && [ -f "${COSIGN_BIN}" ]; then
+            mkdir -p "${HOME}/.local/bin"
+            cp -f "${COSIGN_BIN}" "${HOME}/.local/bin/" || true
+          fi
+
+      - name: Install Syft
+        if: env.SYFT_CACHED != 'true'
+        uses: anchore/sbom-action/download-syft@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+
+      - name: Backup Syft to Cache Directory
+        if: env.SYFT_CACHED != 'true'
+        shell: bash
+        run: |
+          SYFT_BIN="$(command -v syft 2>/dev/null || true)"
+          if [ -n "${SYFT_BIN}" ] && [ -f "${SYFT_BIN}" ]; then
+            mkdir -p "${HOME}/.local/bin"
+            cp -f "${SYFT_BIN}" "${HOME}/.local/bin/" || true
+          fi
+
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        shell: bash
+        run: sh scripts/install-linux-gui-deps.sh
+
+      - name: Install Windows build dependencies
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          $nsisDefaultPath = "C:\Program Files (x86)\NSIS"
+          if (Test-Path "$nsisDefaultPath\makensis.exe") {
+            echo "$nsisDefaultPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            $env:PATH = "$nsisDefaultPath;$env:PATH"
+          } elseif (-not (Get-Command makensis -ErrorAction SilentlyContinue)) {
+            for ($attempt = 1; $attempt -le 3; $attempt++) {
+              try {
+                choco install nsis -y --no-progress --timeout 300
+                if (Test-Path "$nsisDefaultPath\makensis.exe") {
+                  break
+                }
+              } catch {
+                Write-Host "Choco install NSIS attempt $attempt failed, retrying..."
+                Start-Sleep -Seconds 5
+              }
+            }
+            if (Test-Path $nsisDefaultPath) {
+              echo "$nsisDefaultPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+              $env:PATH = "$nsisDefaultPath;$env:PATH"
+            }
+          }
+          makensis /VERSION
+
+      - name: Generate Wails bindings
+        shell: bash
+        run: unirtm exec -- wails generate module
+
+      - name: Build frontend assets
+        shell: bash
+        run: |
+          cd frontend
+          unirtm exec -- npm run build
+
+      - name: Prepare UniGoDesktop App Icon
+        shell: bash
+        run: unirtm exec -- node scripts/prepare-app-icon.mjs
+
+      - name: Verify frontend build artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -d "frontend/dist" ] || [ ! -f "frontend/dist/index.html" ]; then
+            echo "frontend/dist or frontend/dist/index.html is missing, frontend build failed" >&2
+            exit 1
+          fi
+          echo "Frontend build verified: frontend/dist/index.html exists"
+
+      - name: Build Wails native bundle
+        if: runner.os != 'Windows'
+        shell: bash
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -euo pipefail
+          BUILD_TAGS=()
+          if [ "${RUNNER_OS}" = "Linux" ] && pkg-config --exists webkit2gtk-4.1 && ! pkg-config --exists webkit2gtk-4.0; then
+            BUILD_TAGS+=("-tags" "webkit2_41")
+          fi
+          mkdir -p build/bin
+          unirtm exec -- wails build \
+            -s \
+            -clean \
+            -trimpath \
+            -m \
+            -nosyncgomod \
+            -platform "${TARGET}" \
+            ${BUILD_TAGS[@]+"${BUILD_TAGS[@]}"} \
+            -ldflags "${LDFLAGS}"
+          if [ "${RUNNER_OS}" = "macOS" ]; then
+            APP_PATH="$(find build/bin -maxdepth 1 -type d -name '*.app' -print -quit)"
+            if [ -z "${APP_PATH}" ]; then
+              echo "Wails build produced no macOS app bundle" >&2
+              exit 1
+            fi
+            EXECUTABLE="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${APP_PATH}/Contents/Info.plist")"
+            APP_BINARY="${APP_PATH}/Contents/MacOS/${EXECUTABLE}"
+            if [ ! -s "${APP_BINARY}" ] || [ ! -x "${APP_BINARY}" ]; then
+              echo "Wails build completed without a runnable macOS binary: ${APP_BINARY}" >&2
+              exit 1
+            fi
+            file "${APP_BINARY}"
+          fi
+
+      - name: Codesign macOS App Bundle
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASS: ${{ secrets.APPLE_CERTIFICATE_PASS }}
+          APPLE_IDENTITY: ${{ secrets.APPLE_IDENTITY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${APPLE_CERTIFICATE:-}" ]; then
+            echo "No APPLE_CERTIFICATE secret provided, skipping codesign."
+            exit 0
+          fi
+          APP_PATH="$(find build/bin -maxdepth 1 -type d -name '*.app' -print -quit)"
+          if [ -z "${APP_PATH}" ]; then
+            echo "App bundle not found in build/bin" >&2
+            exit 1
+          fi
+          echo "Signing macOS App Bundle..."
+          codesign --force --deep --options runtime --timestamp --sign "${APPLE_IDENTITY}" "${APP_PATH}"
+          codesign --verify --deep --strict "${APP_PATH}"
+          echo "macOS App Bundle signature verified"
+
+      - name: Create macOS DMG
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP_PATH="$(find build/bin -maxdepth 1 -type d -name '*.app' -print -quit)"
+          if [ -z "${APP_PATH}" ]; then
+            echo "App bundle not found in build/bin" >&2
+            exit 1
+          fi
+          APP_NAME="$(basename "${APP_PATH}")"
+          EXECUTABLE="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${APP_PATH}/Contents/Info.plist")"
+          APP_BINARY="${APP_PATH}/Contents/MacOS/${EXECUTABLE}"
+          if [ ! -s "$APP_BINARY" ] || [ ! -x "$APP_BINARY" ]; then
+            echo "App bundle has no runnable executable at $APP_BINARY" >&2
+            exit 1
+          fi
+          rm -rf build/bin/dmg-src
+          mkdir -p build/bin/dmg-src
+          cp -R "$APP_PATH" "build/bin/dmg-src/${APP_NAME}"
+          ln -s /Applications "build/bin/dmg-src/Applications"
+          DMG_NAME="unigodesktop-gui_${CLEAN_VERSION}_darwin_universal.dmg"
+          SRC_SIZE_MB="$(du -sm "build/bin/dmg-src" | awk '{print $1}')"
+          DMG_SIZE_MB=$(( SRC_SIZE_MB + 128 + SRC_SIZE_MB / 5 ))
+          echo "Source bundle size: ${SRC_SIZE_MB}MB, allocated virtual DMG size: ${DMG_SIZE_MB}MB"
+          hdiutil create -volname "${APP_NAME%.app}" -srcfolder build/bin/dmg-src -size "${DMG_SIZE_MB}m" -ov -format UDZO "build/bin/${DMG_NAME}"
+          rm -rf build/bin/dmg-src
+          DMG_PATH="build/bin/${DMG_NAME}"
+          if [ ! -f "${DMG_PATH}" ]; then
+            echo "DMG creation failed: ${DMG_PATH} not found" >&2
+            exit 1
+          fi
+          echo "macOS DMG created successfully: ${DMG_PATH}"
+
+      - name: Notarize macOS DMG
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          if [ -z "${APPLE_ID:-}" ] || [ -z "${APPLE_PASSWORD:-}" ] || [ -z "${APPLE_TEAM_ID:-}" ]; then
+            echo "Apple notarization credentials not provided, gracefully skipping notarization."
+            exit 0
+          fi
+          DMG_PATH="$(find build/bin -maxdepth 1 -name '*.dmg' -print -quit)"
+          if [ -z "${DMG_PATH}" ] || [ ! -f "${DMG_PATH}" ]; then
+            echo "DMG file not found for notarization, skipping."
+            exit 0
+          fi
+          echo "Submitting ${DMG_PATH} for Apple Notarization..."
+          xcrun notarytool submit "${DMG_PATH}" \
+            --apple-id "${APPLE_ID}" \
+            --password "${APPLE_PASSWORD}" \
+            --team-id "${APPLE_TEAM_ID}" \
+            --wait
+          echo "Stapling notarization ticket to ${DMG_PATH}..."
+          xcrun stapler staple "${DMG_PATH}"
+          echo "macOS DMG notarization and stapling completed successfully"
+
+      - name: Create Windows installer
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -d "/c/Program Files (x86)/NSIS" ]; then
+            export PATH="/c/Program Files (x86)/NSIS:${PATH}"
+          fi
+          mkdir -p build/bin
+          unirtm exec -- wails build \
+            -s \
+            -clean \
+            -trimpath \
+            -m \
+            -nosyncgomod \
+            -platform windows/amd64 \
+            -nsis \
+            -ldflags "${LDFLAGS}"
+          echo "Files in build/bin after wails build:"
+          ls -la build/bin/
+          INSTALLER="$(find build/bin -maxdepth 1 -iname '*installer*.exe' -print -quit 2>/dev/null || true)"
+          if [ -z "${INSTALLER}" ] || [ ! -f "${INSTALLER}" ]; then
+            echo "Windows installer executable (*installer*.exe) not found in build/bin" >&2
+            exit 1
+          fi
+          INSTALLER_TARGET="build/bin/unigodesktop-gui_${CLEAN_VERSION}_windows_amd64_installer.exe"
+          if [ "${INSTALLER}" != "${INSTALLER_TARGET}" ]; then
+            mv "${INSTALLER}" "${INSTALLER_TARGET}"
+          fi
+          echo "Windows installer produced: ${INSTALLER_TARGET}"
+
+      - name: Package Windows portable zip
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXE_PATH="$(find build/bin -maxdepth 1 \( -iname 'unigodesktop.exe' -o -iname "${PROJECT_NAME}.exe" \) -print -quit 2>/dev/null || true)"
+          if [ -z "${EXE_PATH}" ] || [ ! -f "${EXE_PATH}" ]; then
+            echo "Windows executable (unigodesktop.exe) not found in build/bin" >&2
+            ls -la build/bin/
+            exit 1
+          fi
+          PORTABLE_DIR="build/bin/unigodesktop-portable"
+          mkdir -p "${PORTABLE_DIR}"
+          cp "${EXE_PATH}" "${PORTABLE_DIR}/unigodesktop.exe"
+          touch "${PORTABLE_DIR}/portable.dat"
+          if [ -f "build/windows/icon.ico" ]; then
+            cp "build/windows/icon.ico" "${PORTABLE_DIR}/icon.ico"
+          fi
+          printf '%s\n' \
+            'UniGoDesktop Portable Edition' \
+            '-----------------------------' \
+            'This is the standalone portable edition of UniGoDesktop.' \
+            'All user configuration, local caches, and WebView2 runtime data are isolated in the local "data" directory.' \
+            'Please do not delete portable.dat if you wish to keep portable mode active.' \
+            > "${PORTABLE_DIR}/README.txt"
+          PORTABLE_ZIP="build/bin/unigodesktop-gui_${CLEAN_VERSION}_windows_amd64_portable.zip"
+          if command -v 7z >/dev/null 2>&1; then
+            7z a -tzip "${PORTABLE_ZIP}" "./${PORTABLE_DIR}/*"
+          else
+            tar -a -c -f "${PORTABLE_ZIP}" -C "${PORTABLE_DIR}" .
+          fi
+          rm -rf "${PORTABLE_DIR}"
+          if [ ! -f "${PORTABLE_ZIP}" ]; then
+            echo "Failed to create portable zip at ${PORTABLE_ZIP}" >&2
+            exit 1
+          fi
+          echo "Windows portable zip produced: ${PORTABLE_ZIP}"
+
+      - name: Create Linux archive
+        if: runner.os == 'Linux'
+        env:
+          TARGET: ${{ matrix.target }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP_BIN="build/bin/unigodesktop"
+          if [ ! -f "$APP_BIN" ]; then
+            echo "Linux binary not found at $APP_BIN" >&2
+            exit 1
+          fi
+          LINUX_ARCH="${TARGET##*/}"
+          mkdir -p build/bin/linux-dist
+          cp "$APP_BIN" build/bin/linux-dist/unigodesktop
+          cp build/linux/unigodesktop.desktop build/bin/linux-dist/unigodesktop.desktop
+          cp build/appicon.png build/bin/linux-dist/unigodesktop.png
+          tar -czf "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.tar.gz" -C build/bin/linux-dist unigodesktop unigodesktop.desktop unigodesktop.png
+          rm -rf build/bin/linux-dist
+
+      - name: Package Linux packages (deb, rpm, AppImage)
+        if: runner.os == 'Linux'
+        env:
+          TARGET: ${{ matrix.target }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          CLEAN_VERSION="${TAG#v}"
+          LINUX_ARCH="${TARGET##*/}"
+
+          # 1. Package deb and rpm via nfpm
+          GITHUB_PROXY="${GITHUB_PROXY:-}"
+
+          if ! command -v nfpm >/dev/null 2>&1; then
+            echo "Installing nfpm..."
+            NFPM_ARCH="x86_64"
+            if [ "$(uname -m)" = "aarch64" ] || [ "${LINUX_ARCH}" = "arm64" ]; then
+              NFPM_ARCH="arm64"
+            fi
+            curl -sfL --connect-timeout 15 --max-time 180 --retry 3 --retry-delay 2 "${GITHUB_PROXY}https://github.com/goreleaser/nfpm/releases/download/v2.41.3/nfpm_2.41.3_Linux_${NFPM_ARCH}.tar.gz" | tar -xz -C /tmp nfpm
+            sudo mv /tmp/nfpm /usr/local/bin/
+            INSTALLED_NFPM_VER="$(nfpm --version 2>&1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
+            if [ "${INSTALLED_NFPM_VER}" != "2.41.3" ]; then
+              echo "nfpm version mismatch: expected 2.41.3, got ${INSTALLED_NFPM_VER:-unknown}" >&2
+              exit 1
+            fi
+            echo "nfpm v${INSTALLED_NFPM_VER} installed successfully"
+          fi
+
+          cat << EOF > /tmp/nfpm.yaml
+          name: "unigodesktop"
+          arch: "${LINUX_ARCH}"
+          platform: "linux"
+          version: "${CLEAN_VERSION}"
+          section: "utils"
+          priority: "optional"
+          maintainer: "SnowdreamTech <snowdreamtech@qq.com>"
+          description: "Universal Go Desktop Suite"
+          vendor: "SnowdreamTech"
+          homepage: "https://github.com/snowdreamtech/UniGoDesktop"
+          license: "MIT"
+          contents:
+            - src: "build/bin/unigodesktop"
+              dst: "/usr/bin/unigodesktop"
+            - src: "build/linux/unigodesktop.desktop"
+              dst: "/usr/share/applications/unigodesktop.desktop"
+            - src: "build/appicon.png"
+              dst: "/usr/share/icons/hicolor/512x512/apps/unigodesktop.png"
+          EOF
+
+          nfpm package --config /tmp/nfpm.yaml --packager deb --target "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.deb"
+          nfpm package --config /tmp/nfpm.yaml --packager rpm --target "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.rpm"
+          rm -f /tmp/nfpm.yaml
+          echo "Linux deb and rpm packages created successfully"
+
+          # 2. Package AppImage via appimagetool
+          echo "Preparing AppImage..."
+          APPIMAGE_ARCH="x86_64"
+          if [ "$(uname -m)" = "aarch64" ] || [ "${LINUX_ARCH}" = "arm64" ]; then
+            APPIMAGE_ARCH="aarch64"
+          fi
+          APPIMAGETOOL="/tmp/appimagetool-${APPIMAGE_ARCH}"
+          if [ ! -f "${APPIMAGETOOL}" ]; then
+            curl -sfL --connect-timeout 15 --max-time 180 --retry 3 --retry-delay 2 -o "${APPIMAGETOOL}" "${GITHUB_PROXY}https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${APPIMAGE_ARCH}.AppImage"
+            chmod +x "${APPIMAGETOOL}"
+            # Verify the downloaded binary is a valid executable (continuous tag has no stable checksum)
+            if ! file "${APPIMAGETOOL}" | grep -qiE 'ELF|executable'; then
+              echo "Downloaded appimagetool is not a valid executable" >&2
+              rm -f "${APPIMAGETOOL}"
+              exit 1
+            fi
+            echo "appimagetool downloaded and verified"
+          fi
+
+          APPDIR="build/bin/AppDir"
+          rm -rf "${APPDIR}"
+          mkdir -p "${APPDIR}/usr/bin"
+          cp build/bin/unigodesktop "${APPDIR}/usr/bin/unigodesktop"
+          cp build/linux/unigodesktop.desktop "${APPDIR}/unigodesktop.desktop"
+          cp build/appicon.png "${APPDIR}/unigodesktop.png"
+          cp build/appicon.png "${APPDIR}/.DirIcon"
+
+          cat << 'EOF' > "${APPDIR}/AppRun"
+          #!/bin/sh
+          HERE="$(dirname "$(readlink -f "${0}")")"
+          exec "${HERE}/usr/bin/unigodesktop" "$@"
+          EOF
+          chmod +x "${APPDIR}/AppRun"
+
+          ARCH="${APPIMAGE_ARCH}" "${APPIMAGETOOL}" --appimage-extract-and-run "${APPDIR}" "build/bin/unigodesktop-gui_${CLEAN_VERSION}_linux_${LINUX_ARCH}.AppImage"
+          rm -rf "${APPDIR}"
+          echo "Linux AppImage created successfully"
+
+      - name: Secure GUI artifacts
+        env:
+          TARGET: ${{ matrix.target }}
+          ASSET_GLOB: ${{ matrix.asset_glob }}
+          WORKFLOW_IDENTITY: https://github.com/${{ github.workflow_ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          MATCHED_ASSETS=()
+          for glob_pattern in ${ASSET_GLOB}; do
+            for f in ${glob_pattern}; do
+              if [ -f "$f" ]; then
+                MATCHED_ASSETS+=("$f")
+              fi
+            done
+          done
+          if [ "${#MATCHED_ASSETS[@]}" -eq 0 ]; then
+            echo "No release asset matched ${ASSET_GLOB}" >&2
+            exit 1
+          fi
+
+          for ASSET in "${MATCHED_ASSETS[@]}"; do
+            FSIZE=$(stat -f%z "$ASSET" 2>/dev/null || stat -c%s "$ASSET" 2>/dev/null || echo 0)
+            if [ "${FSIZE}" -lt 1048576 ]; then
+              echo "WARNING: ${ASSET} is suspiciously small (${FSIZE} bytes), expected >= 1MB for a GUI artifact" >&2
+            fi
+          done
+
+          CHECKSUM_FILE="build/bin/unigodesktop-gui_${CLEAN_VERSION}_${TARGET_OS}_${TARGET_ARCH}.sha256"
+          rm -f "${CHECKSUM_FILE}"
+
+          for ASSET in "${MATCHED_ASSETS[@]}"; do
+            echo "Securing asset: ${ASSET}"
+            ASSET_BASENAME="$(basename "${ASSET}")"
+            (cd "$(dirname "${ASSET}")" && {
+              if command -v sha256sum >/dev/null 2>&1; then
+                sha256sum "${ASSET_BASENAME}"
+              else
+                shasum -a 256 "${ASSET_BASENAME}"
+              fi
+            }) >> "${CHECKSUM_FILE}"
+
+            # --- Syft SBOM Generation (resilient & non-blocking) ---
+            if command -v syft >/dev/null 2>&1; then
+              echo "Generating SBOM for ${ASSET_BASENAME} with Syft..."
+              if ! syft "file:${ASSET}" -o "spdx-json=${ASSET}.sbom.spdx.json"; then
+                echo "WARNING: Syft SBOM generation failed for ${ASSET_BASENAME}, proceeding without blocking release." >&2
+                rm -f "${ASSET}.sbom.spdx.json"
+              fi
+            else
+              echo "WARNING: Syft not available, skipping SBOM generation for ${ASSET_BASENAME}." >&2
+            fi
+
+            # --- Cosign Keyless Signing & Verification (5 retries with exponential backoff & non-blocking fallback) ---
+            if command -v cosign >/dev/null 2>&1; then
+              echo "Signing ${ASSET_BASENAME} with Cosign..."
+              SIGNED_OK=false
+              COSIGN_ATTEMPTS=5
+              COSIGN_DELAY=3
+              for attempt in $(seq 1 ${COSIGN_ATTEMPTS}); do
+                if cosign sign-blob --yes \
+                  --bundle "${ASSET}.sigstore.json" \
+                  "${ASSET}" && \
+                  cosign verify-blob \
+                    --certificate-identity "${WORKFLOW_IDENTITY}" \
+                    --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+                    --bundle "${ASSET}.sigstore.json" \
+                    "${ASSET}"; then
+                  SIGNED_OK=true
+                  echo "Successfully signed and verified ${ASSET_BASENAME} with Cosign on attempt ${attempt}."
+                  break
+                fi
+                echo "Cosign attempt ${attempt}/${COSIGN_ATTEMPTS} for ${ASSET_BASENAME} failed. Retrying in ${COSIGN_DELAY}s..." >&2
+                sleep "${COSIGN_DELAY}"
+                COSIGN_DELAY=$(( COSIGN_DELAY * 2 ))
+              done
+              if [ "${SIGNED_OK}" != "true" ]; then
+                echo "WARNING: Cosign signing/verification failed after ${COSIGN_ATTEMPTS} attempts due to remote Sigstore/Fulcio/Rekor network issues. Release will proceed without sigstore bundle to guarantee delivery." >&2
+                rm -f "${ASSET}.sigstore.json"
+              fi
+            else
+              echo "WARNING: Cosign not available, skipping Cosign signing for ${ASSET_BASENAME}." >&2
+            fi
+          done
+
+          (cd build/bin && {
+            if command -v sha256sum >/dev/null 2>&1; then
+              sha256sum --check "$(basename "${CHECKSUM_FILE}")"
+            else
+              shasum -a 256 --check "$(basename "${CHECKSUM_FILE}")"
+            fi
+          })
+          echo "CHECKSUM_FILE=${CHECKSUM_FILE}" >> "$GITHUB_ENV"
+
+      - name: Attest GUI artifact provenance
+        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
+        with:
+          subject-checksums: ${{ env.CHECKSUM_FILE }}
+
+      - name: Wait for release to exist
+        env:
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 60); do
+            if gh release view "${TAG}" --repo "${REPOSITORY}" >/dev/null 2>&1; then
+              echo "Release ${TAG} is ready"
+              exit 0
+            fi
+            echo "Waiting for release ${TAG} to appear (${i}/60)..."
+            sleep 10
+          done
+          echo "Release ${TAG} was not found after waiting 10 minutes" >&2
+          exit 1
+
+      - name: Upload GUI artifacts to GitHub Release
+        env:
+          ASSET_GLOB: ${{ matrix.asset_glob }}
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          upload_assets=()
+          CHECKSUM_FILE="${CHECKSUM_FILE:-build/bin/unigodesktop-gui_${CLEAN_VERSION}_${TARGET_OS}_${TARGET_ARCH}.sha256}"
+          if [ -f "${CHECKSUM_FILE}" ]; then
+            upload_assets+=("${CHECKSUM_FILE}")
+          fi
+          for glob_pattern in ${ASSET_GLOB}; do
+            for ASSET in ${glob_pattern}; do
+              if [ -f "${ASSET}" ]; then
+                upload_assets+=("${ASSET}")
+                if [ -f "${ASSET}.sbom.spdx.json" ]; then
+                  upload_assets+=("${ASSET}.sbom.spdx.json")
+                fi
+                if [ -f "${ASSET}.sigstore.json" ]; then
+                  upload_assets+=("${ASSET}.sigstore.json")
+                fi
+              fi
+            done
+          done
+          if [ "${#upload_assets[@]}" -eq 0 ]; then
+            echo "No assets found to upload" >&2
+            exit 1
+          fi
+          gh release upload "${TAG}" \
+            --repo "${REPOSITORY}" \
+            --clobber \
+            ${upload_assets[@]+"${upload_assets[@]}"}
+
+  aggregate-checksums:
+    name: "Aggregate and sign release checksums"
+    needs: [gui]
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+    env:
+      UNIRTM_LOCKED: 1
+      GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Configure curl retry resilience
+        shell: bash
+        run: |
+          mkdir -p "${HOME}"
+          cat << 'EOF' > "${HOME}/.curlrc"
+          retry = 10
+          retry-delay = 5
+          retry-max-time = 120
+          retry-connrefused
+          EOF
+          cp "${HOME}/.curlrc" "${HOME}/_curlrc" 2>/dev/null || true
+          if [ -n "${USERPROFILE:-}" ]; then
+            cp "${HOME}/.curlrc" "${USERPROFILE}/.curlrc" 2>/dev/null || true
+            cp "${HOME}/.curlrc" "${USERPROFILE}/_curlrc" 2>/dev/null || true
+          fi
+          echo "CURL_HOME=${HOME}" >> "$GITHUB_ENV"
+
+      - name: Resolve release tag
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --tags --force 2>/dev/null || true
+          if [ -n "$INPUT_TAG" ]; then
+            TAG="$INPUT_TAG"
+          else
+            TAG="$(git tag --points-at "$HEAD_SHA" | head -n 1)"
+          fi
+          if [ -z "$TAG" ]; then
+            echo "No release tag points at ${HEAD_SHA}" >&2
+            exit 1
+          fi
+          echo "TAG=${TAG}" >> "$GITHUB_ENV"
+          echo "Release tag: ${TAG}"
+
+      - name: Cache Release Tools (Cosign)
+        id: cache-release-tools
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.local/bin
+          key: release-tools-Linux-x64-cosign-v3.0.6
+
+      - name: Setup Release Tools PATH
+        shell: bash
+        run: |
+          mkdir -p "${HOME}/.local/bin"
+          echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
+          if command -v cosign >/dev/null 2>&1; then
+            echo "COSIGN_CACHED=true" >> "$GITHUB_ENV"
+            echo "Cosign already cached and available in PATH"
+            cosign version || true
+          fi
+
+      - name: Install Cosign
+        if: env.COSIGN_CACHED != 'true'
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+        with:
+          curl-retries: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+
+      - name: Backup Cosign to Cache Directory
+        if: env.COSIGN_CACHED != 'true'
+        shell: bash
+        run: |
+          COSIGN_BIN="$(command -v cosign 2>/dev/null || true)"
+          if [ -n "${COSIGN_BIN}" ] && [ -f "${COSIGN_BIN}" ]; then
+            mkdir -p "${HOME}/.local/bin"
+            cp -f "${COSIGN_BIN}" "${HOME}/.local/bin/" || true
+          fi
+
+      - name: Aggregate and sign unified checksums
+        env:
+          REPOSITORY: ${{ github.repository }}
+          WORKFLOW_IDENTITY: https://github.com/${{ github.workflow_ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/release-checksums
+          cd /tmp/release-checksums
+
+          echo "Downloading checksums.txt and platform sha256 files from release ${TAG}..."
+          gh release download "${TAG}" \
+            --repo "${REPOSITORY}" \
+            --pattern 'checksums.txt' \
+            --pattern '*.sha256' || true
+
+          if [ ! -f checksums.txt ]; then
+            echo "checksums.txt not found in release ${TAG}, initializing empty file"
+            touch checksums.txt
+          fi
+
+          # Collect and normalize all sha256 entries
+          touch combined_raw.txt
+          cat checksums.txt >> combined_raw.txt
+          for sha_file in *.sha256; do
+            if [ -f "$sha_file" ]; then
+              cat "$sha_file" >> combined_raw.txt
+            fi
+          done
+
+          # Strip CR (\r), strip leading directory paths (e.g. build/bin/), strip leading asterisks from filename
+          # and deduplicate entries by filename while preserving the last valid hash
+          awk '{
+            gsub(/\r/, "");
+            if (NF >= 2) {
+              hash = $1;
+              file = $2;
+              sub(/^\*/, "", file);
+              n = split(file, parts, "/");
+              filename = parts[n];
+              if (length(hash) == 64 && filename != "") {
+                entries[filename] = hash;
+              }
+            }
+          }
+          END {
+            for (f in entries) {
+              printf "%s  %s\n", entries[f], f;
+            }
+          }' combined_raw.txt | sort -k2,2 > checksums.txt
+
+          echo "Aggregated checksums.txt preview:"
+          cat checksums.txt
+
+          if command -v cosign >/dev/null 2>&1; then
+            echo "Re-signing aggregated checksums.txt with Cosign..."
+            SIGNED_OK=false
+            COSIGN_ATTEMPTS=5
+            COSIGN_DELAY=3
+            for attempt in $(seq 1 ${COSIGN_ATTEMPTS}); do
+              if cosign sign-blob --yes \
+                --bundle checksums.txt.sigstore.json \
+                checksums.txt && \
+                cosign verify-blob \
+                  --certificate-identity "${WORKFLOW_IDENTITY}" \
+                  --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+                  --bundle checksums.txt.sigstore.json \
+                  checksums.txt; then
+                SIGNED_OK=true
+                echo "Successfully re-signed and verified checksums.txt with Cosign on attempt ${attempt}."
+                break
+              fi
+              echo "Cosign attempt ${attempt}/${COSIGN_ATTEMPTS} for checksums.txt failed. Retrying in ${COSIGN_DELAY}s..." >&2
+              sleep "${COSIGN_DELAY}"
+              COSIGN_DELAY=$(( COSIGN_DELAY * 2 ))
+            done
+            if [ "${SIGNED_OK}" != "true" ]; then
+              echo "WARNING: Cosign signing for checksums.txt failed after ${COSIGN_ATTEMPTS} attempts. Proceeding with release to ensure delivery." >&2
+              rm -f checksums.txt.sigstore.json
+            fi
+          else
+            echo "WARNING: Cosign not available, skipping checksums.txt signing." >&2
+          fi
+
+          echo "CHECKSUMS_PATH=/tmp/release-checksums/checksums.txt" >> "$GITHUB_ENV"
+
+      - name: Attest aggregated checksums provenance
+        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
+        with:
+          subject-checksums: ${{ env.CHECKSUMS_PATH }}
+
+      - name: Upload aggregated checksums to release
+        env:
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/release-checksums
+          upload_files=("checksums.txt")
+          if [ -f checksums.txt.sigstore.json ]; then
+            upload_files+=("checksums.txt.sigstore.json")
+          fi
+          gh release upload "${TAG}" \
+            --repo "${REPOSITORY}" \
+            --clobber \
+            "${upload_files[@]}"
+          echo "Aggregated checksums uploaded successfully: ${upload_files[*]}"

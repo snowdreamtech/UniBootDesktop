@@ -16,11 +16,11 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 
-	"github.com/snowdreamtech/unigo/internal/cli/output"
-	"github.com/snowdreamtech/unigo/internal/database"
-	"github.com/snowdreamtech/unigo/internal/env"
-	pkgHttp "github.com/snowdreamtech/unigo/internal/http"
-	"github.com/snowdreamtech/unigo/internal/utils"
+	"github.com/snowdreamtech/unigodesktop/internal/cli/output"
+	"github.com/snowdreamtech/unigodesktop/internal/database"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
+	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
+	"github.com/snowdreamtech/unigodesktop/internal/utils"
 )
 
 func init() {
@@ -33,10 +33,8 @@ var doctorCmd = &cobra.Command{
 	Use:     "doctor",
 	Aliases: []string{"dr"},
 	Short:   "Check system health and diagnose issues",
-	Long: `Check UniGo system health and diagnose potential issues.
-
-This command partially aligns with UniRTM to ensure your environment is
-properly configured, providing insights into directories, configurations, and cache.`,
+	Long: `Check UniGoDesktop system health and diagnose potential issues.
+It verifies that your environment is properly configured, providing insights into directories, configurations, and cache.`,
 	Args: cobra.NoArgs,
 	RunE: runDoctor,
 }
@@ -79,8 +77,8 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 	// 4. Configuration
 	pterm.DefaultSection.Println("📝 Configuration")
 	configs := []string{
-		filepath.Join(cwd, ".unigo.toml"),
-		filepath.Join(cwd, "unigo.toml"),
+		filepath.Join(cwd, ".unigodesktop.toml"),
+		filepath.Join(cwd, "unigodesktop.toml"),
 		env.GetGlobalConfigPath(),
 	}
 	var foundConfig bool
@@ -111,7 +109,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 
 	// Check CWD Permissions
 	if wd, err := os.Getwd(); err == nil {
-		if f, err := os.CreateTemp(wd, ".unigo-doctor-*"); err == nil {
+		if f, err := os.CreateTemp(wd, ".unigodesktop-doctor-*"); err == nil {
 			f.Close()
 			os.Remove(f.Name())
 			output.Successf("Current dir: %s (Writable)", wd)
@@ -157,7 +155,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 
 	fmt.Println()
 	if suggestions == 0 {
-		pterm.DefaultBox.WithTitle(pterm.LightGreen("Diagnostics Complete")).Println("Your UniGo environment is perfectly configured and ready.")
+		pterm.DefaultBox.WithTitle(pterm.LightGreen("Diagnostics Complete")).Println("Your UniGoDesktop environment is perfectly configured and ready.")
 	} else {
 		pterm.DefaultBox.WithTitle(pterm.LightYellow("Diagnostics Complete")).Printf("Found %d potential issue(s).\n", suggestions)
 	}

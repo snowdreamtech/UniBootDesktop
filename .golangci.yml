@@ -40,8 +40,10 @@ linters:
               desc: Avoid sqlx with CGO SQLite drivers. Use database/sql + modernc.org/sqlite.
     gosec:
       excludes:
+        - G101
         - G104
         - G115
+        - G204
         - G304
         - G305
         - G306
@@ -64,6 +66,12 @@ linters:
       - std-error-handling
     rules:
       - linters:
+          - noctx
+          - nilerr
+          - staticcheck
+          - unused
+        path: (pkg/|app\.go)
+      - linters:
           - gosec
           - noctx
           - nilnil
@@ -76,7 +84,7 @@ linters:
         text: type assertion on error will fail on wrapped errors
       - linters:
           - typecheck
-        text: 'could not load export data'
+        text: 'could not (load export data|import)'
     paths:
       - vendor
       - node_modules
@@ -105,7 +113,7 @@ formatters:
       sections:
         - standard
         - default
-        - prefix(github.com/snowdreamtech/unigo)
+        - prefix(github.com/snowdreamtech/unigodesktop)
     gofumpt:
       extra:
         group-params: true

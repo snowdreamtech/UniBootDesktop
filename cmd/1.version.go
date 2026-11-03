@@ -11,8 +11,8 @@ import (
 	"github.com/common-nighthawk/go-figure"
 	"github.com/spf13/cobra"
 
-	"github.com/snowdreamtech/unigo/internal/env"
-	"github.com/snowdreamtech/unigo/internal/sysinfo"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unigodesktop/internal/sysinfo"
 )
 
 // init registers the version command to the root command.

@@ -10,17 +10,17 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/snowdreamtech/unigo/internal/config"
-	"github.com/snowdreamtech/unigo/internal/env"
+	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unigodesktop/pkg/config"
 )
 
 var editCmd = &cobra.Command{
 	Use:   "edit",
 	Short: "Open the config file in $EDITOR",
-	Long: `Open the UniGo config file in your preferred editor.
+	Long: `Open the UniGoDesktop config file in your preferred editor.
 
 Priority for finding an editor:
-1.  UNIGO_EDITOR environment variable
+1.  UNIGODESKTOP_EDITOR environment variable
 2.  VISUAL environment variable
 3.  EDITOR environment variable
 4.  Standard system defaults (vim, nano, notepad)`,
@@ -44,8 +44,11 @@ func runEdit(cmd *cobra.Command, args []string) error {
 
 	targetFile := env.GetGlobalConfigPath()
 
-	// Ensure config directory and dummy file exist
-	cfg := &config.Config{}
+	// Ensure config directory and file exist
+	cfg, err := config.Load()
+	if err != nil {
+		cfg = config.GetDefaultConfig()
+	}
 	if err := cfg.Save(); err != nil {
 		return fmt.Errorf("failed to initialize config file: %w", err)
 	}

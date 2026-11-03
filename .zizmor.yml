@@ -27,7 +27,7 @@ rules:
       - "dco.yml"
       - "dependabot-auto-merge.yml"
       - "dependabot-sync.yml"
-      - "docker.yml"
+      - "wails.yml"
       - "goreleaser.yml"
       - "label-sync.yml"
       - "labeler.yml"
@@ -52,7 +52,7 @@ rules:
       - "dco.yml"
       - "dependabot-auto-merge.yml"
       - "dependabot-sync.yml"
-      - "docker.yml"
+      - "wails.yml"
       - "goreleaser.yml"
       - "label-sync.yml"
       - "labeler.yml"
@@ -77,7 +77,7 @@ rules:
       - "dco.yml"
       - "dependabot-auto-merge.yml"
       - "dependabot-sync.yml"
-      - "docker.yml"
+      - "wails.yml"
       - "goreleaser.yml"
       - "label-sync.yml"
       - "labeler.yml"
@@ -102,7 +102,7 @@ rules:
       - "dco.yml"
       - "dependabot-auto-merge.yml"
       - "dependabot-sync.yml"
-      - "docker.yml"
+      - "wails.yml"
       - "goreleaser.yml"
       - "label-sync.yml"
       - "labeler.yml"
@@ -127,7 +127,7 @@ rules:
       - "dco.yml"
       - "dependabot-auto-merge.yml"
       - "dependabot-sync.yml"
-      - "docker.yml"
+      - "wails.yml"
       - "goreleaser.yml"
       - "label-sync.yml"
       - "labeler.yml"
@@ -152,7 +152,7 @@ rules:
       - "dco.yml"
       - "dependabot-auto-merge.yml"
       - "dependabot-sync.yml"
-      - "docker.yml"
+      - "wails.yml"
       - "goreleaser.yml"
       - "label-sync.yml"
       - "labeler.yml"
@@ -176,7 +176,7 @@ rules:
       - "dco.yml"
       - "dependabot-auto-merge.yml"
       - "dependabot-sync.yml"
-      - "docker.yml"
+      - "wails.yml"
       - "goreleaser.yml"
       - "label-sync.yml"
       - "labeler.yml"
@@ -200,7 +200,7 @@ rules:
       - "dco.yml"
       - "dependabot-auto-merge.yml"
       - "dependabot-sync.yml"
-      - "docker.yml"
+      - "wails.yml"
       - "goreleaser.yml"
       - "label-sync.yml"
       - "labeler.yml"
@@ -209,3 +209,19 @@ rules:
       - "pr-title.yml"
       - "scorecard.yml"
       - "stale.yml"
+
+  # ----------------------------------------------------------------------------
+  # dangerous-triggers: Suppresses warnings for workflow_run trigger
+  # ----------------------------------------------------------------------------
+  # Wails GUI packaging runs automatically after GoReleaser completes successfully.
+  dangerous-triggers:
+    ignore:
+      - "wails.yml"
+
+  # ----------------------------------------------------------------------------
+  # github-env: Suppresses warnings for environment file modifications
+  # ----------------------------------------------------------------------------
+  # Wails GUI build dynamically sets artifact tags, paths, and build parameters.
+  github-env:
+    ignore:
+      - "wails.yml"
