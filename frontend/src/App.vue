@@ -13,13 +13,27 @@
       @toggle-theme="toggleTheme"
       @open-settings="openSettings"
       @open-about="openAbout"
-      @open-logs="isLogViewerOpen = true"
+      @open-logs="toggleLogCard"
       @select-lang="selectLanguage"
     />
 
     <!-- Main Content Area -->
     <main class="main-content">
       <HelloPanel :appConfig="appConfig" @open-settings="openSettings" @open-about="openAbout" />
+
+      <!-- Embedded Bottom Log Center Component -->
+      <LogPanel
+        :isVisible="isLogCardVisible"
+        v-model:autoScroll="embeddedAutoScroll"
+        v-model:currentLogFilter="currentEmbeddedLogFilter"
+        :filteredLogs="filteredEmbeddedLogs"
+        :allLogs="runtimeLogs"
+        :logLevels="logLevels"
+        @copy-logs="handleCopyEmbeddedLogs"
+        @export-logs="handleExportEmbeddedLogs"
+        @clear-logs="handleClearEmbeddedLogs"
+        @close-log="toggleLogCard"
+      />
     </main>
 
     <!-- Settings Modal -->
@@ -32,14 +46,6 @@
 
     <!-- About Modal -->
     <AboutModal :show="isAboutOpen" @close="isAboutOpen = false" />
-
-    <!-- Log Viewer Modal -->
-    <LogViewerModal
-      :isOpen="isLogViewerOpen"
-      :logs="runtimeLogs"
-      @close="isLogViewerOpen = false"
-      @clear="handleClearLogs"
-    />
   </div>
 </template>
 
@@ -49,14 +55,15 @@ import AppHeader from "./components/AppHeader.vue";
 import HelloPanel from "./components/HelloPanel.vue";
 import SettingsModal from "./components/SettingsModal.vue";
 import AboutModal from "./components/AboutModal.vue";
-import LogViewerModal, { type LogItem } from "./components/LogViewerModal.vue";
+import LogPanel from "./components/LogPanel.vue";
 import ToastNotification from "./components/ToastNotification.vue";
-import { selectedLangSetting, setLanguage } from "./i18n";
+import { selectedLangSetting, setLanguage, t } from "./i18n";
 import { GetConfig, SaveConfig, CheckUpdate } from "../wailsjs/go/main/App";
 import { WindowShow } from "../wailsjs/runtime/runtime";
 import { isWailsRuntime } from "./utils/wails";
 import { useTheme } from "./composables/useTheme";
 import { useToast } from "./composables/useToast";
+import { useLogPanel } from "./composables/useLogPanel";
 import { useAppRuntimeEvents } from "./composables/useAppRuntimeEvents";
 import type { config } from "../wailsjs/go/models";
 
@@ -67,17 +74,22 @@ const { toastMessage, toastType, showToast, dismissToast } = useToast();
 
 const isSettingsOpen = ref(false);
 const isAboutOpen = ref(false);
-const isLogViewerOpen = ref(false);
-const runtimeLogs = ref<LogItem[]>([]);
 const appConfig = ref<AppConfigType | null>(null);
 
-function handleClearLogs() {
-  runtimeLogs.value = [];
-  const w = window as any;
-  if (w.go && w.go.main && w.go.main.App && typeof w.go.main.App.ClearLogs === "function") {
-    w.go.main.App.ClearLogs().catch(() => {});
-  }
-}
+const {
+  runtimeLogs,
+  isLogCardVisible,
+  embeddedAutoScroll,
+  currentEmbeddedLogFilter,
+  logLevels,
+  filteredEmbeddedLogs,
+  toggleLogCard,
+  handleCopyEmbeddedLogs,
+  handleExportEmbeddedLogs,
+  handleClearEmbeddedLogs,
+  appendLogEntry,
+  setInitialLogs,
+} = useLogPanel({ t, showToast });
 
 import { isClickOnScrollbar, triggerNativeDrag } from "./utils/windowDrag";
 
@@ -197,7 +209,7 @@ onMounted(() => {
     w.go.main.App.GetRecentLogs()
       .then((logs: any[]) => {
         if (Array.isArray(logs)) {
-          runtimeLogs.value = logs;
+          setInitialLogs(logs);
         }
       })
       .catch(() => {});
@@ -205,10 +217,7 @@ onMounted(() => {
 
   if (isWailsRuntime() && window.runtime && typeof window.runtime.EventsOn === "function") {
     window.runtime.EventsOn("log:entry", (entry: any) => {
-      runtimeLogs.value.push(entry);
-      if (runtimeLogs.value.length > 500) {
-        runtimeLogs.value.shift();
-      }
+      appendLogEntry(entry);
     });
 
     try {

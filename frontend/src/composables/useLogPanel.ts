@@ -1,5 +1,5 @@
 import { ref, computed, watch } from "vue";
-import type { LogItem } from "../components/LogViewerModal.vue";
+import type { LogItem } from "../components/LogPanel.vue";
 import { formatLogsToText } from "../utils/logFormatter";
 import { logUserAction } from "../utils/logger";
 import { ExportLogs, ClearLogs } from "../../wailsjs/go/main/App";
