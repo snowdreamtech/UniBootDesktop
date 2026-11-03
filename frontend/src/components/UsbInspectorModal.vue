@@ -98,6 +98,13 @@
 
           <div class="spec-item">
             <span class="spec-label">{{ t("inspector.lbl_mount") }}</span>
+            <span class="spec-val code highlight">{{
+              (disk.mountPoint ? disk.mountPoint.replace(/[\\/]+$/, "") : "") || t("inspector.val_unmounted") || "N/A"
+            }}</span>
+          </div>
+
+          <div class="spec-item">
+            <span class="spec-label">{{ t("inspector.lbl_device") || "Device Path" }}</span>
             <span class="spec-val code">{{ disk.device }}</span>
           </div>
 
@@ -107,6 +114,16 @@
               <span class="val-icon">{{ disk.writable !== false ? "✅" : "🔒" }}</span>
               <span>{{ disk.writable !== false ? t("inspector.val_rw") : t("inspector.val_ro") }}</span>
             </span>
+          </div>
+
+          <div class="spec-item spec-full">
+            <span class="spec-label">{{ t("inspector.lbl_boot_status") }}</span>
+            <span class="spec-val highlight">{{ formatBootStatus(disk) }}</span>
+          </div>
+
+          <div class="spec-item spec-full" v-if="disk.isRealVentoy || disk.bootStatus">
+            <span class="spec-label">{{ t("inspector.lbl_esp_partition") }}</span>
+            <span class="spec-val highlight">{{ t("inspector.val_esp_partition") }}</span>
           </div>
         </div>
 
@@ -209,6 +226,63 @@ function formatPower(val?: string): string {
     return `${str} mA`;
   }
   return str;
+}
+
+function formatBootStatus(disk?: any): string {
+  if (!disk) return t("inspector.val_data_disk");
+
+  const code = disk.bootStatusCode;
+  const toolCode = disk.thirdPartyBootCode;
+
+  if (code === "uniboot_cloud") {
+    return t("inspector.val_boot_cloud");
+  }
+  if (code === "uniboot_hybrid") {
+    return t("inspector.val_boot_hybrid");
+  }
+  if (code === "ventoy_pure") {
+    return t("inspector.val_boot_ventoy_pure" as any) || t("inspector.val_boot_hybrid");
+  }
+  if (code === "third_party_boot") {
+    if (toolCode) {
+      const toolKey = `inspector.tool_${toolCode}` as any;
+      const toolName = t(toolKey);
+      if (toolName && toolName !== toolKey) {
+        const prefix = t("inspector.prefix_third_party" as any) || "第三方引导";
+        return `${prefix}: ${toolName}`;
+      }
+    }
+    if (disk.thirdPartyBootType) {
+      const prefix = t("inspector.prefix_third_party" as any) || t("inspector.val_boot_thirdparty");
+      return `${prefix}: ${disk.thirdPartyBootType}`;
+    }
+    return t("inspector.val_boot_thirdparty");
+  }
+  if (code === "gpt_data") {
+    return t("inspector.val_boot_gpt_data");
+  }
+  if (code === "mbr_data") {
+    return t("inspector.val_boot_mbr_data");
+  }
+  if (code === "needs_privilege") {
+    return t("inspector.val_needs_privilege");
+  }
+  if (code === "data_storage") {
+    return t("inspector.val_data_disk");
+  }
+
+  // Fallback to legacy string check if bootStatusCode is not yet populated
+  const status = typeof disk === "string" ? disk : disk.bootStatus || "";
+  if (status.includes("混合模式") || status.includes("Hybrid")) return t("inspector.val_boot_hybrid");
+  if (status.includes("1秒极速云引导盘") || status.includes("Cloud Mode")) return t("inspector.val_boot_cloud");
+  if (status.includes("原生 Ventoy"))
+    return t("inspector.val_boot_ventoy_pure" as any) || "原生 Ventoy 启动盘 (可无损升级)";
+  if (status.includes("第三方引导")) return t("inspector.val_boot_thirdparty");
+  if (status.includes("GPT 数据盘")) return t("inspector.val_boot_gpt_data");
+  if (status.includes("MBR 数据盘")) return t("inspector.val_boot_mbr_data");
+  if (status.includes("数据存储盘")) return t("inspector.val_data_disk");
+
+  return status || t("inspector.val_data_disk");
 }
 
 const logUserAction = (level: string, message: string, details: string = "") => {

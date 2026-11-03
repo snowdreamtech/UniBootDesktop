@@ -15,11 +15,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/snowdreamtech/unigodesktop/internal/updater"
+	"github.com/snowdreamtech/unibootdesktop/internal/updater"
 )
 
 func TestBuildProxyURL(t *testing.T) {
-	rawURL := "https://github.com/snowdreamtech/unigodesktop/releases/download/v1.0.0/app.tar.gz"
+	rawURL := "https://github.com/snowdreamtech/unibootdesktop/releases/download/v1.0.0/app.tar.gz"
 
 	tests := []struct {
 		proxyPrefix string
@@ -38,6 +38,12 @@ func TestBuildProxyURL(t *testing.T) {
 		if got != tt.expected {
 			t.Errorf("BuildProxyURL(%q, %q) = %q; want %q", rawURL, tt.proxyPrefix, got, tt.expected)
 		}
+	}
+
+	// Verify GitHub API URLs are not prefixed by reverse proxy prefixes
+	apiURL := "https://api.github.com/repos/ventoy/Ventoy/releases/latest"
+	if got := BuildProxyURL(apiURL, "https://proxy.example.com/"); got != apiURL {
+		t.Errorf("expected GitHub API URL to bypass proxy, got %q", got)
 	}
 }
 
@@ -122,37 +128,37 @@ func TestGetAppBundlePath(t *testing.T) {
 	}{
 		{
 			name:     "macOS standard Applications app bundle",
-			execPath: "/Applications/UniGoDesktop.app/Contents/MacOS/unigodesktop",
-			expected: "/Applications/UniGoDesktop.app",
+			execPath: "/Applications/UniBootDesktop.app/Contents/MacOS/unibootdesktop",
+			expected: "/Applications/UniBootDesktop.app",
 		},
 		{
 			name:     "macOS user Applications bundle",
-			execPath: "/Users/alice/Applications/UniGoDesktop.app/Contents/MacOS/UniGoDesktop",
-			expected: "/Users/alice/Applications/UniGoDesktop.app",
+			execPath: "/Users/alice/Applications/UniBootDesktop.app/Contents/MacOS/UniBootDesktop",
+			expected: "/Users/alice/Applications/UniBootDesktop.app",
 		},
 		{
 			name:     "macOS build directory bundle",
-			execPath: "/workspace/build/bin/UniGoDesktop.app/Contents/MacOS/unigodesktop",
-			expected: "/workspace/build/bin/UniGoDesktop.app",
+			execPath: "/workspace/build/bin/UniBootDesktop.app/Contents/MacOS/unibootdesktop",
+			expected: "/workspace/build/bin/UniBootDesktop.app",
 		},
 		{
 			name:     "direct .app folder without trailing path",
-			execPath: "/Applications/UniGoDesktop.app",
-			expected: "/Applications/UniGoDesktop.app",
+			execPath: "/Applications/UniBootDesktop.app",
+			expected: "/Applications/UniBootDesktop.app",
 		},
 		{
 			name:     "standalone Linux/Unix binary",
-			execPath: "/usr/local/bin/unigodesktop",
+			execPath: "/usr/local/bin/unibootdesktop",
 			expected: "",
 		},
 		{
 			name:     "subfolder containing app word but not .app",
-			execPath: "/opt/application/bin/unigodesktop",
+			execPath: "/opt/application/bin/unibootdesktop",
 			expected: "",
 		},
 		{
 			name:     "folder containing .app_data",
-			execPath: "/Users/bob/.app_data/bin/unigodesktop",
+			execPath: "/Users/bob/.app_data/bin/unibootdesktop",
 			expected: "",
 		},
 	}
@@ -169,34 +175,34 @@ func TestGetAppBundlePath(t *testing.T) {
 
 func TestFindGuiReleaseAsset_Darwin(t *testing.T) {
 	assets := []updater.ReleaseAsset{
-		{Name: "unigodesktop-cli_Darwin_arm64.tar.gz", BrowserDownloadURL: "https://example.com/cli.tar.gz"},
-		{Name: "unigodesktop-cli_Darwin_arm64.tar.gz.sbom.json", BrowserDownloadURL: "https://example.com/cli.sbom"},
-		{Name: "unigodesktop-gui_windows_amd64_portable.zip", BrowserDownloadURL: "https://example.com/win.zip"},
-		{Name: "UniGoDesktop.dmg", BrowserDownloadURL: "https://example.com/UniGoDesktop.dmg"},
-		{Name: "UniGoDesktop.dmg.sbom.spdx.json", BrowserDownloadURL: "https://example.com/dmg.sbom"},
-		{Name: "UniGoDesktop.dmg.sigstore.json", BrowserDownloadURL: "https://example.com/dmg.sig"},
+		{Name: "unibootdesktop-cli_Darwin_arm64.tar.gz", BrowserDownloadURL: "https://example.com/cli.tar.gz"},
+		{Name: "unibootdesktop-cli_Darwin_arm64.tar.gz.sbom.json", BrowserDownloadURL: "https://example.com/cli.sbom"},
+		{Name: "unibootdesktop-gui_windows_amd64_portable.zip", BrowserDownloadURL: "https://example.com/win.zip"},
+		{Name: "UniBootDesktop.dmg", BrowserDownloadURL: "https://example.com/UniBootDesktop.dmg"},
+		{Name: "UniBootDesktop.dmg.sbom.spdx.json", BrowserDownloadURL: "https://example.com/dmg.sbom"},
+		{Name: "UniBootDesktop.dmg.sigstore.json", BrowserDownloadURL: "https://example.com/dmg.sig"},
 	}
 
 	asset, err := FindGuiReleaseAsset(assets, "darwin", "arm64")
 	if err != nil {
 		t.Fatalf("unexpected error finding asset: %v", err)
 	}
-	if asset.Name != "UniGoDesktop.dmg" {
-		t.Errorf("expected UniGoDesktop.dmg, got %s", asset.Name)
+	if asset.Name != "UniBootDesktop.dmg" {
+		t.Errorf("expected UniBootDesktop.dmg, got %s", asset.Name)
 	}
 
 	// Guaranteed to never select Windows or Linux or CLI archives on Darwin
-	if asset.Name != "UniGoDesktop.dmg" {
+	if asset.Name != "UniBootDesktop.dmg" {
 		t.Errorf("asset matching violated Darwin integrity: %s", asset.Name)
 	}
 }
 
 func TestFindGuiReleaseAsset_Windows(t *testing.T) {
 	assets := []updater.ReleaseAsset{
-		{Name: "unigodesktop-cli_Windows_x86_64.zip", BrowserDownloadURL: "https://example.com/cli.zip"},
-		{Name: "UniGoDesktop.dmg", BrowserDownloadURL: "https://example.com/UniGoDesktop.dmg"},
-		{Name: "unigodesktop-gui_windows_amd64_installer.exe", BrowserDownloadURL: "https://example.com/installer.exe"},
-		{Name: "unigodesktop-gui_windows_amd64_portable.zip", BrowserDownloadURL: "https://example.com/portable.zip"},
+		{Name: "unibootdesktop-cli_Windows_x86_64.zip", BrowserDownloadURL: "https://example.com/cli.zip"},
+		{Name: "UniBootDesktop.dmg", BrowserDownloadURL: "https://example.com/UniBootDesktop.dmg"},
+		{Name: "unibootdesktop-gui_windows_amd64_installer.exe", BrowserDownloadURL: "https://example.com/installer.exe"},
+		{Name: "unibootdesktop-gui_windows_amd64_portable.zip", BrowserDownloadURL: "https://example.com/portable.zip"},
 	}
 
 	asset, err := FindGuiReleaseAsset(assets, "windows", "amd64")
@@ -204,17 +210,17 @@ func TestFindGuiReleaseAsset_Windows(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	// Prefers portable zip
-	if asset.Name != "unigodesktop-gui_windows_amd64_portable.zip" {
+	if asset.Name != "unibootdesktop-gui_windows_amd64_portable.zip" {
 		t.Errorf("expected portable.zip, got %s", asset.Name)
 	}
 }
 
 func TestFindGuiReleaseAsset_Linux(t *testing.T) {
 	assets := []updater.ReleaseAsset{
-		{Name: "unigodesktop-cli_Linux_x86_64.tar.gz", BrowserDownloadURL: "https://example.com/cli.tar.gz"},
-		{Name: "UniGoDesktop.dmg", BrowserDownloadURL: "https://example.com/UniGoDesktop.dmg"},
-		{Name: "unigodesktop-gui_linux_amd64.tar.gz", BrowserDownloadURL: "https://example.com/gui.tar.gz"},
-		{Name: "unigodesktop-gui_0.4.0_linux_amd64.AppImage", BrowserDownloadURL: "https://example.com/gui.AppImage"},
+		{Name: "unibootdesktop-cli_Linux_x86_64.tar.gz", BrowserDownloadURL: "https://example.com/cli.tar.gz"},
+		{Name: "UniBootDesktop.dmg", BrowserDownloadURL: "https://example.com/UniBootDesktop.dmg"},
+		{Name: "unibootdesktop-gui_linux_amd64.tar.gz", BrowserDownloadURL: "https://example.com/gui.tar.gz"},
+		{Name: "unibootdesktop-gui_0.4.0_linux_amd64.AppImage", BrowserDownloadURL: "https://example.com/gui.AppImage"},
 	}
 
 	asset, err := FindGuiReleaseAsset(assets, "linux", "amd64")
@@ -222,14 +228,14 @@ func TestFindGuiReleaseAsset_Linux(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	// Prefers AppImage
-	if asset.Name != "unigodesktop-gui_0.4.0_linux_amd64.AppImage" {
+	if asset.Name != "unibootdesktop-gui_0.4.0_linux_amd64.AppImage" {
 		t.Errorf("expected AppImage, got %s", asset.Name)
 	}
 }
 
 func TestFindGuiReleaseAsset_NotFound(t *testing.T) {
 	assets := []updater.ReleaseAsset{
-		{Name: "unigodesktop-cli_Linux_x86_64.tar.gz", BrowserDownloadURL: "https://example.com/cli.tar.gz"},
+		{Name: "unibootdesktop-cli_Linux_x86_64.tar.gz", BrowserDownloadURL: "https://example.com/cli.tar.gz"},
 	}
 
 	_, err := FindGuiReleaseAsset(assets, "darwin", "arm64")
@@ -244,8 +250,8 @@ func TestPendingUpdate_SaveGetClear(t *testing.T) {
 	pending := &PendingUpdate{
 		Shell:      "/bin/bash",
 		ScriptPath: filepath.Join(tmpDir, "apply_update.sh"),
-		Target:     "/Applications/UniGoDesktop.app",
-		Staged:     filepath.Join(tmpDir, "UniGoDesktop.app"),
+		Target:     "/Applications/UniBootDesktop.app",
+		Staged:     filepath.Join(tmpDir, "UniBootDesktop.app"),
 	}
 
 	// Save
@@ -310,7 +316,7 @@ func TestDownloadWithProgress(t *testing.T) {
 
 func TestStageWindowsUpdate_InstallerExe(t *testing.T) {
 	tmpDir := t.TempDir()
-	installerPath := filepath.Join(tmpDir, "unigodesktop-gui_windows_amd64_installer.exe")
+	installerPath := filepath.Join(tmpDir, "unibootdesktop-gui_windows_amd64_installer.exe")
 	if err := os.WriteFile(installerPath, []byte("mock-installer-binary"), 0o755); err != nil {
 		t.Fatalf("failed to create mock installer: %v", err)
 	}
@@ -339,7 +345,7 @@ func TestStageWindowsUpdate_InstallerExe(t *testing.T) {
 
 func TestStageLinuxUpdate_AppImage(t *testing.T) {
 	tmpDir := t.TempDir()
-	appImagePath := filepath.Join(tmpDir, "UniGoDesktop.AppImage")
+	appImagePath := filepath.Join(tmpDir, "UniBootDesktop.AppImage")
 	if err := os.WriteFile(appImagePath, []byte("mock-appimage-content"), 0o755); err != nil {
 		t.Fatalf("failed to create mock appimage: %v", err)
 	}
@@ -369,12 +375,12 @@ func TestStageLinuxUpdate_AppImage(t *testing.T) {
 func TestVerifyFileSHA256(t *testing.T) {
 	tmpDir := t.TempDir()
 	filePath := filepath.Join(tmpDir, "test.bin")
-	content := []byte("unigodesktop update test binary payload")
+	content := []byte("unibootdesktop update test binary payload")
 	if err := os.WriteFile(filePath, content, 0o644); err != nil {
 		t.Fatalf("failed to write test file: %v", err)
 	}
 
-	expectedHash := "ade7a59f8b76defd6e81c1477b783495d12ed19c1dbb74d98982f2e28fa7974d"
+	expectedHash := "56e78ee6609bc194c8596670278886aca89485f947f3807045ca9b645ca220ea"
 
 	// Matching checksum
 	if err := VerifyFileSHA256(filePath, expectedHash); err != nil {
@@ -417,12 +423,11 @@ func TestPerformGuiUpdate_IntegrityVerificationFailure(t *testing.T) {
 		stages = append(stages, p.Stage)
 	}
 
-	assetName := "unigodesktop_darwin_arm64.dmg"
-	switch runtime.GOOS {
-	case "windows":
-		assetName = "unigodesktop_windows_amd64.zip"
-	case "linux":
-		assetName = "unigodesktop_linux_amd64.AppImage"
+	assetName := "unibootdesktop_darwin_arm64.dmg"
+	if runtime.GOOS == "windows" {
+		assetName = "unibootdesktop_windows_amd64.zip"
+	} else if runtime.GOOS == "linux" {
+		assetName = "unibootdesktop_linux_amd64.AppImage"
 	}
 
 	var ts *httptest.Server
@@ -492,25 +497,25 @@ func TestPerformGuiUpdate_IntegrityVerificationFailure(t *testing.T) {
 
 func TestParseHashFromChecksumContent(t *testing.T) {
 	sampleContent := `# Checksums for release
-ade7a59f8b76defd6e81c1477b783495d12ed19c1dbb74d98982f2e28fa7974d  unigodesktop-cli_darwin_amd64.tar.gz
-b87c771f81023fded209b829e6c121acf2fd568dcc0641fbe6a369cc6d5eadc8  build/bin/unigodesktop-gui_darwin_universal.dmg
-1111111111111111111111111111111111111111111111111111111111111111 *build/bin/unigodesktop-gui_windows_amd64.exe
+ade7a59f8b76defd6e81c1477b783495d12ed19c1dbb74d98982f2e28fa7974d  unibootdesktop-cli_darwin_amd64.tar.gz
+b87c771f81023fded209b829e6c121acf2fd568dcc0641fbe6a369cc6d5eadc8  build/bin/unibootdesktop-gui_darwin_universal.dmg
+1111111111111111111111111111111111111111111111111111111111111111 *build/bin/unibootdesktop-gui_windows_amd64.exe
 `
 
 	// Test standard path match
-	h1 := ParseHashFromChecksumContent(sampleContent, "unigodesktop-cli_darwin_amd64.tar.gz")
+	h1 := ParseHashFromChecksumContent(sampleContent, "unibootdesktop-cli_darwin_amd64.tar.gz")
 	if h1 != "ade7a59f8b76defd6e81c1477b783495d12ed19c1dbb74d98982f2e28fa7974d" {
 		t.Errorf("expected h1 match, got: %s", h1)
 	}
 
 	// Test prefix strip match (build/bin/)
-	h2 := ParseHashFromChecksumContent(sampleContent, "unigodesktop-gui_darwin_universal.dmg")
+	h2 := ParseHashFromChecksumContent(sampleContent, "unibootdesktop-gui_darwin_universal.dmg")
 	if h2 != "b87c771f81023fded209b829e6c121acf2fd568dcc0641fbe6a369cc6d5eadc8" {
 		t.Errorf("expected h2 match, got: %s", h2)
 	}
 
 	// Test asterisk strip match (*build/bin/)
-	h3 := ParseHashFromChecksumContent(sampleContent, "unigodesktop-gui_windows_amd64.exe")
+	h3 := ParseHashFromChecksumContent(sampleContent, "unibootdesktop-gui_windows_amd64.exe")
 	if h3 != "1111111111111111111111111111111111111111111111111111111111111111" {
 		t.Errorf("expected h3 match, got: %s", h3)
 	}
@@ -532,11 +537,11 @@ func TestResolveExpectedChecksum_FallbackToPlatformSha256(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.HasSuffix(r.URL.Path, "checksums.txt") {
 			// checksums.txt only contains CLI files
-			_, _ = w.Write([]byte("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  unigodesktop-cli.tar.gz\n"))
+			_, _ = w.Write([]byte("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  unibootdesktop-cli.tar.gz\n"))
 			return
 		}
-		if strings.HasSuffix(r.URL.Path, "unigodesktop-gui_darwin_universal.sha256") {
-			_, _ = w.Write([]byte("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  build/bin/unigodesktop-gui_darwin_universal.dmg\n"))
+		if strings.HasSuffix(r.URL.Path, "unibootdesktop-gui_darwin_universal.sha256") {
+			_, _ = w.Write([]byte("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb  build/bin/unibootdesktop-gui_darwin_universal.dmg\n"))
 			return
 		}
 		w.WriteHeader(http.StatusNotFound)
@@ -544,7 +549,7 @@ func TestResolveExpectedChecksum_FallbackToPlatformSha256(t *testing.T) {
 	defer ts.Close()
 
 	targetAsset := updater.ReleaseAsset{
-		Name: "unigodesktop-gui_darwin_universal.dmg",
+		Name: "unibootdesktop-gui_darwin_universal.dmg",
 	}
 
 	allAssets := []updater.ReleaseAsset{
@@ -553,8 +558,8 @@ func TestResolveExpectedChecksum_FallbackToPlatformSha256(t *testing.T) {
 			BrowserDownloadURL: ts.URL + "/download/checksums.txt",
 		},
 		{
-			Name:               "unigodesktop-gui_darwin_universal.sha256",
-			BrowserDownloadURL: ts.URL + "/download/unigodesktop-gui_darwin_universal.sha256",
+			Name:               "unibootdesktop-gui_darwin_universal.sha256",
+			BrowserDownloadURL: ts.URL + "/download/unibootdesktop-gui_darwin_universal.sha256",
 		},
 	}
 
@@ -563,7 +568,7 @@ func TestResolveExpectedChecksum_FallbackToPlatformSha256(t *testing.T) {
 	if hash != "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" {
 		t.Errorf("expected fallback to platform sha256, got hash: %s", hash)
 	}
-	if source != "unigodesktop-gui_darwin_universal.sha256" {
+	if source != "unibootdesktop-gui_darwin_universal.sha256" {
 		t.Errorf("expected source to be platform sha256 asset, got: %s", source)
 	}
 }

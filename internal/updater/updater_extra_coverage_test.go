@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
 )
 
 type customTransport struct {
@@ -31,7 +31,7 @@ func (t *customTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 
 func TestFetchLatestReleaseInfo_Success(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, "/repos/snowdreamtech/UniGoDesktop/releases/latest", r.URL.Path)
+		assert.Equal(t, "/repos/snowdreamtech/UniBootDesktop/releases/latest", r.URL.Path)
 		assert.Equal(t, "application/vnd.github.v3+json", r.Header.Get("Accept"))
 
 		info := ReleaseInfo{

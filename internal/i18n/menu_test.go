@@ -13,17 +13,17 @@ func TestGetMenuTranslations(t *testing.T) {
 		wantApp  string
 		wantEdit string
 	}{
-		{"zh-CN", "UniGoDesktop", "编辑"},
-		{"zh-TW", "UniGoDesktop", "編輯"},
-		{"en-US", "UniGoDesktop", "Edit"},
-		{"de-DE", "UniGoDesktop", "Bearbeiten"},
-		{"fr-FR", "UniGoDesktop", "Édition"},
-		{"es-ES", "UniGoDesktop", "Edición"},
-		{"ja-JP", "UniGoDesktop", "編集"},
-		{"ko-KR", "UniGoDesktop", "편집"},
-		{"ru-RU", "UniGoDesktop", "Правка"},
-		{"ar-SA", "UniGoDesktop", "تعديل"},
-		{"unknown-locale", "UniGoDesktop", "Edit"},
+		{"zh-CN", "UniBootDesktop", "编辑"},
+		{"zh-TW", "UniBootDesktop", "編輯"},
+		{"en-US", "UniBootDesktop", "Edit"},
+		{"de-DE", "UniBootDesktop", "Bearbeiten"},
+		{"fr-FR", "UniBootDesktop", "Édition"},
+		{"es-ES", "UniBootDesktop", "Edición"},
+		{"ja-JP", "UniBootDesktop", "編集"},
+		{"ko-KR", "UniBootDesktop", "편집"},
+		{"ru-RU", "UniBootDesktop", "Правка"},
+		{"ar-SA", "UniBootDesktop", "تعديل"},
+		{"unknown-locale", "UniBootDesktop", "Edit"},
 	}
 
 	for _, tt := range tests {

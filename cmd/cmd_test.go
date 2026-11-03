@@ -85,6 +85,18 @@ func TestDoctorCmd(t *testing.T) {
 	}
 }
 
+func TestVmCmdHelp(t *testing.T) {
+	buf := new(bytes.Buffer)
+	rootCmd.SetOut(buf)
+	rootCmd.SetErr(buf)
+	rootCmd.SetArgs([]string{"vm", "--help"})
+
+	err := rootCmd.Execute()
+	if err != nil {
+		t.Fatalf("expected no error running vm --help, got: %v", err)
+	}
+}
+
 func TestConfigCmdHelp(t *testing.T) {
 	buf := new(bytes.Buffer)
 	rootCmd.SetOut(buf)
@@ -106,30 +118,6 @@ func TestCacheCmdHelp(t *testing.T) {
 	err := rootCmd.Execute()
 	if err != nil {
 		t.Fatalf("expected no error running cache --help, got: %v", err)
-	}
-}
-
-func TestGenerateCmdHelp(t *testing.T) {
-	buf := new(bytes.Buffer)
-	rootCmd.SetOut(buf)
-	rootCmd.SetErr(buf)
-	rootCmd.SetArgs([]string{"generate", "--help"})
-
-	err := rootCmd.Execute()
-	if err != nil {
-		t.Fatalf("expected no error running generate --help, got: %v", err)
-	}
-}
-
-func TestImplodeCmdHelp(t *testing.T) {
-	buf := new(bytes.Buffer)
-	rootCmd.SetOut(buf)
-	rootCmd.SetErr(buf)
-	rootCmd.SetArgs([]string{"implode", "--help"})
-
-	err := rootCmd.Execute()
-	if err != nil {
-		t.Fatalf("expected no error running implode --help, got: %v", err)
 	}
 }
 

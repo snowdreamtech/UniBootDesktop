@@ -11,22 +11,21 @@ import (
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	"github.com/snowdreamtech/unigodesktop/internal/utils"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/utils"
 )
 
 var dfHumanReadable bool
 
 var dfCmd = &cobra.Command{
 	Use:   "df",
-	Short: "Display the disk usage of unigodesktop data directories",
-	Long:  `Display the disk usage of various folders within the unigodesktop data directory.`,
+	Short: "Display the disk usage of unibootdesktop data directories",
+	Long:  `Display the disk usage of various folders within the unibootdesktop data directory.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		dataDir := env.GetDataDir()
 
 		entries, err := os.ReadDir(dataDir)
 		if err != nil {
-			// If data dir doesn't exist, maybe nothing is installed yet
 			if os.IsNotExist(err) {
 				fmt.Println("Data directory does not exist yet.")
 				return nil
@@ -61,7 +60,6 @@ var dfCmd = &cobra.Command{
 			tableData = append(tableData, []string{entry.Name(), sizeStr})
 		}
 
-		// Add total
 		totalStr := fmt.Sprintf("%d", totalSize)
 		if dfHumanReadable {
 			totalStr = utils.FormatBytes(totalSize)
@@ -69,18 +67,13 @@ var dfCmd = &cobra.Command{
 		tableData = append(tableData, []string{"TOTAL", totalStr})
 
 		fmt.Printf("Data Directory: %s\n\n", dataDir)
-		err = pterm.DefaultTable.WithHasHeader().WithData(tableData).Render()
-		if err != nil {
-			return fmt.Errorf("failed to render table: %w", err)
-		}
+		_ = pterm.DefaultTable.WithHasHeader().WithData(tableData).Render()
 
 		return nil
 	},
 }
 
 func init() {
-	if rootCmd != nil {
-		rootCmd.AddCommand(dfCmd)
-	}
-	dfCmd.Flags().BoolVarP(&dfHumanReadable, "human-readable", "h", false, "print sizes in powers of 1024 (e.g., 1023M)")
+	dfCmd.Flags().BoolVarP(&dfHumanReadable, "human-readable", "H", true, "print sizes in human readable format (e.g., 1K 234M 2G)")
+	rootCmd.AddCommand(dfCmd)
 }

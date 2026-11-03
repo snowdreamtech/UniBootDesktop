@@ -22,10 +22,10 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 
-	"github.com/snowdreamtech/unigodesktop/cmd"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	"github.com/snowdreamtech/unigodesktop/internal/sysinfo"
-	"github.com/snowdreamtech/unigodesktop/pkg/config"
+	"github.com/snowdreamtech/unibootdesktop/cmd"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/sysinfo"
+	"github.com/snowdreamtech/unibootdesktop/pkg/config"
 )
 
 //go:embed all:frontend/dist
@@ -49,10 +49,10 @@ func resolveWindowsUserDataPath() string {
 	}
 
 	if localAppData := os.Getenv("LOCALAPPDATA"); localAppData != "" {
-		return filepath.Join(localAppData, "UniGoDesktop", "webview2")
+		return filepath.Join(localAppData, "UniBootDesktop", "webview2")
 	}
 	if appData := os.Getenv("APPDATA"); appData != "" {
-		return filepath.Join(appData, "UniGoDesktop", "webview2")
+		return filepath.Join(appData, "UniBootDesktop", "webview2")
 	}
 	return filepath.Join(env.GetDataDir(), "webview2")
 }
@@ -112,12 +112,12 @@ func RunWails() error {
 	}
 
 	macAppearance := mac.NSAppearanceNameAqua
-	backgroundColour := &options.RGBA{R: 241, G: 245, B: 249, A: 255}
+	backgroundColour := &options.RGBA{R: 248, G: 250, B: 252, A: 255}
 	winTheme := windows.SystemDefault
 
 	if isDark {
 		macAppearance = mac.NSAppearanceNameDarkAqua
-		backgroundColour = &options.RGBA{R: 7, G: 10, B: 18, A: 255}
+		backgroundColour = &options.RGBA{R: 11, G: 15, B: 25, A: 255}
 	}
 
 	switch cfgTheme {
@@ -133,7 +133,7 @@ func RunWails() error {
 	}
 
 	return wails.Run(&options.App{
-		Title:       "UniGoDesktop",
+		Title:       "UniBootDesktop",
 		Width:       1180,
 		Height:      820,
 		MinWidth:    1024,
@@ -158,13 +158,17 @@ func RunWails() error {
 			time.AfterFunc(50*time.Millisecond, func() {
 				wailsRuntime.Show(ctx)
 				wailsRuntime.WindowShow(ctx)
-				sysinfo.SyncTitleBarTheme(cfgTheme)
+				if cfg, err := config.Load(); err == nil && cfg != nil {
+					sysinfo.SyncTitleBarTheme(cfg.Theme)
+				} else {
+					sysinfo.SyncTitleBarTheme("system")
+				}
 			})
 		},
 		OnShutdown:    app.shutdown,
 		OnBeforeClose: app.beforeClose,
 		SingleInstanceLock: &options.SingleInstanceLock{
-			UniqueId:               "com.snowdreamtech.unigodesktop",
+			UniqueId:               "com.snowdreamtech.unibootdesktop",
 			OnSecondInstanceLaunch: app.onSecondInstanceLaunch,
 		},
 		Bind: []interface{}{
@@ -177,14 +181,14 @@ func RunWails() error {
 			DisableWindowIcon:    false,
 			Theme:                winTheme,
 			CustomTheme: &windows.ThemeSettings{
-				DarkModeTitleBar:           windows.RGB(7, 10, 18),
+				DarkModeTitleBar:           windows.RGB(11, 15, 25),
 				DarkModeTitleBarInactive:   windows.RGB(15, 23, 42),
 				DarkModeTitleText:          windows.RGB(241, 245, 249),
 				DarkModeTitleTextInactive:  windows.RGB(148, 163, 184),
 				DarkModeBorder:             windows.RGB(30, 41, 59),
 				DarkModeBorderInactive:     windows.RGB(30, 41, 59),
-				LightModeTitleBar:          windows.RGB(241, 245, 249),
-				LightModeTitleBarInactive:  windows.RGB(226, 232, 240),
+				LightModeTitleBar:          windows.RGB(248, 250, 252),
+				LightModeTitleBarInactive:  windows.RGB(241, 245, 249),
 				LightModeTitleText:         windows.RGB(15, 23, 42),
 				LightModeTitleTextInactive: windows.RGB(100, 116, 139),
 				LightModeBorder:            windows.RGB(226, 232, 240),
@@ -198,7 +202,7 @@ func RunWails() error {
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{
-				Title:   "UniGoDesktop",
+				Title:   "UniBootDesktop",
 				Message: fmt.Sprintf("Universal Go Desktop Suite\nVersion %s", env.GitTag),
 				Icon:    appIcon,
 			},
@@ -206,7 +210,7 @@ func RunWails() error {
 		Linux: &linux.Options{
 			Icon:                appIcon,
 			WindowIsTranslucent: false,
-			ProgramName:         "unigodesktop",
+			ProgramName:         "unibootdesktop",
 			WebviewGpuPolicy:    linux.WebviewGpuPolicyOnDemand,
 		},
 	})

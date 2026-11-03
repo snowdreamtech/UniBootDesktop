@@ -14,7 +14,7 @@ import (
 
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
 
-	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
+	pkgHttp "github.com/snowdreamtech/unibootdesktop/internal/http"
 )
 
 // NativeGPGVerifier implements Verifier using the pure-Go gopenpgp library.

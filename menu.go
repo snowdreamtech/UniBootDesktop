@@ -12,7 +12,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/menu/keys"
 	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
 
-	"github.com/snowdreamtech/unigodesktop/internal/i18n"
+	"github.com/snowdreamtech/unibootdesktop/internal/i18n"
 )
 
 // BuildAppMenu constructs localized application menu based on given language code.

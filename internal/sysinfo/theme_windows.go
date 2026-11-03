@@ -109,8 +109,8 @@ func GetProcessMainWindow() uintptr {
 		}
 	}
 
-	// 3. Check FindWindow by application title "UniGoDesktop"
-	titleWails, _ := syscall.UTF16PtrFromString("UniGoDesktop")
+	// 3. Check FindWindow by application title "UniBootDesktop"
+	titleWails, _ := syscall.UTF16PtrFromString("UniBootDesktop")
 	hwndTitle, _, _ := procFindWindowW.Call(0, uintptr(unsafe.Pointer(titleWails)))
 	if hwndTitle != 0 {
 		var pid uint32
@@ -170,13 +170,13 @@ func UpdateTitleBarTheme(hwnd uintptr, isDark bool) {
 	if isBuildAtLeast(22000) {
 		var captionColor, textColor, borderColor uint32
 		if isDark {
-			// #070a12 background, #f1f5f9 text, #1e293b border (0x00BBGGRR format)
-			captionColor = 0x00120A07
+			// #0b0f19 background, #f1f5f9 text, #1e293b border (0x00BBGGRR format)
+			captionColor = 0x00190F0B
 			textColor = 0x00F9F5F1
 			borderColor = 0x003B291E
 		} else {
-			// #f1f5f9 background, #0f172a text, #e2e8f0 border (0x00BBGGRR format)
-			captionColor = 0x00F9F5F1
+			// #f8fafc background, #0f172a text, #e2e8f0 border (0x00BBGGRR format)
+			captionColor = 0x00FCFAF8
 			textColor = 0x002A170F
 			borderColor = 0x00F0E8E2
 		}

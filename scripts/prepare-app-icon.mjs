@@ -22,7 +22,7 @@ console.log(`Prepared Wails App Icon: ${targetPath}`);
 
 // Ensure macOS app bundle localization folders if building on darwin
 const darwinLocales = ["zh-Hans", "zh_CN", "zh-Hant", "zh_TW", "en", "ja", "ko", "de", "fr", "es", "ru", "pt", "it"];
-const devResources = resolve(projectRoot, "build/bin/UniGoDesktop.app/Contents/Resources");
+const devResources = resolve(projectRoot, "build/bin/UniBootDesktop.app/Contents/Resources");
 try {
   const resStat = await stat(devResources);
   if (resStat.isDirectory()) {

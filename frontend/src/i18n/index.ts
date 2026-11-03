@@ -1,3 +1,6 @@
+// Copyright (c) 2026 SnowdreamTech. All rights reserved.
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 import { ref, computed } from "vue";
 import type { TranslationDict } from "./types";
 export type { TranslationDict };
@@ -41,12 +44,12 @@ export const SUPPORTED_LANGUAGES = [
   { code: "sr-Latn", name: "Srpski", nativeName: "Srpski" },
   { code: "sr-Cyrl", name: "Српски", nativeName: "Српски" },
   { code: "th-TH", name: "ไทย", nativeName: "ไทย" },
-  { code: "no-NO", name: "Norsk", nativeName: "Norsk" },
   { code: "lt-LT", name: "Lietuvių", nativeName: "Lietuvių" },
   { code: "mk-MK", name: "Македонски", nativeName: "Македонски" },
   { code: "he-IL", name: "עברית", nativeName: "עברית" },
   { code: "id-ID", name: "Bahasa Indonesia", nativeName: "Bahasa Indonesia" },
   { code: "nb-NO", name: "Norsk Bokmål", nativeName: "Norsk Bokmål" },
+  { code: "no-NO", name: "Norsk", nativeName: "Norsk" },
   { code: "uk-UA", name: "Українська", nativeName: "Українська" },
   { code: "el-GR", name: "Ελληνικά", nativeName: "Ελληνικά" },
   { code: "sv-SE", name: "Svenska", nativeName: "Svenska" },
@@ -61,7 +64,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: "et-EE", name: "Eesti", nativeName: "Eesti" },
 ];
 
-// Vite glob import for dynamic lazy-loading locale chunks (excluding pre-bundled zh-CN and en-US)
+// Vite glob import for dynamic lazy-loading locale chunks
 const localeLoaders = import.meta.glob<Record<string, any>>([
   "./locales/*.ts",
   "!./locales/zh-CN.ts",
@@ -112,7 +115,7 @@ export function resolveAutoLocale(): string {
 }
 
 export function getInitialLocale(): string {
-  const saved = typeof localStorage !== "undefined" ? localStorage.getItem("unigo_locale") : null;
+  const saved = typeof localStorage !== "undefined" ? localStorage.getItem("uniboot_locale") : null;
   if (saved === "auto" || !saved) {
     return resolveAutoLocale();
   }
@@ -123,7 +126,7 @@ export function getInitialLocale(): string {
 }
 
 export const selectedLangSetting = ref<string>(
-  (typeof localStorage !== "undefined" && localStorage.getItem("unigo_locale")) || "auto"
+  (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_locale")) || "auto"
 );
 export const currentLocale = ref<string>(getInitialLocale());
 export const currentLang = currentLocale;
@@ -131,15 +134,14 @@ export const currentLang = currentLocale;
 export async function setLocale(locale: string) {
   selectedLangSetting.value = locale;
   let targetLocale = locale;
-
   if (locale === "auto") {
     targetLocale = await syncSystemLocale();
     if (typeof localStorage !== "undefined") {
-      localStorage.setItem("unigo_locale", "auto");
+      localStorage.setItem("uniboot_locale", "auto");
     }
   } else {
     if (typeof localStorage !== "undefined") {
-      localStorage.setItem("unigo_locale", locale);
+      localStorage.setItem("uniboot_locale", locale);
     }
   }
 

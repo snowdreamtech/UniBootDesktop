@@ -4,16 +4,29 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UniGoDesktop</title>
-    <!-- Theme pre-load: apply saved or system theme synchronously before any render -->
+    <title>UniBootDesktop</title>
+    <!-- Theme and language pre-load: apply saved preferences synchronously before any render -->
     <script>
       (function () {
         try {
-          var cachedTheme = localStorage.getItem("unigo_theme_cache");
+          var cachedTheme = localStorage.getItem("uniboot_theme_cache");
           var systemTheme =
             window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
           var theme = cachedTheme === "light" || cachedTheme === "dark" ? cachedTheme : systemTheme;
           document.documentElement.setAttribute("data-theme", theme);
+
+          var cachedLang = localStorage.getItem("uniboot_locale") || "zh-CN";
+          if (cachedLang !== "auto") {
+            document.documentElement.setAttribute("lang", cachedLang);
+            var rtlLangs = ["ar-sa", "he-il", "fa-ir", "ur-pk"];
+            var isRtl =
+              rtlLangs.indexOf(cachedLang.toLowerCase()) !== -1 ||
+              cachedLang.toLowerCase().indexOf("ar") === 0 ||
+              cachedLang.toLowerCase().indexOf("he") === 0 ||
+              cachedLang.toLowerCase().indexOf("fa") === 0 ||
+              cachedLang.toLowerCase().indexOf("ur") === 0;
+            document.documentElement.setAttribute("dir", isRtl ? "rtl" : "ltr");
+          }
         } catch (e) {
           document.documentElement.setAttribute(
             "data-theme",
@@ -32,28 +45,28 @@
       }
 
       :root {
-        --startup-bg: radial-gradient(circle at 50% 38%, rgba(0, 229, 255, 0.12), transparent 30%), #070a12;
+        --startup-bg: radial-gradient(circle at 50% 38%, rgba(56, 189, 248, 0.12), transparent 30%), #0b0f19;
         --startup-color: #f8fafc;
       }
 
       @media (prefers-color-scheme: light) {
         :root {
-          --startup-bg: radial-gradient(circle at 50% 38%, rgba(2, 132, 199, 0.1), transparent 30%), #f1f5f9;
+          --startup-bg: radial-gradient(circle at 50% 38%, rgba(2, 132, 199, 0.1), transparent 30%), #f8fafc;
           --startup-color: #0f172a;
         }
       }
 
       [data-theme="dark"] {
-        --startup-bg: radial-gradient(circle at 50% 38%, rgba(0, 229, 255, 0.12), transparent 30%), #070a12;
+        --startup-bg: radial-gradient(circle at 50% 38%, rgba(56, 189, 248, 0.12), transparent 30%), #0b0f19;
         --startup-color: #f8fafc;
-        background: #070a12;
+        background: #0b0f19;
         color: #f8fafc;
       }
 
       [data-theme="light"] {
-        --startup-bg: radial-gradient(circle at 50% 38%, rgba(2, 132, 199, 0.1), transparent 30%), #f1f5f9;
+        --startup-bg: radial-gradient(circle at 50% 38%, rgba(2, 132, 199, 0.1), transparent 30%), #f8fafc;
         --startup-color: #0f172a;
-        background: #f1f5f9;
+        background: #f8fafc;
         color: #0f172a;
       }
 
@@ -65,7 +78,7 @@
         place-items: center;
         background: var(--startup-bg);
         color: var(--startup-color);
-        content: "UniGoDesktop";
+        content: "UniBootDesktop";
         font:
           700 22px/1.2 -apple-system,
           BlinkMacSystemFont,
@@ -117,8 +130,8 @@
         border-radius: 24px;
         overflow: hidden;
         box-shadow:
-          0 18px 50px rgba(0, 229, 255, 0.35),
-          0 0 0 1px rgba(0, 229, 255, 0.4);
+          0 18px 50px rgba(14, 165, 233, 0.35),
+          0 0 0 1px rgba(56, 189, 248, 0.4);
       }
 
       [data-theme="light"] .startup-mark {
@@ -130,14 +143,10 @@
       .startup-mark::after {
         position: absolute;
         inset: -9px;
-        border: 1px solid rgba(0, 229, 255, 0.32);
+        border: 1px solid rgba(56, 189, 248, 0.32);
         border-radius: 31px;
         content: "";
         animation: startup-pulse 1.8s ease-out infinite;
-      }
-
-      [data-theme="light"] .startup-mark::after {
-        border-color: rgba(2, 132, 199, 0.3);
       }
 
       .startup-logo-img {
@@ -171,12 +180,8 @@
         width: var(--startup-progress, 8%);
         height: 100%;
         border-radius: inherit;
-        background: linear-gradient(90deg, #00e5ff, #9d4edd);
+        background: linear-gradient(90deg, #38bdf8, #2563eb);
         transition: width 260ms ease-out;
-      }
-
-      [data-theme="light"] .startup-progress-fill {
-        background: linear-gradient(90deg, #0284c7, #7c3aed);
       }
 
       @keyframes startup-rise {
@@ -213,12 +218,12 @@
     </style>
   </head>
   <body>
-    <div id="startup-loader" role="status" aria-live="polite" aria-label="Starting UniGoDesktop">
+    <div id="startup-loader" role="status" aria-live="polite" aria-label="Starting UniBootDesktop">
       <div class="startup-content">
         <div class="startup-mark" aria-hidden="true">
-          <img src="/logo.png" alt="UniGo" class="startup-logo-img" />
+          <img src="/logo.png" alt="UniBoot" class="startup-logo-img" />
         </div>
-        <h1 class="startup-title">UniGoDesktop</h1>
+        <h1 class="startup-title">UniBootDesktop</h1>
         <div class="startup-progress" aria-hidden="true">
           <div class="startup-progress-fill"></div>
         </div>

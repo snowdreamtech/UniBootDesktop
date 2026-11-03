@@ -14,7 +14,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/errors"
+	"github.com/snowdreamtech/unibootdesktop/internal/errors"
 )
 
 func TestHTTPDownloader_CheckRedirect(t *testing.T) {

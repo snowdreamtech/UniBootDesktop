@@ -16,8 +16,8 @@ describe("updater utility", () => {
   });
 
   it("formats stage: found_asset with detail", () => {
-    expect(formatUpdateProgress({ stage: "found_asset", detail: "unigodesktop.dmg" })).toBe(
-      "Found release asset: unigodesktop.dmg"
+    expect(formatUpdateProgress({ stage: "found_asset", detail: "unibootdesktop.dmg" })).toBe(
+      "Found release asset: unibootdesktop.dmg"
     );
   });
 

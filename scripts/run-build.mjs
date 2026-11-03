@@ -44,7 +44,7 @@ async function main() {
   const commitFull = getGitOutput("git rev-parse HEAD", "unknown");
   const date = new Date().toISOString();
 
-  let modulePath = "github.com/snowdreamtech/unigodesktop";
+  let modulePath = "github.com/snowdreamtech/unibootdesktop";
   try {
     modulePath = execSync("go list -m", { cwd: projectRoot, stdio: ["ignore", "pipe", "ignore"] })
       .toString()
@@ -54,7 +54,7 @@ async function main() {
   }
 
   const pkg = `${modulePath}/internal/env`;
-  const projectName = modulePath.split("/").pop() || "unigodesktop";
+  const projectName = modulePath.split("/").pop() || "unibootdesktop";
 
   const userArgs = process.argv.slice(2);
   const autoTags = [];

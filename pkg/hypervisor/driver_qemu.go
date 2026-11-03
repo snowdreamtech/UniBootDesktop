@@ -15,9 +15,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
-	"github.com/snowdreamtech/unigodesktop/pkg/disk"
-	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/pkg/disk"
+	"github.com/snowdreamtech/unibootdesktop/pkg/privilege"
 )
 
 type QEMUDriver struct{}
@@ -192,7 +192,7 @@ func extractPlistString(plistStr, key string) string {
 
 func ensureDiskPermissions(targetPath string) (func(), error) {
 	noop := func() {}
-	if targetPath == "" || os.Getenv("UNIGO_DRY_RUN") == "1" || !strings.HasPrefix(targetPath, "/dev/") {
+	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" || !strings.HasPrefix(targetPath, "/dev/") {
 		return noop, nil
 	}
 	if _, err := os.Stat(targetPath); err != nil {
@@ -267,12 +267,12 @@ func (d *QEMUDriver) Launch(ctx context.Context, diskPath, bootMode string) erro
 
 func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
 	status := d.Detect()
-	if !status.Installed && os.Getenv("UNIGO_DRY_RUN") == "" {
+	if !status.Installed && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 		return fmt.Errorf("QEMU simulator not detected! Please install QEMU first (e.g. via brew install qemu).")
 	}
 
-	if os.Getenv("UNIGO_DRY_RUN") == "1" {
-		logger.Info("UNIGO_DRY_RUN mode active, dry-run QEMU launch complete", "diskPath", diskPath, "bootMode", cfg.BootMode)
+	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run QEMU launch complete", "diskPath", diskPath, "bootMode", cfg.BootMode)
 		return nil
 	}
 
@@ -350,7 +350,7 @@ func (d *QEMUDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg 
 		unmountTargetDisk(targetPath)
 
 		// Preflight check: verify that current process can actually access targetPath without touching character device
-		if strings.HasPrefix(targetPath, "/dev/") && os.Getenv("UNIGO_DRY_RUN") != "1" {
+		if strings.HasPrefix(targetPath, "/dev/") && os.Getenv("UNIBOOT_DRY_RUN") != "1" {
 			if !canAccessDeviceNode(targetPath) {
 				remountTargetDisk(targetPath)
 				restoreDiskPerms()

@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/pkg/config"
+	"github.com/snowdreamtech/unibootdesktop/pkg/config"
 )
 
 func TestNewApp(t *testing.T) {
@@ -37,7 +37,7 @@ func TestNewApp(t *testing.T) {
 	t.Run("with custom config", func(t *testing.T) {
 		cfg := config.GetDefaultConfig()
 		cfg.Debug = true
-		cfg.Theme = "dark"
+		cfg.Mode = "local"
 
 		app := NewApp(cfg)
 		if app == nil {
@@ -46,8 +46,8 @@ func TestNewApp(t *testing.T) {
 		if !app.config.Debug {
 			t.Errorf("expected debug to be true")
 		}
-		if app.config.Theme != "dark" {
-			t.Errorf("expected theme 'dark', got %s", app.config.Theme)
+		if app.config.Mode != "local" {
+			t.Errorf("expected mode 'local', got %s", app.config.Mode)
 		}
 	})
 }

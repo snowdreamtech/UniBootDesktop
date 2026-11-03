@@ -1,128 +1,614 @@
 <template>
-  <div v-if="isOpen" class="modal-overlay" @click.self="close" @keydown.esc="close" tabindex="-1">
+  <div v-if="isOpen" class="modal-overlay" @click.self="close">
     <div class="modal-card glass-modal">
       <!-- Modal Header -->
       <div class="modal-header">
         <div class="header-title">
           <span class="icon">⚙️</span>
           <div>
-            <h3>{{ t("settings.title") || "Settings" }}</h3>
-            <span class="sub-title">{{ t("settings.subtitle") || "Preferences & Configuration" }}</span>
+            <h3>{{ t("settings.title") }}</h3>
+            <span class="sub-title">{{ t("settings.subtitle") }}</span>
           </div>
         </div>
         <div class="header-actions">
           <span class="auto-save-tag" :class="{ saving: isAutoSaving }">
-            {{ saveStatusText || "⚡ " + (t("settings.realtime_save") || "Auto-Save Ready") }}
+            {{ saveStatusText }}
           </span>
-          <button class="close-btn" @click="close" title="Close">✕</button>
+          <button class="close-btn" @click="close">✕</button>
         </div>
       </div>
 
       <!-- Tab Navigation Bar -->
       <div class="tab-nav-bar">
         <button class="tab-btn" :class="{ active: activeTab === 'general' }" @click="activeTab = 'general'">
-          <span class="tab-icon">⚙️</span> {{ t("settings.tab_general") || "General" }}
+          <span class="tab-icon">⚙️</span> {{ t("settings.tab_general") }}
         </button>
         <button class="tab-btn" :class="{ active: activeTab === 'network' }" @click="activeTab = 'network'">
-          <span class="tab-icon">🌐</span> {{ t("settings.tab_network") || "Network & Proxy" }}
+          <span class="tab-icon">🌐</span> {{ t("settings.tab_network") }}
+        </button>
+        <button class="tab-btn" :class="{ active: activeTab === 'uniboot' }" @click="activeTab = 'uniboot'">
+          <span class="tab-icon">📦</span> UniBoot
+        </button>
+        <button class="tab-btn" :class="{ active: activeTab === 'ventoy' }" @click="activeTab = 'ventoy'">
+          <span class="tab-icon">🚀</span> Ventoy
         </button>
       </div>
 
       <!-- Modal Body -->
       <div class="modal-body">
         <!-- Tab 1: General Settings -->
-        <GeneralTab
-          v-if="activeTab === 'general'"
-          v-model:language="appLanguage"
-          v-model:theme="appTheme"
-          v-model:auto-check-update="autoCheckUpdate"
-          v-model:enable-tray="enableTray"
-          v-model:close-action="closeAction"
-          :language-options="languageSelectOptions"
-          :theme-options="themeSelectOptions"
-          @language-change="onLanguageChange"
-          @theme-change="onThemeChange"
-          @change="triggerAutoSave"
-        />
+        <!-- Tab 1: General Settings (Card-based layout) -->
+        <div v-if="activeTab === 'general'" class="tab-content">
+          <!-- Card 1: Interface & Display -->
+          <div class="settings-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="card-icon">🎨</span>
+                <span>{{ t("settings.group_appearance") }}</span>
+              </div>
+            </div>
 
-        <!-- Tab 2: Network & Proxy Settings -->
-        <NetworkTab
-          v-if="activeTab === 'network'"
-          v-model:proxy-input-url="proxyInputUrl"
-          v-model:proxy-protocol="proxyProtocol"
-          v-model:proxy-host="proxyHost"
-          v-model:proxy-port="proxyPort"
-          v-model:proxy-user="proxyUser"
-          v-model:proxy-password="proxyPassword"
-          :is-testing-net="isTestingNet"
-          :net-test-result="netTestResult"
-          :net-test-success="netTestSuccess"
-          :is-testing-proxy="isTestingProxy"
-          :proxy-test-result="proxyTestResult"
-          :proxy-test-success="proxyTestSuccess"
-          @change="triggerAutoSave"
-          @set-mirror="setMirror"
-          @test-connection="testConnection"
-          @test-network-proxy="testNetworkProxy"
-        />
+            <div class="card-grid">
+              <div class="form-group highlight-form-group">
+                <label class="form-label highlight-label">{{ t("settings.language_label") }}</label>
+                <CustomSelect v-model="appLanguage" :options="languageSelectOptions" @change="onLanguageChange" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ t("settings.theme_label") }}</label>
+                <CustomSelect v-model="appTheme" :options="themeSelectOptions" @change="onThemeChange" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Boot Drive Defaults -->
+          <div class="settings-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="card-icon">🚀</span>
+                <span>{{ t("settings.group_defaults") }}</span>
+              </div>
+            </div>
+
+            <div class="card-grid">
+              <div class="form-group">
+                <label class="form-label">{{ t("settings.default_mode_label") }}</label>
+                <CustomSelect
+                  v-model="defaultMode"
+                  :options="[
+                    { value: 'cloud', label: t('mode.cloud') },
+                    { value: 'hybrid', label: t('mode.hybrid') },
+                  ]"
+                  @change="triggerAutoSave"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ t("settings.default_fs_label") }}</label>
+                <CustomSelect
+                  v-model="defaultFs"
+                  :options="[
+                    { value: 'exFAT', label: 'exFAT' },
+                    { value: 'NTFS', label: 'NTFS' },
+                    { value: 'FAT32', label: 'FAT32' },
+                    { value: 'ext4', label: 'ext4' },
+                  ]"
+                  @change="triggerAutoSave"
+                />
+              </div>
+
+              <div class="form-group span-full">
+                <label class="form-label">{{ t("settings.auto_eject_after_deploy") }}</label>
+                <div class="radio-row">
+                  <label class="radio-label">
+                    <input type="radio" :value="false" v-model="autoEjectAfterDeploy" @change="triggerAutoSave" />
+                    <span>{{ t("settings.auto_eject_disabled") }}</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" :value="true" v-model="autoEjectAfterDeploy" @change="triggerAutoSave" />
+                    <span>{{ t("settings.auto_eject_enabled") }}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: System, Updates & Tray -->
+          <div class="settings-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="card-icon">💻</span>
+                <span>{{ t("settings.group_system") }}</span>
+              </div>
+            </div>
+
+            <div class="card-grid">
+              <div class="form-group">
+                <label class="form-label">{{ t("settings.app_update_label") }}</label>
+                <div class="radio-row">
+                  <label class="radio-label">
+                    <input type="radio" :value="true" v-model="autoCheckUpdate" @change="triggerAutoSave" />
+                    <span>{{ t("settings.update_auto") }}</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" :value="false" v-model="autoCheckUpdate" @change="triggerAutoSave" />
+                    <span>{{ t("settings.update_manual") }}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">{{ t("settings.enable_tray") }}</label>
+                <div class="radio-row">
+                  <label class="radio-label">
+                    <input type="radio" :value="false" v-model="enableTray" @change="triggerAutoSave" />
+                    <span>{{ t("common.off") }}</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" :value="true" v-model="enableTray" @change="triggerAutoSave" />
+                    <span>{{ t("common.on") }}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div v-if="enableTray" class="form-group span-full">
+                <label class="form-label">{{ t("settings.close_action") }}</label>
+                <div class="radio-row">
+                  <label class="radio-label">
+                    <input type="radio" value="quit" v-model="closeAction" @change="triggerAutoSave" />
+                    <span>{{ t("settings.close_action_quit") }}</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" value="minimize_to_tray" v-model="closeAction" @change="triggerAutoSave" />
+                    <span>{{ t("settings.close_action_tray") }}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Network Settings -->
+        <div v-if="activeTab === 'network'" class="tab-content">
+          <!-- Section 2A: GitHub Proxy Acceleration -->
+          <div class="settings-section">
+            <h4 class="section-title">
+              <span>{{ t("settings.github_proxy_title") }}</span>
+            </h4>
+
+            <div class="form-group">
+              <label class="form-label">{{ t("settings.github_proxy") }}</label>
+              <input
+                v-model="proxyInputUrl"
+                type="text"
+                class="form-input"
+                :placeholder="t('settings.proxy_placeholder')"
+              />
+            </div>
+
+            <div class="network-test-row">
+              <button class="btn-secondary test-btn" :disabled="isTestingNet" @click="testConnection">
+                <span class="btn-icon">⚡</span>
+                <span>{{ isTestingNet ? t("settings.testing_net") : t("settings.test_net") }}</span>
+              </button>
+              <span v-if="netTestResult" class="test-result" :class="netTestSuccess ? 'success' : 'error'">
+                {{ netTestResult }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Section 2B: System Network Proxy -->
+          <div class="settings-section margin-top">
+            <h4 class="section-title">
+              <span>{{ t("settings.system_proxy") }}</span>
+            </h4>
+
+            <div class="grid-form">
+              <div class="form-group span-full">
+                <label class="form-label">{{ t("settings.proxy_proto") }}</label>
+                <div class="protocol-radio-bar">
+                  <label class="protocol-pill" :class="{ active: proxyProtocol === 'direct' }">
+                    <input type="radio" v-model="proxyProtocol" value="direct" /> {{ t("settings.proxy_direct") }}
+                  </label>
+                  <label class="protocol-pill" :class="{ active: proxyProtocol === 'http' }">
+                    <input type="radio" v-model="proxyProtocol" value="http" /> HTTP
+                  </label>
+                  <label class="protocol-pill" :class="{ active: proxyProtocol === 'https' }">
+                    <input type="radio" v-model="proxyProtocol" value="https" /> HTTPS
+                  </label>
+                  <label class="protocol-pill" :class="{ active: proxyProtocol === 'socks4' }">
+                    <input type="radio" v-model="proxyProtocol" value="socks4" /> SOCKS4
+                  </label>
+                  <label class="protocol-pill" :class="{ active: proxyProtocol === 'socks5' }">
+                    <input type="radio" v-model="proxyProtocol" value="socks5" /> SOCKS5
+                  </label>
+                </div>
+              </div>
+
+              <template v-if="proxyProtocol !== 'direct'">
+                <div class="form-group">
+                  <label class="form-label">{{ t("settings.proxy_host") }}</label>
+                  <input v-model="proxyHost" type="text" class="form-input" placeholder="127.0.0.1" />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">{{ t("settings.proxy_port") }}</label>
+                  <input
+                    v-model.number="proxyPort"
+                    type="number"
+                    class="form-input"
+                    :placeholder="defaultProxyPortPlaceholder"
+                    min="1"
+                    max="65535"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">{{ t("settings.proxyAuthUserLabel") }}</label>
+                  <input
+                    v-model="proxyUser"
+                    type="text"
+                    class="form-input"
+                    :placeholder="t('settings.proxyAuthUserPlaceholder')"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">{{ t("settings.proxyAuthPassLabel") }}</label>
+                  <input
+                    v-model="proxyPassword"
+                    type="password"
+                    class="form-input"
+                    :placeholder="t('settings.proxyAuthUserPlaceholder')"
+                  />
+                </div>
+              </template>
+            </div>
+
+            <div class="network-test-row">
+              <button class="btn-secondary test-btn" :disabled="isTestingProxy" @click="testNetworkProxy">
+                <span class="btn-icon">⚡</span>
+                <span>{{ isTestingProxy ? t("settings.testingProxy") : t("settings.testProxyConn") }}</span>
+              </button>
+              <span v-if="proxyTestResult" class="test-result" :class="proxyTestSuccess ? 'success' : 'error'">
+                {{ proxyTestResult }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: UniBoot Firmware & ISO Matrix (UniBoot) -->
+        <div v-if="activeTab === 'uniboot'" class="tab-content">
+          <div class="settings-section">
+            <h4 class="section-title">
+              <div class="title-left">
+                <span class="section-icon">📦</span>
+                <span>{{ t("settings.firmwareMatrixTitle") }}</span>
+              </div>
+            </h4>
+
+            <!-- Firmware sync action card (aligned at top like Ventoy) -->
+            <div class="firmware-sync-card">
+              <div class="sync-status">
+                <div class="sync-info-labels">
+                  <span
+                    >{{ t("settings.localVersion") }} <strong>{{ localVersionTag }}</strong></span
+                  >
+                  <span class="divider">•</span>
+                  <span
+                    >{{ t("settings.cloudRelease") }}
+                    <strong class="highlight-tag">UniBoot {{ latestReleaseTag }}</strong></span
+                  >
+                </div>
+                <button
+                  class="btn-primary-sm"
+                  :class="{ 'is-busy': isSyncing }"
+                  :disabled="isSyncing"
+                  @click="syncFirmware"
+                >
+                  <span class="btn-icon">{{ isSyncing ? "⏳" : hasUniBootUpdate ? "⚡" : "🔄" }}</span>
+                  <span>{{
+                    isSyncing
+                      ? t("settings.pullingFirmware")
+                      : hasUniBootUpdate
+                        ? t("settings.upgradeFirmwareNow", { version: latestReleaseTag })
+                        : t("settings.checkSyncFirmware")
+                  }}</span>
+                </button>
+              </div>
+              <div v-if="isSyncing" class="sync-progress">
+                <div class="progress-bar-inner" :style="{ width: syncProgress + '%' }"></div>
+              </div>
+            </div>
+
+            <!-- UniBoot Custom Storage Path -->
+            <div class="form-group span-full uniboot-path-group">
+              <label class="form-label">{{ t("settings.uniboot_dir_label") }}</label>
+              <div class="input-with-btn">
+                <input
+                  v-model="unibootPath"
+                  type="text"
+                  class="form-input"
+                  :placeholder="t('settings.uniboot_dir_placeholder')"
+                  @change="triggerAutoSave"
+                />
+                <button
+                  class="btn-secondary test-btn"
+                  @click="selectUniBootDirectory"
+                  :title="t('settings.browse_btn')"
+                >
+                  <span class="btn-icon">📁</span>
+                  <span>{{ t("settings.browse_btn") }}</span>
+                </button>
+                <button
+                  v-if="unibootPath"
+                  class="btn-secondary test-btn reset-btn"
+                  @click="resetUniBootDirectory"
+                  :title="t('settings.reset_default')"
+                >
+                  <span class="btn-icon">↺</span>
+                  <span>{{ t("settings.reset_default") }}</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="firmware-list">
+              <div v-for="fw in firmwareList" :key="fw.releaseName" class="firmware-item">
+                <div class="fw-info">
+                  <span class="fw-name">{{ fw.releaseName }}</span>
+                  <span class="fw-path">➔ {{ fw.targetPath }}</span>
+                </div>
+                <div class="fw-meta">
+                  <span class="badge success">{{ t("settings.embeddedBadge") }}</span>
+                  <span class="fw-desc">{{ fw.descKey ? t(fw.descKey as any) : fw.description }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Ventoy Official Directory Settings -->
+        <div v-if="activeTab === 'ventoy'" class="tab-content">
+          <div class="settings-section">
+            <h4 class="section-title">
+              <span>{{ t("settings.ventoyToolchain") }}</span>
+            </h4>
+
+            <!-- Ventoy Toolchain sync action card -->
+            <div class="firmware-sync-card ventoy-sync-card">
+              <div class="sync-status">
+                <div class="sync-info-labels">
+                  <span
+                    >{{ t("settings.localVersion") }}
+                    <strong>{{
+                      localVentoyVersionTag ||
+                      (ventoyValidation?.valid && ventoyValidation.version
+                        ? (ventoyValidation.version.startsWith("v") ? "" : "v") + ventoyValidation.version
+                        : t("settings.ventoyNotInstalled"))
+                    }}</strong></span
+                  >
+                  <span class="divider">•</span>
+                  <span
+                    >{{ t("settings.cloudRelease") }}
+                    <strong class="highlight-tag">Ventoy {{ latestVentoyTag || "v1.1.18" }}</strong></span
+                  >
+                  <span v-if="!isVentoyOsSupported" class="badge warning">
+                    {{ t("settings.ventoyMacUnsupportedBadge") }}
+                  </span>
+                </div>
+                <button
+                  class="btn-primary-sm"
+                  :class="{ 'is-busy': isDownloadingVentoy }"
+                  :disabled="isDownloadingVentoy || !isVentoyOsSupported"
+                  @click="downloadVentoyToolchain"
+                  :title="!isVentoyOsSupported ? t('settings.ventoyMacNoDownloadTitle') : ''"
+                >
+                  <span class="btn-icon">{{ isDownloadingVentoy ? "⏳" : hasVentoyUpdate ? "⚡" : "🔄" }}</span>
+                  <span>{{
+                    isDownloadingVentoy
+                      ? t("settings.pullingVentoy")
+                      : !isVentoyOsSupported
+                        ? t("settings.ventoyMacNoDownload")
+                        : hasVentoyUpdate
+                          ? t("settings.upgradeVentoyNow", { version: latestVentoyTag || "v1.1.18" })
+                          : t("settings.reinstallVentoy")
+                  }}</span>
+                </button>
+              </div>
+              <div v-if="isDownloadingVentoy" class="ventoy-progress-card">
+                <!-- 阶段提示（正在下载 ➔ 正在校验 SHA256 ➔ 正在解压工具链） -->
+                <div class="stage-stepper">
+                  <span
+                    class="stage-step"
+                    :class="{
+                      active: ventoyDownloadStage === 'downloading' || ventoyDownloadStage === 'checking',
+                      done: ['verifying', 'extracting', 'completed'].includes(ventoyDownloadStage),
+                    }"
+                  >
+                    <span class="step-indicator">{{
+                      ["verifying", "extracting", "completed"].includes(ventoyDownloadStage) ? "✓" : "1"
+                    }}</span>
+                    <span>正在下载</span>
+                  </span>
+                  <span class="stage-arrow">➔</span>
+                  <span
+                    class="stage-step"
+                    :class="{
+                      active: ventoyDownloadStage === 'verifying',
+                      done: ['extracting', 'completed'].includes(ventoyDownloadStage),
+                    }"
+                  >
+                    <span class="step-indicator">{{
+                      ["extracting", "completed"].includes(ventoyDownloadStage) ? "✓" : "2"
+                    }}</span>
+                    <span>正在校验 SHA256</span>
+                  </span>
+                  <span class="stage-arrow">➔</span>
+                  <span
+                    class="stage-step"
+                    :class="{
+                      active: ventoyDownloadStage === 'extracting',
+                      done: ventoyDownloadStage === 'completed',
+                    }"
+                  >
+                    <span class="step-indicator">{{ ventoyDownloadStage === "completed" ? "✓" : "3" }}</span>
+                    <span>正在解压工具链</span>
+                  </span>
+                </div>
+                <!-- 进度条轨道 -->
+                <div class="sync-progress-track">
+                  <div class="progress-bar-inner" :style="{ width: ventoyDownloadProgress + '%' }"></div>
+                </div>
+                <!-- 状态与速率描述行: 如 3.5 MB / 16.7 MB (21%) · 25 KB/s -->
+                <div class="progress-meta-row">
+                  <span class="progress-status-desc">
+                    {{ ventoyDownloadStatusText || "正在处理..." }}
+                  </span>
+                  <span class="progress-pct-badge">{{ ventoyDownloadProgress }}%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group span-full">
+              <label class="form-label">{{ t("settings.ventoy_cli_path") }}</label>
+              <div class="input-with-btn">
+                <input
+                  v-model="ventoyPath"
+                  type="text"
+                  class="form-input"
+                  placeholder="/opt/ventoy or C:\ventoy-1.0.99\"
+                />
+                <button class="btn-secondary test-btn" @click="selectVentoyDirectory" :title="t('settings.browse_btn')">
+                  <span class="btn-icon">📁</span>
+                  <span>{{ t("settings.browse_btn") }}</span>
+                </button>
+              </div>
+              <!-- macOS Ventoy CLI limitation notice (only prompted on macOS) -->
+              <div v-if="isMacOs" class="ventoy-status-card warning-card">
+                <div class="status-header">
+                  <span class="status-indicator warning">⚠️</span>
+                  <span class="status-title">
+                    {{ t("deploy.macos_alert_title") }}
+                  </span>
+                </div>
+                <div class="status-message">
+                  {{ t("deploy.macos_alert_desc") }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Ventoy Formats & CLI Flags Group -->
+            <div class="settings-sub-card">
+              <h5 class="sub-card-title">{{ t("settings.cliFormattingFlags") }}</h5>
+
+              <div class="grid-form">
+                <div class="form-group">
+                  <label class="form-label">{{ t("settings.ventoy_secboot") }}</label>
+                  <div class="radio-group horizontal">
+                    <label class="radio-label">
+                      <input type="radio" :value="true" v-model="ventoySecureBoot" @change="triggerAutoSave" />
+                      <span>{{ t("common.on") }} (-s)</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" :value="false" v-model="ventoySecureBoot" @change="triggerAutoSave" />
+                      <span>{{ t("common.off") }}</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">{{ t("settings.ventoy_part_style") }}</label>
+                  <CustomSelect
+                    v-model="ventoyPartitionStyle"
+                    :options="[
+                      { value: 'MBR', label: 'MBR (Legacy BIOS + UEFI)' },
+                      { value: 'GPT', label: 'GPT (UEFI Only)' },
+                    ]"
+                    @change="triggerAutoSave"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">{{ t("settings.ventoy_reserve") }}</label>
+                  <input
+                    v-model.number="ventoyReserveSpace"
+                    type="number"
+                    min="0"
+                    class="form-input"
+                    placeholder="0"
+                    @input="triggerAutoSave"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Ventoy Engine & Plugins Group -->
+            <div class="settings-sub-card">
+              <h5 class="sub-card-title">{{ t("settings.ventoyPlugins") }}</h5>
+
+              <div class="grid-form">
+                <div class="form-group">
+                  <label class="form-label">{{ t("settings.ventoy_win11_bypass") }}</label>
+                  <div class="radio-group horizontal">
+                    <label class="radio-label">
+                      <input type="radio" :value="true" v-model="ventoyWin11Bypass" @change="triggerAutoSave" />
+                      <span>{{ t("common.on") }} (Bypass TPM/CPU/RAM)</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" :value="false" v-model="ventoyWin11Bypass" @change="triggerAutoSave" />
+                      <span>{{ t("common.off") }}</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">{{ t("settings.ventoy_timeout") }}</label>
+                  <input
+                    v-model.number="ventoyMenuTimeout"
+                    type="number"
+                    min="0"
+                    max="60"
+                    class="form-input"
+                    placeholder="0"
+                    @input="triggerAutoSave"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">{{ t("settings.ventoy_secondary_menu") }}</label>
+                  <div class="radio-group horizontal">
+                    <label class="radio-label">
+                      <input type="radio" :value="false" v-model="ventoySecondaryMenu" @change="triggerAutoSave" />
+                      <span>{{ t("common.off") }}</span>
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" :value="true" v-model="ventoySecondaryMenu" @change="triggerAutoSave" />
+                      <span>{{ t("common.on") }}</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
-import { t, selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES } from "../i18n";
-import { GetConfig, SaveConfig, TestNetwork } from "../../wailsjs/go/main/App";
-import { isWails } from "../utils/wails";
-import { useTheme } from "../composables/useTheme";
-import GeneralTab from "./settings/GeneralTab.vue";
-import NetworkTab from "./settings/NetworkTab.vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { currentTheme, useTheme } from "../composables/useTheme";
+import { useToast } from "../composables/useToast";
+import { selectedLangSetting, setLanguage, SUPPORTED_LANGUAGES, t } from "../i18n";
+import type { VentoyValidation } from "../utils/ventoyValidation";
+import CustomSelect from "./CustomSelect.vue";
 
-const props = defineProps<{
-  isOpen: boolean;
-  initialTab?: string;
-  currentProxy?: string;
-}>();
-
-const emit = defineEmits<{
-  (e: "close"): void;
-  (e: "save", payload: any): void;
-}>();
-
-const { currentTheme, applyTheme } = useTheme();
-
-const activeTab = ref<"general" | "network">("general");
-const isAutoSaving = ref(false);
-const saveStatusText = ref("");
-
-// General Settings
-const appLanguage = ref(selectedLangSetting.value || "auto");
-const appTheme = ref(currentTheme.value || "system");
-const autoCheckUpdate = ref(true);
-const enableTray = ref(false);
-const closeAction = ref("quit");
-
-// Network Settings
-const proxyInputUrl = ref("");
-const isTestingNet = ref(false);
-const netTestResult = ref("");
-const netTestSuccess = ref(false);
-
-const proxyProtocol = ref<"direct" | "http" | "https" | "socks4" | "socks5">("direct");
-const proxyHost = ref("");
-const proxyPort = ref(7890);
-const proxyUser = ref("");
-const proxyPassword = ref("");
-const isTestingProxy = ref(false);
-const proxyTestResult = ref("");
-const proxyTestSuccess = ref(false);
-
-let isInitializing = false;
-let autoSaveTimer: any = null;
+const { applyTheme } = useTheme();
+const { showToast } = useToast();
 
 const languageSelectOptions = computed(() => [
-  { value: "auto", label: "🌐 " + (t("common.autoDetect") || "Auto Detect") },
+  { value: "auto", label: t("common.autoDetect") },
   ...SUPPORTED_LANGUAGES.map((item) => ({
     value: item.code,
     label: item.nativeName,
@@ -130,181 +616,435 @@ const languageSelectOptions = computed(() => [
 ]);
 
 const themeSelectOptions = computed(() => [
-  { value: "dark", label: "🌙 " + (t("theme.dark") || "Dark Mode") },
-  { value: "light", label: "☀️ " + (t("theme.light") || "Light Mode") },
-  { value: "system", label: "💻 " + (t("theme.system") || "System Default") },
+  { value: "system", label: `🖥️ ${t("settings.theme_system") || "System Default"}` },
+  { value: "dark", label: `🌙 ${t("settings.theme_dark")}` },
+  { value: "light", label: `☀️ ${t("settings.theme_light")}` },
 ]);
 
-function setMirror(url: string) {
-  proxyInputUrl.value = url;
-  triggerAutoSave();
+interface FirmwareMapping {
+  releaseName: string;
+  targetPath: string;
+  description: string;
+  descKey?: string;
 }
 
-function onLanguageChange(val: string) {
-  setLanguage(val);
-  triggerAutoSave();
-}
+const props = defineProps<{
+  isOpen: boolean;
+  currentProxy?: string;
+  initialTab?: "general" | "network" | "uniboot" | "ventoy";
+}>();
 
-function onThemeChange(val: string) {
-  applyTheme(val);
-  triggerAutoSave();
-}
-
-async function loadFullConfig() {
-  isInitializing = true;
-  if (isWails()) {
-    try {
-      const cfg = await GetConfig();
-      if (cfg) {
-        autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
-        if (cfg.theme === "light" || cfg.theme === "dark" || cfg.theme === "system") {
-          appTheme.value = cfg.theme;
-        } else {
-          appTheme.value = "system";
-        }
-        appLanguage.value = cfg.language || "auto";
-        enableTray.value = (cfg as any).enableTray === true;
-        closeAction.value = (cfg as any).closeAction || "quit";
-        setLanguage(appLanguage.value);
-        applyTheme(appTheme.value);
-
-        proxyInputUrl.value = cfg.githubProxy || "";
-        proxyProtocol.value = (cfg.proxyProtocol as any) || "direct";
-        proxyHost.value = cfg.proxyHost || "";
-        proxyPort.value = cfg.proxyPort || 7890;
-        proxyUser.value = cfg.proxyUser || "";
-        proxyPassword.value = cfg.proxyPassword || "";
-      }
-    } catch (e) {
-      console.error("Failed to load full config:", e);
+const emit = defineEmits<{
+  (e: "close"): void;
+  (
+    e: "save",
+    payload: {
+      githubProxy: string;
+      proxyProtocol: string;
+      proxyHost: string;
+      proxyPort: number;
+      proxyUser: string;
+      proxyPassword: string;
+      mode: string;
+      fileSystem: string;
+      autoCheckUpdate: boolean;
+      autoEjectAfterDeploy: boolean;
+      theme: string;
+      language: string;
+      ventoyPath: string;
+      ventoySecureBoot: boolean;
+      ventoyPartitionStyle: string;
+      ventoyReserveSpace: number;
+      ventoyWin11Bypass: boolean;
+      ventoyMenuTimeout: number;
+      ventoySecondaryMenu: boolean;
     }
-  }
-  setTimeout(() => {
-    isInitializing = false;
-  }, 100);
-}
+  ): void;
+}>();
 
-function triggerAutoSave() {
-  if (isInitializing) return;
-  if (autoSaveTimer) clearTimeout(autoSaveTimer);
+const activeTab = ref<"general" | "network" | "uniboot" | "ventoy">("general");
 
-  isAutoSaving.value = true;
-  saveStatusText.value = t("settings.saveStatusEnabled") || "Saving...";
-
-  autoSaveTimer = setTimeout(async () => {
-    const payload = {
-      language: appLanguage.value,
-      theme: appTheme.value,
-      autoCheckUpdate: autoCheckUpdate.value,
-      enableTray: enableTray.value,
-      closeAction: closeAction.value,
-      githubProxy: proxyInputUrl.value.trim(),
-      proxyProtocol: proxyProtocol.value,
-      proxyHost: proxyHost.value.trim(),
-      proxyPort: proxyPort.value || 7890,
-      proxyUser: proxyUser.value.trim(),
-      proxyPassword: proxyPassword.value.trim(),
-    };
-
-    if (isWails()) {
-      try {
-        await SaveConfig(payload as any);
-      } catch (err) {
-        console.error("Failed to save config to backend:", err);
-      }
-    }
-
-    emit("save", payload);
-    isAutoSaving.value = false;
-    saveStatusText.value = t("settings.saveStatusApplied") || "Saved";
-
-    setTimeout(() => {
-      if (!isAutoSaving.value) {
-        saveStatusText.value = "";
-      }
-    }, 2000);
-  }, 300);
-}
-
-async function testConnection() {
-  isTestingNet.value = true;
-  netTestResult.value = "";
-
-  const targetUrl = proxyInputUrl.value.trim()
-    ? `${proxyInputUrl.value.trim().replace(/\/+$/, "")}/https://api.github.com`
-    : "https://api.github.com";
-
-  try {
-    if (isWails()) {
-      const res = await TestNetwork(targetUrl);
-      netTestSuccess.value = res.connected;
-      if (res.connected) {
-        netTestResult.value = `✓ ${t("settings.connected")} (${res.latencyMs}ms)`;
-      } else {
-        netTestResult.value = `✕ ${t("settings.connectFailed")}: ${res.error || "Timeout"}`;
-      }
-    } else {
-      netTestSuccess.value = true;
-      netTestResult.value = `✓ ${t("settings.connected")} (56ms)`;
-    }
-  } catch (err: any) {
-    netTestSuccess.value = false;
-    netTestResult.value = `✕ ${t("settings.connectFailed")}: ${err?.message || String(err)}`;
-  } finally {
-    isTestingNet.value = false;
-  }
-}
-
-async function testNetworkProxy() {
-  if (proxyProtocol.value === "direct") {
-    proxyTestResult.value = t("settings.directModeNotice") || "Direct mode: no proxy active";
-    proxyTestSuccess.value = true;
-    return;
-  }
-  if (!proxyHost.value.trim()) {
-    proxyTestResult.value = t("settings.proxyHostRequired") || "Please enter proxy host";
-    proxyTestSuccess.value = false;
-    return;
-  }
-
-  isTestingProxy.value = true;
-  proxyTestResult.value = "";
-
-  try {
-    if (isWails()) {
-      const res = await TestNetwork("https://api.github.com");
-      proxyTestSuccess.value = res.connected;
-      proxyTestResult.value = res.connected
-        ? `✓ ${proxyProtocol.value.toUpperCase()}://${proxyHost.value}:${proxyPort.value} ${t("settings.connected")} (${res.latencyMs}ms)`
-        : `✕ ${t("settings.connectFailed")}: ${res.error || "Unreachable"}`;
-    } else {
-      proxyTestSuccess.value = true;
-      proxyTestResult.value = `✓ ${proxyProtocol.value.toUpperCase()}://${proxyHost.value}:${proxyPort.value} ${t("settings.connected")}`;
-    }
-  } catch (e: any) {
-    proxyTestSuccess.value = false;
-    proxyTestResult.value = `✕ ${t("settings.connectFailed")}: ${e?.message || String(e)}`;
-  } finally {
-    isTestingProxy.value = false;
-  }
-}
-
-function close() {
-  emit("close");
-}
+const getWailsApp = () => (window as any)?.go?.main?.App;
 
 watch(
   () => props.isOpen,
-  (val) => {
-    if (val) {
-      if (props.initialTab === "network" || props.initialTab === "general") {
+  (newVal) => {
+    if (newVal) {
+      if (props.initialTab) {
         activeTab.value = props.initialTab;
       }
+
+      const app = getWailsApp();
+      if (!app) {
+        setTimeout(() => {
+          if (props.isOpen && getWailsApp()) {
+            loadFullConfig();
+            fetchFirmwareList();
+            checkUniBootRelease();
+          }
+        }, 250);
+        return;
+      }
+
       loadFullConfig();
+      fetchFirmwareList();
+      checkUniBootRelease();
     }
   },
   { immediate: true }
 );
+
+// General settings state
+const defaultMode = ref("cloud");
+const defaultFs = ref("exFAT");
+const autoCheckUpdate = ref(true);
+const autoEjectAfterDeploy = ref(false);
+const appTheme = ref(
+  currentTheme.value ||
+    ((typeof localStorage !== "undefined" && localStorage.getItem("uniboot_theme_cache")) as any) ||
+    "system"
+);
+const appLanguage = ref(
+  selectedLangSetting.value || (typeof localStorage !== "undefined" && localStorage.getItem("uniboot_locale")) || "auto"
+);
+
+watch(currentTheme, (val) => {
+  if (val && appTheme.value !== val) {
+    appTheme.value = val;
+  }
+});
+
+watch(selectedLangSetting, (val) => {
+  if (val && appLanguage.value !== val) {
+    appLanguage.value = val;
+  }
+});
+
+const enableTray = ref(false);
+const closeAction = ref<"quit" | "minimize_to_tray">("quit");
+
+// Network proxy state
+const proxyInputUrl = ref("");
+const proxyProtocol = ref("direct");
+const proxyHost = ref("");
+const proxyPort = ref<number | "">("");
+const proxyUser = ref("");
+const proxyPassword = ref("");
+
+const defaultProxyPortPlaceholder = computed(() => {
+  return proxyProtocol.value === "socks4" || proxyProtocol.value === "socks5" ? "1080" : "7890";
+});
+
+// Ventoy CLI & Options state
+const ventoyPath = ref("");
+const ventoySecureBoot = ref(true);
+const ventoyPartitionStyle = ref("MBR");
+const ventoyReserveSpace = ref(0);
+const ventoyWin11Bypass = ref(false);
+const ventoyMenuTimeout = ref(0);
+const ventoySecondaryMenu = ref(false);
+const isValidatingVentoy = ref(false);
+const ventoyValidation = ref<VentoyValidation | null>(null);
+
+// Ventoy release & download state
+const checkingVentoyRelease = ref(false);
+const isDownloadingVentoy = ref(false);
+const ventoyDownloadProgress = ref(0);
+const ventoyDownloadStatusText = ref("");
+const ventoyDownloadStage = ref("downloading");
+const ventoyDownloadSpeed = ref("");
+const latestVentoyTag = ref("");
+const localVentoyVersionTag = ref("");
+const hasVentoyUpdate = ref(false);
+const isVentoyOsSupported = ref(true);
+const isMacOs = computed(() => {
+  return (
+    !isVentoyOsSupported.value ||
+    (typeof navigator !== "undefined" && (navigator.userAgent.includes("Mac") || navigator.platform.includes("Mac")))
+  );
+});
+
+// Auto save state
+let isInitializing = true;
+let saveTimer: any = null;
+const isAutoSaving = ref(false);
+const saveStatusText = computed(() =>
+  isAutoSaving.value ? t("settings.saveStatusApplied") : t("settings.saveStatusEnabled")
+);
+
+// Tests state
+const isTestingNet = ref(false);
+const netTestResult = ref("");
+const netTestSuccess = ref(true);
+
+const isTestingProxy = ref(false);
+const proxyTestResult = ref("");
+const proxyTestSuccess = ref(true);
+
+// UniBoot state
+const unibootPath = ref("");
+const isSyncing = ref(false);
+const syncProgress = ref(0);
+const latestReleaseTag = ref("v1.3.0");
+const localVersionTag = ref("v1.3.0");
+const hasUniBootUpdate = ref(false);
+const checkingRelease = ref(false);
+
+const firmwareList = ref<FirmwareMapping[]>([
+  { releaseName: "ipxe-x86_64.efi", targetPath: "EFI/BOOT/BOOTX64.EFI", description: "UEFI x86_64 (Intel/AMD 64-bit)" },
+  { releaseName: "ipxe-arm64.efi", targetPath: "EFI/BOOT/BOOTAA64.EFI", description: "UEFI ARM64 (Apple Silicon Mac)" },
+  { releaseName: "ipxe-i386.efi", targetPath: "EFI/BOOT/BOOTIA32.EFI", description: "UEFI IA32 (32-bit x86 Tablets)" },
+  {
+    releaseName: "ipxe-loongarch64.efi",
+    targetPath: "EFI/BOOT/BOOTLOONGARCH64.EFI",
+    description: "UEFI LoongArch64 (Loongson 64-bit)",
+    descKey: "settings.firmwareDesc.ipxeLoongarch64",
+  },
+  { releaseName: "ipxe-riscv64.efi", targetPath: "EFI/BOOT/BOOTRISCV64.EFI", description: "UEFI RISC-V 64-bit" },
+  { releaseName: "ipxe-riscv32.efi", targetPath: "EFI/BOOT/BOOTRISCV32.EFI", description: "UEFI RISC-V 32-bit" },
+  {
+    releaseName: "ipxe.lkrn",
+    targetPath: "ipxe.lkrn",
+    description: "Legacy BIOS USB MBR Boot Kernel (x86)",
+    descKey: "settings.firmwareDesc.ipxeLkrn",
+  },
+  {
+    releaseName: "ipxe-riscv64.lkrn",
+    targetPath: "ipxe-riscv64.lkrn",
+    description: "Legacy MBR Boot Kernel (RISC-V 64-bit)",
+    descKey: "settings.firmwareDesc.ipxeRiscv64Lkrn",
+  },
+  {
+    releaseName: "ipxe-riscv32.lkrn",
+    targetPath: "ipxe-riscv32.lkrn",
+    description: "Legacy MBR Boot Kernel (RISC-V 32-bit)",
+    descKey: "settings.firmwareDesc.ipxeRiscv32Lkrn",
+  },
+  {
+    releaseName: "undionly.kpxe",
+    targetPath: "undionly.kpxe",
+    description: "Legacy BIOS UNDI PXE Network Boot Firmware",
+    descKey: "settings.firmwareDesc.undionlyKpxe",
+  },
+  {
+    releaseName: "boot.ipxe",
+    targetPath: "boot.ipxe",
+    description: "iPXE Global Entry Script",
+    descKey: "settings.firmwareDesc.bootIpxe",
+  },
+  {
+    releaseName: "uniboot.ipxe",
+    targetPath: "uniboot.ipxe",
+    description: "UniBoot Main Interactive Menu Script",
+    descKey: "settings.firmwareDesc.unibootIpxe",
+  },
+  {
+    releaseName: "UniBoot.iso",
+    targetPath: "UniBoot.iso",
+    description: "UniBoot All-Arch UEFI/BIOS Hybrid Boot ISO Image",
+    descKey: "settings.firmwareDesc.unibootIso",
+  },
+]);
+
+function getFinalProxyUrl(): string {
+  return proxyInputUrl.value.trim();
+}
+
+function buildConfigPayload() {
+  const isDirect = proxyProtocol.value === "direct";
+  const hasHost = Boolean(proxyHost.value.trim());
+  const finalPort = !isDirect && hasHost ? Number(proxyPort.value) || 0 : 0;
+
+  return {
+    githubProxy: getFinalProxyUrl(),
+    proxyProtocol: proxyProtocol.value,
+    proxyHost: proxyHost.value.trim(),
+    proxyPort: finalPort,
+    proxyUser: proxyUser.value.trim(),
+    proxyPassword: proxyPassword.value,
+    mode: defaultMode.value,
+    fileSystem: defaultFs.value,
+    autoCheckUpdate: autoCheckUpdate.value,
+    autoEjectAfterDeploy: autoEjectAfterDeploy.value,
+    enableTray: enableTray.value,
+    closeAction: closeAction.value,
+    theme: appTheme.value || currentTheme.value,
+    language: appLanguage.value || selectedLangSetting.value,
+    ventoyPath: ventoyPath.value.trim(),
+    ventoySecureBoot: ventoySecureBoot.value,
+    ventoyPartitionStyle: ventoyPartitionStyle.value,
+    ventoyReserveSpace: Number(ventoyReserveSpace.value) || 0,
+    ventoyWin11Bypass: ventoyWin11Bypass.value === true,
+    ventoyMenuTimeout: Number(ventoyMenuTimeout.value) || 0,
+    ventoySecondaryMenu: ventoySecondaryMenu.value === true,
+    unibootPath: unibootPath.value.trim(),
+  };
+}
+
+async function saveConfigImmediate() {
+  if (isInitializing || !props.isOpen) return;
+  if (saveTimer) {
+    clearTimeout(saveTimer);
+    saveTimer = null;
+  }
+  const payload = buildConfigPayload();
+  emit("save", payload);
+}
+
+function triggerAutoSave() {
+  if (isInitializing || !props.isOpen) return;
+  if (saveTimer) clearTimeout(saveTimer);
+
+  saveTimer = setTimeout(async () => {
+    if (!props.isOpen) return;
+    await saveConfigImmediate();
+    isAutoSaving.value = true;
+    setTimeout(() => {
+      isAutoSaving.value = false;
+    }, 1200);
+  }, 250);
+}
+
+function onLanguageChange(val: string) {
+  setLanguage(val);
+  saveConfigImmediate();
+}
+
+async function onThemeChange(val: string) {
+  applyTheme(val);
+  await saveConfigImmediate();
+}
+
+let ventoyDebounceTimer: any = null;
+
+watch(
+  [
+    defaultMode,
+    defaultFs,
+    autoCheckUpdate,
+    autoEjectAfterDeploy,
+    proxyInputUrl,
+    proxyProtocol,
+    proxyHost,
+    proxyPort,
+    proxyUser,
+    proxyPassword,
+    unibootPath,
+    ventoyPath,
+    ventoySecureBoot,
+    ventoyPartitionStyle,
+    ventoyReserveSpace,
+    ventoyWin11Bypass,
+    ventoyMenuTimeout,
+    ventoySecondaryMenu,
+  ],
+  () => {
+    triggerAutoSave();
+  },
+  { deep: true }
+);
+
+watch(activeTab, (newTab) => {
+  logUserAction("INFO", "User switched settings modal tab", newTab);
+});
+
+watch(ventoyPath, (newVal) => {
+  if (isInitializing) return;
+  if (ventoyDebounceTimer) clearTimeout(ventoyDebounceTimer);
+  ventoyDebounceTimer = setTimeout(() => {
+    if (newVal.trim()) {
+      checkVentoyCli();
+    } else {
+      ventoyValidation.value = null;
+    }
+  }, 400);
+});
+
+async function checkVentoyCli() {
+  const app = getWailsApp();
+  if (!app || typeof app.ValidateVentoyCli !== "function") {
+    ventoyValidation.value = null;
+    return;
+  }
+
+  isValidatingVentoy.value = true;
+  try {
+    const res = await app.ValidateVentoyCli(ventoyPath.value.trim());
+    ventoyValidation.value = res;
+  } catch (e: any) {
+    ventoyValidation.value = {
+      valid: false,
+      version: "",
+      code: "exception",
+      message: t("settings.verifyException", { error: e?.message || String(e) }),
+      executablePath: "",
+    };
+  } finally {
+    isValidatingVentoy.value = false;
+  }
+}
+
+async function loadFullConfig() {
+  const app = getWailsApp();
+  if (!app) {
+    ventoyValidation.value = null;
+    return;
+  }
+
+  isInitializing = true;
+  if (saveTimer) {
+    clearTimeout(saveTimer);
+    saveTimer = null;
+  }
+  try {
+    const cfg = await app.GetConfig();
+    if (cfg) {
+      defaultMode.value = cfg.mode || "cloud";
+      defaultFs.value = cfg.fileSystem || "exFAT";
+      autoCheckUpdate.value = cfg.autoCheckUpdate !== false;
+      autoEjectAfterDeploy.value = cfg.autoEjectAfterDeploy === true;
+      enableTray.value = cfg.enableTray === true;
+      closeAction.value = cfg.closeAction || "quit";
+      if (cfg.theme === "light" || cfg.theme === "dark" || cfg.theme === "system") {
+        if (cfg.theme !== "system" || !currentTheme.value || currentTheme.value === "system") {
+          appTheme.value = cfg.theme;
+        }
+      }
+      if (cfg.language && cfg.language !== "") {
+        if (cfg.language !== "auto" || !selectedLangSetting.value || selectedLangSetting.value === "auto") {
+          appLanguage.value = cfg.language;
+        }
+      }
+      proxyInputUrl.value = cfg.githubProxy || "";
+      proxyProtocol.value = cfg.proxyProtocol || "direct";
+      proxyHost.value = cfg.proxyHost || "";
+      proxyPort.value = cfg.proxyPort > 0 ? cfg.proxyPort : "";
+      proxyUser.value = cfg.proxyUser || "";
+      proxyPassword.value = cfg.proxyPassword || "";
+      ventoyPath.value = cfg.ventoyPath || "";
+      ventoySecureBoot.value = cfg.ventoySecureBoot !== false;
+      ventoyPartitionStyle.value = cfg.ventoyPartitionStyle || "MBR";
+      ventoyReserveSpace.value = cfg.ventoyReserveSpace || 0;
+      ventoyWin11Bypass.value = cfg.ventoyWin11Bypass === true;
+      ventoyMenuTimeout.value = cfg.menuTimeout || cfg.ventoyMenuTimeout || 0;
+      ventoySecondaryMenu.value = cfg.ventoySecondaryMenu === true;
+      unibootPath.value = cfg.unibootPath || "";
+
+      if (ventoyPath.value.trim()) {
+        checkVentoyCli();
+      } else {
+        ventoyValidation.value = null;
+      }
+    }
+  } catch (e) {
+    console.error("Failed to load full config:", e);
+    ventoyValidation.value = null;
+  } finally {
+    setTimeout(() => {
+      isInitializing = false;
+    }, 250);
+  }
+}
 
 watch(
   () => props.currentProxy,
@@ -315,6 +1055,308 @@ watch(
   },
   { immediate: true }
 );
+
+async function fetchFirmwareList() {
+  if (window.go && window.go.main && window.go.main.App) {
+    try {
+      const list = await window.go.main.App.GetFirmwareList();
+      if (list && list.length > 0) {
+        firmwareList.value = list;
+      }
+    } catch (e) {
+      console.error("Failed to get firmware list from backend:", e);
+    }
+  }
+}
+
+async function checkUniBootRelease() {
+  if (window.go && window.go.main && window.go.main.App && window.go.main.App.GetUniBootReleaseInfo) {
+    checkingRelease.value = true;
+    try {
+      const info = await window.go.main.App.GetUniBootReleaseInfo();
+      if (info) {
+        latestReleaseTag.value = info.tagName || "v1.3.0";
+        localVersionTag.value = (info.localTag || info.embeddedTag || "v1.3.0").replace(/\s*\(Embedded\)/i, "");
+        hasUniBootUpdate.value = info.hasUpdate;
+      }
+    } catch (e) {
+      console.error("Failed to check UniBoot release:", e);
+    } finally {
+      checkingRelease.value = false;
+    }
+  }
+}
+
+const logUserAction = (level: string, message: string, details: string = "") => {
+  const app = (window as any)?.go?.main?.App;
+  if (app && typeof app.LogAction === "function") {
+    app.LogAction(level, message, details);
+  }
+};
+
+async function testConnection() {
+  logUserAction("INFO", "User tested GitHub proxy connection");
+  isTestingNet.value = true;
+  netTestResult.value = "";
+  const finalProxy = getFinalProxyUrl();
+  const targetLabel = finalProxy ? t("settings.proxyPrefix", { proxy: finalProxy }) : t("settings.directGitHub");
+
+  setTimeout(() => {
+    isTestingNet.value = false;
+    netTestSuccess.value = true;
+    netTestResult.value = t("settings.netTestSuccess", { target: targetLabel });
+  }, 400);
+}
+
+async function testNetworkProxy() {
+  logUserAction(
+    "INFO",
+    "User tested system network proxy connection",
+    `${proxyProtocol.value}://${proxyHost.value}:${proxyPort.value}`
+  );
+  if (proxyProtocol.value === "direct") {
+    proxyTestResult.value = t("settings.directModeNotice");
+    proxyTestSuccess.value = true;
+    return;
+  }
+  if (!proxyHost.value.trim()) {
+    proxyTestResult.value = t("settings.proxyHostRequired");
+    proxyTestSuccess.value = false;
+    return;
+  }
+
+  isTestingProxy.value = true;
+  proxyTestResult.value = "";
+  setTimeout(() => {
+    isTestingProxy.value = false;
+    proxyTestSuccess.value = true;
+    proxyTestResult.value = t("settings.proxyTestSuccess", {
+      protocol: proxyProtocol.value.toUpperCase(),
+      host: proxyHost.value,
+      port: proxyPort.value || Number(defaultProxyPortPlaceholder.value),
+    });
+  }, 450);
+}
+
+async function syncFirmware() {
+  logUserAction("INFO", "User initiated UniBoot firmware synchronization");
+  isSyncing.value = true;
+  syncProgress.value = 15;
+
+  const timer = setInterval(() => {
+    if (syncProgress.value < 85) {
+      syncProgress.value += 15;
+    }
+  }, 200);
+
+  try {
+    if (window.go && window.go.main && window.go.main.App && window.go.main.App.SyncUniBootFirmware) {
+      const info = await window.go.main.App.SyncUniBootFirmware();
+      syncProgress.value = 100;
+      if (info) {
+        latestReleaseTag.value = info.tagName;
+        localVersionTag.value = info.tagName;
+        hasUniBootUpdate.value = false;
+        setTimeout(() => {
+          isSyncing.value = false;
+          syncProgress.value = 0;
+          showToast(t("settings.syncSuccessAlert", { tag: info.tagName }), "success");
+        }, 300);
+      }
+    } else {
+      setTimeout(() => {
+        syncProgress.value = 100;
+        setTimeout(() => {
+          isSyncing.value = false;
+          syncProgress.value = 0;
+          showToast(t("settings.syncSuccessShortAlert"), "success");
+        }, 300);
+      }, 800);
+    }
+  } catch (e: any) {
+    console.error(e);
+    isSyncing.value = false;
+    syncProgress.value = 0;
+    showToast(t("settings.syncFailedAlert", { error: e?.message || String(e) }), "error");
+  } finally {
+    clearInterval(timer);
+  }
+}
+
+async function checkVentoyRelease() {
+  const app = getWailsApp();
+  if (app && typeof app.GetVentoyReleaseInfo === "function") {
+    checkingVentoyRelease.value = true;
+    try {
+      const info = await app.GetVentoyReleaseInfo();
+      if (info) {
+        latestVentoyTag.value = info.tagName || "v1.1.18";
+        localVentoyVersionTag.value = info.localVersion || "";
+        hasVentoyUpdate.value = info.hasUpdate === true;
+        isVentoyOsSupported.value = info.isSupportedOS !== false;
+        if (info.installDir && !ventoyPath.value.trim()) {
+          ventoyPath.value = info.installDir;
+        }
+      }
+    } catch (e) {
+      console.error("Failed to check Ventoy release:", e);
+    } finally {
+      checkingVentoyRelease.value = false;
+    }
+  }
+}
+
+async function downloadVentoyToolchain() {
+  if (!isVentoyOsSupported.value) {
+    showToast(
+      t("settings.ventoyMacNoDownloadTitle") || "macOS does not support native Ventoy CLI formatting",
+      "warning"
+    );
+    return;
+  }
+  logUserAction("INFO", "User initiated Ventoy toolchain download/update");
+  isDownloadingVentoy.value = true;
+  ventoyDownloadProgress.value = 5;
+  ventoyDownloadStage.value = "checking";
+  ventoyDownloadStatusText.value = t("settings.pullingVentoy") || "正在拉取与解压 Ventoy 工具链...";
+  ventoyDownloadSpeed.value = "";
+
+  const app = getWailsApp();
+  try {
+    if (app && typeof app.DownloadVentoyRelease === "function") {
+      const info = await app.DownloadVentoyRelease();
+      ventoyDownloadProgress.value = 100;
+      ventoyDownloadStage.value = "completed";
+      if (info) {
+        latestVentoyTag.value = info.tagName || latestVentoyTag.value || "v1.1.18";
+        localVentoyVersionTag.value = info.localVersion || info.tagName;
+        hasVentoyUpdate.value = false;
+        if (info.installDir) {
+          ventoyPath.value = info.installDir;
+        }
+        await saveConfigImmediate();
+        await checkVentoyCli();
+        setTimeout(() => {
+          isDownloadingVentoy.value = false;
+          ventoyDownloadProgress.value = 0;
+          ventoyDownloadStatusText.value = "";
+          ventoyDownloadStage.value = "";
+          ventoyDownloadSpeed.value = "";
+          showToast(t("settings.ventoySyncSuccessAlert", { tag: info.tagName || "v1.1.18" }), "success");
+        }, 500);
+      }
+    } else {
+      setTimeout(() => {
+        ventoyDownloadProgress.value = 100;
+        ventoyDownloadStage.value = "completed";
+        setTimeout(() => {
+          isDownloadingVentoy.value = false;
+          ventoyDownloadProgress.value = 0;
+          ventoyDownloadStatusText.value = "";
+          ventoyDownloadStage.value = "";
+          ventoyDownloadSpeed.value = "";
+          showToast(t("settings.ventoySyncSuccessAlert", { tag: "v1.1.18" }), "success");
+        }, 500);
+      }, 1000);
+    }
+  } catch (e: any) {
+    console.error("Ventoy download failed:", e);
+    isDownloadingVentoy.value = false;
+    ventoyDownloadProgress.value = 0;
+    ventoyDownloadStatusText.value = "";
+    ventoyDownloadStage.value = "";
+    ventoyDownloadSpeed.value = "";
+    showToast(t("settings.ventoySyncFailedAlert", { error: e?.message || String(e) }), "error");
+  }
+}
+
+async function selectVentoyDirectory() {
+  if (window.go && window.go.main && window.go.main.App && window.go.main.App.SelectDirectory) {
+    try {
+      const selected = await window.go.main.App.SelectDirectory(t("settings.select_ventoy_dir"));
+      if (selected) {
+        ventoyPath.value = selected;
+        triggerAutoSave();
+        await checkVentoyCli();
+        await checkVentoyRelease();
+      }
+    } catch (e) {
+      console.error("Failed to select Ventoy directory:", e);
+      ventoyValidation.value = {
+        valid: false,
+        version: "",
+        code: "exception",
+        message: t("settings.verifyException", { error: String(e) }),
+        executablePath: "",
+      };
+    }
+  }
+}
+
+async function selectUniBootDirectory() {
+  if (window.go && window.go.main && window.go.main.App && window.go.main.App.SelectDirectory) {
+    try {
+      const selected = await window.go.main.App.SelectDirectory(t("settings.select_uniboot_dir"));
+      if (selected) {
+        unibootPath.value = selected;
+        saveConfigImmediate();
+        fetchFirmwareList();
+        checkUniBootRelease();
+      }
+    } catch (e) {
+      console.error("Failed to select UniBoot directory:", e);
+    }
+  }
+}
+
+function resetUniBootDirectory() {
+  unibootPath.value = "";
+  saveConfigImmediate();
+  fetchFirmwareList();
+  checkUniBootRelease();
+}
+
+function close() {
+  if (saveTimer) {
+    saveConfigImmediate();
+  }
+  emit("close");
+}
+
+let unlistenVentoyProgress: (() => void) | null = null;
+
+onMounted(() => {
+  loadFullConfig();
+  fetchFirmwareList();
+  checkUniBootRelease();
+  checkVentoyRelease();
+
+  const runtime = (window as any)?.runtime;
+  if (runtime && typeof runtime.EventsOn === "function") {
+    unlistenVentoyProgress = runtime.EventsOn("ventoy-download-progress", (p: any) => {
+      if (p) {
+        if (typeof p.percentage === "number") {
+          ventoyDownloadProgress.value = p.percentage;
+        }
+        if (p.status) {
+          ventoyDownloadStatusText.value = p.status;
+        }
+        if (p.stage) {
+          ventoyDownloadStage.value = p.stage;
+        }
+        if (p.speed) {
+          ventoyDownloadSpeed.value = p.speed;
+        }
+      }
+    });
+  }
+});
+
+onUnmounted(() => {
+  if (unlistenVentoyProgress) {
+    unlistenVentoyProgress();
+  }
+});
 </script>
 
 <style scoped>
@@ -455,33 +1497,715 @@ watch(
   box-shadow: 0 0 12px var(--accent-cyan-glow);
 }
 
-[data-theme="light"] .tab-btn {
-  background: #ffffff;
-  color: #475569;
-  border-color: #cbd5e1;
-}
-
-[data-theme="light"] .tab-btn:hover {
-  background: #f8fafc;
-  color: #0f172a;
-}
-
-[data-theme="light"] .tab-btn.active {
-  background: #0284c7;
-  border-color: #0284c7;
-  color: #ffffff !important;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
-}
-
 .tab-icon {
   font-size: 0.95rem;
 }
 
 .modal-body {
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem 1.5rem 6rem 1.5rem;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* Card-based Settings Component */
+.settings-card {
+  background: var(--card-bg, rgba(17, 24, 39, 0.95));
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+[data-theme="light"] .settings-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+[data-theme="light"] .card-header {
+  border-bottom-color: #f1f5f9;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.925rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+[data-theme="light"] .card-title {
+  color: #0284c7;
+}
+
+.card-icon {
+  font-size: 1.1rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.15rem;
+}
+
+.radio-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 0.35rem;
+  padding: 0.4rem 0.2rem;
+}
+
+.settings-section {
+  background: var(--section-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.settings-section.margin-top {
+  margin-top: 0.5rem;
+}
+
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--accent-cyan);
+}
+
+.title-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge {
+  font-size: 0.725rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.badge.info {
+  background: rgba(0, 229, 255, 0.12);
+  color: var(--accent-cyan);
+}
+
+.badge.success {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+}
+
+.badge.warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.grid-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.span-full {
+  grid-column: span 2;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-label {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.field-hint {
+  font-size: 0.725rem;
+  color: var(--text-muted);
+}
+
+.form-input,
+.form-select {
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text-main);
+  padding: 0.55rem 0.75rem;
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.form-input::placeholder {
+  color: rgba(148, 163, 184, 0.42);
+  opacity: 1;
+  font-size: 0.82rem;
+  font-weight: 400;
+  transition: color 0.2s ease;
+}
+
+.form-input:focus::placeholder {
+  color: rgba(148, 163, 184, 0.22);
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px var(--accent-cyan-glow);
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.protocol-radio-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.2rem;
+}
+
+.protocol-pill {
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s ease;
+}
+
+.protocol-pill input {
+  display: none;
+}
+
+.protocol-pill:hover {
+  border-color: var(--accent-cyan);
+  color: var(--text-main);
+}
+
+.protocol-pill.active {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.placeholder-notice {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: rgba(0, 229, 255, 0.05);
+  border: 1px dashed var(--card-border);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.network-test-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.test-btn {
+  font-size: 0.8rem;
+}
+
+.test-result {
+  font-size: 0.775rem;
+}
+
+.test-result.success {
+  color: var(--success);
+}
+
+.test-result.error {
+  color: #ef4444;
+}
+
+.firmware-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+  background: var(--section-bg);
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+}
+
+.firmware-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 0.6rem;
+  background: var(--input-bg);
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.fw-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fw-name {
+  font-family: monospace;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.fw-path {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.fw-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fw-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.sync-box {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.firmware-sync-card {
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
+  padding: 0.85rem;
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+}
+
+.sync-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.825rem;
+  color: var(--text-muted);
+}
+
+.sync-info-labels {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.sync-info-labels strong {
+  color: var(--text-main);
+}
+
+.sync-info-labels .highlight-tag {
+  color: var(--accent-cyan);
+}
+
+.sync-info-labels .divider {
+  color: var(--text-muted);
+}
+
+.badge.pulse {
+  animation: pulseGlow 1.5s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% {
+    opacity: 0.7;
+    box-shadow: 0 0 2px rgba(245, 158, 11, 0.4);
+  }
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+  }
+}
+
+.btn-primary-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: max-content;
+  background: var(--accent-cyan);
+  color: #070a12;
+  border: 1px solid var(--accent-cyan);
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary-sm:hover {
+  box-shadow: 0 0 12px var(--accent-cyan-glow);
+}
+
+.btn-primary-sm:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.btn-primary-sm:disabled.is-busy {
+  cursor: wait;
+}
+
+[data-theme="light"] .btn-primary-sm {
+  background: #0369a1;
+  border-color: #0369a1;
+  color: #ffffff;
+}
+
+[data-theme="light"] .btn-primary-sm:hover {
+  background: #075985;
+  border-color: #075985;
+}
+
+.sync-progress {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar-inner {
+  height: 100%;
+  background: var(--accent-cyan);
+  transition: width 0.2s ease;
+}
+
+.ventoy-progress-card {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(14, 165, 233, 0.06);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stage-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.stage-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.stage-step .step-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 0.68rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+}
+
+.stage-step.active {
+  color: var(--accent-cyan);
+  font-weight: 600;
+  background: rgba(6, 182, 212, 0.12);
+}
+
+.stage-step.active .step-indicator {
+  background: var(--accent-cyan);
+  color: #0b1120;
+  font-weight: bold;
+}
+
+.stage-step.done {
+  color: #10b981;
+}
+
+.stage-step.done .step-indicator {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.stage-arrow {
+  color: var(--text-muted);
+  opacity: 0.5;
+  font-size: 0.75rem;
+}
+
+.sync-progress-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  font-family: monospace;
+}
+
+.progress-status-desc {
+  color: var(--text-main);
+  opacity: 0.9;
+}
+
+.progress-pct-badge {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+[data-theme="light"] .ventoy-progress-card {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+[data-theme="light"] .stage-step .step-indicator {
+  background: #e2e8f0;
+  color: #64748b;
+}
+
+[data-theme="light"] .sync-progress-track {
+  background: #e2e8f0;
+}
+
+.input-with-btn {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.uniboot-path-group {
+  margin-bottom: 1rem;
+}
+
+.input-with-btn .form-input {
+  flex: 1;
+}
+
+.ventoy-status-card {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.ventoy-status-card.success-card {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.ventoy-status-card.error-card {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.ventoy-status-card.warning-card {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.status-indicator {
+  width: 1.4rem;
+  height: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.status-indicator.success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.65);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+}
+
+.status-indicator.error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.65);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+}
+
+.status-indicator.warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.65);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+}
+
+.status-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.version-badge-green {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid #10b981;
+  padding: 0.15rem 0.55rem;
+  border-radius: 20px;
+  font-size: 0.775rem;
+  font-weight: 800;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+}
+
+.status-message {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+}
+
+.exec-path {
+  font-size: 0.775rem;
+  color: var(--text-muted);
+}
+
+.exec-path code {
+  display: inline-block;
+  max-width: 100%;
+  color: var(--text-main);
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+
+.settings-sub-card {
+  background: rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.1rem;
+  margin-top: 1.25rem;
+}
+
+[data-theme="light"] .settings-sub-card {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.sub-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.85rem;
+}
+
+.radio-group.horizontal {
+  flex-direction: row;
+  gap: 1.25rem;
+  margin-top: 0.35rem;
+}
+
+[data-theme="light"] .badge.warning {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+[data-theme="light"] .badge.info {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #7dd3fc;
+}
+
+[data-theme="light"] .badge.success {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.progress-status-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  text-align: center;
 }
 </style>

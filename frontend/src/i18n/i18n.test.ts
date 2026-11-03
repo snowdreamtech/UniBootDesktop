@@ -9,12 +9,12 @@ describe("i18n module", () => {
   it("translates pre-bundled en-US string correctly", () => {
     expect(currentLocale.value).toBe("en-US");
     const appTitle = t("app.title");
-    expect(appTitle).toBe("UniGoDesktop");
+    expect(appTitle).toBe("UniBoot Desktop");
   });
 
   it("interpolates parameters correctly with {key}", async () => {
     await setLanguage("en-US");
-    const notice = t("about.newVersionNotice", { tag: "v1.2.3" });
+    const notice = t("about.updateTo", { tag: "v1.2.3" });
     expect(notice).toContain("v1.2.3");
   });
 
@@ -34,6 +34,24 @@ describe("i18n module", () => {
 
   it("contains 53 supported languages", () => {
     expect(SUPPORTED_LANGUAGES.length).toBe(53);
+  });
+
+  it("persists selectedLangSetting and local storage correctly", async () => {
+    const store = new Map<string, string>();
+    (globalThis as any).localStorage = {
+      getItem: (k: string) => store.get(k) ?? null,
+      setItem: (k: string, v: string) => store.set(k, String(v)),
+      removeItem: (k: string) => store.delete(k),
+      clear: () => store.clear(),
+    };
+    await setLanguage("zh-CN");
+    const { selectedLangSetting } = await import("./index");
+    expect(selectedLangSetting.value).toBe("zh-CN");
+    expect(store.get("uniboot_locale")).toBe("zh-CN");
+
+    await setLanguage("en-US");
+    expect(selectedLangSetting.value).toBe("en-US");
+    expect(store.get("uniboot_locale")).toBe("en-US");
   });
 
   it("ensures all 53 locales contain all translation keys from en-US", async () => {

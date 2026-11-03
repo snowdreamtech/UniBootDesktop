@@ -797,13 +797,21 @@ gen_*.go
 test_*.json
 coverage.html
 trivy-out.txt
+# UniBoot Embedded Firmware Binaries
+pkg/firmware/assets/*.efi
+pkg/firmware/assets/*.lkrn
+pkg/firmware/assets/*.kpxe
+pkg/firmware/assets/*.iso
+pkg/firmware/assets/*.tmp-*
+pkg/firmware/assets/*.download-*
+
 coverage_report.md
 coverage.svg
 sbom.json
 completions/
 manpages/
-unigo
-unigodesktop
+uniboot
+unibootdesktop
 *.md5
 .trivycache/
 

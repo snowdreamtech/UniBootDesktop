@@ -19,11 +19,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/archive"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	pkgHttp "github.com/snowdreamtech/unigodesktop/internal/http"
-	"github.com/snowdreamtech/unigodesktop/internal/updater"
-	"github.com/snowdreamtech/unigodesktop/internal/version"
+	"github.com/snowdreamtech/unibootdesktop/internal/archive"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	pkgHttp "github.com/snowdreamtech/unibootdesktop/internal/http"
+	"github.com/snowdreamtech/unibootdesktop/internal/updater"
+	"github.com/snowdreamtech/unibootdesktop/internal/version"
 )
 
 // UpdateStatus represents release update metadata.
@@ -48,6 +48,7 @@ type UpdateProgress struct {
 	Detail      string `json:"detail,omitempty"`
 	LoadedBytes int64  `json:"loadedBytes,omitempty"`
 	TotalBytes  int64  `json:"totalBytes,omitempty"`
+	Speed       string `json:"speed,omitempty"`
 }
 
 // ProgressFunc reports update progress.
@@ -88,7 +89,7 @@ func CheckUpdate(ctx context.Context) *UpdateStatus {
 		hasUpdate := HasNewVersion(currentTag, latestTag)
 		var downloadURL string
 		if hasUpdate {
-			downloadURL = "https://github.com/snowdreamtech/UniGoDesktop/releases/tag/" + latestTag
+			downloadURL = "https://github.com/snowdreamtech/UniBootDesktop/releases/tag/" + latestTag
 		}
 		return &UpdateStatus{
 			HasUpdate:   hasUpdate,
@@ -107,9 +108,14 @@ func CheckUpdate(ctx context.Context) *UpdateStatus {
 }
 
 // BuildProxyURL formats a URL with the given GitHub proxy prefix if configured.
+// GitHub API endpoints (api.github.com) are excluded from proxying because reverse proxy
+// services typically only mirror raw/release download endpoints and do not support the REST API.
 func BuildProxyURL(rawURL, proxyPrefix string) string {
 	proxyPrefix = strings.TrimSpace(proxyPrefix)
 	if proxyPrefix == "" || strings.EqualFold(proxyPrefix, "direct") {
+		return rawURL
+	}
+	if strings.Contains(rawURL, "api.github.com") {
 		return rawURL
 	}
 	if !strings.HasSuffix(proxyPrefix, "/") {
@@ -155,7 +161,7 @@ func FindGuiReleaseAsset(assets []updater.ReleaseAsset, targetOS, targetArch str
 
 		switch cleanOS {
 		case "darwin":
-			// macOS release asset is a DMG image (e.g. UniGoDesktop.dmg)
+			// macOS release asset is a DMG image (e.g. UniBootDesktop.dmg)
 			if strings.HasSuffix(name, ".dmg") {
 				matched = append(matched, a)
 			}
@@ -194,15 +200,28 @@ func FindGuiReleaseAsset(assets []updater.ReleaseAsset, targetOS, targetArch str
 	return &matched[0], nil
 }
 
+func formatByteSpeed(bytesPerSec float64) string {
+	if bytesPerSec <= 0 {
+		return "0 KB/s"
+	}
+	if bytesPerSec >= 1048576 {
+		return fmt.Sprintf("%.1f MB/s", bytesPerSec/1048576.0)
+	}
+	return fmt.Sprintf("%.0f KB/s", bytesPerSec/1024.0)
+}
+
 type progressTrackingReader struct {
-	reader     io.Reader
-	totalBytes int64
-	readBytes  int64
-	startPct   int
-	endPct     int
-	lastPct    int
-	lastUpdate time.Time
-	onProgress ProgressFunc
+	reader        io.Reader
+	totalBytes    int64
+	readBytes     int64
+	startPct      int
+	endPct        int
+	lastPct       int
+	lastUpdate    time.Time
+	lastSpeedTime time.Time
+	lastSpeedByte int64
+	currentSpeed  string
+	onProgress    ProgressFunc
 }
 
 func (pt *progressTrackingReader) Read(p []byte) (int, error) {
@@ -222,15 +241,28 @@ func (pt *progressTrackingReader) Read(p []byte) (int, error) {
 			}
 
 			now := time.Now()
+			speedElapsed := now.Sub(pt.lastSpeedTime)
+			if speedElapsed >= 500*time.Millisecond {
+				deltaBytes := pt.readBytes - pt.lastSpeedByte
+				bytesPerSec := float64(deltaBytes) / speedElapsed.Seconds()
+				pt.currentSpeed = formatByteSpeed(bytesPerSec)
+				pt.lastSpeedByte = pt.readBytes
+				pt.lastSpeedTime = now
+			}
+
 			if currentPct != pt.lastPct && (currentPct-pt.lastPct >= 1 || now.Sub(pt.lastUpdate) >= 200*time.Millisecond) {
 				pt.lastPct = currentPct
 				pt.lastUpdate = now
 				var status string
 				if pt.totalBytes > 0 {
-					status = fmt.Sprintf("Downloading update: %.1f MB / %.1f MB (%d%%)",
-						float64(pt.readBytes)/1048576.0, float64(pt.totalBytes)/1048576.0, currentPct)
+					filePct := int(float64(pt.readBytes) * 100 / float64(pt.totalBytes))
+					status = fmt.Sprintf("%.1f MB / %.1f MB (%d%%)",
+						float64(pt.readBytes)/1048576.0, float64(pt.totalBytes)/1048576.0, filePct)
 				} else {
-					status = fmt.Sprintf("Downloading update: %.1f MB", float64(pt.readBytes)/1048576.0)
+					status = fmt.Sprintf("%.1f MB", float64(pt.readBytes)/1048576.0)
+				}
+				if pt.currentSpeed != "" {
+					status += " · " + pt.currentSpeed
 				}
 				pt.onProgress(UpdateProgress{
 					Percentage:  currentPct,
@@ -238,6 +270,7 @@ func (pt *progressTrackingReader) Read(p []byte) (int, error) {
 					Stage:       "downloading",
 					LoadedBytes: pt.readBytes,
 					TotalBytes:  pt.totalBytes,
+					Speed:       pt.currentSpeed,
 				})
 			}
 		}
@@ -256,7 +289,7 @@ func DownloadWithProgress(
 ) error {
 	proxyPrefix = strings.TrimSpace(proxyPrefix)
 
-	client := pkgHttp.NewClientWithTimeout(60 * time.Second)
+	client := pkgHttp.NewClient()
 	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 		if len(via) >= 10 {
 			return fmt.Errorf("stopped after 10 redirects")
@@ -281,7 +314,7 @@ func DownloadWithProgress(
 		if err != nil {
 			return fmt.Errorf("failed to create download request: %w", err)
 		}
-		req.Header.Set("User-Agent", "UniGoDesktop/1.0")
+		req.Header.Set("User-Agent", "UniBootDesktop/1.0")
 		req.Header.Set("Accept", "*/*")
 
 		resp, err := client.Do(req)
@@ -298,12 +331,15 @@ func DownloadWithProgress(
 				return fmt.Errorf("failed to create temp destination file: %w", err)
 			}
 
+			now := time.Now()
 			tracker := &progressTrackingReader{
-				reader:     resp.Body,
-				totalBytes: resp.ContentLength,
-				startPct:   startPct,
-				endPct:     endPct,
-				onProgress: onProgress,
+				reader:        resp.Body,
+				totalBytes:    resp.ContentLength,
+				startPct:      startPct,
+				endPct:        endPct,
+				lastUpdate:    now,
+				lastSpeedTime: now,
+				onProgress:    onProgress,
 			}
 
 			copyBuf := make([]byte, 64*1024)
@@ -344,6 +380,51 @@ func DownloadWithProgress(
 		}
 	}
 
+	// Fallback to direct download if proxy attempts failed
+	if lastErr != nil && finalURL != rawURL {
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
+		if err == nil {
+			req.Header.Set("User-Agent", "UniBootDesktop/1.0")
+			req.Header.Set("Accept", "*/*")
+			resp, err := client.Do(req)
+			if err == nil && resp.StatusCode == http.StatusOK {
+				if err := os.MkdirAll(filepath.Dir(destPath), 0o755); err == nil {
+					tmpPath := destPath + ".tmp"
+					if out, err := os.Create(tmpPath); err == nil {
+						now := time.Now()
+						tracker := &progressTrackingReader{
+							reader:        resp.Body,
+							totalBytes:    resp.ContentLength,
+							startPct:      startPct,
+							endPct:        endPct,
+							lastUpdate:    now,
+							lastSpeedTime: now,
+							onProgress:    onProgress,
+						}
+						copyBuf := make([]byte, 64*1024)
+						_, copyErr := io.CopyBuffer(out, tracker, copyBuf)
+						resp.Body.Close()
+						out.Close()
+						if copyErr == nil {
+							if err := os.Rename(tmpPath, destPath); err == nil {
+								if onProgress != nil {
+									onProgress(UpdateProgress{
+										Percentage: endPct,
+										Status:     "Download completed",
+										Stage:      "download_completed",
+									})
+								}
+								return nil
+							}
+						}
+						os.Remove(tmpPath)
+					}
+				}
+				resp.Body.Close()
+			}
+		}
+	}
+
 	if proxyPrefix == "" || strings.EqualFold(proxyPrefix, "direct") {
 		return fmt.Errorf("direct GitHub connection failed (%w). Please configure GitHub proxy prefix in Settings and try again", lastErr)
 	}
@@ -371,7 +452,7 @@ func StageMacDmgUpdate(
 		})
 	}
 
-	mountDir, err := os.MkdirTemp("", "unigodesktop-mount-*")
+	mountDir, err := os.MkdirTemp("", "unibootdesktop-mount-*")
 	if err != nil {
 		return nil, fmt.Errorf("failed to create temporary mount point: %w", err)
 	}
@@ -482,8 +563,8 @@ if [[ "$TARGET" == *".app"* ]]; then
         open "$TARGET"
     fi
 else
-    if [ -f "$STAGED/Contents/MacOS/unigodesktop" ]; then
-        cp -f "$STAGED/Contents/MacOS/unigodesktop" "$TARGET" 2>/dev/null || true
+    if [ -f "$STAGED/Contents/MacOS/unibootdesktop" ]; then
+        cp -f "$STAGED/Contents/MacOS/unibootdesktop" "$TARGET" 2>/dev/null || true
         chmod +x "$TARGET" 2>/dev/null || true
         "$TARGET" &
     elif [ -f "$STAGED" ]; then
@@ -552,7 +633,7 @@ func StageWindowsUpdate(
 		}
 		_ = os.Remove(archivePath)
 
-		stagedExe = filepath.Join(stagingDir, "unigodesktop.exe")
+		stagedExe = filepath.Join(stagingDir, "unibootdesktop.exe")
 		if _, err := os.Stat(stagedExe); err != nil {
 			// Look for any .exe in stagingDir
 			entries, _ := os.ReadDir(stagingDir)
@@ -675,7 +756,7 @@ func StageLinuxUpdate(
 		}
 		_ = os.Remove(filePath)
 
-		stagedBinary := filepath.Join(stagingDir, "unigodesktop")
+		stagedBinary := filepath.Join(stagingDir, "unibootdesktop")
 		if _, err := os.Stat(stagedBinary); err != nil {
 			entries, _ := os.ReadDir(stagingDir)
 			for _, e := range entries {

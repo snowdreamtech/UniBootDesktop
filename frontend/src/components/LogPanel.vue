@@ -25,40 +25,35 @@
         </div>
       </div>
 
-      <!-- Row 2: Filter Tabs & Search Box -->
+      <!-- Row 2: Filter Tabs -->
       <div class="log-sub-header">
         <div class="filter-tabs-sm">
           <button
             v-for="level in logLevels"
             :key="level.key"
             class="btn-tab-sm"
-            :class="{ active: currentLogFilter === level.key, [level.key.toLowerCase()]: true }"
+            :class="{ active: currentLogFilter === level.key }"
             @click="emit('update:currentLogFilter', level.key)"
           >
-            {{ level.label }} ({{ getLevelCount(level.key) }})
+            {{ level.label }}
           </button>
-        </div>
-
-        <div class="search-box-sm">
-          <input v-model="searchQuery" type="text" :placeholder="t('log.search_placeholder')" class="search-input-sm" />
         </div>
       </div>
 
-      <!-- Terminal Log Window -->
       <div class="embedded-terminal-window" ref="embeddedTerminalRef">
-        <div v-if="displayedLogs.length === 0" class="empty-logs">
+        <div v-if="filteredLogs.length === 0" class="empty-logs">
           {{ t("log.empty") }}
         </div>
         <div
-          v-for="log in displayedLogs"
+          v-for="log in filteredLogs"
           :key="log.id || String(log.timestamp)"
           class="log-row"
-          :class="(log.level || 'info').toLowerCase()"
+          :class="log.level.toLowerCase()"
         >
           <span class="log-time"
             ><bdi>{{ formatLogTime(log.timestamp) }}</bdi></span
           >
-          <span class="log-level-badge" :class="(log.level || 'info').toLowerCase()"
+          <span class="log-level-badge" :class="log.level.toLowerCase()"
             ><bdi>[{{ log.level }}]</bdi></span
           >
           <div class="log-content">
@@ -76,24 +71,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from "vue";
+import { ref, watch, nextTick, onMounted } from "vue";
+import type { LogItem } from "./LogViewerModal.vue";
 import { t } from "../i18n";
 import { formatLogTime } from "../utils/logFormatter";
-
-export interface LogItem {
-  id?: number;
-  timestamp: string | Date;
-  level: string;
-  message: string;
-  details?: string;
-}
 
 const props = defineProps<{
   isVisible: boolean;
   autoScroll: boolean;
   currentLogFilter: string;
   filteredLogs: LogItem[];
-  allLogs?: LogItem[];
   logLevels: { key: string; label: string }[];
 }>();
 
@@ -106,43 +93,66 @@ const emit = defineEmits<{
   (e: "close-log"): void;
 }>();
 
-const searchQuery = ref("");
 const embeddedTerminalRef = ref<HTMLElement | null>(null);
-
-function getLevelCount(levelKey: string): number {
-  const source = props.allLogs || props.filteredLogs;
-  if (levelKey === "ALL") return source.length;
-  return source.filter((l) => (l.level || "").toUpperCase() === levelKey).length;
-}
-
-const displayedLogs = computed(() => {
-  const query = searchQuery.value.trim().toLowerCase();
-  if (!query) return props.filteredLogs;
-  return props.filteredLogs.filter((log) => {
-    const msg = (log.message || "").toLowerCase();
-    const details = (log.details || "").toLowerCase();
-    return msg.includes(query) || details.includes(query);
-  });
-});
 
 function scrollToBottom() {
   if (props.autoScroll && embeddedTerminalRef.value) {
-    embeddedTerminalRef.value.scrollTop = embeddedTerminalRef.value.scrollHeight;
+    nextTick(() => {
+      if (embeddedTerminalRef.value) {
+        embeddedTerminalRef.value.scrollTop = embeddedTerminalRef.value.scrollHeight;
+      }
+    });
   }
 }
 
 watch(
   () => props.filteredLogs.length,
   () => {
-    nextTick(scrollToBottom);
+    scrollToBottom();
   }
 );
+
+watch(
+  () => props.filteredLogs,
+  () => {
+    scrollToBottom();
+  },
+  { deep: true }
+);
+
+watch(
+  () => props.autoScroll,
+  (val) => {
+    if (val) {
+      scrollToBottom();
+    }
+  }
+);
+
+watch(
+  () => props.isVisible,
+  (val) => {
+    if (val) {
+      scrollToBottom();
+    }
+  }
+);
+
+watch(
+  () => props.currentLogFilter,
+  () => {
+    scrollToBottom();
+  }
+);
+
+onMounted(() => {
+  scrollToBottom();
+});
 </script>
 
 <style scoped>
 .log-section-card {
-  width: 100%;
-  margin-top: 1.5rem;
+  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
   padding: 1.25rem 1.5rem;
@@ -150,9 +160,7 @@ watch(
   border: 1px solid var(--card-border);
   border-radius: 16px;
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  box-sizing: border-box;
   min-height: 500px;
 }
 
@@ -167,11 +175,8 @@ watch(
 
 .log-sub-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.85rem;
-  gap: 1rem;
-  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
 }
 
 .log-title-group {
@@ -188,27 +193,14 @@ watch(
 }
 
 .live-badge {
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: var(--badge-success-bg);
+  color: var(--badge-success-text);
+  border: 1px solid var(--alert-success-border);
   font-size: 0.75rem;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-  100% {
-    opacity: 1;
-  }
 }
 
 .log-section-controls {
@@ -220,8 +212,8 @@ watch(
 
 .filter-tabs-sm {
   display: flex;
-  gap: 0.35rem;
-  background: var(--subtab-container-bg, rgba(255, 255, 255, 0.04));
+  gap: 0.3rem;
+  background: var(--subtab-container-bg);
   padding: 3px;
   border-radius: 8px;
   border: 1px solid var(--card-border);
@@ -229,242 +221,167 @@ watch(
 
 .btn-tab-sm {
   background: transparent;
-  border: 1px solid transparent;
-  color: var(--subtab-btn-text, var(--text-muted));
-  padding: 0.3rem 0.65rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
+  border: none;
+  color: var(--subtab-btn-text);
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-weight: 500;
 }
 
 .btn-tab-sm:hover {
   color: var(--text-main);
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--btn-sec-hover-bg);
 }
 
 .btn-tab-sm.active {
-  background: var(--tab-btn-active-bg, #0284c7);
-  color: var(--tab-btn-active-text, #ffffff);
-  border-color: var(--subtab-btn-active-border, #0284c7);
-  font-weight: 600;
-}
-
-.search-box-sm {
-  display: flex;
-  align-items: center;
-}
-
-.search-input-sm {
-  background: var(--input-bg, rgba(0, 0, 0, 0.2));
-  border: 1px solid var(--card-border);
-  color: var(--text-main);
-  padding: 0.35rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.82rem;
-  width: 220px;
-  transition: all 0.2s ease;
-}
-
-.search-input-sm:focus {
-  outline: none;
-  border-color: var(--accent-cyan, #0284c7);
-  box-shadow: 0 0 8px rgba(2, 132, 199, 0.25);
+  background: var(--tab-btn-active-bg);
+  color: var(--tab-btn-active-text);
 }
 
 .btn-text-sm {
-  background: var(--btn-sec-bg, rgba(255, 255, 255, 0.06));
-  border: 1px solid var(--card-border);
-  color: var(--text-main);
-  padding: 0.35rem 0.75rem;
+  background: var(--btn-sec-bg);
+  border: 1px solid var(--btn-sec-border);
+  color: var(--btn-sec-text);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
   border-radius: 6px;
-  font-size: 0.82rem;
-  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
 .btn-text-sm:hover {
-  background: var(--btn-sec-hover-bg, rgba(255, 255, 255, 0.12));
-  transform: translateY(-1px);
+  background: var(--btn-sec-hover-bg);
+  border-color: var(--btn-sec-hover-border);
+  color: var(--btn-sec-hover-text);
 }
 
 .btn-text-danger-sm {
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #ef4444;
-  padding: 0.35rem 0.75rem;
+  background: var(--alert-danger-bg);
+  border: 1px solid var(--alert-danger-border);
+  color: var(--alert-danger-title);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
   border-radius: 6px;
-  font-size: 0.82rem;
-  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
 .btn-text-danger-sm:hover {
-  background: rgba(239, 68, 68, 0.22);
-  transform: translateY(-1px);
-}
-
-.btn-close-log {
-  padding: 0.35rem 0.55rem;
-  font-size: 0.85rem;
-  line-height: 1;
-}
-
-.btn-close-log:hover {
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.15);
+  background: var(--badge-danger-bg);
+  border-color: var(--danger);
+  color: var(--danger);
 }
 
 .auto-scroll-label-sm {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--btn-sec-text);
   cursor: pointer;
+  user-select: none;
   padding: 0.35rem 0.65rem;
   border-radius: 6px;
-  background: var(--btn-sec-bg, rgba(255, 255, 255, 0.04));
-  border: 1px solid var(--card-border);
-  color: var(--text-main);
+  background: var(--btn-sec-bg);
+  border: 1px solid var(--btn-sec-border);
   transition: all 0.2s ease;
 }
 
 .auto-scroll-label-sm input[type="checkbox"] {
-  accent-color: var(--accent-cyan, #0284c7);
+  accent-color: var(--accent-cyan);
   width: 14px;
   height: 14px;
   cursor: pointer;
 }
 
 .auto-scroll-label-sm:hover {
-  background: var(--btn-sec-hover-bg, rgba(255, 255, 255, 0.1));
+  background: var(--btn-sec-hover-bg);
+  border-color: var(--btn-sec-hover-border);
+  color: var(--btn-sec-hover-text);
 }
 
 .embedded-terminal-window {
-  background: var(--terminal-bg, #0b1120);
-  border: 1px solid var(--terminal-border, rgba(255, 255, 255, 0.08));
+  background: var(--terminal-bg);
+  border: 1px solid var(--terminal-border);
   border-radius: 10px;
-  padding: 0.9rem 1.15rem;
+  padding: 1rem 1.15rem;
   min-height: 440px;
   max-height: 560px;
-  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
   font-size: 0.82rem;
   line-height: 1.6;
+  flex: 1;
 }
 
 .embedded-terminal-window .empty-logs {
-  color: var(--text-muted, #64748b);
+  color: var(--text-muted);
   text-align: center;
-  padding: 4rem 0;
+  padding-top: 60px;
 }
 
 .log-row {
   display: flex;
-  align-items: flex-start;
-  gap: 0.85rem;
-  padding: 0.3rem 0;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
-  box-sizing: border-box;
-  width: 100%;
+  gap: 0.75rem;
+  padding: 0.2rem 0;
+  border-bottom: 1px solid var(--card-border);
 }
 
 .log-time {
-  color: var(--text-muted, #64748b);
-  font-size: 0.78rem;
-  font-family: "JetBrains Mono", monospace;
-  white-space: nowrap;
+  color: var(--text-muted);
   flex-shrink: 0;
-  width: 100px;
-  min-width: 100px;
 }
 
 .log-level-badge {
-  font-size: 0.7rem;
   font-weight: 700;
-  padding: 0.05rem 0.45rem;
+  font-size: 0.75rem;
+  padding: 0.05rem 0.35rem;
   border-radius: 4px;
   flex-shrink: 0;
-  width: 58px;
-  min-width: 58px;
-  text-align: center;
-  letter-spacing: 0.5px;
 }
 
 .log-level-badge.info {
-  background: rgba(16, 185, 129, 0.18);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #38bdf8;
 }
-
 .log-level-badge.warn,
 .log-level-badge.warning {
-  background: rgba(245, 158, 11, 0.18);
   color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
 }
-
 .log-level-badge.error {
-  background: rgba(239, 68, 68, 0.2);
   color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.35);
 }
-
 .log-level-badge.debug {
-  background: rgba(168, 85, 247, 0.18);
   color: #c084fc;
-  border: 1px solid rgba(168, 85, 247, 0.3);
 }
 
 .log-content {
   flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.5rem;
+  word-break: break-word;
 }
 
 .log-msg {
-  color: var(--text-main, #e2e8f0);
-  font-size: 0.82rem;
-  line-height: 20px;
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-.log-row.info .log-msg {
-  color: #f1f5f9;
-}
-.log-row.warn .log-msg {
-  color: #fde047;
-}
-.log-row.error .log-msg {
-  color: #fca5a5;
-}
-.log-row.debug .log-msg {
-  color: #c084fc;
+  color: var(--text-main);
 }
 
 .log-details {
-  color: var(--text-muted, #94a3b8);
+  display: inline-block;
   font-size: 0.78rem;
-  line-height: 20px;
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  color: var(--text-muted);
+  margin-left: 0.5rem;
+  opacity: 0.85;
 }
 
 /* Light Mode Overrides for LogPanel */
@@ -494,42 +411,41 @@ watch(
 }
 
 [data-theme="light"] .btn-tab-sm.active {
-  background: #0284c7;
+  background: linear-gradient(135deg, #0396e6 0%, #0284c7 45%, #2563eb 100%);
   color: #ffffff;
-  border-color: #0284c7;
   font-weight: 700;
-}
-
-[data-theme="light"] .search-input-sm {
-  background: #ffffff;
-  border-color: #cbd5e1;
-  color: #0f172a;
-}
-
-[data-theme="light"] .search-input-sm:focus {
-  border-color: #0284c7;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 2px 8px rgba(2, 132, 199, 0.3);
 }
 
 [data-theme="light"] .btn-text-sm {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 60%, #f1f5f9 100%);
+  border: 1px solid rgba(15, 23, 42, 0.12);
   color: #0f172a;
   font-weight: 600;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 [data-theme="light"] .btn-text-sm:hover {
-  background: #f0f9ff;
-  border-color: #0284c7;
+  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-color: rgba(2, 132, 199, 0.35);
   color: #0284c7;
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 3px 8px rgba(2, 132, 199, 0.15);
 }
 
 [data-theme="light"] .auto-scroll-label-sm {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 60%, #f1f5f9 100%);
+  border: 1px solid rgba(15, 23, 42, 0.12);
   color: #0f172a;
   font-weight: 600;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 [data-theme="light"] .auto-scroll-label-sm input[type="checkbox"] {
@@ -537,23 +453,31 @@ watch(
 }
 
 [data-theme="light"] .auto-scroll-label-sm:hover {
-  background: #f0f9ff;
-  border-color: #0284c7;
+  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-color: rgba(2, 132, 199, 0.35);
   color: #0284c7;
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 3px 8px rgba(2, 132, 199, 0.15);
 }
 
 [data-theme="light"] .btn-text-danger-sm {
-  background: #fef2f2;
-  border: 1px solid #fca5a5;
+  background: linear-gradient(180deg, #ffffff 0%, #fff5f5 60%, #fef2f2 100%);
+  border: 1px solid rgba(239, 68, 68, 0.25);
   color: #dc2626;
   font-weight: 600;
-  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.08);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 1px 3px rgba(239, 68, 68, 0.08);
 }
 
 [data-theme="light"] .btn-text-danger-sm:hover {
-  background: #fee2e2;
-  border-color: #ef4444;
+  background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: rgba(239, 68, 68, 0.45);
   color: #b91c1c;
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 3px 8px rgba(239, 68, 68, 0.15);
 }
 
 [data-theme="light"] .embedded-terminal-window {
@@ -620,17 +544,5 @@ watch(
   background: #f3e8ff;
   color: #6b21a8;
   border: 1px solid #e9d5ff;
-}
-
-/* Card fade transition */
-.card-fade-enter-active,
-.card-fade-leave-active {
-  transition: all 0.25s ease-out;
-}
-
-.card-fade-enter-from,
-.card-fade-leave-to {
-  opacity: 0;
-  transform: translateY(12px);
 }
 </style>

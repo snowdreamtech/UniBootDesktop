@@ -113,7 +113,7 @@ formatters:
       sections:
         - standard
         - default
-        - prefix(github.com/snowdreamtech/unigodesktop)
+        - prefix(github.com/snowdreamtech/unibootdesktop)
     gofumpt:
       extra:
         group-params: true

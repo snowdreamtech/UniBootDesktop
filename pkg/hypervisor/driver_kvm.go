@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
 )
 
 type KVMDriver struct{}
@@ -105,12 +105,12 @@ func (d *KVMDriver) Detect() *VMStatus {
 
 func (d *KVMDriver) Launch(ctx context.Context, diskPath, bootMode string) error {
 	status := d.Detect()
-	if !status.Installed && os.Getenv("UNIGO_DRY_RUN") == "" {
+	if !status.Installed && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
-	if os.Getenv("UNIGO_DRY_RUN") == "1" {
-		logger.Info("UNIGO_DRY_RUN mode active, dry-run KVM launch complete", "diskPath", diskPath, "bootMode", bootMode)
+	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run KVM launch complete", "diskPath", diskPath, "bootMode", bootMode)
 		return nil
 	}
 

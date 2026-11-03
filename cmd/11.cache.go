@@ -14,11 +14,11 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 
-	"github.com/snowdreamtech/unigodesktop/internal/cli/output"
-	"github.com/snowdreamtech/unigodesktop/internal/database"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	"github.com/snowdreamtech/unigodesktop/internal/repository/sqlite"
-	"github.com/snowdreamtech/unigodesktop/internal/service"
+	"github.com/snowdreamtech/unibootdesktop/internal/cli/output"
+	"github.com/snowdreamtech/unibootdesktop/internal/database"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/repository/sqlite"
+	"github.com/snowdreamtech/unibootdesktop/internal/service"
 )
 
 // init registers the cache command and its subcommands to the root command.
@@ -37,8 +37,8 @@ func init() {
 // cacheCmd is the parent cache command.
 var cacheCmd = &cobra.Command{
 	Use:   "cache",
-	Short: "Manage UniGoDesktop cache",
-	Long: `Manage the UniGoDesktop download cache.
+	Short: "Manage UniBootDesktop cache",
+	Long: `Manage the UniBootDesktop download cache.
 
 If no subcommand is provided, it displays the path to the cache directory.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -91,7 +91,7 @@ var cacheListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"ls"},
 	Short:   "List all cached artifacts",
-	Long:    `List all cached artifacts stored in the UniGoDesktop cache directory.`,
+	Long:    `List all cached artifacts stored in the UniBootDesktop cache directory.`,
 	Args:    cobra.NoArgs,
 	RunE:    runCacheList,
 }
@@ -105,10 +105,10 @@ var cacheClearCmd = &cobra.Command{
 
 Examples:
   # Clear all cache
-  unigodesktop cache clear
+  unibootdesktop cache clear
 
   # Clear cache for a specific tool
-  unigodesktop cache clear node`,
+  unibootdesktop cache clear node`,
 	Args: cobra.MaximumNArgs(1),
 	RunE: runCacheClear,
 }
@@ -352,18 +352,17 @@ func runCacheStats(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
+// getDefaultCacheDir returns the default cache directory path.
+func getDefaultCacheDir() string {
+	return env.GetCacheDir()
+}
+
 // listCacheFiles walks the cache directory and returns a list of file info maps.
 func listCacheFiles(dir string) ([]map[string]string, error) {
 	var entries []map[string]string
 
 	info, err := os.Stat(dir)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return entries, nil
-		}
-		return nil, fmt.Errorf("stat cache directory: %w", err)
-	}
-	if !info.IsDir() {
+	if err != nil || !info.IsDir() {
 		return entries, nil
 	}
 

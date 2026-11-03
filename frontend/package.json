@@ -1,7 +1,7 @@
 {
-  "name": "unigodesktop-frontend",
+  "name": "unibootdesktop-frontend",
   "private": true,
-  "version": "0.13.0",
+  "version": "0.7.0",
   "type": "module",
   "scripts": {
     "predev": "node ../scripts/ensure-wailsjs.mjs",
@@ -25,7 +25,6 @@
     "vue-tsc": "^2.0.6"
   },
   "overrides": {
-    "brace-expansion": "2.1.7",
-    "minimatch": "11.0.4"
+    "brace-expansion": "2.1.7"
   }
 }

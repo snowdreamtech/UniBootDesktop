@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
 )
 
 type ParallelsDriver struct{}
@@ -81,12 +81,12 @@ func (d *ParallelsDriver) Detect() *VMStatus {
 
 func (d *ParallelsDriver) Launch(ctx context.Context, diskPath, bootMode string) error {
 	status := d.Detect()
-	if !status.Installed && os.Getenv("UNIGO_DRY_RUN") == "" {
+	if !status.Installed && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
-	if os.Getenv("UNIGO_DRY_RUN") == "1" {
-		logger.Info("UNIGO_DRY_RUN mode active, dry-run Parallels launch complete", "diskPath", diskPath, "bootMode", bootMode)
+	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run Parallels launch complete", "diskPath", diskPath, "bootMode", bootMode)
 		return nil
 	}
 

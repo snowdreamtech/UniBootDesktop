@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
-	"github.com/snowdreamtech/unigodesktop/pkg/disk"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/pkg/disk"
 )
 
 type VirtualBoxDriver struct{}
@@ -106,12 +106,12 @@ func (d *VirtualBoxDriver) Launch(ctx context.Context, diskPath, bootMode string
 // LaunchWithConfig launches VirtualBox with custom VMConfig and monitors guest OS shutdown.
 func (d *VirtualBoxDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
 	status := d.Detect()
-	if !status.Installed && os.Getenv("UNIGO_DRY_RUN") == "" {
+	if !status.Installed && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
-	if os.Getenv("UNIGO_DRY_RUN") == "1" {
-		logger.Info("UNIGO_DRY_RUN mode active, dry-run VirtualBox launch complete", "diskPath", diskPath, "bootMode", cfg.BootMode)
+	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run VirtualBox launch complete", "diskPath", diskPath, "bootMode", cfg.BootMode)
 		return nil
 	}
 

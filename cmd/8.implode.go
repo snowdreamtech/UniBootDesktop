@@ -11,31 +11,30 @@ import (
 	"time"
 
 	"github.com/pterm/pterm"
-	"github.com/pterm/pterm/putils"
 	"github.com/spf13/cobra"
 
-	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
 )
 
 var implodeConfig bool
 
 func init() {
-	implodeCmd.Flags().BoolVar(&implodeConfig, "config", false, "also remove configuration directory (~/.config/unigodesktop)")
+	implodeCmd.Flags().BoolVar(&implodeConfig, "config", false, "also remove configuration directory (~/.config/unibootdesktop)")
 
 	if rootCmd != nil {
 		rootCmd.AddCommand(implodeCmd)
 	}
 }
 
-// implodeCmd removes all UniGoDesktop data, cache, and configuration.
+// implodeCmd removes all UniBootDesktop data, cache, and configuration.
 var implodeCmd = &cobra.Command{
 	Use:   "implode",
-	Short: "Completely remove all UniGoDesktop data and configurations",
-	Long: `Completely remove all UniGoDesktop data and configurations.
+	Short: "Completely remove all UniBootDesktop data and configurations",
+	Long: `Completely remove all UniBootDesktop data and configurations.
 
 This command will internal-combust and erase:
   • All download caches and temporary files
-  • (Optional) Your configuration directory (~/.config/unigodesktop)
+  • (Optional) Your configuration directory (~/.config/unibootdesktop)
 
 WARNING: This action is permanent and IRREVERSIBLE.`,
 	Args: cobra.NoArgs,
@@ -46,8 +45,8 @@ func runImplode(cmd *cobra.Command, args []string) error {
 	// 1. Visual Banner
 	pterm.DefaultCenter.Println(pterm.Red("!!! DANGER ZONE !!!"))
 	pterm.DefaultBigText.WithLetters(
-		putils.LettersFromStringWithStyle("IM", pterm.NewStyle(pterm.FgRed)),
-		putils.LettersFromStringWithStyle("PLODE", pterm.NewStyle(pterm.FgWhite)),
+		pterm.NewLettersFromStringWithStyle("IM", pterm.NewStyle(pterm.FgRed)),
+		pterm.NewLettersFromStringWithStyle("PLODE", pterm.NewStyle(pterm.FgWhite)),
 	).Render()
 
 	configDir := env.GetConfigDir()
@@ -70,7 +69,7 @@ func runImplode(cmd *cobra.Command, args []string) error {
 	// 2. Confirmation
 	if !yes {
 		pterm.Warning.Prefix = pterm.Prefix{Text: "WARNING", Style: pterm.NewStyle(pterm.BgRed, pterm.FgWhite)}
-		pterm.Warning.Println("This will permanently destroy ALL UniGoDesktop data.")
+		pterm.Warning.Println("This will permanently destroy ALL UniBootDesktop data.")
 		fmt.Printf("\nSelected Targets:\n")
 		for _, t := range targets {
 			pterm.BulletListPrinter{}.WithItems([]pterm.BulletListItem{

@@ -7,13 +7,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 	"time"
 
 	"github.com/pelletier/go-toml/v2"
 
-	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
 )
 
 var configWriteMutex sync.Mutex
@@ -40,10 +39,12 @@ func isEmptyConfig(cfg *AppConfig) bool {
 	if cfg == nil {
 		return true
 	}
-	return !cfg.Debug &&
+	return cfg.Mode == "" &&
+		!cfg.Debug &&
 		!cfg.AutoCheckUpdate &&
 		cfg.Theme == "" &&
 		cfg.GithubProxy == "" &&
+		cfg.FileSystem == "" &&
 		cfg.ProxyProtocol == "" &&
 		cfg.ProxyHost == "" &&
 		cfg.ProxyPort == 0 &&
@@ -51,7 +52,32 @@ func isEmptyConfig(cfg *AppConfig) bool {
 		cfg.ProxyPassword == "" &&
 		cfg.Language == "" &&
 		!cfg.EnableTray &&
-		cfg.CloseAction == ""
+		cfg.CloseAction == "" &&
+		cfg.VentoyPath == "" &&
+		cfg.UniBootPath == "" &&
+		!cfg.VentoySecureBoot &&
+		cfg.VentoyPartitionStyle == "" &&
+		cfg.VentoyReserveSpace == 0 &&
+		!cfg.VentoyWin11Bypass &&
+		cfg.VentoyMenuTimeout == 0 &&
+		!cfg.VentoySecondaryMenu &&
+		!cfg.AutoEjectAfterDeploy
+}
+
+func normalizePersistedDefaults(cfg *AppConfig) bool {
+	if cfg == nil {
+		return false
+	}
+	updated := false
+	if cfg.VentoyPath == "" {
+		cfg.VentoyPath = env.GetVentoyDir()
+		updated = true
+	}
+	if cfg.UniBootPath == "" {
+		cfg.UniBootPath = env.GetFirmwareDir()
+		updated = true
+	}
+	return updated
 }
 
 func validateTOMLData(data []byte) error {
@@ -62,41 +88,12 @@ func validateTOMLData(data []byte) error {
 	return nil
 }
 
-func restoreConfigBackup(cfgPath, backupPath string) error {
-	if backupPath == "" {
-		return fmt.Errorf("no config backup available")
-	}
-	if err := os.Remove(cfgPath); err != nil && !os.IsNotExist(err) {
-		return fmt.Errorf("remove failed config: %w", err)
-	}
-	if err := os.Rename(backupPath, cfgPath); err != nil {
-		return fmt.Errorf("restore backup: %w", err)
-	}
-	return nil
-}
-
-func backupExistingConfig(cfgPath string) (string, bool, error) {
-	if _, err := os.Stat(cfgPath); err != nil {
-		if os.IsNotExist(err) {
-			return "", false, nil
-		}
-		return "", false, fmt.Errorf("stat current config: %w", err)
-	}
-	backupPath := cfgPath + ".corrupt"
-	if err := os.Remove(backupPath); err != nil && !os.IsNotExist(err) {
-		return "", false, fmt.Errorf("remove stale backup: %w", err)
-	}
-	if err := os.Rename(cfgPath, backupPath); err != nil {
-		return "", false, fmt.Errorf("backup config: %w", err)
-	}
-	return backupPath, true, nil
-}
-
 func writeConfigAtomically(cfgPath string, data []byte) error {
-	if err := os.MkdirAll(filepath.Dir(cfgPath), 0o755); err != nil {
+	dir := filepath.Dir(cfgPath)
+	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return fmt.Errorf("create config dir: %w", err)
 	}
-	file, err := os.CreateTemp(filepath.Dir(cfgPath), ".unigodesktop-*.toml")
+	file, err := os.CreateTemp(dir, ".unibootdesktop-*.toml")
 	if err != nil {
 		return fmt.Errorf("create temp config: %w", err)
 	}
@@ -113,58 +110,79 @@ func writeConfigAtomically(cfgPath string, data []byte) error {
 	if err := file.Close(); err != nil {
 		return fmt.Errorf("close temp config: %w", err)
 	}
-	if err := os.Rename(tmpPath, cfgPath); err != nil {
-		return fmt.Errorf("replace config file: %w", err)
-	}
-	if err := os.Chmod(cfgPath, 0o600); err != nil {
-		return fmt.Errorf("set config permissions: %w", err)
-	}
-	return nil
-}
+	_ = os.Chmod(tmpPath, 0o600)
 
-func atomicRestoreDefaultConfig(cfgPath string) error {
-	defaultCfg := GetDefaultConfig()
-	data, err := toml.Marshal(defaultCfg)
-	if err != nil {
-		return fmt.Errorf("marshal default config: %w", err)
+	var renameErr error
+	for i := 0; i < 5; i++ {
+		renameErr = os.Rename(tmpPath, cfgPath)
+		if renameErr == nil {
+			break
+		}
+		time.Sleep(time.Duration(15*(i+1)) * time.Millisecond)
 	}
-	if err := writeConfigAtomically(cfgPath, data); err != nil {
-		return fmt.Errorf("write default config: %w", err)
+	if renameErr != nil {
+		if directErr := os.WriteFile(cfgPath, data, 0o600); directErr != nil {
+			return fmt.Errorf("replace config file: %w (fallback direct write: %w)", renameErr, directErr)
+		}
 	}
+
+	_ = os.Chmod(cfgPath, 0o600)
 	return nil
 }
 
 // AppConfig represents universal desktop application settings.
 type AppConfig struct {
-	Debug           bool   `json:"debug" toml:"debug"`                     // Debug mode flag
-	AutoCheckUpdate bool   `json:"autoCheckUpdate" toml:"autoCheckUpdate"` // Automatically check for updates
-	Theme           string `json:"theme" toml:"theme"`                     // UI theme preference (dark, light, system)
-	Language        string `json:"language" toml:"language"`               // UI Language (auto, zh-CN, en-US, etc.)
-	EnableTray      bool   `json:"enableTray" toml:"enableTray"`           // Whether to enable system tray (default: false)
-	CloseAction     string `json:"closeAction" toml:"closeAction"`         // Window close action: "quit" or "minimize_to_tray" (default: "quit")
-	GithubProxy     string `json:"githubProxy" toml:"githubProxy"`         // GitHub proxy acceleration mirror
-	ProxyProtocol   string `json:"proxyProtocol" toml:"proxyProtocol"`     // Network proxy protocol: direct, http, https, socks5
-	ProxyHost       string `json:"proxyHost" toml:"proxyHost"`             // Network proxy server host
-	ProxyPort       int    `json:"proxyPort" toml:"proxyPort"`             // Network proxy server port
-	ProxyUser       string `json:"proxyUser" toml:"proxyUser"`             // Network proxy authentication username
-	ProxyPassword   string `json:"proxyPassword" toml:"-"`                 // Stored securely in OS credential store, excluded from TOML file
+	Mode                 string `json:"mode" toml:"mode"`                                 // Operation Mode: "local" or "cloud"
+	Debug                bool   `json:"debug" toml:"debug"`                               // Debug mode flag
+	AutoCheckUpdate      bool   `json:"autoCheckUpdate" toml:"autoCheckUpdate"`           // Automatically check for updates
+	Theme                string `json:"theme" toml:"theme"`                               // UI theme preference (dark, light, system)
+	Language             string `json:"language" toml:"language"`                         // UI Language (auto, zh-CN, en-US, etc.)
+	EnableTray           bool   `json:"enableTray" toml:"enableTray"`                     // Whether to enable system tray (default: false)
+	CloseAction          string `json:"closeAction" toml:"closeAction"`                   // Window close action: "quit" or "minimize_to_tray" (default: "quit")
+	GithubProxy          string `json:"githubProxy" toml:"githubProxy"`                   // GitHub proxy acceleration mirror
+	FileSystem           string `json:"fileSystem" toml:"fileSystem"`                     // Default file system for Hybrid Mode (exFAT/NTFS/FAT32/ext4)
+	ProxyProtocol        string `json:"proxyProtocol" toml:"proxyProtocol"`               // Network proxy protocol: direct, http, https, socks5
+	ProxyHost            string `json:"proxyHost" toml:"proxyHost"`                       // Network proxy server host
+	ProxyPort            int    `json:"proxyPort" toml:"proxyPort"`                       // Network proxy server port
+	ProxyUser            string `json:"proxyUser" toml:"proxyUser"`                       // Network proxy authentication username
+	ProxyPassword        string `json:"proxyPassword" toml:"-"`                           // Transient input; persisted in the OS credential store
+	VentoyPath           string `json:"ventoyPath" toml:"ventoyPath"`                     // Path to official Ventoy CLI directory / executable
+	UniBootPath          string `json:"unibootPath" toml:"unibootPath"`                   // Custom local UniBoot firmware directory path (empty uses system default)
+	VentoySecureBoot     bool   `json:"ventoySecureBoot" toml:"ventoySecureBoot"`         // Enable Ventoy Secure Boot support (-s)
+	VentoyPartitionStyle string `json:"ventoyPartitionStyle" toml:"ventoyPartitionStyle"` // Ventoy partition style: GPT or MBR
+	VentoyReserveSpace   int    `json:"ventoyReserveSpace" toml:"ventoyReserveSpace"`     // Reserved space at end of disk (MB)
+	VentoyWin11Bypass    bool   `json:"ventoyWin11Bypass" toml:"ventoyWin11Bypass"`       // Auto inject Win11 TPM/CPU bypass patch
+	VentoyMenuTimeout    int    `json:"ventoyMenuTimeout" toml:"ventoyMenuTimeout"`       // Auto boot timeout (seconds)
+	VentoySecondaryMenu  bool   `json:"ventoySecondaryMenu" toml:"ventoySecondaryMenu"`   // Enable Ventoy secondary boot mode menu (default: false, direct boot)
+	AutoEjectAfterDeploy bool   `json:"autoEjectAfterDeploy" toml:"autoEjectAfterDeploy"` // Automatically safely eject target disks after successful deployment
 }
 
 // GetDefaultConfig returns the default application configuration.
 func GetDefaultConfig() *AppConfig {
 	return &AppConfig{
-		Debug:           false,
-		AutoCheckUpdate: true,
-		Theme:           "system",
-		Language:        "auto", // Auto detect OS system language by default
-		EnableTray:      false,  // Disabled by default
-		CloseAction:     "quit", // Quit application on close by default
-		GithubProxy:     "",     // Direct connection by default
-		ProxyProtocol:   "direct",
-		ProxyHost:       "",
-		ProxyPort:       0,
-		ProxyUser:       "",
-		ProxyPassword:   "",
+		Mode:                 "cloud", // Cloud Mode by default
+		Debug:                false,
+		AutoCheckUpdate:      true,
+		Theme:                "system",
+		Language:             "auto", // Auto detect OS system language by default
+		EnableTray:           false,  // Disabled by default
+		CloseAction:          "quit", // Quit application on close by default
+		GithubProxy:          "",     // Default to empty (Direct connection)
+		FileSystem:           "exFAT",
+		ProxyProtocol:        "direct",
+		ProxyHost:            "",
+		ProxyPort:            0,
+		ProxyUser:            "",
+		ProxyPassword:        "",
+		VentoyPath:           env.GetVentoyDir(),
+		UniBootPath:          env.GetFirmwareDir(),
+		VentoySecureBoot:     true,  // Official Ventoy default: Enabled (Checked)
+		VentoyPartitionStyle: "MBR", // Official Ventoy default: MBR
+		VentoyReserveSpace:   0,     // Official Ventoy default: 0 MB
+		VentoyWin11Bypass:    false, // Official Ventoy default: Disabled (False)
+		VentoyMenuTimeout:    0,     // Official Ventoy default: 0 (No timeout / wait indefinitely)
+		VentoySecondaryMenu:  false, // Default: false (Direct boot without secondary menu for beginner friendly UX)
+		AutoEjectAfterDeploy: false, // Default: do NOT auto eject — user should verify the disk first
 	}
 }
 
@@ -174,7 +192,7 @@ func GetDefaultConfig() *AppConfig {
 func Load() (*AppConfig, error) {
 	cfgPath := env.GetGlobalConfigPath()
 
-	// Fast path: return cached config without parsing TOML if file is unchanged.
+	// Fast path: return the cached config without parsing TOML if file is unchanged.
 	if fi, statErr := os.Stat(cfgPath); statErr == nil {
 		configCacheMu.RLock()
 		if configCache != nil && configCachePath == cfgPath && fi.ModTime().Equal(configCacheModTime) {
@@ -198,16 +216,15 @@ func Load() (*AppConfig, error) {
 			}
 			return cfg, nil
 		}
-
-		// Sanitize legacy or default public proxy mirrors to maintain legal compliance
-		if strings.Contains(cfg.GithubProxy, "ghproxy") || strings.Contains(cfg.GithubProxy, "ghfast") {
-			cfg.GithubProxy = ""
-			_ = cfg.Save()
+		if normalizePersistedDefaults(cfg) {
+			if err := cfg.Save(); err != nil {
+				return nil, fmt.Errorf("migrate default firmware directories: %w", err)
+			}
 		}
-
-		// Populate cache
+		// Populate cache with a sanitized copy of what we just parsed.
 		configCacheMu.Lock()
 		cacheCopy := *cfg
+		cacheCopy.ProxyPassword = ""
 		configCache = &cacheCopy
 		configCachePath = cfgPath
 		if fi, statErr := os.Stat(cfgPath); statErr == nil {
@@ -216,7 +233,6 @@ func Load() (*AppConfig, error) {
 		configCacheMu.Unlock()
 		return cfg, nil
 	}
-
 	defaultCfg := GetDefaultConfig()
 	if err := defaultCfg.Save(); err != nil {
 		return nil, fmt.Errorf("initialize default config: %w", err)
@@ -224,7 +240,7 @@ func Load() (*AppConfig, error) {
 	return defaultCfg, nil
 }
 
-// Save writes application configuration to disk atomically with file locking and backup rollback.
+// Save writes application configuration to disk.
 func (c *AppConfig) Save() error {
 	if c == nil {
 		return fmt.Errorf("config is nil")
@@ -233,16 +249,11 @@ func (c *AppConfig) Save() error {
 	defer configWriteMutex.Unlock()
 
 	cfgPath := env.GetGlobalConfigPath()
-	lockFile, unlockLock, err := acquireConfigLock(cfgPath)
+	_, unlockLock, err := acquireConfigLock(cfgPath)
 	if err != nil {
 		return fmt.Errorf("acquire config lock: %w", err)
 	}
 	defer unlockLock()
-	defer func() {
-		if lockFile != nil {
-			_ = lockFile.Close()
-		}
-	}()
 
 	if isEmptyConfig(c) {
 		if _, statErr := os.Stat(cfgPath); statErr != nil && os.IsNotExist(statErr) {
@@ -259,35 +270,11 @@ func (c *AppConfig) Save() error {
 		return fmt.Errorf("validate config payload: %w", err)
 	}
 
-	backupFile, _, backupErr := backupExistingConfig(cfgPath)
-	if backupErr != nil {
-		return fmt.Errorf("prepare backup for config write: %w", backupErr)
-	}
 	if writeErr := writeConfigAtomically(cfgPath, data); writeErr != nil {
-		if backupFile != "" {
-			if restoreErr := restoreConfigBackup(cfgPath, backupFile); restoreErr != nil {
-				return fmt.Errorf("save failed and backup restore failed: %w (restoreErr=%w)", writeErr, restoreErr)
-			}
-		}
 		return fmt.Errorf("write config file: %w", writeErr)
 	}
 
-	if err := validateTOMLDataFromFile(cfgPath); err != nil {
-		if backupFile != "" {
-			if restoreErr := restoreConfigBackup(cfgPath, backupFile); restoreErr != nil {
-				return fmt.Errorf("post-write validation failed and backup restore failed: %w (restoreErr=%w)", err, restoreErr)
-			}
-		} else if restoreErr := atomicRestoreDefaultConfig(cfgPath); restoreErr != nil {
-			return fmt.Errorf("post-write validation failed and default restore failed: %w (restoreErr=%w)", err, restoreErr)
-		}
-		return fmt.Errorf("post-write validation failed: %w", err)
-	}
-
-	if backupFile != "" {
-		_ = os.Remove(backupFile)
-	}
-
-	// Update in-memory cache
+	// Update the in-memory cache so subsequent Load() calls do not re-read disk.
 	configCacheMu.Lock()
 	cacheCopy := *c
 	cacheCopy.ProxyPassword = ""
@@ -301,33 +288,27 @@ func (c *AppConfig) Save() error {
 	return nil
 }
 
-func validateTOMLDataFromFile(cfgPath string) error {
-	data, err := os.ReadFile(cfgPath)
-	if err != nil {
-		return fmt.Errorf("read config file: %w", err)
-	}
-	return validateTOMLData(data)
-}
-
 // ConfigHealth describes the current health of the persisted config state.
 type ConfigHealth struct {
-	ConfigPath string
-	Exists     bool
-	Valid      bool
-	HasBackup  bool
-	Issue      string
+	ConfigPath      string
+	Exists          bool
+	Valid           bool
+	HasBackup       bool
+	DefaultPathsSet bool
+	Issue           string
 }
 
 // HealthCheck inspects the persisted config file and reports whether it is readable,
-// whether a backup exists, and whether configuration format is valid.
+// whether a backup exists, and whether default UniBoot/Ventoy paths are available.
 func HealthCheck() (*ConfigHealth, error) {
 	cfgPath := env.GetGlobalConfigPath()
 	status := &ConfigHealth{
-		ConfigPath: cfgPath,
-		Exists:     false,
-		Valid:      true,
-		HasBackup:  false,
-		Issue:      "",
+		ConfigPath:      cfgPath,
+		Exists:          false,
+		Valid:           true,
+		HasBackup:       false,
+		DefaultPathsSet: true,
+		Issue:           "",
 	}
 
 	if _, err := os.Stat(cfgPath); err == nil {
@@ -352,5 +333,10 @@ func HealthCheck() (*ConfigHealth, error) {
 		status.HasBackup = true
 	}
 
+	defaults := GetDefaultConfig()
+	status.DefaultPathsSet = defaults.VentoyPath != "" && defaults.UniBootPath != ""
+	if !status.Valid {
+		status.DefaultPathsSet = status.DefaultPathsSet && defaults.VentoyPath != "" && defaults.UniBootPath != ""
+	}
 	return status, nil
 }

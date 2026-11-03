@@ -13,9 +13,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
-	"github.com/snowdreamtech/unigodesktop/pkg/disk"
-	"github.com/snowdreamtech/unigodesktop/pkg/privilege"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/pkg/disk"
+	"github.com/snowdreamtech/unibootdesktop/pkg/privilege"
 )
 
 // HypervisorType defines supported virtualization engines.
@@ -174,7 +174,7 @@ func (m *Manager) DetectBest() *VMStatus {
 	}
 
 	// Dry-run mode for tests or simulation
-	if os.Getenv("UNIGO_DRY_RUN") != "" {
+	if os.Getenv("UNIBOOT_DRY_RUN") != "" {
 		return &VMStatus{
 			Type:       TypeQEMU,
 			Name:       "QEMU Simulator (Mock)",
@@ -236,7 +236,7 @@ func (m *Manager) LaunchBestConfigured(ctx context.Context, targetDisk string, c
 	}
 
 	// Fallback check for dry-run
-	if os.Getenv("UNIGO_DRY_RUN") != "" {
+	if os.Getenv("UNIBOOT_DRY_RUN") != "" {
 		logger.Info("Dry-run hypervisor simulation test executed", "disk", targetDisk, "bootMode", cfg.BootMode)
 		return nil
 	}
@@ -298,7 +298,7 @@ func (m *Manager) LaunchSpecifiedConfigured(ctx context.Context, targetDisk stri
 	for _, drv := range m.drivers {
 		if drv.Type() == hType {
 			status := drv.Detect()
-			if (status == nil || !status.Installed) && os.Getenv("UNIGO_DRY_RUN") == "" {
+			if (status == nil || !status.Installed) && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 				return fmt.Errorf("requested hypervisor '%s' is not installed", drv.Name())
 			}
 			logger.Info("Launching specified hypervisor", "hypervisor", drv.Name(), "disk", targetDisk, "bootMode", cfg.BootMode, "cpu", cfg.CpuCores, "ramMB", cfg.MemoryMB)
@@ -452,7 +452,7 @@ func runCommandWithTimeout(timeout time.Duration, name string, args ...string) e
 
 // unmountTargetDisk safely unmounts disk partitions across macOS, Linux, and Windows before hypervisor launch.
 func unmountTargetDisk(targetPath string) {
-	if targetPath == "" || os.Getenv("UNIGO_DRY_RUN") == "1" {
+	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" {
 		return
 	}
 	TrackDiskUnmounted(targetPath)
@@ -527,7 +527,7 @@ func NotifyVMExited(targetDisk string, err error) {
 
 // remountTargetDisk automatically remounts target disk partitions back to host OS after VM exit.
 func remountTargetDisk(targetPath string) {
-	if targetPath == "" || os.Getenv("UNIGO_DRY_RUN") == "1" {
+	if targetPath == "" || os.Getenv("UNIBOOT_DRY_RUN") == "1" {
 		return
 	}
 	defer TrackDiskRemounted(targetPath)

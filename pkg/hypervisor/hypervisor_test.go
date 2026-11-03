@@ -49,8 +49,8 @@ func TestHypervisorManager_DetectAll(t *testing.T) {
 }
 
 func TestHypervisorManager_DetectBest(t *testing.T) {
-	os.Setenv("UNIGO_DRY_RUN", "1")
-	defer os.Unsetenv("UNIGO_DRY_RUN")
+	os.Setenv("UNIBOOT_DRY_RUN", "1")
+	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
 	mgr := GetManager()
 	best := mgr.DetectBest()
@@ -64,8 +64,8 @@ func TestHypervisorManager_DetectBest(t *testing.T) {
 }
 
 func TestHypervisorManager_LaunchBest_DryRun(t *testing.T) {
-	os.Setenv("UNIGO_DRY_RUN", "1")
-	defer os.Unsetenv("UNIGO_DRY_RUN")
+	os.Setenv("UNIBOOT_DRY_RUN", "1")
+	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
 	mgr := GetManager()
 	err := mgr.LaunchBest(context.Background(), "dummy_disk", BootModeAuto)
@@ -105,8 +105,8 @@ func TestRecommendedResources(t *testing.T) {
 }
 
 func TestUnmountedDisksTrackingAndCleanup(t *testing.T) {
-	os.Setenv("UNIGO_DRY_RUN", "1")
-	defer os.Unsetenv("UNIGO_DRY_RUN")
+	os.Setenv("UNIBOOT_DRY_RUN", "1")
+	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
 	dummyDisk := "/dev/disk999"
 	TrackDiskUnmounted(dummyDisk)
@@ -137,8 +137,8 @@ func TestUnmountedDisksTrackingAndCleanup(t *testing.T) {
 }
 
 func TestLaunchSpecified_DryRun(t *testing.T) {
-	os.Setenv("UNIGO_DRY_RUN", "1")
-	defer os.Unsetenv("UNIGO_DRY_RUN")
+	os.Setenv("UNIBOOT_DRY_RUN", "1")
+	defer os.Unsetenv("UNIBOOT_DRY_RUN")
 
 	mgr := GetManager()
 	drivers := []HypervisorType{TypeQEMU, TypeVMware, TypeVirtualBox}

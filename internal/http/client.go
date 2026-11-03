@@ -10,7 +10,7 @@ import (
 
 	"golang.org/x/net/http/httpproxy"
 
-	"github.com/snowdreamtech/unigodesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
 )
 
 // ClientConfig provides HTTP client configurations.

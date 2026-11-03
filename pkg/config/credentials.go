@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	defaultSecretService = "github.com/snowdreamtech/unigodesktop"
+	proxyPasswordService = "github.com/snowdreamtech/unibootdesktop"
 	proxyPasswordAccount = "proxy-password"
 )
 
@@ -34,47 +34,32 @@ func (keyringStore) Delete(service, user string) error {
 	return keyring.Delete(service, user)
 }
 
-var globalSecretStore secretStore = keyringStore{}
+var proxyPasswordStore secretStore = keyringStore{}
 
-// SaveSecret stores an arbitrary secret for the given account key in the OS credential store.
-func SaveSecret(account, secret string) error {
-	if secret == "" {
-		return DeleteSecret(account)
-	}
-	if err := globalSecretStore.Set(defaultSecretService, account, secret); err != nil {
-		return fmt.Errorf("save secret %q to system credential store: %w", account, err)
-	}
-	return nil
-}
-
-// LoadSecret retrieves a secret for the given account key from the OS credential store.
-func LoadSecret(account string) (string, error) {
-	secret, err := globalSecretStore.Get(defaultSecretService, account)
-	if err != nil {
-		return "", fmt.Errorf("load secret %q from system credential store: %w", account, err)
-	}
-	return secret, nil
-}
-
-// DeleteSecret removes a secret for the given account key from the OS credential store.
-func DeleteSecret(account string) error {
-	if err := globalSecretStore.Delete(defaultSecretService, account); err != nil {
-		return fmt.Errorf("delete secret %q from system credential store: %w", account, err)
-	}
-	return nil
-}
-
-// SaveProxyPassword stores the network proxy password in the operating system credential store.
+// SaveProxyPassword stores the proxy password in the operating system credential store.
 func SaveProxyPassword(password string) error {
-	return SaveSecret(proxyPasswordAccount, password)
+	if password == "" {
+		return DeleteProxyPassword()
+	}
+	if err := proxyPasswordStore.Set(proxyPasswordService, proxyPasswordAccount, password); err != nil {
+		return fmt.Errorf("save proxy password to system credential store: %w", err)
+	}
+	return nil
 }
 
-// LoadProxyPassword retrieves the network proxy password from the operating system credential store.
+// LoadProxyPassword retrieves the proxy password from the operating system credential store.
 func LoadProxyPassword() (string, error) {
-	return LoadSecret(proxyPasswordAccount)
+	password, err := proxyPasswordStore.Get(proxyPasswordService, proxyPasswordAccount)
+	if err != nil {
+		return "", fmt.Errorf("load proxy password from system credential store: %w", err)
+	}
+	return password, nil
 }
 
-// DeleteProxyPassword removes the network proxy password from the operating system credential store.
+// DeleteProxyPassword removes the proxy password from the operating system credential store.
 func DeleteProxyPassword() error {
-	return DeleteSecret(proxyPasswordAccount)
+	if err := proxyPasswordStore.Delete(proxyPasswordService, proxyPasswordAccount); err != nil {
+		return fmt.Errorf("delete proxy password from system credential store: %w", err)
+	}
+	return nil
 }

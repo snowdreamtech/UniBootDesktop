@@ -23,7 +23,7 @@ function dismissStartupLoader() {
   }, remaining);
 }
 
-window.addEventListener("unigo:config-ready", dismissStartupLoader, { once: true });
+window.addEventListener("uniboot:config-ready", dismissStartupLoader, { once: true });
 
 // Fallback safety timeout: ensure startup loader is dismissed if event doesn't fire
 window.setTimeout(() => {
@@ -32,7 +32,11 @@ window.setTimeout(() => {
   }
 }, 2500);
 
-// 1. Prevent default browser context menu on non-editable UI elements
+// Prevent accidental external file drop from navigating away
+window.addEventListener("dragover", (e: DragEvent) => e.preventDefault(), false);
+window.addEventListener("drop", (e: DragEvent) => e.preventDefault(), false);
+
+// Prevent default browser context menu except on text inputs and textareas
 window.addEventListener("contextmenu", (e: MouseEvent) => {
   const target = e.target as HTMLElement | null;
   if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
@@ -41,51 +45,7 @@ window.addEventListener("contextmenu", (e: MouseEvent) => {
   e.preventDefault();
 });
 
-// 2. Prevent accidental browser reload, find, print, and save shortcuts
-window.addEventListener("keydown", (e: KeyboardEvent) => {
-  const key = e.key.toLowerCase();
-  const isCmdOrCtrl = e.metaKey || e.ctrlKey;
-
-  // Prevent reload: F5, Ctrl+R, Cmd+R
-  if (e.key === "F5" || (isCmdOrCtrl && key === "r")) {
-    e.preventDefault();
-  }
-  // Prevent browser in-page search: Ctrl+F, Cmd+F
-  if (isCmdOrCtrl && key === "f") {
-    e.preventDefault();
-  }
-  // Prevent browser print: Ctrl+P, Cmd+P
-  if (isCmdOrCtrl && key === "p") {
-    e.preventDefault();
-  }
-  // Prevent browser save webpage: Ctrl+S, Cmd+S
-  if (isCmdOrCtrl && key === "s") {
-    e.preventDefault();
-  }
-  // Prevent browser history navigation: Alt+Left/Right, Cmd+[/]
-  if (
-    (e.altKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) ||
-    (e.metaKey && (e.key === "[" || e.key === "]"))
-  ) {
-    e.preventDefault();
-  }
-});
-
-// 3. Prevent mouse navigation side-buttons (Back/Forward) from navigating webview
-window.addEventListener("mousedown", (e: MouseEvent) => {
-  if (e.button === 3 || e.button === 4) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
-});
-window.addEventListener("mouseup", (e: MouseEvent) => {
-  if (e.button === 3 || e.button === 4) {
-    e.preventDefault();
-    e.stopPropagation();
-  }
-});
-
-// 4. Prevent pinch-to-zoom and Ctrl/Cmd + wheel zooming
+// Prevent browser zoom shortcuts (Cmd/Ctrl + +/-/0) and pinch/wheel zoom
 window.addEventListener(
   "wheel",
   (e: WheelEvent) => {
@@ -96,15 +56,13 @@ window.addEventListener(
   { passive: false }
 );
 
-window.addEventListener("gesturestart", (e: Event) => e.preventDefault());
-window.addEventListener("gesturechange", (e: Event) => e.preventDefault());
-window.addEventListener("gestureend", (e: Event) => e.preventDefault());
+window.addEventListener("keydown", (e: KeyboardEvent) => {
+  if ((e.ctrlKey || e.metaKey) && (e.key === "=" || e.key === "-" || e.key === "0" || e.key === "+")) {
+    e.preventDefault();
+  }
+});
 
-// 5. Prevent accidental external file drop from navigating away
-window.addEventListener("dragover", (e: DragEvent) => e.preventDefault(), false);
-window.addEventListener("drop", (e: DragEvent) => e.preventDefault(), false);
-
-// 6. Native Window Focus / Blur State Adaptation
+// Native Window Focus / Blur State Adaptation
 window.addEventListener("focus", () => {
   document.documentElement.classList.remove("window-inactive");
 });
@@ -114,7 +72,7 @@ window.addEventListener("blur", () => {
 
 import { isClickOnScrollbar, triggerNativeDrag } from "./utils/windowDrag";
 
-// 7. Enable native window dragging when dragging on background blank areas
+// Enable native window dragging when dragging on background blank areas
 window.addEventListener("mousedown", (e: MouseEvent) => {
   // Only trigger on primary mouse button single clicks
   if (e.buttons !== 1 || e.detail > 1) {
@@ -141,15 +99,19 @@ window.addEventListener("mousedown", (e: MouseEvent) => {
     "code",
     "label",
     "dialog",
-    ".lang-selector-header",
-    ".lang-dropdown-menu",
-    ".terminal-body",
-    ".log-line",
     ".modal-overlay",
     ".modal-card",
     ".modal-body",
-    ".settings-modal-card",
-    ".about-modal-card",
+    ".modal-container",
+    ".glass-modal",
+    ".disk-item",
+    ".iso-file-item",
+    ".mode-tabs",
+    ".lang-selector-header",
+    ".lang-dropdown-menu",
+    ".terminal-body",
+    ".terminal-container",
+    ".log-line",
     ".no-drag",
     "[contenteditable='true']",
     "[role='button']",

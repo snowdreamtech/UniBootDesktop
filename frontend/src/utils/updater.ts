@@ -7,6 +7,7 @@ export interface UpdateProgressPayload {
   detail?: string;
   loadedBytes?: number;
   totalBytes?: number;
+  speed?: string;
 }
 
 /**

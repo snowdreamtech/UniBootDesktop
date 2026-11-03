@@ -20,7 +20,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
 )
 
 const (

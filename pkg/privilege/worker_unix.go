@@ -21,7 +21,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
 )
 
 // isProcessAlive checks whether a process with given PID exists in the system.
@@ -193,7 +193,7 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 		return client, nil
 	}
 
-	socketDir := filepath.Join(os.TempDir(), fmt.Sprintf("unigo-ipc-%d", os.Getuid()))
+	socketDir := filepath.Join(os.TempDir(), fmt.Sprintf("uniboot-ipc-%d", os.Getuid()))
 	_ = os.MkdirAll(socketDir, 0o700)
 	_ = os.Chmod(socketDir, 0o700)
 	cleanStaleSockets(socketDir)

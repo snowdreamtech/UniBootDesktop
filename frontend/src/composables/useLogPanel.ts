@@ -1,5 +1,5 @@
 import { ref, computed, watch } from "vue";
-import type { LogItem } from "../components/LogPanel.vue";
+import type { LogItem } from "../components/LogViewerModal.vue";
 import { formatLogsToText } from "../utils/logFormatter";
 import { logUserAction } from "../utils/logger";
 import { ExportLogs, ClearLogs } from "../../wailsjs/go/main/App";
@@ -14,20 +14,20 @@ export function useLogPanel(options: UseLogPanelOptions) {
 
   const runtimeLogs = ref<LogItem[]>([]);
 
-  const savedLogCardVisible = localStorage.getItem("unigodesktop_log_card_visible");
+  const savedLogCardVisible = localStorage.getItem("unibootdesktop_log_card_visible");
   const isLogCardVisible = ref(savedLogCardVisible !== null ? savedLogCardVisible === "true" : true);
 
   function toggleLogCard() {
     isLogCardVisible.value = !isLogCardVisible.value;
-    localStorage.setItem("unigodesktop_log_card_visible", String(isLogCardVisible.value));
+    localStorage.setItem("unibootdesktop_log_card_visible", String(isLogCardVisible.value));
   }
 
-  const savedAutoScroll = localStorage.getItem("unigodesktop_embedded_log_autoscroll");
+  const savedAutoScroll = localStorage.getItem("unibootdesktop_embedded_log_autoscroll");
   const embeddedAutoScroll = ref(savedAutoScroll !== null ? savedAutoScroll === "true" : true);
   const currentEmbeddedLogFilter = ref<string>("ALL");
 
   watch(embeddedAutoScroll, (val) => {
-    localStorage.setItem("unigodesktop_embedded_log_autoscroll", String(val));
+    localStorage.setItem("unibootdesktop_embedded_log_autoscroll", String(val));
   });
 
   watch(currentEmbeddedLogFilter, (val) => {
@@ -90,7 +90,7 @@ export function useLogPanel(options: UseLogPanelOptions) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `unigodesktop-log-${new Date().toISOString().slice(0, 10)}.log`;
+      a.download = `unibootdesktop-log-${new Date().toISOString().slice(0, 10)}.log`;
       a.click();
       URL.revokeObjectURL(url);
       showToast(t("log.exported_toast"), "success");
@@ -133,7 +133,7 @@ export function useLogPanel(options: UseLogPanelOptions) {
         {
           timestamp: new Date().toISOString(),
           level: "INFO",
-          message: "UniGoDesktop engine ready. Real-time log stream connected.",
+          message: "UniBootDesktop engine ready. Real-time log stream connected.",
         },
       ];
     }

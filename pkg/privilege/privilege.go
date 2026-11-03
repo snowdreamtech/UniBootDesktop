@@ -21,7 +21,7 @@ var (
 	cachedEvaluated  bool
 
 	defaultPromptMu        sync.RWMutex
-	defaultElevationPrompt = "UniGoDesktop requires administrator privileges to access raw storage devices and system resources."
+	defaultElevationPrompt = "UniBootDesktop requires administrator privileges to access raw storage devices and verify boot partitions."
 )
 
 // SetDefaultElevationPrompt allows customizing the prompt message displayed during privilege elevation.
@@ -495,7 +495,7 @@ func MountHiddenESP(partitionDevice string) (string, func(), error) {
 		return "", func() {}, fmt.Errorf("unsafe partition device: %w", err)
 	}
 
-	tempDir, err := os.MkdirTemp("", "unigo_esp_*")
+	tempDir, err := os.MkdirTemp("", "uniboot_esp_*")
 	if err != nil {
 		return "", func() {}, fmt.Errorf("failed to create temporary mount directory: %w", err)
 	}

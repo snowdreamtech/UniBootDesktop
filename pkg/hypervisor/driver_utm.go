@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
 )
 
 type UTMDriver struct{}
@@ -93,12 +93,12 @@ func (d *UTMDriver) Launch(ctx context.Context, diskPath, bootMode string) error
 
 func (d *UTMDriver) LaunchWithConfig(ctx context.Context, diskPath string, cfg VMConfig) error {
 	status := d.Detect()
-	if !status.Installed && os.Getenv("UNIGO_DRY_RUN") == "" {
+	if !status.Installed && os.Getenv("UNIBOOT_DRY_RUN") == "" {
 		return fmt.Errorf("%s is not installed on host system", d.Name())
 	}
 
-	if os.Getenv("UNIGO_DRY_RUN") == "1" {
-		logger.Info("UNIGO_DRY_RUN mode active, dry-run UTM launch complete", "diskPath", diskPath, "bootMode", cfg.BootMode)
+	if os.Getenv("UNIBOOT_DRY_RUN") == "1" {
+		logger.Info("UNIBOOT_DRY_RUN mode active, dry-run UTM launch complete", "diskPath", diskPath, "bootMode", cfg.BootMode)
 		return nil
 	}
 

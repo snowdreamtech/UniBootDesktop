@@ -17,10 +17,10 @@
           <div class="about-hero">
             <div class="logo-wrapper">
               <div class="logo-glow"></div>
-              <img src="/logo.png" alt="UniGo" class="app-logo-image" />
+              <img src="/logo.png" alt="UniBootDesktop" class="app-logo-img" />
             </div>
-            <h2 class="app-title">UniGoDesktop</h2>
-            <p class="app-subtitle">{{ t("about.subtitle") || "Universal Go Desktop Suite" }}</p>
+            <h2 class="app-title">UniBootDesktop</h2>
+            <p class="app-subtitle">{{ t("app.subtitle") }}</p>
             <div class="version-badge">
               <span class="badge-dot"></span>
               <span class="badge-text">{{ displayVersion }}</span>
@@ -58,7 +58,7 @@
             </button>
 
             <button
-              v-if="!hasUpdateAvailable && !isRestartReady"
+              v-if="!hasUpdateAvailable"
               class="action-btn primary-btn"
               @click="handleCheckUpdate"
               :disabled="checking || updating"
@@ -97,21 +97,6 @@
               <span>{{ checking ? t("about.checking") : t("about.checkUpdate") }}</span>
             </button>
 
-            <!-- 关键演进：更新准备就绪时，按钮就地转化为【立即重启生效】 -->
-            <button
-              v-else-if="isRestartReady"
-              class="action-btn restart-btn"
-              @click="handleRestartApp"
-              :disabled="restarting"
-            >
-              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
-                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
-              </svg>
-              <span>{{
-                restarting ? t("about.restarting") || "正在重启..." : t("about.restartToApply") || "立即重启生效"
-              }}</span>
-            </button>
-
             <button v-else class="action-btn update-btn" @click="handlePerformUpdate" :disabled="updating">
               <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -142,7 +127,7 @@
           <!-- Links & Footer -->
           <div class="about-footer">
             <div class="footer-links">
-              <button @click="openUrl('https://github.com/snowdreamtech/unigodesktop')" class="footer-link-btn">
+              <button @click="openUrl('https://github.com/snowdreamtech/unibootdesktop')" class="footer-link-btn">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
                   <path
                     d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
@@ -152,7 +137,7 @@
               </button>
               <span class="link-separator">•</span>
               <button
-                @click="openUrl('https://github.com/snowdreamtech/unigodesktop/blob/main/LICENSE')"
+                @click="openUrl('https://github.com/snowdreamtech/unibootdesktop/blob/main/LICENSE')"
                 class="footer-link-btn"
               >
                 MIT License
@@ -171,10 +156,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { t } from "../i18n";
-import { GetSystemInfo, CheckUpdate, PerformGuiUpdate, RestartApp, OpenURL } from "../../wailsjs/go/main/App";
-import { EventsOn } from "../../wailsjs/runtime/runtime";
-import { isWails, isWailsRuntime } from "../utils/wails";
-import { formatUpdateProgress, type UpdateProgressPayload } from "../utils/updater";
 
 const props = defineProps<{
   show: boolean;
@@ -199,7 +180,7 @@ interface AppInfo {
 }
 
 const appInfo = ref<AppInfo>({
-  projectName: "unigodesktop",
+  projectName: "unibootdesktop",
   version: "N/A",
   gitTag: "N/A",
   commitHash: "N/A",
@@ -217,15 +198,8 @@ const displayBuildTime = computed(() => appInfo.value.buildTime || "N/A");
 const copied = ref(false);
 const checking = ref(false);
 const updating = ref(false);
-const isRestartReady = ref(false);
-const restarting = ref(false);
 const updateProgress = ref(0);
-const currentProgress = ref<UpdateProgressPayload | null>(null);
-
-const updateStatusText = computed(() => {
-  return formatUpdateProgress(currentProgress.value, updateProgress.value);
-});
-
+const updateStatusText = ref("");
 const hasUpdateAvailable = ref(false);
 const latestTag = ref("");
 const updateMessage = ref("");
@@ -233,24 +207,15 @@ const updateStatusClass = ref("");
 
 const loadAppInfo = async () => {
   try {
-    if (isWails()) {
-      const sys = await GetSystemInfo();
-      if (sys) {
-        appInfo.value = {
-          projectName: sys.appName || "UniGoDesktop",
-          version: sys.version || "v1.0.0",
-          gitTag: sys.version || "v1.0.0",
-          commitHash: sys.commit || "dev",
-          buildTime: sys.buildTime || "N/A",
-          osArch: `${sys.os || "darwin"}/${sys.arch || "arm64"}`,
-          goVersion: sys.goVersion || "go1.27",
-          copyright: "Copyright © 2026-present SnowdreamTech Inc.",
-        };
-        return;
+    const wailsApp = (window as any)?.go?.main?.App;
+    if (wailsApp && typeof wailsApp.GetAppInfo === "function") {
+      const info = await wailsApp.GetAppInfo();
+      if (info) {
+        appInfo.value = info;
       }
     }
   } catch (err) {
-    console.warn("Failed to load Wails GetSystemInfo, using fallback info:", err);
+    console.warn("Failed to load Wails GetAppInfo, using fallback info:", err);
   }
 };
 
@@ -260,11 +225,12 @@ onMounted(() => {
   if (props.show) {
     loadAppInfo();
   }
-  if (isWailsRuntime()) {
-    unlistenProgress = EventsOn("gui-update-progress", (p: any) => {
+  const runtime = (window as any)?.runtime;
+  if (runtime && typeof runtime.EventsOn === "function") {
+    unlistenProgress = runtime.EventsOn("gui-update-progress", (p: any) => {
       if (p) {
         updateProgress.value = p.percentage || 0;
-        currentProgress.value = p;
+        updateStatusText.value = p.status || "";
       }
     });
   }
@@ -284,8 +250,6 @@ watch(
       copied.value = false;
       updateMessage.value = "";
       updating.value = false;
-      isRestartReady.value = false;
-      restarting.value = false;
     }
   }
 );
@@ -294,15 +258,22 @@ const close = () => {
   emit("close");
 };
 
-const logUserAction = (_level: string, _message: string, _details: string = "") => {
-  // User action logging placeholder
+const logUserAction = (level: string, message: string, details: string = "") => {
+  const app = (window as any)?.go?.main?.App;
+  if (app && typeof app.LogAction === "function") {
+    app.LogAction(level, message, details);
+  }
 };
 
 const openUrl = (url: string) => {
   logUserAction("INFO", "User opened external link in browser", url);
   try {
-    if (isWails()) {
-      OpenURL(url);
+    const wailsRuntime = (window as any)?.runtime;
+    const wailsApp = (window as any)?.go?.main?.App;
+    if (wailsRuntime && typeof wailsRuntime.BrowserOpenURL === "function") {
+      wailsRuntime.BrowserOpenURL(url);
+    } else if (wailsApp && typeof wailsApp.OpenBrowserURL === "function") {
+      wailsApp.OpenBrowserURL(url);
     } else {
       window.open(url, "_blank");
     }
@@ -314,7 +285,7 @@ const openUrl = (url: string) => {
 
 const copySystemInfo = async () => {
   logUserAction("INFO", "User copied system diagnostic info to clipboard");
-  const diagnosticText = `--- UniGoDesktop Diagnostic Info ---
+  const diagnosticText = `--- UniBootDesktop Diagnostic Info ---
 Version: ${displayVersion.value} (${displayGitTag.value})
 Commit: ${displayCommitHash.value}
 Build Time: ${displayBuildTime.value}
@@ -348,22 +319,14 @@ const handleCheckUpdate = async () => {
   checking.value = true;
   updateMessage.value = "";
   try {
-    if (isWails()) {
-      const res = await CheckUpdate();
+    const wailsApp = (window as any)?.go?.main?.App;
+    if (wailsApp && typeof wailsApp.CheckUpdate === "function") {
+      const res = await wailsApp.CheckUpdate();
       if (res && res.hasUpdate) {
-        const cleanTag = (tag: string) => (tag || "").trim().toLowerCase().replace(/^v/, "");
-        const curVer = cleanTag(displayVersion.value) || cleanTag(displayGitTag.value) || cleanTag(res.currentTag);
-        const newVer = cleanTag(res.latestTag || (res as any).latestVersion);
-        if (newVer && curVer && newVer === curVer) {
-          hasUpdateAvailable.value = false;
-          updateMessage.value = t("about.isLatest");
-          updateStatusClass.value = "is-latest";
-        } else {
-          hasUpdateAvailable.value = true;
-          latestTag.value = res.latestTag || (res as any).latestVersion || "v0.2.0";
-          updateMessage.value = `${t("about.updateAvailable")} ${latestTag.value}!`;
-          updateStatusClass.value = "has-update";
-        }
+        hasUpdateAvailable.value = true;
+        latestTag.value = res.latestTag || res.latestVersion || "v0.2.0";
+        updateMessage.value = `${t("about.updateAvailable")} ${latestTag.value}!`;
+        updateStatusClass.value = "has-update";
       } else {
         hasUpdateAvailable.value = false;
         updateMessage.value = t("about.isLatest");
@@ -387,14 +350,14 @@ const handleCheckUpdate = async () => {
 const handlePerformUpdate = async () => {
   updating.value = true;
   updateProgress.value = 0;
-  currentProgress.value = { stage: "checking", percentage: 0 };
+  updateStatusText.value = t("about.preparingDownload");
   updateMessage.value = "";
   try {
-    if (isWails()) {
-      const res = await PerformGuiUpdate();
+    const wailsApp = (window as any)?.go?.main?.App;
+    if (wailsApp && typeof wailsApp.PerformGuiUpdate === "function") {
+      const res = await wailsApp.PerformGuiUpdate();
       if (res && res.success) {
-        isRestartReady.value = true;
-        updateMessage.value = t("about.updateCompleteRestart");
+        updateMessage.value = t("about.updateReady", { path: res.targetFile });
         updateStatusClass.value = "is-latest";
       } else {
         updateMessage.value = t("about.updateDownloadFailed");
@@ -406,16 +369,10 @@ const handlePerformUpdate = async () => {
       const interval = setInterval(() => {
         p += 20;
         updateProgress.value = Math.min(p, 100);
-        currentProgress.value = {
-          percentage: updateProgress.value,
-          stage: "downloading",
-          loadedBytes: Math.round(18035507 * (updateProgress.value / 100)),
-          totalBytes: 18035507,
-        };
+        updateStatusText.value = t("about.downloadingGuiUpdate", { progress: updateProgress.value });
         if (p >= 100) {
           clearInterval(interval);
           updating.value = false;
-          isRestartReady.value = true;
           updateMessage.value = t("about.updateCompleteRestart");
           updateStatusClass.value = "is-latest";
         }
@@ -425,28 +382,11 @@ const handlePerformUpdate = async () => {
     updateMessage.value = t("about.onlineUpdateFailed", { error: String(err) });
     updateStatusClass.value = "update-error";
   } finally {
-    if (isWails()) {
+    if (!(window as any)?.go?.main?.App?.PerformGuiUpdate) {
+      // keep updating status managed in interval
+    } else {
       updating.value = false;
     }
-  }
-};
-
-const handleRestartApp = async () => {
-  logUserAction("INFO", "User clicked restart app to apply update");
-  restarting.value = true;
-  updateMessage.value = t("about.restarting") || "正在重启应用...";
-  try {
-    if (isWails()) {
-      await RestartApp();
-    } else {
-      setTimeout(() => {
-        window.location.reload();
-      }, 800);
-    }
-  } catch (err) {
-    restarting.value = false;
-    updateMessage.value = String(err);
-    updateStatusClass.value = "update-error";
   }
 };
 </script>
@@ -528,15 +468,14 @@ const handleRestartApp = async () => {
   z-index: 0;
 }
 
-.app-logo-icon,
-.app-logo-image {
+.app-logo-img {
   position: relative;
   z-index: 1;
-  width: 68px;
-  height: 68px;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
   border-radius: 16px;
-  object-fit: cover;
-  box-shadow: 0 4px 20px var(--accent-cyan-glow);
+  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.25);
 }
 
 .app-title {
@@ -652,18 +591,6 @@ const handleRestartApp = async () => {
 
 .update-btn:hover:not(:disabled) {
   background: #047857;
-}
-
-.restart-btn {
-  background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
-  color: #ffffff;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-}
-
-.restart-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #1d4ed8 0%, #0369a1 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
 }
 
 .update-progress-container {

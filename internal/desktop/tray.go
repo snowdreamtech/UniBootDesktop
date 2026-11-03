@@ -6,7 +6,7 @@ package desktop
 import (
 	"context"
 
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
 )
 
 // TrayManager handles the application system tray menu and notifications.

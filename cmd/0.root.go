@@ -9,11 +9,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/snowdreamtech/unigodesktop/internal/cli/output"
-	"github.com/snowdreamtech/unigodesktop/internal/env"
-	"github.com/snowdreamtech/unigodesktop/internal/errors"
-	"github.com/snowdreamtech/unigodesktop/internal/logger"
-	"github.com/snowdreamtech/unigodesktop/internal/updater"
+	"github.com/snowdreamtech/unibootdesktop/internal/cli/output"
+	"github.com/snowdreamtech/unibootdesktop/internal/env"
+	"github.com/snowdreamtech/unibootdesktop/internal/errors"
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
+	"github.com/snowdreamtech/unibootdesktop/internal/updater"
 )
 
 var (
@@ -36,8 +36,8 @@ func getOutputFormat() output.OutputFormat {
 var WailsRunner func() error
 
 var rootCmd = &cobra.Command{
-	Use:   "unigodesktop",
-	Short: "UniGoDesktop is a modern cross-platform desktop application",
+	Use:   "unibootdesktop",
+	Short: "UniBootDesktop is a modern cross-platform desktop application",
 	Long:  `A fast, cross-platform desktop application built with Go, Wails, and Vue 3.`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// Change directory if --cd is provided

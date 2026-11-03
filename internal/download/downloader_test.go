@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/snowdreamtech/unigodesktop/internal/download"
+	"github.com/snowdreamtech/unibootdesktop/internal/download"
 )
 
 // TestDefaultDownloadOptions verifies that DefaultDownloadOptions returns sensible defaults.
