@@ -1,5 +1,56 @@
 # Changelog
 
+## [0.8.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.7.0...v0.8.0) (2026-11-04)
+
+
+### 🚀 Features
+
+* align with template dev and retain unigo configs ([f2702f3](https://github.com/snowdreamtech/UniBootDesktop/commit/f2702f38d105ae550b932c9d11750ace65c15b7e))
+* align with unigo dev and retain unigodesktop configs ([91774bf](https://github.com/snowdreamtech/UniBootDesktop/commit/91774bfac25115ab4fc20e64cb75b80797a5477b))
+* align with unigodesktop dev and retain unibootdesktop configs ([6054c44](https://github.com/snowdreamtech/UniBootDesktop/commit/6054c448d22119ef68ad2b34ac3417ccd964bdc6))
+* **dev:** align run-dev and vite config with unigodesktop ([c032a90](https://github.com/snowdreamtech/UniBootDesktop/commit/c032a90013850c60c089e203a45ff9211675937a))
+
+
+### 🐛 Bug Fixes
+
+* **deps:** pin exact versions for frontend dependencies and resolve osv audit vulnerabilities ([2c2d7e7](https://github.com/snowdreamtech/UniBootDesktop/commit/2c2d7e77b1bff6d4db55f7c7deec2798fc89b196))
+* **dev:** fallback to xvfb-run when no physical or ssh x11 display is reachable ([6332c30](https://github.com/snowdreamtech/UniBootDesktop/commit/6332c30cb75549e8b9c8f00d54553bed4cb01b74))
+* **dev:** improve display auto-detection and dual-stack port checking ([e6ae4ef](https://github.com/snowdreamtech/UniBootDesktop/commit/e6ae4ef0bf88dd6cba0e66db848575fdb125afcb))
+* **i18n:** restore log localization keys across 53 locales and fix modal overlay styling ([bb6e3dc](https://github.com/snowdreamtech/UniBootDesktop/commit/bb6e3dc04f7ea09659f3f167b15ef4d4d5dfe446))
+* **lint:** format windows sources with gofumpt and align gci import order ([c2602a7](https://github.com/snowdreamtech/UniBootDesktop/commit/c2602a735faa04d1873cfc8e2ca8193db9a40a6f))
+* **lint:** migrate golangci-lint config to v2 format and resolve lint issues ([f911d4a](https://github.com/snowdreamtech/UniBootDesktop/commit/f911d4aaf782f1fe87f8d595ff06f4ca3974fafe))
+* **lint:** resolve go linter issues across cmd, internal, and pkg ([329c6ba](https://github.com/snowdreamtech/UniBootDesktop/commit/329c6bac964fe2a701a4d72629b87d7ca34eb7b3))
+* **security:** bump golang.org/x/net to v0.62.0 and ignore unused crypto openpgp in osv-scanner ([0b8e325](https://github.com/snowdreamtech/UniBootDesktop/commit/0b8e325b39723217d1a5317d3ff0ae29da57fd17))
+* **toolchain:** align Go to 1.27.3, bump golangci-lint to v2.15.0 and exclude template links in lychee ([1b8d0b5](https://github.com/snowdreamtech/UniBootDesktop/commit/1b8d0b58ca6e2c4a6e33c904ea6a654a630f111d))
+* **toolchain:** align Go toolchain to 1.27.1 and harden typecheck exclusion ([2ad1aa5](https://github.com/snowdreamtech/UniBootDesktop/commit/2ad1aa55d90e4ba1786c9fedf7ffd2261635d81b))
+
+
+### 🛠 Refactoring
+
+* **ui:** embed LogPanel at bottom of page with proper margin and toggleable visibility ([c8bbdaf](https://github.com/snowdreamtech/UniBootDesktop/commit/c8bbdaf7cd8663ed5c2797be4cd0bcfc97e03419))
+
+
+### 📖 Documentation
+
+* **unirtm:** fix dead link in unirtm-configuration.md ([4739b04](https://github.com/snowdreamtech/UniBootDesktop/commit/4739b04a552029f057ef2e0699f044f23d7d2fe1))
+* update README with Zero-Footprint MCP architecture and UniRTM workflow ([814ad43](https://github.com/snowdreamtech/UniBootDesktop/commit/814ad438d08f5cb48f4f0a255ca533721f2bb5a8))
+
+
+### ♻️ Miscellaneous Chores
+
+* **deps:** bump vite in /docs in the all-dependencies group ([d82e459](https://github.com/snowdreamtech/UniBootDesktop/commit/d82e4593038f11a664275e1a8a15462d2242098e))
+* **deps:** remove commitlint tools and obsolete configs ([1aa1467](https://github.com/snowdreamtech/UniBootDesktop/commit/1aa14677ad6db61d83c2f5eb6c782a51d036d07c))
+* **deps:** sync dependabot config and unirtm toolchain ([e08765f](https://github.com/snowdreamtech/UniBootDesktop/commit/e08765fcabc3580ea01f0ba6d81ecd978f83ffaa))
+* **deps:** sync dependabot config and unirtm toolchain ([e124d2e](https://github.com/snowdreamtech/UniBootDesktop/commit/e124d2eae5b0451d21787b4dfdc9bd7729e239e0))
+* **deps:** sync dependabot config and unirtm toolchain ([57785fc](https://github.com/snowdreamtech/UniBootDesktop/commit/57785fc161176b9bea6562e1e7a1ddfc1824552b))
+* **deps:** sync dependabot config and unirtm toolchain ([3685ed4](https://github.com/snowdreamtech/UniBootDesktop/commit/3685ed4b8b1b703e6de3843f8d68beab20460b3b))
+* release main ([5a493e8](https://github.com/snowdreamtech/UniBootDesktop/commit/5a493e86ee3e605f019c835f569ba2762bd53355))
+* release main ([0e42fd3](https://github.com/snowdreamtech/UniBootDesktop/commit/0e42fd3ba7596e9b9e2b47621d2cc8aee582b67d))
+* release main ([80422b3](https://github.com/snowdreamtech/UniBootDesktop/commit/80422b3a7cc9968cab27a4d902ae9409083848a9))
+* release main ([72bdaa7](https://github.com/snowdreamtech/UniBootDesktop/commit/72bdaa77106e77ca67751f682df13af72b9c30df))
+* remove template docs and cleanup configurations ([5684232](https://github.com/snowdreamtech/UniBootDesktop/commit/5684232d35c267771140efaa1993f268ddac85fb))
+* retain uniboot dev server config, smart display detection, and disk matrix docs ([ffe88a9](https://github.com/snowdreamtech/UniBootDesktop/commit/ffe88a96d70d44df8aba46b01e40cf84fb8642b6))
+
 ## [0.7.0](https://github.com/snowdreamtech/UniBootDesktop/compare/v0.6.0...v0.7.0) (2026-10-11)
 
 
