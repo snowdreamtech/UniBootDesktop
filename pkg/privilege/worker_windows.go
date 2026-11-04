@@ -17,8 +17,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/snowdreamtech/unibootdesktop/internal/logger"
 	"golang.org/x/sys/windows"
+
+	"github.com/snowdreamtech/unibootdesktop/internal/logger"
 )
 
 // isProcessAlive checks whether a process with given PID exists on Windows.
@@ -95,7 +96,7 @@ func RunWorkerServer(portFile, token string, parentPID int) error {
 	}()
 
 	addr := listener.Addr().(*net.TCPAddr)
-	if err := os.WriteFile(portFile, []byte(strconv.Itoa(addr.Port)), 0600); err != nil {
+	if err := os.WriteFile(portFile, []byte(strconv.Itoa(addr.Port)), 0o600); err != nil {
 		return fmt.Errorf("failed to write port file: %w", err)
 	}
 
@@ -172,7 +173,7 @@ func StartOrConnectWorker(prompt string) (*WorkerClient, error) {
 	_ = os.Remove(portFile)
 
 	tokenFile := filepath.Join(os.TempDir(), fmt.Sprintf("uniboot-worker-%d.tok", os.Getpid()))
-	if err := os.WriteFile(tokenFile, []byte(token), 0600); err != nil {
+	if err := os.WriteFile(tokenFile, []byte(token), 0o600); err != nil {
 		return nil, fmt.Errorf("failed to write token file: %w", err)
 	}
 	defer func() {

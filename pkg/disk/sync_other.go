@@ -53,7 +53,7 @@ type winUsbDeviceInfo struct {
 }
 
 // getUsbDeviceInfoWindows is a stub on other platforms.
-func getUsbDeviceInfoWindows(pnpDeviceID string, serialNumber string) *winUsbDeviceInfo {
+func getUsbDeviceInfoWindows(pnpDeviceID, serialNumber string) *winUsbDeviceInfo {
 	return nil
 }
 

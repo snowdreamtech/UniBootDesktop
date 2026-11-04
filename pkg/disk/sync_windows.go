@@ -404,7 +404,7 @@ func InvalidateWindowsUSBCache() {
 }
 
 // getUsbDeviceInfoWindows queries hardware metadata (VID/PID, real USB revision, UASP vs BOT) from the Windows PnP Registry.
-func getUsbDeviceInfoWindows(pnpDeviceID string, serialNumber string) *winUsbDeviceInfo {
+func getUsbDeviceInfoWindows(pnpDeviceID, serialNumber string) *winUsbDeviceInfo {
 	cacheKey := strings.ToUpper(strings.TrimSpace(pnpDeviceID)) + "|" + strings.ToUpper(strings.TrimSpace(serialNumber))
 	winUSBCacheMutex.RLock()
 	if winUSBCacheMap != nil && time.Since(winUSBCacheTime) < 30*time.Second {
@@ -886,7 +886,7 @@ func getWindowsDisksNative() ([]DiskInfo, error) {
 	wg.Add(len(validDrives))
 
 	for idx, item := range validDrives {
-		go func(resultIdx int, driveIndex int, d winDiskDrive) {
+		go func(resultIdx, driveIndex int, d winDiskDrive) {
 			defer wg.Done()
 			disksResult[resultIdx] = inspectWindowsDisk(driveIndex, d)
 		}(idx, item.index, item.drive)
